@@ -149,13 +149,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_gptj_skill": {
+            "dff_generative_faq_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 360,
-                    "url": "http://dff-gptj-skill:8134/respond"
+                    "url": "http://dff-generative-faq-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_gptj_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_generative_faq_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

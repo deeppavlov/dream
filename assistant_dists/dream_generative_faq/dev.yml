@@ -46,9 +46,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8126:8126
-  dff-gptj-skill:
+  dff-generative-faq-skill:
     volumes:
-      - "./skills/dff_gptj_skill:/src"
+      - "./skills/dff_generative_faq_skill:/src"
       - "./common:/src/common"
     ports:
       - 8134:8134

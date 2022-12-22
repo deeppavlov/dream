@@ -14,8 +14,8 @@ from common.constants import CAN_NOT_CONTINUE
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-GPTJ_SERVICE_URL = getenv("GPTJ_SERVICE_URL")
-assert GPTJ_SERVICE_URL
+MODEL_SERVICE_URL = getenv("MODEL_SERVICE_URL")
+assert MODEL_SERVICE_URL
 
 #ранжирование делаем на этапе аннотации? когда мы их ранжируем???
 data = json.load(open('common/prompts/example_prompt.json', 'r'))
@@ -49,7 +49,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     request_data = compose_data_for_dialogpt(ctx, actor)
     if len(request_data) > 0:
-        response = requests.post(GPTJ_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=10)
+        response = requests.post(MODEL_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=10)
         hypotheses = response.json()
     else:
         hypotheses = []

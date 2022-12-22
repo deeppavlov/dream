@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, 
           intent-catcher:8014, badlisted-words:8018, combined-classification:8087,
           dff-intent-responder-skill:8012,
-          spelling-preprocessing:8074, gptj:8126, sentence-ranker:8128, dff-gptj-skill:8134"
+          spelling-preprocessing:8074, gptj:8126, sentence-ranker:8128, dff-generative-faq-skill:8134"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -143,14 +143,15 @@ services:
         reservations:
           memory: 40G
 
-  dff-gptj-skill:
+  dff-generative-faq-skill:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8134
-        SERVICE_NAME: dff_gptj_skill
+        SERVICE_NAME: dff_generative_faq_skill
+        MODEL_SERVICE_URL: http://gptj:8126/respond
       context: .
-      dockerfile: ./skills/dff_gptj_skill/Dockerfile
+      dockerfile: ./skills/dff_generative_faq_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload
     deploy:
       resources:
@@ -158,7 +159,7 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-          
+
   dff-intent-responder-skill:
     env_file: [ .env ]
     build:
