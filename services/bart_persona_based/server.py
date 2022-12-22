@@ -8,22 +8,21 @@ from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from dimweb_persona_bot.hyperparameters.causal_modeling_hyperparameters import (
-    H2PersonaChatHyperparametersV1,
-)
-from dimweb_persona_bot.inference.seq2seq_bots import DialogBotV2
 from common.utils import get_intents
+from bart_utils.bot_utils import  DialogBotV2, H2PersonaChatHyperparametersV1
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
 app = Flask(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-PAIR_DIALOG_HISTORY_LENGTH = os.environ.get("PAIR_DIALOG_HISTORY_LENGTH", 3)
+PAIR_DIALOG_HISTORY_LENGTH = int(os.environ.get("PAIR_DIALOG_HISTORY_LENGTH", 3))
 
 SUPER_CONFIDENCE = 1.0
 DEFAULT_CONFIDENCE = 0.9
@@ -32,26 +31,24 @@ DEFAULT_CONFIDENCE = 0.9
 try:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"bart_persona_based device: {device}")
-    model = AutoModelForSeq2SeqLM.from_pretrained(
-        PRETRAINED_MODEL_NAME_OR_PATH,
-    )
+    model = AutoModelForSeq2SeqLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model.to(device)
+    model.eval()
+
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    
+    if torch.cuda.is_available():
+        model.half()
 
     hyperparameters = H2PersonaChatHyperparametersV1(
-        model_name="facebook/bart-base",
-        model_architecture="seq2seq",
         chat_history_pair_length=PAIR_DIALOG_HISTORY_LENGTH,
         persona_max_length=14,
         chat_max_length=25,
+        model_name='facebook/bart-base',
     )
 
-    if torch.cuda.is_available():
-        model.to("cuda")
-        logger.info("bart_persona_based is set to run on cuda")
-        model = model.half()
-
     logger.info("bart_persona_based is ready")
+
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -103,9 +100,10 @@ def respond():
     last_annotated_utterances_batch = request.json["last_annotated_utterances"]
     utterances_histories = request.json["utterances_histories"]
     try:
-        for utt_pos in range(len(last_annotated_utterances_batch)):
-            persona = (
-                last_annotated_utterances_batch[utt_pos].get("annotations", {}).get("relative_persona_extractor", [])
+        # я понятия не имею, что тут происходит и почему мы передаем именно эти поля
+        for utterance in last_annotated_utterances_batch:
+            persona = utterance.get("annotations", {}).get(
+                "relative_persona_extractor", []
             )
 
             response = generate_response(
@@ -115,7 +113,8 @@ def respond():
                 utterances_histories=utterances_histories,
             )
 
-            if "open_question_personal" in get_intents(last_annotated_utterances_batch[utt_pos]):
+            # зачем это здесь? что мы пытаемся сделать?
+            if "open_question_personal" in get_intents(utterance):
                 logger.info("open_question_personal")
                 responses.append([response])
                 confidences.append([SUPER_CONFIDENCE])

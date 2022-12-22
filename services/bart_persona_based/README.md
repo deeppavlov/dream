@@ -1,15 +1,6 @@
-RAM = 3 Gb
-GPU RAM = 2.1 Gb
-cpu time = 70 sec 
-gpu time = 1-1.2 sec 
+RAM = 2 Gb
+GPU RAM = 2 Gb
 
 ### Finetune details
-- epochs=1
-- freeze 3 last fransformer blocks
-- optimizer Adam
-- lr=5e-4
-- batch_size=4
-- perplexity train ~ 3.4
-- perplexity valid ~ 4.059
-- [metrics details](https://wandb.ai/dimweb/gpt_persona_bot/runs/8ryub57u?workspace=user-dimweb)
-- train/test split 0.1
+- based on "facebook/bart-base"
+- [wandb dashboard](https://wandb.ai/dimweb/persona_bot_2/runs/28akcwik/overview?workspace=user-dimweb)
