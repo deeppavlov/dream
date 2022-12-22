@@ -1,4 +1,4 @@
-from typing import List, Dict, Union, TypedDict
+from typing import List, TypedDict
 import random
 from dataclasses import dataclass
 from itertools import chain
@@ -6,11 +6,13 @@ from itertools import chain
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import torch
 
+
 @dataclass
 class H2PersonaChatHyperparametersV1:
     """
     chat_history_pair_length: int - количество пар диалога с конца
     """
+
     model_name: str = "facebook/bart-base"
     chat_history_pair_length: int = 7
     max_response_length: int = 25
@@ -304,4 +306,3 @@ class DialogBotV2(DialogBotV1):
                 penalty_alpha=0.15,
                 top_k=10,
             )
-

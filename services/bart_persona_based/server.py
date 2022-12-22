@@ -9,13 +9,11 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from common.utils import get_intents
-from bart_utils.bot_utils import  DialogBotV2, H2PersonaChatHyperparametersV1
+from bart_utils.bot_utils import DialogBotV2, H2PersonaChatHyperparametersV1
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
@@ -36,7 +34,7 @@ try:
     model.eval()
 
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    
+
     if torch.cuda.is_available():
         model.half()
 
@@ -44,7 +42,7 @@ try:
         chat_history_pair_length=PAIR_DIALOG_HISTORY_LENGTH,
         persona_max_length=14,
         chat_max_length=25,
-        model_name='facebook/bart-base',
+        model_name="facebook/bart-base",
     )
 
     logger.info("bart_persona_based is ready")
@@ -102,9 +100,7 @@ def respond():
     try:
         # я понятия не имею, что тут происходит и почему мы передаем именно эти поля
         for utterance in last_annotated_utterances_batch:
-            persona = utterance.get("annotations", {}).get(
-                "relative_persona_extractor", []
-            )
+            persona = utterance.get("annotations", {}).get("relative_persona_extractor", [])
 
             response = generate_response(
                 model=model,
