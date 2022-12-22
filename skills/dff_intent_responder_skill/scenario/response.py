@@ -1,10 +1,10 @@
 import logging
-import common.dff.integration.context as int_ctx
-import scenario.response_funcs as response_funcs
 from copy import deepcopy
 
-from df_engine.core import Actor, Context
+import common.dff.integration.context as int_ctx
+import scenario.response_funcs as response_funcs
 from common.utils import high_priority_intents
+from df_engine.core import Actor, Context
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             conf = deepcopy(response[1])
             human_attr = deepcopy(response[2])
             bot_attr = deepcopy(response[3])
-            attr = deepcopy(response[3])
+            attr = deepcopy(response[4])
             response = deepcopy(response[0])
         # Special formatter which used in AWS Lambda to identify what was the intent
         while "#+#" in response:
