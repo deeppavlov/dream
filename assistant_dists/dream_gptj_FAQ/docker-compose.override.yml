@@ -3,7 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, 
-          intent-catcher:8014, badlisted-words:8018,
+          intent-catcher:8014, badlisted-words:8018, combined-classification:8087,
+          dff-intent-responder-skill:8012,
           spelling-preprocessing:8074, gptj:8126, sentence-ranker:8128, dff-gptj-skill:8134"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -21,6 +22,23 @@ services:
         reservations:
           memory: 1.5G
 
+  combined-classification:
+    env_file: [.env]
+    build:
+      args:
+        CONFIG: combined_classifier.json
+        PORT: 8087
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
   convers-evaluation-selector:
     env_file: [.env]
     build:
@@ -35,7 +53,7 @@ services:
         IGNORE_DISLIKED_SKILLS: 0
         GREETING_FIRST: 1
         RESTRICTION_FOR_SENSITIVE_CASE: 1
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
         MAX_TURNS_WITHOUT_SCRIPTS: 7
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
         PRIORITIZE_SCRIPTED_SKILLS: 0
@@ -134,6 +152,23 @@ services:
       context: .
       dockerfile: ./skills/dff_gptj_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+          
+  dff-intent-responder-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8012
+        SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
+      context: .
+      dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
     deploy:
       resources:
         limits:

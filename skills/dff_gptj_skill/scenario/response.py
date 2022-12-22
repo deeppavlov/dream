@@ -4,12 +4,12 @@ import sentry_sdk
 from os import getenv
 from typing import Any
 import json
+from pathlib import Path
 
 import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
 from df_engine.core import Context, Actor
 from common.constants import CAN_NOT_CONTINUE
-
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -17,7 +17,8 @@ logger = logging.getLogger(__name__)
 GPTJ_SERVICE_URL = getenv("GPTJ_SERVICE_URL")
 assert GPTJ_SERVICE_URL
 
-data = json.load(open('prompt_files/example_prompt.json', 'r'))
+#ранжирование делаем на этапе аннотации? когда мы их ранжируем???
+data = json.load(open('common/prompts/example_prompt.json', 'r'))
 
 def compose_data_for_dialogpt(ctx, actor):
     text_prompt = [data["prompt"]]

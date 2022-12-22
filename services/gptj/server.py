@@ -70,7 +70,7 @@ def respond():
         confidences = []
         for context in contexts:
             logger.info(f"context_1 seen as: {context}")
-            outputs = generate_responses("""""", context, model, tokenizer)
+            outputs = generate_responses("", context, model, tokenizer)
             logger.info(f"outputs: {outputs}")
             for response in outputs:
                 if len(response) > 3:

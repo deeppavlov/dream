@@ -34,6 +34,12 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    ports:
+      - 8087:8087
   gptj:
     volumes:
       - "./services/gptj:/src"
@@ -46,6 +52,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8134:8134
+  dff-intent-responder-skill:
+    volumes:
+      - "./skills/dff_intent_responder_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8012:8012
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"

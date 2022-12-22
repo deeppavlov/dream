@@ -18,6 +18,15 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8014
       - PORT=8014
 
+  dff-intent-responder-skill:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8012
+      - PORT=8012
+
   badlisted-words:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -44,6 +53,15 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8009
       - PORT=8009
+
+  combined-classification:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8087
+      - PORT=8087
 
   sentence-ranker:
     command: [ "nginx", "-g", "daemon off;" ]

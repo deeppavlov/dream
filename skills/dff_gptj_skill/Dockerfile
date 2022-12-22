@@ -15,6 +15,9 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
+# ARG GEN_SER_URL=EN
+# ENV GEN_SER_URL ${GEN_SER_URL}
+
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet
