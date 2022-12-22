@@ -43,13 +43,15 @@ services:
       - 8018:8018
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing:/src"
+      - "./annotators/spelling_preprocessing_dp:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8074:8074
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
   gptj:
@@ -67,6 +69,7 @@ services:
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
 version: "3.7"

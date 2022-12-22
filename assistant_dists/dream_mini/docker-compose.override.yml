@@ -127,16 +127,23 @@ services:
   spelling-preprocessing:
     env_file: [.env]
     build:
-      context: ./annotators/spelling_preprocessing/
+      args:
+        CONFIG: brillmoore_wikitypos_en.json
+        PORT: 8074
+        SRC_DIR: annotators/spelling_preprocessing_dp
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        LANGUAGE: EN
+      context: ./
+      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 6.5G
         reservations:
-          memory: 50M
+          memory: 6.5G
 
   dialogpt:
     env_file: [ .env ]

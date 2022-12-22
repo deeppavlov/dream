@@ -22,11 +22,12 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://spelling_preprocessing:3881/response"
+                    "timeout": 1,
+                    "url": "http://spelling-preprocessing:8074/respond"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
             }
         },
         "skills": {
@@ -80,9 +81,15 @@
             }
         }
     },
-    "connectors": {}
+    "connectors": {},
+    "metadata": {
+        "display_name": "Deepy GoBot Base",
+        "author": "DeepPavlov",
+        "description": "Goal-oriented version of Lunar assistant. Deepy GoBot Base contains Spelling Preprocessing annotator, Harvesters Maintenance GoBot Skill for goal-oriented responses, and AIML-based open-domain Program-y Skill based on Dialog Flow Framework.",
+        "version": "0.1.0",
+        "date_created": "2021-12-12T12:12:00",
+        "ram_usage": "50 GB",
+        "gpu_usage": "50 GB",
+        "disk_usage": "50 GB"
+    }
 }
-
-
-
-

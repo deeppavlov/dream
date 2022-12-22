@@ -79,7 +79,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing_ru:/src"
+      - "./annotators/spelling_preprocessing_dp:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8074:8074
@@ -103,6 +103,7 @@ services:
   dialogpt:
     volumes:
       - "./services/dialogpt_RU:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8091:8091
   dff-generative-skill:
@@ -114,6 +115,7 @@ services:
   dialogrpt:
     volumes:
       - "./services/dialogrpt_ru:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8122:8122
   dff-template-skill:
