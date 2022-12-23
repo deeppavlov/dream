@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+from typing import List
 
 import sentry_sdk
 import torch
@@ -54,7 +55,7 @@ except Exception as e:
 
 
 def generate_response(
-    persona: dict = None,
+    persona: List[str] = None,
     model=None,
     tokenizer=None,
     utterances_histories=None,
@@ -71,15 +72,13 @@ def generate_response(
         str: next utterance
     """
 
-    max_likelihood_sentences = persona["persona"]
-
-    history = utterances_histories[0][-PAIR_DIALOG_HISTORY_LENGTH:]
+    history = utterances_histories[-PAIR_DIALOG_HISTORY_LENGTH:]
     persona_bot = DialogBotV2(
         model=model,
         tokenizer=tokenizer,
         hyperparameters=hyperparameters,
         history=history,
-        persona=max_likelihood_sentences,
+        persona=persona,
         device=device,
     )
 
@@ -98,18 +97,16 @@ def respond():
     last_annotated_utterances_batch = request.json["last_annotated_utterances"]
     utterances_histories = request.json["utterances_histories"]
     try:
-        # я понятия не имею, что тут происходит и почему мы передаем именно эти поля
-        for utterance in last_annotated_utterances_batch:
+        for utterance, utterence_hist in zip(last_annotated_utterances_batch, utterances_histories):
             persona = utterance.get("annotations", {}).get("relative_persona_extractor", [])
-
+            
             response = generate_response(
                 model=model,
                 tokenizer=tokenizer,
                 persona=persona,
-                utterances_histories=utterances_histories,
+                utterances_histories=utterence_hist,
             )
 
-            # зачем это здесь? что мы пытаемся сделать?
             if "open_question_personal" in get_intents(utterance):
                 logger.info("open_question_personal")
                 responses.append([response])
