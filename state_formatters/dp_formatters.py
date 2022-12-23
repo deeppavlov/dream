@@ -148,6 +148,15 @@ def base_response_selector_formatter_service(payload: List):
             "human_attributes": payload[3],
             "bot_attributes": payload[4],
         }
+    elif len(payload) == 6:
+        return {
+            "skill_name": payload[0],
+            "text": payload[1],
+            "confidence": payload[2],
+            "human_attributes": payload[3],
+            "bot_attributes": payload[4],
+            "attributes": payload[5],
+        }
 
 
 def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
