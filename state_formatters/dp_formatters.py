@@ -1,6 +1,12 @@
 import logging
 from copy import deepcopy
 from typing import Dict, List
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
 
 from common.utils import get_entities
 import state_formatters.utils as utils
@@ -980,7 +986,17 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
 
 
 def context_formatter_dialog(dialog: Dict) -> List[Dict]:
-    num_last_utterances = 4
+    curr_utt = dialog["human_utterances"][-1]
+    stop_words = set(stopwords.words('english'))
+    words = word_tokenize(curr_utt['text'])
+    words_filtered = []
+    for w in words:
+        if w not in stop_words:
+            words_filtered.append(w)
+    if len(words_filtered) > 3:
+        num_last_utterances = 1
+    else:
+        num_last_utterances = 3
     dialog = utils.get_last_n_turns(dialog, total_last_turns=num_last_utterances)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
