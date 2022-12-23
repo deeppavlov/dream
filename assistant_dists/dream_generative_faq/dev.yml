@@ -44,6 +44,7 @@ services:
     volumes:
       - "./services/gptj:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8126:8126
   dff-generative-faq-skill:
@@ -52,15 +53,22 @@ services:
       - "./common:/src/common"
     ports:
       - 8134:8134
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
   dff-intent-responder-skill:
     volumes:
       - "./skills/dff_intent_responder_skill:/src"
       - "./common:/src/common"
     ports:
       - 8012:8012
-  sentence-ranker:
+  prompt-selector:
     volumes:
-      - "./services/sentence_ranker:/src"
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
     ports:
-      - 8128:8128
+      - 8135:8135
 version: "3.7"

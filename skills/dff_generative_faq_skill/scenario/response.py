@@ -5,6 +5,7 @@ from os import getenv
 from typing import Any
 import json
 from pathlib import Path
+from flask import Flask, request, jsonify
 
 import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
@@ -18,19 +19,23 @@ MODEL_SERVICE_URL = getenv("MODEL_SERVICE_URL")
 assert MODEL_SERVICE_URL
 
 #ранжирование делаем на этапе аннотации? когда мы их ранжируем???
-data = json.load(open('common/prompts/example_prompt.json', 'r'))
 
 def compose_data_for_dialogpt(ctx, actor):
-    text_prompt = [data["prompt"]]
+    text_prompt = []
     human_uttrs = int_ctx.get_human_utterances(ctx, actor)
     bot_uttrs = int_ctx.get_bot_utterances(ctx, actor)
-
     if len(human_uttrs) > 1:
         text_prompt.append(f'Human: {human_uttrs[-2]["text"]}')
     if len(bot_uttrs) > 0:
         text_prompt.append(f'AI: {bot_uttrs[-1]["text"]}')
     if len(human_uttrs) > 0:
+        logger.info(f"utts: {human_uttrs[-1]}")
         text_prompt.append(f'Human: {human_uttrs[-1]["text"]}')
+        prompts = human_uttrs[-1]["annotations"]["prompt_selector"]["prompt"]
+        if prompts:
+            prompt = prompts[0]
+            text_prompt.insert(0, prompt)
+        logger.info(f"prompt: {text_prompt}")
 
     return text_prompt
 

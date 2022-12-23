@@ -117,6 +117,19 @@
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
+            },
+            "prompt_selector": {
+                "connector": {
+                "protocol": "http",
+                "timeout": 5,
+                "url": "http://prompt-selector:8135/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ]
             }
         },
         "skill_selectors": {

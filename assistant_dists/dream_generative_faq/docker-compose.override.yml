@@ -1,11 +1,11 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_generative_faq/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, 
           intent-catcher:8014, badlisted-words:8018, combined-classification:8087,
           dff-intent-responder-skill:8012,
-          spelling-preprocessing:8074, gptj:8126, sentence-ranker:8128, dff-generative-faq-skill:8134"
+          spelling-preprocessing:8074, gptj:8126, sentence-ranker:8128, dff-generative-faq-skill:8134, prompt-selector:8135"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -176,6 +176,26 @@ services:
           memory: 128M
         reservations:
           memory: 128M
+
+
+  prompt-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8135
+        SERVICE_NAME: prompt_selector
+        N_SENTENCES_OT_RETURN: 3
+      context: .
+      dockerfile: ./annotators/prompt_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8135
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 80M
+        reservations:
+          memory: 80M
 
   sentence-ranker:
     env_file: [ .env ]
