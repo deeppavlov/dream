@@ -1,97 +1,85 @@
 [
     [
-        "Do you enjoy dancing with other people?",
+        "What a muzzle! Would you like to have an animal like that?",
         1,
         {
             "dff_image_skill_state": {
                 "shared_memory": {},
-                "previous_human_utter_index": 71,
+                "previous_human_utter_index": 15,
                 "history": {
-                    "25": [
+                    "0": [
                         "caption_response",
                         "animals_node"
                     ],
-                    "27": [
-                        "caption_response",
-                        "people_node"
-                    ],
-                    "49": [
+                    "1": [
                         "caption_response",
                         "animals_node"
                     ],
-                    "55": [
-                        "caption_response",
-                        "people_node"
-                    ],
-                    "60": [
+                    "10": [
                         "caption_response",
                         "food_node"
                     ],
-                    "61": [
+                    "11": [
                         "caption_response",
                         "general_node"
                     ],
-                    "62": [
+                    "12": [
                         "caption_response",
                         "general_node"
                     ],
-                    "63": [
+                    "14": [
                         "caption_response",
                         "people_node"
                     ],
-                    "64": [
-                        "caption_response",
-                        "general_node"
-                    ],
-                    "65": [
-                        "caption_response",
-                        "people_node"
-                    ],
-                    "66": [
+                    "2": [
                         "caption_response",
                         "animals_node"
                     ],
-                    "67": [
+                    "3": [
                         "caption_response",
                         "animals_node"
                     ],
-                    "68": [
-                        "caption_response",
-                        "general_node"
-                    ],
-                    "69": [
-                        "caption_response",
-                        "general_node"
-                    ],
-                    "70": [
+                    "4": [
                         "caption_response",
                         "animals_node"
                     ],
-                    "71": [
+                    "7": [
                         "caption_response",
-                        "people_node"
+                        "animals_node"
+                    ],
+                    "8": [
+                        "caption_response",
+                        "animals_node"
+                    ],
+                    "9": [
+                        "caption_response",
+                        "food_node"
+                    ],
+                    "15": [
+                        "caption_response",
+                        "animals_node"
                     ]
                 },
                 "current_turn_dff_suspended": false,
                 "context": {
-                    "id": "33bd876f-c168-43bf-913d-c8e3da30e5a8",
+                    "id": "ea79fbf7-09d0-4be8-8f4a-bf98d26afe45",
                     "labels": {
-                        "14": [
-                            "caption_response",
-                            "animals_node"
-                        ],
-                        "15": [
+                        "11": [
                             "caption_response",
                             "people_node"
+                        ],
+                        "12": [
+                            "caption_response",
+                            "animals_node"
                         ]
                     },
                     "requests": {
-                        "14": "",
-                        "15": ""
+                        "11": "",
+                        "12": ""
                     },
                     "responses": {
-                        "14": "I would like to have an animal like that. I wonder if it eats a lot.",
-                        "15": "Do you enjoy dancing with other people?"
+                        "11": "Do you enjoy standing with other people?",
+                        "12": "What a muzzle! Would you like to have an animal like that?"
                     },
                     "misc": {},
                     "validation": false,

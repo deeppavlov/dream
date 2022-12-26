@@ -740,12 +740,15 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
 
     return [{"human_utter_indexes": [human_utter_index], "dialogs": [new_dialog]}]
 
+
 def image_formatter_service(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
-   return [{"image_paths": dialog["human_utterances"][-1]["attributes"].get("image")}]
+    return [{"image_paths": [dialog["human_utterances"][-1]["attributes"].get("image")]}]
+
 
 def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
+
 
 def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_friendship_skill")
