@@ -99,7 +99,7 @@ def respond():
     try:
         for utterance, utterence_hist in zip(last_annotated_utterances_batch, utterances_histories):
             persona = utterance.get("annotations", {}).get("relative_persona_extractor", [])
-            
+
             response = generate_response(
                 model=model,
                 tokenizer=tokenizer,

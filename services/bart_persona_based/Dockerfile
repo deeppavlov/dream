@@ -29,7 +29,8 @@ ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
 COPY ./services/bart_persona_based/requirements.txt /src/requirements.txt
-RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt 
+# RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt 
+RUN pip install -r /src/requirements.txt 
 
 COPY ./common/ /src/common/
 
