@@ -12,6 +12,7 @@ from healthcheck import HealthCheck
 from sentry_sdk.integrations.logging import ignore_logger
 
 from common.dff.integration.actor import load_ctxs, get_response
+from common import containers
 from scenario.main import actor
 
 import test_server
@@ -34,16 +35,16 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def is_container_running():
-    try:
-        requested_data = [{"speaker": "human", "text": "hi"}]
-        response = requests.post(MODEL_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=4)
-        if response.status_code == 200:
-            return True
-    except Exception as exc:
-        print(exc)
-        return False
-    return False
+# def is_container_running():
+#     try:
+#         requested_data = [{"speaker": "human", "text": "hi"}]
+#         response = requests.post(MODEL_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=4)
+#         if response.status_code == 200:
+#             return True
+#     except Exception as exc:
+#         print(exc)
+#         return False
+#     return False
 
 
 def handler(requested_data, random_seed=None):
@@ -70,7 +71,7 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = is_container_running()
+    result = containers.is_container_running(MODEL_SERVICE_URL)
     if result:
         break
     else:

@@ -7,6 +7,7 @@ import json
 import numpy as np
 import sentry_sdk
 from flask import Flask, request, jsonify
+import re
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -21,7 +22,7 @@ for filename in listdir('common/prompts'):
     data = json.load(open('common/prompts/' + filename, 'r'))
     PROMPTS.append(data["prompt"])
 
-def get_result(request):
+def get_result(request, questions_only=False):
     st_time = time.time()
     contexts = request.json["contexts"]
     result = []
@@ -31,7 +32,14 @@ def get_result(request):
     for context_id, context in enumerate(contexts): #про контекст усложняем логику. нужно чекнуть сколько в реплике пользователя без стопслов остается слов, и если их меньше трех(?), делать так чтоб еще предыдущая реплика бота попадала в контекст. Если больше, то не добавлять реплику бота. Еще одобрать трешхолд, чтобы схожесть была не меньше ...
         str_context = " ".join(context)
         for prompt in PROMPTS:
-            pairs += [[str_context, prompt]]
+            if questions_only:
+                questions = re.findall(r"\nQuestion: (.*)\nAnswer:", prompt)
+                logger.info(f"questions_list: {str(questions)}")
+                questions_list = ' '.join(questions)
+                logger.info(f"questions_list: {questions_list}")
+                pairs += [[str_context, questions_list]]
+            else:
+                pairs += [[str_context, prompt]]
             context_ids += [context_id]
     context_ids = np.array(context_ids)
     try:
@@ -60,13 +68,13 @@ def get_result(request):
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    result = get_result(request)
+    result = get_result(request, questions_only=True)
     return jsonify(result)
 
 
 @app.route("/respond_batch", methods=["POST"])
 def respond_batch():
-    result = get_result(request)
+    result = get_result(request, questions_only=True)
     return jsonify([{"batch": result}])
 
 
