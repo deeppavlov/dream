@@ -24,15 +24,17 @@ def get_result(sentences, sentences_with_history, postannotations=False):
     if not sentences_with_history:
         logger.exception("Input sentences with history not received")
         sentences_with_history = sentences
-    data = [sentences,  # emo was trained without history
-            sentences,  # sentiment was trained without history
-            sentences,  # toxic was trained without history
-            sentences,  # factoid was trained without history
-            sentences_with_history,  # midas was trained with history
-            sentences,  # deeppavlov topics was trained without history
-            sentences,  # cobot topics was trained without history
-            sentences,  # cobot dialogact topics is now trained without history
-            sentences]  # cobot dialogact intents is now trained without history
+    data = [
+        sentences,  # emo was trained without history
+        sentences,  # sentiment was trained without history
+        sentences,  # toxic was trained without history
+        sentences,  # factoid was trained without history
+        sentences_with_history,  # midas was trained with history
+        sentences,  # deeppavlov topics was trained without history
+        sentences,  # cobot topics was trained without history
+        sentences,  # cobot dialogact topics is now trained without history
+        sentences,
+    ]  # cobot dialogact intents is now trained without history
     try:
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
