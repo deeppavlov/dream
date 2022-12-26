@@ -138,39 +138,48 @@
         "tasks": {
           "emo": {
             "type": "classification",
-            "options": 7
+            "options": 7,
+            "type_to_cache": 0
           },
           "sentiment": {
             "type": "classification",
-            "options": 3
+            "options": 3,
+            "type_to_cache": 0
           },
           "toxic": {
             "type": "classification",
-            "options": 8
+            "options": 8,
+            "type_to_cache": 0
           },
           "factoid": {
             "type": "classification",
-            "options": 2
+            "options": 2,
+            "type_to_cache": 0
           },
           "midas": {
             "type": "classification",
-            "options": 15
+            "options": 15,
+            "type_to_cache": 1
           },
           "deeppavlov_topics": {
             "type": "classification",
-            "options": 33
+            "options": 33,
+            "type_to_cache": 0
           },
           "topics": {
             "type": "classification",
-            "options": 22
+            "options": 22,
+            "type_to_cache": 0
           },
           "dialogact_topics": {
             "type": "classification",
-            "options": 11
+            "options": 11,
+            "type_to_cache": 0
           },
           "dialogact_intents": {
             "type": "classification",
-            "options": 11
+            "options": 11,
+            "type_to_cache": 0
           }
         },
         "in": [
