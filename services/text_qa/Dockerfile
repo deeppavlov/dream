@@ -15,7 +15,6 @@ COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
-RUN pip install pyOpenSSL==22.0.0
 
 COPY . /src
 

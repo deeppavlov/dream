@@ -398,6 +398,7 @@ services:
         SRC_DIR: annotators/fact_retrieval_rus
       context: ./
       dockerfile: annotators/fact_retrieval_rus/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8100
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
