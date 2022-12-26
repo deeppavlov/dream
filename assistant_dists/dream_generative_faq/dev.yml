@@ -16,13 +16,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  intent-catcher:
-    volumes:
-      - "./annotators/IntentCatcherTransformers:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8014:8014
   badlisted-words:
     volumes:
       - "./annotators/BadlistedWordsDetector:/src"
@@ -59,12 +52,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  dff-intent-responder-skill:
-    volumes:
-      - "./skills/dff_intent_responder_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8012:8012
   prompt-selector:
     volumes:
       - "./annotators/prompt_selector:/src"
