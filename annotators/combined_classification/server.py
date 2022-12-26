@@ -24,9 +24,7 @@ def get_result(sentences, sentences_with_history, postannotations=False):
     if not sentences_with_history:
         logger.exception("Input sentences with history not received")
         sentences_with_history = sentences
-    if not postannotations:
-        data = [
-            sentences,  # emo was trained without history
+    data = [sentences,  # emo was trained without history
             sentences,  # sentiment was trained without history
             sentences,  # toxic was trained without history
             sentences,  # factoid was trained without history
@@ -34,15 +32,7 @@ def get_result(sentences, sentences_with_history, postannotations=False):
             sentences,  # deeppavlov topics was trained without history
             sentences,  # cobot topics was trained without history
             sentences,  # cobot dialogact topics is now trained without history
-            sentences,  # cobot dialogact intents is now trained without history
-        ]
-    else:
-        # While using postannotations, we annotate only for tasks we use in response_selector
-        data = [[] for _ in range(9)]
-        data[2] = sentences
-        data[-1] = sentences
-        data[-2] = sentences
-        data[-3] = sentences
+            sentences]  # cobot dialogact intents is now trained without history
     try:
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
@@ -78,7 +68,7 @@ def respond():
     t = time.time()
     sentences = request.json.get("sentences", [" "])
     sentences_with_hist = request.json.get("sentences_with_history", sentences)
-    answer = get_result(sentences, sentences_with_hist, postannotations=False)
+    answer = get_result(sentences, sentences_with_hist)
     logger.debug(f"combined_classification result: {answer}")
     logger.info(f"combined_classification exec time: {time.time() - t}")
     return jsonify(answer)
@@ -91,7 +81,7 @@ def batch_respond():
     utterances_with_histories = request.json.get("utterances_with_histories", [[" "]])
     sentences_with_hist = [sep.join(s) for s in utterances_with_histories]
     sentences = [s[-1].split(sep)[-1] for s in utterances_with_histories]
-    answer = get_result(sentences, sentences_with_hist, postannotations=True)
+    answer = get_result(sentences, sentences_with_hist)
     logger.debug(f"combined_classification batch result: {answer}")
     logger.info(f"combined_classification exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
