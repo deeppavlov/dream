@@ -7,7 +7,8 @@ services:
           ner:8021, personal-info-skill:8030, sentseg:8011,
           spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, dff-generative-skill:8092,
           dff-friendship-skill:8086, entity-detection:8103, dialogpt:8091,
-          dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126"
+          dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126, fact-retrieval:8130,
+          text-qa:8078"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   dff-program-y-skill:
@@ -385,5 +386,45 @@ services:
           memory: 128M
         reservations:
           memory: 128M
+
+  fact-retrieval:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: fact_retrieval_rus.json
+        COMMIT: c8264bf82eaa3ed138395ab68f71d47a4175f2fc
+        TOP_N: 20
+        PORT: 8130
+        SRC_DIR: annotators/fact_retrieval_rus
+      context: ./
+      dockerfile: annotators/fact_retrieval_rus/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 10G
+        reservations:
+          memory: 10G
+
+  text-qa:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: qa_rus.json
+        PORT: 8078
+        COMMIT: 4a6d1776110ee3c57b98d53cc68d24ff15a7ed74
+      context: services/text_qa
+      dockerfile: Dockerfile
+    command: flask run -h 0.0.0.0 -p 8078
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
 
 version: '3.7'

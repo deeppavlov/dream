@@ -682,6 +682,30 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
     ]
 
 
+def fact_retrieval_rus_formatter_dialog(dialog: Dict):
+    # Used by: odqa annotator
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-2:]])]
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list, entity_tags_list, entity_pages_list = [], [], []
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+            entity_tags_list.append(entity_info["entity_tags"])
+            entity_pages_list.append(entity_info["entity_pages"])
+    return [
+        {
+            "dialog_history": [dialog_history],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "entity_pages": [entity_pages_list],
+        }
+    ]
+
+
 def short_story_formatter_dialog(dialog: Dict):
     # Used by: short_story_skill
     return [

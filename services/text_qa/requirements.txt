@@ -6,6 +6,3 @@ requests==2.22.0
 click==7.1.2
 jinja2<=3.0.3
 Werkzeug<=2.0.3
-torch==1.6.0
-transformers==2.11.0
-cryptography==2.8

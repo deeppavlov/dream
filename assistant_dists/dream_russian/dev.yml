@@ -124,4 +124,16 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  fact-retrieval:
+    volumes:
+      - "./annotators/fact_retrieval_rus:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8130:8130
+  text-qa:
+    volumes:
+      - "./services/text_qa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8078:8078
 version: "3.7"
