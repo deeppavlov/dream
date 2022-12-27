@@ -291,11 +291,11 @@ def last_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
 
 def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
     if len(dialog["bot_utterances"]):
-        return [{"human_utterances": [dialog["human_utterances"][-1]],
+        return [{"last_human_utterances": [dialog["human_utterances"][-1]],
                  "bot_utterances": [dialog["bot_utterances"][-1]],
                  "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
     else:
-        return [{"human_utterances": [dialog["human_utterances"][-1]],
+        return [{"last_human_utterances": [dialog["human_utterances"][-1]],
                  "bot_utterances": [{}],
                  "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
 

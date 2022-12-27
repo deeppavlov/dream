@@ -26,7 +26,7 @@ def respond():
     st_time = time.time()
     results = []
     ann_human_utterances = request.json.get("last_human_utterances", [])
-    ann_bot_utterances = request.json.get("current_bot_utterances", [])
+    ann_bot_utterances = request.json.get("bot_utterances", [])
     dialog_ids = request.json.get("dialog_ids", [])
 
     for ann_human_uttr, ann_bot_uttr, dialog_id in zip(ann_human_utterances, ann_bot_utterances, dialog_ids):
