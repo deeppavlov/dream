@@ -166,7 +166,7 @@ services:
     environment:
       # - FLASK_APP=server
       - STORE_DATA_ENABLE=true
-      - CUDA_VISIBLE_DEVICES=4,5
+      - CUDA_VISIBLE_DEVICES=0
     # command: flask run -h 0.0.0.0 -p 2102
     tty: true
     deploy:

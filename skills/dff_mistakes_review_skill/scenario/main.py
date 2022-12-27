@@ -39,7 +39,8 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("feedback", "comments", 2.0): loc_cnd.is_end_dialog(),
+            ("feedback", "comments", 2.0): cnd.true(),
+            # ("feedback", "comments", 2.0): loc_cnd.is_end_dialog(),
         },
     },
     "sevice": {

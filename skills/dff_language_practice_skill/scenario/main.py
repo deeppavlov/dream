@@ -15,6 +15,7 @@ import common.constants as common_constants
 
 from . import condition as loc_cnd
 from . import response as loc_rsp
+from . import processing as loc_prs
 
 logger = logging.getLogger(__name__)
 
@@ -22,13 +23,15 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("greeting", "node1"): cnd.regexp(r"\balemira\b"),
+            ("scenario", "main_node"): cnd.regexp(r"\balemira\b")
         },
     },
-    "sevice": {
+    "service": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {("greeting", "node1"): cnd.true()},
+            TRANSITIONS: {
+                ("scenario", "main_node"): cnd.true()
+            },
         },
         "fallback": {
             RESPONSE: "Ooops",
@@ -38,22 +41,37 @@ flows = {
             },
         },
     },
-    "greeting": {
+    "scenario": {
         LOCAL: {
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(0.9),
                 "set_can_continue": int_prs.set_can_continue(),
             },
         },
-        "node1": {
+        "main_node": {
             RESPONSE: loc_rsp.response_from_data(),  
-            PROCESSING: {},
+            PROCESSING: {
+                "slot_filling": int_prs.fill_responses_by_slots()
+            },
             TRANSITIONS: {
+                "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b"),
                 lbl.repeat(0.9): cnd.true(),
             },
         },
+        "cancel_dialog": {
+            RESPONSE: "Ok, let's finish here. Would you like me to comment on your performance?",
+            PROCESSING: {
+                # "show_comments": loc_prs.show_feedback4cancelled_dialog()
+            },
+            TRANSITIONS: {
+                "no_feedback_needed": int_cnd.is_no_vars
+            }
+        },
+        "no_feedback_needed": {
+            RESPONSE: "As you wish!"
+        }
     },
 }
 
 
-actor = Actor(flows, start_label=("sevice", "start"), fallback_label=("sevice", "fallback"))
+actor = Actor(flows, start_label=("service", "start"), fallback_label=("service", "fallback"))

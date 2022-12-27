@@ -193,14 +193,22 @@ def last_utt_dialog(dialog: Dict) -> List[Dict]:
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     corrected_utt = dialog["human_utterances"][-1].get("annotations", {}).get("gector", {})
-    print(corrected_utt)
+    if "corrected_sentences_gector" in corrected_utt.keys():   
+        return [
+            {
+                "sentences": [
+                    corrected_utt["corrected_sentences_gector"][0][0]["text"]
+                ]
+            }
+        ]
+    
     return [
-        {
-            "sentences": [
-                corrected_utt["corrected_sentences_gector"][0][0]["text"]
-            ]
-        }
-    ]
+            {
+                "sentences": [
+                    ""
+                ]
+            }
+        ]
 
 
 def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -1019,6 +1027,9 @@ def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
     splitted_utt = last_human_utt.split(' ')
     words = []
     for word in splitted_utt:
+        if word == "":
+            continue
+
         if word[-1] in puncts:
             words.append(word[:-1])
             words.append(word[-1])

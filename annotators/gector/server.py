@@ -49,6 +49,7 @@ subject_name = "английский"
 def handler(instance):
     if instance["instance_info"]["subject"] not in ["eng"]:
         return {"selections": []}
+    
     orig_essay = instance["annotations"]["basic_reader"]["standard_markup"]["text"]
     orig_sentences = instance["annotations"]["basic_reader"]["extended_markup"]["clear_essay_sentences"]
     orig_offsets = instance["annotations"]["basic_reader"]["extended_markup"]["clear_essay_word_offsets"]
@@ -56,6 +57,9 @@ def handler(instance):
     # потом это станет спеллер
     curr_sentences = instance["annotations"]["contraction_corrector"]["essay_sentences"]
     corrections, corrected_sents, index_maps = [], [], []
+    if len(orig_sentences[0][0]["words"][0]) == 0:
+        return {"selections": []}
+
     for i, curr_paragraph in enumerate(curr_sentences):
         if not curr_paragraph:
             corrected_sents.append([])
