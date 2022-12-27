@@ -289,6 +289,17 @@ def last_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
         return [{"bot_utterances": [{}], "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
 
 
+def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
+    if len(dialog["bot_utterances"]):
+        return [{"human_utterances": [dialog["human_utterances"][-1]],
+                 "bot_utterances": [dialog["bot_utterances"][-1]],
+                 "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
+    else:
+        return [{"human_utterances": [dialog["human_utterances"][-1]],
+                 "bot_utterances": [{}],
+                 "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
+
+
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
     entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)

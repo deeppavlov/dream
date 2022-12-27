@@ -15,18 +15,26 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
+SKILL_NAMES_SENDING_COMMANDS = [
+    "intent_responder",
+    "dff_intent_responder_skill"
+]
 
 
 @app.route("/send", methods=["POST"])
 def respond():
     st_time = time.time()
     results = []
-    annotated_bot_utterances = request.json.get("bot_utterances", [])
+    ann_human_utterances = request.json.get("last_human_utterances", [])
+    ann_bot_utterances = request.json.get("current_bot_utterances", [])
     dialog_ids = request.json.get("dialog_ids", [])
 
-    for ann_uttr, dialog_id in zip(annotated_bot_utterances, dialog_ids):
-        command = ann_uttr.get("attributes", {}).get("command_to_perform")
-        if command:
+    for ann_human_uttr, ann_bot_uttr, dialog_id in zip(ann_human_utterances, ann_bot_utterances, dialog_ids):
+        active_skill = ann_bot_uttr.get("active_skill", {})
+        hyps = ann_human_uttr.get("hypotheses", [])
+        current_skill_hyp = [hyp for hyp in hyps if hyp.get("skill_name", "") == active_skill][0]
+        command = current_skill_hyp.get("command_to_perform", "")
+        if active_skill in SKILL_NAMES_SENDING_COMMANDS and len(command):
             logger.info(f"robot_command_sender: command `{command}` is being sent to robot")
             result = False
             try:
