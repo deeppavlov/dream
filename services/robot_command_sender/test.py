@@ -12,9 +12,9 @@ def main():
                     {
                         "skill_name": "dff_intent_responder_skill",
                         "text": "Moving forward for 10 meters",
-                        "command_to_perform": "move_forward_10"
+                        "command_to_perform": "move_forward_10",
                     }
-                ]
+                ],
             },
             {
                 "text": "Move backward for 10 meters",
@@ -22,22 +22,14 @@ def main():
                     {
                         "skill_name": "dff_intent_responder_skill",
                         "text": "Moving backward for 10 meters",
-                        "command_to_perform": "move_backward_10"
+                        "command_to_perform": "move_backward_10",
                     }
-                ]
+                ],
             },
         ],
         "bot_utterances": [
-            {
-                "text": "Moving forward for 10 meters",
-                "confidence": 1.0,
-                "active_skill": "dff_intent_responder_skill"
-            },
-            {
-                "text": "Moving backward for 10 meters",
-                "confidence": 1.0,
-                "active_skill": "dff_intent_responder_skill"
-            },
+            {"text": "Moving forward for 10 meters", "confidence": 1.0, "active_skill": "dff_intent_responder_skill"},
+            {"text": "Moving backward for 10 meters", "confidence": 1.0, "active_skill": "dff_intent_responder_skill"},
         ],
         "dialog_ids": ["test_dialog_id", "test_dialog_id"],
     }

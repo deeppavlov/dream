@@ -40,8 +40,9 @@ def respond():
                 # command was completed, so remove it from human attributes
                 performed_commands = dialog["human"]["attributes"].get("performed_commands", [])
                 performed_commands += [command]
-                results += [{"human_attributes": {"performing_command": None,
-                                                  "performed_commands": performed_commands}}]
+                results += [
+                    {"human_attributes": {"performing_command": None, "performed_commands": performed_commands}}
+                ]
             else:
                 # command is not completed, so do not update human attributes
                 results += [{"human_attributes": {}}]
