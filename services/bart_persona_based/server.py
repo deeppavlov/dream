@@ -78,7 +78,7 @@ def generate_response(
         tokenizer=tokenizer,
         hyperparameters=hyperparameters,
         history=history,
-        persona=persona,
+        persona=persona["persona"],
         device=device,
     )
 
