@@ -14,7 +14,7 @@ def main():
     result = requests.post(url, json=request_data).json()
     print(result)
     gold_result = [{"human_attributes": {}},
-                   {"human_attributes": {"performed_commands": ["move_forward_10"],
+                   {"human_attributes": {"performed_commands": ["move_backward_10"],
                                          "performing_command": None}}]
 
     assert result == gold_result, f"Got\n{result}\n, but expected:\n{gold_result}"
