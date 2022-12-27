@@ -98,7 +98,13 @@ class EntityLinker(Component, Serializable):
             query_str = f"title:{entity_substr} AND entity_id:{entity_id} AND tag:{tag}"
             query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
             res = self.cur.execute(query, (query_str,)).fetchall()
-            if not res:
+            if res and res[0][3] == "name" and res[0][1] == entity_id and tag == "name":
+                query = "DELETE FROM inverted_index WHERE entity_id=? AND tag=?;"
+                self.cur.execute(query, (entity_id, tag))
+                self.cur.execute("INSERT INTO inverted_index "
+                                 "VALUES (?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag))
+                self.conn.commit()
+            elif not res:
                 self.cur.execute("INSERT INTO inverted_index "
                                  "VALUES (?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag))
                 self.conn.commit()

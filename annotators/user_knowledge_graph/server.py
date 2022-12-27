@@ -3,6 +3,7 @@ import uuid
 import os
 import re
 
+import inflect
 import requests
 from flask import Flask, jsonify, request
 from deeppavlov_kg import TerminusdbKnowledgeGraph
@@ -13,6 +14,8 @@ from common.personal_info import my_name_is_pattern
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
+
+inflect = inflect.engine()
 
 CUSTOM_EL_ADD = os.getenv("CUSTOM_EL_ADD")
 logger.info(f"URL of custom EL: {CUSTOM_EL_ADD}")
@@ -28,6 +31,22 @@ with open("rel_list.txt", "r") as fl:
         else:
             rel_type = "property"
         rel_type_dict[rel.replace("_", " ")] = rel_type
+
+rel_kinds_dict = {
+    "favorite_animal": "animal",
+    "have_pet": "animal",
+    "like_animal": "animal",
+    "favorite_book": "book",
+    "like_read": "book",
+    "favorite_movie": "film",
+    "favorite_movie": "film",
+    "favorite_food": "food",
+    "like_food": "food",
+    "favorite_drink": "food",
+    "like_drink": "food",
+    "favorite_sport": "type_of_sport",
+    "like_sports": "type_of_sport"
+}
 
 DB = "test"
 TEAM = "yashkens|c77b"
@@ -68,10 +87,17 @@ def add_name_property(graph, user_id, names):
     logger.info(f"I already have you in the graph! Updating your property name to {names[0]}!")
 
 
-def add_any_relationship(graph, entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets):
+def add_any_relationship(utt, graph, entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets):
     """Creates an entity and a relation between it and the User from property extraction service."""
     entity_kind = entity_kind.replace('_', '').title()
     graph.ontology.create_property_kinds_of_entity_kinds([entity_kind], [["name"]])
+
+    text = utt.get("text", "")
+    if rel_type in {"have_family", "have_sibling", "have_chidren", "have_pet", "have_vehicle"}:
+        if f" a {entity_name}" in text or inflect.singular_noun(entity_name):
+            entity_kind = f"{entity_kind}_general"
+        else:
+            entity_kind = f"{entity_kind}_partcl"
 
     message = ""
     # logger.info(f"All entity Kinds: {graph.ontology.get_all_entity_kinds()}")
@@ -141,8 +167,11 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets):
             if 'relation' in triplet:
                 entity_kind = get_entity_type(attribute)
                 entity_name = triplet['object']
-                relation = '_'.join(triplet['relation'].split(' ')).upper()
-                add_any_relationship(graph, entity_kind, entity_name, relation, user_id, entities_with_types, ex_triplets)
+                relation = '_'.join(triplet['relation'].split(' '))
+                if relation in rel_kinds_dict:
+                    entity_kind = rel_kinds_dict[relation]
+                add_any_relationship(utt, graph, entity_kind, entity_name, relation.upper(), user_id,
+                                     entities_with_types, ex_triplets)
                 return triplet
             else:
                 add_any_property(graph, user_id, triplet['property'], triplet['object'])
@@ -206,7 +235,7 @@ def get_result(request):
     kg_parser_annotations = []
     ex_triplets = []
     if user_id in existing_ids:
-        entity_rel_info = graph.get_relationships_of_entities([user_id])
+        entity_rel_info = graph.search_for_relationships([user_id])
         for rel, objects in entity_rel_info:
             for obj in objects:
                 ex_triplets.append((user_id, rel, obj))
@@ -240,6 +269,10 @@ def get_result(request):
             substr_list.append(entity["name"])
             ids_list.append(entity["@id"])
             tags_list.append(entity["@type"])
+    if name_result:
+        substr_list.append(name_result["object"])
+        ids_list.append(user_id)
+        tags_list.append("name")
     if substr_list:
         requests.post(CUSTOM_EL_ADD, json={"entity_info": {"entity_substr": substr_list,
                                                            "entity_ids": ids_list, "tags": tags_list}})
