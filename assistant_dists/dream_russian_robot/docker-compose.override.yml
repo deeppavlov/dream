@@ -240,7 +240,7 @@ services:
       context: ./services/dialogpt_RU/
       args:
         SERVICE_PORT: 8091
-        PRETRAINED_MODEL_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+        PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
         LANGUAGE: RU
     command: flask run -h 0.0.0.0 -p 8091
     environment:
@@ -277,7 +277,7 @@ services:
       args:
         SERVICE_PORT: 8122
         PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
-        TOKENIZER_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+        TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
     command: flask run -h 0.0.0.0 -p 8122
     environment:
       - CUDA_VISIBLE_DEVICES=0
