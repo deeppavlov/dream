@@ -67,7 +67,7 @@ try:
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("sentence-ranker is set to run on cuda")
-    test_scores = get_sim_for_pair_embeddings([['I really like dogs', 'I really like cats']])
+    test_scores = get_sim_for_pair_embeddings([["I really like dogs", "I really like cats"]])
     if test_scores:
         logger.info("test case processed")
     logger.info("sentence-ranker is ready")
