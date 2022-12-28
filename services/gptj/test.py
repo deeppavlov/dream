@@ -9,7 +9,6 @@ def test_respond():
     url = "http://0.0.0.0:8126/respond"
     contexts = [
         [
-            """Instruction: You are a travel guide bot. You are informative, creative, and know a lot about landmarks. Give an answer to the human's question.""",
             "Hello, who are you?",
             "I am Marcus, your travel guide. How can I help you today?",
             "Where can I spend an evening in Beirut?",
