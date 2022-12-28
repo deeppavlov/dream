@@ -19,9 +19,7 @@ def test_respond():
         ]
     ]
     result = requests.post(url, json={"utterances_histories": contexts}).json()
-    assert [
-        all(len(sample[0]) > 0 for sample in result)
-    ], f"Got\n{result}\n, something is wrong"
+    assert [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
     print("Success")
     print(result)
 
