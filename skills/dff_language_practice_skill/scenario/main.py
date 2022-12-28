@@ -22,16 +22,12 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {
-        TRANSITIONS: {
-            ("scenario", "main_node"): cnd.regexp(r"\balemira\b")
-        },
+        TRANSITIONS: {("scenario", "main_node"): cnd.regexp(r"\balemira\b")},
     },
     "service": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {
-                ("scenario", "main_node"): cnd.true()
-            },
+            TRANSITIONS: {("scenario", "main_node"): cnd.true()},
         },
         "fallback": {
             RESPONSE: "Ooops",
@@ -49,10 +45,8 @@ flows = {
             },
         },
         "main_node": {
-            RESPONSE: loc_rsp.response_from_data(),  
-            PROCESSING: {
-                "slot_filling": int_prs.fill_responses_by_slots()
-            },
+            RESPONSE: loc_rsp.response_from_data(),
+            PROCESSING: {"slot_filling": int_prs.fill_responses_by_slots()},
             TRANSITIONS: {
                 "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b"),
                 lbl.repeat(0.9): cnd.true(),
@@ -60,16 +54,10 @@ flows = {
         },
         "cancel_dialog": {
             RESPONSE: "Ok, let's finish here. Would you like me to comment on your performance?",
-            PROCESSING: {
-                # "show_comments": loc_prs.show_feedback4cancelled_dialog()
-            },
-            TRANSITIONS: {
-                "no_feedback_needed": int_cnd.is_no_vars
-            }
+            PROCESSING: {},
+            TRANSITIONS: {"no_feedback_needed": int_cnd.is_no_vars},
         },
-        "no_feedback_needed": {
-            RESPONSE: "As you wish!"
-        }
+        "no_feedback_needed": {RESPONSE: "As you wish!"},
     },
 }
 

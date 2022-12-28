@@ -24,6 +24,6 @@ if __name__ == "__main__":
     #     results.append(result)
     #     if result[0]["human_attributes"]["goals_tracker"] == gold_res:
     #         count += 1
-        
+
     # assert count == len(test_config)
     print("Success")

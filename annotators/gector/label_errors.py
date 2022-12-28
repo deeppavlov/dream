@@ -393,9 +393,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     item[4].append(before[end])
                     end += 1
                     correction["subtype"] = "omis"
-                    correction[
-                        "explanation"
-                    ] = f"You missed the word '{normalized_correction}'"
+                    correction["explanation"] = f"You missed the word '{normalized_correction}'"
                 else:
                     start -= 1
                     item[4].insert(0, before[start])

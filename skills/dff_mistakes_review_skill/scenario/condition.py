@@ -27,10 +27,12 @@ def is_end_dialog():
         if (scenario_len == dialog_step_id) and (dialog_step_id != 0):
             return True
 
-        feedback4cancelled_dialog = practice_skill_state.get("shared_memory", {}).get("show_feedback4cancelled_dialog", False)
+        feedback4cancelled_dialog = practice_skill_state.get("shared_memory", {}).get(
+            "show_feedback4cancelled_dialog", False
+        )
         if feedback4cancelled_dialog:
             return True
-            
+
         return False
 
     return is_end_dialog_handler

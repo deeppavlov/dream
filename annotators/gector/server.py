@@ -49,7 +49,7 @@ subject_name = "английский"
 def handler(instance):
     if instance["instance_info"]["subject"] not in ["eng"]:
         return {"selections": []}
-    
+
     orig_essay = instance["annotations"]["basic_reader"]["standard_markup"]["text"]
     orig_sentences = instance["annotations"]["basic_reader"]["extended_markup"]["clear_essay_sentences"]
     orig_offsets = instance["annotations"]["basic_reader"]["extended_markup"]["clear_essay_word_offsets"]

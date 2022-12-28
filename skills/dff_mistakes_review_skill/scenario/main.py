@@ -67,7 +67,7 @@ flows = {
             RESPONSE: loc_rsp.feedback_response(),
             PROCESSING: {},
             TRANSITIONS: {},
-        }
+        },
     },
 }
 
