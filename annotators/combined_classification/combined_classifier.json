@@ -7,7 +7,7 @@
       "MULTI_SENTENCE_LEN": 128
     },
     "download":[{
-        "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/9in1_singlelabel_v1.tar.gz",
+        "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/9in1_singlelabel_v2_no_history.tar.gz",
         "subdir": "{MODELS_PATH}"
       }]
   },
@@ -159,7 +159,7 @@
           "midas": {
             "type": "classification",
             "options": 15,
-            "type_to_cache": 1
+            "type_to_cache": 0
           },
           "deeppavlov_topics": {
             "type": "classification",
