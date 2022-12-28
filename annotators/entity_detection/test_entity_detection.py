@@ -4,9 +4,17 @@ import requests
 def main():
     url = "http://0.0.0.0:8103/respond"
 
+    # request_data = [
+    #     {"sentences": [["what is the capital of russia?"]]},
+    #     {"sentences": [["let's talk about politics."]]},
+    # ]
+
     request_data = [
-        {"sentences": [["what is the capital of russia?"]]},
-        {"sentences": [["let's talk about politics."]]},
+        {"sentences": [["you must track red car and people"]]},
+        {"sentences": [["turn 12 degrees clockwise"]]},
+        {"sentences": [["turn 12 degrees counterclockwise"]]},
+        {"sentences": [["move forward ten metres"]]},
+        {"sentences": [["drive backward nine meters"]]},
     ]
 
     # gold_results = [
@@ -35,13 +43,12 @@ def main():
     # ]
 
     count = 0
-    for data, gold_result in zip(request_data, gold_results):
+    for data in request_data:
         result = requests.post(url, json=data).json()
-        if result == gold_result:
-            count += 1
+        print(result)
 
-    assert count == len(request_data)
-    print("Success")
+
+
 
 
 

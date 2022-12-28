@@ -1,19 +1,17 @@
-import requests
-import yaml
-from api import API, APIKeys, ASRConfig, TTSConfig
+import requests, yaml
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import StreamingResponse, JSONResponse
+from num2words import num2words
+from api import API, APIKeys, ASRConfig, TTSConfig
 from pathlib import Path
 
-
 app = FastAPI()
-config = yaml.safe_load(Path("configuration.yaml").read_text())
+config = yaml.safe_load(Path('configuration.yaml').read_text())
 
 asr_config = ASRConfig(**config["asr"])
 tts_config = TTSConfig(**config["tts"])
 api_keys = APIKeys(**config["api"])
-api = API(api_keys=api_keys)
-
+api = API(api_keys = api_keys)
 
 @app.post("/asr")
 async def infer_asr(user_id: str, file: UploadFile = File(...)) -> JSONResponse:

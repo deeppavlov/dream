@@ -22,8 +22,6 @@ ENV DEBIAN_FRONTEND noninteractive
 #     -o cuda-keyring_1.0-1_all.deb && \
 #     dpkg -i cuda-keyring_1.0-1_all.deb
 
-RUN rm -r /etc/apt/sources.list.d && \
-    apt update && apt install -y libsndfile-dev
 # RUN apt-get -y update
 
 # COPY . .

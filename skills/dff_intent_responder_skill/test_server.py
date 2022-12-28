@@ -36,6 +36,9 @@ def run_test(handler):
         assert is_equal_flag, msg
         print("Success")
 
+# def run_test(handler):
+#     print("Success")
+
 
 # def run_test(handler):
 #     print("Success")
@@ -43,3 +46,4 @@ def run_test(handler):
 
 if __name__ == "__main__":
     run_test(handler)
+
