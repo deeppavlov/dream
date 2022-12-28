@@ -1,6 +1,7 @@
 {
     "CEFR": "B1",
     "situation_description": "Some time ago you applied for an open position at the company that you have been following in LinkedIn for a while now. You are invited to a job interview with an HR specialist.",
+    "keywords": ["job interview"],
     "expected_language": [
         "To work as a (manager, developer, web designer)",
         "For the past *** years..",
@@ -30,64 +31,60 @@
     },
     "utterances": [
         {
-            "utterance": "Good afternoon! My name is Germain and I am an HR manager. Could you tell me about yourself and de-scribe your background in brief?",
-            "info_for_user": "Greet HR manager and thank her for meeting you. Say your name and age. 5 years in GoDaddy. Background in Tech. Degree (MIT)"
+            "utterance": "Hello, {user name}! My name is {avatar name}. And I am an HR manager at {company name}. Thank you for finding the time today to have this conversation with me about an open position we are looking to fill. If you don't mind, I will ask you a couple of questions to know a bit more about your professional experience and your preferences. I wouldn't want to take a lot of your time so it is more than OK to provide brief responses. At the same time, it would be beneficial if you could focus on the most important aspects. OK. Are you ready?",
+            "info_for_user": ""
         },
         {
-            "utterance": "How did you hear about this position?",
-            "info_for_user": "LinkedIn"
+            "utterance": "Good. Why are you looking for a new job? Why did you decide to have a chat with me today?",
+            "info_for_user": "Say that it is always a good idea to monitor the market and look at different opportunities."
         },
         {
-            "utterance": "Did you actively seeking out job?",
-            "info_for_user": "You are not. You follow the Company in LinkedIn. You applied when saw this vacancy."
+            "utterance": "What are you looking for? What kind of job or position would be of interest to you?",
+            "info_for_user": "Say that you are looking for new challenges. Mention industries you are most interested in."
         },
         {
-            "utterance": "Are you considering other positions in other companies?",
-            "info_for_user": "You're not interested in changing job unless it's for this position in this particular company"
+            "utterance": "Can you tell me about one of your career achievements you are most proud of?",
+            "info_for_user": "Describe one of the projects you worked on by describing a situation, project goals, your actions and results."
         },
         {
-            "utterance": "Why did you decide to apply for this position in our company?",
-            "info_for_user": "Mention your skills and work experience. Add more reasons for applying for this po-sition (improvisation)"
+            "utterance": "Can you tell me about the key areas of your expertise? What areas do you consider yourself to be an expert in?",
+            "info_for_user": "Answer with a number of years of experience in your domain of choice. Mention your hard skills, such as tech skills, and soft skills, such as communication, management, etc."
         },
         {
-            "utterance": "What are your biggest strengths?",
-            "info_for_user": "Working with pressure, stress and heavy workload."
+            "utterance": "What are your key strengths or superpowers?",
+            "info_for_user": "Focus on your responsibility, proactivity, attention to details, willingness to learn and adapt, focusing on company's business targets."
         },
         {
-            "utterance": "What is your biggest weakness?",
-            "info_for_user": "Your communication skills, especially when speaking English. You've done a lot to improve it, still working at that. You work well in team regardless."
+            "utterance": "What do you consider to be your areas for development?",
+            "info_for_user": "Say that continuous education and self development are key for you and that you never stop learning. Mention that you are working to improve your English speaking and presentational skills."
         },
         {
-            "utterance": "How do you react to criticism?",
-            "info_for_user": "You remain calm if it's constructive. You respond it it's unfair."
+            "utterance": "What is the notice period at the company you currently work for?",
+            "info_for_user": "Say that it is usually around a month."
         },
         {
-            "utterance": "Why would you leave your job In GoDad-dy?",
-            "info_for_user": "Want changes. Like the company"
+            "utterance": "What are your salary expectations?",
+            "info_for_user": "If you are not sure, say 50 thousand euros for example."
         },
         {
-            "utterance": "What is your notice period?",
-            "info_for_user": "60 days can be less if both sides agree on that"
+            "utterance": "Do you have any questions for me?",
+            "info_for_user": "Ask if you can work remotely if hired."
         },
         {
-            "utterance": "I see. Do you have any questions for us?",
-            "info_for_user": "Ask about training programs for employees"
+            "utterance": "Our company adapted a hybrid work model. This allows employees to split their time between working from office or from home. However, full-time office or fully remote options are also available. It will be totally up to you to decide.",
+            "info_for_user": "Ask about training programs for employees at the company."
         },
         {
-            "utterance": "We encourage and support continuing education, we offer training programs in the areas of certification, new manager skills, manager effectiveness, leadership development, communication and presentation skills, plus mentoring and coaching programs.",
-            "info_for_user": "Respond. Is this WFH or WFO position?"
+            "utterance": "We encourage and strongly support our employees' professional development. We partner with various educational platforms and offer online training programs in a variety of areas covering everything imaginable, including technical skills, communications skills, effective leadership, and so much more.",
+            "info_for_user": "Ask about the next steps"
         },
         {
-            "utterance": "Our company adapted a hybrid work model, that allows employees to split their time between working in the office and working from home.",
-            "info_for_user": "Ask what goes next?"
+            "utterance": "We are currently talking to a number of potential candidates. I will be able to share your CV with the team. If everything goes smoothly, we will invite you to the next interview with the hiring manager. And if that goes well, you may be expected to have the final interview with our CEO. We pay a lot of attention to the culture fit. So, don't be surprised.",
+            "info_for_user": "Thank the HR manager for a pleasant conversation."
         },
         {
-            "utterance": "There will be some background checks and reference checks. Then you may be invited to the your final in-person interview with an executive.",
-            "info_for_user": "Is this a long process?"
-        },
-        {
-            "utterance": "It may take up to 2 weeks. Our HR department will be in contact with you about the next steps!",
-            "info_for_user": "Thank an interviewer and leave."
+            "utterance": "Well, thank you, {user name}. I do appreciate you having found the time for our meeting today. I really enjoyed our conversation. And I will be looking forward to our next conversation. Bye-bye.",
+            "info_for_user": ""
         }
     ]
 }

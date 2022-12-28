@@ -26,20 +26,16 @@ def feedback_response():
         mistakes_state = json.loads(mistakes_state)
         logger.info(f"mistakes_state = {mistakes_state}")
 
-        expl_templates = [
-            "You used the wrong X. ",
-            "The X was incorrect. ",
-            "There was a mistake in the X. "
-        ]
+        expl_templates = ["You used the wrong X. ", "The X was incorrect. ", "There was a mistake in the X. "]
         comp_templates = [
             "You said 'X', but it would be better to say 'Z'. ",
             "You said 'X', but the accurate way to say it would be 'Z'. ",
-            "Instead of saying 'X', I would suggest saying 'Z'. "
+            "Instead of saying 'X', I would suggest saying 'Z'. ",
         ]
         corr_templates = [
             "So, it would me more accurate to say 'X'. ",
             "Thus, it would be better to say 'X'. ",
-            "That is why it would be more accurate to say X. "
+            "That is why it would be more accurate to say X. ",
         ]
         unique_subtypes = ["context", "extra art", "extra prep", "skip art", "skip prep", "omis"]
         feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
@@ -56,16 +52,16 @@ def feedback_response():
                 else:
                     expl_template = random.choice(expl_templates)
                     feedback_sents += expl_template.replace("X", selection["explanation"])
-                
+
                 if correction != "":
                     corr_template = random.choice(corr_templates)
                     corrected_sent = corr_template.replace("X", correction)
                     feedback_sents += corrected_sent
-                
+
                 feedback_sents += "\n"
-            
+
             feedback_sents += "\n\n"
-            
+
         return feedback_sents
-    
+
     return feedback_response_handler

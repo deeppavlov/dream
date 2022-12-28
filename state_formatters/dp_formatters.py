@@ -193,14 +193,10 @@ def last_utt_dialog(dialog: Dict) -> List[Dict]:
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     corrected_utt = dialog["human_utterances"][-1].get("annotations", {}).get("gector", {})
-    print(corrected_utt)
-    return [
-        {
-            "sentences": [
-                corrected_utt["corrected_sentences_gector"][0][0]["text"]
-            ]
-        }
-    ]
+    if "corrected_sentences_gector" in corrected_utt.keys():
+        return [{"sentences": [corrected_utt["corrected_sentences_gector"][0][0]["text"]]}]
+
+    return [{"sentences": [""]}]
 
 
 def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -995,6 +991,7 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def language_mistakes_tracker_formatter(dialog: Dict):
     import json
+
     json_object = json.dumps(dialog, indent=4)
     with open("sample.json", "w") as outfile:
         outfile.write(json_object)
@@ -1006,19 +1003,22 @@ def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
     # print(f"base_formatter_in = {annotations.keys()}", flush=True)
     clear_essay_word_offsets = []
     puncts = [".", "?", "!"]
-    for i in range(len(last_human_utt)): 
+    for i in range(len(last_human_utt)):
         if i == 0:
             clear_essay_word_offsets.append(0)
             continue
         if last_human_utt[i] in puncts:
             clear_essay_word_offsets.append(i)
         else:
-            if last_human_utt[i-1] == " ":
+            if last_human_utt[i - 1] == " ":
                 clear_essay_word_offsets.append(i)
 
-    splitted_utt = last_human_utt.split(' ')
+    splitted_utt = last_human_utt.split(" ")
     words = []
     for word in splitted_utt:
+        if word == "":
+            continue
+
         if word[-1] in puncts:
             words.append(word[:-1])
             words.append(word[-1])
@@ -1029,47 +1029,22 @@ def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
     data = {
         "annotations": {
             "basic_reader": {
-                "standard_markup": {
-                    "text": last_human_utt
-                        },
+                "standard_markup": {"text": last_human_utt},
                 "extended_markup": {
-                    "clear_essay_sentences": [
-                        [
-                            {
-                                "text": last_human_utt,
-                                "words": words
-                            }
-                        ]
-                    ],
-                    "clear_essay_word_offsets": [
-                        [
-                            clear_essay_word_offsets
-                        ]
-                    ]
-                }
+                    "clear_essay_sentences": [[{"text": last_human_utt, "words": words}]],
+                    "clear_essay_word_offsets": [[clear_essay_word_offsets]],
+                },
             },
             "contraction_corrector": {
-                "essay_sentences": [
-                    [
-                        {
-                            "text": last_human_utt,
-                            "words": words
-                        }
-                    ]
-                ],
-                "index_map": [
-                    [
-                        index_map
-                    ]
-                ]
-            }
+                "essay_sentences": [[{"text": last_human_utt, "words": words}]],
+                "index_map": [[index_map]],
+            },
         },
-        "instance_info": {
-            "subject": "eng"
-        }
+        "instance_info": {"subject": "eng"},
     }
     response = [{"input_data": [data]}]
     import json
+
     json_object = json.dumps(response, indent=4)
     with open("sample_gector.json", "w") as outfile:
         outfile.write(json_object)

@@ -15,7 +15,6 @@ import pathlib
 import re
 
 
-
 def compare_structs(ground_truth, hypothesis, stack_track="hypothesis"):
     if type(ground_truth) != type(hypothesis):
         return (
@@ -67,7 +66,6 @@ SEED = 31415
 SERVICE_PORT = 2102
 SERVICE_NAME = "gector"
 TEST_DATA_DIR = "/home/kpetyxova/prochtenie/services/solvers/gector/test_data"
-
 
 
 parser = argparse.ArgumentParser()

@@ -1,6 +1,7 @@
 {
     "CEFR": "B1",
     "situation_description": "You have just landed in Zurich. You're waiting for your luggage, but it doesn't seem to be there. You contact a baggage claim representative.",
+    "keywords": ["luggage", "baggage", "suitcase"],
     "expected_language": [
         "Luggage seems to be missing stop over/ connection/layover Boarding pass",
         "Luggage receipt/check Suitcase",

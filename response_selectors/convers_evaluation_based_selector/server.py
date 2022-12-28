@@ -379,7 +379,8 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
 
     if len(dialog["bot_utterances"]) == 0 and greeting_spec[LANGUAGE] not in best_text and GREETING_FIRST:
         # add greeting to the first bot uttr, if it's not already included
-        best_text = f"{best_text}"
+        greeting_tutor = "Hello, this is Alemira Fluent Demonstration bot!"
+        best_text = f"{greeting_tutor} {best_text}"
 
     while candidates[best_id]["text"] == "" or candidates[best_id]["confidence"] == 0.0:
         curr_single_scores[int(best_id)] = 0.0
