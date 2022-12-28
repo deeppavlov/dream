@@ -1,5 +1,6 @@
 import requests
 
+
 def is_container_running(model_url):
     try:
         requested_data = [{"speaker": "human", "text": "hi"}]

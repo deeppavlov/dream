@@ -12,9 +12,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
@@ -47,9 +45,7 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(
-    instruction, context, model, tokenizer, continue_last_uttr=False
-):
+def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
     outputs = []
     dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context_1 inside generate_responses seen as: {[dialog_context]}")

@@ -4,7 +4,6 @@ import logging
 import time
 import os
 import random
-import requests
 
 import sentry_sdk
 from flask import Flask, request, jsonify

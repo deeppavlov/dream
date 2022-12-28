@@ -32,9 +32,7 @@ def get_result(request, questions_only=False):
     pairs = []
     context_ids = []
 
-    for context_id, context in enumerate(
-        contexts
-    ):  # про контекст усложняем логику. нужно чекнуть сколько в реплике пользователя без стопслов остается слов, и если их меньше трех(?), делать так чтоб еще предыдущая реплика бота попадала в контекст. Если больше, то не добавлять реплику бота. Еще подобрать трешхолд, чтобы схожесть была не меньше ...
+    for context_id, context in enumerate(contexts):
         str_context = " ".join(context)
         for prompt in PROMPTS:
             if questions_only:

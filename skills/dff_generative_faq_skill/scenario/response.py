@@ -3,9 +3,6 @@ import requests
 import sentry_sdk
 from os import getenv
 from typing import Any
-import json
-from pathlib import Path
-from flask import Flask, request, jsonify
 import re
 
 import common.dff.integration.response as int_rsp

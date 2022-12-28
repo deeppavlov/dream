@@ -2,8 +2,9 @@ import logging
 from copy import deepcopy
 from typing import Dict, List
 import nltk
-nltk.download('stopwords')
-nltk.download('punkt')
+
+nltk.download("stopwords")
+nltk.download("punkt")
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
@@ -801,11 +802,14 @@ def dff_short_story_skill_formatter(dialog: Dict) -> List[Dict]:
 def dff_generative_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_generative_skill")
 
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
+
 def dff_generative_faq_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_generative_faq_skill")
+
 
 def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
     intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
@@ -987,8 +991,8 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
 
 def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     curr_utt = dialog["human_utterances"][-1]
-    stop_words = set(stopwords.words('english'))
-    words = word_tokenize(curr_utt['text'])
+    stop_words = set(stopwords.words("english"))
+    words = word_tokenize(curr_utt["text"])
     words_filtered = []
     for w in words:
         if w not in stop_words:
