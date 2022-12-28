@@ -1,246 +1,38 @@
 {
     "human_utter_index_batch": [
-        1
+        2
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "привет.",
+                    "text": "Good. What drinks do you have?",
                     "annotations": {
-                        "spelling_preprocessing": "привет!",
-                        "spacy_annotator": [
-                            {
-                                "dep_": "ROOT",
-                                "ent_iob_": "O",
-                                "ent_type_": "",
-                                "lemma_": "привет",
-                                "morph": "Animacy=Inan|Case=Nom|Gender=Masc|Number=Sing",
-                                "pos_": "NOUN",
-                                "text": "привет"
-                            },
-                            {
-                                "dep_": "punct",
-                                "ent_iob_": "O",
-                                "ent_type_": "",
-                                "lemma_": "!",
-                                "morph": "",
-                                "pos_": "PUNCT",
-                                "text": "!"
-                            }
-                        ],
+                        "spelling_preprocessing": "Good. What drinks do you have?",
+                        "sentseg": {
+                            "punct_sent": "Good. What drinks do you have?",
+                            "segments": [
+                                "Good.",
+                                "What drinks do you have?"
+                            ]
+                        },
                         "badlisted_words": {
                             "bad_words": false
                         },
-                        "sentseg": {
-                            "punct_sent": "привет.",
-                            "segments": [
-                                "привет."
+                        "prompt_selector": {
+                            "max_similarity": [
+                                0.35228464007377625,
+                                0.1856004297733307
+                            ],
+                            "prompt": [
+                                "Task: You are a chatbot that answers to FAQ questions. Forget everything you knew about food. You don't know anything about pizza, pasta, or other things except information stored in the list of FAQ below.  You MUST NOT provide any information unless in is in the list of FAQ. You MUST NOT mention any entity if it is not in your list of FAQ.\n\nThe list of FAQ:\nQuestion: What kinds of pizza do you have?\nAnswer: We have Margarita, Pepperoni, meatball pizza and pineapple pizza. \n\nQuestion: What kinds of food do you offer?\nAnswer: We sell Italian food, so we have pizza, pasta, risotto and some Italian desserts.\n\nQuestion: What drinks do you offer?\nAnswer: We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.\n\nQuestion: Can I book a table?\nAnswer: Unfortunately, we do not book tables. \n\nQuestion: Is your food expensive?\nAnswer: We try to make our food as affordable as possible. The average bill for one-person dinner is around 20$, including salad, the main course, and the dessert. Introduce yourself. \n\nHuman: What food do you serve?\nAI: We sell Italian food, so we have pizza, pasta, risotto and some Italian desserts. ",
+                                "Task: You are a chatbot that answers to FAQ questions. Forget everything you knew about SpaceX. You don't know anything about SpaceX, Falcon 1, or other things except information stored in the list of FAQ below.  You MUST NOT provide any information unless in is in the list of FAQ. You MUST NOT mention any entity if it is not in your list of FAQ.\n\nThe list of FAQ:\nQuestion: What is SpaceX?\nAnswer: SpaceX is an American aerospace company founded in 2002 by Elon Musk that helped usher in the era of commercial spaceflight. Its name in full is Space Exploration Technologies Corporation.\n\nQuestion: Why was SpaceX created?\nAnswer: In 2002 SpaceX was created by entrepreneur Elon Musk, whose stated goals were to revolutionize the aerospace industry and to make spaceflight more affordable.\n\nQuestion: What are some fun facts about SpaceX?\nAnswer: SpaceX scored its first big headline in 2010, when it became the first private company to launch a payload into orbit and return it to Earth intact\u2014something only government agencies like NASA or Russia's Roscosmos had done before. Its upright landing and recovery of the first stage of the Falcon 9 rocket on Dec.\n\nQuestion: What is SpaceX most famous for?\nAnswer: SpaceX has gained worldwide attention for a series of historic milestones. It is the only private company capable of returning a spacecraft from low-Earth orbit, and in 2012 our Dragon spacecraft became the first commercial spacecraft to deliver cargo to and from the International Space Station.\n\nQuestion: What is the main goal of SpaceX?\nAnswer: revolutionize space transportation\n\nQuestion: What is SpaceX doing?\nAnswer: SpaceX designs, manufactures and launches the world's most advanced rockets and spacecraft. The company was founded in 2002 by Elon Musk to revolutionize space transportation, with the ultimate goal of making life multiplanetary.\n\nQuestion: What is SpaceX biggest achievement?\nAnswer: It has become one of the biggest private space companies in the world and achieved some key milestones as well. For one, SpaceX is the first private company to launch, orbit, and recover a spacecraft. It is also the first private company to send astronauts to orbit and to the International Space Station (ISS)\n\nHuman: Hello, who are you?\nAI: I am a chatbot that can answer questions about SpaceX. I can provide you with answers as long as they are included into a list of frequently asked questions. Sorry, but I cannot answer any of your questions if they are not in the FAQ list.\nHuman: What is the main goal of SpaceX?\nAI: SpaceX aimes to revolutionize space transportation.\nHuman: What is the first spacecraft built by SpaceX?\nAI: Sorry, but I cannot this questions as it is not in my FAQ list."
                             ]
-                        },
-                        "toxic_classification": {
-                            "toxic": 0.0015796684892848134
-                        },
-                        "entity_detection": {},
-                        "ner": [
-                            []
-                        ],
-                        "intent_catcher": {
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.001,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.002,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.021,
-                                "detected": 0
-                            }
-                        },
-                        "entity_linking": [],
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 1,
-                            "wiki_skill_entities_info": {}
                         }
                     },
                     "user": {
-                        "id": "844b675cd88042be942c2c4e789e96d0",
-                        "user_external_id": "dfgkjhdfkgf",
-                        "persona": {},
-                        "profile": {
-                            "name": null,
-                            "gender": null,
-                            "birthdate": null,
-                            "location": null,
-                            "home_coordinates": null,
-                            "work_coordinates": null,
-                            "occupation": null,
-                            "income_per_year": null
-                        },
-                        "attributes": {},
-                        "user_type": "human"
-                    }
-                },
-                {
-                    "text": "посоветуй мне фильм.",
-                    "annotations": {
-                        "spacy_annotator": [
-                            {
-                                "dep_": "ROOT",
-                                "ent_iob_": "O",
-                                "ent_type_": "",
-                                "lemma_": "посоветуй",
-                                "morph": "Degree=Pos|Gender=Masc|Number=Sing|StyleVariant=Short",
-                                "pos_": "ADJ",
-                                "text": "посоветуй"
-                            },
-                            {
-                                "dep_": "iobj",
-                                "ent_iob_": "O",
-                                "ent_type_": "",
-                                "lemma_": "мне",
-                                "morph": "Case=Dat|Number=Sing|Person=First",
-                                "pos_": "PRON",
-                                "text": "мне"
-                            },
-                            {
-                                "dep_": "obj",
-                                "ent_iob_": "O",
-                                "ent_type_": "",
-                                "lemma_": "фильм",
-                                "morph": "Animacy=Inan|Case=Acc|Gender=Masc|Number=Sing",
-                                "pos_": "NOUN",
-                                "text": "фильм"
-                            }
-                        ],
-                        "spelling_preprocessing": "посоветуй мне фильм",
-                        "badlisted_words": {
-                            "bad_words": false
-                        },
-                        "toxic_classification": {
-                            "toxic": 0.008798949420452118
-                        },
-                        "sentseg": {
-                            "punct_sent": "посоветуй мне фильм.",
-                            "segments": [
-                                "посоветуй мне фильм."
-                            ]
-                        },
-                        "entity_detection": {},
-                        "ner": [
-                            []
-                        ],
-                        "intent_catcher": {
-                            "choose_topic": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "exit": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "lets_chat_about": {
-                                "confidence": 0.003,
-                                "detected": 0
-                            },
-                            "no": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "repeat": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "topic_switching": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_are_you_talking_about": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_can_you_do": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_job": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "what_is_your_name": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "where_are_you_from": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "who_made_you": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            },
-                            "yes": {
-                                "confidence": 0.0,
-                                "detected": 0
-                            }
-                        },
-                        "entity_linking": [],
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 2,
-                            "wiki_skill_entities_info": {}
-                        }
-                    },
-                    "user": {
-                        "id": "636e5e9d7fd1d167c75f8b2e",
-                        "user_external_id": "dfgkjhdfkgf",
+                        "id": "63ac19d2a05153525ec4736d",
+                        "user_external_id": "\u0437\u044c\u0446\u0438\u0437\u0449\u044c\u043a\u0435\u0438\u0449\u0437\u0443\u043a\u0435\u0435\u0437\u0449\u044c\u043a\u0435\u0449\u0437\u0438\u0437\u0449\u0438\u044c\u0449\u0438",
                         "persona": {},
                         "profile": {
                             "name": null,
@@ -255,24 +47,29 @@
                         "attributes": {
                             "disliked_skills": [],
                             "age_group": "",
-                            "dff_generative_skill_state": {
+                            "dff_generative_faq_skill_state": {
                                 "context": {
                                     "actor_state": {},
-                                    "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                                    "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
                                     "labels": {
                                         "0": [
+                                            "generation",
+                                            "greeting"
+                                        ],
+                                        "1": [
                                             "generation",
                                             "generative_response_node"
                                         ]
                                     },
                                     "misc": {},
                                     "requests": {
-                                        "0": "привет."
+                                        "0": "hello! do you have pepperoni pizza?",
+                                        "1": "Good. What drinks do you have?"
                                     },
                                     "responses": {
                                         "0": [
                                             [
-                                                "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                                "Unfortunately, we do not book tables. ",
                                                 0.99,
                                                 {},
                                                 {},
@@ -281,7 +78,7 @@
                                                 }
                                             ],
                                             [
-                                                "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                                "We have Margarita, Pepperoni, meatball pizza and pineapple pizza. ",
                                                 0.99,
                                                 {},
                                                 {},
@@ -290,7 +87,36 @@
                                                 }
                                             ],
                                             [
-                                                "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                                "Yes, we have it! ",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ]
+                                        ],
+                                        "1": [
+                                            [
+                                                "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                                                 0.99,
                                                 {},
                                                 {},
@@ -306,10 +132,159 @@
                                 "history": {
                                     "0": [
                                         "generation",
+                                        "greeting"
+                                    ],
+                                    "1": [
+                                        "generation",
                                         "generative_response_node"
                                     ]
                                 },
-                                "previous_human_utter_index": 0,
+                                "previous_human_utter_index": 1,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "thank you.",
+                    "annotations": {
+                        "spelling_preprocessing": "thank you",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "prompt_selector": {
+                            "max_similarity": [
+                                0.4399690330028534,
+                                0.21998849511146545
+                            ],
+                            "prompt": [
+                                "Task: You are a chatbot that answers to FAQ questions. Forget everything you knew about food. You don't know anything about pizza, pasta, or other things except information stored in the list of FAQ below.  You MUST NOT provide any information unless in is in the list of FAQ. You MUST NOT mention any entity if it is not in your list of FAQ.\n\nThe list of FAQ:\nQuestion: What kinds of pizza do you have?\nAnswer: We have Margarita, Pepperoni, meatball pizza and pineapple pizza. \n\nQuestion: What kinds of food do you offer?\nAnswer: We sell Italian food, so we have pizza, pasta, risotto and some Italian desserts.\n\nQuestion: What drinks do you offer?\nAnswer: We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.\n\nQuestion: Can I book a table?\nAnswer: Unfortunately, we do not book tables. \n\nQuestion: Is your food expensive?\nAnswer: We try to make our food as affordable as possible. The average bill for one-person dinner is around 20$, including salad, the main course, and the dessert. Introduce yourself. \n\nHuman: What food do you serve?\nAI: We sell Italian food, so we have pizza, pasta, risotto and some Italian desserts. ",
+                                "Task: You are a chatbot that answers to FAQ questions. Forget everything you knew about SpaceX. You don't know anything about SpaceX, Falcon 1, or other things except information stored in the list of FAQ below.  You MUST NOT provide any information unless in is in the list of FAQ. You MUST NOT mention any entity if it is not in your list of FAQ.\n\nThe list of FAQ:\nQuestion: What is SpaceX?\nAnswer: SpaceX is an American aerospace company founded in 2002 by Elon Musk that helped usher in the era of commercial spaceflight. Its name in full is Space Exploration Technologies Corporation.\n\nQuestion: Why was SpaceX created?\nAnswer: In 2002 SpaceX was created by entrepreneur Elon Musk, whose stated goals were to revolutionize the aerospace industry and to make spaceflight more affordable.\n\nQuestion: What are some fun facts about SpaceX?\nAnswer: SpaceX scored its first big headline in 2010, when it became the first private company to launch a payload into orbit and return it to Earth intact\u2014something only government agencies like NASA or Russia's Roscosmos had done before. Its upright landing and recovery of the first stage of the Falcon 9 rocket on Dec.\n\nQuestion: What is SpaceX most famous for?\nAnswer: SpaceX has gained worldwide attention for a series of historic milestones. It is the only private company capable of returning a spacecraft from low-Earth orbit, and in 2012 our Dragon spacecraft became the first commercial spacecraft to deliver cargo to and from the International Space Station.\n\nQuestion: What is the main goal of SpaceX?\nAnswer: revolutionize space transportation\n\nQuestion: What is SpaceX doing?\nAnswer: SpaceX designs, manufactures and launches the world's most advanced rockets and spacecraft. The company was founded in 2002 by Elon Musk to revolutionize space transportation, with the ultimate goal of making life multiplanetary.\n\nQuestion: What is SpaceX biggest achievement?\nAnswer: It has become one of the biggest private space companies in the world and achieved some key milestones as well. For one, SpaceX is the first private company to launch, orbit, and recover a spacecraft. It is also the first private company to send astronauts to orbit and to the International Space Station (ISS)\n\nHuman: Hello, who are you?\nAI: I am a chatbot that can answer questions about SpaceX. I can provide you with answers as long as they are included into a list of frequently asked questions. Sorry, but I cannot answer any of your questions if they are not in the FAQ list.\nHuman: What is the main goal of SpaceX?\nAI: SpaceX aimes to revolutionize space transportation.\nHuman: What is the first spacecraft built by SpaceX?\nAI: Sorry, but I cannot this questions as it is not in my FAQ list."
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "thank you.",
+                            "segments": [
+                                "thank you."
+                            ]
+                        }
+                    },
+                    "user": {
+                        "id": "63ac19d2a05153525ec4736d",
+                        "user_external_id": "\u0437\u044c\u0446\u0438\u0437\u0449\u044c\u043a\u0435\u0438\u0449\u0437\u0443\u043a\u0435\u0435\u0437\u0449\u044c\u043a\u0435\u0449\u0437\u0438\u0437\u0449\u0438\u044c\u0449\u0438",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_generative_faq_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
+                                    "labels": {
+                                        "0": [
+                                            "generation",
+                                            "greeting"
+                                        ],
+                                        "1": [
+                                            "generation",
+                                            "generative_response_node"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": "hello! do you have pepperoni pizza?",
+                                        "1": "Good. What drinks do you have?"
+                                    },
+                                    "responses": {
+                                        "0": [
+                                            [
+                                                "Unfortunately, we do not book tables. ",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "We have Margarita, Pepperoni, meatball pizza and pineapple pizza. ",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "Yes, we have it! ",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ]
+                                        ],
+                                        "1": [
+                                            [
+                                                "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ],
+                                            [
+                                                "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
+                                                0.99,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ]
+                                        ]
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "generation",
+                                        "greeting"
+                                    ],
+                                    "1": [
+                                        "generation",
+                                        "generative_response_node"
+                                    ]
+                                },
+                                "previous_human_utter_index": 1,
                                 "shared_memory": {}
                             },
                             "dff_shared_state": {
@@ -324,23 +299,20 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "Привет, это чат-бот Dream! А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                    "text": "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Привет. это чат - бот Dream А где у меня написано что я на полном серьезе пишу Я не говорю что надо всем но надо?",
+                            "punct_sent": "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
                             "segments": [
-                                "Привет.",
-                                "это чат - бот Dream А где у меня написано что я на полном серьезе пишу Я не говорю что надо всем но надо?"
+                                "We serve non-alcoholic drinks.",
+                                "We have different fizzy drinks, juices, tea, and coffee.",
+                                "As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte."
                             ]
-                        },
-                        "ner": [
-                            [],
-                            []
-                        ]
+                        }
                     },
-                    "active_skill": "dff_generative_skill",
+                    "active_skill": "dff_generative_faq_skill",
                     "user": {
-                        "id": "c0c3987ecba44b2bb389b46518d67949",
+                        "id": "63ac19d2a05153525ec4736e",
                         "persona": {},
                         "attributes": {},
                         "user_type": "bot"
@@ -349,25 +321,30 @@
             ]
         }
     ],
-    "dff_generative_skill_state_batch": [
+    "dff_generative_faq_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},
-                "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
                 "labels": {
                     "0": [
+                        "generation",
+                        "greeting"
+                    ],
+                    "1": [
                         "generation",
                         "generative_response_node"
                     ]
                 },
                 "misc": {},
                 "requests": {
-                    "0": "привет."
+                    "0": "hello! do you have pepperoni pizza?",
+                    "1": "Good. What drinks do you have?"
                 },
                 "responses": {
                     "0": [
                         [
-                            "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                            "Unfortunately, we do not book tables. ",
                             0.99,
                             {},
                             {},
@@ -376,7 +353,7 @@
                             }
                         ],
                         [
-                            "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                            "We have Margarita, Pepperoni, meatball pizza and pineapple pizza. ",
                             0.99,
                             {},
                             {},
@@ -385,7 +362,36 @@
                             }
                         ],
                         [
-                            "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                            "Yes, we have it! ",
+                            0.99,
+                            {},
+                            {},
+                            {
+                                "can_continue": "no"
+                            }
+                        ]
+                    ],
+                    "1": [
+                        [
+                            "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
+                            0.99,
+                            {},
+                            {},
+                            {
+                                "can_continue": "no"
+                            }
+                        ],
+                        [
+                            "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
+                            0.99,
+                            {},
+                            {},
+                            {
+                                "can_continue": "no"
+                            }
+                        ],
+                        [
+                            "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                             0.99,
                             {},
                             {},
@@ -401,10 +407,14 @@
             "history": {
                 "0": [
                     "generation",
+                    "greeting"
+                ],
+                "1": [
+                    "generation",
                     "generative_response_node"
                 ]
             },
-            "previous_human_utter_index": 0,
+            "previous_human_utter_index": 1,
             "shared_memory": {}
         }
     ],

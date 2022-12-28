@@ -1,9 +1,9 @@
 [
     [
         [
-            "про любовь.",
-            "какой?",
-            "Причем желательно с субтитрами."
+            "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
+            "Your welcome. I am going to order dinner now.",
+            "We can also arrange a tour for you. "
         ],
         [
             0.99,
@@ -12,40 +12,44 @@
         ],
         [
             {
-                "dff_generative_skill_state": {
+                "dff_generative_faq_skill_state": {
                     "shared_memory": {},
-                    "previous_human_utter_index": 1,
+                    "previous_human_utter_index": 2,
                     "history": {
                         "0": [
                             "generation",
-                            "generative_response_node"
+                            "greeting"
                         ],
                         "1": [
+                            "generation",
+                            "generative_response_node"
+                        ],
+                        "2": [
                             "generation",
                             "generative_response_node"
                         ]
                     },
                     "current_turn_dff_suspended": false,
                     "context": {
-                        "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                        "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
                         "labels": {
-                            "0": [
+                            "1": [
                                 "generation",
                                 "generative_response_node"
                             ],
-                            "1": [
+                            "2": [
                                 "generation",
                                 "generative_response_node"
                             ]
                         },
                         "requests": {
-                            "0": "привет.",
-                            "1": "посоветуй мне фильм."
+                            "1": "Good. What drinks do you have?",
+                            "2": "thank you."
                         },
                         "responses": {
-                            "0": [
+                            "1": [
                                 [
-                                    "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
                                     0.99,
                                     {},
                                     {},
@@ -54,7 +58,7 @@
                                     }
                                 ],
                                 [
-                                    "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                                     0.99,
                                     {},
                                     {},
@@ -63,7 +67,7 @@
                                     }
                                 ],
                                 [
-                                    "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                    "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                                     0.99,
                                     {},
                                     {},
@@ -72,9 +76,9 @@
                                     }
                                 ]
                             ],
-                            "1": [
+                            "2": [
                                 [
-                                    "про любовь.",
+                                    "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
                                     0.99,
                                     {},
                                     {},
@@ -83,7 +87,7 @@
                                     }
                                 ],
                                 [
-                                    "какой?",
+                                    "Your welcome. I am going to order dinner now.",
                                     0.99,
                                     {},
                                     {},
@@ -92,7 +96,7 @@
                                     }
                                 ],
                                 [
-                                    "Причем желательно с субтитрами.",
+                                    "We can also arrange a tour for you. ",
                                     0.99,
                                     {},
                                     {},
@@ -116,40 +120,44 @@
                 "disliked_skills": []
             },
             {
-                "dff_generative_skill_state": {
+                "dff_generative_faq_skill_state": {
                     "shared_memory": {},
-                    "previous_human_utter_index": 1,
+                    "previous_human_utter_index": 2,
                     "history": {
                         "0": [
                             "generation",
-                            "generative_response_node"
+                            "greeting"
                         ],
                         "1": [
+                            "generation",
+                            "generative_response_node"
+                        ],
+                        "2": [
                             "generation",
                             "generative_response_node"
                         ]
                     },
                     "current_turn_dff_suspended": false,
                     "context": {
-                        "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                        "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
                         "labels": {
-                            "0": [
+                            "1": [
                                 "generation",
                                 "generative_response_node"
                             ],
-                            "1": [
+                            "2": [
                                 "generation",
                                 "generative_response_node"
                             ]
                         },
                         "requests": {
-                            "0": "привет.",
-                            "1": "посоветуй мне фильм."
+                            "1": "Good. What drinks do you have?",
+                            "2": "thank you."
                         },
                         "responses": {
-                            "0": [
+                            "1": [
                                 [
-                                    "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
                                     0.99,
                                     {},
                                     {},
@@ -158,7 +166,7 @@
                                     }
                                 ],
                                 [
-                                    "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                                     0.99,
                                     {},
                                     {},
@@ -167,7 +175,7 @@
                                     }
                                 ],
                                 [
-                                    "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                    "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                                     0.99,
                                     {},
                                     {},
@@ -176,9 +184,9 @@
                                     }
                                 ]
                             ],
-                            "1": [
+                            "2": [
                                 [
-                                    "про любовь.",
+                                    "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
                                     0.99,
                                     {},
                                     {},
@@ -187,7 +195,7 @@
                                     }
                                 ],
                                 [
-                                    "какой?",
+                                    "Your welcome. I am going to order dinner now.",
                                     0.99,
                                     {},
                                     {},
@@ -196,7 +204,7 @@
                                     }
                                 ],
                                 [
-                                    "Причем желательно с субтитрами.",
+                                    "We can also arrange a tour for you. ",
                                     0.99,
                                     {},
                                     {},
@@ -220,40 +228,44 @@
                 "disliked_skills": []
             },
             {
-                "dff_generative_skill_state": {
+                "dff_generative_faq_skill_state": {
                     "shared_memory": {},
-                    "previous_human_utter_index": 1,
+                    "previous_human_utter_index": 2,
                     "history": {
                         "0": [
                             "generation",
-                            "generative_response_node"
+                            "greeting"
                         ],
                         "1": [
+                            "generation",
+                            "generative_response_node"
+                        ],
+                        "2": [
                             "generation",
                             "generative_response_node"
                         ]
                     },
                     "current_turn_dff_suspended": false,
                     "context": {
-                        "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                        "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
                         "labels": {
-                            "0": [
+                            "1": [
                                 "generation",
                                 "generative_response_node"
                             ],
-                            "1": [
+                            "2": [
                                 "generation",
                                 "generative_response_node"
                             ]
                         },
                         "requests": {
-                            "0": "привет.",
-                            "1": "посоветуй мне фильм."
+                            "1": "Good. What drinks do you have?",
+                            "2": "thank you."
                         },
                         "responses": {
-                            "0": [
+                            "1": [
                                 [
-                                    "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
                                     0.99,
                                     {},
                                     {},
@@ -262,7 +274,7 @@
                                     }
                                 ],
                                 [
-                                    "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                                     0.99,
                                     {},
                                     {},
@@ -271,7 +283,7 @@
                                     }
                                 ],
                                 [
-                                    "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                    "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
                                     0.99,
                                     {},
                                     {},
@@ -280,9 +292,9 @@
                                     }
                                 ]
                             ],
-                            "1": [
+                            "2": [
                                 [
-                                    "про любовь.",
+                                    "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
                                     0.99,
                                     {},
                                     {},
@@ -291,7 +303,7 @@
                                     }
                                 ],
                                 [
-                                    "какой?",
+                                    "Your welcome. I am going to order dinner now.",
                                     0.99,
                                     {},
                                     {},
@@ -300,7 +312,7 @@
                                     }
                                 ],
                                 [
-                                    "Причем желательно с субтитрами.",
+                                    "We can also arrange a tour for you. ",
                                     0.99,
                                     {},
                                     {},
