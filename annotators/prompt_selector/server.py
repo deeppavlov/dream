@@ -29,14 +29,12 @@ def get_result(request, questions_only=False):
     pairs = []
     context_ids = []
 
-    for context_id, context in enumerate(contexts): #про контекст усложняем логику. нужно чекнуть сколько в реплике пользователя без стопслов остается слов, и если их меньше трех(?), делать так чтоб еще предыдущая реплика бота попадала в контекст. Если больше, то не добавлять реплику бота. Еще одобрать трешхолд, чтобы схожесть была не меньше ...
+    for context_id, context in enumerate(contexts): #про контекст усложняем логику. нужно чекнуть сколько в реплике пользователя без стопслов остается слов, и если их меньше трех(?), делать так чтоб еще предыдущая реплика бота попадала в контекст. Если больше, то не добавлять реплику бота. Еще подобрать трешхолд, чтобы схожесть была не меньше ...
         str_context = " ".join(context)
         for prompt in PROMPTS:
             if questions_only:
                 questions = re.findall(r"\nQuestion: (.*)\nAnswer:", prompt)
-                logger.info(f"questions_list: {str(questions)}")
                 questions_list = ' '.join(questions)
-                logger.info(f"questions_list: {questions_list}")
                 pairs += [[str_context, questions_list]]
             else:
                 pairs += [[str_context, prompt]]
@@ -54,7 +52,6 @@ def get_result(request, questions_only=False):
                 "prompt": [PROMPTS[_id] for _id in most_relevant_sent_ids],
                 "max_similarity": [scores[curr_ids][most_relevant_sent_ids[0]], scores[curr_ids][most_relevant_sent_ids[1]]],
             }
-            logger.info(f"Prompt: {curr_result['prompt']}")
             result += [curr_result]
     except Exception as exc:
         logger.exception(exc)

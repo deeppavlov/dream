@@ -12,7 +12,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
@@ -43,20 +45,30 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
+def generate_responses(
+    instruction, context, model, tokenizer, continue_last_uttr=False
+):
     outputs = []
-    dialog_context = instruction + '\n' + '\n'.join(context) + '\n' + 'AI:'
+    dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context_1 inside generate_responses seen as: {[dialog_context]}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
+    generation_params["max_length"] = (
+        len(tokenizer(dialog_context)["input_ids"]) + generation_params["max_length"]
+    )
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
-        chat_history_ids = model.generate(bot_input_ids, max_length=len(tokenizer(dialog_context)['input_ids'])+generation_params["max_length"], min_length=8, top_p=0.9, temperature=0.9, do_sample=True, pad_token_id=tokenizer.eos_token_id, num_return_sequences=3)
+        chat_history_ids = model.generate(
+            bot_input_ids, pad_token_id=tokenizer.eos_token_id, **generation_params
+        )
+        # сделать чтоб параметры брались из файлы !!!
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
-        result_cut = output.replace(dialog_context + ' ', '').split('\n')[0]
+        logger.info(f"full output: {[output]}")
+        logger.info(f"full dialog_context: {[dialog_context]}")
+        result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
         outputs.append(result_cut)
     return outputs
 
@@ -69,7 +81,6 @@ def respond():
         responses = []
         confidences = []
         for context in contexts:
-            logger.info(f"context_1 seen as: {context}")
             outputs = generate_responses("", context, model, tokenizer)
             logger.info(f"outputs: {outputs}")
             for response in outputs:
