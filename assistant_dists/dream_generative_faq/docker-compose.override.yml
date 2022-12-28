@@ -2,12 +2,11 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_generative_faq/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087,
-          spelling-preprocessing:8074, gptj:8126, sentence-ranker:8128, dff-generative-faq-skill:8134, prompt-selector:8135"
+      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, spelling-preprocessing:8074, gptj:8126, sentence-ranker:8128, dff-generative-faq-skill:8134, prompt-selector:8135"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/SentSeg/
     command: flask run -h 0.0.0.0 -p 8011
@@ -21,7 +20,7 @@ services:
           memory: 1.5G
 
   combined-classification:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: combined_classifier.json
@@ -38,7 +37,7 @@ services:
           memory: 2G
 
   convers-evaluation-selector:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -72,7 +71,7 @@ services:
           memory: 256M
 
   badlisted-words:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
@@ -86,7 +85,7 @@ services:
           memory: 256M
 
   spelling-preprocessing:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074

@@ -26,7 +26,9 @@ ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
-generation_params["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
+generation_params["num_return_sequences"] = 3
+max_length = generation_params["max_length"]
+del generation_params["max_length"]
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
@@ -52,14 +54,14 @@ def generate_responses(
     dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context_1 inside generate_responses seen as: {[dialog_context]}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
-    generation_params["max_length"] = (
-        len(tokenizer(dialog_context)["input_ids"]) + generation_params["max_length"]
-    )
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
-            bot_input_ids, pad_token_id=tokenizer.eos_token_id, **generation_params
+            bot_input_ids,
+            max_length=len(tokenizer(dialog_context)["input_ids"]) + max_length,
+            pad_token_id=tokenizer.eos_token_id,
+            **generation_params,
         )
         # сделать чтоб параметры брались из файлы !!!
     if torch.cuda.is_available():
@@ -68,6 +70,10 @@ def generate_responses(
         output = tokenizer.decode(result, skip_special_tokens=True)
         logger.info(f"full output: {[output]}")
         logger.info(f"full dialog_context: {[dialog_context]}")
+        split_output = output.replace(dialog_context + " ", "")
+        logger.info(f"split output: {split_output}")
+        split_output_1 = output.replace(dialog_context, "").split("\n")
+        logger.info(f"split output_1: {split_output_1}")
         result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
         outputs.append(result_cut)
     return outputs
