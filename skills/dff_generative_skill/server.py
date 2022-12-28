@@ -4,7 +4,6 @@ import logging
 import time
 import os
 import random
-import requests
 
 import sentry_sdk
 from flask import Flask, request, jsonify
@@ -26,7 +25,10 @@ SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 DIALOGPT_SERVICE_URL = os.environ["DIALOGPT_SERVICE_URL"]
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(
+    format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s",
+    level=logging.DEBUG,
+)
 logger = logging.getLogger(__name__)
 
 
