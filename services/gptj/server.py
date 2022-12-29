@@ -37,7 +37,7 @@ def generate_responses(
 ):
     outputs = []
     dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
-    logger.info(f"context_1 inside generate_responses seen as: {[dialog_context]}")
+    logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
     with torch.no_grad():
         if torch.cuda.is_available():
@@ -48,17 +48,11 @@ def generate_responses(
             pad_token_id=tokenizer.eos_token_id,
             **generation_params,
         )
-        # сделать чтоб параметры брались из файлы !!!
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         logger.info(f"full output: {[output]}")
-        logger.info(f"full dialog_context: {[dialog_context]}")
-        split_output = output.replace(dialog_context + " ", "")
-        logger.info(f"split output: {split_output}")
-        split_output_1 = output.replace(dialog_context, "").split("\n")
-        logger.info(f"split output_1: {split_output_1}")
         result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
         outputs.append(result_cut)
     return outputs
@@ -71,7 +65,11 @@ try:
         model.to("cuda")
         logger.info("gptj is set to run on cuda")
     example_response = generate_responses(
-        "", "Hello! Let's chat!", model, tokenizer, continue_last_uttr=False
+        "",
+        "Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. ",
+        model,
+        tokenizer,
+        continue_last_uttr=False,
     )
     logger.info(f"example response: {example_response}")
     logger.info("gptj is ready")
