@@ -107,7 +107,7 @@
             "prompt_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 2,
                     "url": "http://prompt-selector:8135/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
