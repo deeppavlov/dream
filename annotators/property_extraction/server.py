@@ -66,8 +66,7 @@ def get_result(request):
             utt_prev = uttr_list[-2].lower()
             utt_cur = uttr_list[-1].lower()
             is_question = (
-                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
-                or "?" in utt_prev
+                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]]) or "?" in utt_prev
             )
 
             is_sentence = False
