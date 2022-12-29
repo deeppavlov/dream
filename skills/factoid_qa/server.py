@@ -279,7 +279,8 @@ def respond():
         )
 
         logger.info(
-            f"factoid_qa --- text {curr_ann_uttr.get('text', '')} --- find {re.findall(full_template, curr_ann_uttr.get('text', ''))}"
+            f"factoid_qa --- text {curr_ann_uttr.get('text', '')} --- "
+            f"find {re.findall(full_template, curr_ann_uttr.get('text', ''))}"
         )
         if "sentrewrite" in annotations:
             text_rewritten = annotations["sentrewrite"]["modified_sents"][-1]
