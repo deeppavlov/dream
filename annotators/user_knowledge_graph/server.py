@@ -19,6 +19,7 @@ inflect = inflect.engine()
 
 CUSTOM_EL_ADD = os.getenv("CUSTOM_EL_ADD")
 logger.info(f"URL of custom EL: {CUSTOM_EL_ADD}")
+USE_ABSTRACT_KINDS = True
 
 # read all relations & properties to add them into ontology
 rel_type_dict = {}
@@ -39,7 +40,6 @@ rel_kinds_dict = {
     "favorite_book": "book",
     "like_read": "book",
     "favorite_movie": "film",
-    "favorite_movie": "film",
     "favorite_food": "food",
     "like_food": "food",
     "favorite_drink": "food",
@@ -53,28 +53,10 @@ TEAM = "yashkens|c77b"
 
 graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB)
 
-logger.info('Graph Loaded!')
+graph.ontology.create_entity_kind("Abstract")
+graph.ontology.create_property_kind_of_entity_kind("Abstract", "Target_kind", str)
 
-# graph.drop_database()
-#
-# graph.ontology.create_entity_kinds(
-#     entity_kinds=["Person", "User", "Habit"],
-#     parents=[None, "Person", None]
-# )
-# for rel in rel_type_dict:
-#     if rel_type_dict[rel] == 'relation':
-#         continue
-#         # rel_name = '_'.join(rel.split(' ')).upper()
-#         # logger.info(f'adding rel: {rel_name}')
-#         # graph.ontology.create_relationship_kind(rel_name, "User")
-#     else:
-#         if rel == "<blank>":
-#             continue
-#         logger.info(f'adding property: {rel}')
-#         graph.ontology.create_property_kinds_of_entity_kinds(["User"], [[rel]])
-# graph.ontology.create_property_kinds_of_entity_kinds(["User"], [["name"]])
-#
-# logger.info('Graph Populated!')
+logger.info('Graph Loaded!')
 
 
 def add_name_property(graph, user_id, names):
@@ -87,39 +69,66 @@ def add_name_property(graph, user_id, names):
     logger.info(f"I already have you in the graph! Updating your property name to {names[0]}!")
 
 
-def add_any_relationship(utt, graph, entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets):
+def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets,
+                         existing_ids):
     """Creates an entity and a relation between it and the User from property extraction service."""
-    entity_kind = entity_kind.replace('_', '').title()
-    graph.ontology.create_property_kinds_of_entity_kinds([entity_kind], [["name"]])
+    init_entity_kind = init_entity_kind.replace('_', '').title()
+    graph.ontology.create_property_kinds_of_entity_kinds([init_entity_kind], [["name"]])
 
+    logger.info(f"add_any_relationship, rel_type: {rel_type} --- entity_name: {entity_name} --- "
+                f"inflected: {inflect.singular_noun(entity_name)}")
     text = utt.get("text", "")
-    if rel_type in {"have_family", "have_sibling", "have_chidren", "have_pet", "have_vehicle"}:
-        if f" a {entity_name}" in text or inflect.singular_noun(entity_name):
-            entity_kind = f"{entity_kind}_general"
-        else:
-            entity_kind = f"{entity_kind}_partcl"
+
+    added_abstract_entity = False
+    if USE_ABSTRACT_KINDS and \
+            rel_type.lower() in {"favorite_animal", "like_animal", "favorite_book", "like_read", "favorite_movie",
+                                 "favorite_food", "like_food", "favorite_drink", "like_drink", "favorite_sport",
+                                 "like_sports"} \
+            and not any([f" {word} {entity_name}" in text for word in ["the", "my", "his", "her"]]):
+        if f"Abstract/{init_entity_kind}" not in existing_ids:
+            graph.create_entities(
+                entity_kinds=["Abstract"],
+                entity_ids=[f"Abstract/{init_entity_kind}"],
+                property_kinds=[["Target_kind"]],
+                property_values=[[init_entity_kind]]
+            )
+            logger.info(f"adding abstract kind --- {init_entity_kind} --- {entity_name}")
+        entity_kind = "Abstract"
+        graph.ontology.create_property_kinds_of_entity_kinds(["Abstract"], [["name"]])
+        new_entity_id = f"Abstract/{entity_kind}"
+        inflect_entity_name = inflect.singular_noun(entity_name)
+        if inflect_entity_name:
+            entity_name = inflect_entity_name
+        logger.info(f"correcting type and name, entity_kind: {entity_kind}, entity_name: {entity_name}")
+        added_abstract_entity = True
+    else:
+        entity_kind = init_entity_kind
 
     message = ""
-    # logger.info(f"All entity Kinds: {graph.ontology.get_all_entity_kinds()}")
-    if (entity_name, entity_kind) in entities_with_types:
-        new_entity_id = entities_with_types[(entity_name, entity_kind)]
-        message += f"entity exists: {new_entity_id} --- "
-    else:
-        new_entity_id = str(uuid.uuid4())
-        new_entity_id = entity_kind + '/' + new_entity_id
-        logger.info(f"Entity type to add: {entity_kind}")
-        graph.ontology.create_entity_kinds(entity_kinds=[entity_kind], parents=[None])
-        graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
-        message += f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! "
+    if not added_abstract_entity:
+        if (entity_name, entity_kind) in entities_with_types:
+            new_entity_id = entities_with_types[(entity_name, entity_kind)]
+            message += f"entity exists: {new_entity_id} --- "
+        else:
+            new_entity_id = str(uuid.uuid4())
+            new_entity_id = entity_kind + '/' + new_entity_id
+            logger.info(f"Entity type to add: {entity_kind}")
+            graph.ontology.create_entity_kinds(entity_kinds=[entity_kind], parents=[None])
+            graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
+            logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
 
-    rel_name = rel_type + f"_{entity_kind.lower()}"
-    if (user_id, rel_name, new_entity_id) in ex_triplets:
-        message += f"triplet exists: {(rel_name, new_entity_id)}"
+    if entity_kind == "Abstract":
+        rel_name = rel_type.split("_")[0] + "_Abstract"
     else:
+        rel_name = rel_type + f"_{entity_kind.lower()}"
+
+    if (user_id, rel_name, new_entity_id) in ex_triplets:
+        logger.info(f"triplet exists: {(rel_name, new_entity_id)}")
+    else:
+        logger.info(f"connecting {entity_name} with User by {rel_type} relationship, entity_kind {entity_kind}")
         graph.ontology.create_relationship_kind("User", rel_name, entity_kind)
         graph.create_relationship(user_id, rel_name, new_entity_id)
-        message += f"{entity_name} is connected with User by {rel_type} relationship."
-    logger.info(message)
+        logger.info(f"{entity_name} is connected with User by {rel_type} relationship.")
 
 
 def add_any_property(graph, user_id, property_type, property_value):
@@ -150,7 +159,7 @@ def get_entity_type(attributes):
     return 'Misc'
 
 
-def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets):
+def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, existing_ids):
     """Chooses what to add: property, relationship or nothing."""
     no_rel_message = "No relations were found!"
     attributes = utt.get("annotations", {}).get("property_extraction", {})
@@ -171,7 +180,7 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets):
                 if relation in rel_kinds_dict:
                     entity_kind = rel_kinds_dict[relation]
                 add_any_relationship(utt, graph, entity_kind, entity_name, relation.upper(), user_id,
-                                     entities_with_types, ex_triplets)
+                                     entities_with_types, ex_triplets, existing_ids)
                 return triplet
             else:
                 add_any_property(graph, user_id, triplet['property'], triplet['object'])
@@ -235,7 +244,7 @@ def get_result(request):
     kg_parser_annotations = []
     ex_triplets = []
     if user_id in existing_ids:
-        entity_rel_info = graph.search_for_relationships([user_id])
+        entity_rel_info = graph.search_for_relationships(id_a=user_id)
         for rel, objects in entity_rel_info:
             for obj in objects:
                 ex_triplets.append((user_id, rel, obj))
@@ -253,7 +262,7 @@ def get_result(request):
     name_result = {}
     if entities:
         name_result = name_scenario(utt, user_id)
-    property_result = add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets)
+    property_result = add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, existing_ids)
     if name_result:
         added.append(name_result)
     if property_result:

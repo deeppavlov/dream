@@ -11,3 +11,12 @@ res = requests.post(
              "annotations": {"property_extraction":
                               {"triplet": {"subject": "user", "relation": "have_pet", "object": "dog"}}}}]}
 ).json()
+
+res = requests.post(
+    URL,
+    json={"utterances":
+           [{"text": "i like dogs",
+             "user": {"id": "1234"},
+             "annotations": {"property_extraction":
+                              {"triplet": {"subject": "user", "relation": "like_animal", "object": "dog"}}}}]}
+).json()
