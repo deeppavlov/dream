@@ -30,7 +30,7 @@ flows = {
             TRANSITIONS: {("scenario", "main_node"): cnd.true()},
         },
         "fallback": {
-            RESPONSE: "Ooops",
+            RESPONSE: "Ooops, something went wrong inside me! Could you repeat what you've just said?",
             TRANSITIONS: {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),

@@ -1,7 +1,7 @@
 {
     "CEFR": "B1",
     "situation_description": "Some time ago you applied for an open position at the company that you have been following in LinkedIn for a while now. You are invited to a job interview with an HR specialist.",
-    "keywords": ["job interview"],
+    "keywords": ["job", "interview"],
     "expected_language": [
         "To work as a (manager, developer, web designer)",
         "For the past *** years..",

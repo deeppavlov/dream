@@ -40,7 +40,6 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("feedback", "comments", 2.0): cnd.true(),
-            # ("feedback", "comments", 2.0): loc_cnd.is_end_dialog(),
         },
     },
     "sevice": {
@@ -49,7 +48,7 @@ flows = {
             TRANSITIONS: {("feedback", "comments"): loc_cnd.is_end_dialog()},
         },
         "fallback": {
-            RESPONSE: "smth is wrong",
+            RESPONSE: "Ooops, something went wrong inside me! Could you repeat what you've just said?",
             TRANSITIONS: {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),

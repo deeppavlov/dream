@@ -167,7 +167,8 @@ def dont_tell_you_answer(annotated_phrase):
 
 HOW_BOT_IS_DOING_RESPONSES = {
     "EN": [
-        "I can't complain! It's against the Company Policy." "I am as happy as a clam in butter sauce.",
+        "I can't complain! It's against the Company Policy.",
+        "I am as happy as a clam in butter sauce.",
         "I am fine thanks!",
         "I'm so happy I have to sit on my hands to keep from clapping.",
         "Blessed!",
@@ -205,8 +206,7 @@ BAD_MOOD_REACTIONS = {
     "EN": [
         "I am sorry to hear that.",
         "I see.",
-        "Sounds like a bad mood.",
-        "Sounds like a bad mood.",
+        "Sounds like a bad mood."
     ],
     "RU": [
         "Мне жаль слышать такое.",

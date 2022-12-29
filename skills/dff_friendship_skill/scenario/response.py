@@ -30,6 +30,8 @@ HIGH_CONFIDENCE = 0.95
 MIDDLE_CONFIDENCE = 0.9
 GREETING_STEPS = list(common_greeting.GREETING_QUESTIONS[LANGUAGE])
 
+
+# вот эти линки надо будет поменять все
 link_to_skill2key_words = {
     skill_name: common_link.link_to_skill2key_words[skill_name]
     for skill_name in common_link.link_to_skill2key_words
@@ -161,7 +163,7 @@ def bye_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     logger.debug("bye_response")
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     int_ctx.set_can_continue(ctx, actor, CAN_NOT_CONTINUE)
-    reply = "Sorry, bye. #+#exit"
+    reply = "Sorry, bye."
     return reply
 
 
