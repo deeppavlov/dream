@@ -106,9 +106,9 @@
             },
             "prompt_selector": {
                 "connector": {
-                "protocol": "http",
-                "timeout": 5,
-                "url": "http://prompt-selector:8135/respond"
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://prompt-selector:8135/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -135,13 +135,13 @@
             }
         },
         "skills": {
-            "dff_generative_faq_skill": {
+            "dff_generative_prompt_based_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 360,
-                    "url": "http://dff-generative-faq-skill:8134/respond"
+                    "timeout": 5,
+                    "url": "http://dff-generative-prompt-based-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_generative_faq_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_generative_prompt_based_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -151,7 +151,7 @@
             "gptj": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 100,
+                    "timeout": 5,
                     "url": "http://gptj:8126/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
@@ -197,7 +197,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
+                "previous_services": [
+                    "skills"
+                ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             }
         },

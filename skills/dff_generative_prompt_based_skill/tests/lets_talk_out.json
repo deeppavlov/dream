@@ -12,7 +12,7 @@
         ],
         [
             {
-                "dff_generative_faq_skill_state": {
+                "dff_generative_prompt_based_skill_state": {
                     "shared_memory": {},
                     "previous_human_utter_index": 2,
                     "history": {
@@ -120,7 +120,7 @@
                 "disliked_skills": []
             },
             {
-                "dff_generative_faq_skill_state": {
+                "dff_generative_prompt_based_skill_state": {
                     "shared_memory": {},
                     "previous_human_utter_index": 2,
                     "history": {
@@ -228,7 +228,7 @@
                 "disliked_skills": []
             },
             {
-                "dff_generative_faq_skill_state": {
+                "dff_generative_prompt_based_skill_state": {
                     "shared_memory": {},
                     "previous_human_utter_index": 2,
                     "history": {

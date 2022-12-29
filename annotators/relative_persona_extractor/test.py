@@ -27,7 +27,7 @@ def main():
             ],
         },
         {
-            "max_similarity": 0.6451027989387512,
+            "max_similarity": 0.6451027393341064,
             "persona": [
                 "I like watching travel video blogs.",
                 "I like to watch football and basketball on TV.",
@@ -37,7 +37,9 @@ def main():
     ]
 
     result = requests.post(url, json=input_data).json()
-    assert result == gold, print(result)
+    print(result)
+    assert result == gold
+    print(result)
     print("Success!")
 
 

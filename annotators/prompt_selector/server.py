@@ -11,12 +11,14 @@ import re
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
+)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
-N_SENTENCES_OT_RETURN = int(getenv("N_SENTENCES_OT_RETURN"))
+N_SENTENCES_TO_RETURN = int(getenv("N_SENTENCES_TO_RETURN"))
 PROMPTS = []
 for filename in listdir("common/prompts"):
     data = json.load(open("common/prompts/" + filename, "r"))
@@ -42,13 +44,15 @@ def get_result(request, questions_only=False):
             context_ids += [context_id]
     context_ids = np.array(context_ids)
     try:
-        scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0][
-            "batch"
-        ]
+        scores = requests.post(
+            SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5
+        ).json()[0]["batch"]
         scores = np.array(scores)
         for i, context in enumerate(contexts):
             curr_ids = np.where(context_ids == i)[0]
-            most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_OT_RETURN]
+            most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][
+                :N_SENTENCES_TO_RETURN
+            ]
             curr_result = {
                 "prompt": [PROMPTS[_id] for _id in most_relevant_sent_ids],
                 "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
