@@ -5,6 +5,7 @@ import time
 
 import nltk
 import sentry_sdk
+import spacy
 from flask import Flask, jsonify, request
 
 from deeppavlov import build_model
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 stemmer = nltk.PorterStemmer()
+nlp = spacy.load("en_core_web_sm")
 
 config_name = os.getenv("CONFIG")
 rel_cls_flag = int(os.getenv("REL_CLS_FLAG", "0"))
@@ -52,10 +54,35 @@ except Exception as e:
 
 def get_result(request):
     st_time = time.time()
-    uttrs = request.json.get("utterances", [])
-    named_entities_batch = request.json.get("named_entities", [[] for _ in uttrs])
-    entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in uttrs])
-    entity_info_batch = request.json.get("entity_info", [[] for _ in uttrs])
+    init_uttrs = request.json.get("utterances", [])
+    named_entities_batch = request.json.get("named_entities", [[] for _ in init_uttrs])
+    entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in init_uttrs])
+    entity_info_batch = request.json.get("entity_info", [[] for _ in init_uttrs])
+    uttrs = []
+    for uttr_list in init_uttrs:
+        if len(uttr_list) == 1:
+            uttrs.append(uttr_list[0])
+        else:
+            utt_prev = uttr_list[-2].lower()
+            utt_cur = uttr_list[-1].lower()
+            is_question = (
+                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
+                or "?" in utt_prev
+            )
+
+            is_sentence = False
+            parsed_sentence = nlp(utt_cur)
+            if parsed_sentence:
+                tokens = [elem.text for elem in parsed_sentence]
+                tags = [elem.tag_ for elem in parsed_sentence]
+                found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP"]])
+                if found_verbs and len(tokens) > 2:
+                    is_sentence = True
+
+            if is_question and not is_sentence:
+                uttrs.append(f"{utt_prev} {utt_cur}")
+            else:
+                uttrs.append(utt_cur)
 
     triplets_batch = []
     outputs, scores = generative_ie(uttrs)
