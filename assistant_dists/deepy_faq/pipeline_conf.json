@@ -1,28 +1,36 @@
 {
+    "connectors": {},
     "services": {
         "last_chance_service": {
+            "is_enabled": true,
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say."
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["last_chance"]
+            "tags": [
+                "last_chance"
+            ]
         },
         "timeout_service": {
+            "is_enabled": true,
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else."
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["timeout"]
+            "tags": [
+                "timeout"
+            ]
         },
         "annotators": {
             "spelling_preprocessing": {
+                "is_enabled": true,
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 1.0,
                     "url": "http://spelling-preprocessing:8074/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
@@ -30,21 +38,41 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
             }
         },
+        "response_annotators": {
+            "emotion_classification": {
+                "is_enabled": true,
+                "connector": {
+                    "protocol": "python",
+                    "url": "http://emotion_classification:3774/model",
+                    "class_name": "connectors:BatchConnector"
+                },
+                "dialog_formatter": "dp_formatters:hypotheses_list",
+                "response_formatter": "dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            }
+        },
         "skills": {
             "faq_skill": {
+                "is_enabled": true,
                 "connector": {
                     "protocol": "http",
                     "url": "http://faq_skill:3772/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_skill_formatter",
-                "state_manager_method": "add_hypothesis",
-                "previous_services": ["annotators"]
+                "previous_services": [
+                    "annotators"
+                ],
+                "state_manager_method": "add_hypothesis"
             },
             "dff_program_y_skill": {
+                "is_enabled": true,
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 2.0,
                     "url": "http://dff-program-y-skill:3775/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
@@ -55,33 +83,22 @@
                 "state_manager_method": "add_hypothesis"
             }
         },
-        "response_annotators": {
-            "emotion_classification": {
-                "connector": {
-                    "protocol": "python",
-                    "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3774/model"
-                },
-              "dialog_formatter": "dp_formatters:hypotheses_list",
-              "response_formatter": "dp_formatters:simple_formatter_service",
-              "previous_services": ["skills"],
-              "state_manager_method": "add_hypothesis_annotation_batch"
-            }
-        },
         "response_selectors": {
             "rule_based_response_selector": {
+                "is_enabled": true,
                 "connector": {
                     "protocol": "http",
                     "url": "http://rule_based_response_selector:3773/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_response_selector_formatter_service",
-                "previous_services": ["response_annotators"],
+                "previous_services": [
+                    "response_annotators"
+                ],
                 "state_manager_method": "add_bot_utterance"
             }
         }
     },
-    "connectors": {},
     "metadata": {
         "display_name": "Deepy FAQ",
         "author": "DeepPavlov",
