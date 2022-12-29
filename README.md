@@ -61,10 +61,10 @@ This is a generative-based socialbot that uses [English DialoGPT model](https://
 Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_russian)
 
-### Generative FAQ Dream
+### Generative Prompt-Based Dream
 
 Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models (currently supports GPT-J only). This is a generative-based socialbot that uses [GPT-J](https://huggingface.co/EleutherAI/gpt-j-6B) to generate most of the responses. You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/tree/generative_skills/common/prompts), and the provided information will be used in GPT-J-based reply generation as a prompt.
-[Link to the distribution.](https://github.com/deeppavlov/dream/tree/generative_skills/assistant_dists/dream_generative_faq)
+[Link to the distribution.](https://github.com/deeppavlov/dream/tree/generative_skills/assistant_dists/dream_generative_prompt_based)
 
 # Quick Start
 
@@ -123,13 +123,13 @@ Refer to the [components](#components) section to see estimated requirements.
 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml up --build
 ```
 
-#### **Generative FAQ Dream**
+#### **Generative Prompt-Based Dream**
 
 **Please note that this distribution (in particular, GPT-J model) requires a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
 
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream_generative_faq/docker-compose.override.yml -f assistant_dists/dream_generative_faq/dev.yml up --build 
+docker-compose -f docker-compose.yml -f assistant_dists/dream_generative_prompt_based/docker-compose.override.yml -f assistant_dists/dream_generative_prompt_based/dev.yml up --build 
 ```
 
 We've also included a config with GPU allocations for multi-GPU environments.
@@ -235,9 +235,9 @@ Dream Architecture is presented in the following image:
 | NER                         | 2.2 GiB RAM, 5 GiB GPU   | extracts person names, names of locations, organizations from uncased text                                                                                                                                                     |
 | News API annotator          | 80 MiB RAM               | extracts the latest news about entities or topics using the GNews API. DeepPavlov Dream deployments utilize our own API key.                                                                                                   |
 | Personality Catcher         | 30 MiB RAM               |                                                                                                                                                                                                                                |
-| Prompt Selector             | 50 MiB RAM               | Annotator utilizing Sentence Ranker to rank prompts and selecting `N_SENTENCES_OT_RETURN` most relevant prompts (based on questions provided in prompts)                                                                                               |
+| Prompt Selector             | 50 MiB RAM               | Annotator utilizing Sentence Ranker to rank prompts and selecting `N_SENTENCES_TO_RETURN` most relevant prompts (based on questions provided in prompts)                                                                                               |
 | Rake keywords               | 40 MiB RAM               | extracts keywords from utterances with the help of RAKE algorithm                                                                                                                                                              |
-| Relative Persona Extractor  | 50 MiB RAM               | Annotator utilizing Sentence Ranker to rank persona sentences and selecting `N_SENTENCES_OT_RETURN` the most relevant sentences                                                                                                |
+| Relative Persona Extractor  | 50 MiB RAM               | Annotator utilizing Sentence Ranker to rank persona sentences and selecting `N_SENTENCES_TO_RETURN` the most relevant sentences                                                                                                |
 | Sentrewrite                 | 200 MiB RAM              | rewrites user's utterances by replacing pronouns with specific names that provide more useful information to downstream components                                                                                             |
 | Sentseg                     | 1 GiB RAM                | allows us to handle long and complex user's utterances by splitting them into sentences and recovering punctuation                                                                                                             |
 | Spacy Nounphrases           | 180 MiB RAM              | extracts nounphrases using Spacy and filters out generic ones                                                                                                                                                                  |
@@ -299,7 +299,7 @@ Dream Architecture is presented in the following image:
 | DFF Funfact skill             | 100 MiB RAM               | **[New DFF version]** Tells user fun facts                                                                                                                                                                         |
 | DFF Gaming skill              | 80 MiB RAM                | provides a video games discussion. Gaming Skill is for more general talk about video games                                                                                                                         |
 | DFF Gossip skill              | 95 MiB RAM                | DFF-based skill to discuss other people with news about them                                                                                                                                                       |
-| DFF Generative FAQ skill      | 50 MiB RAM                | **[New DFF version]** DFF-based skill that provides GPT-J generated answers based on specified prompts and the dialog context |
+| DFF Generative Prompt-Based skill      | 50 MiB RAM                | **[New DFF version]** DFF-based skill that provides GPT-J generated answers based on specified prompts and the dialog context |
 | DFF Grounding skill           | 90 MiB RAM                | **[New DFF version]** DFF-based skill to answer what is the topic of the conversation, to generate acknowledgement, to generate universal responses on some dialog acts by MIDAS                                   |
 | DFF Intent Responder          | 100 MiB RAM               | **[New DFF version]**  provides template-based replies for some of the intents detected by Intent Catcher annotator                                                                                                |
 | DFF Movie skill               | 1.1 GiB RAM               | is implemented using DFF and takes care of the conversations related to movies                                                                                                                                     |

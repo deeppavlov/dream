@@ -23,7 +23,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-MODEL_SERVICE_URL = os.environ["MODEL_SERVICE_URL"]
+GENERATIVE_SERVICE_URL = os.environ["GENERATIVE_SERVICE_URL"]
 
 logging.basicConfig(
     format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s",
@@ -40,7 +40,7 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 # def is_container_running():
 #     try:
 #         requested_data = [{"speaker": "human", "text": "hi"}]
-#         response = requests.post(MODEL_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=4)
+#         response = requests.post(GENERATIVE_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=4)
 #         if response.status_code == 200:
 #             return True
 #     except Exception as exc:
@@ -73,7 +73,7 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = containers.is_container_running(MODEL_SERVICE_URL)
+    result = containers.is_container_running(GENERATIVE_SERVICE_URL)
     if result:
         break
     else:

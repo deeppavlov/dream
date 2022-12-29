@@ -12,11 +12,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
@@ -24,28 +25,16 @@ ZERO_CONFIDENCE = 0.0
 MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
-generation_params["num_return_sequences"] = 3
 max_length = generation_params["max_length"]
 del generation_params["max_length"]
-
-try:
-    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    if torch.cuda.is_available():
-        model.to("cuda")
-        logger.info("gptj is set to run on cuda")
-
-    logger.info("gptj is ready")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
+def generate_responses(
+    instruction, context, model, tokenizer, continue_last_uttr=False
+):
     outputs = []
     dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context_1 inside generate_responses seen as: {[dialog_context]}")
@@ -73,6 +62,23 @@ def generate_responses(instruction, context, model, tokenizer, continue_last_utt
         result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
         outputs.append(result_cut)
     return outputs
+
+
+try:
+    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    if torch.cuda.is_available():
+        model.to("cuda")
+        logger.info("gptj is set to run on cuda")
+    example_response = generate_responses(
+        "", "Hello! Let's chat!", model, tokenizer, continue_last_uttr=False
+    )
+    logger.info(f"example response: {example_response}")
+    logger.info("gptj is ready")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
 
 
 @app.route("/respond", methods=["POST"])

@@ -105,7 +105,6 @@ services:
         SERVICE_PORT: 8126
         SERVICE_NAME: gptj
         PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
-        N_HYPOTHESES_TO_GENERATE: 1
         CONFIG_NAME: gptj.json
       context: .
       dockerfile: ./services/gptj/Dockerfile
@@ -126,7 +125,7 @@ services:
       args:
         SERVICE_PORT: 8134
         SERVICE_NAME: dff_generative_prompt_based_skill
-        MODEL_SERVICE_URL: http://gptj:8126/respond
+        GENERATIVE_SERVICE_URL: http://gptj:8126/respond
       context: .
       dockerfile: ./skills/dff_generative_prompt_based_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload
