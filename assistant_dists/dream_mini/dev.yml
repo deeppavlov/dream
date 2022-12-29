@@ -54,18 +54,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
-  gptj:
-    volumes:
-      - "./services/gptj:/src"
-      - "./common:/src/common"
-    ports:
-      - 8126:8126
-  dff-gptj-skill:
-    volumes:
-      - "./skills/dff_gptj_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8134:8134
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"

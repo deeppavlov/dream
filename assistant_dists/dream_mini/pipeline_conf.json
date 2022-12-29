@@ -47,7 +47,7 @@
                 "timeout"
             ]
         },
-        "bot_annotator_selector": {
+        "response_annotator_selectors": {
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -60,13 +60,13 @@
                 "selector"
             ]
         },
-        "bot_utterance_annotators": {
+        "response_annotators": {
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "bot_annotator_selector"
+                    "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
@@ -162,19 +162,6 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_gptj_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 360,
-                    "url": "http://dff-gptj-skill:8134/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_gptj_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
             "dummy_skill": {
                 "connector": {
                     "protocol": "python",
@@ -192,19 +179,6 @@
                     "protocol": "http",
                     "timeout": 5,
                     "url": "http://dialogpt:8125/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "gptj": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 100,
-                    "url": "http://gptj:8126/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
