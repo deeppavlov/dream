@@ -1,40 +1,335 @@
 [
     [
         [
-            "А я тебе советую книгу почитать.",
-            "\"Скотт Пилигрим против всех\"",
-            "не смотри.",
-            "\"Скотт Пилигрим против всех\"",
-            "не смотри."
+            "про любовь.",
+            "какой?",
+            "Причем желательно с субтитрами."
         ],
         [
-            0.99,
-            0.99,
             0.99,
             0.99,
             0.99
         ],
         [
-            {},
-            {},
+            {
+                "dff_generative_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 1,
+                    "history": {
+                        "0": [
+                            "generation",
+                            "generative_response_node"
+                        ],
+                        "1": [
+                            "generation",
+                            "generative_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                        "labels": {
+                            "0": [
+                                "generation",
+                                "generative_response_node"
+                            ],
+                            "1": [
+                                "generation",
+                                "generative_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "0": "привет.",
+                            "1": "посоветуй мне фильм."
+                        },
+                        "responses": {
+                            "0": [
+                                [
+                                    "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ],
+                            "1": [
+                                [
+                                    "про любовь.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "какой?",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "Причем желательно с субтитрами.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {},
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "",
+                "disliked_skills": []
+            },
+            {
+                "dff_generative_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 1,
+                    "history": {
+                        "0": [
+                            "generation",
+                            "generative_response_node"
+                        ],
+                        "1": [
+                            "generation",
+                            "generative_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                        "labels": {
+                            "0": [
+                                "generation",
+                                "generative_response_node"
+                            ],
+                            "1": [
+                                "generation",
+                                "generative_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "0": "привет.",
+                            "1": "посоветуй мне фильм."
+                        },
+                        "responses": {
+                            "0": [
+                                [
+                                    "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ],
+                            "1": [
+                                [
+                                    "про любовь.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "какой?",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "Причем желательно с субтитрами.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {},
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "",
+                "disliked_skills": []
+            },
+            {
+                "dff_generative_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 1,
+                    "history": {
+                        "0": [
+                            "generation",
+                            "generative_response_node"
+                        ],
+                        "1": [
+                            "generation",
+                            "generative_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "7c92d5fe-bdb3-45ce-984e-5b00e0dab8bb",
+                        "labels": {
+                            "0": [
+                                "generation",
+                                "generative_response_node"
+                            ],
+                            "1": [
+                                "generation",
+                                "generative_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "0": "привет.",
+                            "1": "посоветуй мне фильм."
+                        },
+                        "responses": {
+                            "0": [
+                                [
+                                    "А то я уже отчаялся найти вас в своей группе и даже на этом подсайте.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "А где у меня написано, что я на полном серьезе пишу? Я не говорю, что надо всем, но надо.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "И, что характерно, \" не так всё плохо \" — это, оказывается, \" плохо \".",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ],
+                            "1": [
+                                [
+                                    "про любовь.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "какой?",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ],
+                                [
+                                    "Причем желательно с субтитрами.",
+                                    0.99,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {},
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "",
+                "disliked_skills": []
+            }
+        ],
+        [
             {},
             {},
             {}
         ],
         [
-            {},
-            {},
-            {},
-            {},
-            {}
-        ],
-        [
-            {
-                "can_continue": "no"
-            },
-            {
-                "can_continue": "no"
-            },
             {
                 "can_continue": "no"
             },

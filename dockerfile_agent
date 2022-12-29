@@ -27,7 +27,7 @@ RUN mkdir /pavlov && \
     cd DeepPavlov && \
     pip install -e .
 
-RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pyaml openpyxl==3.0.0 xlrd==1.2.0
+RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pyaml openpyxl==3.0.0 xlrd==1.2.0 ruamel-yaml==0.17.21
 RUN pip install pip install deeppavlov-agent==2.3.0a0
 
 ENV LANG C.UTF-8

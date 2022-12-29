@@ -37,7 +37,7 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def is_container_running():
     try:
         requested_data = [{"speaker": "human", "text": "привет"}]
-        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=1)
+        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=4)
         if response.status_code == 200:
             return True
     except Exception as exc:

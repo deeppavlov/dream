@@ -1,7 +1,7 @@
 [
     [
         "Go ahead,, try to ask you a question.",
-        0.85,
+        0.7,
         {
             "dff_program_y_wide_skill_state": {
                 "shared_memory": {},
@@ -42,7 +42,7 @@
         },
         {},
         {
-            "can_continue": "can"
+            "can_continue": "no"
         }
     ]
 ]

@@ -24,7 +24,7 @@ def test_one_step_responses():
         },
     ).json()
     assert response[0][:2] == ["Do you like superheroes?", 1.0], print(response)
-    assert response[1][1] == 0.98, print(response)
+    assert response[1][1] == 0.9, print(response)
 
     print("SUCCESS!")
 

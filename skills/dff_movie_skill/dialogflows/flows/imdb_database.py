@@ -263,13 +263,13 @@ class IMDb:
                 pass
         to_remove = []
         for proc_title in self.preprocessed_original.keys():
-            if re.match(f"^[0-9 ]+$", proc_title):
+            if re.match("^[0-9 ]+$", proc_title):
                 to_remove.append(proc_title)
         for proc_title in to_remove:
             self.preprocessed_original.pop(proc_title)
         to_remove = []
         for proc_title in self.preprocessed_alternative.keys():
-            if re.match(f"^[0-9 ]+$", proc_title):
+            if re.match("^[0-9 ]+$", proc_title):
                 to_remove.append(proc_title)
         for proc_title in to_remove:
             self.preprocessed_alternative.pop(proc_title)
@@ -286,9 +286,10 @@ class IMDb:
                 else:
                     self.database[imdb_id][f"lowercased_{profession}s"] = []
                     self.database[imdb_id][f"{profession}s"] = []
-            self.database[imdb_id]["characters"] = [
-                json.loads(char_list)[0] for char_list in self.database[imdb_id]["characters"] if json.loads(char_list)
-            ]
+            # self.database[imdb_id]["characters"] = [
+            #     json.loads(char_list)[0]
+            #     for char_list in self.database[imdb_id]["characters"] if json.loads(char_list)
+            # ]
         # `self.professionals` is a dictionary with keys from `self.professions`
         # and ['lowercased_prof` for prof in `self.professions`].
         # Each field is a dictionary where key is a name of person and value is a list of movies imdb_ids

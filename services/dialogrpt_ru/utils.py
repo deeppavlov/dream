@@ -6,7 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 EOS_token = "<|endoftext|>"
-TOKENIZER_NAME_OR_PATH = os.getenv("TOKENIZER_NAME_OR_PATH", "Grossmend/rudialogpt3_medium_based_on_gpt2")
+TOKENIZER_NAME_OR_PATH = os.getenv("TOKENIZER_NAME_OR_PATH", "DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2")
 
 
 class Option:
@@ -173,7 +173,7 @@ class Scorer(ScorerBase):
     def __init__(self, opt):
         super().__init__(opt)
         n_embd = 1024
-        self.transformer = AutoModelForCausalLM.from_pretrained("Grossmend/rudialogpt3_medium_based_on_gpt2")
+        self.transformer = AutoModelForCausalLM.from_pretrained(TOKENIZER_NAME_OR_PATH)
         self.transformer.resize_token_embeddings(len(self.tokenizer))
 
         self.score = torch.nn.Linear(n_embd, 1, bias=False)

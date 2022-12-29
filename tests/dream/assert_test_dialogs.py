@@ -15,7 +15,7 @@ special_symb_pat = re.compile(r"[^a-z0-9 ]")
 
 SPECIAL_SKILLS = {
     "RANDOM_SKILLS": [
-        "program_y",
+        "dff_program_y_skill",
         "dummy_skill",
         "movie_tfidf_retrieval",
         "entertainment_tfidf_retrieval",
@@ -42,8 +42,10 @@ SPECIAL_SKILLS = {
         "dff_science_skill",
         "dff_travel_skill",
         "dff_wiki_skill",
+        "dff_short_story_skill",
         "game_cooperative_skill",
         "dialogpt",
+        "dialogpt_persona_based",
     ],
 }
 
@@ -71,6 +73,9 @@ def main():
     assert statistics.mean(proc_times) <= args.time_limit, print(
         f"Mean proc time: {mean_proc_time} > {args.time_limit}"
     )
+
+    error_reports = []
+
     for pred_r, true_r, skill in zip(pred_data, true_data, active_skills):
         true_sents = set([sent.lower().replace("\n", " ").replace("  ", " ") for sent in true_r[2:]])
         acceptable_skill_names = true_r[0]
@@ -111,18 +116,23 @@ def main():
                     checked = True
             if not checked:
                 passed_gold_phrases = False
-                print("FOUND POSSIBLE ERROR: {} not in {}".format(pred_r[-1], true_sents))
+                print(f"FOUND POSSIBLE ERROR: {pred_r[-1]} by skill {skill} not in {true_sents}")
 
         if len(acceptable_skill_names) > 0 or len(true_sents) > 0:
-            assert (len(acceptable_skill_names) > 0 and passed_acceptable_skills) or (
+            if (len(acceptable_skill_names) > 0 and passed_acceptable_skills) or (
                 len(true_sents) > 0 and passed_gold_phrases
-            ), (
-                f"\nERROR!!!\nAcceptable skill names: `{acceptable_skill_names}`.\n"
-                f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
-                f"True sentences: `{true_sents}`.\n"
-                f"Passed true sentences: `{passed_gold_phrases}`.\n"
-                f"Skill: {skill}\nSkill output: {pred_r[-1]}"
-            )
+            ):
+                continue
+            else:
+                error_reports += [
+                    f"\nERROR!!!\nAcceptable skill names: `{acceptable_skill_names}`.\n"
+                    f"Passed acceptable skill names: `{passed_acceptable_skills}`.\n"
+                    f"True sentences: `{true_sents}`.\n"
+                    f"Passed true sentences: `{passed_gold_phrases}`.\n"
+                    f"Skill: {skill}\nSkill output: {pred_r[-1]}"
+                ]
+    print("\n\nASSERTION RESULTS:\n")
+    assert len(error_reports) == 0, print("\n\n".join(error_reports))
 
 
 if __name__ == "__main__":

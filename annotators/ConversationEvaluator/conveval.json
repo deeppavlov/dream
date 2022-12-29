@@ -41,14 +41,25 @@
       }
     ]
   },
+  "train": {
+    "batch_size": 64
+  },
   "metadata": {
-      "variables": {
-      "MODEL_PATH": "/tmp",
-      "MODEL_NAME": "model"
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_PATH": "{MODELS_PATH}/classifiers/cobot_conveval2"
     },
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/tf.txt",
       "{DEEPPAVLOV_PATH}/requirements/bert_dp.txt"
+    ],
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz",
+        "subdir": "{MODELS_PATH}/classifiers"
+      }
     ]
   }
 }

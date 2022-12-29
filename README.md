@@ -58,7 +58,7 @@ This is a generative-based socialbot that uses [English DialoGPT model](https://
 
 ### Dream Russian
 
-Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT model](https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
+Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_russian)
 
 # Quick Start
@@ -229,7 +229,7 @@ Dream Architecture is presented in the following image:
 | Spacy Nounphrases           | 180 MiB RAM              | extracts nounphrases using Spacy and filters out generic ones                                                                                                                                                                  |
 | Speech Function Classifier  |                          | a hierarchical algorithm based on several linear models and a rule-based approach for the prediction of speech functions described by Eggins and Slade                                                                         |
 | Speech Function Predictor   |                          | yields probabilities of speech functions that can follow a speech function predicted by Speech Function Classifier                                                                                                             |
-| Spelling Preprocessing      | 30 MiB RAM               | pattern-based component to rewrite different colloquial expressions to a more formal style of conversation                                                                                                                     |
+| Spelling Preprocessing      | 6.5 GiB RAM               | two components: pattern-based component to rewrite different colloquial expressions to a more formal style of conversation; component that uses statistics based error model to find best candidates in a static dictionary                                                                                                                   |
 | Topic recommendation        | 40 MiB RAM               | offers a topic for further conversation using the information about the discussed topics and user's preferences. Current version is based on Reddit personalities (see Dream Report for Alexa Prize 4).                        |
 | User Persona Extractor      | 40 MiB RAM               | determines which age category the user belongs to based on some key words                                                                                                                                                      |
 | Wiki Parser                 | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                                                                       |
@@ -302,23 +302,23 @@ Dream Architecture is presented in the following image:
 
 ## Annotators
 
-| Name                   | Requirements             | Description                                                                                                                                                                   |
-|------------------------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Badlisted words        | 50 MiB RAM               | detects obscene Russian words from the badlist                                                                                                                                |
-| Entity detection       | 3  GiB RAM               | extracts entities and their types from utterances                                                                                                                             |
-| Entity linking         | 500 MiB RAM, ?? GiB GPU  | finds Wikidata entity ids for the entities detected with Entity Detection                                                                                                     |
-| Intent catcher         | 900 MiB RAM              | classifies user utterances into a number of predefined intents which are trained on a set of phrases and regexps                                                              |
-| NER                    | 1.7 GiB RAM, 4.9 Gib GPU | extracts person names, names of locations, organizations from uncased text using ruBert-based (pyTorch) model                                                                 |
-| Sentseg                | 2.4 GiB RAM, 4.9 Gib GPU | recovers punctuation using ruBert-based (pyTorch) model and splits into sentences                                                                                             |
-| Spacy Annotator        | 250 MiB RAM              | token-wise annotations by Spacy                                                                                                                                               |
-| Spelling preprocessing | 4.4 GiB RAM              | Russian Levenshtein correction model                                                                                                                                          |
-| Wiki parser            | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                      |
-| DialogRPT              | 3.8 GiB RAM,  2 GiB GPU  | DialogRPT model which is based on Russian DialoGPT (see https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2) and fine-tuned on Russian Pikabu Comment sequences |
+| Name                   | Requirements             | Description                                                                                                                                                                                  |
+|------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Badlisted words        | 50 MiB RAM               | detects obscene Russian words from the badlist                                                                                                                                               |
+| Entity detection       | 3  GiB RAM               | extracts entities and their types from utterances                                                                                                                                            |
+| Entity linking         | 500 MiB RAM, ?? GiB GPU  | finds Wikidata entity ids for the entities detected with Entity Detection                                                                                                                    |
+| Intent catcher         | 900 MiB RAM              | classifies user utterances into a number of predefined intents which are trained on a set of phrases and regexps                                                                             |
+| NER                    | 1.7 GiB RAM, 4.9 Gib GPU | extracts person names, names of locations, organizations from uncased text using ruBert-based (pyTorch) model                                                                                |
+| Sentseg                | 2.4 GiB RAM, 4.9 Gib GPU | recovers punctuation using ruBert-based (pyTorch) model and splits into sentences                                                                                                            |
+| Spacy Annotator        | 250 MiB RAM              | token-wise annotations by Spacy                                                                                                                                                              |
+| Spelling preprocessing | 8 GiB RAM              | Russian Levenshtein correction model                                                                                                                                                         |
+| Wiki parser            | 100 MiB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                                     |
+| DialogRPT              | 3.8 GiB RAM,  2 GiB GPU  | DialogRPT model which is based on [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) and fine-tuned on Russian Pikabu Comment sequences |
 
 ## Skills & Services
 | Name                   | Requirements              | Description                                                                                                                         |
 |------------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| DialoGPT               | 2.8 GiB RAM, 2 GiB GPU    | Russian DialoGPT model https://huggingface.co/Grossmend/rudialogpt3_medium_based_on_gpt2                                            |
+| DialoGPT               | 2.8 GiB RAM, 2 GiB GPU    | [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2)                             |
 | Dummy Skill            | a part of agent container | a fallback skill with multiple non-toxic candidate responses and random Russian questions                                           |
 | Personal Info skill    | 40 MiB RAM                | queries and stores user's name, birthplace, and location                                                                            |
 | DFF Generative skill   | 50 MiB RAM                | **[New DFF version]** generative skill which uses DialoGPT service to generate 3 different hypotheses                               |

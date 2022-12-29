@@ -14,11 +14,12 @@ services:
   spacy-nounphrases:
     volumes:
       - "./annotators/spacy_nounphrases:/src"
+      - "./common:/src/common"
     ports:
       - 8006:8006
-  dff-program-y:
+  dff-program-y-skill:
     volumes:
-      - "./skills/dff_program_y:/src"
+      - "./skills/dff_program_y_skill:/src"
       - "./common:/src/common"
     ports:
       - 8008:8008
@@ -43,16 +44,17 @@ services:
       - "./annotators/SentRewrite:/src"
     ports:
       - 8017:8017
-  intent-responder:
+  dff-intent-responder-skill:
     volumes:
-      - "./skills/IntentResponder:/src"
+      - "./skills/dff_intent_responder_skill:/src"
       - "./common:/src/common"
     ports:
       - 8012:8012
   intent-catcher:
     volumes:
-      - "./annotators/IntentCatcher/src:/src"
+      - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8014:8014
   badlisted-words:
@@ -61,9 +63,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  dff-program-y-dangerous:
+  dff-program-y-dangerous-skill:
     volumes:
-      - "./skills/dff_program_y_dangerous:/src"
+      - "./skills/dff_program_y_dangerous_skill:/src"
       - "./common:/src/common"
     ports:
       - 8022:8022
@@ -155,9 +157,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8068:8068
-  dff-program-y-wide:
+  dff-program-y-wide-skill:
     volumes:
-      - "./skills/dff_program_y_wide:/src"
+      - "./skills/dff_program_y_wide_skill:/src"
       - "./common:/src/common"
     ports:
       - 8064:8064
@@ -205,7 +207,8 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing:/src"
+      - "./annotators/spelling_preprocessing_dp:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8074:8074
   dff-grounding-skill:
@@ -317,11 +320,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8100:8100
-  hypothesis-scorer:
-    volumes:
-      - "./annotators/hypothesis_scorer:/src"
-    ports:
-      - 8110:8110
   dff-funfact-skill:
     volumes:
       - "./skills/dff_funfact_skill:/src"
@@ -398,12 +396,14 @@ services:
     volumes:
       - "./annotators/speech_function_classifier:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8108:8108
   speech-function-predictor:
     volumes:
       - "./annotators/speech_function_predictor:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8107:8107
 version: "3.7"

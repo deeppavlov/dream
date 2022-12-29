@@ -75,7 +75,7 @@
                 "timeout"
             ]
         },
-        "bot_annotator_selector": {
+        "response_annotator_selectors": {
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -92,13 +92,13 @@
                 "selector"
             ]
         },
-        "post_annotators": {
+        "response_annotators": {
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "bot_annotator_selector"
+                    "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
@@ -106,9 +106,9 @@
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
-                    "bot_annotator_selector",
-                    "post_annotators.sentseg"
+                "previous_services": [
+                    "response_annotator_selectors",
+                    "response_annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
@@ -116,10 +116,10 @@
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
-                    "bot_annotator_selector",
-                    "post_annotators.sentseg",
-                    "post_annotators.ner"
+                "previous_services": [
+                    "response_annotator_selectors",
+                    "response_annotators.sentseg",
+                    "response_annotators.ner"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
@@ -144,7 +144,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_bot_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["bot_annotator_selector", "post_annotators.sentseg"],
+                "previous_services": ["response_annotator_selectors", "response_annotators.sentseg"],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
         },
@@ -153,7 +153,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://spelling-preprocessing:8074/response"
+                    "url": "http://spelling-preprocessing:8074/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -163,7 +163,7 @@
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -176,7 +176,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -189,10 +189,8 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_utt_nounphrases",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
                 "previous_services": [
+                    "annotators.spelling_preprocessing",
                     "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ],
@@ -206,7 +204,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -230,7 +228,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
@@ -259,7 +257,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
                     "annotators.entity_linking"
@@ -270,7 +268,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
@@ -281,10 +279,10 @@
                     "timeout": 1,
                     "url": "http://entity-detection:8103/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ]
@@ -311,10 +309,8 @@
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.ner"
-                ],
                 "previous_services": [
+                    "annotators.ner",
                     "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ]
@@ -337,11 +333,11 @@
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg",
                     "annotators.ner",
-                    "post_annotators.ner"
+                    "response_annotators.ner"
                 ]
             },
             "midas_classification": {
@@ -352,7 +348,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
@@ -366,7 +362,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation"
@@ -441,7 +437,7 @@
                 "state_manager_method": "add_annotation",
                 "previous_services": [
                     "annotators.sentseg",
-                    "post_annotators.speech_function_classifier"
+                    "response_annotators.speech_function_classifier"
                 ]
             },
             "speech_function_predictor": {
@@ -466,10 +462,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators"
-                ],
-                "required_previous_services": [
-                    "annotators.badlisted_words",
-                    "annotators.asr"
                 ],
                 "tags": [
                     "selector"
@@ -686,7 +678,7 @@
             "dff_short_story_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 3,
                     "url": "http://dff-short-story-skill:8057/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_short_story_skill_formatter",
@@ -996,7 +988,7 @@
                 "state_manager_method": "add_hypothesis"
             }
         },
-        "post_skill_selector_annotators": {
+        "candidate_annotators": {
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
@@ -1016,7 +1008,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_hypotheses_predictor_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["post_skill_selector_annotators.speech_function_classifier"],
+                "previous_services": ["candidate_annotators.speech_function_classifier"],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
             "badlisted_words": {
@@ -1035,7 +1027,7 @@
             "convers_evaluator_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://convers-evaluator-annotator:8004/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
@@ -1094,19 +1086,6 @@
                     "skills"
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "hypothesis_scorer": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://hypothesis-scorer:8110/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_scorer_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
             }
         },
         "response_selectors": {
@@ -1119,10 +1098,20 @@
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
-                    "post_skill_selector_annotators"
+                    "candidate_annotators"
                 ],
                 "state_manager_method": "add_bot_utterance"
             }
         }
+    },
+    "metadata": {
+        "display_name": "Dream Speech-Function-based",
+        "author": "DeepPavlov",
+        "description": "SFC version of DeepPavlov Dream Socialbot.",
+        "version": "0.1.0",
+        "date_created": "2022-12-12T12:12:00",
+        "ram_usage": "50 GB",
+        "gpu_usage": "50 GB",
+        "disk_usage": "50 GB"
     }
 }

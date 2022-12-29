@@ -10,7 +10,7 @@ URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 
 
 def handler(requested_data, random_seed):
-    hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}).json()
+    hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}, timeout=4).json()
     return hypothesis
 
 
@@ -18,9 +18,11 @@ def run_test(handler):
     in_data, out_data = test_utils.get_dataset()
     for test_name in in_data:
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
-        print(f"test name: {test_name}")
-        is_equal_flag, msg = test_utils.compare_structs(out_data[test_name], hypothesis, ignored_keys=["id"])
-        if msg and len(msg.split("`")) == 5:
+        # do not compare first elements of the structs - generated texts
+        is_equal_flag, msg = test_utils.compare_structs(
+            out_data[test_name][1:], hypothesis[1:], ignored_keys=["id", "responses"]
+        )
+        if msg and len(msg.split("`")) == 3:
             _, ground_truth_text, _, hypothesis_text, _ = msg.split("`")
             is_equal_flag, ratio = test_utils.compare_text(ground_truth_text, hypothesis_text, 0.0)
             if not is_equal_flag:

@@ -29,6 +29,7 @@ from common.universal_templates import (
     is_switch_topic,
     if_choose_topic,
     DUMMY_DONTKNOW_RESPONSES,
+    is_any_question_sentence_in_utterance,
 )
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
 
@@ -42,6 +43,7 @@ ASK_QUESTION_PROB = 0.7
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 
+LANGUAGE = getenv("LANGUAGE", "EN")
 
 with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_UNIGRAMS = f.read().splitlines()[:1000]
@@ -86,6 +88,7 @@ class RandomTopicResponder:
 
     def get_random_text(self, topics):
         available_topics = self.topics.intersection(set(topics))
+        logger.info(f"Topics: {available_topics}")
         if not available_topics:
             return ""
 
@@ -168,6 +171,19 @@ def generate_question_not_from_last_responses(dialog, all_prev_active_skills):
     return result, human_attr
 
 
+def no_initiative(dialog):
+    utts = dialog["human_utterances"]
+    if len(utts) <= 2:
+        return False
+    if not (is_any_question_sentence_in_utterance(utts[-1]) or is_any_question_sentence_in_utterance(utts[-2])):
+        logger.info("dummy_skill: No questions 2 times in a row detected")
+        return True
+    if is_switch_topic(utts[-1]):
+        logger.info("dummy_skill: Switch topic detected")
+        return True
+    return False
+
+
 class DummySkillConnector:
     async def send(self, payload: Dict, callback: Callable):
         try:
@@ -199,11 +215,8 @@ class DummySkillConnector:
             human_attrs = []
             bot_attrs = []
             attrs = []
-            prev_human_uttr_text = dialog["human_utterances"][-2]["text"] if len(dialog["human_utterances"]) > 1 else ""
-            is_russian = re.search(r"[а-яА-Я]+", dialog["human_utterances"][-1]["text"]) or re.search(
-                r"[а-яА-Я]+", prev_human_uttr_text
-            )
-            if is_russian:
+
+            if LANGUAGE == "RU":
                 cands += [choice(DUMMY_DONTKNOW_RESPONSES["RU"])]
             else:
                 cands += [choice(DUMMY_DONTKNOW_RESPONSES["EN"])]
@@ -212,7 +225,7 @@ class DummySkillConnector:
             human_attrs += [{}]
             bot_attrs += [{}]
 
-            if len(dialog["utterances"]) > 14 and not is_sensitive_case and not is_russian:
+            if len(dialog["utterances"]) > 14 and not is_sensitive_case and LANGUAGE == "EN":
                 questions_same_nps = []
                 for i, nphrase in enumerate(curr_nounphrases):
                     for q_id in NP_QUESTIONS.get(nphrase, []):
@@ -227,7 +240,35 @@ class DummySkillConnector:
                     bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
-            if link_to_question and not is_russian:
+
+            if no_initiative(dialog) and LANGUAGE == "EN":
+                last_utt = dialog["human_utterances"][-1]
+                user = last_utt["user"].get("attributes", {})
+                entities = user.get("entities", {})
+                entities = {ent: val for ent, val in entities.items() if len(val["human_encounters"])}
+                response = ""
+                if entities:
+                    selected_entity = ""
+                    # reverse so it uses recent entities first
+                    sorted_entities = sorted(
+                        entities.values(),
+                        key=lambda d: d["human_encounters"][-1]["human_utterance_index"],
+                        reverse=True,
+                    )
+                    for entity_dict in sorted_entities:
+                        if entity_dict["human_attitude"] == "like" and not entity_dict["mentioned_by_bot"]:
+                            selected_entity = entity_dict["name"]
+                            break
+                    if selected_entity:
+                        response = f"Previously, you have mentioned {selected_entity}, maybe you want to discuss it?"
+                        logger.info(f"dummy_skill hypothesis no_initiative: {response}")
+                    cands += [response]
+                    confs += [0.5]
+                    attrs += [{"type": "entity_recap", "response_parts": ["prompt"]}]
+                    human_attrs += [{}]
+                    bot_attrs += [{}]
+
+            if link_to_question and LANGUAGE == "EN":
                 _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
                 _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
                 _prev_active_skill = (
@@ -270,14 +311,14 @@ class DummySkillConnector:
                 attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
                 human_attrs += [human_attr]
                 bot_attrs += [{}]
-            elif is_russian:
+            elif LANGUAGE == "RU":
                 cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
                 confs += [0.8]
                 attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
                 human_attrs += [{}]
                 bot_attrs += [{}]
 
-            if not is_russian:
+            if LANGUAGE == "EN":
                 facts_same_nps = []
                 for i, nphrase in enumerate(curr_nounphrases):
                     for fact_id in NP_FACTS.get(nphrase, []):
@@ -289,7 +330,7 @@ class DummySkillConnector:
             else:
                 facts_same_nps = []
 
-            if len(facts_same_nps) > 0 and not is_sensitive_case and not is_russian:
+            if len(facts_same_nps) > 0 and not is_sensitive_case and LANGUAGE == "EN":
                 logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
                 cands += [choice(facts_same_nps)]
                 confs += [0.5]

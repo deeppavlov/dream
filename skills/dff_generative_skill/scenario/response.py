@@ -7,7 +7,7 @@ from typing import Any
 import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
 from df_engine.core import Context, Actor
-from common.constants import CAN_CONTINUE_SCENARIO
+from common.constants import CAN_NOT_CONTINUE
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -52,7 +52,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     request_data = compose_data_for_dialogpt(ctx, actor)
     if len(request_data) > 0:
-        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=1.8)
+        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [request_data]}, timeout=3.8)
         hypotheses = response.json()["generated_responses"][0]
     else:
         hypotheses = []
@@ -60,7 +60,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     for hyp in hypotheses:
         if hyp[-1] not in [".", "?", "!"]:
             hyp += "."
-        gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_CONTINUE_SCENARIO})
+        gathering_responses(hyp, 0.99, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""

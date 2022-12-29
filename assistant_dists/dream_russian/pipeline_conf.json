@@ -58,7 +58,7 @@
                 "timeout"
             ]
         },
-        "bot_annotator_selector": {
+        "response_annotator_selectors": {
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -72,13 +72,13 @@
                 "selector"
             ]
         },
-        "post_annotators": {
+        "response_annotators": {
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "bot_annotator_selector"
+                    "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             },
@@ -87,8 +87,8 @@
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "bot_annotator_selector",
-                    "post_annotators.sentseg"
+                    "response_annotator_selectors",
+                    "response_annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
@@ -300,7 +300,7 @@
             "dff_generative_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 4,
                     "url": "http://dff-generative-skill:8092/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_generative_skill_formatter",
@@ -324,7 +324,7 @@
                 "state_manager_method": "add_hypothesis"
             }
         },
-        "post_skill_selector_annotators": {
+        "candidate_annotators": {
             "spacy_annotator": {
                 "connector": {
                     "protocol": "http",
@@ -347,7 +347,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "post_skill_selector_annotators.spacy_annotator"
+                    "candidate_annotators.spacy_annotator"
                 ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             },
@@ -401,10 +401,20 @@
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
-                    "post_skill_selector_annotators"
+                    "candidate_annotators"
                 ],
                 "state_manager_method": "add_bot_utterance"
             }
         }
+    },
+    "metadata": {
+        "display_name": "Dream Russian",
+        "author": "DeepPavlov",
+        "description": "Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses Russian DialoGPT by DeepPavlov to generate most of the responses. It also contains intent catcher and responder components to cover special user requests.",
+        "version": "0.1.0",
+        "date_created": "2022-12-12T12:12:00",
+        "ram_usage": "50 GB",
+        "gpu_usage": "50 GB",
+        "disk_usage": "50 GB"
     }
 }

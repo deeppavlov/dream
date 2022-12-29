@@ -33,18 +33,22 @@ services:
       args:
         TAG_BASED_SELECTION: 1
         CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.3
+        PROMPT_PROBA: 0.1
         ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 1
+        PRIORITIZE_WITH_REQUIRED_ACT: 0
         PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 1
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
         IGNORE_DISLIKED_SKILLS: 0
         GREETING_FIRST: 1
         RESTRICTION_FOR_SENSITIVE_CASE: 1
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+        MAX_TURNS_WITHOUT_SCRIPTS: 7
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
         PRIORITIZE_SCRIPTED_SKILLS: 0
-        LANGUAGE: RU
+        CONFIDENCE_STRENGTH: 0.8
+        CONV_EVAL_STRENGTH: 0.4
+        PRIORITIZE_HUMAN_INITIATIVE: 1
+        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -255,20 +259,20 @@ services:
       args:
         CONFIG: levenshtein_corrector_ru.json
         PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_ru
+        SRC_DIR: annotators/spelling_preprocessing_dp
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
         LANGUAGE: RU
       context: ./
-      dockerfile: annotators/spelling_preprocessing_ru/Dockerfile
+      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 5G
+          memory: 8G
         reservations:
-          memory: 5G
+          memory: 8G
 
   spacy-annotator:
     env_file: [.env]
@@ -317,7 +321,7 @@ services:
       context: ./services/dialogpt_RU/
       args:
         SERVICE_PORT: 8091
-        PRETRAINED_MODEL_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+        PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
         LANGUAGE: RU
     command: flask run -h 0.0.0.0 -p 8091
     environment:
@@ -354,7 +358,7 @@ services:
       args:
         SERVICE_PORT: 8122
         PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
-        TOKENIZER_NAME_OR_PATH: "Grossmend/rudialogpt3_medium_based_on_gpt2"
+        TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
     command: flask run -h 0.0.0.0 -p 8122
     environment:
       - CUDA_VISIBLE_DEVICES=0

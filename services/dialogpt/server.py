@@ -2,9 +2,11 @@ import logging
 import json
 import os
 import time
+import re
 
 import sentry_sdk
 import torch
+from common.constants import CAN_CONTINUE_SCENARIO
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -21,7 +23,8 @@ CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 3
+MAX_HISTORY_DEPTH = 2
+smiles_pattern = re.compile(r":[)(DpP3]")
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 generation_params["num_return_sequences"] = N_HYPOTHESES_TO_GENERATE
@@ -45,7 +48,12 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 def generate_responses(context, model, tokenizer, continue_last_uttr=False):
     encoded_context = []
-    for uttr in context[-MAX_HISTORY_DEPTH:-1]:
+
+    history_depth = MAX_HISTORY_DEPTH
+    if len(context[-1].split()) > 3:
+        history_depth = MAX_HISTORY_DEPTH - 1
+
+    for uttr in context[-history_depth:-1]:
         encoded_context += [tokenizer.encode(uttr + " " + tokenizer.eos_token, return_tensors="pt")]
     if continue_last_uttr:
         encoded_context += [tokenizer.encode(context[-1] + " ", return_tensors="pt")]
@@ -64,6 +72,24 @@ def generate_responses(context, model, tokenizer, continue_last_uttr=False):
     return outputs
 
 
+def cut_response(response):
+    # if ends with a smile, it's finished
+    if smiles_pattern.match(response[-2:]):
+        return response
+
+    leftover = re.split(r"[.!?]", response)[-1]
+    if leftover:
+        # strings with no ending punctuation will be empty
+        response = response[: -len(leftover)]
+
+    # save smiles from cutting
+    smile = ""
+    if smiles_pattern.match(leftover.strip()[:2]):
+        smile = " " + leftover.strip()[:2]
+    response += smile
+    return response.strip()
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
@@ -72,31 +98,38 @@ def respond():
     try:
         responses = []
         confidences = []
+        attributes = []
         for context in contexts:
             curr_responses = []
             curr_confidences = []
+            curr_attributes = []
             outputs = generate_responses(context, model, tokenizer)
             for response in outputs:
+                response = cut_response(response)
                 if len(response) > 3:
                     # drop too short responses
                     curr_responses += [response]
                     curr_confidences += [DEFAULT_CONFIDENCE]
+                    curr_attributes += [{"can_continue": CAN_CONTINUE_SCENARIO}]
                 else:
                     curr_responses += [""]
                     curr_confidences += [ZERO_CONFIDENCE]
+                    curr_attributes += [{}]
 
             responses += [curr_responses]
             confidences += [curr_confidences]
+            attributes += [curr_attributes]
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
         confidences = [[ZERO_CONFIDENCE]] * len(contexts)
+        attributes = [[{}]] * len(contexts)
 
     total_time = time.time() - st_time
     logger.info(f"dialogpt exec time: {total_time:.3f}s")
-    return jsonify(list(zip(responses, confidences)))
+    return jsonify(list(zip(responses, confidences, attributes)))
 
 
 @app.route("/continue", methods=["POST"])
@@ -110,6 +143,7 @@ def continue_last_uttr():
             curr_responses = []
             outputs = generate_responses(context, model, tokenizer, continue_last_uttr=True)
             for response in outputs:
+                response = cut_response(response)
                 if len(response) > 3:
                     # drop too short responses
                     curr_responses += [response]
