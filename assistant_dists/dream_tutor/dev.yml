@@ -61,4 +61,10 @@ services:
       - ./common_packages:/common_packages
     ports:
       - 2102:2102
+  dff-friendship-skill:
+    volumes:
+      - "./skills/dff_friendship_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8086:8086
 version: '3.7'

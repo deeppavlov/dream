@@ -387,7 +387,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "hi.",
-                                "Hi, this is a DREAM Socialbot! How are you?",
+                                "Hello, this is Alemira Fluent Demonstration bot! How are you?",
                                 "great. how are you?"
                             ]
                         },
@@ -449,12 +449,12 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "Hi, this is a DREAM Socialbot! How are you?",
+                    "text": "Hello, this is Alemira Fluent Demonstration bot! How are you?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Hi, this is a DREAM Socialbot! How are you?",
+                            "punct_sent": "Hello, this is Alemira Fluent Demonstration bot! How are you?",
                             "segments": [
-                                "Hi, this is a DREAM Socialbot!",
+                                "Hello, this is Alemira Fluent Demonstration bot!",
                                 "How are you?"
                             ]
                         },
@@ -466,7 +466,7 @@
                             "clusters": [],
                             "modified_sents": [
                                 "hi.",
-                                "Hi, this is a DREAM Socialbot! How are you?"
+                                "Hello, this is Alemira Fluent Demonstration bot! How are you?"
                             ]
                         }
                     },
@@ -491,7 +491,7 @@
                     "0": "hi."
                 },
                 "responses": {
-                    "0": "Hi, this is a DREAM Socialbot! How are you?"
+                    "0": "Hello, this is Alemira Fluent Demonstration bot! How are you?"
                 },
                 "validation": false
             },

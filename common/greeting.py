@@ -2,11 +2,11 @@ import re
 
 
 greeting_spec = {
-    "EN": "this is a Dream Socialbot",
+    "EN": "this is Alemira Fluent Demonstration bot",
     "RU": "это чат-бот Dream",
 }
 HI_THIS_IS_DREAM = {
-    "EN": f"Hi, {greeting_spec['EN']}!",
+    "EN": f"Hello, {greeting_spec['EN']}!",
     "RU": f"Привет, {greeting_spec['RU']}!",
 }
 HOW_ARE_YOU_TEMPLATE = {

@@ -76,7 +76,7 @@ class RuleBasedSkillSelectorConnector:
                     skills_for_uttr.append("dff_mistakes_review_skill")
 
             if not skills_for_uttr:
-                skills_for_uttr.append("dialogpt")
+                skills_for_uttr.append("dff_friendship_skill")
 
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time

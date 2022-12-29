@@ -3,8 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_tutor/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, sentseg:8011, convers-evaluation-selector:8009,
-          badlisted-words:8018, language-mistakes-tracker:8129, gector:2102, dialogpt:8125, intent-catcher:8014,
-          dff-language-practice-skill:8130, dff-mistakes-review-skill:8131, dff-template-skill:8120"
+          badlisted-words:8018, language-mistakes-tracker:8129, gector:2102, intent-catcher:8014,
+          dff-language-practice-skill:8130, dff-mistakes-review-skill:8131, dff-friendship-skill:8086, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -176,27 +176,6 @@ services:
         reservations:
           memory: 5G
 
-  dialogpt:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8125
-        SERVICE_NAME: dialogpt
-        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
-        N_HYPOTHESES_TO_GENERATE: 5
-        CONFIG_NAME: dialogpt_en.json
-      context: ./services/dialogpt/
-    command: flask run -h 0.0.0.0 -p 8125
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
-
   intent-catcher:
     env_file: [.env]
     build:
@@ -216,5 +195,24 @@ services:
           memory: 3.5G
         reservations:
           memory: 3.5G
+  
+  dff-friendship-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8086
+        SERVICE_NAME: dff_friendship_skill # has to be the same with skill dir name
+      context: .
+      dockerfile: ./skills/dff_friendship_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8086
+    # command:  flask run -h 0.0.0.0 -p 8086
+    # environment:
+    #   - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
 version: '3.7'

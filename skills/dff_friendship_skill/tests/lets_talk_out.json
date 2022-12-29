@@ -1,6 +1,6 @@
 [
     [
-        "Hi, this is a DREAM Socialbot! How are you?",
+        "Hello, this is Alemira Fluent Demonstration bot! How are you?",
         1.0,
         {
             "dff_friendship_skill_state": {
@@ -27,7 +27,7 @@
                         "0": "hi."
                     },
                     "responses": {
-                        "0": "Hi, this is a DREAM Socialbot! How are you?"
+                        "0": "Hello, this is Alemira Fluent Demonstration bot! How are you?"
                     },
                     "misc": {},
                     "validation": false,
