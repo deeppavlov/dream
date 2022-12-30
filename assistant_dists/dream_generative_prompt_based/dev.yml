@@ -33,9 +33,9 @@ services:
       - "./annotators/combined_classification:/src"
     ports:
       - 8087:8087
-  gptj:
+  transformers_lm:
     volumes:
-      - "./services/gptj:/src"
+      - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
