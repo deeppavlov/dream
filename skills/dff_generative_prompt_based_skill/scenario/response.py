@@ -17,10 +17,15 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 assert GENERATIVE_SERVICE_URL
+
+
+FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 
 
 def compose_data_for_model(ctx, actor):
@@ -31,7 +36,16 @@ def compose_data_for_model(ctx, actor):
     if len(human_uttrs) > 0:
         logger.info(f"utts: {human_uttrs[-1]}")
         text_prompt.append(f'Human: {human_uttrs[-1]["text"]}')
-        prompts = human_uttrs[-1].get("annotations", {}).get("prompt_selector", {}).get("prompt", "")
+        if len(bot_uttrs) > 0:
+            text_prompt.insert(0, f'AI: {bot_uttrs[-1]["text"]}')
+        if len(human_uttrs) > 1:
+            text_prompt.insert(0, f'Human: {human_uttrs[-2]["text"]}')
+        prompts = (
+            human_uttrs[-1]
+            .get("annotations", {})
+            .get("prompt_selector", {})
+            .get("prompt", "")
+        )
         if prompts:
             prompt = prompts[0]
             text_prompt.insert(0, prompt)
@@ -40,14 +54,10 @@ def compose_data_for_model(ctx, actor):
         for w in words:
             if w not in stop_words:
                 words_filtered.append(w)
-        if len(words_filtered) < 4:
-            if len(bot_uttrs) > 0:
-                text_prompt.insert(0, f'AI: {bot_uttrs[-1]["text"]}')
-            if len(human_uttrs) > 1:
-                text_prompt.insert(0, f'Human: {human_uttrs[-2]["text"]}')
-        logger.info(f"prompt: {text_prompt}")
+        # if len(words_filtered) < 4:
+    logger.info(f"prompt: {text_prompt}")
     if text_prompt:
-        text_prompt = [re.sub(r"\s(?=[\.,:;])", "", x) for x in text_prompt]  # костыль
+        text_prompt = [re.sub(FIX_PUNCTUATION, "", x) for x in text_prompt]  # костыль
     return text_prompt
 
 
@@ -72,7 +82,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     request_data = compose_data_for_model(ctx, actor)
     logger.info(f"request_data: {request_data}")
     if len(request_data) > 0:
-        response = requests.post(GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=20)
+        response = requests.post(
+            GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=20
+        )
         hypotheses = response.json()
     else:
         hypotheses = []
@@ -81,7 +93,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         for hyp in hypotheses:
             if hyp[0][-1] not in [".", "?", "!"]:
                 hyp[0] += "."
-            gathering_responses(hyp[0], 0.99, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+            gathering_responses(
+                hyp[0], 0.99, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+            )
 
     if len(curr_responses) == 0:
         return ""
