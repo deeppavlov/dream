@@ -33,7 +33,7 @@ services:
       - "./annotators/combined_classification:/src"
     ports:
       - 8087:8087
-  transformers_lm:
+  transformers-lm:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
