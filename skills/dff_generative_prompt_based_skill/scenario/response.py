@@ -83,7 +83,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"request_data: {request_data}")
     if len(request_data) > 0:
         response = requests.post(
-            GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=20
+            GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=5
         )
         hypotheses = response.json()
     else:
