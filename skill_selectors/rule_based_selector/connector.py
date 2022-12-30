@@ -293,6 +293,7 @@ class RuleBasedSkillSelectorConnector:
                 if prev_active_skill != "dff_short_story_skill":
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
+            # skills_for_uttr.append("dff_generative_prompt_based_skill")
             if (
                 dialog["human_utterances"][-1]
                 .get("annotations", {})
