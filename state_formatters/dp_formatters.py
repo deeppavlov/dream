@@ -229,9 +229,13 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    if dialog["bot_utterances"]:
+        dialog_history = [dialog["bot_utterances"][-1]["text"]]
+    else:
+        dialog_history = [""]
     return [
         {
-            "utterances": [dialog["bot_utterances"][-1]["text"]],
+            "utterances": [dialog_history],
         }
     ]
 
