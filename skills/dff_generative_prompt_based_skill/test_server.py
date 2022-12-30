@@ -10,7 +10,9 @@ URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 
 
 def handler(requested_data, random_seed):
-    hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}, timeout=4).json()
+    hypothesis = requests.post(
+        URL, json={**requested_data, "random_seed": random_seed}, timeout=4
+    ).json()
     return hypothesis
 
 
@@ -24,7 +26,9 @@ def run_test(handler):
         )
         if msg and len(msg.split("`")) == 3:
             _, ground_truth_text, _, hypothesis_text, _ = msg.split("`")
-            is_equal_flag, ratio = test_utils.compare_text(ground_truth_text, hypothesis_text, 0.0)
+            is_equal_flag, ratio = test_utils.compare_text(
+                ground_truth_text, hypothesis_text, 0.2
+            )
             if not is_equal_flag:
                 msg = f"{msg} ratio = {ratio}"
         assert is_equal_flag, msg
