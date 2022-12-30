@@ -36,7 +36,9 @@ from common.wiki_skill import (
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
+)
 logger = logging.getLogger(__name__)
 
 
@@ -50,15 +52,25 @@ class RuleBasedSkillSelectorConnector:
             user_uttr = dialog["human_utterances"][-1]
             user_uttr_text = user_uttr["text"].lower()
             user_uttr_annotations = user_uttr["annotations"]
-            bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
+            bot_uttr = (
+                dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
+            )
             bot_uttr_text_lower = bot_uttr.get("text", "").lower()
             prev_active_skill = bot_uttr.get("active_skill", "")
 
-            intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
-            high_priority_intent_detected = any(
-                [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
+            intent_catcher_intents = get_intents(
+                user_uttr, probs=False, which="intent_catcher"
             )
-            low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
+            high_priority_intent_detected = any(
+                [
+                    k
+                    for k in intent_catcher_intents
+                    if k in high_priority_intents["dff_intent_responder_skill"]
+                ]
+            )
+            low_priority_intent_detected = any(
+                [k for k in intent_catcher_intents if k in low_priority_intents]
+            )
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
@@ -66,7 +78,9 @@ class RuleBasedSkillSelectorConnector:
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
             if_choose_topic_detected = if_choose_topic(user_uttr, bot_uttr)
-            if_lets_chat_about_particular_topic_detected = if_chat_about_particular_topic(user_uttr, bot_uttr)
+            if_lets_chat_about_particular_topic_detected = (
+                if_chat_about_particular_topic(user_uttr, bot_uttr)
+            )
 
             dialog_len = len(dialog["human_utterances"])
 
@@ -81,18 +95,31 @@ class RuleBasedSkillSelectorConnector:
             cant_do_cond = (
                 "cant_do" in intent_catcher_intents
                 and "play" in user_uttr_text
-                and any([phrase in bot_uttr_text_lower for phrase in GREETING_QUESTIONS_TEXTS])
+                and any(
+                    [
+                        phrase in bot_uttr_text_lower
+                        for phrase in GREETING_QUESTIONS_TEXTS
+                    ]
+                )
             )
-            for intent_name, condition in zip(["exit", "repeat", "cant_do"], [exit_cond, repeat_cond, cant_do_cond]):
+            for intent_name, condition in zip(
+                ["exit", "repeat", "cant_do"], [exit_cond, repeat_cond, cant_do_cond]
+            ):
                 if condition:
                     high_priority_intent_detected = False
                     not_detected = {"detected": 0, "confidence": 0.0}
-                    user_uttr["annotations"]["intent_catcher"][intent_name] = not_detected
-                    dialog["utterances"][-1]["annotations"]["intent_catcher"][intent_name] = not_detected
+                    user_uttr["annotations"]["intent_catcher"][
+                        intent_name
+                    ] = not_detected
+                    dialog["utterances"][-1]["annotations"]["intent_catcher"][
+                        intent_name
+                    ] = not_detected
 
             if "/new_persona" in user_uttr_text:
                 # process /new_persona command
-                skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
+                skills_for_uttr.append(
+                    "personality_catcher"
+                )  # TODO: rm crutch of personality_catcher
             elif user_uttr_text == "/get_dialog_id":
                 skills_for_uttr.append("dummy_skill")
             elif high_priority_intent_detected:
@@ -148,7 +175,9 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dialogpt")  # generative skill
-                skills_for_uttr.append("dialogpt_persona_based")  # generative skill persona-based
+                skills_for_uttr.append(
+                    "dialogpt_persona_based"
+                )  # generative skill persona-based
                 skills_for_uttr.append("small_talk_skill")
                 skills_for_uttr.append("knowledge_grounding_skill")
                 skills_for_uttr.append("convert_reddit")
@@ -162,7 +191,10 @@ class RuleBasedSkillSelectorConnector:
                 if len(dialog["utterances"]) < 20:
                     skills_for_uttr.append("dff_friendship_skill")
 
-                if if_choose_topic_detected or if_lets_chat_about_particular_topic_detected:
+                if (
+                    if_choose_topic_detected
+                    or if_lets_chat_about_particular_topic_detected
+                ):
                     skills_for_uttr.append("knowledge_grounding_skill")
                     skills_for_uttr.append("news_api_skill")
 
@@ -234,7 +266,10 @@ class RuleBasedSkillSelectorConnector:
 
             if len(dialog["utterances"]) > 1:
                 # Use only misheard asr skill if asr is not confident and skip it for greeting
-                if user_uttr_annotations.get("asr", {}).get("asr_confidence", "high") == "very_low":
+                if (
+                    user_uttr_annotations.get("asr", {}).get("asr_confidence", "high")
+                    == "very_low"
+                ):
                     skills_for_uttr = ["misheard_asr"]
 
             if "/alexa_" in user_uttr.get("orig_text", user_uttr_text):
@@ -245,17 +280,34 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_short_story_skill")
 
             if len(dialog["human_utterances"]) > 1:
-                nouns = dialog["human_utterances"][-1].get("annotations", {}).get("rake_keywords", [])
-                nouns.extend(dialog["human_utterances"][-2].get("annotations", {}).get("rake_keywords", []))
+                nouns = (
+                    dialog["human_utterances"][-1]
+                    .get("annotations", {})
+                    .get("rake_keywords", [])
+                )
+                nouns.extend(
+                    dialog["human_utterances"][-2]
+                    .get("annotations", {})
+                    .get("rake_keywords", [])
+                )
                 if prev_active_skill != "dff_short_story_skill":
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
-            if dialog["human_utterances"][-1].get("annotations", {}).get("prompt_selector", {}).get("prompt", ""):
+            if (
+                dialog["human_utterances"][-1]
+                .get("annotations", {})
+                .get("prompt_selector", {})
+                .get("prompt", "")
+            ):
                 skills_for_uttr.append("dff_generative_prompt_based_skill")
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=skills_for_uttr))
+            asyncio.create_task(
+                callback(
+                    task_id=payload["task_id"], response=list(set(skills_for_uttr))
+                )
+            )
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
