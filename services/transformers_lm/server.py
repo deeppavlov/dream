@@ -63,7 +63,7 @@ try:
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("gptj is set to run on cuda")
+        logger.info("transformers_lm is set to run on cuda")
     example_response = generate_responses(
         "",
         "Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. ",
@@ -72,7 +72,7 @@ try:
         continue_last_uttr=False,
     )
     logger.info(f"example response: {example_response}")
-    logger.info("gptj is ready")
+    logger.info("transformers_lm is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -105,5 +105,5 @@ def respond():
         confidences = [[ZERO_CONFIDENCE]] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"gptj exec time: {total_time:.3f}s")
+    logger.info(f"transformers_lm exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))
