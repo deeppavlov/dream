@@ -63,8 +63,8 @@ Russian version of DeepPavlov Dream Socialbot. This is a generative-based social
 
 ### Generative Prompt-Based Dream
 
-Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models (currently supports GPT-J only). This is a generative-based socialbot that uses [GPT-J](https://huggingface.co/EleutherAI/gpt-j-6B) to generate most of the responses. You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/tree/generative_skills/common/prompts), and the provided information will be used in GPT-J-based reply generation as a prompt.
-[Link to the distribution.](https://github.com/deeppavlov/dream/tree/generative_skills/assistant_dists/dream_generative_prompt_based)
+Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models (currently supports GPT-J only). This is a generative-based socialbot that uses [GPT-J](https://huggingface.co/EleutherAI/gpt-j-6B) to generate most of the responses. You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts), and the provided information will be used in GPT-J-based reply generation as a prompt.
+[Link to the distribution.](https://github.com/deeppavlov/dream/assistant_dists/dream_generative_prompt_based)
 
 # Quick Start
 
