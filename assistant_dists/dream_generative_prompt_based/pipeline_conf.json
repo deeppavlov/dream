@@ -47,7 +47,7 @@
                 "timeout"
             ]
         },
-        "bot_annotator_selector": {
+        "response_annotator_selectors": {
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -60,7 +60,7 @@
                 "selector"
             ]
         },
-        "post_annotators": {
+        "response_annotators": {
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
@@ -174,7 +174,7 @@
                 "state_manager_method": "add_hypothesis"
             }
         },
-        "post_skill_selector_annotators": {
+        "candidate_annotators": {
             "badlisted_words": {
                 "connector": {
                     "protocol": "http",
@@ -230,5 +230,15 @@
                 "state_manager_method": "add_bot_utterance"
             }
         }
+    },
+    "metadata": {
+        "display_name": "Generative Prompt-Based Dream",
+        "author": "DeepPavlov",
+        "description": "Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload specify own prompts (json files) to be used in LLM-powered reply generation.",
+        "version": "0.0.0",
+        "date_created": "2022-12-30T15:00:00",
+        "ram_usage": "30 GB",
+        "gpu_usage": "30 GB",
+        "disk_usage": "6 GB"
     }
 }
