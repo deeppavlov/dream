@@ -91,10 +91,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"hyps: {hypotheses}")
     if hypotheses:
         for hyp in hypotheses:
+            confidence = 0.99
             if hyp[0][-1] not in [".", "?", "!"]:
                 hyp[0] += "."
+                confidence = 0.5
             gathering_responses(
-                hyp[0], 0.99, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+                hyp[0], confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
             )
 
     if len(curr_responses) == 0:
