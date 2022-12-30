@@ -239,6 +239,6 @@
         "date_created": "2022-12-30T15:00:00",
         "ram_usage": "30 GB",
         "gpu_usage": "30 GB",
-        "disk_usage": "6 GB"
+        "disk_usage": "30 GB"
     }
 }

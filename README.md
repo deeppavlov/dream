@@ -63,7 +63,7 @@ Russian version of DeepPavlov Dream Socialbot. This is a generative-based social
 
 ### Generative Prompt-Based Dream
 
-Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models (currently supports GPT-J only). This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts), and the provided information will be used in GPT-J-based reply generation as a prompt.
+Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts), and the provided information will be used in LLM-powered reply generation as a prompt.
 [Link to the distribution.](https://github.com/deeppavlov/dream/assistant_dists/dream_generative_prompt_based)
 
 # Quick Start
@@ -125,7 +125,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 
 #### **Generative Prompt-Based Dream**
 
-**Please note that this distribution (in particular, GPT-J model) requires a lot of resources.**
+**Please note that this distribution requires a lot of resources.**
 Refer to the [components](#components) section to see estimated requirements.
 
 ```
@@ -254,7 +254,7 @@ Dream Architecture is presented in the following image:
 |------------------------|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | DialoGPT               | 1.2 GiB RAM, 2.1 GiB GPU  | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU) |
 | DialoGPT Persona-based | 1.2 GiB RAM, 2.1 GiB GPU  | generative service based on Transformers generative model, the model was pre-trained on the PersonaChat dataset to generate a response conditioned on a several sentences of the socialbot's persona     |
-| GPT-J                  | 1.5 GiB RAM, 24.2 GiB GPU | generative service based on [GPT-J model](https://huggingface.co/EleutherAI/gpt-j-6B), returns the response for a given prompt and dialog context (one or two last utterances depending on the last utterance length) |
+| Transformers LM        | 1.5 GiB RAM, 24.2 GiB GPU | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (for example, you can use [GPT-J model](https://huggingface.co/EleutherAI/gpt-j-6B). Returns the response for a given prompt which may include dialog context.
 | Image captioning       | 4 GiB RAM, 5.4 GiB GPU    | creates text representation of a received image                                                                                                                                                          |
 | Infilling              | 1  GiB RAM, 1.2 GiB GPU   | (turned off but the code is available) generative service based on Infilling model, for the given utterance returns utterance where `_` from original text is replaced with generated tokens             |
 | Knowledge Grounding    | 2 GiB RAM, 2.1 GiB GPU    | generative service based on BlenderBot architecture providing a response to the context taking into account an additional text paragraph                                                                 |
@@ -299,7 +299,7 @@ Dream Architecture is presented in the following image:
 | DFF Funfact skill             | 100 MiB RAM               | **[New DFF version]** Tells user fun facts                                                                                                                                                                         |
 | DFF Gaming skill              | 80 MiB RAM                | provides a video games discussion. Gaming Skill is for more general talk about video games                                                                                                                         |
 | DFF Gossip skill              | 95 MiB RAM                | DFF-based skill to discuss other people with news about them                                                                                                                                                       |
-| DFF Generative Prompt-Based skill      | 50 MiB RAM                | **[New DFF version]** DFF-based skill that provides GPT-J generated answers based on specified prompts and the dialog context |
+| DFF Generative Prompt-Based skill      | 50 MiB RAM                | **[New DFF version]** DFF-based skill that provides language model generated answers based on specified prompts and the dialog context. The model to be used is specified in GENERATIVE_SERVICE_URL. For example, you may use Transformer LM service. |
 | DFF Grounding skill           | 90 MiB RAM                | **[New DFF version]** DFF-based skill to answer what is the topic of the conversation, to generate acknowledgement, to generate universal responses on some dialog acts by MIDAS                                   |
 | DFF Intent Responder          | 100 MiB RAM               | **[New DFF version]**  provides template-based replies for some of the intents detected by Intent Catcher annotator                                                                                                |
 | DFF Movie skill               | 1.1 GiB RAM               | is implemented using DFF and takes care of the conversations related to movies                                                                                                                                     |
