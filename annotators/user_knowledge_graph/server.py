@@ -95,7 +95,7 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
             logger.info(f"adding abstract kind --- {init_entity_kind} --- {entity_name}")
         entity_kind = "Abstract"
         graph.ontology.create_property_kinds_of_entity_kinds(["Abstract"], [["name"]])
-        new_entity_id = f"Abstract/{entity_kind}"
+        new_entity_id = f"Abstract/{init_entity_kind}"
         inflect_entity_name = inflect.singular_noun(entity_name)
         if inflect_entity_name:
             entity_name = inflect_entity_name
@@ -117,6 +117,7 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
             graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
             logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
 
+    logger.info(f"define rel_name, entity_kind {entity_kind} --- init_entity_kind {init_entity_kind}")
     if entity_kind == "Abstract":
         rel_name = rel_type.split("_")[0] + "_Abstract"
     else:
@@ -125,7 +126,8 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
     if (user_id, rel_name, new_entity_id) in ex_triplets:
         logger.info(f"triplet exists: {(rel_name, new_entity_id)}")
     else:
-        logger.info(f"connecting {entity_name} with User by {rel_type} relationship, entity_kind {entity_kind}")
+        logger.info(f"connecting {entity_name} with User by rel_type: {rel_type}, rel_name: {rel_name} relationship, "
+                    f"entity_kind {entity_kind} new_entity_id {new_entity_id}")
         graph.ontology.create_relationship_kind("User", rel_name, entity_kind)
         graph.create_relationship(user_id, rel_name, new_entity_id)
         logger.info(f"{entity_name} is connected with User by {rel_type} relationship.")

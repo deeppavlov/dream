@@ -623,7 +623,7 @@ def find_entity_custom_kg(annotations, kg_type):
     for entity_info in custom_el_info:
         substr = entity_info["entity_substr"]
         e_type = entity_info["entity_id_tags"]
-        if e_type == kg_type:
+        if e_type.lower() == kg_type.lower():
             return substr
     return ""
 
@@ -639,7 +639,7 @@ def find_entity_prex(annotations, prop):
         elif "property" in triplet:
             rel = triplet["property"]
         obj = triplet["object"]
-        if rel == prop:
+        if rel.lower() == prop.lower():
             return obj
     return ""
 

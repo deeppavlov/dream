@@ -20,7 +20,8 @@ services:
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, terminusdb:6363, storygpt:8126,
-          prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8130, custom-entity-linking:8131"
+          prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8130, custom-entity-linking:8131,
+          dff-user-kg-skill:8132"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -1295,7 +1296,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8130
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=6
     deploy:
       resources:
         limits:
@@ -1321,4 +1322,21 @@ services:
           memory: 256M
         reservations:
           memory: 256M
+
+  dff-user-kg-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8132
+        SERVICE_NAME: dff_user_kg_skill
+      context: .
+      dockerfile: ./skills/dff_user_kg_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8132
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
+
 version: '3.7'

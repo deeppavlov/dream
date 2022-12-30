@@ -288,20 +288,11 @@ def facts(ctx, actor):
     return provide_facts_request(ctx, actor)
 
 
-def has_entities(**kwargs):
-    slot_info = list(kwargs.items())
-
+def has_entities(*args):
     def has_entities_func(ctx: Context, actor: Actor) -> Context:
-        for slot_name, slot_types in slot_info:
-            if isinstance(slot_types, str):
-                extracted_entity = extract_entity(ctx, slot_types)
-                if extracted_entity:
-                    return True
-            elif isinstance(slot_types, list):
-                for slot_type in slot_types:
-                    extracted_entity = extract_entity(ctx, slot_type)
-                    if extracted_entity:
-                        return True
+        for f_type in args:
+            extracted_entity = extract_entity(ctx, f_type)
+            if extracted_entity:
+                return True
         return False
-
     return has_entities_func
