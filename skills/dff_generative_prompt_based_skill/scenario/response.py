@@ -92,11 +92,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if hypotheses:
         for hyp in hypotheses:
             confidence = 0.99
-            if hyp[0][-1] not in [".", "?", "!"]:
-                hyp[0] += "."
+            hyp_text = " ".join(hyp[0].split())
+            if hyp_text[-1] not in [".", "?", "!"]:
+                hyp_text += "."
                 confidence = 0.5
             gathering_responses(
-                hyp[0], confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+                hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
             )
 
     if len(curr_responses) == 0:
