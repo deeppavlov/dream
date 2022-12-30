@@ -5,6 +5,7 @@ import time
 
 import nltk
 import sentry_sdk
+import spacy
 from flask import Flask, jsonify, request
 
 from deeppavlov import build_model
@@ -16,9 +17,11 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 stemmer = nltk.PorterStemmer()
+nlp = spacy.load("en_core_web_sm")
 
 config_name = os.getenv("CONFIG")
 rel_cls_flag = int(os.getenv("REL_CLS_FLAG", "0"))
+add_entity_info = int(os.getenv("ADD_ENTITY_INFO", "0"))
 
 rel_type_dict = {}
 with open("rel_list.txt", "r") as fl:
@@ -51,9 +54,34 @@ except Exception as e:
 
 def get_result(request):
     st_time = time.time()
-    uttrs = request.json.get("utterances", [])
-    entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in uttrs])
-    entity_info_batch = request.json.get("entity_info", [[] for _ in uttrs])
+    init_uttrs = request.json.get("utterances", [])
+    named_entities_batch = request.json.get("named_entities", [[] for _ in init_uttrs])
+    entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in init_uttrs])
+    entity_info_batch = request.json.get("entity_info", [[] for _ in init_uttrs])
+    uttrs = []
+    for uttr_list in init_uttrs:
+        if len(uttr_list) == 1:
+            uttrs.append(uttr_list[0])
+        else:
+            utt_prev = uttr_list[-2].lower()
+            utt_cur = uttr_list[-1].lower()
+            is_question = (
+                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]]) or "?" in utt_prev
+            )
+
+            is_sentence = False
+            parsed_sentence = nlp(utt_cur)
+            if parsed_sentence:
+                tokens = [elem.text for elem in parsed_sentence]
+                tags = [elem.tag_ for elem in parsed_sentence]
+                found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP"]])
+                if found_verbs and len(tokens) > 2:
+                    is_sentence = True
+
+            if is_question and not is_sentence:
+                uttrs.append(f"{utt_prev} {utt_cur}")
+            else:
+                uttrs.append(utt_cur)
 
     triplets_batch = []
     outputs, scores = generative_ie(uttrs)
@@ -79,12 +107,12 @@ def get_result(request):
         triplets_batch = filtered_triplets_batch
 
     triplets_info_batch = []
-    for triplet, uttr, entities_with_labels, entity_info_list in zip(
-        triplets_batch, uttrs, entities_with_labels_batch, entity_info_batch
+    for triplet, uttr, named_entities, entities_with_labels, entity_info_list in zip(
+        triplets_batch, uttrs, named_entities_batch, entities_with_labels_batch, entity_info_batch
     ):
         uttr = uttr.lower()
         entity_substr_dict = {}
-        formatted_triplet = {}
+        formatted_triplet, per_triplet = {}, {}
         if len(uttr.split()) > 2:
             for entity in entities_with_labels:
                 if "text" in entity:
@@ -114,8 +142,27 @@ def get_result(request):
                             )
         if triplet:
             formatted_triplet = {"subject": triplet[0], rel_type_dict[triplet[1]]: triplet[1], "object": triplet[2]}
-        triplets_info_batch.append({"triplet": formatted_triplet, "entity_info": entity_substr_dict})
+            named_entities_list = []
+            for elem in named_entities:
+                for entity in elem:
+                    named_entities_list.append(entity)
+            per_entities = [entity for entity in named_entities_list if entity.get("type", "") == "PER"]
+            if triplet[1] in {"have pet", "have family", "have sibling", "have chidren"} and per_entities:
+                per_triplet = {"subject": triplet[2], "property": "name", "object": per_entities[0].get("text", "")}
 
+        triplets_info_list = []
+        if add_entity_info:
+            triplets_info_list.append({"triplet": formatted_triplet, "entity_info": entity_substr_dict})
+        else:
+            triplets_info_list.append({"triplet": formatted_triplet})
+        if per_triplet:
+            if add_entity_info:
+                triplets_info_list.append(
+                    {"triplet": per_triplet, "entity_info": {per_triplet["object"]: {"entity_id_tags": ["PER"]}}}
+                )
+            else:
+                triplets_info_list.append({"triplet": per_triplet})
+        triplets_info_batch.append(triplets_info_list)
     total_time = time.time() - st_time
     logger.info(f"property extraction exec time: {total_time: .3f}s")
     logger.info(f"property extraction, input {uttrs}, output {triplets_info_batch} scores {scores}")
@@ -129,4 +176,4 @@ def respond():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8130)
+    app.run(debug=False, host="0.0.0.0", port=8103)
