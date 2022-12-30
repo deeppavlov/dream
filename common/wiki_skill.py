@@ -618,6 +618,32 @@ def check_nounphr(annotations, nounphr_to_find):
     return ""
 
 
+def find_entity_custom_kg(annotations, kg_type):
+    custom_el_info = annotations.get("custom_entity_linking", [])
+    for entity_info in custom_el_info:
+        substr = entity_info["entity_substr"]
+        e_type = entity_info["entity_id_tags"]
+        if e_type == kg_type:
+            return substr
+    return ""
+
+
+def find_entity_prex(annotations, prop):
+    prex_info = annotations.get("property_extraction", [])
+    if isinstance(prex_info, list) and prex_info:
+        prex_info = prex_info[0]
+    if prex_info:
+        triplet = prex_info["triplet"]
+        if "relation" in triplet:
+            rel = triplet["relation"]
+        elif "property" in triplet:
+            rel = triplet["property"]
+        obj = triplet["object"]
+        if rel == prop:
+            return obj
+    return ""
+
+
 def extract_entity(ctx, entity_type):
     user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
     annotations = user_uttr.get("annotations", {})
@@ -634,6 +660,16 @@ def extract_entity(ctx, entity_type):
     elif entity_type.startswith("wiki"):
         wp_type = entity_type.split("wiki:")[1]
         found_entity, *_ = find_entity_by_types(annotations, [wp_type])
+        if found_entity:
+            return found_entity
+    elif entity_type.startswith("kg"):
+        kg_type = entity_type.split("kg:")[1]
+        found_entity = find_entity_custom_kg(annotations, kg_type)
+        if found_entity:
+            return found_entity
+    elif entity_type.startswith("prop"):
+        prop = entity_type.split("prop:")[1]
+        found_entity = find_entity_prex(annotations, prop)
         if found_entity:
             return found_entity
     elif entity_type == "any_entity":
