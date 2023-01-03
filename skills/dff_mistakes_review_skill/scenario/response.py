@@ -47,7 +47,13 @@ def feedback_response():
             feedback_sents += sentence_compare
             for selection in state[0]["selections"]:
                 correction = selection["correction"]
-                if selection["subtype"] in unique_subtypes:
+                start_selection = selection["startSelection"]
+                end_selection = selection["endSelection"]
+                selection2correct = original_sentence[start_selection:end_selection]
+                logger.info(f"selection = {selection2correct}")
+                if selection2correct.lower() == correction.lower():
+                    continue
+                elif selection["subtype"] in unique_subtypes:
                     feedback_sents += selection["explanation"]
                 else:
                     expl_template = random.choice(expl_templates)

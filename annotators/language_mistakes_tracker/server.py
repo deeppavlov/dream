@@ -19,13 +19,19 @@ def update_mistakes_state(requested_data):
     results = []
     st_time = time.time()
     dialog = requested_data["dialog"]
-    try:
-        mistakes_state = dialog["human"]["attributes"]["language_mistakes"]
-    except:
+    prev_active_skill = dialog["bot_utterances"][-1]["active_skill"]
+    not2review_skills = ["dff_mistakes_review_skill", "dff_friendship_skill"]
+    if prev_active_skill in not2review_skills:
         mistakes_state = None
-
-    tracker = LanguageMistakes(initial_state=mistakes_state)
-    tracker.update_language_mistakes_tracker(dialog)
+        tracker = LanguageMistakes(initial_state=mistakes_state)     
+    else:
+        try:
+            mistakes_state = dialog["human"]["attributes"]["language_mistakes"]
+        except:
+            mistakes_state = None
+        tracker = LanguageMistakes(initial_state=mistakes_state)
+        tracker.update_language_mistakes_tracker(dialog)
+        
     new_state = tracker.dump_state()
     results.append({"human_attributes": {"language_mistakes": new_state}})
     total_time = time.time() - st_time

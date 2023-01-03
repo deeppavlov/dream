@@ -5,6 +5,7 @@ from typing import Dict, List
 from common.utils import get_entities
 import state_formatters.utils as utils
 
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -510,6 +511,7 @@ def skill_with_attributes_formatter_service(payload: List):
                 result += [full_hyp]
     else:
         # only one hypotheses from this skill
+        logger.info(f"payload: {payload}")
         if len(payload[0]) > 0 and payload[1] > 0.0:
             result = [{"text": payload[0], "confidence": payload[1]}]
             if len(payload) >= 4:
@@ -1001,6 +1003,7 @@ def language_mistakes_tracker_formatter(dialog: Dict):
 def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
     last_human_utt = dialog["human_utterances"][-1]["text"]
     # print(f"base_formatter_in = {annotations.keys()}", flush=True)
+    last_human_utt = last_human_utt[0].upper() + last_human_utt[1:]
     clear_essay_word_offsets = []
     puncts = [".", "?", "!"]
     for i in range(len(last_human_utt)):

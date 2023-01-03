@@ -30,7 +30,7 @@ class LanguageMistakes:
         logger.info(f"language_mistakes update: {corrected_utt}")
         if "corrected_sentences_gector" in corrected_utt.keys():
             corrected_text = corrected_utt["corrected_sentences_gector"][0][0]["text"]
-            if corrected_text != user_utt:
+            if corrected_text.lower() != user_utt.lower():
                 curr_hum_utt_status.append(
                     {
                         "original_sentence": user_utt,
