@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {
-        TRANSITIONS: {("scenario", "main_node"): cnd.regexp(r"\balemira\b")},
+        TRANSITIONS: {("scenario", "main_node"): cnd.true()},
     },
     "service": {
         "start": {

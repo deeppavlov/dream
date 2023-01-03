@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, sentseg:8011, convers-evaluation-selector:8009,
           badlisted-words:8018, language-mistakes-tracker:8129, gector:2102, intent-catcher:8014,
           dff-language-practice-skill:8130, dff-mistakes-review-skill:8131, dff-friendship-skill:8086, dff-template-skill:8120"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
   convers-evaluator-annotator:
     env_file: [.env]
     build:

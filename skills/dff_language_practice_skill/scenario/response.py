@@ -24,22 +24,27 @@ def response_from_data():
         dialog_step_id = shared_memory.get("dialog_step_id", 0)
         dialog_script_name = shared_memory.get("dialog_script_name", None)
         processed_node = ctx.last_request
-        if dialog_script_name is None:
-            for filename in os.listdir("data"):
-                f = os.path.join("data", filename)
-                if os.path.isfile(f):
-                    dialog = json.load(open(f))
-                    keywords = dialog["keywords"]
-                    for keyword in keywords:
-                        if keyword in processed_node.lower():
-                            logger.info(f"keyword: {keyword}")
-                            logger.info(f"filename: {filename}")
-                            dialog_script_name = filename.replace(".json", "")
+        keywords_found = False
+        found_dialog_script_name = None
+        # if dialog_script_name is None:
+        for filename in os.listdir("data"):
+            f = os.path.join("data", filename)
+            if os.path.isfile(f):
+                dialog = json.load(open(f))
+                keywords = dialog["keywords"]
+                for keyword in keywords:
+                    if keyword in processed_node.lower():
+                        logger.info(f"keyword: {keyword}")
+                        logger.info(f"filename: {filename}")
+                        found_dialog_script_name = filename.replace(".json", "")
 
-                if dialog_script_name != None:
-                    break
+            if (found_dialog_script_name != None) and (dialog_script_name != found_dialog_script_name):
+                keywords_found = True
+                dialog_script_name = found_dialog_script_name
+                dialog_step_id = 0
+                break
         
-        else:
+        if (dialog_script_name != None) and (keywords_found == False):
             f = f"data/{dialog_script_name}.json"
             dialog = json.load(open(f))
 
