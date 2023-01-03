@@ -34,8 +34,6 @@ def response_from_data():
                 keywords = dialog["keywords"]
                 for keyword in keywords:
                     if keyword in processed_node.lower():
-                        logger.info(f"keyword: {keyword}")
-                        logger.info(f"filename: {filename}")
                         found_dialog_script_name = filename.replace(".json", "")
 
             if (found_dialog_script_name != None) and (dialog_script_name != found_dialog_script_name):

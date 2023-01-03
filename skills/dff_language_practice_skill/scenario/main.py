@@ -48,7 +48,7 @@ flows = {
             RESPONSE: loc_rsp.response_from_data(),
             PROCESSING: {"slot_filling": int_prs.fill_responses_by_slots()},
             TRANSITIONS: {
-                "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b"),
+                "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
                 lbl.repeat(0.9): cnd.true(),
             },
         },

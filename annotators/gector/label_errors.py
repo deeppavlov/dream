@@ -139,6 +139,11 @@ FP_PLURAL_NOUNS = {
     "lives",
     "research",
     "viruses",
+    "children",
+    "people",
+    "men",
+    "women",
+    "advice"
 }
 
 FP_PUNCT_WORDS = {
@@ -222,8 +227,6 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
     corrections = []
     skip = False
     for i, item in enumerate(opcodes):
-        logger.info(f"item: {item}")
-        logger.info(f"word_offsets: {word_offsets}")
         if skip:
             skip = False
             continue
@@ -267,6 +270,9 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             if after_parsed[item[2][0]].lemma_ in FP_LEX_WORDS:
                                 continue
                             elif after_parsed[item[2][0]].lemma_ in FP_LEX_VERBS_TO_GRAM:
+                                logger.info(f"reason: {1}")
+                                logger.info(f"normalized_error: {normalized_error}")
+                                logger.info(f"normalized_correction: {normalized_correction}")
                                 correction["type"] = "gram"
                                 correction["subtype"] = "tense"
                                 correction["explanation"] = "verb tense"
@@ -295,15 +301,35 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             correction["subtype"] = "plur"
                             correction["explanation"] = "plural form"
                         else:
+                            logger.info(f"reason: {2}")
+                            logger.info(f"normalized_error: {normalized_error}")
+                            logger.info(f"normalized_correction: {normalized_correction}")
                             correction["type"] = "gram"
                             correction["subtype"] = "tense"
                             correction["explanation"] = "verb tense"
                 elif len(item[3]) < len(item[4]):
+                    q = before_parsed[item[1][0]].tag_
+                    w = after_parsed[item[2][0]].tag_
+                    logger.info(f"before_parsed: {q}")
+                    logger.info(f"after_parsed: {w}")
                     if normalized_correction in ENG_ARTICLES:
                         correction["type"] = "gram"
                         correction["subtype"] = "art"
                         correction["explanation"] = "article"
+                    elif normalized_correction in FP_PLURAL_NOUNS:
+                        correction["type"] = "gram"
+                        correction["subtype"] = "plur"
+                        correction["explanation"] = "plural form"
+                    elif (before_parsed[item[1][0]].tag_ == "NN" and after_parsed[item[2][0]].tag_ == "NNS") or (
+                            before_parsed[item[1][0]].tag_ == "NNS" and after_parsed[item[2][0]].tag_ == "NN"
+                        ):
+                            correction["type"] = "gram"
+                            correction["subtype"] = "plur"
+                            correction["explanation"] = "plural form"
                     else:
+                        logger.info(f"reason: {3}")
+                        logger.info(f"normalized_error: {normalized_error}")
+                        logger.info(f"normalized_correction: {normalized_correction}")
                         correction["type"] = "gram"
                         correction["subtype"] = "tense"
                         correction["explanation"] = "verb tense"
@@ -313,6 +339,9 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         correction["subtype"] = "art"
                         correction["explanation"] = "article"
                     else:
+                        logger.info(f"reason: {4}")
+                        logger.info(f"normalized_error: {normalized_error}")
+                        logger.info(f"normalized_correction: {normalized_correction}")
                         correction["type"] = "gram"
                         correction["subtype"] = "tense"
                         correction["explanation"] = "verb tense"
@@ -339,13 +368,19 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     correction["subtype"] = "extra prep"
                     correction["explanation"] = "You used an extra preposition."
                 else:
+                    logger.info(f"reason: {5}")
+                    logger.info(f"normalized_error: {normalized_error}")
+                    # logger.info(f"normalized_correction: {normalized_correction}")
                     correction["subtype"] = "tense"
-                    correction["explanation"] = "verb tense"
+                    correction["explanation"] = "verb form"
             else:
                 if spacy_model(item[3][0])[0].pos_ == "ADP":
                     correction["subtype"] = "extra prep"
                     correction["explanation"] = "You used an extra preposition."
                 else:
+                    logger.info(f"reason: {6}")
+                    logger.info(f"normalized_error: {normalized_error}")
+                    # logger.info(f"normalized_correction: {normalized_correction}")
                     correction["subtype"] = "tense"
                     correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]
@@ -397,6 +432,9 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                 else:
                     start -= 1
                     item[4].insert(0, before[start])
+                    logger.info(f"reason: {7}")
+                    # logger.info(f"normalized_error: {normalized_error}")
+                    logger.info(f"normalized_correction: {normalized_correction}")
                     correction["subtype"] = "tense"
                     correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]
