@@ -281,7 +281,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                                 correction["subtype"] = "context"
                                 correction[
                                     "explanation"
-                                ] = "You used the word which was not quite suitable in this context."
+                                ] = "You used the word which was not quite suitable in this context. "
                         elif before_pos == after_pos == "ADP":
                             correction["type"] = "gram"
                             correction["subtype"] = "prep"
@@ -306,7 +306,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             logger.info(f"normalized_correction: {normalized_correction}")
                             correction["type"] = "gram"
                             correction["subtype"] = "tense"
-                            correction["explanation"] = "verb tense"
+                            correction["explanation"] = "verb form"
                 elif len(item[3]) < len(item[4]):
                     q = before_parsed[item[1][0]].tag_
                     w = after_parsed[item[2][0]].tag_
@@ -366,7 +366,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     continue  # выключили пунктуацию
                 elif spacy_model(item[3][0])[0].pos_ == "ADP":
                     correction["subtype"] = "extra prep"
-                    correction["explanation"] = "You used an extra preposition."
+                    correction["explanation"] = "You used an extra preposition. "
                 else:
                     logger.info(f"reason: {5}")
                     logger.info(f"normalized_error: {normalized_error}")
@@ -376,7 +376,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
             else:
                 if spacy_model(item[3][0])[0].pos_ == "ADP":
                     correction["subtype"] = "extra prep"
-                    correction["explanation"] = "You used an extra preposition."
+                    correction["explanation"] = "You used an extra preposition. "
                 else:
                     logger.info(f"reason: {6}")
                     logger.info(f"normalized_error: {normalized_error}")
@@ -405,12 +405,12 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     correction["explanation"] = "form of the degree of comparison"
                 else:
                     correction["subtype"] = "skip art"
-                    correction["explanation"] = f"You skipped the article '{normalized_correction}'"
+                    correction["explanation"] = f"You skipped the article '{normalized_correction}'. "
             elif after_pos == "ADP":
                 start -= 1
                 item[4].insert(0, before[start])
                 correction["subtype"] = "skip prep"
-                correction["explanation"] = f"You skipped the preposition '{normalized_correction}'"
+                correction["explanation"] = f"You skipped the preposition '{normalized_correction}'. "
             else:
                 correction["type"] = "gram"
                 if i + 1 < len(opcodes) and item[3:][::-1] == opcodes[i + 1][3:]:
@@ -428,7 +428,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     item[4].append(before[end])
                     end += 1
                     correction["subtype"] = "omis"
-                    correction["explanation"] = f"You missed the word '{normalized_correction}'"
+                    correction["explanation"] = f"You missed the word '{normalized_correction}'. "
                 else:
                     start -= 1
                     item[4].insert(0, before[start])

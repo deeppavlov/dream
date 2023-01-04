@@ -67,7 +67,7 @@ class RuleBasedSkillSelectorConnector:
             elif (prev_active_skill == "dff_language_practice_skill") and (scenario_len != dialog_step_id):
                 skills_for_uttr.append("dff_language_practice_skill")
 
-            if (scenario_len == dialog_step_id) and (dialog_step_id != 0):
+            if (scenario_len == dialog_step_id) and (dialog_step_id != 0) and (prev_active_skill != "dff_mistakes_review_skill"):
                 skills_for_uttr.append("dff_mistakes_review_skill")
 
             bot_uttr_text = bot_uttr.get("text", "")

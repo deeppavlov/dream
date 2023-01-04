@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("feedback", "comments", 2.0): cnd.true(),
+            ("feedback", "comments", 0.8): cnd.true(),
         },
     },
     "sevice": {
@@ -58,8 +58,7 @@ flows = {
     "feedback": {
         LOCAL: {
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(),
-                "set_can_continue": int_prs.set_can_continue(),
+                "set_confidence": int_prs.set_confidence()
             },
         },
         "comments": {

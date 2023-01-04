@@ -24,6 +24,9 @@ def feedback_response():
         if mistakes_state == "":
             return "Your answers were perfect! Nice work!"
         mistakes_state = json.loads(mistakes_state)
+        if mistakes_state["state"] == []:
+            return "Your answers were perfect! Nice work!"
+
         logger.info(f"mistakes_state = {mistakes_state}")
 
         expl_templates = ["You used the wrong X. ", "The X was incorrect. ", "There was a mistake in the X. "]
