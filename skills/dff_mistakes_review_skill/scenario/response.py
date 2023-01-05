@@ -44,7 +44,13 @@ def feedback_response():
         feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
         for state in mistakes_state["state"]:
             original_sentence = state[0]["original_sentence"]
+            if original_sentence[-1] not in [".", "!", "?"]:
+                original_sentence += "."
+            
             corrected_sentence = state[0]["corrected_sentence"]
+            if original_sentence.lower() == corrected_sentence.lower():
+                continue
+
             comp_template = random.choice(comp_templates)
             sentence_compare = comp_template.replace("X", original_sentence).replace("Z", corrected_sentence)
             feedback_sents += sentence_compare
@@ -56,7 +62,8 @@ def feedback_response():
                 logger.info(f"selection = {selection2correct}")
                 if selection2correct.lower() == correction.lower():
                     continue
-                elif selection["subtype"] in unique_subtypes:
+
+                if selection["subtype"] in unique_subtypes:
                     feedback_sents += selection["explanation"]
                 else:
                     expl_template = random.choice(expl_templates)
@@ -67,7 +74,7 @@ def feedback_response():
                     corrected_sent = corr_template.replace("X", correction)
                     feedback_sents += corrected_sent
 
-                feedback_sents += "\n"
+                    # feedback_sents += "\n"
 
             feedback_sents += "\n\n"
 

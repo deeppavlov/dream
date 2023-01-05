@@ -1004,8 +1004,10 @@ def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
     last_human_utt = dialog["human_utterances"][-1]["text"]
     # print(f"base_formatter_in = {annotations.keys()}", flush=True)
     last_human_utt = last_human_utt[0].upper() + last_human_utt[1:]
-    clear_essay_word_offsets = []
     puncts = [".", "?", "!"]
+    if last_human_utt[-1] not in puncts:
+        last_human_utt += "."
+    clear_essay_word_offsets = []
     for i in range(len(last_human_utt)):
         if i == 0:
             clear_essay_word_offsets.append(0)
