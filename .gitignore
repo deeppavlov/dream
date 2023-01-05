@@ -142,3 +142,4 @@ kubernetes/models
 docker-compose-one-replica.yml
 
 *.pem
+services/chatgpt/config_local.json
