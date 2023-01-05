@@ -76,7 +76,7 @@
         "connector": {
             "protocol": "http",
             "timeout": 1,
-            "url": "http://spelling-preprocessing:8074/respond"
+            "url": "http://spelling-preprocessing:8074/response"
         },
         "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

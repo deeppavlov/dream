@@ -172,7 +172,7 @@ except Exception as e:
     raise e
 
 
-@app.route("/respond", methods=["POST"])
+@app.route("/response", methods=["POST"])
 def respond():
     st_time = time.time()
 
