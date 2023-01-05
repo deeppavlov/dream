@@ -1,4 +1,8 @@
 # С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+networks:
+  lan_access:
+    driver: bridge
+
 services:
   agent:
     volumes:
@@ -40,6 +44,9 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8150:8150
+    networks:
+      - lan_access
+      - default
   dff-generative-prompt-based-skill:
     volumes:
       - "./skills/dff_generative_prompt_based_skill:/src"
