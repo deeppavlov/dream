@@ -19,7 +19,11 @@ def update_mistakes_state(requested_data):
     results = []
     st_time = time.time()
     dialog = requested_data["dialog"]
-    prev_active_skill = dialog["bot_utterances"][-1]["active_skill"]
+    if dialog["bot_utterances"] != []:
+        prev_active_skill = dialog["bot_utterances"][-1]["active_skill"]
+    else:
+        prev_active_skill = None
+        
     not2review_skills = ["dff_mistakes_review_skill", "dff_friendship_skill"]
     if prev_active_skill in not2review_skills:
         mistakes_state = None
