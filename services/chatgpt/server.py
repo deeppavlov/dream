@@ -5,7 +5,7 @@ import time
 import sys
 
 import sentry_sdk
-import torch
+
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 
@@ -44,6 +44,9 @@ session_token = generation_params.get("session_token", "")
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+api = ChatGPT(session_token)  # auth with session token
+ # auth with google login
+api = ChatGPT(auth_type='google', email=email, password=password)
 
 
 def generate_responses(
@@ -56,17 +59,17 @@ def generate_responses(
     result = ""
 
     # session_token = 'abc123'  # `__Secure-next-auth.session-token` cookie from https://chat.openai.com/chat
-    api = ChatGPT(session_token)  # auth with session token
+    
     # api = ChatGPT(session_token, conversation_id='some-random-uuid')  # specify conversation id
     # api = ChatGPT(session_token, proxy='https://proxy.example.com:8080')  # specify proxy
     # api = ChatGPT(session_token, chrome_args=['--window-size=1920,768'])  # specify chrome args
     # api = ChatGPT(session_token, moderation=False)  # disable moderation
     # api = ChatGPT(session_token, verbose=True)  # verbose mode (print debug messages)
 
-    # auth with google login
-    api = ChatGPT(auth_type='google', email=email, password=password)
+   
 
-    result = api.send_message(context)
+    resp = api.send_message(context)
+    result = resp['message']
 
     # logger.info(f"full output: {[output]}")
     # result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
