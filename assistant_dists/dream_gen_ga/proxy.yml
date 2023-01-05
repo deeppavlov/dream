@@ -1,7 +1,3 @@
-networks:
-  lan_access:
-    driver: bridge
-
 services:
 
   sentseg:
@@ -54,11 +50,10 @@ services:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
-      - PROXY_PASS=127.0.0.1:9150
+      - PROXY_PASS=host.docker.internal:9150
       - PORT=8150
-    networks:
-      - lan_access
-      - default
 
 version: '3.7'
