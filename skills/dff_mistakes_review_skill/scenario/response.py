@@ -18,10 +18,11 @@ def example_response(reply: str):
 
 def feedback_response():
     def feedback_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        counter_mistakes_answers = 0
         human_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
         attributes = human_utterances.get("user", {}).get("attributes", {})
         mistakes_state = attributes.get("language_mistakes", "")
-        if mistakes_state == "":
+        if mistakes_state == "": 
             return "Your answers were perfect! Nice work!"
         mistakes_state = json.loads(mistakes_state)
         if mistakes_state["state"] == []:
@@ -51,6 +52,7 @@ def feedback_response():
             if original_sentence.lower() == corrected_sentence.lower():
                 continue
 
+            counter_mistakes_answers += 1
             comp_template = random.choice(comp_templates)
             sentence_compare = comp_template.replace("X", original_sentence).replace("Z", corrected_sentence)
             feedback_sents += sentence_compare
@@ -61,6 +63,7 @@ def feedback_response():
                 selection2correct = original_sentence[start_selection:end_selection]
                 logger.info(f"selection = {selection2correct}")
                 if selection2correct.lower() == correction.lower():
+
                     continue
 
                 if selection["subtype"] in unique_subtypes:
@@ -78,6 +81,9 @@ def feedback_response():
 
             feedback_sents += "\n\n"
 
+        if counter_mistakes_answers == 0:
+            return "Your answers were perfect! Nice work!"
+            
         return feedback_sents
 
     return feedback_response_handler
