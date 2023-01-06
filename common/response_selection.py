@@ -27,6 +27,7 @@ ACTIVE_SKILLS = [
     "dff_gaming_skill",
     "dff_science_skill",
     "dff_gossip_skill",
+    "dff_user_kg_skill",
     "small_talk_skill",
     "dff_wiki_skill",
     "dff_art_skill",
