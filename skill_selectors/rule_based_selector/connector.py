@@ -242,9 +242,6 @@ class RuleBasedSkillSelectorConnector:
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
 
-            out = open("log.txt", 'a')
-            out.write(f"Selected skills: {skills_for_uttr}"+'\n')
-            out.close()
             logger.info(f"Selected skills: {skills_for_uttr}")
 
             total_time = time.time() - st_time
