@@ -1,0 +1,776 @@
+name: dream
+services:
+  agent:
+    build:
+      context: /home/danielko/dreambuilder/dream
+      dockerfile: dockerfile_agent
+    command:
+    - sh
+    - -c
+    - bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_generative_prompt_based/pipeline_conf.json
+    deploy:
+      resources:
+        limits:
+          memory: "4294967296"
+        reservations:
+          memory: "2147483648"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WAIT_HOSTS: sentseg:8011, gen-convers-evaluation-selector:8009, badlisted-words:8018,
+        combined-classification:8087, spelling-preprocessing:8074, sentence-ranker:8128,
+        dff-generative-prompt-based-skill:8134, prompt-selector:8135, chatgpt:8150
+      WAIT_HOSTS_TIMEOUT: "1000"
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 4242
+      published: "4242"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream
+      target: /dp-agent
+      bind:
+        create_host_path: true
+  badlisted-words:
+    build:
+      context: /home/danielko/dreambuilder/dream/dp/proxy
+      dockerfile: Dockerfile
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    deploy:
+      resources:
+        limits:
+          memory: "268435456"
+        reservations:
+          memory: "268435456"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      FLASK_APP: server
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PORT: "8018"
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      PROXY_PASS: dream.deeppavlov.ai:8018
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8018
+      published: "8018"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/annotators/BadlistedWordsDetector
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/common
+      target: /src/common
+      bind:
+        create_host_path: true
+  chatgpt:
+    build:
+      context: /home/danielko/dreambuilder/dream/dp/proxy
+      dockerfile: Dockerfile
+      args:
+        CONFIG_NAME: config_local.json
+        PRETRAINED_MODEL_NAME_OR_PATH: ChatGPT
+        SERVICE_NAME: chatgpt
+        SERVICE_PORT: "8150"
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    deploy:
+      resources:
+        limits:
+          memory: "1073741824"
+        reservations:
+          memory: "1073741824"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      FLASK_APP: server
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PORT: "8150"
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      PROXY_PASS: ai-rig:9150
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    extra_hosts:
+      ai-rig: 172.17.0.1
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8150
+      published: "8150"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/.deeppavlov/cache
+      target: /root/.cache
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/services/chatgpt
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/common
+      target: /src/common
+      bind:
+        create_host_path: true
+  combined-classification:
+    build:
+      context: /home/danielko/dreambuilder/dream/dp/proxy
+      dockerfile: Dockerfile
+      args:
+        CONFIG: combined_classifier.json
+        PORT: "8087"
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    deploy:
+      resources:
+        limits:
+          memory: "2147483648"
+        reservations:
+          memory: "2147483648"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUDA_VISIBLE_DEVICES: "0"
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PORT: "8087"
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      PROXY_PASS: dream.deeppavlov.ai:8087
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8087
+      published: "8087"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/annotators/combined_classification
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/common
+      target: /src/common
+      bind:
+        create_host_path: true
+  dff-generative-prompt-based-skill:
+    build:
+      context: /home/danielko/dreambuilder/dream
+      dockerfile: ./skills/dff_generative_prompt_based_skill/Dockerfile
+      args:
+        GENERATIVE_SERVICE_URL: http://chatgpt:8150/respond
+        SERVICE_NAME: dff_generative_prompt_based_skill
+        SERVICE_PORT: "8134"
+    command:
+    - gunicorn
+    - --workers=1
+    - server:app
+    - -b
+    - 0.0.0.0:8134
+    - --reload
+    deploy:
+      resources:
+        limits:
+          memory: "134217728"
+        reservations:
+          memory: "134217728"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8134
+      published: "8134"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/skills/dff_generative_prompt_based_skill
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/common
+      target: /src/common
+      bind:
+        create_host_path: true
+  gen-convers-evaluation-selector:
+    build:
+      context: /home/danielko/dreambuilder/dream
+      dockerfile: ./response_selectors/gen_convers_evaluation_based_selector/Dockerfile
+      args:
+        ACKNOWLEDGEMENT_PROBA: "0.3"
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: "1"
+        CALL_BY_NAME_PROBABILITY: "0.5"
+        CONFIDENCE_STRENGTH: "0.8"
+        CONV_EVAL_STRENGTH: "0.4"
+        GREETING_FIRST: "1"
+        IGNORE_DISLIKED_SKILLS: "0"
+        MAX_TURNS_WITHOUT_SCRIPTS: "7"
+        PRIORITIZE_HUMAN_INITIATIVE: "1"
+        PRIORITIZE_NO_DIALOG_BREAKDOWN: "0"
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: "0"
+        PRIORITIZE_SCRIPTED_SKILLS: "0"
+        PRIORITIZE_WITH_REQUIRED_ACT: "0"
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: "0"
+        PROMPT_PROBA: "0.1"
+        QUESTION_TO_QUESTION_DOWNSCORE_COEF: "0.8"
+        RESTRICTION_FOR_SENSITIVE_CASE: "1"
+        TAG_BASED_SELECTION: "1"
+    command:
+    - flask
+    - run
+    - -h
+    - 0.0.0.0
+    - -p
+    - "8009"
+    deploy:
+      resources:
+        limits:
+          memory: "268435456"
+        reservations:
+          memory: "268435456"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      FLASK_APP: server
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8009
+      published: "8009"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/response_selectors/gen_convers_evaluation_based_selector
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/common
+      target: /src/common
+      bind:
+        create_host_path: true
+  mongo:
+    command:
+    - mongod
+    image: mongo:4.0.0
+    networks:
+      default: null
+  prompt-selector:
+    build:
+      context: /home/danielko/dreambuilder/dream
+      dockerfile: ./annotators/prompt_selector/Dockerfile
+      args:
+        N_SENTENCES_TO_RETURN: "3"
+        SERVICE_NAME: prompt_selector
+        SERVICE_PORT: "8135"
+    command:
+    - flask
+    - run
+    - -h
+    - 0.0.0.0
+    - -p
+    - "8135"
+    deploy:
+      resources:
+        limits:
+          memory: "83886080"
+        reservations:
+          memory: "83886080"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      FLASK_APP: server
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8135
+      published: "8135"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/annotators/prompt_selector
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/common
+      target: /src/common
+      bind:
+        create_host_path: true
+  sentence-ranker:
+    build:
+      context: /home/danielko/dreambuilder/dream/services/sentence_ranker
+      dockerfile: Dockerfile
+      args:
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+        SERVICE_PORT: "8128"
+    command:
+    - flask
+    - run
+    - -h
+    - 0.0.0.0
+    - -p
+    - "8128"
+    deploy:
+      resources:
+        limits:
+          memory: "3221225472"
+        reservations:
+          memory: "3221225472"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUDA_VISIBLE_DEVICES: "0"
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      FLASK_APP: server
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8128
+      published: "8128"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/services/sentence_ranker
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: /home/danielko/.deeppavlov/cache
+      target: /root/.cache
+      bind:
+        create_host_path: true
+  sentseg:
+    build:
+      context: /home/danielko/dreambuilder/dream/dp/proxy
+      dockerfile: Dockerfile
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    deploy:
+      resources:
+        limits:
+          memory: "1610612736"
+        reservations:
+          memory: "1610612736"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      FLASK_APP: server
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PORT: "8011"
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      PROXY_PASS: dream.deeppavlov.ai:8011
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8011
+      published: "8011"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/annotators/SentSeg
+      target: /src
+      bind:
+        create_host_path: true
+  spelling-preprocessing:
+    build:
+      context: /home/danielko/dreambuilder/dream/dp/proxy
+      dockerfile: Dockerfile
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    deploy:
+      resources:
+        limits:
+          memory: "52428800"
+        reservations:
+          memory: "52428800"
+    environment:
+      BADLIST_ANNOTATOR_URL: http://badlisted-words:8018/badlisted_words_batch
+      COMET_SERVICE_URL: http://comet-atomic:8053/comet
+      CONCEPTNET_SERVICE_URL: http://comet-conceptnet:8065/comet
+      CUSTOM_DIALOG_FILE: data/test_data.json
+      DB_CONFIG: db_conf.json
+      DB_HOST: mongo
+      DB_NAME: dream-dev
+      DB_PORT: "27017"
+      DIALOGPT_CONTINUE_SERVICE_URL: http://dialogpt:8125/continue
+      DIALOGPT_SERVICE_URL: http://dialogpt:8091/respond
+      DP_AGENT_SENTRY_DSN: ""
+      DP_ENTITY_LINKING_URL: http://entity-linking:8075/model
+      DP_WIKIDATA_URL: http://wiki-parser:8077/model
+      EXTERNAL_FOLDER: ~/.deeppavlov/agent/
+      FACT_RANDOM_SERVICE_URL: http://fact-random:8119/respond
+      FLASK_APP: server
+      INFILLING_SERVICE_URL: http://infilling:8122/respond
+      KBQA_URL: http://kbqa:8072/model
+      KEEP_ALIVE: "True"
+      KEEP_ALIVE_TIMEOUT: "35"
+      KNOWLEDGE_GROUNDING_SERVICE_URL: http://knowledge-grounding:8083/respond
+      MASKED_LM_SERVICE_URL: http://masked-lm:8088/respond
+      NEWS_API_ANNOTATOR_URL: http://news-api-annotator:8112/respond
+      PIPELINE_CONFIG: pipeline_conf.json
+      PORT: "8074"
+      PROMPT_STORYGPT_SERVICE_URL: http://prompt-storygpt:8127/respond
+      PROXY_PASS: dream.deeppavlov.ai:8074
+      REQUEST_TIMEOUT: "2"
+      RESPONSE_TIMEOUT: "2"
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTIMENT_CLASSIFICATION_SERVICE_URL: http://sentiment-classification:8024/model
+      SENTRY_DSN: ""
+      STORYGPT_SERVICE_URL: http://storygpt:8126/respond
+      TEXT_QA_URL: http://text-qa:8078/model
+      TFIDF_BAD_FILTER: "1"
+      TIME_LIMIT: "30"
+      USE_ASSESSMENT: "1"
+      USE_TFIDF_COBOT: ""
+      WIKI_FACTS_URL: http://wiki-facts:8116/respond
+      WIKIDATA_DIALOGUE_SERVICE_URL: http://wikidata-dial-service:8092/model
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8074
+      published: "8074"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: /home/danielko/dreambuilder/dream/annotators/spelling_preprocessing
+      target: /src
+      bind:
+        create_host_path: true
+networks:
+  default:
+    name: dream_default

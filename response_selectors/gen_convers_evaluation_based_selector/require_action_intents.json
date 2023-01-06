@@ -1,0 +1,50 @@
+{
+    "open_question_factual": [
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer",
+        "Information_DeliveryIntent"
+    ],
+    "open_question_opinion": [
+        "opinion",
+        "Opinion_ExpressionIntent"
+    ],
+    "open_question_personal": [
+        "opinion",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer",
+        "Opinion_ExpressionIntent",
+        "Information_DeliveryIntent"
+    ],
+    "yes_no_question": [
+        "pos_answer",
+        "neg_answer",
+        "yes",
+        "no"
+    ],
+    "clarifying_question": [
+        "opinion",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer",
+        "Opinion_ExpressionIntent",
+        "Information_DeliveryIntent"
+    ],
+    "Information_RequestIntent": [
+        "opinion",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer",
+        "Opinion_ExpressionIntent",
+        "Information_DeliveryIntent"
+    ],
+    "Opinion_RequestIntent": [
+        "opinion",
+        "Opinion_ExpressionIntent"
+    ]
+}

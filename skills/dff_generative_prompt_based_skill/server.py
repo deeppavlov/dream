@@ -49,7 +49,11 @@ def handler(requested_data, random_seed=None):
             if random_seed:
                 random.seed(int(random_seed))
             ctx = actor(ctx)
-            responses.append(get_response(ctx, actor))
+
+            temp_responses = get_response(ctx, actor)
+            logger.info(f"responses in handler are: {temp_responses}")
+
+            responses.append(temp_responses)
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
@@ -102,7 +106,12 @@ def respond():
 
     # t_utils.save_to_test(responses, "tests/lets_talk_out.json", indent=4)  # TEST
     responses = handler(request.json)
-    return jsonify(responses)
+
+    results = jsonify(responses)
+    # logger.info(f"{SERVICE_NAME} responses are:")
+    # logger.info(f"{results}")
+
+    return results
 
 
 if __name__ == "__main__":

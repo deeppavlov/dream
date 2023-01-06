@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 assert GENERATIVE_SERVICE_URL
 
+TIMEOUT = 30
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 
@@ -83,7 +84,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"request_data: {request_data}")
     if len(request_data) > 0:
         response = requests.post(
-            GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=5
+            GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=TIMEOUT
         )
         hypotheses = response.json()
     else:
@@ -102,6 +103,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     if len(curr_responses) == 0:
         return ""
+    
+    # logger.info(f"replies: {curr_responses}") 
+
     return int_rsp.multi_response(
         replies=curr_responses,
         confidences=curr_confidences,

@@ -1,0 +1,39 @@
+{
+    "exit": [
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
+    ],
+    "repeat": [
+        "dff_intent_responder_skill"
+    ],
+    "what_time": [
+        "dff_intent_responder_skill"
+    ],
+    "cant_do": [
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
+    ],
+    "what_is_your_name": [
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
+    ],
+    "where_are_you_from": [
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
+    ],
+    "who_made_you": [
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
+    ],
+    "what_is_your_job": [
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
+    ],
+    "what_can_you_do": [
+        "dff_intent_responder_skill",
+        "dff_program_y_skill"
+    ],
+    "dont_understand": [
+        "dff_intent_responder_skill"
+    ]
+}

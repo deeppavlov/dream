@@ -138,7 +138,7 @@
             "dff_generative_prompt_based_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10,
+                    "timeout": 30,
                     "url": "http://dff-generative-prompt-based-skill:8134/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_generative_prompt_based_skill_formatter",
@@ -151,7 +151,7 @@
             "chatgpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10,
+                    "timeout": 30,
                     "url": "http://chatgpt:8150/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
