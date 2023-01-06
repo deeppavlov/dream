@@ -347,7 +347,11 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     # flatten 2d list to 1d list of all appeared sentences of bot replies
     bot_utterances = sum(bot_utterances, [])
     bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
-
+    
+    for i in range(len(candidates)):
+        if candidates[i]["skill_name"] == "dff_user_kg_skill":
+            scores[i] = max(scores)
+    
     if TAG_BASED_SELECTION:
         logger.info("Tag based selection")
         best_candidate, best_id, curr_single_scores = tag_based_response_selection(

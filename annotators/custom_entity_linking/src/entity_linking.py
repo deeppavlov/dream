@@ -99,7 +99,8 @@ class EntityLinker(Component, Serializable):
         
         for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
             entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")
-            query_str = f"title:{entity_substr} AND entity_id:{entity_id} AND tag:{tag}"
+            query_str = f"title:{entity_substr} AND tag:{tag}"
+            
             query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
             res = self.cur.execute(query, (query_str,)).fetchall()
             if res and res[0][3] == "name" and res[0][1] == entity_id and tag == "name":
@@ -161,6 +162,7 @@ class EntityLinker(Component, Serializable):
                 sentences_offsets_list,
             )
             log.info(f"entity_ids_list {entity_ids_list} entity_conf_list {entity_conf_list}")
+            
             entity_ids_batch.append(entity_ids_list[:self.num_entities_to_return])
             entity_conf_batch.append(entity_conf_list[:self.num_entities_to_return])
             entity_id_tags_batch.append(entity_id_tags_list[:self.num_entities_to_return])
@@ -187,16 +189,10 @@ class EntityLinker(Component, Serializable):
                     entity_substr = entity_substr.replace(symb_old, symb_new)
                 cand_ent_init = defaultdict(set)
                 if len(entity_substr) > 1:
+                    for start in ["a ", "the ", "my ", "his ", "her "]:
+                        if entity_substr.startswith(start):
+                            entity_substr = entity_substr[len(start):]
                     cand_ent_init = self.find_exact_match(entity_substr, tags)
-                    all_low_conf = True
-                    for entity_id in cand_ent_init:
-                        entity_info_set = cand_ent_init[entity_id]
-                        for entity_info in entity_info_set:
-                            if entity_info[0] == 1.0:
-                                all_low_conf = False
-                                break
-                        if not all_low_conf:
-                            break
                     clean_tags = [tag for tag, conf in tags]
                     entity_substr_split = [
                         word for word in entity_substr.split(" ") if word not in self.stopwords and len(word) > 0
@@ -207,6 +203,10 @@ class EntityLinker(Component, Serializable):
                         cand_ent_init = {**cand_ent_init, **stem_cand_ent_init}
                     if not cand_ent_init and len(entity_substr_split) > 1:
                         cand_ent_init = self.find_fuzzy_match(entity_substr_split, tags)
+                    if not cand_ent_init:
+                        cand_ent_init = self.find_exact_match(entity_substr)
+                    if not cand_ent_init:
+                        cand_ent_init = self.find_fuzzy_match(entity_substr_split)
 
                 cand_ent_scores = []
                 for entity in cand_ent_init:
@@ -216,8 +216,8 @@ class EntityLinker(Component, Serializable):
 
                 cand_ent_scores = sorted(cand_ent_scores, key=lambda x: (x[1], x[3], x[2]), reverse=True)
                 entity_ids = [elem[0] for elem in cand_ent_scores]
-                entity_id_tags = [elem[5] for elem in cand_ent_scores]
                 confs = [elem[1:4] for elem in cand_ent_scores]
+                entity_id_tags = [elem[4] for elem in cand_ent_scores]
                 entity_ids = [entity_id.replace("slash", "/").replace("hyphen", "-") for entity_id in entity_ids]
                 entity_ids_list.append(entity_ids)
                 conf_list.append(confs)
@@ -226,26 +226,32 @@ class EntityLinker(Component, Serializable):
         return entity_ids_list, conf_list, entity_id_tags_list
 
     def process_cand_ent(self, cand_ent_init, entities_and_ids, entity_substr_split, tags):
-        for entity_title, entity_id, entity_rels, f_tag in entities_and_ids:
-            for tag, tag_conf in tags:
-                if tag == f_tag:
-                    substr_score = self.calc_substr_score(entity_title, entity_substr_split)
-                    cand_ent_init[entity_id].add((substr_score, entity_rels, tag_conf, f_tag))
+        if tags:
+            for entity_title, entity_id, entity_rels, f_tag in entities_and_ids:
+                for tag, tag_conf in tags:
+                    if tag == f_tag:
+                        substr_score = self.calc_substr_score(entity_title, entity_substr_split)
+                        cand_ent_init[entity_id].add((substr_score, entity_rels, tag_conf, f_tag))
+        else:
+            for entity_title, entity_id, entity_rels, f_tag in entities_and_ids:
+                substr_score = self.calc_substr_score(entity_title, entity_substr_split)
+                cand_ent_init[entity_id].add((substr_score, entity_rels, 1.0, f_tag))
         return cand_ent_init
 
-    def find_exact_match(self, entity_substr, tags):
+    def find_exact_match(self, entity_substr, tags=None):
         entity_substr = entity_substr.lower()
         entity_substr_split = entity_substr.split()
         cand_ent_init = defaultdict(set)
 
-        query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
-        res = self.cur.execute(query)
+        query = "SELECT * FROM inverted_index WHERE title MATCH ?;"
+        res = self.cur.execute(query, (entity_substr,))
         entities_and_ids = res.fetchall()
+        
         if entities_and_ids:
             cand_ent_init = self.process_cand_ent(cand_ent_init, entities_and_ids, entity_substr_split, tags)
         return cand_ent_init
 
-    def find_fuzzy_match(self, entity_substr_split, tags):
+    def find_fuzzy_match(self, entity_substr_split, tags=None):
         entity_substr_split = [word.lower() for word in entity_substr_split]
         cand_ent_init = defaultdict(set)
         for word in entity_substr_split:

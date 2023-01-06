@@ -225,7 +225,7 @@ def get_result(request):
     found_kg_ids = []
     for entity_info in custom_el_annotations:
         if entity_info.get("entity_id_tags", []):
-            entities_with_types[(entity_indo["entity_substr"], entity_info["entity_id_tags"][0])] = \
+            entities_with_types[(entity_info["entity_substr"], entity_info["entity_id_tags"][0])] = \
                 entity_info["entity_ids"][0]
             found_kg_ids.append(entity_info["entity_ids"][0])
 

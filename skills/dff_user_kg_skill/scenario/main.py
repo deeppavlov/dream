@@ -13,6 +13,7 @@ from df_engine.core.keywords import (
 )
 from df_engine.core import Actor
 
+import common.constants as common_constants
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
 import scenario.condition as loc_cnd
@@ -39,15 +40,19 @@ flows = {
                 ("personal_info_flow", "pet_r", 2): int_cnd.has_entities("prop:have_pet"),
                 ("personal_info_flow", "hobby_q", 1): cnd.true()
             },
-            PROCESSING: {"set_confidence": int_prs.set_confidence(1.1)}
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(1.1),
+                "set_can_continue": int_prs.set_can_continue(common_constants.MUST_CONTINUE),
+            }
         },
         "pet_r": {
             RESPONSE: "Cool! I also have a {users_pet}.",
             TRANSITIONS: {lbl.forward(): cnd.true()},
             PROCESSING: {
-                "entity_extraction": int_prs.entities(users_hobby=["prop:have_pet", "default:pet"]),
+                "entity_extraction": int_prs.entities(users_pet=["prop:have_pet", "default:pet"]),
                 "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.1)
+                "set_confidence": int_prs.set_confidence(1.1),
+                "set_can_continue": int_prs.set_can_continue(common_constants.MUST_CONTINUE),
             },
         },
         "hobby_q": {
@@ -56,23 +61,29 @@ flows = {
                 ("personal_info_flow", "hobby_r", 2): int_cnd.has_entities("prop:like_activity"),
             },
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.1)
+                "set_confidence": int_prs.set_confidence(1.1),
+                "set_can_continue": int_prs.set_can_continue(common_constants.MUST_CONTINUE),
             },
         },
         "hobby_r": {
             RESPONSE: "Cool! I also like {users_hobby}",
-            TRANSITIONS: {lbl.forward(): cnd.true()},
+            TRANSITIONS: {
+                ("personal_info_flow", "pet_q", 1): cnd.regexp(re.compile(r"(pet|pets)")),
+                lbl.forward(): cnd.true()
+            },
             PROCESSING: {
                 "entity_extraction": int_prs.entities(users_hobby=["prop:like_activity", "default:this activity"]),
                 "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.1)
+                "set_confidence": int_prs.set_confidence(1.1),
+                "set_can_continue": int_prs.set_can_continue(common_constants.MUST_CONTINUE),
             },
         },
         "pet_tell_more": {
             RESPONSE: "Tell me more about your {users_pet}.",
             PROCESSING: {
                 "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.1)
+                "set_confidence": int_prs.set_confidence(1.1),
+                "set_can_continue": int_prs.set_can_continue(common_constants.MUST_CONTINUE),
             },
             TRANSITIONS: {},
         }
