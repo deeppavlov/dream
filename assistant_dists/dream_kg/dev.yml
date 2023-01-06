@@ -195,7 +195,7 @@ services:
   entity-linking:
     volumes:
       - "./annotators/entity_linking:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "/archive/evseev/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8075:8075
   wiki-parser:

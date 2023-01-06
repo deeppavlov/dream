@@ -608,8 +608,7 @@ def wp_formatter_dialog(dialog: Dict):
     return [{"parser_info": parser_info, "query": [input_entity_info_list], "utt_num": utt_index}]
 
 
-def el_formatter_dialog(dialog: Dict):
-    # Used by: entity_linking annotator
+def prepare_el_input(dialog: Dict):
     num_last_utterances = 2
     entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
     entity_substr_list, entity_tags_list = [], []
@@ -627,7 +626,21 @@ def el_formatter_dialog(dialog: Dict):
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
 
+    return entity_substr_list, entity_tags_list, context
+
+
+def el_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
     return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": context}]
+
+
+def custom_el_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
+    property_extraction = dialog["human_utterances"][-1]["annotations"].get("property_extraction", {})
+    return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": context,
+             "property_extraction": [property_extraction]}]
 
 
 def kbqa_formatter_dialog(dialog: Dict):

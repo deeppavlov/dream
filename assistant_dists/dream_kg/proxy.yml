@@ -531,15 +531,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8006
       - PORT=8006
 
-  convers-evaluation-selector:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8009
-      - PORT=8009
-
   dff-coronavirus-skill:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
