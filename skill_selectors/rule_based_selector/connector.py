@@ -190,6 +190,7 @@ class RuleBasedSkillSelectorConnector:
                     bot_uttr.get("text", ""),
                     available_skills=[
                         "dff_art_skill",
+                        "dff_user_kg_skill",
                         "dff_movie_skill",
                         "dff_book_skill",
                         "news_api_skill",
@@ -241,6 +242,9 @@ class RuleBasedSkillSelectorConnector:
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
 
+            out = open("log.txt", 'a')
+            out.write(f"Selected skills: {skills_for_uttr}"+'\n')
+            out.close()
             logger.info(f"Selected skills: {skills_for_uttr}")
 
             total_time = time.time() - st_time
