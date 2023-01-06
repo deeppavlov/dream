@@ -621,8 +621,8 @@ def check_nounphr(annotations, nounphr_to_find):
 def find_entity_custom_kg(annotations, kg_type):
     custom_el_info = annotations.get("custom_entity_linking", [])
     for entity_info in custom_el_info:
-        substr = entity_info["entity_substr"]
-        e_type = entity_info["entity_id_tags"]
+        substr = entity_info.get("entity_substr", "")
+        e_type = entity_info.get("entity_id_tags", "")
         if e_type.lower() == kg_type.lower():
             return substr
     return ""

@@ -39,7 +39,7 @@ flows = {
                 ("personal_info_flow", "pet_r", 2): int_cnd.has_entities("prop:have_pet"),
                 ("personal_info_flow", "hobby_q", 1): cnd.true()
             },
-            PROCESSING: {"set_confidence": int_prs.set_confidence(1.0)}
+            PROCESSING: {"set_confidence": int_prs.set_confidence(1.1)}
         },
         "pet_r": {
             RESPONSE: "Cool! I also have a {users_pet}.",
@@ -47,7 +47,7 @@ flows = {
             PROCESSING: {
                 "entity_extraction": int_prs.entities(users_hobby=["prop:have_pet", "default:pet"]),
                 "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.0)
+                "set_confidence": int_prs.set_confidence(1.1)
             },
         },
         "hobby_q": {
@@ -56,7 +56,7 @@ flows = {
                 ("personal_info_flow", "hobby_r", 2): int_cnd.has_entities("prop:like_activity"),
             },
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0)
+                "set_confidence": int_prs.set_confidence(1.1)
             },
         },
         "hobby_r": {
@@ -65,14 +65,14 @@ flows = {
             PROCESSING: {
                 "entity_extraction": int_prs.entities(users_hobby=["prop:like_activity", "default:this activity"]),
                 "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.0)
+                "set_confidence": int_prs.set_confidence(1.1)
             },
         },
         "pet_tell_more": {
             RESPONSE: "Tell me more about your {users_pet}.",
             PROCESSING: {
                 "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.0)
+                "set_confidence": int_prs.set_confidence(1.1)
             },
             TRANSITIONS: {},
         }
