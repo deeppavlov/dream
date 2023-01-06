@@ -36,4 +36,4 @@ RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
-CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8131
+CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8135

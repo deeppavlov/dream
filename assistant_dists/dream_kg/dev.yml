@@ -426,7 +426,7 @@ services:
       - "./annotators/custom_entity_linking:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8131:8131
+      - 8135:8135
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"

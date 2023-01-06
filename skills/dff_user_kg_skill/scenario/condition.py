@@ -6,7 +6,7 @@ from os import getenv
 from df_engine.core import Context, Actor
 
 import common.dff.integration.context as int_ctx
-from common.art import ART_PATTERN
+from common.universal_templates import if_lets_chat
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -20,6 +20,9 @@ def check_flag(prop: str) -> Callable:
     return check_flag_handler
 
 
-def art_skill_switch(ctx: Context, actor: Actor) -> bool:
+def skill_switch(ctx: Context, actor: Actor) -> bool:
+    flag = False
     user_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    return re.findall(ART_PATTERN, user_uttr["text"])
+    if if_lets_chat(user_uttr["text"]) and re.findall(r"(\bpet|pets|hobby|hobbies)", user_uttr["text"]):
+        flag = True
+    return flag

@@ -1,4 +1,5 @@
 import logging
+import re
 import sentry_sdk
 from os import getenv
 
@@ -26,7 +27,9 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("personal_info_flow", "pet_tell_more", 2): int_cnd.has_entities("kg:animal")
+            ("personal_info_flow", "pet_tell_more", 2): int_cnd.has_entities("kg:animal"),
+            ("personal_info_flow", "pet_q", 1): cnd.regexp(re.compile(r"(pet|pets)")),
+            ("personal_info_flow", "hobby_q", 1): cnd.regexp(re.compile(r"(hobby|hobbies)")),
         }
     },
     "personal_info_flow": {
@@ -66,11 +69,11 @@ flows = {
             },
         },
         "pet_tell_more": {
-            RESPONSE: "Tell me more about your {users_pet}."
+            RESPONSE: "Tell me more about your {users_pet}.",
             PROCESSING: {
                 "slot_filling": int_prs.fill_responses_by_slots(),
                 "set_confidence": int_prs.set_confidence(1.0)
-            }
+            },
             TRANSITIONS: {},
         }
     },
