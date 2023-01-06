@@ -119,10 +119,10 @@
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "gen_rule_based_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.gen_rule_based_selector.connector:RuleBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -138,7 +138,7 @@
             "dff_generative_prompt_based_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 10,
                     "url": "http://dff-generative-prompt-based-skill:8134/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_generative_prompt_based_skill_formatter",
@@ -151,7 +151,7 @@
             "chatgpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 10,
                     "url": "http://chatgpt:8150/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
@@ -216,11 +216,11 @@
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "gen_convers_evaluation_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://gen-convers-evaluation-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -232,13 +232,13 @@
         }
     },
     "metadata": {
-        "display_name": "Generative Prompt-Based Dream",
+        "display_name": "ChatGPT-based Generative Prompt-Based Dream",
         "author": "DeepPavlov",
-        "description": "Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload specify own prompts (json files) to be used in LLM-powered reply generation.",
-        "version": "0.0.0",
-        "date_created": "2022-12-30T15:00:00",
-        "ram_usage": "30 GB",
-        "gpu_usage": "30 GB",
-        "disk_usage": "30 GB"
+        "description": "Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative model ChatGPT. This is a generative-based socialbot that uses ChatGPT to generate most of the responses. You can upload specify own prompts (json files) to be used in LLM-powered reply generation.",
+        "version": "0.0.1",
+        "date_created": "2023-01-04T15:00:00",
+        "ram_usage": "2 GB",
+        "gpu_usage": "2 GB",
+        "disk_usage": "2 GB"
     }
 }

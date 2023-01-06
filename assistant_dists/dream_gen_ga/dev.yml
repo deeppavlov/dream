@@ -3,6 +3,8 @@ services:
   agent:
     volumes:
       - ".:/dp-agent"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - 4242:4242
   sentseg:
@@ -10,9 +12,9 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-selector:
+  gen-convers-evaluation-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/gen_convers_evaluation_based_selector:/src"
       - "./common:/src/common"
     ports:
       - 8009:8009
@@ -38,12 +40,16 @@ services:
       - "./services/chatgpt:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - 8150:8150
   dff-generative-prompt-based-skill:
     volumes:
       - "./skills/dff_generative_prompt_based_skill:/src"
       - "./common:/src/common"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - 8134:8134
   sentence-ranker:

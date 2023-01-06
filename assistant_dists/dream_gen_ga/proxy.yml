@@ -27,14 +27,14 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8074
       - PORT=8074
 
-  convers-evaluation-selector:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8009
-      - PORT=8009
+  # convers-evaluation-selector:
+  #   command: [ "nginx", "-g", "daemon off;" ]
+  #   build:
+  #     context: dp/proxy/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PROXY_PASS=dream.deeppavlov.ai:8009
+  #     - PORT=8009
 
   combined-classification:
     command: ["nginx", "-g", "daemon off;"]
@@ -50,6 +50,7 @@ services:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
+    network_mode: bridge
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
