@@ -1,8 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_generative_prompt_based/pipeline_conf.json'
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_gen_ga/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, gen-convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, spelling-preprocessing:8074, sentence-ranker:8128, dff-generative-prompt-based-skill:8134, prompt-selector:8135, chatgpt:8150"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -111,8 +109,6 @@ services:
       context: .
       dockerfile: ./services/chatgpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8150
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     environment:
       - FLASK_APP=server
     deploy:
@@ -132,8 +128,6 @@ services:
       context: .
       dockerfile: ./skills/dff_generative_prompt_based_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     deploy:
       resources:
         limits:

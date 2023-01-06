@@ -50,11 +50,10 @@ services:
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
-    network_mode: bridge
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "ai-rig:${HOST_GATEWAY}"
     environment:
-      - PROXY_PASS=host.docker.internal:9150
+      - PROXY_PASS=ai-rig:9150
       - PORT=8150
 
 version: '3.7'
