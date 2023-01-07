@@ -365,21 +365,28 @@ def select_gen_response(candidates, scores, confidences, is_toxics, dialog, all_
 
     logger.info("Simple selection (single skill)")
 
-    best_id = ""
+    # best_id = 0
 
-    indices = []
+    # indices = []
 
-    for candidate_index in range(len(candidates)):
-        if candidates[candidate_index]["skill_name"] == "dff_generative_prompt_based_skill":
-            indices.append(candidate)
+    # for candidate_index in range(len(candidates)):
+    #     if candidates[candidate_index]["skill_name"] == "dff_generative_prompt_based_skill":
+    #         indices.append(candidate_index)
 
-    if len(indices)>0:
-        best_id = indices[0]
+    # if len(indices)>0:
+    #     best_id = indices[0]
 
-    best_candidate = candidates[best_id]
-    # best_skill_name = skill_names[int(best_id)]
+    # best_candidate = candidates[best_id]
+    # # best_skill_name = skill_names[int(best_id)]
     prev_skill_names = [uttr["skill_name"] for uttr in dialog["bot_utterances"][-5:]]
 
+    # we pick first as a back up plan
+    best_candidate = candidates[0]
+
+    # but our goal is to use dff_generative_prompt_based_skill instead
+    for candidate in candidates:
+        if candidate["skill_name"] == "dff_generative_prompt_based_skill":
+            best_candidate = candidate
 
     logger.info(f"Best candidate: {best_candidate}")
     best_text = best_candidate["text"]

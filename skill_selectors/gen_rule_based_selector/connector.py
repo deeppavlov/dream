@@ -305,8 +305,8 @@ class RuleBasedSkillSelectorConnector:
             skills_for_uttr.clear()
             # using only the generative prompt-based-skill, chatGPT itself, and dummy
             skills_for_uttr.append("dummy_skill")
-            # skills_for_uttr.append("chatgpt")
-            # skills_for_uttr.append("dff_generative_prompt_based_skill")
+            skills_for_uttr.append("chatgpt")
+            skills_for_uttr.append("dff_generative_prompt_based_skill")
             
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
