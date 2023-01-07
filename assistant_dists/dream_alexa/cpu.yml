@@ -1,0 +1,48 @@
+version: '3.7'
+services:
+  ner:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  kbqa:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  spacy-nounphrases:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  comet-atomic:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  comet-conceptnet:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  knowledge-grounding:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  midas-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  combined-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  text-qa:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  fact-retrieval:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  entity-detection:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  convers-evaluator-annotator:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  dialogpt:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  intent-catcher:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""

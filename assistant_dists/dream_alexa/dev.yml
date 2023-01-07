@@ -55,6 +55,7 @@ services:
       - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8014:8014
   badlisted-words:
@@ -110,12 +111,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8033:8033
-  dff-book-sfc-skill:
+  dff-book-skill:
     volumes:
-      - "./skills/dff_book_sfc_skill:/src"
+      - "./skills/dff_book_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8034:8034
+      - 8032:8032
   emotion-skill:
     volumes:
       - "./skills/emotion_skill:/src"
@@ -185,12 +186,14 @@ services:
     volumes:
       - "./annotators/kbqa:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8072:8072
   entity-linking:
     volumes:
       - "./annotators/entity_linking:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8075:8075
   wiki-parser:
@@ -207,8 +210,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing_dp:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
   dff-grounding-skill:
@@ -221,6 +223,7 @@ services:
     volumes:
       - "./services/text_qa:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8078:8078
   knowledge-grounding:
@@ -263,6 +266,7 @@ services:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8087:8087
   midas-classification:
@@ -318,6 +322,7 @@ services:
       - "./annotators/fact_retrieval:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8100:8100
   dff-funfact-skill:
@@ -366,6 +371,7 @@ services:
     volumes:
       - "./annotators/entity_detection:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8103:8103
   dff-coronavirus-skill:
@@ -374,36 +380,23 @@ services:
       - "./common:/src/common"
     ports:
       - 8061:8061
-  dff-short-story-skill:
-    volumes:
-      - "./skills/dff_short_story_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8057:8057
   dff-weather-skill:
     volumes:
       - "./skills/dff_weather_skill:/src"
       - "./common:/src/common"
     ports:
       - 8037:8037
+  dialogpt:
+    volumes:
+      - "./services/dialogpt:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8125:8125
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
       - "./common:/src/common"
     ports:
       - 8120:8120
-  speech-function-classifier:
-    volumes:
-      - "./annotators/speech_function_classifier:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8108:8108
-  speech-function-predictor:
-    volumes:
-      - "./annotators/speech_function_predictor:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8107:8107
 version: "3.7"
