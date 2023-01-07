@@ -306,7 +306,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             logger.info(f"normalized_correction: {normalized_correction}")
                             correction["type"] = "gram"
                             correction["subtype"] = "tense"
-                            correction["explanation"] = "verb form"
+                            correction["explanation"] = "form"
                 elif len(item[3]) < len(item[4]):
                     q = before_parsed[item[1][0]].tag_
                     w = after_parsed[item[2][0]].tag_
@@ -371,8 +371,8 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     logger.info(f"reason: {5}")
                     logger.info(f"normalized_error: {normalized_error}")
                     # logger.info(f"normalized_correction: {normalized_correction}")
-                    correction["subtype"] = "tense"
-                    correction["explanation"] = "verb form"
+                    correction["subtype"] = "extra word"
+                    correction["explanation"] = "You used and extra word here. "
             else:
                 if spacy_model(item[3][0])[0].pos_ == "ADP":
                     correction["subtype"] = "extra prep"
