@@ -21,7 +21,7 @@ def example_response(reply: str):
 def response_from_data():
     def response_from_data_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        dialog_step_id = shared_memory.get("dialog_step_id", 0)
+        dialog_step_id = shared_memory.get("dialog_step_id", -1)
         dialog_script_name = shared_memory.get("dialog_script_name", None)
         processed_node = ctx.last_request
         keywords_found = False
@@ -39,7 +39,7 @@ def response_from_data():
             if (found_dialog_script_name != None) and (dialog_script_name != found_dialog_script_name):
                 keywords_found = True
                 dialog_script_name = found_dialog_script_name
-                dialog_step_id = 0
+                dialog_step_id = -1
                 break
         
         if (dialog_script_name != None) and (keywords_found == False):
@@ -51,17 +51,17 @@ def response_from_data():
             return "We can role play some discussions on different topics."
 
         if "repeat" in processed_node.lower():
-            reply = dialog["utterances"][dialog_step_id - 1]["utterance"]
+            reply = dialog["utterances"][dialog_step_id]["utterance"]
             int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
 
         elif "previous" in processed_node.lower():
-            reply = dialog["utterances"][dialog_step_id - 2]["utterance"]
+            reply = dialog["utterances"][dialog_step_id-1]["utterance"]
             dialog_step_id -= 1
             int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
 
         else:
-            if dialog_step_id <= len(dialog["utterances"]):
-                reply = dialog["utterances"][dialog_step_id]["utterance"]
+            if dialog_step_id < (len(dialog["utterances"]) - 1):
+                reply = dialog["utterances"][dialog_step_id+1]["utterance"]
                 dialog_step_id += 1
                 int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
 

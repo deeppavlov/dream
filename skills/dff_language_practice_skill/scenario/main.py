@@ -10,6 +10,8 @@ import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
 import common.dff.integration.response as int_rsp
 
+import common.set_user_instructions as set_instructions
+
 
 import common.constants as common_constants
 
@@ -46,7 +48,10 @@ flows = {
         },
         "main_node": {
             RESPONSE: loc_rsp.response_from_data(),
-            PROCESSING: {"slot_filling": int_prs.fill_responses_by_slots()},
+            PROCESSING: {
+                "set_user_instructions": set_instructions.set_user_instructions(),
+                "slot_filling": int_prs.fill_responses_by_slots()
+                },
             TRANSITIONS: {
                 "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
                 lbl.repeat(0.9): cnd.true(),
