@@ -9,6 +9,7 @@ RUN pip install -r requirements.txt
 
 COPY $SRC_DIR .
 COPY ./common/ ./common/
+COPY ./skills/dff_language_practice_skill/data ./data
 
 ARG SERVICE_PORT
 ARG SERVICE_NAME

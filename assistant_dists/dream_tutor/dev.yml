@@ -53,6 +53,7 @@ services:
     - 8129:8129
     volumes:
     - ./annotators/language_mistakes_tracker:/src
+    - ./skills/dff_language_practice_skill/data:/src/data
     - ./common:/src/common
   gector:
     volumes:
