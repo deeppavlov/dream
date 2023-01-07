@@ -54,11 +54,8 @@ def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> 
     ]
     if int_ctx.get_age_group(ctx, actor) == "kid":
         available_skill_names = [
-            "game_cooperative_skill",
-            "dff_animals_skill",
-            "dff_food_skill",
-            "superheroes",
-            "school",
+            "dff_book_skill",
+            "dff_animals_skill"
         ]  # for small talk skill
     if len(available_skill_names) == 0:
         available_skill_names = link_to_skill2key_words.keys()
@@ -68,7 +65,7 @@ def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> 
         response = random.choice(link_to_skill2i_like_to_talk[skill_name])
     else:
 
-        response = f"Would you like to talk about {skill_name}?"
+        response = f"Sorry, I don't know what to answer."
     int_ctx.save_to_shared_memory(ctx, actor, offered_topics=link_to_skill2key_words.get(skill_name, skill_name))
 
     return response

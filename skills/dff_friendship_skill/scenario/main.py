@@ -1,11 +1,12 @@
 import logging
 
 import common.dff.integration.processing as int_prs
+import df_engine.conditions as cnd
 import scenario.condition as loc_cnd
 import scenario.response as loc_rsp
 import scenario.weekend_condition as loc_wkd_cnd
 import scenario.weekend_response as loc_wkd_rsp
-from common.constants import CAN_NOT_CONTINUE
+from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from df_engine.core.keywords import PROCESSING, TRANSITIONS, RESPONSE
 from df_engine.core import Actor
 
@@ -22,17 +23,20 @@ flows = {
                 ("greeting_flow", "hello_response_node"): loc_cnd.hello_condition,
                 ("greeting_flow", "how_are_you_node"): loc_cnd.how_are_you_condition,
                 ("greeting_flow", "std_greeting_node"): loc_cnd.std_greeting_condition,
-                ("greeting_flow", "new_entities_is_needed_for_node"): loc_cnd.new_entities_is_needed_for_condition,
-                ("greeting_flow", "link_to_by_enity_node"): loc_cnd.link_to_by_enity_condition,
-                ("weekend_flow", "std_weekend_node"): loc_wkd_cnd.std_weekend_condition,
+                # ("greeting_flow", "new_entities_is_needed_for_node"): loc_cnd.new_entities_is_needed_for_condition,
+                # ("greeting_flow", "link_to_by_enity_node"): loc_cnd.link_to_by_enity_condition,
+                ("weekend_flow", "std_weekend_node"): loc_wkd_cnd.std_weekend_condition
             },
         },
         "fallback": {
-            RESPONSE: "Sorry",
+            RESPONSE: "Sorry, I don't know what to answer.",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(CAN_NOT_CONTINUE),
+                "set_confidence": int_prs.set_confidence(0.8),
+                "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
             },
+            # TRANSITIONS: {
+            #     ("greeting_flow", "new_entities_is_needed_for_node"): cnd.true()
+            # }
         },
     },
     "greeting_flow": {
@@ -90,7 +94,7 @@ flows = {
         "new_entities_is_needed_for_node": {
             RESPONSE: loc_rsp.closed_answer_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "link_to_by_enity_node": {
@@ -114,7 +118,7 @@ flows = {
         "sys_cleaned_up_node": {
             RESPONSE: loc_wkd_rsp.sys_cleaned_up_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "sys_slept_in_node": {
@@ -127,25 +131,25 @@ flows = {
         "sys_feel_great_node": {
             RESPONSE: loc_wkd_rsp.sys_feel_great_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "sys_need_more_time_node": {
             RESPONSE: loc_wkd_rsp.sys_need_more_time_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "sys_read_book_node": {
             RESPONSE: loc_wkd_rsp.sys_read_book_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "sys_watched_film_node": {
             RESPONSE: loc_wkd_rsp.sys_watched_film_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "sys_played_computer_game_node": {
@@ -164,13 +168,13 @@ flows = {
         "sys_play_regularly_node": {
             RESPONSE: loc_wkd_rsp.sys_play_regularly_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "sys_play_once_node": {
             RESPONSE: loc_wkd_rsp.sys_play_once_response,
             TRANSITIONS: {
-                "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
+                # "link_to_by_enity_node": loc_cnd.link_to_by_enity_condition,
             },
         },
         "link_to_by_enity_node": {
