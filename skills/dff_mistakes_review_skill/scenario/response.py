@@ -49,7 +49,7 @@ def feedback_response():
                 original_sentence += "."
             
             corrected_sentence = state[0]["corrected_sentence"]
-            if original_sentence.lower() == corrected_sentence.lower():
+            if original_sentence.replace(",", "").lower() == corrected_sentence.replace(",", "").lower():
                 continue
 
             counter_mistakes_answers += 1
@@ -61,9 +61,9 @@ def feedback_response():
                 start_selection = selection["startSelection"]
                 end_selection = selection["endSelection"]
                 selection2correct = original_sentence[start_selection:end_selection]
-                logger.info(f"selection = {selection2correct}")
                 if selection2correct.lower() == correction.lower():
-
+                    continue
+                elif (correction[:2] == ", ") and selection2correct.lower() == correction[2:].lower():
                     continue
 
                 if selection["subtype"] in unique_subtypes:
@@ -76,8 +76,6 @@ def feedback_response():
                     corr_template = random.choice(corr_templates)
                     corrected_sent = corr_template.replace("X", correction)
                     feedback_sents += corrected_sent
-
-                    # feedback_sents += "\n"
 
             feedback_sents += "\n\n"
 
