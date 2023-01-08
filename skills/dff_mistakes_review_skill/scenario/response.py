@@ -32,16 +32,16 @@ def feedback_response():
 
         expl_templates = ["You used the wrong X. ", "The X was incorrect. ", "There was a mistake in the X. "]
         comp_templates = [
-            "You said 'X', but it would be better to say 'Z'. ",
-            "You said 'X', but the accurate way to say it would be 'Z'. ",
-            "Instead of saying 'X', I would suggest saying 'Z'. ",
+            """You said "X", but it would be better to say "Z". """,
+            """You said "X", but the accurate way to say it would be "Z". """,
+            """Instead of saying "X", I would suggest saying "Z". """,
         ]
         corr_templates = [
-            "So, it would me more accurate to say 'X'. ",
-            "Thus, it would be better to say 'X'. ",
-            "That is why it would be more accurate to say X. ",
+            """So, it would me more accurate to say "X". """,
+            """Thus, it would be better to say "X". """,
+            """That is why it would be more accurate to say "X". """,
         ]
-        unique_subtypes = ["context", "extra art", "extra prep", "skip art", "skip prep", "omis", "extra word"]
+        unique_subtypes = ["context", "extra art", "extra prep", "skip art", "skip prep", "omis", "extra word", "wrong_word"]
         feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
         for state in mistakes_state["state"]:
             original_sentence = state[0]["original_sentence"]
@@ -50,6 +50,11 @@ def feedback_response():
             
             corrected_sentence = state[0]["corrected_sentence"]
             if original_sentence.replace(",", "").lower() == corrected_sentence.replace(",", "").lower():
+                continue
+            elif original_sentence.replace(".", "").lower() == corrected_sentence.replace(".", "").lower():
+                continue
+            
+            elif original_sentence.replace("?", "").lower() == corrected_sentence.replace("?", "").lower():
                 continue
 
             counter_mistakes_answers += 1
@@ -66,6 +71,12 @@ def feedback_response():
                 elif (correction[:2] == ", ") and selection2correct.lower() == correction[2:].lower():
                     continue
 
+                elif (correction[:2] == ". ") and selection2correct.lower() == correction[2:].lower():
+                    continue
+            
+                elif (correction[:2] == "? ") and selection2correct.lower() == correction[2:].lower():
+                    continue
+
                 if selection["subtype"] in unique_subtypes:
                     feedback_sents += selection["explanation"]
                 else:
@@ -76,6 +87,7 @@ def feedback_response():
                     corr_template = random.choice(corr_templates)
                     corrected_sent = corr_template.replace("X", correction)
                     feedback_sents += corrected_sent
+                    feedback_sents += "\n"
 
             feedback_sents += "\n\n"
 

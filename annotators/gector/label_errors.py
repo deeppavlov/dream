@@ -305,8 +305,8 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             logger.info(f"normalized_error: {normalized_error}")
                             logger.info(f"normalized_correction: {normalized_correction}")
                             correction["type"] = "gram"
-                            correction["subtype"] = "tense"
-                            correction["explanation"] = "form"
+                            correction["subtype"] = "wrong_word"
+                            correction["explanation"] = f"""Use of "{normalized_error}" is inappropriate here. """
                 elif len(item[3]) < len(item[4]):
                     q = before_parsed[item[1][0]].tag_
                     w = after_parsed[item[2][0]].tag_
@@ -332,7 +332,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         logger.info(f"normalized_correction: {normalized_correction}")
                         correction["type"] = "gram"
                         correction["subtype"] = "tense"
-                        correction["explanation"] = "verb tense"
+                        correction["explanation"] = "verb form"
                 else:
                     if normalized_error in ENG_ARTICLES:
                         correction["type"] = "gram"
@@ -358,7 +358,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         correction["subtype"] = "comparative"
                     else:
                         correction["subtype"] = "extra art"
-                        correction["explanation"] = "You used an extra article"
+                        correction["explanation"] = "You used an extra article. "
                 elif item[3][0] in punct:
                     start -= 1
                     item[4].insert(0, before[start])
@@ -372,7 +372,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     logger.info(f"normalized_error: {normalized_error}")
                     # logger.info(f"normalized_correction: {normalized_correction}")
                     correction["subtype"] = "extra word"
-                    correction["explanation"] = "You used and extra word here. "
+                    correction["explanation"] = f"""You used and extra word "{normalized_error}" here. """
             else:
                 if spacy_model(item[3][0])[0].pos_ == "ADP":
                     correction["subtype"] = "extra prep"
@@ -405,12 +405,12 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     correction["explanation"] = "form of the degree of comparison"
                 else:
                     correction["subtype"] = "skip art"
-                    correction["explanation"] = f"You skipped the article '{normalized_correction}'. "
+                    correction["explanation"] = f"""You skipped the article "{normalized_correction}". """
             elif after_pos == "ADP":
                 start -= 1
                 item[4].insert(0, before[start])
                 correction["subtype"] = "skip prep"
-                correction["explanation"] = f"You skipped the preposition '{normalized_correction}'. "
+                correction["explanation"] = f"""You skipped the preposition "{normalized_correction}". """
             else:
                 correction["type"] = "gram"
                 if i + 1 < len(opcodes) and item[3:][::-1] == opcodes[i + 1][3:]:
@@ -428,7 +428,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     item[4].append(before[end])
                     end += 1
                     correction["subtype"] = "omis"
-                    correction["explanation"] = f"You missed the word '{normalized_correction}'. "
+                    correction["explanation"] = f"""You missed the word "{normalized_correction}". """
                 else:
                     start -= 1
                     item[4].insert(0, before[start])
