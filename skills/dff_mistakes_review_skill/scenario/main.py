@@ -15,6 +15,7 @@ import common.constants as common_constants
 
 from . import condition as loc_cnd
 from . import response as loc_rsp
+from . import processing as loc_prs
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +64,9 @@ flows = {
         },
         "comments": {
             RESPONSE: loc_rsp.feedback_response(),
-            PROCESSING: {},
+            PROCESSING: {
+                "set_mistakes_review": loc_prs.set_mistakes_review()
+            },
             TRANSITIONS: {},
         },
     },

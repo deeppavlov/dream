@@ -22,7 +22,7 @@ def feedback_response():
         human_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
         attributes = human_utterances.get("user", {}).get("attributes", {})
         mistakes_state = attributes.get("language_mistakes", "")
-        if mistakes_state == "": 
+        if mistakes_state == "":
             return "Your answers were perfect! Nice work!"
         mistakes_state = json.loads(mistakes_state)
         if mistakes_state["state"] == []:
@@ -93,7 +93,7 @@ def feedback_response():
 
         if counter_mistakes_answers == 0:
             return "Your answers were perfect! Nice work!"
-            
+        
         return feedback_sents
 
     return feedback_response_handler

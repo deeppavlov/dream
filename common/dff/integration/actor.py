@@ -128,6 +128,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     can_continue = ctx.misc["agent"]["response"].get("can_continue", can_continue)
     user_instructions = ctx.misc["agent"]["response"].get("user_instructions", "")
     situation_description = ctx.misc["agent"]["response"].get("situation_description", "")
+    mistakes_review = ctx.misc["agent"]["response"].get("mistakes_review", "")
     ctx.clear(2, ["requests", "responses", "labels"])
     del ctx.misc["agent"]
     state["context"] = json.loads(ctx.json())
@@ -142,7 +143,8 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     hype_attr = {
         "can_continue": can_continue,
         "user_instructions": user_instructions,
-        "situation_description": situation_description
+        "situation_description": situation_description,
+        "mistakes_review": mistakes_review
     }
     if response_parts:
         hype_attr["response_parts"] = response_parts
