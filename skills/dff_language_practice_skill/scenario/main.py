@@ -51,7 +51,7 @@ flows = {
             RESPONSE: loc_rsp.response_from_data(),
             PROCESSING: {
                 "set_user_instructions": set_instructions.set_user_instructions(),
-                "set_user_instructions": set_instructions.set_situation_description(),
+                "set_situation_description": set_instructions.set_situation_description(),
                 "slot_filling": int_prs.fill_responses_by_slots()
                 },
             TRANSITIONS: {
