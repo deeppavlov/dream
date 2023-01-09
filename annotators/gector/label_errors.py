@@ -331,8 +331,8 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         logger.info(f"normalized_error: {normalized_error}")
                         logger.info(f"normalized_correction: {normalized_correction}")
                         correction["type"] = "gram"
-                        correction["subtype"] = "tense"
-                        correction["explanation"] = "verb form"
+                        correction["subtype"] = "reason_3"
+                        correction["explanation"] = f"""It's not good to use {normalized_error} here. """
                 else:
                     if normalized_error in ENG_ARTICLES:
                         correction["type"] = "gram"

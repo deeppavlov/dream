@@ -49,7 +49,7 @@ def set_mistakes_review():
                 """Thus, it would be better to say "X". """,
                 """That is why it would be more accurate to say "X". """,
             ]
-            unique_subtypes = ["context", "extra art", "extra prep", "skip art", "skip prep", "omis", "extra word", "wrong_word"]
+            unique_subtypes = ["context", "extra art", "extra prep", "skip art", "skip prep", "omis", "extra word", "wrong_word", "reason_3"]
             feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
             for state in mistakes_state["state"]:
                 original_sentence = state[0]["original_sentence"]
