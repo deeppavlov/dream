@@ -1,5 +1,4 @@
 from typing import List, TypedDict
-import random
 from dataclasses import dataclass
 from itertools import chain
 
@@ -96,9 +95,7 @@ class H2Seq2SeqInferencePersonaSampleV1:
     def get_sample(self) -> H2Seq2SeqInferenceSampleDictV1:
 
         dialog_history = self.dataset_sample["history"]
-        dialog_history = dialog_history[
-            -self.hyperparameters.chat_history_pair_length * 2 - 1 :
-        ]
+        dialog_history = dialog_history[-self.hyperparameters.chat_history_pair_length * 2 - 1 :]
         dialog_history = self.add_sep_beetween(dialog_history)
 
         persona = self.dataset_sample["persona"]
@@ -230,7 +227,7 @@ class DialogBotV1:
         **generation_params,
     ):
         """
-        generation_params - https://huggingface.co/docs/transformers/v4.24.0/en/main_classes/text_generation#transformers.generation_utils.GenerationMixin
+        generation_params - https://huggingface.co/docs/transformers/v4.24.0/en/main_classes/text_generation
         """
         with torch.no_grad():
             return self.model.generate(

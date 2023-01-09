@@ -15,9 +15,7 @@ from seq2seq_utils.bot_utils import DialogBotV1, H2PersonaChatHyperparametersV1
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
@@ -110,12 +108,8 @@ def respond():
     last_annotated_utterances_batch = request.json["last_annotated_utterances"]
     utterances_histories = request.json["utterances_histories"]
     try:
-        for utterance, utterence_hist in zip(
-            last_annotated_utterances_batch, utterances_histories
-        ):
-            persona = utterance.get("annotations", {}).get(
-                "relative_persona_extractor", []
-            )
+        for utterance, utterence_hist in zip(last_annotated_utterances_batch, utterances_histories):
+            persona = utterance.get("annotations", {}).get("relative_persona_extractor", [])
 
             response = generate_response(
                 model=model,
