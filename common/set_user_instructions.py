@@ -41,3 +41,30 @@ def set_user_instructions():
         return ctx
     
     return set_user_instructions_handler
+
+
+def set_situation_description():
+    def set_situation_description_handler(ctx: Context, actor: Actor):
+        dialog_script_name = None
+        if not ctx.validation:
+            user_uttr = ctx.misc["agent"]["dialog"]["human_utterances"][-1]
+            last_utterance = user_uttr.get("user", {})
+            processed_node = ctx.last_request
+            for filename in os.listdir("data"):
+                f = os.path.join("data", filename)
+                if os.path.isfile(f):
+                    dialog = json.load(open(f))
+                    keywords = dialog["keywords"]
+                    for keyword in keywords:
+                        if keyword in processed_node.lower():
+                            dialog_script_name = filename.replace(".json", "")
+                            continue
+
+            if dialog_script_name != None:
+                f = f"data/{dialog_script_name}.json"
+                scenario = json.load(open(f))
+                description = scenario["situation_description"]
+                ctx.misc["agent"]["response"].update({"situation_description": description})
+        return ctx
+    
+    return set_situation_description_handler

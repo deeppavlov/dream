@@ -11,6 +11,7 @@ import common.dff.integration.processing as int_prs
 import common.dff.integration.response as int_rsp
 
 import common.set_user_instructions as set_instructions
+import common.set_user_instructions as set_situation_description
 
 
 import common.constants as common_constants
@@ -50,6 +51,7 @@ flows = {
             RESPONSE: loc_rsp.response_from_data(),
             PROCESSING: {
                 "set_user_instructions": set_instructions.set_user_instructions(),
+                "set_user_instructions": set_instructions.set_situation_description(),
                 "slot_filling": int_prs.fill_responses_by_slots()
                 },
             TRANSITIONS: {
