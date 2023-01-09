@@ -9,7 +9,6 @@ ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 ARG CONFIG_NAME
 ENV CONFIG_NAME ${CONFIG_NAME}
 
-
 COPY ./services/transformers_lm/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 

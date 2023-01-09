@@ -4,10 +4,6 @@ import sentry_sdk
 from os import getenv
 from typing import Any
 import re
-import nltk
-
-nltk.download("stopwords")
-nltk.download("punkt")
 
 import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
