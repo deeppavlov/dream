@@ -254,6 +254,8 @@ def get_result(request):
                     kg_parser_annotations.append([user_id, rel, obj])
         logger.info(f"User with id {user_id} already exists!")
     else:
+        if len(graph.ontology.get_entity_kind("User")) == 1:
+            graph.ontology.create_entity_kind("User")
         graph.create_entity("User", user_id, [], [])
         logger.info(f"Created User with id: {user_id}")
 
