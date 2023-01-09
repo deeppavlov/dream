@@ -15,7 +15,6 @@ class H2PersonaChatHyperparametersV1:
 
     model_name: str = "facebook/bart-base"
     chat_history_pair_length: int = 7
-    max_response_length: int = 25
 
     persona_max_length: int = 14
     chat_max_length: int = 25
@@ -96,9 +95,11 @@ class H2Seq2SeqInferencePersonaSampleV1:
 
     def get_sample(self) -> H2Seq2SeqInferenceSampleDictV1:
 
-        history = self.dataset_sample["history"]
-        history = history[-self.hyperparameters.chat_history_pair_length * 2 - 1 :]
-        history = self.add_sep_beetween(history)
+        dialog_history = self.dataset_sample["history"]
+        dialog_history = dialog_history[
+            -self.hyperparameters.chat_history_pair_length * 2 - 1 :
+        ]
+        dialog_history = self.add_sep_beetween(dialog_history)
 
         persona = self.dataset_sample["persona"]
         persona = self.add_sep_beetween(
@@ -116,7 +117,7 @@ class H2Seq2SeqInferencePersonaSampleV1:
         )
 
         encoded_history = self.tokenizer.batch_encode_plus(
-            history,
+            dialog_history,
             add_special_tokens=False,
             truncation=True,
             max_length=self.hyperparameters.chat_max_length,
@@ -150,10 +151,6 @@ class H2Seq2SeqInferencePersonaSampleV1:
 
 
 class DialogBotV1:
-    """
-    bot uses greedy decoding
-    """
-
     def __init__(
         self,
         model: AutoModelForSeq2SeqLM,
@@ -203,62 +200,23 @@ class DialogBotV1:
 
         return sample
 
-    def chat(
+    def next_response(
         self,
-        message: str,
+        **generation_params,
     ) -> str:
-        if self.shuffle_persona:
-            random.shuffle(self.persona)
-
-        self.history.append(message)
-
-        sample = self._get_sample(
-            persona=self.persona,
-            history=self.history,
-        )
-        answer = self.generate_response(sample)
-        answer = self.tokenizer.batch_decode(
-            answer,
-            skip_special_tokens=True,
-        )
-        self.history.append(answer[0])
-        return answer[0]
-
-    def single_chat(
-        self,
-        message: str,
-    ) -> str:
-        if self.shuffle_persona:
-            random.shuffle(self.persona)
-
-        temp_history = self.history.copy()
-        temp_history.append(message)
-
-        sample = self._get_sample(
-            persona=self.persona,
-            history=temp_history,
-        )
-
-        answer = self.generate_response(sample)
-        answer = self.tokenizer.batch_decode(
-            answer,
-            skip_special_tokens=True,
-        )
-        return answer[0]
-
-    def next_response(self) -> str:
         """
         делает предсказание на основе текущей истории
         и персоны
-        полезно если мы управляем и отслеживаем состояние извне
-        а этот бот нужен только для генерации ответов
         """
 
         sample = self._get_sample(
             persona=self.persona,
             history=self.history,
         )
-        answer = self.generate_response(sample)
+        answer = self.generate_response(
+            sample,
+            **generation_params,
+        )
         answer = self.tokenizer.batch_decode(
             answer,
             skip_special_tokens=True,
@@ -266,43 +224,16 @@ class DialogBotV1:
         self.history.append(answer[0])
         return answer[0]
 
-    def generate_response(self, sample):
+    def generate_response(
+        self,
+        sample: H2Seq2SeqInferenceSampleDictV1,
+        **generation_params,
+    ):
+        """
+        generation_params - https://huggingface.co/docs/transformers/v4.24.0/en/main_classes/text_generation#transformers.generation_utils.GenerationMixin
+        """
         with torch.no_grad():
             return self.model.generate(
                 **sample,
-                max_length=20,
-            )
-
-    def start_chat(self):
-        if self.debug_status == 1:
-            print(f"PERSONA: {self.persona}")
-
-        while True:
-            message = input("You: ")
-
-            if self.debug_status == 1:
-                print("-" * 100)
-
-            if message == "exit":
-                break
-            answer = self.chat(message)
-
-            if self.debug_status:
-                print("CONTEXT:", self.history)
-
-            print("Bot:", answer)
-
-
-class DialogBotV2(DialogBotV1):
-    """
-    bot uses Contrastive Search
-    """
-
-    def generate_response(self, sample: H2Seq2SeqInferenceSampleDictV2):
-        with torch.no_grad():
-            return self.model.generate(
-                **sample,
-                max_new_tokens=60,
-                penalty_alpha=0.15,
-                top_k=10,
+                **generation_params,
             )

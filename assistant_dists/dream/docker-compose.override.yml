@@ -19,7 +19,7 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, dff-template-skill:8120, bart-persona-based:8140"
+          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, dff-template-skill:8120, seq2seq-persona-based:8140"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [ .env ]
@@ -1193,16 +1193,18 @@ services:
         reservations:
           memory: 2G
 
-  bart-persona-based:
+  seq2seq-persona-based:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8140
-        SERVICE_NAME: bart_persona_based
+        SERVICE_NAME: seq2seq_persona_based
         PRETRAINED_MODEL_NAME_OR_PATH: dim/persona_bot_2_28akcwik
-        PAIR_DIALOG_HISTORY_LENGTH: 7
+        PAIR_DIALOG_HISTORY_LENGTH: 2
+        CHAT_MAX_LENGTH: 25
+        PERSONA_MAX_LENGTH: 19
       context: .
-      dockerfile: ./services/bart_persona_based/Dockerfile
+      dockerfile: ./services/seq2seq_persona_based/Dockerfile
     command: flask run -h 0.0.0.0 -p 8140
     environment:
       - CUDA_VISIBLE_DEVICES=0

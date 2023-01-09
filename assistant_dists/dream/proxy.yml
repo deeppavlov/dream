@@ -576,7 +576,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8125
       - PORT=8125
   
-  bart-persona-based:
+  seq2seq-persona-based:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/

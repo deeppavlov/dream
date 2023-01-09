@@ -201,11 +201,11 @@
         ],
         "state_manager_method": "add_hypothesis"
       },
-      "bart_persona_based": {
+      "seq2seq_persona_based": {
         "connector": {
           "protocol": "http",
           "timeout": 3,
-          "url": "http://bart-persona-based:8140/respond"
+          "url": "http://seq2seq-persona-based:8140/respond"
         },
         "dialog_formatter": "state_formatters.dp_formatters:persona_bot_formatter",
         "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

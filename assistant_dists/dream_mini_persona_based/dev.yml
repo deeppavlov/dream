@@ -57,9 +57,9 @@ services:
       - "./services/sentence_ranker:/src"
     ports:
       - 8128:8128
-  bart-persona-based:
+  seq2seq-persona-based:
     volumes:
-      - "./services/bart_persona_based:/src"
+      - "./services/seq2seq_persona_based:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:

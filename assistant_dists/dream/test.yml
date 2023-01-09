@@ -125,7 +125,7 @@ services:
   prompt-storygpt:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  bart-persona-based:
+  seq2seq-persona-based:
     environment:
       - CUDA_VISIBLE_DEVICES=9
   sentence-ranker:

@@ -15,7 +15,7 @@ services:
   midas-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  bart-persona-based:
+  seq2seq-persona-based:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
