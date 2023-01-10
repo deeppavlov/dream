@@ -125,9 +125,6 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 
 #### **Generative Prompt-Based Dream**
 
-**Please note that this distribution requires a lot of resources.**
-Refer to the [components](#components) section to see estimated requirements.
-
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/dream_generative_prompt_based/docker-compose.override.yml -f assistant_dists/dream_generative_prompt_based/dev.yml up --build 
 ```
