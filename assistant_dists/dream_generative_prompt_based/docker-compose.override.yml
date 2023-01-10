@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=5840259638:AAEmueTEOUrjjuxb75xGu_wojlo5YPd4XHM agent.pipeline_config=assistant_dists/dream_generative_prompt_based/pipeline_conf.json agent.db_config=assistant_dists/dream_generative_prompt_based/db_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, spelling-preprocessing:8074, transformers-lm:8126, sentence-ranker:8128, dff-generative-prompt-based-skill:8134, prompt-selector:8135"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
