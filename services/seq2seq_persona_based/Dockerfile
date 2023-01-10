@@ -37,8 +37,8 @@ ENV CHAT_MAX_LENGTH ${CHAT_MAX_LENGTH}
 ENV PERSONA_MAX_LENGTH ${PERSONA_MAX_LENGTH}
 
 COPY ./services/seq2seq_persona_based/requirements.txt /src/requirements.txt
-RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt 
-# RUN pip install -r /src/requirements.txt 
+# RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt 
+RUN pip install -r /src/requirements.txt 
 
 COPY ./common/ /src/common/
 
