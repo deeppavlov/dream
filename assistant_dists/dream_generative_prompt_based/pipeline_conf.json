@@ -138,7 +138,7 @@
             "dff_generative_prompt_based_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 30,
+                    "timeout": 4.5,
                     "url": "http://dff-generative-prompt-based-skill:8134/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_generative_prompt_based_skill_formatter",
