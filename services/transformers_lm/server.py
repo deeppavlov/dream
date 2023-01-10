@@ -62,7 +62,7 @@ try:
         logger.info("transformers_lm is set to run on cuda")
     example_response = generate_responses(
         "",
-        "Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. ",
+        ["Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "],
         model,
         tokenizer,
         continue_last_uttr=False,
