@@ -13,7 +13,9 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 assert GENERATIVE_SERVICE_URL
@@ -34,7 +36,12 @@ def compose_data_for_model(ctx, actor):
             text_prompt.insert(0, f'AI: {bot_uttrs[-1]["text"]}')
         if len(human_uttrs) > 1:
             text_prompt.insert(0, f'Human: {human_uttrs[-2]["text"]}')
-        prompts = human_uttrs[-1].get("annotations", {}).get("prompt_selector", {}).get("prompt", "")
+        prompts = (
+            human_uttrs[-1]
+            .get("annotations", {})
+            .get("prompt_selector", {})
+            .get("prompt", "")
+        )
         if prompts:
             prompt = prompts[0]
             text_prompt.insert(0, prompt)
@@ -71,19 +78,23 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     request_data = compose_data_for_model(ctx, actor)
     logger.info(f"request_data: {request_data}")
     if len(request_data) > 0:
-        response = requests.post(GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=5)
+        response = requests.post(
+            GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=5
+        )
         hypotheses = response.json()
     else:
         hypotheses = []
     logger.info(f"hyps: {hypotheses}")
     if hypotheses:
         for hyp in hypotheses:
-            confidence = 0.99
+            confidence = 0.9
             hyp_text = " ".join(hyp[0].split())
             if hyp_text[-1] not in [".", "?", "!"]:
                 hyp_text += "."
                 confidence = 0.5
-            gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+            gathering_responses(
+                hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+            )
 
     if len(curr_responses) == 0:
         return ""
