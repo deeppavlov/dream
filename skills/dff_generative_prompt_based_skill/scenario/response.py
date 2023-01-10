@@ -20,8 +20,10 @@ logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 assert GENERATIVE_SERVICE_URL
 
-
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
+GENERATIVE_TIMEOUT = 4
+DEFAULT_CONFIDENCE = 0.9
+LOW_CONFIDENCE = 0.5
 
 
 def compose_data_for_model(ctx, actor):
@@ -50,7 +52,6 @@ def compose_data_for_model(ctx, actor):
         for w in words:
             if w not in stop_words:
                 words_filtered.append(w)
-        # if len(words_filtered) < 4:
     logger.info(f"prompt: {text_prompt}")
     if text_prompt:
         text_prompt = [re.sub(FIX_PUNCTUATION, "", x) for x in text_prompt]  # костыль
@@ -79,7 +80,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"request_data: {request_data}")
     if len(request_data) > 0:
         response = requests.post(
-            GENERATIVE_SERVICE_URL, json={"dialog_context": [request_data]}, timeout=5
+            GENERATIVE_SERVICE_URL,
+            json={"dialog_context": [request_data]},
+            timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()
     else:
@@ -87,11 +90,11 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"hyps: {hypotheses}")
     if hypotheses:
         for hyp in hypotheses:
-            confidence = 0.9
+            confidence = DEFAULT_CONFIDENCE
             hyp_text = " ".join(hyp[0].split())
             if hyp_text[-1] not in [".", "?", "!"]:
                 hyp_text += "."
-                confidence = 0.5
+                confidence = LOW_CONFIDENCE
             gathering_responses(
                 hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
             )
