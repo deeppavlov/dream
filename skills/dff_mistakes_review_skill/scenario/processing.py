@@ -30,11 +30,11 @@ def set_mistakes_review():
             mistakes_state = attributes.get("language_mistakes", "")
             if mistakes_state == "":
                 ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
-                return "Your answers were perfect! Nice work!"
+
             mistakes_state = json.loads(mistakes_state)
             if mistakes_state["state"] == []:
                 ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
-                return "Your answers were perfect! Nice work!"
+
 
             logger.info(f"mistakes_state = {mistakes_state}")
 
@@ -101,7 +101,7 @@ def set_mistakes_review():
 
             if counter_mistakes_answers == 0:
                 ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
-                return "Your answers were perfect! Nice work!"
+
         
             ctx.misc["agent"]["response"].update({"mistakes_review": feedback_sents})
         return ctx
