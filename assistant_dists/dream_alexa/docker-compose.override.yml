@@ -1,15 +1,15 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_alexa/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, rake-keywords:8007, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009,
+          spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009,
           personality-catcher:8010, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           sentrewrite:8017, ner:8021, dff-program-y-dangerous-skill:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
           eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
           dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, dff-program-y-wide-skill:8064,
-          comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072,
+          comet-conceptnet:8065, news-api-skill:8066, factoid-qa:8071, kbqa:8072,
           spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
           dff-friendship-skill:8086, entity-storer:8089,
@@ -19,7 +19,7 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, dff-template-skill:8120"
+          dialogpt:8125, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -47,21 +47,6 @@ services:
       context: .
       dockerfile: ./annotators/spacy_nounphrases/Dockerfile
     command: flask run -h 0.0.0.0 -p 8006
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
-
-  rake-keywords:
-    env_file: [ .env ]
-    build:
-      context: .
-      dockerfile: ./annotators/rake_keywords/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8007
     environment:
       - FLASK_APP=server
     deploy:
@@ -120,21 +105,21 @@ services:
       args:
         TAG_BASED_SELECTION: 1
         CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.1
+        PROMPT_PROBA: 0.3
         ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 0
+        PRIORITIZE_WITH_REQUIRED_ACT: 1
         PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
-        IGNORE_DISLIKED_SKILLS: 0
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 1
+        IGNORE_DISLIKED_SKILLS: 1
         GREETING_FIRST: 1
         RESTRICTION_FOR_SENSITIVE_CASE: 1
         PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
         MAX_TURNS_WITHOUT_SCRIPTS: 7
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
-        PRIORITIZE_SCRIPTED_SKILLS: 0
-        CONFIDENCE_STRENGTH: 0.8
+        PRIORITIZE_SCRIPTED_SKILLS: 1
+        CONFIDENCE_STRENGTH: 2.0
         CONV_EVAL_STRENGTH: 0.4
-        PRIORITIZE_HUMAN_INITIATIVE: 1
+        PRIORITIZE_HUMAN_INITIATIVE: 0
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
@@ -613,25 +598,18 @@ services:
           memory: 5G
 
   spelling-preprocessing:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
-      args:
-        CONFIG: brillmoore_wikitypos_en.json
-        PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: EN
-      context: ./
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
+      context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 6.5G
+          memory: 50M
         reservations:
-          memory: 6.5G
+          memory: 50M
 
   dff-grounding-skill:
     env_file: [.env]
@@ -1112,23 +1090,6 @@ services:
         reservations:
           memory: 192M
 
-  dff-short-story-skill:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8057
-        SERVICE_NAME: dff_short_story_skill
-        STORY_TYPE: generated
-      context: .
-      dockerfile: ./skills/dff_short_story_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-
   dff-weather-skill:
     env_file: [.env]
     build:
@@ -1162,23 +1123,6 @@ services:
         reservations:
           memory: 512M
 
-  midas-predictor:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8121
-        SERVICE_NAME: midas_predictor
-      context: ./annotators/midas_predictor/
-    command: flask run -h 0.0.0.0 -p 8121
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 50M
-
   dialogpt:
     env_file: [ .env ]
     build:
@@ -1200,105 +1144,6 @@ services:
           memory: 2G
         reservations:
           memory: 2G
-
-  dialogpt-persona-based:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8131
-        SERVICE_NAME: dialogpt_persona_based
-        PRETRAINED_MODEL_NAME_OR_PATH: dim/dialogpt-medium-persona-chat
-        MAX_PERSONA_SENTENCES: 3
-      context: .
-      dockerfile: ./services/dialogpt_persona_based/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8131
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
-
-  relative-persona-extractor:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8133
-        SERVICE_NAME: relative_persona_extractor
-        N_SENTENCES_OT_RETURN: 3
-      context: .
-      dockerfile: ./annotators/relative_persona_extractor/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8133
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 80M
-        reservations:
-          memory: 80M
-
-  sentence-ranker:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8128
-        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
-      context: ./services/sentence_ranker/
-    command: flask run -h 0.0.0.0 -p 8128
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
-
-  storygpt:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8126
-        SERVICE_NAME: storygpt
-        PRETRAINED_MODEL_NAME_OR_PATH: gpt2-medium
-        FINETUNED_GPT_URL: http://files.deeppavlov.ai/dream_data/story_skill/filtered_ROCStories_gpt_medium.pt
-      context: ./services/storygpt/
-    command: flask run -h 0.0.0.0 -p 8126
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 10G
-        reservations:
-          memory: 10G
-
-  prompt-storygpt:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8127
-        SERVICE_NAME: prompt_storygpt
-        MODELS_URL: http://files.deeppavlov.ai/dream_data/story_skill/finetuned2.tar.gz
-        BART_MODEL_NAME: facebook/bart-large
-        FINETUNED_MODEL_NAME: /data/finetuned2
-      context: ./services/prompt_storygpt/
-    command: flask run -h 0.0.0.0 -p 8127
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 10G
-        reservations:
-          memory: 10G
 
   dff-template-skill:
     env_file: [.env]

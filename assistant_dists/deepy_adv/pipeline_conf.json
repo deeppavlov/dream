@@ -22,11 +22,12 @@
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://spelling_preprocessing:3551/response"
+                    "timeout": 1,
+                    "url": "http://spelling-preprocessing:8074/respond"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
             },
             "entity_linking": {
                 "connector": {

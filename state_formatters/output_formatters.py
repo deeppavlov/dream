@@ -41,6 +41,7 @@ def http_debug_output_formatter(payload: Dict):
         "active_skill": active_skill,
         "ssml_tagged_response": ssml_tagged_response,
         "debug_output": payload["utterances"][-2]["hypotheses"],
+        "attributes": payload["utterances"][-1].get("attributes", {}),
     }
 
     logger.info(f"http api output {ret_val}")

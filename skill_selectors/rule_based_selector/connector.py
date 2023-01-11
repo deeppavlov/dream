@@ -230,7 +230,7 @@ class RuleBasedSkillSelectorConnector:
                 if user_uttr_annotations.get("asr", {}).get("asr_confidence", "high") == "very_low":
                     skills_for_uttr = ["misheard_asr"]
 
-            if "/alexa_" in user_uttr_text:
+            if "/alexa_" in user_uttr.get("orig_text", user_uttr_text):
                 # adding alexa handler for Amazon Alexa specific commands
                 skills_for_uttr = ["alexa_handler"]
 

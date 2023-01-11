@@ -1,19 +1,21 @@
-import json
 import logging
-import re
+import os
 import time
-from os import getenv
+import json
+import re
 
-from flask import Flask, request, jsonify
 import sentry_sdk
+from flask import Flask, jsonify, request
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+from deeppavlov import build_model
 
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 app = Flask(__name__)
+
+config_name = os.getenv("CONFIG")
 
 with open("numbers.json", "r") as f:
     NUMBERS = json.load(f)
@@ -21,7 +23,15 @@ with open("numbers.json", "r") as f:
 templates = []
 
 templates += [(re.compile(r"^alexa ", flags=re.IGNORECASE), "")]
-templates += [(re.compile(r"(?<=\b[a-z])\. (?=[a-z]\.)|(?<=\b[a-z]\. [a-z])\.(?! [a-z]\.)", flags=re.IGNORECASE), "")]
+templates += [
+    (
+        re.compile(
+            r"(?<=\b[a-z])\. (?=[a-z]\.)|(?<=\b[a-z]\. [a-z])\.(?! [a-z]\.)",
+            flags=re.IGNORECASE,
+        ),
+        "",
+    )
+]
 templates += [(re.compile(r"\bwon'?t\b", flags=re.IGNORECASE), "will not")]
 templates += [(re.compile(r"\bhaven'?t\b", flags=re.IGNORECASE), "have not")]
 templates += [(re.compile(r"\bhadn'?t\b", flags=re.IGNORECASE), "had not")]
@@ -87,7 +97,12 @@ templates += [(re.compile(r"\bgonna\b", flags=re.IGNORECASE), "going to")]
 templates += [(re.compile(r"\bna\b", flags=re.IGNORECASE), "no")]
 
 for written_number, int_number in list(NUMBERS.items())[::-1]:
-    templates += [(re.compile(r"\b" + written_number + r"\b", flags=re.IGNORECASE), str(int_number))]
+    templates += [
+        (
+            re.compile(r"\b" + written_number + r"\b", flags=re.IGNORECASE),
+            str(int_number),
+        )
+    ]
 
 
 def hundred_repl(match_obj):
@@ -126,7 +141,12 @@ templates += [
     )
 ]
 
-templates += [(re.compile(r"(?<![0-9] )\b([0-9]{1,2}) ([0-9]{1,2})\b(?! [0-9])", flags=re.IGNORECASE), r"\1\2")]
+templates += [
+    (
+        re.compile(r"(?<![0-9] )\b([0-9]{1,2}) ([0-9]{1,2})\b(?! [0-9])", flags=re.IGNORECASE),
+        r"\1\2",
+    )
+]
 templates += [(re.compile(r"\s+"), " ")]
 
 
@@ -136,18 +156,42 @@ def preprocess(text):
     return text.strip()
 
 
+try:
+    spelling_preprocessing_model = build_model(config_name, download=True)
+    if config_name == "levenshtein_corrector_ru.json":
+        r = "я ге видел малако"
+        logger.info(f"Original: {r}. Corrected: {spelling_preprocessing_model([r])}")
+        logger.info("spelling_preprocessing model is loaded.")
+    else:
+        r = "tge shop is cloed"
+        logger.info(f"Original: {r}. Corrected: {spelling_preprocessing_model([r])}")
+        logger.info("spelling_preprocessing model is loaded.")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
 
     sentences = request.json["sentences"]
+    sentences = [text.lower() for text in sentences]
+    if config_name == "brillmoore_wikitypos_en.json":
+        sentences = [preprocess(text) for text in sentences]
 
-    corrected_sentences = [preprocess(text) for text in sentences]
+    corrected_sentences = spelling_preprocessing_model(sentences)
+    corrected_sentences = [
+        text if "/alexa" not in orig_text else orig_text for text, orig_text in zip(corrected_sentences, sentences)
+    ]
+
+    logger.info(f"spelling_preprocessing results: {list(zip(sentences, corrected_sentences))}")
 
     total_time = time.time() - st_time
-    logger.info(f"Spelling Preprocessing exec time: {total_time:.3f}s")
+    logger.info(f"spelling_preprocessing exec time: {total_time:.3f}")
     return jsonify(corrected_sentences)
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)
+    app.run(debug=False, host="0.0.0.0", port=8074)
