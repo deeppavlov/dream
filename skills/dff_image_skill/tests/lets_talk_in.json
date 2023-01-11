@@ -1,6 +1,6 @@
 {
     "human_utter_index_batch": [
-        15
+        32
     ],
     "dialog_batch": [
         {
@@ -110,7 +110,7 @@
                         },
                         "image_captioning": [
                             {
-                                "caption": "two women standing on top of a mountain with their hands up",
+                                "caption": "a dog and a cat sitting in the grass",
                                 "image_id": "42"
                             }
                         ]
@@ -135,25 +135,25 @@
                             "dff_image_skill_state": {
                                 "context": {
                                     "actor_state": {},
-                                    "id": "ea79fbf7-09d0-4be8-8f4a-bf98d26afe45",
+                                    "id": "01d0642d-00ef-44f8-9cab-7aa1a39b4ffe",
                                     "labels": {
-                                        "10": [
+                                        "30": [
                                             "caption_response",
                                             "general_node"
                                         ],
-                                        "11": [
+                                        "31": [
                                             "caption_response",
-                                            "people_node"
+                                            "animals_node"
                                         ]
                                     },
                                     "misc": {},
                                     "requests": {
-                                        "10": "",
-                                        "11": ""
+                                        "30": "",
+                                        "31": ""
                                     },
                                     "responses": {
-                                        "10": "Cool! Why did you send me a group of people celebrating at a party with drinks?",
-                                        "11": "Do you enjoy standing with other people?"
+                                        "30": "Cool! Why did you send me a wooden fence with a river in the background?",
+                                        "31": "What a muzzle! Would you like to have an animal like that?"
                                     },
                                     "validation": false
                                 },
@@ -173,17 +173,81 @@
                                     ],
                                     "11": [
                                         "caption_response",
-                                        "general_node"
+                                        "food_node"
                                     ],
                                     "12": [
                                         "caption_response",
-                                        "general_node"
+                                        "food_node"
                                     ],
-                                    "14": [
+                                    "13": [
                                         "caption_response",
                                         "people_node"
                                     ],
+                                    "14": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "15": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "16": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "17": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "18": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "19": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
                                     "2": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "20": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "21": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "22": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "23": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "24": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "25": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "26": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "27": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "28": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "29": [
                                         "caption_response",
                                         "animals_node"
                                     ],
@@ -191,24 +255,40 @@
                                         "caption_response",
                                         "animals_node"
                                     ],
+                                    "30": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "31": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
                                     "4": [
                                         "caption_response",
                                         "animals_node"
                                     ],
-                                    "7": [
+                                    "5": [
                                         "caption_response",
                                         "animals_node"
                                     ],
+                                    "6": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "7": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
                                     "8": [
                                         "caption_response",
-                                        "animals_node"
+                                        "food_node"
                                     ],
                                     "9": [
                                         "caption_response",
                                         "food_node"
                                     ]
                                 },
-                                "previous_human_utter_index": 14,
+                                "previous_human_utter_index": 31,
                                 "shared_memory": {}
                             },
                             "dff_shared_state": {
@@ -224,14 +304,14 @@
                     "text": "",
                     "annotations": {
                         "spelling_preprocessing": "",
-                        "badlisted_words": {
-                            "bad_words": false
-                        },
                         "sentseg": {
                             "punct_sent": "",
                             "segments": [
                                 ""
                             ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
                         },
                         "intent_catcher": {
                             "cant_do": {
@@ -325,7 +405,7 @@
                         },
                         "image_captioning": [
                             {
-                                "caption": "a cat standing on a rock next to a body of water",
+                                "caption": "a kitten isolated on a white background",
                                 "image_id": "42"
                             }
                         ]
@@ -350,25 +430,25 @@
                             "dff_image_skill_state": {
                                 "context": {
                                     "actor_state": {},
-                                    "id": "ea79fbf7-09d0-4be8-8f4a-bf98d26afe45",
+                                    "id": "01d0642d-00ef-44f8-9cab-7aa1a39b4ffe",
                                     "labels": {
-                                        "10": [
+                                        "30": [
                                             "caption_response",
                                             "general_node"
                                         ],
-                                        "11": [
+                                        "31": [
                                             "caption_response",
-                                            "people_node"
+                                            "animals_node"
                                         ]
                                     },
                                     "misc": {},
                                     "requests": {
-                                        "10": "",
-                                        "11": ""
+                                        "30": "",
+                                        "31": ""
                                     },
                                     "responses": {
-                                        "10": "Cool! Why did you send me a group of people celebrating at a party with drinks?",
-                                        "11": "Do you enjoy standing with other people?"
+                                        "30": "Cool! Why did you send me a wooden fence with a river in the background?",
+                                        "31": "What a muzzle! Would you like to have an animal like that?"
                                     },
                                     "validation": false
                                 },
@@ -388,17 +468,81 @@
                                     ],
                                     "11": [
                                         "caption_response",
-                                        "general_node"
+                                        "food_node"
                                     ],
                                     "12": [
                                         "caption_response",
-                                        "general_node"
+                                        "food_node"
                                     ],
-                                    "14": [
+                                    "13": [
                                         "caption_response",
                                         "people_node"
                                     ],
+                                    "14": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "15": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "16": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "17": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "18": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "19": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
                                     "2": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "20": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "21": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "22": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "23": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "24": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "25": [
+                                        "caption_response",
+                                        "people_node"
+                                    ],
+                                    "26": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "27": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "28": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
+                                    "29": [
                                         "caption_response",
                                         "animals_node"
                                     ],
@@ -406,24 +550,40 @@
                                         "caption_response",
                                         "animals_node"
                                     ],
+                                    "30": [
+                                        "caption_response",
+                                        "general_node"
+                                    ],
+                                    "31": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ],
                                     "4": [
                                         "caption_response",
                                         "animals_node"
                                     ],
-                                    "7": [
+                                    "5": [
                                         "caption_response",
                                         "animals_node"
                                     ],
+                                    "6": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
+                                    "7": [
+                                        "caption_response",
+                                        "food_node"
+                                    ],
                                     "8": [
                                         "caption_response",
-                                        "animals_node"
+                                        "food_node"
                                     ],
                                     "9": [
                                         "caption_response",
                                         "food_node"
                                     ]
                                 },
-                                "previous_human_utter_index": 14,
+                                "previous_human_utter_index": 31,
                                 "shared_memory": {}
                             },
                             "dff_shared_state": {
@@ -438,18 +598,19 @@
             ],
             "bot_utterances": [
                 {
-                    "text": "Do you enjoy standing with other people?",
+                    "text": "What a muzzle! Would you like to have an animal like that?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": "Do you enjoy standing with other people?",
+                            "punct_sent": "What a muzzle! Would you like to have an animal like that?",
                             "segments": [
-                                "Do you enjoy standing with other people?"
+                                "What a muzzle!",
+                                "Would you like to have an animal like that?"
                             ]
                         }
                     },
                     "active_skill": "dff_image_skill",
                     "user": {
-                        "id": "63a959361b9a55d7b984aec5",
+                        "id": "63bd030f5eb56adf7ba565a3",
                         "persona": {},
                         "attributes": {},
                         "user_type": "bot"
@@ -462,25 +623,25 @@
         {
             "context": {
                 "actor_state": {},
-                "id": "ea79fbf7-09d0-4be8-8f4a-bf98d26afe45",
+                "id": "01d0642d-00ef-44f8-9cab-7aa1a39b4ffe",
                 "labels": {
-                    "10": [
+                    "30": [
                         "caption_response",
                         "general_node"
                     ],
-                    "11": [
+                    "31": [
                         "caption_response",
-                        "people_node"
+                        "animals_node"
                     ]
                 },
                 "misc": {},
                 "requests": {
-                    "10": "",
-                    "11": ""
+                    "30": "",
+                    "31": ""
                 },
                 "responses": {
-                    "10": "Cool! Why did you send me a group of people celebrating at a party with drinks?",
-                    "11": "Do you enjoy standing with other people?"
+                    "30": "Cool! Why did you send me a wooden fence with a river in the background?",
+                    "31": "What a muzzle! Would you like to have an animal like that?"
                 },
                 "validation": false
             },
@@ -500,17 +661,81 @@
                 ],
                 "11": [
                     "caption_response",
-                    "general_node"
+                    "food_node"
                 ],
                 "12": [
                     "caption_response",
-                    "general_node"
+                    "food_node"
                 ],
-                "14": [
+                "13": [
                     "caption_response",
                     "people_node"
                 ],
+                "14": [
+                    "caption_response",
+                    "general_node"
+                ],
+                "15": [
+                    "caption_response",
+                    "people_node"
+                ],
+                "16": [
+                    "caption_response",
+                    "people_node"
+                ],
+                "17": [
+                    "caption_response",
+                    "general_node"
+                ],
+                "18": [
+                    "caption_response",
+                    "animals_node"
+                ],
+                "19": [
+                    "caption_response",
+                    "animals_node"
+                ],
                 "2": [
+                    "caption_response",
+                    "animals_node"
+                ],
+                "20": [
+                    "caption_response",
+                    "animals_node"
+                ],
+                "21": [
+                    "caption_response",
+                    "food_node"
+                ],
+                "22": [
+                    "caption_response",
+                    "people_node"
+                ],
+                "23": [
+                    "caption_response",
+                    "people_node"
+                ],
+                "24": [
+                    "caption_response",
+                    "food_node"
+                ],
+                "25": [
+                    "caption_response",
+                    "people_node"
+                ],
+                "26": [
+                    "caption_response",
+                    "food_node"
+                ],
+                "27": [
+                    "caption_response",
+                    "animals_node"
+                ],
+                "28": [
+                    "caption_response",
+                    "animals_node"
+                ],
+                "29": [
                     "caption_response",
                     "animals_node"
                 ],
@@ -518,24 +743,40 @@
                     "caption_response",
                     "animals_node"
                 ],
+                "30": [
+                    "caption_response",
+                    "general_node"
+                ],
+                "31": [
+                    "caption_response",
+                    "animals_node"
+                ],
                 "4": [
                     "caption_response",
                     "animals_node"
                 ],
-                "7": [
+                "5": [
                     "caption_response",
                     "animals_node"
                 ],
+                "6": [
+                    "caption_response",
+                    "food_node"
+                ],
+                "7": [
+                    "caption_response",
+                    "food_node"
+                ],
                 "8": [
                     "caption_response",
-                    "animals_node"
+                    "food_node"
                 ],
                 "9": [
                     "caption_response",
                     "food_node"
                 ]
             },
-            "previous_human_utter_index": 14,
+            "previous_human_utter_index": 31,
             "shared_memory": {}
         }
     ],

@@ -7,6 +7,7 @@ import warnings
 
 logger = logging.getLogger(__name__)
 nltk.download("averaged_perceptron_tagger")
+nltk.download("punkt")
 warnings.simplefilter("ignore")
 lmtzr = nltk.WordNetLemmatizer()
 
@@ -14,13 +15,17 @@ lmtzr = nltk.WordNetLemmatizer()
 def get_all_possible_entities(entity_name):
     ppl = ["woman", "women", "man", "men", "couple", "baby", "toddler", "people"]
     if entity_name == "food":
-        entities = list(set([w for s in wn.synset(f"{entity_name}.n.02").closure(lambda s:s.hyponyms()) for w in s.lemma_names()]))
+        entities = list(
+            set([w for s in wn.synset(f"{entity_name}.n.02").closure(lambda s: s.hyponyms()) for w in s.lemma_names()])
+        )
         entities = [ent.replace("_", " ") for ent in entities]
         entities = [ent for ent in entities if ent not in ppl]
     elif entity_name == "person":
         entities = ppl
     elif entity_name == "animal":
-        entities = list(set([w for s in wn.synset(f"{entity_name}.n.01").closure(lambda s:s.hyponyms()) for w in s.lemma_names()]))
+        entities = list(
+            set([w for s in wn.synset(f"{entity_name}.n.01").closure(lambda s: s.hyponyms()) for w in s.lemma_names()])
+        )
         entities = [ent.replace("_", " ") for ent in entities]
         entities = [ent for ent in entities if ent not in ppl]
     return entities
@@ -29,10 +34,10 @@ def get_all_possible_entities(entity_name):
 def extract_entity(sentence, entity_name):
     try:
         tokens = [lmtzr.lemmatize(token) for token in word_tokenize(sentence)]
+        logger.debug(f"tokens {tokens}")
         entities = list(set(entity_name).intersection(tokens))
-        logger.debug(f"{entities}")
         return random.choice(entities)
-    except Exception:
+    except IndexError:
         return ""
 
 
@@ -43,5 +48,5 @@ def extract_verb_from_sentence(sentence):
     try:
         if len(verbs) > 0:
             return random.choice(list(verbs))[0]
-    except Exception:
+    except IndexError:
         return ""
