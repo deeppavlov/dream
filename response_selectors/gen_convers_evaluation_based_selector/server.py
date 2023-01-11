@@ -378,7 +378,7 @@ def select_gen_response(candidates, scores, confidences, is_toxics, dialog, all_
 
     # best_candidate = candidates[best_id]
     # # best_skill_name = skill_names[int(best_id)]
-    prev_skill_names = [uttr["skill_name"] for uttr in dialog["bot_utterances"][-5:]]
+    # prev_skill_names = [uttr["skill_name"] for uttr in dialog["bot_utterances"][-5:]]
 
     # we pick first as a back up plan
     best_candidate = candidates[0]
