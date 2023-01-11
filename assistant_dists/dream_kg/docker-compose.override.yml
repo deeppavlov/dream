@@ -1300,9 +1300,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 3.5G
         reservations:
-          memory: 2.5G
+          memory: 3.5G
 
   user-knowledge-graph:
     env_file: [ .env ]
