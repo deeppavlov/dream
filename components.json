@@ -22,7 +22,7 @@
         "assistant_dist": "deepy_faq",
         "metadata": {
             "type": "retrieval",
-            "display_name": "Faq Skill",
+            "display_name": "FAQ Skill",
             "author": "DeepPavlov",
             "description": "One of the skills used by deepy_faq distribution. Add it to your distribution and try it out",
             "version": "0.1.0",
