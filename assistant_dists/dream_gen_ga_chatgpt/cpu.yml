@@ -8,11 +8,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  # chatgpt:
-  #   environment:
-  #     DEVICE: cpu
-  #     CUDA_VISIBLE_DEVICES: ""
-  gpt-3.5:
+  chatgpt:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

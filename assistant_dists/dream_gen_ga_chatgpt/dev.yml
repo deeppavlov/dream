@@ -33,20 +33,13 @@ services:
       - "./annotators/combined_classification:/src"
     ports:
       - 8087:8087
-  # chatgpt:
-  #   volumes:
-  #     - "./services/chatgpt:/src"
-  #     - "./common:/src/common"
-  #     - "~/.deeppavlov/cache:/root/.cache"
-  #   ports:
-  #     - 8150:8150
-  gpt-3.5:
+  chatgpt:
     volumes:
-      - "./services/gpt-3.5:/src"
+      - "./services/chatgpt:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8151:8151
+      - 8150:8150
   dff-generative-prompt-based-skill:
     volumes:
       - "./skills/dff_generative_prompt_based_skill:/src"

@@ -1,8 +1,8 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_gen_ga/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_gen_ga_chatgpt/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, gen-convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, spelling-preprocessing:8074, sentence-ranker:8128, dff-generative-prompt-based-skill:8134, prompt-selector:8135, gpt-3.5:8151"
+      WAIT_HOSTS: "sentseg:8011, gen-convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, spelling-preprocessing:8074, sentence-ranker:8128, dff-generative-prompt-based-skill:8134, prompt-selector:8135, chatgpt:8150"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -98,37 +98,17 @@ services:
         reservations:
           memory: 50M
 
-  # chatgpt:
-  #   env_file: [ .env ]
-  #   build:
-  #     args:
-  #       SERVICE_PORT: 8150
-  #       SERVICE_NAME: chatgpt
-  #       PRETRAINED_MODEL_NAME_OR_PATH: ChatGPT
-  #       CONFIG_NAME: config_local.json
-  #     context: .
-  #     dockerfile: ./services/chatgpt/Dockerfile
-  #   command: flask run -h 0.0.0.0 -p 8150
-  #   environment:
-  #     - FLASK_APP=server
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 1G
-  #       reservations:
-  #         memory: 1G
-
-  gpt-3.5:
+  chatgpt:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8151
-        SERVICE_NAME: gpt-3.5
-        PRETRAINED_MODEL_NAME_OR_PATH: GPT-3.5
+        SERVICE_PORT: 8150
+        SERVICE_NAME: chatgpt
+        PRETRAINED_MODEL_NAME_OR_PATH: ChatGPT
         CONFIG_NAME: config_local.json
       context: .
-      dockerfile: ./services/gpt-3.5/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8151
+      dockerfile: ./services/chatgpt/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8150
     environment:
       - FLASK_APP=server
     deploy:
@@ -144,7 +124,7 @@ services:
       args:
         SERVICE_PORT: 8134
         SERVICE_NAME: dff_generative_prompt_based_skill
-        GENERATIVE_SERVICE_URL: http://gpt-3.5:8151/respond
+        GENERATIVE_SERVICE_URL: http://chatgpt:8150/respond
       context: .
       dockerfile: ./skills/dff_generative_prompt_based_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload

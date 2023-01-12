@@ -45,24 +45,15 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8087
       - PORT=8087
 
-  # gpt-3.5:
-  #   command: ["nginx", "-g", "daemon off;"]
-  #   build:
-  #     context: dp/proxy/
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - PROXY_PASS=dream.deeppavlov.ai:8087
-  #     - PORT=8087
-
-  # chatgpt:
-  #   command: ["nginx", "-g", "daemon off;"]
-  #   build:
-  #     context: dp/proxy/
-  #     dockerfile: Dockerfile
-  #   extra_hosts:
-  #     - "ai-rig:${HOST_GATEWAY}"
-  #   environment:
-  #     - PROXY_PASS=ai-rig:9150
-  #     - PORT=8150
+  chatgpt:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    extra_hosts:
+      - "ai-rig:${HOST_GATEWAY}"
+    environment:
+      - PROXY_PASS=ai-rig:9150
+      - PORT=8150
 
 version: '3.7'

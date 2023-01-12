@@ -145,3 +145,4 @@ docker-compose-one-replica.yml
 services/chatgpt/config_local.json
 services/chatgpt/cf_failed_3.png
 skills/dff_generative_prompt_based_skill/scenario/response.py
+services/gpt-3.5/config_local.json

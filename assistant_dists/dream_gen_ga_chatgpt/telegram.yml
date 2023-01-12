@@ -1,0 +1,17 @@
+services:
+  agent-tg:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$5840259638:AAEmueTEOUrjjuxb75xGu_wojlo5YPd4XHM agent.pipeline_config=assistant_dists/dream_generative_prompt_based/pipeline_conf.json agent.db_config=assistant_dists/dream_generative_prompt_based/db_conf.json'
+    env_file: [.env]
+    build:
+      context: ./
+      dockerfile: dockerfile_agent
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+    volumes:
+      - ".:/dp-agent"
+
+version: '3.7'
