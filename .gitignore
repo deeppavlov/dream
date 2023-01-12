@@ -147,3 +147,4 @@ services/chatgpt/cf_failed_3.png
 skills/dff_generative_prompt_based_skill/scenario/response.py
 services/gpt-3.5/config_local.json
 services/gpt-3.5/example.py
+services/gpt-3.5/example.py
