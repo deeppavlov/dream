@@ -68,6 +68,7 @@ def respond():
     selected_confidences = []
     selected_human_attributes = []
     selected_bot_attributes = []
+    selected_attributes = []
 
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_confidences = []
@@ -112,7 +113,7 @@ def respond():
             curr_scores = np.array(curr_scores)
             curr_confidences = np.array(curr_confidences)
             # now we collected all current candidates and their annotations. select response among them
-            best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
+            best_skill_name, best_text, best_confidence, best_human_attrs, best_bot_attrs, best_attrs = select_response(
                 curr_candidates,
                 curr_scores,
                 curr_confidences,
@@ -136,23 +137,27 @@ def respond():
                     "skill_name": "dummy_skill",
                     "active_skill": "dummy_skill",
                 }
-            best_skill_name = best_cand["skill_name"]
-            best_text = best_cand["text"]
-            best_confidence = best_cand["confidence"]
-            best_human_attributes = best_cand.get("human_attributes", {})
-            best_bot_attributes = best_cand.get("bot_attributes", {})
+            best_skill_name = best_cand.pop("skill_name")
+            best_text = best_cand.pop("text")
+            best_confidence = best_cand.pop("confidence")
+            best_human_attrs = best_cand.pop("human_attributes", {})
+            best_bot_attrs = best_cand.pop("bot_attributes", {})
+            best_cand.pop("annotations", {})
+            best_attrs = best_cand
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
-        selected_human_attributes.append(best_human_attributes)
-        selected_bot_attributes.append(best_bot_attributes)
+        selected_human_attributes.append(best_human_attrs)
+        selected_bot_attributes.append(best_bot_attrs)
+        selected_attributes.append(best_attrs)
 
     logger.info(
         f"Choose selected_skill_names: {selected_skill_names};"
         f"selected_texts {selected_texts}; selected_confidences {selected_confidences};"
         f"selected human attributes: {selected_human_attributes}; "
-        f"selected bot attributes: {selected_bot_attributes}"
+        f"selected bot attributes: {selected_bot_attributes}; "
+        f"selected attributes: {selected_attributes}"
     )
 
     total_time = time.time() - st_time
@@ -165,6 +170,7 @@ def respond():
                 selected_confidences,
                 selected_human_attributes,
                 selected_bot_attributes,
+                selected_attributes,
             )
         )
     )
@@ -409,7 +415,15 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     if dialog["human_utterances"][-1]["text"] == "/get_dialog_id":
         best_text = "Your dialog's id: " + str(dialog["dialog_id"])
 
-    return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
+    candidates[best_id].pop("skill_name")
+    candidates[best_id].pop("text")
+    candidates[best_id].pop("confidence")
+    candidates[best_id].pop("human_attributes", {})
+    candidates[best_id].pop("bot_attributes", {})
+    candidates[best_id].pop("annotations", {})
+    best_attrs = candidates[best_id]
+
+    return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes, best_attrs
 
 
 if __name__ == "__main__":
