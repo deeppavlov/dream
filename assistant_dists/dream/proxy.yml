@@ -592,7 +592,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8131
-      - PORT=8125
+      - PORT=8131
 
   relative-persona-extractor:
     command: [ "nginx", "-g", "daemon off;" ]
