@@ -1,6 +1,7 @@
 ## Setting up server
 
 https://minecraft.fandom.com/wiki/Tutorials/Setting_up_a_server
+
 https://www.minecraft.net/en-us/download/server
 
 `home/mtalimanchuk/projects/minecraft-server`
