@@ -4,8 +4,8 @@
   "description": "DREAM to Minecraft connector",
   "author": "",
   "dependencies": {
-    "mineflayer": "4.3.0",
-    "mineflayer-pathfinder": "2.1.1",
+    "mineflayer": "4.5.1",
+    "mineflayer-pathfinder": "2.4.1",
     "mineflayer-collectblock": "1.4.1"
   }
 }

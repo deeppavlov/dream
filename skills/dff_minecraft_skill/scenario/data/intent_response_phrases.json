@@ -31,5 +31,11 @@
   ],
   "recreate" : [
     "Working hard!"
+  ],
+  "start_building" : [
+    "How should we start?"
+  ],
+  "finish_building" : [
+    "I loved working on it! What should we call it?"
   ]
 }

@@ -5,11 +5,13 @@ import requests
 
 from botconfig import BotSettings
 from core.serializer import encode_actions, decode_actions, CommandBuffer
-from core.actions import WrongActionException, GetActionException
+from core.actions import  WrongActionException, GetActionException
 from core.maps import get_action_map
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
+)
 logger = logging.getLogger(__name__)
 
 
@@ -30,7 +32,10 @@ bot = mineflayer.createBot(
         "hideErrors": False,
     }
 )
-buffer = CommandBuffer()
+buffer =  CommandBuffer()
+is_buffer = False
+# actions2buffer = ["destroy_block", "place_block", "destroy_and_grab_block"]
+command_index = 0
 # The spawn event
 once(bot, "login")
 bot.chat(f"I spawned at {bot.entity.position}")
@@ -49,8 +54,10 @@ def end(event, player):
 
 @On(bot, "chat")
 def on_chat(event, user, message, *args):
-
-    crash_reason = ""
+    global is_buffer
+    global buffer
+    global command_index
+    crash_reason = ""        
     success_flag = True
     coords = []
 
@@ -84,7 +91,9 @@ def on_chat(event, user, message, *args):
 
     try:
         user_id = USERS.get(user, user)
-        response = requests.post(bot_settings.agent_url, json={"user_id": user_id, "payload": message})
+        response = requests.post(
+            bot_settings.agent_url, json={"user_id": user_id, "payload": message}
+        )
         data = response.json()
         response_message = data["response"]
 
@@ -100,13 +109,20 @@ def on_chat(event, user, message, *args):
 
         if len(response_parts) == 2:
             response_actions = decode_actions(response_parts[1])
-            logger.warning(f"All players: {bot.players}")
-            logger.warning(f"Action data: {response_actions}")
-
             for action_data in response_actions:
                 try:
-                    if action_data["action"] == "stop":
+                    if action_data["action"] == "start_building":
+                        # buffer = CommandBuffer()
+                        is_buffer = True
+                    
+                    elif action_data["action"] == "finish_building":
                         buffer.to_json("./command_memory/commands.json")
+                        file_index = str(command_index)
+                        # buffer.to_json(f"./command_memory/command_{file_index}.json")
+                        is_buffer = False
+                        command_index += 1
+                        buffer = CommandBuffer()
+
 
                     action_f = ACTION_MAP[action_data["action"]]
 
@@ -118,21 +134,21 @@ def on_chat(event, user, message, *args):
                         **action_data.get("kwargs", {}),
                     )
                 except WrongActionException as e:
-                    crash_reason = str(e)
+                    crash_reason = str(e)        
                     success_flag = False
                     coords = []
                 except GetActionException as e:
                     coords = [int(c) for c in str(e).split()]
-
-                if action_data["action"] != "recreate":
+                
+                if (action_data["action"] == "place_block") and is_buffer:
                     buffer.append(
-                        success_flag=success_flag,
-                        crash_reason=crash_reason,
-                        command_name=action_f.__name__,
-                        command_args=action_data.get("args", []),
-                        command_kwargs=action_data["kwargs"],
-                        response=response_text,
-                        coords=coords,
+                        success_flag = success_flag,
+                        crash_reason = crash_reason,
+                        command_name = action_f.__name__,
+                        command_args = action_data.get("args", []),
+                        command_kwargs = action_data["kwargs"],
+                        response = response_text,
+                        coords = coords
                     )
 
     bot.chat(response_text)

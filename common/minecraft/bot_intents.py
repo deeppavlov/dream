@@ -53,6 +53,14 @@ def detect_minecraft_bot_intents(utterance):
         r"\brecreate\b", utterance, re.IGNORECASE
         )
 
+    start_building_pattern = re.search(
+        r"\bstart building\b", utterance, re.IGNORECASE
+        )
+
+    finish_building_pattern = re.search(
+        r"\bfinish building\b", utterance, re.IGNORECASE
+        )
+
     if come_to_me_pattern:
         answer_probs["goto_user"] = 1.0
         answer_labels.append("goto_user")
@@ -85,6 +93,13 @@ def detect_minecraft_bot_intents(utterance):
     elif recreate_pattern:
         answer_probs["recreate"] = 1.0
         answer_labels.append("recreate")
+    elif start_building_pattern:
+        answer_probs["start_building"] = 1.0
+        answer_labels.append("start_building")
+    elif finish_building_pattern:
+        answer_probs["finish_building"] = 1.0
+        answer_labels.append("finish_building")
+    
         
 
     if len(answer_labels) > 0:

@@ -7,6 +7,7 @@ import logging
 from math import pi
 from javascript import AsyncTask, On, require
 from javascript import config, proxy, events
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ FACE_VECTOR_MAP = {
     5: vec3(1, 0, 0),
 }
 
-
+#buffer exceptions to catch block positions and errors
 class WrongActionException(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
@@ -38,9 +39,7 @@ class GetActionException(Exception):
             return f"{position.x} {position.y} {position.z}"
         super().__init__(get_coordinates(position))
 
-# def jshandler(fn, *args, **kwargs):
-
-
+#TODO: handle missplacements
 def Once(emitter, event):
     def decor(fn):
         i = hash(fn)
@@ -285,17 +284,27 @@ def destroy_block(bot, pathfinder, invoker_username, target_block = None, *args)
 
 def destroy_and_grab_block(bot, pathfinder, invoker_username, target_block = None, *args):
     user_entity = bot.players[invoker_username].entity
-    if target_block is None:
+
+    none_flag =target_block is None
+
+    if none_flag:
         target_block = bot.blockAtEntityCursor(user_entity)
 
-    try:
+    #TODO: do we need those?
+    # if not none_flag:
+    #     bot.pathfinder.setGoal(
+    #             pathfinder.goals.GoalPlaceBlock(
+    #                 target_block.position, bot.world, {"range": None}
+    #             )
+    #         )
+    #     bot.pathfinder.setGoal(pathfinder.goals.GoalFollow(target_block, None), False)
 
+    try:
         @AsyncTask(start=True)
         def collect_block(task):
             bot.collectBlock.collect(target_block)
 
         bot.chat(f"Collecting {target_block.position}")
-
 
     except Exception as e:
         bot.chat(f"Couldn't finish collecting because {type(e)}")
@@ -324,19 +333,19 @@ def place_block(
  
     """
     user_entity = bot.players[invoker_username].entity
-    none_flag =target_block is None
+    none_flag = target_block is None
+
     if none_flag:
         target_block = bot.blockAtEntityCursor(user_entity)
     
     if not target_block:
         bot.chat(f"{invoker_username} is not looking at any block")
         raise WrongActionException(f"{invoker_username} is not looking at any block")
-    logger.info(target_block.position)
     
     # TODO if not bot_has_block
  
     # sometimes it is None. Why?
-    # logger.debug(f"bot.pathfinder module is {bot.pathfinder}")
+    logger.debug(f"bot.pathfinder module is {bot.pathfinder}")
  
     try:
         # change to GoalPlaceBlock later
@@ -347,16 +356,19 @@ def place_block(
                 )
             )
         else:
-            # bot.pathfinder.setGoal(pathfinder.goals.GoalBlock(  target_block.position.x,
-            #                                                     target_block.position.y,
-            #                                                     target_block.position.z)
-            #                                                 )
-            bot.pathfinder.setGoal(
-                pathfinder.goals.GoalPlaceBlock(
-                    target_block.position, bot.world, {"range": max_range_goal}
+            
+            try:
+                bot.placeBlock(target_block, FACE_VECTOR_MAP[target_block.face])
+            except Exception as placing_e:
+                bot.chat(f"Couldn't place the block there")
+                # q = str(target_block.position)
+                # w = str(target_block.face)
+                # e = str(target_block.type)
+                # bot.chat(q + "###" + w + "###" + e)
+                logger.warning(
+                    f"Couldn't place the block because {type(placing_e)} {placing_e}"
                 )
-            )
-            bot.pathfinder.setGoal(pathfinder.goals.GoalFollow(target_block, max_range_goal), False)
+
 
     except Exception as e:
         # bot.chat("Ugh, something's wrong with my pathfinding. Try again?" + str(target_block.position))
@@ -373,16 +385,13 @@ def place_block(
             bot.placeBlock(target_block, FACE_VECTOR_MAP[target_block.face])
         except Exception as placing_e:
             bot.chat(f"Couldn't place the block there")
-            q = str(target_block.position)
-            w = str(target_block.face)
-            e = str(target_block.type)
-            bot.chat(q + "###" + w + "###" + e)
+            # q = str(target_block.position)
+            # w = str(target_block.face)
+            # e = str(target_block.type)
+            # bot.chat(q + "###" + w + "###" + e)
             logger.warning(
                 f"Couldn't place the block because {type(placing_e)} {placing_e}"
             )
-            # logger.state = "Couldn't place the block there" + str(target_block.position)
-            logger.state = "Couldn't place the block there"
 
-    logger.info("all good, exiting")       
     raise GetActionException(target_block.position) 
 

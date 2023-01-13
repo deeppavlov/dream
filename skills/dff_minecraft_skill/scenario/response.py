@@ -65,3 +65,11 @@ def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Co
     _, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
     int_ctx.set_confidence(ctx, actor, confidence)
     return ctx
+
+
+def name_given_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    for slot_name, slot_value in ctx.misc.get("slots", {}).items():
+        if slot_name == "minecraft_new_known_object":
+            return f"Gotcha! Now if ask me to build {slot_value} -- I can do it seamlessly without any instructions!"
+
+    return "Gotcha! Now if ask me to build it -- I can do it seamlessly without any instructions!"
