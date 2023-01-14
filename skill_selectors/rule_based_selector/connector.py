@@ -251,7 +251,7 @@ class RuleBasedSkillSelectorConnector:
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
             if dialog["human_utterances"][-1].get("annotations", {}).get("prompt_selector", {}).get("prompt", ""):
-                skills_for_uttr.append("dff_generative_prompt_based_skill")
+                skills_for_uttr.append("dff_template_prompt_based_skill")
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")

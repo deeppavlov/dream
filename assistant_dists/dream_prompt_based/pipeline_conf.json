@@ -135,13 +135,13 @@
             }
         },
         "skills": {
-            "dff_generative_prompt_based_skill": {
+            "dff_template_prompt_based_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.5,
-                    "url": "http://dff-generative-prompt-based-skill:8134/respond"
+                    "url": "http://dff-template-prompt-based-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_generative_prompt_based_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_template_prompt_based_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

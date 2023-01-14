@@ -22,6 +22,7 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 GENERATIVE_TIMEOUT = 4
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.5
+PROMPT_FILE = getenv("PROMPT_FILE")
 
 
 def compose_data_for_model(ctx, actor):

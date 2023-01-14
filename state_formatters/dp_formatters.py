@@ -870,8 +870,8 @@ def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
 
-def dff_generative_prompt_based_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_generative_prompt_based_skill")
+def dff_template_prompt_based_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_template_prompt_based_skill")
 
 
 def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:

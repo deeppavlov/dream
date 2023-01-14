@@ -22,6 +22,9 @@ COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
+ARG PROMPT_FILE
+ENV PROMPT_FILE ${PROMPT_FILE}
+
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
 
