@@ -1,5 +1,4 @@
 FROM deeppavlov/base-gpu:0.12.1
-RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 RUN apt-get update && apt-get install git -y
 
