@@ -412,9 +412,9 @@ services:
     env_file: [ .env ]
     build:
       args:
+        LANGUAGE: RU
         CONFIG: qa_rus.json
         PORT: 8078
-        COMMIT: 4a6d1776110ee3c57b98d53cc68d24ff15a7ed74
       context: services/text_qa
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078

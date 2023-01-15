@@ -3,18 +3,16 @@ FROM deeppavlov/base-gpu:0.17.6
 RUN apt-get update && apt-get install git -y
 
 ARG CONFIG
-ARG COMMIT=0.13.0
 ARG PORT
 ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
-ENV COMMIT=$COMMIT
+
+RUN pip freeze | grep deeppavlov
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
-
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@${COMMIT}
 
 COPY . /src
 

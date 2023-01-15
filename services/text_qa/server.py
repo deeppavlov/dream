@@ -10,11 +10,15 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
+language = os.getenv("LANGUAGE")
 config_name = os.getenv("CONFIG")
 
 try:
     qa = build_model(config_name, download=True)
-    test_res = qa(["What is the capital of Russia?"], [["Moscow is the capital of Russia."]])
+    if language == "EN":
+        test_res = qa(["What is the capital of Russia?"], [["Moscow is the capital of Russia."]])
+    else:
+        test_res = qa(["Какая столица России?"], [["Москва - столица России."]])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
