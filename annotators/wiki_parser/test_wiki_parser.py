@@ -49,7 +49,7 @@ def main():
                         "age": 59,
                         "conf": 1.0,
                         "country of sitizenship": [["Q183", "Germany"]],
-                        "date of birth": [[""+1963-01-17^^T"", "17 January 1963"]],
+                        "date of birth": [['"+1963-01-17^^T"', "17 January 1963"]],
                         "entity_label": "Jürgen Schmidhuber",
                         "instance of": [["Q5", "human"]],
                         "occupation": [
