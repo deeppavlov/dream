@@ -1,9 +1,12 @@
 import logging
 import json
 import random
+import re
+import spacy
 
 from df_engine.core import Context, Actor
 
+load_model = spacy.load("en_core_web_sm", disable=["parser", "ner"])
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -16,17 +19,75 @@ def example_response(reply: str):
     return example_response_handler
 
 
+def check_vocabulary(user_utterances: list, scenario_name: str) -> str:
+    scenario = json.load(open(f"data/{scenario_name}.json"))
+    joined_utt = " ".join(user_utterances).lower()
+    doc_utt = load_model(joined_utt)
+    lemmatized_utt = " ".join([token.lemma_ for token in doc_utt])
+    expected_phrases = scenario["expected_language"]
+    used_phrases = []
+    not_used_phrases = []
+    for phrase in expected_phrases:
+        pattern = phrase.replace("/", "|")
+        if pattern[:3] == "To ":
+            pattern = pattern[3:]
+        pattern = re.sub("[\(].*?[\)]", "", pattern)
+        pattern = pattern.replace("  ", " ")
+        if pattern[-1] == " ":
+            pattern = pattern[:-1]
+        doc_pattern = load_model(pattern)
+        pattern = " ".join([token.lemma_ for token in doc_pattern])
+        logger.info(f"""pattern: {pattern}""")
+        pattern = pattern.replace("* * *", ".*?")
+        pattern = pattern.replace("...", "")
+        pattern = pattern.replace("something", ".*?")
+        pattern = pattern.replace("someone", ".*?")
+        is_used = bool(re.findall(pattern, lemmatized_utt, re.IGNORECASE))
+        if is_used:
+            used_phrases.append(phrase)
+        else:
+            not_used_phrases.append(phrase)
+
+    reply = ""
+    if len(used_phrases) == 0:
+        reply += """To make your speech sound more advanced you could use the following phrases:\n"""
+        reply += "\n".join(not_used_phrases)
+
+    elif len(used_phrases) == 1:
+        reply += f"""You used one really nice phrase -- "{used_phrases[0]}". To make your speech sound more advanced you could also use the following phrases:\n"""
+        reply += "\n".join(not_used_phrases)
+
+    else:
+        reply += """Your vocabulary was great! Here are the phrases that I really liked:\n"""
+        reply += "\n".join(used_phrases)
+        if 0 < len(not_used_phrases) <= 1:
+            reply += f"""\n\nThere is one more useful phrase you could use - {not_used_phrases[0]}"""
+        elif len(not_used_phrases) > 1:
+            reply += """\n\nTo make your speech sound even more advanced you could also use the following phrases:\n"""
+            reply += "\n".join(not_used_phrases)
+
+    return reply
+
+
 def feedback_response():
     def feedback_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         counter_mistakes_answers = 0
         human_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
         attributes = human_utterances.get("user", {}).get("attributes", {})
+        practice_skill_state = attributes.get("dff_language_practice_skill_state", {})
         mistakes_state = attributes.get("language_mistakes", "")
+        user_utterances = attributes.get("user_utterances", [])
+        try:
+            scenario_name = practice_skill_state["shared_memory"]["dialog_script_name"]
+            vocabulary_reply = check_vocabulary(user_utterances, scenario_name)
+        except Exception:
+            vocabulary_reply = ""
+
         if mistakes_state == "":
-            return "Your answers were perfect! Nice work!"
+            return "Your answers were perfect! Nice work!" + "\n\n" + vocabulary_reply
         mistakes_state = json.loads(mistakes_state)
         if mistakes_state["state"] == []:
-            return "Your answers were perfect! Nice work!"
+            return "Your answers were perfect! Nice work!" + "\n\n" + vocabulary_reply
 
         logger.info(f"mistakes_state = {mistakes_state}")
 
@@ -41,19 +102,30 @@ def feedback_response():
             """Thus, it would be better to say "X". """,
             """That is why it would be more accurate to say "X". """,
         ]
-        unique_subtypes = ["context", "extra art", "extra prep", "skip art", "skip prep", "omis", "extra word", "wrong_word", "reason_3"]
+        unique_subtypes = [
+            "context",
+            "extra art",
+            "extra prep",
+            "skip art",
+            "skip prep",
+            "omis",
+            "extra word",
+            "wrong_word",
+            "reason_3",
+            "need_art",
+        ]
         feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
         for state in mistakes_state["state"]:
             original_sentence = state[0]["original_sentence"]
             if original_sentence[-1] not in [".", "!", "?"]:
                 original_sentence += "."
-            
+
             corrected_sentence = state[0]["corrected_sentence"]
             if original_sentence.replace(",", "").lower() == corrected_sentence.replace(",", "").lower():
                 continue
             elif original_sentence.replace(".", "").lower() == corrected_sentence.replace(".", "").lower():
                 continue
-            
+
             elif original_sentence.replace("?", "").lower() == corrected_sentence.replace("?", "").lower():
                 continue
 
@@ -73,7 +145,7 @@ def feedback_response():
 
                 elif (correction[:2] == ". ") and selection2correct.lower() == correction[2:].lower():
                     continue
-            
+
                 elif (correction[:2] == "? ") and selection2correct.lower() == correction[2:].lower():
                     continue
 
@@ -92,8 +164,8 @@ def feedback_response():
             feedback_sents += "\n\n"
 
         if counter_mistakes_answers == 0:
-            return "Your answers were perfect! Nice work!"
-        
-        return feedback_sents
+            return "Your answers were perfect! Nice work!" + "\n\n" + vocabulary_reply
+
+        return feedback_sents + vocabulary_reply
 
     return feedback_response_handler

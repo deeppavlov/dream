@@ -52,8 +52,8 @@ flows = {
             PROCESSING: {
                 "set_user_instructions": set_instructions.set_user_instructions(),
                 "set_situation_description": set_instructions.set_situation_description(),
-                "slot_filling": int_prs.fill_responses_by_slots()
-                },
+                "slot_filling": int_prs.fill_responses_by_slots(),
+            },
             TRANSITIONS: {
                 "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
                 lbl.repeat(0.9): cnd.true(),

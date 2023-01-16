@@ -53,10 +53,7 @@ def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> 
         skill_name for skill_name in link_to_skill2key_words.keys() if skill_name not in excluded_skills
     ]
     if int_ctx.get_age_group(ctx, actor) == "kid":
-        available_skill_names = [
-            "dff_book_skill",
-            "dff_animals_skill"
-        ]  # for small talk skill
+        available_skill_names = ["dff_book_skill", "dff_animals_skill"]  # for small talk skill
     if len(available_skill_names) == 0:
         available_skill_names = link_to_skill2key_words.keys()
 

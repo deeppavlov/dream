@@ -24,7 +24,7 @@ def is_end_dialog():
         practice_skill_state = last_utterance.get("attributes", {}).get("dff_language_practice_skill_state", {})
         scenario_len = practice_skill_state.get("shared_memory", {}).get("scenario_len", 0)
         dialog_step_id = practice_skill_state.get("shared_memory", {}).get("dialog_step_id", 0)
-        if ((scenario_len-1) == dialog_step_id) and (dialog_step_id != 0):
+        if ((scenario_len - 1) == dialog_step_id) and (dialog_step_id != 0):
             return True
 
         feedback4cancelled_dialog = practice_skill_state.get("shared_memory", {}).get(

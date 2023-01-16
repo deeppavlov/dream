@@ -65,10 +65,18 @@ class RuleBasedSkillSelectorConnector:
 
             if if_lets_chat_about_particular_topic_detected:
                 skills_for_uttr.append("dff_language_practice_skill")
-            elif (prev_active_skill == "dff_language_practice_skill") and ((scenario_len-1) != dialog_step_id) and (bot_uttr_text != "We can role play some discussions on different topics."):
+            elif (
+                (prev_active_skill == "dff_language_practice_skill")
+                and ((scenario_len - 1) != dialog_step_id)
+                and (bot_uttr_text != "We can role play some discussions on different topics.")
+            ):
                 skills_for_uttr.append("dff_language_practice_skill")
 
-            if ((scenario_len-1) == dialog_step_id) and (dialog_step_id != 0) and (prev_active_skill != "dff_mistakes_review_skill"):
+            if (
+                ((scenario_len - 1) == dialog_step_id)
+                and (dialog_step_id != 0)
+                and (prev_active_skill != "dff_mistakes_review_skill")
+            ):
                 skills_for_uttr.append("dff_mistakes_review_skill")
 
             if bot_uttr_text == "Ok, let's finish here. Would you like me to comment on your performance?":

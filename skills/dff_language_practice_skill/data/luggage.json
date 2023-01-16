@@ -3,14 +3,21 @@
     "situation_description": "You have just landed in Zurich. You're waiting for your luggage, but it doesn't seem to be there. You contact a baggage claim representative.",
     "keywords": ["luggage", "baggage", "suitcase"],
     "expected_language": [
-        "Luggage seems to be missing stop over/ connection/layover Boarding pass",
-        "Luggage receipt/check Suitcase",
+        "Luggage seems to be missing",
+        "Stop over",
+        "Layover",
+        "Boarding pass",
+        "Luggage receipt",
+        "Luggage check",
+        "Suitcase",
         "Personal stuff",
         "To say for sure",
-        "To stay for a week Coming Friday",
-        "How long does it take to (email) - '.' dot, @ at",
+        "To stay for a week",
+        "Coming Friday",
+        "How long does it take to",
         "Not my fault",
-        "Airline's responsibility Deliver it at no cost to me"
+        "Airline's responsibility",
+        "Deliver it at no cost to me"
     ],
     "recommendations": {
         "grammar": ["link to grammar expercise"],

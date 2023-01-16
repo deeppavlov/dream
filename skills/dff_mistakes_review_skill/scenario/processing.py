@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 #             logger.info(f"""description: {description}""")
 #             ctx.misc["agent"]["response"].update({"mistakes_review": description})
 #         return ctx
-    
+
 #     return set_mistakes_review_handler
 
 
@@ -37,7 +37,6 @@ def set_mistakes_review():
                 ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
                 return ctx
 
-
             logger.info(f"mistakes_state = {mistakes_state}")
 
             expl_templates = ["You used the wrong X. ", "The X was incorrect. ", "There was a mistake in the X. "]
@@ -51,19 +50,29 @@ def set_mistakes_review():
                 """Thus, it would be better to say "X". """,
                 """That is why it would be more accurate to say "X". """,
             ]
-            unique_subtypes = ["context", "extra art", "extra prep", "skip art", "skip prep", "omis", "extra word", "wrong_word", "reason_3"]
+            unique_subtypes = [
+                "context",
+                "extra art",
+                "extra prep",
+                "skip art",
+                "skip prep",
+                "omis",
+                "extra word",
+                "wrong_word",
+                "reason_3",
+            ]
             feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
             for state in mistakes_state["state"]:
                 original_sentence = state[0]["original_sentence"]
                 if original_sentence[-1] not in [".", "!", "?"]:
                     original_sentence += "."
-                
+
                 corrected_sentence = state[0]["corrected_sentence"]
                 if original_sentence.replace(",", "").lower() == corrected_sentence.replace(",", "").lower():
                     continue
                 elif original_sentence.replace(".", "").lower() == corrected_sentence.replace(".", "").lower():
                     continue
-                
+
                 elif original_sentence.replace("?", "").lower() == corrected_sentence.replace("?", "").lower():
                     continue
 
@@ -83,7 +92,7 @@ def set_mistakes_review():
 
                     elif (correction[:2] == ". ") and selection2correct.lower() == correction[2:].lower():
                         continue
-                
+
                     elif (correction[:2] == "? ") and selection2correct.lower() == correction[2:].lower():
                         continue
 
@@ -105,8 +114,7 @@ def set_mistakes_review():
                 ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
                 return ctx
 
-        
             ctx.misc["agent"]["response"].update({"mistakes_review": feedback_sents})
         return ctx
-    
+
     return set_mistakes_review_handler

@@ -203,11 +203,7 @@ GOOD_MOOD_REACTIONS = {
 }
 
 BAD_MOOD_REACTIONS = {
-    "EN": [
-        "I am sorry to hear that.",
-        "I see.",
-        "Sounds like a bad mood."
-    ],
+    "EN": ["I am sorry to hear that.", "I see.", "Sounds like a bad mood."],
     "RU": [
         "Мне жаль слышать такое.",
         "Понятно.",

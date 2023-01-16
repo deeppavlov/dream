@@ -94,12 +94,8 @@ link_to_skill2key_words = {
 }
 
 link_to_skill2i_like_to_talk = {
-    "dff_book_skill": [
-        "I'm choosing what book should I read next. What is the last book you have ever read?"
-    ],
-    "dff_animals_skill": [
-        "I think that pets are a great source of entertainment. Do you have pets at home?"
-    ]
+    "dff_book_skill": ["I'm choosing what book should I read next. What is the last book you have ever read?"],
+    "dff_animals_skill": ["I think that pets are a great source of entertainment. Do you have pets at home?"],
 }
 
 DFF_WIKI_LINKTO = {

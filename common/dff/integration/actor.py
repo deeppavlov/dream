@@ -144,7 +144,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "can_continue": can_continue,
         "user_instructions": user_instructions,
         "situation_description": situation_description,
-        "mistakes_review": mistakes_review
+        "mistakes_review": mistakes_review,
     }
     if response_parts:
         hype_attr["response_parts"] = response_parts

@@ -41,11 +41,10 @@ def response_from_data():
                 dialog_script_name = found_dialog_script_name
                 dialog_step_id = -1
                 break
-        
+
         if (dialog_script_name != None) and (keywords_found == False):
             f = f"data/{dialog_script_name}.json"
             dialog = json.load(open(f))
-
 
         if dialog_script_name is None:
             return "We can role play some discussions on different topics."
@@ -55,13 +54,13 @@ def response_from_data():
             int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
 
         elif "previous" in processed_node.lower():
-            reply = dialog["utterances"][dialog_step_id-1]["utterance"]
+            reply = dialog["utterances"][dialog_step_id - 1]["utterance"]
             dialog_step_id -= 1
             int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
 
         else:
             if dialog_step_id < (len(dialog["utterances"]) - 1):
-                reply = dialog["utterances"][dialog_step_id+1]["utterance"]
+                reply = dialog["utterances"][dialog_step_id + 1]["utterance"]
                 dialog_step_id += 1
                 int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
 

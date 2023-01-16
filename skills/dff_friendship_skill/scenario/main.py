@@ -25,7 +25,7 @@ flows = {
                 ("greeting_flow", "std_greeting_node"): loc_cnd.std_greeting_condition,
                 # ("greeting_flow", "new_entities_is_needed_for_node"): loc_cnd.new_entities_is_needed_for_condition,
                 # ("greeting_flow", "link_to_by_enity_node"): loc_cnd.link_to_by_enity_condition,
-                ("weekend_flow", "std_weekend_node"): loc_wkd_cnd.std_weekend_condition
+                ("weekend_flow", "std_weekend_node"): loc_wkd_cnd.std_weekend_condition,
             },
         },
         "fallback": {

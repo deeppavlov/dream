@@ -143,7 +143,7 @@ FP_PLURAL_NOUNS = {
     "people",
     "men",
     "women",
-    "advice"
+    "advice",
 }
 
 FP_PUNCT_WORDS = {
@@ -310,22 +310,20 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                 elif len(item[3]) < len(item[4]):
                     q = before_parsed[item[1][0]].tag_
                     w = after_parsed[item[2][0]].tag_
-                    logger.info(f"before_parsed: {q}")
-                    logger.info(f"after_parsed: {w}")
                     if normalized_correction in ENG_ARTICLES:
                         correction["type"] = "gram"
-                        correction["subtype"] = "art"
-                        correction["explanation"] = "article"
+                        correction["subtype"] = "need_art"
+                        correction["explanation"] = f"""You need to use an article before "{normalized_error}". """
                     elif normalized_correction in FP_PLURAL_NOUNS:
                         correction["type"] = "gram"
                         correction["subtype"] = "plur"
                         correction["explanation"] = "plural form"
                     elif (before_parsed[item[1][0]].tag_ == "NN" and after_parsed[item[2][0]].tag_ == "NNS") or (
-                            before_parsed[item[1][0]].tag_ == "NNS" and after_parsed[item[2][0]].tag_ == "NN"
-                        ):
-                            correction["type"] = "gram"
-                            correction["subtype"] = "plur"
-                            correction["explanation"] = "plural form"
+                        before_parsed[item[1][0]].tag_ == "NNS" and after_parsed[item[2][0]].tag_ == "NN"
+                    ):
+                        correction["type"] = "gram"
+                        correction["subtype"] = "plur"
+                        correction["explanation"] = "plural form"
                     else:
                         logger.info(f"reason: {3}")
                         logger.info(f"normalized_error: {normalized_error}")

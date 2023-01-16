@@ -39,7 +39,7 @@ def set_user_instructions():
                 instructions = scenario["utterances"][dialog_step_id]["info_for_user"]
                 ctx.misc["agent"]["response"].update({"user_instructions": instructions})
         return ctx
-    
+
     return set_user_instructions_handler
 
 
@@ -66,5 +66,5 @@ def set_situation_description():
                 description = scenario["situation_description"]
                 ctx.misc["agent"]["response"].update({"situation_description": description})
         return ctx
-    
+
     return set_situation_description_handler

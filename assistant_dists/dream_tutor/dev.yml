@@ -39,6 +39,7 @@ services:
     - 8131:8131
     volumes:
     - ./skills/dff_mistakes_review_skill:/src
+    - ./skills/dff_language_practice_skill/data:/src/data
     - ./common:/src/common
   mongo:
     ports:

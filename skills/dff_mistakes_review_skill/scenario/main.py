@@ -58,15 +58,11 @@ flows = {
     },
     "feedback": {
         LOCAL: {
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence()
-            },
+            PROCESSING: {"set_confidence": int_prs.set_confidence()},
         },
         "comments": {
             RESPONSE: loc_rsp.feedback_response(),
-            PROCESSING: {
-                "set_mistakes_review": loc_prs.set_mistakes_review()
-            },
+            PROCESSING: {"set_mistakes_review": loc_prs.set_mistakes_review()},
             TRANSITIONS: {},
         },
     },
