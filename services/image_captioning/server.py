@@ -121,13 +121,14 @@ app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    img_paths = request.json.get("image_paths", [])   
+    img_paths = request.json.get("image_paths", [])
     captions = []
     try:
-         for img_path in img_paths:
+        for img_path in img_paths:
             response = requests.get(img_path)
             image = Image.open(BytesIO(response.content))
             image.thumbnail((256, 256))
@@ -146,8 +147,9 @@ def respond():
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         for img_path in img_paths:
-            captions.append('')
+            captions.append("")
 
     total_time = time.time() - st_time
     logger.info(f"captioning exec time: {total_time:.3f}s")
     return jsonify(captions)
+

@@ -68,6 +68,7 @@ def respond():
     selected_confidences = []
     selected_human_attributes = []
     selected_bot_attributes = []
+    selected_attributes = []
 
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_confidences = []
@@ -80,15 +81,11 @@ def respond():
             # logger.info(pprint.pformat(curr_candidates, compact=False))
 
             for skill_data in curr_candidates:
-                image = skill_data.get('image')
-                if image is not None:
-                    attributes = {'image': image}
                 if len(dialog["utterances"]) > 1:
                     assert len(dialog["human_utterances"]) > 0
                     assert len(dialog["bot_utterances"]) > 0
 
                 curr_confidences += [skill_data["confidence"]]
-                annotation = skill_data.get("annotations", {})
                 if skill_data["text"] and skill_data["confidence"]:
                     if not skill_data.get("annotations"):
                         logger.warning(f"Valid skill data without annotations: {skill_data}")
@@ -151,8 +148,9 @@ def respond():
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
-        selected_human_attributes.append(best_human_attributes)
-        selected_bot_attributes.append(best_bot_attributes)
+        selected_human_attributes.append(best_human_attrs)
+        selected_bot_attributes.append(best_bot_attrs)
+        selected_attributes.append(best_attrs)
 
     logger.info(
         f"Choose selected_skill_names: {selected_skill_names};"
@@ -172,6 +170,7 @@ def respond():
                 selected_confidences,
                 selected_human_attributes,
                 selected_bot_attributes,
+                selected_attributes,
             )
         )
     )

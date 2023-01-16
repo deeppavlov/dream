@@ -13,7 +13,21 @@ lmtzr = nltk.WordNetLemmatizer()
 
 
 def get_all_possible_entities(entity_name):
-    ppl = ["woman", "women", "man", "men", "couple", "baby", "toddler", "people"]
+    ppl = [
+        "woman",
+        "women",
+        "man",
+        "men",
+        "baby",
+        "toddler",
+        "people",
+        "girl",
+        "boy",
+        "person",
+        "human",
+        "lady",
+        "gentlemen",
+    ]
     if entity_name == "food":
         entities = list(
             set([w for s in wn.synset(f"{entity_name}.n.02").closure(lambda s: s.hyponyms()) for w in s.lemma_names()])

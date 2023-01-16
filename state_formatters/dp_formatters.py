@@ -743,7 +743,7 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
 
 def image_formatter_service(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
-    return [{"image_paths": [dialog["human_utterances"][-1]["attributes"].get("image")]}]
+    return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
 def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
