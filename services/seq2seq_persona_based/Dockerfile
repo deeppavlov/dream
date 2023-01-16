@@ -23,18 +23,10 @@ ENV PATH=/venv/bin:$PATH
 RUN python3.10 --version
 WORKDIR /src
 
-ARG PRETRAINED_MODEL_NAME_OR_PATH
-ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
+
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-ARG PAIR_DIALOG_HISTORY_LENGTH
-ARG CHAT_MAX_LENGTH
-ARG PERSONA_MAX_LENGTH
-
-ENV PAIR_DIALOG_HISTORY_LENGTH ${PAIR_DIALOG_HISTORY_LENGTH}
-ENV CHAT_MAX_LENGTH ${CHAT_MAX_LENGTH}
-ENV PERSONA_MAX_LENGTH ${PERSONA_MAX_LENGTH}
 
 COPY ./services/seq2seq_persona_based/requirements.txt /src/requirements.txt
 # RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt 
@@ -42,7 +34,7 @@ RUN pip install -r /src/requirements.txt
 
 COPY ./common/ /src/common/
 
-COPY /services/seq2seq_persona_based/ /src
+COPY ./services/seq2seq_persona_based/ /src
 
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300

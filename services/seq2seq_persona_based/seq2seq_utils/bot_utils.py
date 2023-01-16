@@ -9,10 +9,9 @@ import torch
 @dataclass
 class H2PersonaChatHyperparametersV1:
     """
-    chat_history_pair_length: int - количество пар диалога с конца
+    chat_history_pair_length: int - number of dialogue pairs from the end
     """
 
-    model_name: str = "facebook/bart-base"
     chat_history_pair_length: int = 7
 
     persona_max_length: int = 14
@@ -23,8 +22,8 @@ class H2PersonaChatHyperparametersV1:
 
 class PersonaChatDatasetSampleV1(TypedDict):
     """
-    persona: List[str] - набор предложений фактов персоны
-    history: List[str] - набор предложений истории переписки
+    persona: List[str] - person fact sentence set
+    history: List[str] - dialogue history
     """
 
     persona: List[str]
@@ -66,9 +65,6 @@ class H2Seq2SeqInferencePersonaSampleV1:
 
     @property
     def bos_token_id(self):
-        if "t5" in self.hyperparameters.model_name:
-            return []
-
         if self.tokenizer.bos_token_id is None:
             return []
 
@@ -95,7 +91,9 @@ class H2Seq2SeqInferencePersonaSampleV1:
     def get_sample(self) -> H2Seq2SeqInferenceSampleDictV1:
 
         dialog_history = self.dataset_sample["history"]
-        dialog_history = dialog_history[-self.hyperparameters.chat_history_pair_length * 2 - 1 :]
+        dialog_history = dialog_history[
+            -self.hyperparameters.chat_history_pair_length * 2 - 1 :
+        ]
         dialog_history = self.add_sep_beetween(dialog_history)
 
         persona = self.dataset_sample["persona"]

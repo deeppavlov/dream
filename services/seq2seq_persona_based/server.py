@@ -15,7 +15,9 @@ from seq2seq_utils.bot_utils import DialogBotV1, H2PersonaChatHyperparametersV1
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
@@ -25,14 +27,16 @@ PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 PAIR_DIALOG_HISTORY_LENGTH = int(os.environ.get("PAIR_DIALOG_HISTORY_LENGTH", 2))
 
 # CHAT_MAX_LENGTH for single sentence
-CHAT_MAX_LENGTH = int(os.environ.get("CHAT_MAX_LENGTH", 25))
+CHAT_MAX_SENT_TOKENS = int(os.environ.get("CHAT_MAX_SENT_TOKENS", 25))
 # PERSONA_MAX_LENGTH for single sentence
-PERSONA_MAX_LENGTH = int(os.environ.get("PERSONA_MAX_LENGTH", 19))
-
+PERSONA_MAX_SENT_TOKENS = int(os.environ.get("PERSONA_MAX_SENT_TOKENS", 19))
+GENERATION_PARAMS_CONFIG = os.environ.get(
+    "GENERATION_PARAMS_CONFIG", "bart-base-en-persona-chat_v1.json"
+)
 SUPER_CONFIDENCE = 1.0
 DEFAULT_CONFIDENCE = 0.9
 
-with open("./constractive_search_params.json") as f:
+with open(f"./{GENERATION_PARAMS_CONFIG}") as f:
     GENERATION_PARAMS = json.load(f)
 
 
@@ -50,9 +54,8 @@ try:
 
     hyperparameters = H2PersonaChatHyperparametersV1(
         chat_history_pair_length=PAIR_DIALOG_HISTORY_LENGTH,
-        persona_max_length=PERSONA_MAX_LENGTH,
-        chat_max_length=CHAT_MAX_LENGTH,
-        model_name=PRETRAINED_MODEL_NAME_OR_PATH,
+        persona_max_length=PERSONA_MAX_SENT_TOKENS,
+        chat_max_length=CHAT_MAX_SENT_TOKENS,
     )
 
     logger.info("seq2seq_persona_based is ready")
@@ -108,8 +111,12 @@ def respond():
     last_annotated_utterances_batch = request.json["last_annotated_utterances"]
     utterances_histories = request.json["utterances_histories"]
     try:
-        for utterance, utterence_hist in zip(last_annotated_utterances_batch, utterances_histories):
-            persona = utterance.get("annotations", {}).get("relative_persona_extractor", [])
+        for utterance, utterence_hist in zip(
+            last_annotated_utterances_batch, utterances_histories
+        ):
+            persona = utterance.get("annotations", {}).get(
+                "relative_persona_extractor", []
+            )
 
             response = generate_response(
                 model=model,
