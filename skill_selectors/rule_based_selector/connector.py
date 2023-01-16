@@ -48,12 +48,7 @@ class RuleBasedSkillSelectorConnector:
             prev_active_skill = bot_uttr.get("active_skill", "")
 
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
-            high_priority_intent_detected = any(
-                [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
-            )
-            low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
-            if_lets_chat_about_particular_topic_detected = if_chat_about_particular_topic(user_uttr, bot_uttr)
-            detected_topics = set(get_topics(user_uttr, which="all"))
+            logger.info(f"""intent_catcher_intents: {intent_catcher_intents}""")
 
             # agent = ctx.misc.get("agent", {})
             # dialog = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
@@ -63,12 +58,13 @@ class RuleBasedSkillSelectorConnector:
             dialog_step_id = practice_skill_state.get("shared_memory", {}).get("dialog_step_id", 0)
             bot_uttr_text = bot_uttr.get("text", "")
 
-            if if_lets_chat_about_particular_topic_detected:
+            if "lets_chat_about" in intent_catcher_intents:
                 skills_for_uttr.append("dff_language_practice_skill")
             elif (
                 (prev_active_skill == "dff_language_practice_skill")
                 and ((scenario_len - 1) != dialog_step_id)
                 and (bot_uttr_text != "We can role play some discussions on different topics.")
+                and (bot_uttr_text != "As you wish!")
             ):
                 skills_for_uttr.append("dff_language_practice_skill")
 
