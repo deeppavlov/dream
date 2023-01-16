@@ -228,6 +228,7 @@ def dff_formatter(
     used_links = human_attributes.get("used_links", {})
     age_group = human_attributes.get("age_group", "")
     disliked_skills = human_attributes.get("disliked_skills", {})
+    cerf = human_attributes.get("cerf", "C2")
     entities = human_attributes.get("entities", {})
 
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
@@ -269,6 +270,7 @@ def dff_formatter(
             "used_links_batch": [used_links],
             "age_group_batch": [age_group],
             "disliked_skills_batch": [disliked_skills],
+            "cerf_batch": [cerf],
             "clarification_request_flag_batch": [clarification_request_flag],
         }
     ]

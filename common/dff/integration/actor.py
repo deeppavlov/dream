@@ -28,6 +28,7 @@ def load_ctxs(requested_data):
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
     age_group_batch = requested_data.get("age_group_batch", [""] * len(dialog_batch))
     disliked_skills_batch = requested_data.get("disliked_skills_batch", [{}] * len(dialog_batch))
+    cerf_batch = requested_data.get("cerf_batch", ["C2"] * len(dialog_batch))
     clarification_request_flag_batch = requested_data.get(
         "clarification_request_flag_batch",
         [False] * len(dialog_batch),
@@ -42,6 +43,7 @@ def load_ctxs(requested_data):
         used_links,
         age_group,
         disliked_skills,
+        cerf,
         clarification_request_flag,
     ) in zip(
         human_utter_index_batch,
@@ -52,6 +54,7 @@ def load_ctxs(requested_data):
         used_links_batch,
         age_group_batch,
         disliked_skills_batch,
+        cerf_batch,
         clarification_request_flag_batch,
     ):
         ctx = get_ctx(
@@ -63,6 +66,7 @@ def load_ctxs(requested_data):
             used_links,
             age_group,
             disliked_skills,
+            cerf,
             clarification_request_flag,
         )
         ctxs += [ctx]
@@ -78,6 +82,7 @@ def get_ctx(
     used_links,
     age_group,
     disliked_skills,
+    cerf,
     clarification_request_flag,
 ):
     context = state.get("context", {})
@@ -98,6 +103,7 @@ def get_ctx(
         "used_links": used_links,
         "age_group": age_group,
         "disliked_skills": disliked_skills,
+        "CERF": cerf,
         "clarification_request_flag": clarification_request_flag,
     }
     ctx = Context.cast(context)
@@ -115,6 +121,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     age_group = agent["age_group"]
     disliked_skills = agent["disliked_skills"]
     current_turn_dff_suspended = agent["current_turn_dff_suspended"]
+    cerf = agent["CERF"]
     response_parts = agent.get("response_parts", [])
     history[str(human_utter_index)] = list(ctx.labels.values())[-1]
     state = {
@@ -139,6 +146,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "used_links": used_links,
         "age_group": age_group,
         "disliked_skills": disliked_skills,
+        "CERF": cerf,
     }
     hype_attr = {
         "can_continue": can_continue,

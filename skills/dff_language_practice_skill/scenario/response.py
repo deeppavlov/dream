@@ -20,13 +20,14 @@ def example_response(reply: str):
 
 def response_from_data():
     def response_from_data_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        CERF_levels = ["A1", "A2", "B1", "B2", "C1", "C2"]
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         dialog_step_id = shared_memory.get("dialog_step_id", -1)
         dialog_script_name = shared_memory.get("dialog_script_name", None)
+        user_cerf = ctx.misc.get("agent", {}).get("dialog", {}).get("human", {}).get("attributes", {}).get("CERF", "C2")
         processed_node = ctx.last_request
-        keywords_found = False
         found_dialog_script_name = None
-        # if dialog_script_name is None:
+        keywords_found = False
         for filename in os.listdir("data"):
             f = os.path.join("data", filename)
             if os.path.isfile(f):
@@ -35,8 +36,13 @@ def response_from_data():
                 for keyword in keywords:
                     if keyword in processed_node.lower():
                         found_dialog_script_name = filename.replace(".json", "")
+                        dialog_cerf = dialog["CEFR"]
 
-            if (found_dialog_script_name != None) and (dialog_script_name != found_dialog_script_name):
+            if (
+                (found_dialog_script_name != None)
+                and (dialog_script_name != found_dialog_script_name)
+                and (CERF_levels.index(user_cerf) >= CERF_levels.index(dialog_cerf))
+            ):
                 keywords_found = True
                 dialog_script_name = found_dialog_script_name
                 dialog_step_id = -1
