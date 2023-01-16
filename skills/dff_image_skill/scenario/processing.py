@@ -48,19 +48,19 @@ def get_all_possible_entities(entity_name):
 def extract_entity(sentence, entity_name):
     try:
         tokens = [lmtzr.lemmatize(token) for token in word_tokenize(sentence)]
-        logger.debug(f"tokens {tokens}")
         entities = list(set(entity_name).intersection(tokens))
         return random.choice(entities)
     except IndexError:
         return ""
+    return ""
 
 
 def extract_verb_from_sentence(sentence):
     pos_tagged = nltk.pos_tag(word_tokenize(str(sentence)))
     verbs = list(filter(lambda x: x[1] in ["VB", "VBP", "VBZ", "VBD", "VBN", "VBG"], pos_tagged))
-    logger.debug(f"extract_verb_from_sentence {verbs}")
     try:
         if len(verbs) > 0:
             return random.choice(list(verbs))[0]
     except IndexError:
         return ""
+    return ""
