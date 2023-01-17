@@ -250,8 +250,13 @@ class RuleBasedSkillSelectorConnector:
                 if prev_active_skill != "dff_short_story_skill":
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
-            if dialog["human_utterances"][-1].get("annotations", {}).get("prompt_selector", {}).get("prompt", ""):
-                skills_for_uttr.append("dff_template_prompt_based_skill")
+
+            # turn on skills if prompts are selected by prompt_selector
+            ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
+            if ranged_prompts:
+                for prompt_name in ranged_prompts:
+                    skills_for_uttr.append(f"dff_{prompt_name}_prompt_based_skill")
+
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
