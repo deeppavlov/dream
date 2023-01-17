@@ -91,9 +91,7 @@ class H2Seq2SeqInferencePersonaSampleV1:
     def get_sample(self) -> H2Seq2SeqInferenceSampleDictV1:
 
         dialog_history = self.dataset_sample["history"]
-        dialog_history = dialog_history[
-            -self.hyperparameters.chat_history_pair_length * 2 - 1 :
-        ]
+        dialog_history = dialog_history[-self.hyperparameters.chat_history_pair_length * 2 - 1 :]
         dialog_history = self.add_sep_beetween(dialog_history)
 
         persona = self.dataset_sample["persona"]

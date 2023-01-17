@@ -192,8 +192,8 @@ services:
       - FLASK_APP=server
       - PRETRAINED_MODEL_NAME_OR_PATH=DeepPavlov/bart-base-en-persona-chat
       - PAIR_DIALOG_HISTORY_LENGTH=2 
-      - CHAT_MAX_SENT_TOKENS=25
-      - PERSONA_MAX_SENT_TOKENS=19
+      - CHAT_EVERY_SENT_MAX_LENGTH=25
+      - PERSONA_EVERY_SENT_MAX_LENGTH=19
       - GENERATION_PARAMS_CONFIG=bart-base-en-persona-chat_v1.json
     deploy:
       resources:
