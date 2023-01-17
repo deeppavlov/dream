@@ -272,10 +272,16 @@ def respond():
         curr_ann_uttr = dialog["human_utterances"][-1]
         prev_ann_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
         annotations = curr_ann_uttr["annotations"]
-        tell_me_about_intent = annotations.get("intent_catcher", {}).get("lets_chat_about", {}).get(
-            "detected", 0
-        ) == 1 or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+        tell_me_about_intent = (
+            annotations.get("intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
+            or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+            or re.findall(full_template, curr_ann_uttr.get("text", ""))
+        )
 
+        logger.info(
+            f"factoid_qa --- text {curr_ann_uttr.get('text', '')} --- "
+            f"find {re.findall(full_template, curr_ann_uttr.get('text', ''))}"
+        )
         if "sentrewrite" in annotations:
             text_rewritten = annotations["sentrewrite"]["modified_sents"][-1]
         else:
@@ -316,9 +322,11 @@ def respond():
         attr = {}
         curr_ann_uttr = dialog["human_utterances"][-1]
         prev_ann_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
-        tell_me_about_intent = curr_ann_uttr["annotations"].get("intent_catcher", {}).get("lets_chat_about", {}).get(
-            "detected", 0
-        ) == 1 or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+        tell_me_about_intent = (
+            curr_ann_uttr["annotations"].get("intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
+            or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+            or re.findall(full_template, curr_ann_uttr.get("text", ""))
+        )
 
         if "sentrewrite" in curr_ann_uttr["annotations"]:
             curr_uttr_rewritten = curr_ann_uttr["annotations"]["sentrewrite"]["modified_sents"][-1]
@@ -366,7 +374,7 @@ def respond():
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
-    logger.info(f"Responses {responses}")
+    logger.info(f"Responses: {responses} --- confidences: {confidences}")
     total_time = time.time() - st_time
     logger.info(f"factoid_qa exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences, attributes)))
