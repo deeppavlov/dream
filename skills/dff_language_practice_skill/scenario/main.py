@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {
-        TRANSITIONS: {("scenario", "main_node"): cnd.true()},
+        TRANSITIONS: {("scenario", "main_node", 0.8): cnd.true()},
     },
     "service": {
         "start": {

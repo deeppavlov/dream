@@ -48,7 +48,6 @@ class RuleBasedSkillSelectorConnector:
             prev_active_skill = bot_uttr.get("active_skill", "")
 
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
-            logger.info(f"""intent_catcher_intents: {intent_catcher_intents}""")
 
             # agent = ctx.misc.get("agent", {})
             # dialog = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
@@ -77,7 +76,7 @@ class RuleBasedSkillSelectorConnector:
 
             if bot_uttr_text == "Ok, let's finish here. Would you like me to comment on your performance?":
                 if re.search(yes_templates, user_uttr_text):
-                    skills_for_uttr.append("dff_mistakes_review_skill")
+                    skills_for_uttr = ["dff_mistakes_review_skill"]
 
             if not skills_for_uttr:
                 skills_for_uttr.append("dff_friendship_skill")

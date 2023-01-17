@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("feedback", "comments", 0.8): cnd.true(),
+            ("feedback", "comments", 1.0): cnd.true(),
         },
     },
     "sevice": {
