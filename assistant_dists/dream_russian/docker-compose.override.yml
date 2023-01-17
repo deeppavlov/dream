@@ -9,12 +9,10 @@ services:
           dff-friendship-skill:8086, entity-detection:8103, dialogpt:8091,
           dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-    build:
-      args:
-        HIGH_PRIORITY_INTENTS: 1
-        RESTRICTION_FOR_SENSITIVE_CASE: 1
-        ALWAYS_TURN_ON_ALL_SKILLS: 0
-        LANGUAGE: RU
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: RU
 
   dff-program-y-skill:
     env_file: [.env]

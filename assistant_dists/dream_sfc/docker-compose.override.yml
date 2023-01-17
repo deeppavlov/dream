@@ -21,12 +21,10 @@ services:
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           dff-template-skill:8120, speech-function-predictor:8107, speech-function-classifier:8108"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
-    build:
-      args:
-        HIGH_PRIORITY_INTENTS: 1
-        RESTRICTION_FOR_SENSITIVE_CASE: 1
-        ALWAYS_TURN_ON_ALL_SKILLS: 0
-        LANGUAGE: EN
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
 
   convers-evaluator-annotator:
     env_file: [.env]
