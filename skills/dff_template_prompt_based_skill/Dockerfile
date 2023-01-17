@@ -18,7 +18,7 @@ COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
-COPY skills/${SERVICE_NAME}/ ./
+COPY skills/dff_template_prompt_based_skill/ ./
 COPY ./common/ ./common/
 
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
