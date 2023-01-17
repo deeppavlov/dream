@@ -1,16 +1,18 @@
 version: '3.7'
 services:
+
   dff-template-prompt-based-skill:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8134
         SERVICE_NAME: dff_template_prompt_based_skill
-        GENERATIVE_SERVICE_URL: http://transformers-lm:8130/respond
-        PROMPT_FILE: common/prompts/dream_persona_prompt.json
       context: .
       dockerfile: ./skills/dff_template_prompt_based_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload
+    environment:
+      - PROMPT_FILE=common/prompts/dream_persona_prompt.json
+      - GENERATIVE_SERVICE_URL=http://transformers-lm:8130/respond
     deploy:
       resources:
         limits:
