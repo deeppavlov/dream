@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  transformers-lm:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8130
+        SERVICE_NAME: transformers_lm
+        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+        CONFIG_NAME: transformers_lm.json
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8130
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 40G
+        reservations:
+          memory: 40G

@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  dff-template-prompt-based-skill:
+    volumes:
+      - "./skills/dff_template_prompt_based_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8134:8134
