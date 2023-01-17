@@ -1,7 +1,6 @@
 import os
 import requests
 
-
 if os.getenv("LANGUAGE", "EN") == "RU":
     lang = "@ru"
 else:
@@ -29,7 +28,7 @@ def main():
                 "animals_skill_entities_info": {},
                 "entities_info": {
                     "Jurgen Schmidhuber": {
-                        "age": 59,
+                        "age": 60,
                         "conf": 1.0,
                         "country of sitizenship": [["Q183", "Germany"]],
                         "date of birth": [['"+1963-01-17^^T"', "17 January 1963"]],
