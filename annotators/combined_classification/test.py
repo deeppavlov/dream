@@ -52,10 +52,7 @@ def main_test():
             "answers_bert": [["open_question_opinion"]],
         },
         {
-            "sentences": [
-                "please talk about movies",
-                "talk about games"
-            ],
+            "sentences": ["please talk about movies", "talk about games"],
             "task": "deeppavlov_topics",
             "answers_bert": [["Movies&Tv"], ["Videogames"]],
         },
