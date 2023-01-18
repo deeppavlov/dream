@@ -18,13 +18,17 @@ app = Flask(__name__)
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 N_SENTENCES_TO_RETURN = int(getenv("N_SENTENCES_TO_RETURN"))
+# list of string names of prompts from common/prompts
+PROMPTS_TO_CONSIDER = getenv("PROMPTS_TO_CONSIDER", "").split(",")
+logger.info(f"prompt-selector considered prompts: {PROMPTS_TO_CONSIDER}")
 PROMPTS = []
 PROMPTS_NAMES = []
 for filename in listdir("common/prompts"):
-    if ".json" in filename:
-        data = json.load(open("common/prompts/" + filename, "r"))
+    prompt_name = Path(filename).stem
+    if ".json" in filename and prompt_name in PROMPTS_TO_CONSIDER:
+        data = json.load(open(f"common/prompts/{filename}", "r"))
         PROMPTS.append(data["prompt"])
-        PROMPTS_NAMES.append(Path(filename).stem)
+        PROMPTS_NAMES.append(prompt_name)
 
 
 def get_result(request, questions_only=False):
@@ -66,6 +70,7 @@ def get_result(request, questions_only=False):
 
     total_time = time.time() - st_time
     logger.info(f"prompt-selector exec time: {total_time:.3f}s")
+    logger.info(f"prompt-selector result: {result}")
     return result
 
 
