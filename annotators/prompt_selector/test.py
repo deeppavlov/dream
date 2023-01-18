@@ -1,9 +1,4 @@
 import requests
-import json
-
-pizza = json.load(open("common/prompts/pizza.json", "r"))["prompt"]
-spacex = json.load(open("common/prompts/spacex.json", "r"))["prompt"]
-ielts = json.load(open("common/prompts/ielts.json", "r"))["prompt"]
 
 
 def main():
@@ -21,11 +16,11 @@ def main():
     gold = [
         {
             "max_similarity": 0.766472339630127,
-            "prompt": [pizza, spacex, ielts],
+            "prompts": ["pizza", "spacex", "ielts"],
         },
         {
             "max_similarity": 0.7275472283363342,
-            "prompt": [spacex, ielts, pizza],
+            "prompts": ["spacex", "ielts", "pizza"],
         },
     ]
 

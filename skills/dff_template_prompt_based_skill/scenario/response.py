@@ -1,22 +1,29 @@
+import json
 import logging
+import re
 import requests
 import sentry_sdk
 from os import getenv
 from typing import Any
-import re
 
-import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
-from df_engine.core import Context, Actor
+import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from df_engine.core import Context, Actor
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
+PROMPT_FILE = getenv("PROMPT_FILE")
 assert GENERATIVE_SERVICE_URL
+assert PROMPT_FILE
+
+with open(PROMPT_FILE, "r") as f:
+    PROMPT = json.load(f)["prompt"]
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 GENERATIVE_TIMEOUT = 4
@@ -25,6 +32,7 @@ LOW_CONFIDENCE = 0.5
 
 
 def compose_data_for_model(ctx, actor):
+    global PROMPT
     text_prompt = []
     stop_words = set(stopwords.words("english"))
     human_uttrs = int_ctx.get_human_utterances(ctx, actor)
@@ -36,10 +44,7 @@ def compose_data_for_model(ctx, actor):
             text_prompt.insert(0, f'AI: {bot_uttrs[-1]["text"]}')
         if len(human_uttrs) > 1:
             text_prompt.insert(0, f'Human: {human_uttrs[-2]["text"]}')
-        prompts = human_uttrs[-1].get("annotations", {}).get("prompt_selector", {}).get("prompt", "")
-        if prompts:
-            prompt = prompts[0]
-            text_prompt.insert(0, prompt)
+            text_prompt.insert(0, PROMPT)
         words = word_tokenize(human_uttrs[-1]["text"])
         words_filtered = []
         for w in words:
@@ -85,7 +90,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         for hyp in hypotheses:
             confidence = DEFAULT_CONFIDENCE
             hyp_text = " ".join(hyp[0].split())
-            if hyp_text[-1] not in [".", "?", "!"]:
+            if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
                 hyp_text += "."
                 confidence = LOW_CONFIDENCE
             gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})

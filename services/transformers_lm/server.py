@@ -86,7 +86,7 @@ def respond():
             outputs = generate_responses("", context, model, tokenizer)
             logger.info(f"outputs: {outputs}")
             for response in outputs:
-                if len(response) > 3:
+                if len(response) >= 3:
                     # drop too short responses
                     responses += [response]
                     confidences += [DEFAULT_CONFIDENCE]

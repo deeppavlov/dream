@@ -135,13 +135,13 @@
             }
         },
         "skills": {
-            "dff_generative_prompt_based_skill": {
+            "dff_dream_persona_prompt_based_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.5,
-                    "url": "http://dff-generative-prompt-based-skill:8134/respond"
+                    "url": "http://dff-dream-persona-prompt-based-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_generative_prompt_based_skill_formatter",
+                "dialog_formatter": "state_formatters.dream_persona:dff_dream_persona_prompt_based_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -219,13 +219,13 @@
         }
     },
     "metadata": {
-        "display_name": "ChatGPT-based Generative Prompt-Based Dream",
+        "display_name": "ChatGPT-based Prompt-Based Dream",
         "author": "DeepPavlov",
         "description": "Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload specify own prompts (json files) to be used in LLM-powered reply generation.",
         "version": "0.0.1",
         "date_created": "2023-01-10T02:00:00",
-        "ram_usage": "30 GB",
-        "gpu_usage": "30 GB",
-        "disk_usage": "30 GB"
+        "ram_usage": "50 GB",
+        "gpu_usage": "50 GB",
+        "disk_usage": "50 GB"
     }
 }

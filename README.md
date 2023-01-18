@@ -64,7 +64,7 @@ Russian version of DeepPavlov Dream Socialbot. This is a generative-based social
 ### Generative Prompt-Based Dream
 
 Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts), and the provided information will be used in LLM-powered reply generation as a prompt.
-[Link to the distribution.](https://github.com/deeppavlov/dream/assistant_dists/dream_generative_prompt_based)
+[Link to the distribution.](https://github.com/deeppavlov/dream/assistant_dists/dream_prompt_based)
 
 # Quick Start
 
@@ -126,7 +126,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 #### **Generative Prompt-Based Dream**
 
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream_generative_prompt_based/docker-compose.override.yml -f assistant_dists/dream_generative_prompt_based/dev.yml up --build 
+docker-compose -f docker-compose.yml -f assistant_dists/dream_prompt_based/docker-compose.override.yml -f assistant_dists/dream_prompt_based/dev.yml up --build 
 ```
 
 We've also included a config with GPU allocations for multi-GPU environments.
