@@ -200,7 +200,7 @@
             "dff_image_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 2,
                     "url": "http://dff-image-skill:8188/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_image_skill_formatter",
@@ -228,7 +228,7 @@
             "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 1,
                     "url": "http://sentence-ranker:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
