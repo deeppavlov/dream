@@ -2,6 +2,7 @@ import logging
 import os
 import random
 import json
+from collections import Counter
 
 from . import response as loc_rsp
 
@@ -25,6 +26,7 @@ def set_mistakes_review():
     def set_mistakes_review_handler(ctx: Context, actor: Actor):
         if not ctx.validation:
             review = {}
+            types_mistakes, subtypes_mistakes = [], []
             counter_mistakes_answers = 0
             human_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
             attributes = human_utterances.get("user", {}).get("attributes", {})
@@ -66,15 +68,15 @@ def set_mistakes_review():
                 """That is why it would be more accurate to say "X". """,
             ]
             unique_subtypes = [
-                "context",
-                "extra art",
-                "extra prep",
-                "skip art",
-                "skip prep",
-                "omis",
+                "usage of a word",
+                "extra article",
+                "extra preposition",
+                "skipped article",
+                "skipped preposition",
+                "omissed word",
                 "extra word",
-                "wrong_word",
-                "reason_3",
+                "other",
+                "did not use the article",
             ]
             feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
             for state in mistakes_state["state"]:
@@ -111,6 +113,8 @@ def set_mistakes_review():
                     elif (correction[:2] == "? ") and selection2correct.lower() == correction[2:].lower():
                         continue
 
+                    types_mistakes.append(selection["type"])
+                    subtypes_mistakes.append(selection["subtype"])
                     if selection["subtype"] in unique_subtypes:
                         feedback_sents += selection["explanation"]
                     else:
@@ -135,6 +139,11 @@ def set_mistakes_review():
             reply = feedback_sents + vocabulary_reply
             review["text"] = reply
             review["pecentage_vocabulary_used"] = percentage
+            review["mistakes_counter"] = counter_mistakes_answers
+            count_types = dict(Counter(types_mistakes))
+            review["mistakes_types_counter"] = count_types
+            count_subtypes = dict(Counter(subtypes_mistakes))
+            review["mistakes_subtypes_counter"] = count_subtypes
             ctx.misc["agent"]["response"].update({"mistakes_review": review})
 
         return ctx

@@ -242,22 +242,22 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
             normalized_correction = item[4][0].lower().translate(str.maketrans("", "", punct))
             if normalized_error in ENG_PRONOUNS and normalized_correction in ENG_PRONOUNS:
                 if normalized_error == normalized_correction:
-                    correction["type"] = "spell"
+                    correction["type"] = "spelling"
                     correction["explanation"] = "spelling"
                 else:
-                    correction["type"] = "gram"
-                    correction["subtype"] = "pron"
+                    correction["type"] = "grammatical"
+                    correction["subtype"] = "pronoun"
                     correction["explanation"] = "pronoun"
             elif all(not re.search("\w*[.,?!]\s*\w+", x) for x in item[3]) and all(
                 not re.search("\w+[.,?!]", x) for x in item[3]
             ):
                 if len(item[3]) == len(item[4]):
                     if "'s" in item[3][0] or "'s" in item[4][0]:
-                        correction["type"] = "gram"
-                        correction["subtype"] = "poss"
+                        correction["type"] = "grammatical"
+                        correction["subtype"] = "possesive form"
                         correction["explanation"] = "form of the possessive case of a noun"
                     elif normalized_error == normalized_correction or normalized_error not in words:
-                        correction["type"] = "spell"
+                        correction["type"] = "spelling"
                         correction["explanation"] = "spelling"
                     else:
                         before_pos = before_parsed[item[1][0]].pos_
@@ -273,22 +273,22 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                                 logger.info(f"reason: {1}")
                                 logger.info(f"normalized_error: {normalized_error}")
                                 logger.info(f"normalized_correction: {normalized_correction}")
-                                correction["type"] = "gram"
-                                correction["subtype"] = "tense"
+                                correction["type"] = "grammatical"
+                                correction["subtype"] = "verb tense"
                                 correction["explanation"] = "verb tense"
                             else:
-                                correction["type"] = "lex"
-                                correction["subtype"] = "context"
+                                correction["type"] = "lexical"
+                                correction["subtype"] = "usage of a word"
                                 correction[
                                     "explanation"
                                 ] = "You used the word which was not quite suitable in this context. "
                         elif before_pos == after_pos == "ADP":
-                            correction["type"] = "gram"
-                            correction["subtype"] = "prep"
+                            correction["type"] = "grammatical"
+                            correction["subtype"] = "preposition"
                             correction["explanation"] = "preposition"
                         elif after[item[2][0]] in ENG_MODAL_VERBS:
-                            correction["type"] = "gram"
-                            correction["subtype"] = "mod"
+                            correction["type"] = "grammatical"
+                            correction["subtype"] = "modal verb"
                             correction["explanation"] = "modal verb"
                         elif any(x in punct for x in item[4][0]):
                             continue
@@ -297,56 +297,56 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         ):
                             if item[4][0] in FP_PLURAL_NOUNS:
                                 continue
-                            correction["type"] = "gram"
-                            correction["subtype"] = "plur"
+                            correction["type"] = "grammatical"
+                            correction["subtype"] = "plural form"
                             correction["explanation"] = "plural form"
                         else:
                             logger.info(f"reason: {2}")
                             logger.info(f"normalized_error: {normalized_error}")
                             logger.info(f"normalized_correction: {normalized_correction}")
-                            correction["type"] = "gram"
-                            correction["subtype"] = "wrong_word"
+                            correction["type"] = "grammatical"
+                            correction["subtype"] = "other"
                             correction["explanation"] = f"""Use of "{normalized_error}" is inappropriate here. """
                 elif len(item[3]) < len(item[4]):
                     q = before_parsed[item[1][0]].tag_
                     w = after_parsed[item[2][0]].tag_
                     if normalized_correction in ENG_ARTICLES:
-                        correction["type"] = "gram"
-                        correction["subtype"] = "need_art"
+                        correction["type"] = "grammatical"
+                        correction["subtype"] = "did not use the article"
                         correction["explanation"] = f"""You need to use an article before "{normalized_error}". """
                     elif normalized_correction in FP_PLURAL_NOUNS:
-                        correction["type"] = "gram"
-                        correction["subtype"] = "plur"
+                        correction["type"] = "grammatical"
+                        correction["subtype"] = "plural form"
                         correction["explanation"] = "plural form"
                     elif (before_parsed[item[1][0]].tag_ == "NN" and after_parsed[item[2][0]].tag_ == "NNS") or (
                         before_parsed[item[1][0]].tag_ == "NNS" and after_parsed[item[2][0]].tag_ == "NN"
                     ):
-                        correction["type"] = "gram"
-                        correction["subtype"] = "plur"
+                        correction["type"] = "grammatical"
+                        correction["subtype"] = "plural form"
                         correction["explanation"] = "plural form"
                     else:
                         logger.info(f"reason: {3}")
                         logger.info(f"normalized_error: {normalized_error}")
                         logger.info(f"normalized_correction: {normalized_correction}")
-                        correction["type"] = "gram"
-                        correction["subtype"] = "reason_3"
+                        correction["type"] = "grammatical"
+                        correction["subtype"] = "other"
                         correction["explanation"] = f"""It's not good to use {normalized_error} here. """
                 else:
                     if normalized_error in ENG_ARTICLES:
-                        correction["type"] = "gram"
-                        correction["subtype"] = "art"
+                        correction["type"] = "grammatical"
+                        correction["subtype"] = "article"
                         correction["explanation"] = "article"
                     else:
                         logger.info(f"reason: {4}")
                         logger.info(f"normalized_error: {normalized_error}")
                         logger.info(f"normalized_correction: {normalized_correction}")
-                        correction["type"] = "gram"
-                        correction["subtype"] = "tense"
+                        correction["type"] = "grammatical"
+                        correction["subtype"] = "verb tense"
                         correction["explanation"] = "verb tense"
         elif "delete" == item[0]:
             if not item[3] and not item[4]:
                 continue
-            correction["type"] = "gram"
+            correction["type"] = "grammatical"
             normalized_error = item[3][0].lower().translate(str.maketrans("", "", punct))
             if len(item[3]) == 1:
                 if normalized_error in ENG_ARTICLES:
@@ -355,7 +355,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     if item[4][-1] in ENG_ADJ_COMP or item[4][-1].endswith("est"):
                         correction["subtype"] = "comparative"
                     else:
-                        correction["subtype"] = "extra art"
+                        correction["subtype"] = "extra article"
                         correction["explanation"] = "You used an extra article. "
                 elif item[3][0] in punct:
                     start -= 1
@@ -363,7 +363,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     correction["type"] = "punct"
                     continue  # выключили пунктуацию
                 elif spacy_model(item[3][0])[0].pos_ == "ADP":
-                    correction["subtype"] = "extra prep"
+                    correction["subtype"] = "extra preposition"
                     correction["explanation"] = "You used an extra preposition. "
                 else:
                     logger.info(f"reason: {5}")
@@ -379,44 +379,44 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     logger.info(f"reason: {6}")
                     logger.info(f"normalized_error: {normalized_error}")
                     # logger.info(f"normalized_correction: {normalized_correction}")
-                    correction["subtype"] = "tense"
+                    correction["subtype"] = "verb tense"
                     correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]
             correction["endSelection"] = word_offsets[end - 1][1]
             correction["correction"] = md.detokenize(item[4])
         elif "insert" == item[0]:
             normalized_correction = item[4][0].lower().translate(str.maketrans("", "", punct))
-            correction["type"] = "gram"
+            correction["type"] = "grammatical"
             after_pos = "".join([token.pos_ for token in spacy_model(normalized_correction)])
             if item[4][0] in punct and item[2][0] != len(before):
                 start -= 1
                 if before[start].lower() in FP_PUNCT_WORDS:
                     continue
                 item[4].insert(0, before[start])
-                correction["type"] = "punct"
+                correction["type"] = "punctuation"
                 continue  # выключили пунктуацию
             elif normalized_correction in ENG_ARTICLES:
                 item[4].append(before[end])
                 end += 1
                 if item[4][-1] in ENG_ADJ_COMP or item[4][-1].endswith("est"):
-                    correction["subtype"] = "compar"
+                    correction["subtype"] = "comparative form"
                     correction["explanation"] = "form of the degree of comparison"
                 else:
-                    correction["subtype"] = "skip art"
+                    correction["subtype"] = "skipped article"
                     correction["explanation"] = f"""You skipped the article "{normalized_correction}". """
             elif after_pos == "ADP":
                 start -= 1
                 item[4].insert(0, before[start])
-                correction["subtype"] = "skip prep"
+                correction["subtype"] = "skipped preposition"
                 correction["explanation"] = f"""You skipped the preposition "{normalized_correction}". """
             else:
-                correction["type"] = "gram"
+                correction["type"] = "grammatical"
                 if i + 1 < len(opcodes) and item[3:][::-1] == opcodes[i + 1][3:]:
                     skip = True
                     _start, _end = opcodes[i + 1][1]
                     item[4].extend(before[end:_start])
                     end = _end
-                    correction["subtype"] = "svo"
+                    correction["subtype"] = "word order"
                     correction["explanation"] = "word order"
                 elif ("ROOT" in [x.dep_ for x in after_parsed[item[2][0] : item[2][1] + 1]]) or (
                     "nsubj" in [x.dep_ for x in after_parsed[item[2][0] : item[2][1] + 1]]
@@ -425,7 +425,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         continue
                     item[4].append(before[end])
                     end += 1
-                    correction["subtype"] = "omis"
+                    correction["subtype"] = "omissed word"
                     correction["explanation"] = f"""You missed the word "{normalized_correction}". """
                 else:
                     start -= 1
@@ -433,7 +433,7 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     logger.info(f"reason: {7}")
                     # logger.info(f"normalized_error: {normalized_error}")
                     logger.info(f"normalized_correction: {normalized_correction}")
-                    correction["subtype"] = "tense"
+                    correction["subtype"] = "verb tense"
                     correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]
             if end > start:

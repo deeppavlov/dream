@@ -108,16 +108,15 @@ def feedback_response():
             """That is why it would be more accurate to say "X". """,
         ]
         unique_subtypes = [
-            "context",
-            "extra art",
-            "extra prep",
-            "skip art",
-            "skip prep",
-            "omis",
+            "usage of a word",
+            "extra article",
+            "extra preposition",
+            "skipped article",
+            "skipped preposition",
+            "omissed word",
             "extra word",
-            "wrong_word",
-            "reason_3",
-            "need_art",
+            "other",
+            "did not use the article",
         ]
         feedback_sents = "You did good, but you made a few mistakes I'd love to discuss: \n\n"
         for state in mistakes_state["state"]:
