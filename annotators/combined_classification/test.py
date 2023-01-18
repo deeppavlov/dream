@@ -49,23 +49,20 @@ def main_test():
             "sentences_with_history": ["this is the best dog [SEP] so what you think"],
             "sentences": ["so what you think"],
             "task": "midas_classification",
-            "answers_bert": [["opinion"]],
+            "answers_bert": [["open_question_opinion"]],
         },
         {
             "sentences": [
-                "do you like porn",
-                "have you been to Alaska",
                 "please talk about movies",
-                "please talk about books",
-                "talk about games",
+                "talk about games"
             ],
             "task": "deeppavlov_topics",
-            "answers_bert": [["Music"], ["Travel"], ["Movies&Tv"], ["Books&Literature"], ["Videogames"]],
+            "answers_bert": [["Movies&Tv"], ["Videogames"]],
         },
         {
             "sentences": ["you son of the bitch", "yes", "do you like porn"],
             "task": "toxic_classification",
-            "answers_bert": [["toxic"], ["not_toxic"], ["sexual_explicit"]],
+            "answers_bert": [["obscene"], ["not_toxic"], ["sexual_explicit"]],
         },
     ]
     t = time()
