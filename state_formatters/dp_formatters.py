@@ -560,11 +560,14 @@ def ner_formatter_dialog(dialog: Dict):
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
-    if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
-        return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+    if len(dialog["bot_utterances"]):
+        if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
+            return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+        else:
+            segments = [dialog["bot_utterances"][-1]["text"]]
+            return [{"last_utterances": [segments]}]
     else:
-        segments = [dialog["bot_utterances"][-1]["text"]]
-        return [{"last_utterances": [segments]}]
+        return [{"last_utterances": [[""]]}]
 
 
 def wp_formatter_dialog(dialog: Dict):
