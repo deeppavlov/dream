@@ -24,17 +24,32 @@ logger = logging.getLogger(__name__)
 def set_mistakes_review():
     def set_mistakes_review_handler(ctx: Context, actor: Actor):
         if not ctx.validation:
+            review = {}
             counter_mistakes_answers = 0
             human_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
             attributes = human_utterances.get("user", {}).get("attributes", {})
+            practice_skill_state = attributes.get("dff_language_practice_skill_state", {})
             mistakes_state = attributes.get("language_mistakes", "")
+            user_utterances = attributes.get("user_utterances", [])
+            try:
+                scenario_name = practice_skill_state["shared_memory"]["dialog_script_name"]
+                vocabulary_reply, percentage = loc_rsp.check_vocabulary(user_utterances, scenario_name)
+            except Exception:
+                vocabulary_reply = ""
+
             if mistakes_state == "":
-                ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
+                reply = "Your answers were perfect! Nice work!" + "\n\n" + vocabulary_reply
+                review["text"] = reply
+                review["pecentage_vocabulary_used"] = percentage
+                ctx.misc["agent"]["response"].update({"mistakes_review": review})
                 return ctx
 
             mistakes_state = json.loads(mistakes_state)
             if mistakes_state["state"] == []:
-                ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
+                reply = "Your answers were perfect! Nice work!" + "\n\n" + vocabulary_reply
+                review["text"] = reply
+                review["pecentage_vocabulary_used"] = percentage
+                ctx.misc["agent"]["response"].update({"mistakes_review": review})
                 return ctx
 
             logger.info(f"mistakes_state = {mistakes_state}")
@@ -111,10 +126,17 @@ def set_mistakes_review():
                 feedback_sents += "\n\n"
 
             if counter_mistakes_answers == 0:
-                ctx.misc["agent"]["response"].update({"mistakes_review": "Your answers were perfect! Nice work!"})
+                reply = "Your answers were perfect! Nice work!" + "\n\n" + vocabulary_reply
+                review["text"] = reply
+                review["pecentage_vocabulary_used"] = percentage
+                ctx.misc["agent"]["response"].update({"mistakes_review": review})
                 return ctx
 
-            ctx.misc["agent"]["response"].update({"mistakes_review": feedback_sents})
+            reply = feedback_sents + vocabulary_reply
+            review["text"] = reply
+            review["pecentage_vocabulary_used"] = percentage
+            ctx.misc["agent"]["response"].update({"mistakes_review": review})
+
         return ctx
 
     return set_mistakes_review_handler

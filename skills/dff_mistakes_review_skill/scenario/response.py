@@ -66,7 +66,12 @@ def check_vocabulary(user_utterances: list, scenario_name: str) -> str:
             reply += """\n\nTo make your speech sound even more advanced you could also use the following phrases:\n"""
             reply += "\n".join(not_used_phrases)
 
-    return reply
+    if len(used_phrases) == 0:
+        percent_expected_lang_used = 0
+    else:
+        percent_expected_lang_used = round(((len(used_phrases) / len(expected_phrases)) * 100), 2)
+
+    return reply, percent_expected_lang_used
 
 
 def feedback_response():
@@ -79,7 +84,7 @@ def feedback_response():
         user_utterances = attributes.get("user_utterances", [])
         try:
             scenario_name = practice_skill_state["shared_memory"]["dialog_script_name"]
-            vocabulary_reply = check_vocabulary(user_utterances, scenario_name)
+            vocabulary_reply, percentage = check_vocabulary(user_utterances, scenario_name)
         except Exception:
             vocabulary_reply = ""
 
