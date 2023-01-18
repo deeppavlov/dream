@@ -148,6 +148,15 @@ def base_response_selector_formatter_service(payload: List):
             "human_attributes": payload[3],
             "bot_attributes": payload[4],
         }
+    elif len(payload) == 6:
+        return {
+            "skill_name": payload[0],
+            "text": payload[1],
+            "confidence": payload[2],
+            "human_attributes": payload[3],
+            "bot_attributes": payload[4],
+            "attributes": payload[5],
+        }
 
 
 def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -551,11 +560,14 @@ def ner_formatter_dialog(dialog: Dict):
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
-    if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
-        return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+    if len(dialog["bot_utterances"]):
+        if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
+            return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+        else:
+            segments = [dialog["bot_utterances"][-1]["text"]]
+            return [{"last_utterances": [segments]}]
     else:
-        segments = [dialog["bot_utterances"][-1]["text"]]
-        return [{"last_utterances": [segments]}]
+        return [{"last_utterances": [[""]]}]
 
 
 def wp_formatter_dialog(dialog: Dict):
@@ -718,8 +730,8 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
     human_utter_index = len(dialog["human_utterances"]) - 1
     attributes = {"entities": dialog.get("human", {}).get("attributes", {}).get("entities", {})}
 
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=2)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="clean_sent")
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=5, human_last_turns=2)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
 
     # rm all execpt human_utterances, bot_utterances
     # we need only: text, annotations, active_skill

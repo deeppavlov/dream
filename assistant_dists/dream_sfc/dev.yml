@@ -207,7 +207,8 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing:/src"
+      - "./annotators/spelling_preprocessing_dp:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8074:8074
   dff-grounding-skill:
@@ -395,12 +396,14 @@ services:
     volumes:
       - "./annotators/speech_function_classifier:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8108:8108
   speech-function-predictor:
     volumes:
       - "./annotators/speech_function_predictor:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8107:8107
 version: "3.7"

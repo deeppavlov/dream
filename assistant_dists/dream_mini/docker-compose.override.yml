@@ -6,6 +6,10 @@ services:
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
 
   dff-program-y-skill:
     env_file: [.env]
@@ -127,16 +131,23 @@ services:
   spelling-preprocessing:
     env_file: [.env]
     build:
-      context: ./annotators/spelling_preprocessing/
+      args:
+        CONFIG: brillmoore_wikitypos_en.json
+        PORT: 8074
+        SRC_DIR: annotators/spelling_preprocessing_dp
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        LANGUAGE: EN
+      context: ./
+      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 6.5G
         reservations:
-          memory: 50M
+          memory: 6.5G
 
   dialogpt:
     env_file: [ .env ]

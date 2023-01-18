@@ -136,7 +136,7 @@ def preprocess(text):
     return text.strip()
 
 
-@app.route("/response", methods=["POST"])
+@app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
 

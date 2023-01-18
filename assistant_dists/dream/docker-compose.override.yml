@@ -21,6 +21,11 @@ services:
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, dff-template-skill:8120, seq2seq-persona-based:8140"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+
   convers-evaluator-annotator:
     env_file: [ .env ]
     build:
@@ -615,16 +620,23 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
-      context: ./annotators/spelling_preprocessing/
+      args:
+        CONFIG: brillmoore_wikitypos_en.json
+        PORT: 8074
+        SRC_DIR: annotators/spelling_preprocessing_dp
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        LANGUAGE: EN
+      context: ./
+      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 6.5G
         reservations:
-          memory: 50M
+          memory: 6.5G
 
   dff-grounding-skill:
     env_file: [ .env ]

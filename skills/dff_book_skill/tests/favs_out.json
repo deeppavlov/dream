@@ -1,6 +1,6 @@
 [
     [
-        "71 years  ago! I didn't exist at that time.",
+        "72 years  ago! I didn't exist at that time.",
         0.85,
         {
             "dff_book_skill_state": {
@@ -63,7 +63,7 @@
                     },
                     "responses": {
                         "7": "I've read it. It's an amazing book! Do you want to know when it was first published?",
-                        "8": "71 years  ago! I didn't exist at that time."
+                        "8": "72 years  ago! I didn't exist at that time."
                     },
                     "misc": {
                         "flags": {
@@ -71,7 +71,7 @@
                         },
                         "slots": {
                             "cur_book_about": "The novel \"The catcher in the rye\" tells the story of a teenager who has been kicked out of a boarding school. This is my favourite story, it is truly fascinating.",
-                            "cur_book_ago": "71 years ",
+                            "cur_book_ago": "72 years ",
                             "cur_book_author": "Jerome Salinger",
                             "cur_book_name": "The Catcher in the Rye",
                             "cur_book_plain": "Q183883",
