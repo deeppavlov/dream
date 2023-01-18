@@ -61,10 +61,14 @@ This is a generative-based socialbot that uses [English DialoGPT model](https://
 Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_russian)
 
-### Generative Prompt-Based Dream
+### Prompt-Based Dream Distributions
 
-Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts), and the provided information will be used in LLM-powered reply generation as a prompt.
-[Link to the distribution.](https://github.com/deeppavlov/dream/assistant_dists/dream_generative_prompt_based)
+Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. 
+This is a generative-based socialbot that uses large language models to generate most of the responses. 
+You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts),
+add prompt names to `PROMPTS_TO_CONSIDER` (comma-separated),
+and the provided information will be used in LLM-powered reply generation as a prompt.
+[Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_prompt_based)
 
 # Quick Start
 
@@ -123,14 +127,7 @@ Refer to the [components](#components) section to see estimated requirements.
 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml up --build
 ```
 
-#### **Generative Prompt-Based Dream**
-
-```
-docker-compose -f docker-compose.yml -f assistant_dists/dream_generative_prompt_based/docker-compose.override.yml -f assistant_dists/dream_generative_prompt_based/dev.yml up --build 
-```
-
-We've also included a config with GPU allocations for multi-GPU environments.
-
+We've also included a config with GPU allocations for multi-GPU environments:
 ```
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml -f assistant_dists/dream/test.yml up
 ```
@@ -140,6 +137,13 @@ When you need to restart particular docker container without re-building (make s
 ```
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml restart container-name
 ```
+
+#### **Prompt-Based Dream**
+
+```
+docker-compose -f docker-compose.yml -f assistant_dists/dream_prompt_based/docker-compose.override.yml -f assistant_dists/dream_prompt_based/dev.yml -f assistant_dists/dream_prompt_based/proxy.yml -f assistant_dists/dream_prompt_based/dream_persona.yml -f assistant_dists/dream_prompt_based/dream_persona_dev.yml -f assistant_dists/dream_prompt_based/transformers_lm.yml -f assistant_dists/dream_prompt_based/transformers_lm_dev.yml up --build```
+
+We've also included a config with GPU allocations for multi-GPU environments.
 
 ### Let's chat
 
