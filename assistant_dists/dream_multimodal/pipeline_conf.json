@@ -124,7 +124,7 @@
                     "timeout": 3,
                     "url": "http://image-captioning:8123/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:image_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:image_captioning_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             }
@@ -200,7 +200,7 @@
             "dff_image_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 5,
                     "url": "http://dff-image-skill:8188/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_image_skill_formatter",
@@ -228,7 +228,7 @@
             "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://sentence-ranker:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",

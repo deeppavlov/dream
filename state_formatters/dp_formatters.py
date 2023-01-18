@@ -491,12 +491,10 @@ def skill_with_attributes_formatter_service(payload: List):
     """
     Formatter should use `"state_manager_method": "add_hypothesis"` in config!!!
     Because it returns list of hypothesis even if the payload is returned for one sample!
-
     Args:
         payload: if one sample, list of the following structure:
             (text, confidence, ^human_attributes, ^bot_attributes, attributes) [by ^ marked optional elements]
                 if several hypothesis, list of lists of the above structure
-
     Returns:
         list of dictionaries of the following structure:
             {"text": text, "confidence": confidence_value,
@@ -560,11 +558,14 @@ def ner_formatter_dialog(dialog: Dict):
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
-    if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
-        return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+    if len(dialog["bot_utterances"]):
+        if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
+            return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+        else:
+            segments = [dialog["bot_utterances"][-1]["text"]]
+            return [{"last_utterances": [segments]}]
     else:
-        segments = [dialog["bot_utterances"][-1]["text"]]
-        return [{"last_utterances": [segments]}]
+        return [{"last_utterances": [[""]]}]
 
 
 def wp_formatter_dialog(dialog: Dict):
@@ -741,15 +742,6 @@ def entity_storer_formatter(dialog: Dict) -> List[Dict]:
     return [{"human_utter_indexes": [human_utter_index], "dialogs": [new_dialog]}]
 
 
-def image_formatter_service(dialog: Dict) -> List[Dict]:
-    # Used by: image_captioning
-    return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
-
-
-def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_image_skill")
-
-
 def dff_friendship_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_friendship_skill")
 
@@ -880,6 +872,10 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
 
 
+def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_image_skill")
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
@@ -1002,3 +998,7 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
     return [{"contexts": contexts}]
+
+def image_captioning_formatter(dialog: Dict) -> List[Dict]:
+    # Used by: image_captioning
+    return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
