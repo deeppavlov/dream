@@ -9,9 +9,11 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 from common.utils import combined_classes
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
-
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
+app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
 
