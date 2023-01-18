@@ -11,25 +11,17 @@ RUN pip install -r requirements.txt
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
-
-ARG LANGUAGE=EN
-ENV LANGUAGE ${LANGUAGE}
-
-ARG GENERATIVE_SERVICE_URL
-ENV GENERATIVE_SERVICE_URL ${GENERATIVE_SERVICE_URL}
-
-COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
-
-COPY skills/${SERVICE_NAME}/ ./
-COPY ./common/ ./common/
-
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
+COPY skills/dff_template_prompt_based_skill/requirements.txt .
+RUN pip install -r requirements.txt
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+
+COPY skills/dff_template_prompt_based_skill/ ./
+COPY ./common/ ./common/
+
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
-
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}

@@ -1,13 +1,14 @@
+import json
 import logging
+import re
 import requests
 import time
 from os import getenv, listdir
-import json
+from pathlib import Path
 
 import numpy as np
 import sentry_sdk
 from flask import Flask, request, jsonify
-import re
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -17,13 +18,21 @@ app = Flask(__name__)
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 N_SENTENCES_TO_RETURN = int(getenv("N_SENTENCES_TO_RETURN"))
+# list of string names of prompts from common/prompts
+PROMPTS_TO_CONSIDER = getenv("PROMPTS_TO_CONSIDER", "").split(",")
+logger.info(f"prompt-selector considered prompts: {PROMPTS_TO_CONSIDER}")
 PROMPTS = []
+PROMPTS_NAMES = []
 for filename in listdir("common/prompts"):
-    data = json.load(open("common/prompts/" + filename, "r"))
-    PROMPTS.append(data["prompt"])
+    prompt_name = Path(filename).stem
+    if ".json" in filename and prompt_name in PROMPTS_TO_CONSIDER:
+        data = json.load(open(f"common/prompts/{filename}", "r"))
+        PROMPTS.append(data["prompt"])
+        PROMPTS_NAMES.append(prompt_name)
 
 
 def get_result(request, questions_only=False):
+    global PROMPTS, PROMPTS_NAMES
     st_time = time.time()
     contexts = request.json["contexts"]
     result = []
@@ -50,17 +59,18 @@ def get_result(request, questions_only=False):
             curr_ids = np.where(context_ids == i)[0]
             most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
             curr_result = {
-                "prompt": [PROMPTS[_id] for _id in most_relevant_sent_ids],
+                "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
                 "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
             }
             result += [curr_result]
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = [{"prompt": [], "max_similarity": 0.0}] * len(contexts)
+        result = [{"prompts": [], "max_similarity": 0.0}] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"propmt-selector exec time: {total_time:.3f}s")
+    logger.info(f"prompt-selector exec time: {total_time:.3f}s")
+    logger.info(f"prompt-selector result: {result}")
     return result
 
 

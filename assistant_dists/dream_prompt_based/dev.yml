@@ -33,19 +33,6 @@ services:
       - "./annotators/combined_classification:/src"
     ports:
       - 8087:8087
-  transformers-lm:
-    volumes:
-      - "./services/transformers_lm:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8126:8126
-  dff-generative-prompt-based-skill:
-    volumes:
-      - "./skills/dff_generative_prompt_based_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8134:8134
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
