@@ -977,11 +977,9 @@ def topic_recommendation_formatter(dialog: Dict):
 
 def midas_predictor_formatter(dialog: Dict):
     annotations = dialog["human_utterances"][-1].get("annotations", {})
-    try:
-        midas_dist = annotations.get("combined_classification", [{}])[-1]["midas_classification"]
-    except Exception as e:
-        logger.exception(f'Exception {e} in {annotations}')
-        raise e
+    if "combined_classification" in annotations:  # use combined annotations
+        annotations = annotations["combined_classification"]
+    midas_dist = annotations.get("midas_classification", [{}])[-1]
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
 
 
