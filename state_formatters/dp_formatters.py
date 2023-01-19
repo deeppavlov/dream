@@ -997,6 +997,7 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
     return [{"contexts": contexts}]
 
+
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
