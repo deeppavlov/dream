@@ -3,6 +3,7 @@ import os
 import random
 import json
 from collections import Counter
+import pandas as pd
 
 from . import response as loc_rsp
 
@@ -11,15 +12,31 @@ from df_engine.core import Context, Actor
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# def set_mistakes_review():
-#     def set_mistakes_review_handler(ctx: Context, actor: Actor):
-#         if not ctx.validation:
-#             description = loc_rsp.feedback_response()
-#             logger.info(f"""description: {description}""")
-#             ctx.misc["agent"]["response"].update({"mistakes_review": description})
-#         return ctx
 
-#     return set_mistakes_review_handler
+def check_cerf(lemmas, lang="british"):
+    user_cerf = {}
+    if lang == "british":
+        df = pd.read_csv("/src/common/dream_tutor/cerf_british.tsv", sep="\t")
+    else:
+        df = pd.read_csv("/src/common/dream_tutor/cerf_american.tsv", sep="\t")
+
+    counter = 0
+    words_cerf = list(df.word)
+    for lemma in lemmas:
+        if lemma in words_cerf:
+            counter += 1
+            df_word = df[df["word"] == lemma]
+            cerf = list(df_word["cerf"])[0]
+            if cerf not in user_cerf.keys():
+                user_cerf[cerf] = [lemma]
+            else:
+                user_cerf[cerf].append(lemma)
+
+    count_cerf = {}
+    for key, value in user_cerf.items():
+        count_cerf[key] = round((len(value) / counter) * 100, 2)
+
+    return user_cerf, count_cerf
 
 
 def set_mistakes_review():
@@ -33,9 +50,13 @@ def set_mistakes_review():
             practice_skill_state = attributes.get("dff_language_practice_skill_state", {})
             mistakes_state = attributes.get("language_mistakes", "")
             user_utterances = attributes.get("user_utterances", [])
+            lemmatized_user_utt = loc_rsp.lemmatize_utt(user_utterances)
+            user_cerf, count_cerf = check_cerf(lemmatized_user_utt)
+            review["vocabulary_cerf_percentages"] = count_cerf
+            review["vocabulary_by_cerf"] = user_cerf
             try:
                 scenario_name = practice_skill_state["shared_memory"]["dialog_script_name"]
-                vocabulary_reply, percentage = loc_rsp.check_vocabulary(user_utterances, scenario_name)
+                vocabulary_reply, percentage = loc_rsp.check_vocabulary(lemmatized_user_utt, scenario_name)
             except Exception:
                 vocabulary_reply = ""
 

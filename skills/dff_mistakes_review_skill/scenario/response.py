@@ -19,11 +19,16 @@ def example_response(reply: str):
     return example_response_handler
 
 
-def check_vocabulary(user_utterances: list, scenario_name: str) -> str:
-    scenario = json.load(open(f"data/{scenario_name}.json"))
+def lemmatize_utt(user_utterances: list):
     joined_utt = " ".join(user_utterances).lower()
     doc_utt = load_model(joined_utt)
-    lemmatized_utt = " ".join([token.lemma_ for token in doc_utt])
+    lemmas = [token.lemma_ for token in doc_utt]
+    return lemmas
+
+
+def check_vocabulary(user_utterances_lemmatized: list, scenario_name: str) -> str:
+    scenario = json.load(open(f"data/{scenario_name}.json"))
+    lemmatized_utt = " ".join(user_utterances_lemmatized)
     expected_phrases = scenario["expected_language"]
     used_phrases = []
     not_used_phrases = []
@@ -82,9 +87,10 @@ def feedback_response():
         practice_skill_state = attributes.get("dff_language_practice_skill_state", {})
         mistakes_state = attributes.get("language_mistakes", "")
         user_utterances = attributes.get("user_utterances", [])
+        lemmatized_user_utt = lemmatize_utt(user_utterances)
         try:
             scenario_name = practice_skill_state["shared_memory"]["dialog_script_name"]
-            vocabulary_reply, percentage = check_vocabulary(user_utterances, scenario_name)
+            vocabulary_reply, percentage = check_vocabulary(lemmatized_user_utt, scenario_name)
         except Exception:
             vocabulary_reply = ""
 
