@@ -344,7 +344,7 @@
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
+                    "timeout": 2,
                     "url": "http://combined-classification:8087/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
