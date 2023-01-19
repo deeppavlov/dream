@@ -198,7 +198,7 @@ def name_scenario(utt, user_id):
         logger.info('No names were found.')
         return {}
     logger.info(f'I found a name: {names[0]}')
-    existing_ids = [user[0].get("Id") for user in graph.search_for_entities("User")]
+    existing_ids = [entity["@id"] for entity in graph.get_all_entities() if entity["@type"]=="User"]
     if user_id not in existing_ids:
         # let's hope user is telling us their name if they're new here
         # actually that's an unreal situation -- delete this part
