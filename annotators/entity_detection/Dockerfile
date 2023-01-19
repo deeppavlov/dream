@@ -21,7 +21,7 @@ ENV PORT=$PORT
 COPY ./annotators/entity_detection/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-RUN python -m spacy download en_core_web_sm
+RUN pip install pyopenssl==23.0.0 && python -m spacy download en_core_web_sm
 
 COPY $SRC_DIR /src
 

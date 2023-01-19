@@ -22,6 +22,11 @@ services:
           midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, property-extraction:8129,
           dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+
   convers-evaluator-annotator:
     env_file: [.env]
     build:

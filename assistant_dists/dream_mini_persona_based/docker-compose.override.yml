@@ -7,6 +7,10 @@ services:
           spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, dialogpt-persona-based:8131,
           relative-persona-extractor:8133"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
 
   midas-classification:
     env_file: [.env]
