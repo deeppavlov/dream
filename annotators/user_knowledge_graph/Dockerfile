@@ -9,11 +9,12 @@ RUN pip install -r requirements.txt
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes
 
+RUN pip install -U pip wheel setuptools
+
 COPY annotators/user_knowledge_graph/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet
-RUN pip install git+https://github.com/deeppavlov/custom_kg_svc
-
+RUN pip install git+https://github.com/deeppavlov/custom_kg_svc.git@test/custom_el
 COPY annotators/user_knowledge_graph/ ./
 
 ARG PORT
