@@ -423,7 +423,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.midas_classification",
                     "annotators.combined_classification"
                 ]
             },

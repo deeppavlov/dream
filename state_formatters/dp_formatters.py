@@ -976,8 +976,8 @@ def topic_recommendation_formatter(dialog: Dict):
 
 
 def midas_predictor_formatter(dialog: Dict):
-    midas_dist = dialog["human_utterances"][-1].get("annotations", {}).get("midas_classification", [{}])[-1]
-
+    annotations = dialog["human_utterances"][-1].get("annotations", {})
+    midas_dist = annotations.get("combined_classification", [{}])[-1]["midas_classification"]
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
 
 
