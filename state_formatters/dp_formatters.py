@@ -979,7 +979,7 @@ def midas_predictor_formatter(dialog: Dict):
     annotations = dialog["human_utterances"][-1].get("annotations", {})
     if "combined_classification" in annotations:  # use combined annotations
         annotations = annotations["combined_classification"]
-    midas_dist = annotations.get("midas_classification", [{}])[-1]
+    midas_dist = annotations.get("midas_classification", {})
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
 
 
