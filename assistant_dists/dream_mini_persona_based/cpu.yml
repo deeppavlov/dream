@@ -12,10 +12,10 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  dialogpt-persona-based:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
   midas-classification:
     environment:
+      CUDA_VISIBLE_DEVICES: ""
+  seq2seq-persona-based:
+    environment:
+      DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
