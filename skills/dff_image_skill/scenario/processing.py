@@ -13,6 +13,7 @@ lmtzr = nltk.WordNetLemmatizer()
 
 
 def get_all_possible_entities(entity_name):
+    entities = []
     ppl = [
         "woman",
         "women",
@@ -42,6 +43,8 @@ def get_all_possible_entities(entity_name):
         )
         entities = [ent.replace("_", " ") for ent in entities]
         entities = [ent for ent in entities if ent not in ppl]
+    else:
+        return entities
     return entities
 
 
@@ -60,7 +63,7 @@ def extract_verb_from_sentence(sentence):
     verbs = list(filter(lambda x: x[1] in ["VB", "VBP", "VBZ", "VBD", "VBN", "VBG"], pos_tagged))
     try:
         if len(verbs) > 0:
-            return random.choice(list(verbs))[0]
+            return random.choice(verbs)[0]
     except IndexError:
         return ""
     return ""
