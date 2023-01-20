@@ -51,10 +51,9 @@ rel_kinds_dict = {
 DB = "test"
 TEAM = "yashkens|c77b"
 
-graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB)
+graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password="G5KMuz9dF1K2mD5cPz726oazSJJtkFLw")
 
-graph.ontology.create_entity_kind("Abstract")
-graph.ontology.create_property_kind_of_entity_kind("Abstract", "Target_kind", str)
+graph.drop_database()
 
 logger.info('Graph Loaded!')
 
@@ -63,7 +62,7 @@ def add_name_property(graph, user_id, names):
     """Adds User Name property."""
     graph.create_or_update_property_of_entity(
         id_=user_id,
-        property_kind="name",
+        property_kind="Name",
         property_value=names[0],
     )
     logger.info(f"I already have you in the graph! Updating your property name to {names[0]}!")
@@ -73,7 +72,7 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
                          existing_ids):
     """Creates an entity and a relation between it and the User from property extraction service."""
     init_entity_kind = init_entity_kind.replace('_', '').title()
-    graph.ontology.create_property_kinds_of_entity_kinds([init_entity_kind], [["name"]])
+    graph.ontology.create_property_kind_of_entity_kind(init_entity_kind, "Name")
 
     logger.info(f"add_any_relationship, rel_type: {rel_type} --- entity_name: {entity_name} --- "
                 f"inflected: {inflect.singular_noun(entity_name)}")
@@ -85,16 +84,7 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
                                  "favorite_food", "like_food", "favorite_drink", "like_drink", "favorite_sport",
                                  "like_sports"} \
             and not any([f" {word} {entity_name}" in text for word in ["the", "my", "his", "her"]]):
-        if f"Abstract/{init_entity_kind}" not in existing_ids:
-            graph.create_entities(
-                entity_kinds=["Abstract"],
-                entity_ids=[f"Abstract/{init_entity_kind}"],
-                property_kinds=[["Target_kind"]],
-                property_values=[[init_entity_kind]]
-            )
-            logger.info(f"adding abstract kind --- {init_entity_kind} --- {entity_name}")
         entity_kind = "Abstract"
-        graph.ontology.create_property_kinds_of_entity_kinds(["Abstract"], [["name"]])
         new_entity_id = f"Abstract/{init_entity_kind}"
         inflect_entity_name = inflect.singular_noun(entity_name)
         if inflect_entity_name:
@@ -113,15 +103,12 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
             new_entity_id = str(uuid.uuid4())
             new_entity_id = entity_kind + '/' + new_entity_id
             logger.info(f"Entity type to add: {entity_kind}")
-            graph.ontology.create_entity_kinds(entity_kinds=[entity_kind], parents=[None])
-            graph.create_entity(entity_kind, new_entity_id, ["name"], [entity_name])
+            graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
+            graph.create_entity(entity_kind, new_entity_id, ["Name"], [entity_name])
             logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
 
     logger.info(f"define rel_name, entity_kind {entity_kind} --- init_entity_kind {init_entity_kind}")
-    if entity_kind == "Abstract":
-        rel_name = rel_type.split("_")[0] + "_Abstract"
-    else:
-        rel_name = rel_type + f"_{entity_kind.lower()}"
+    rel_name = rel_type
 
     if (user_id, rel_name, new_entity_id) in ex_triplets:
         logger.info(f"triplet exists: {(rel_name, new_entity_id)}")
@@ -138,7 +125,7 @@ def add_any_property(graph, user_id, property_type, property_value):
     if property_type == "<blank>":
         property_type = "other"
     property_type = '_'.join(property_type.split(' '))
-    graph.ontology.create_property_kinds_of_entity_kinds(["User"], [[property_type]])
+    graph.ontology.create_property_kind_of_entity_kind("User", [property_type])
     graph.create_or_update_property_of_entity(
         entity_id=user_id,
         property_kind=property_type,
@@ -198,17 +185,17 @@ def name_scenario(utt, user_id):
         logger.info('No names were found.')
         return {}
     logger.info(f'I found a name: {names[0]}')
-    existing_ids = [user[0].get("Id") for user in graph.search_for_entities("User")]
+    existing_ids = [entity["@id"] for entity in graph.get_all_entities() if entity["@type"]=="User"]
     if user_id not in existing_ids:
         # let's hope user is telling us their name if they're new here
         # actually that's an unreal situation -- delete this part
         add_name_property(graph, user_id, names)
-        result = {'subject': 'user', 'property': 'name', 'object': names[0]}
+        result = {'subject': 'user', 'property': 'Name', 'object': names[0]}
     elif my_name_is_pattern.search(utt.get("text", "")):
         # if they're not new, search for pattern
         logger.info('I am in my name is patter if')
         add_name_property(graph, user_id, names)
-        result = {'subject': 'user', 'property': 'name', 'object': names[0]}
+        result = {'subject': 'user', 'property': 'Name', 'object': names[0]}
     else:
         logger.info("You are telling me someone's name, but I guess it's not yours!")
         result = {}
@@ -254,6 +241,8 @@ def get_result(request):
                     kg_parser_annotations.append([user_id, rel, obj])
         logger.info(f"User with id {user_id} already exists!")
     else:
+        if len(graph.ontology.get_entity_kind("User")) == 1:
+            graph.ontology.create_entity_kind("User")
         graph.create_entity("User", user_id, [], [])
         logger.info(f"Created User with id: {user_id}")
 
@@ -276,14 +265,14 @@ def get_result(request):
 
     substr_list, ids_list, tags_list = [], [], []
     for entity in all_entities_new:
-        if "name" in entity:
-            substr_list.append(entity["name"])
+        if "Name" in entity:
+            substr_list.append(entity["Name"])
             ids_list.append(entity["@id"])
             tags_list.append(entity["@type"])
     if name_result:
         substr_list.append(name_result["object"])
         ids_list.append(user_id)
-        tags_list.append("name")
+        tags_list.append("Name")
     if substr_list:
         requests.post(CUSTOM_EL_ADD, json={"entity_info": {"entity_substr": substr_list,
                                                            "entity_ids": ids_list, "tags": tags_list}})
