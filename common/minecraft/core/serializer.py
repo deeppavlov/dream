@@ -31,8 +31,6 @@ class CommandBuffer(NamedTuple):
         self.response.append(kwargs.get("response"))
         self.coords.append(kwargs.get("coords"))
 
-
-
     def to_json(self, logfile: Optional[Path] = None) -> str:
         json_str = json.dumps(self._asdict(), indent = 4)
         print(json_str)
