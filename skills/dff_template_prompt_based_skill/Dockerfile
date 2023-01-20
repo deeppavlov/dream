@@ -14,11 +14,11 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-COPY skills/dff_template_prompt_based_skill/requirements.txt .
+COPY skills/dff_template_prompted_skill/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
-COPY skills/dff_template_prompt_based_skill/ ./
+COPY skills/dff_template_prompted_skill/ ./
 COPY ./common/ ./common/
 
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy

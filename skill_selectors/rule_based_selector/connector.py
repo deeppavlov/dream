@@ -279,7 +279,7 @@ class RuleBasedSkillSelectorConnector:
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
             if ranged_prompts:
                 for prompt_name in ranged_prompts:
-                    skills_for_uttr.append(f"dff_{prompt_name}_prompt_based_skill")
+                    skills_for_uttr.append(f"dff_{prompt_name}_prompted_skill")
 
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time

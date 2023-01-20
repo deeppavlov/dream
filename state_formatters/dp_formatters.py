@@ -935,14 +935,14 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
 
 
-def dff_dream_persona_prompt_based_skill_formatter(dialog):
+def dff_dream_persona_prompted_skill_formatter(dialog):
     return utils.dff_formatter(
-        dialog, "dff_dream_persona_prompt_based_skill",
+        dialog, "dff_dream_persona_prompted_skill",
         types_utterances=["human_utterances", "bot_utterances", "utterances"]
     )
 
 
-def dff_prompt_based_skill_formatter(dialog, skill_name=None):
+def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog, skill_name, types_utterances=["human_utterances", "bot_utterances", "utterances"]
     )

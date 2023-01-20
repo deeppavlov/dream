@@ -47,7 +47,7 @@
                         "attributes": {
                             "disliked_skills": [],
                             "age_group": "",
-                            "dff_template_prompt_based_skill_state": {
+                            "dff_template_prompted_skill_state": {
                                 "context": {
                                     "actor_state": {},
                                     "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
@@ -192,7 +192,7 @@
                         "attributes": {
                             "disliked_skills": [],
                             "age_group": "",
-                            "dff_template_prompt_based_skill_state": {
+                            "dff_template_prompted_skill_state": {
                                 "context": {
                                     "actor_state": {},
                                     "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
@@ -310,7 +310,7 @@
                             ]
                         }
                     },
-                    "active_skill": "dff_template_prompt_based_skill",
+                    "active_skill": "dff_template_prompted_skill",
                     "user": {
                         "id": "63ac19d2a05153525ec4736e",
                         "persona": {},
@@ -321,7 +321,7 @@
             ]
         }
     ],
-    "dff_template_prompt_based_skill_state_batch": [
+    "dff_template_prompted_skill_state_batch": [
         {
             "context": {
                 "actor_state": {},

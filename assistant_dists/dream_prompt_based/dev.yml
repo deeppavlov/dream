@@ -52,9 +52,9 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8130:8130
-  dff-dream-persona-prompt-based-skill:
+  dff-dream-persona-prompted-skill:
     volumes:
-      - "./skills/dff_template_prompt_based_skill:/src"
+      - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
       - 8134:8134

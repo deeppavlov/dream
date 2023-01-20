@@ -61,14 +61,14 @@ This is a generative-based socialbot that uses [English DialoGPT model](https://
 Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) to generate most of the responses. It also contains intent catcher and responder components to cover special user requests. 
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_russian)
 
-### Prompt-Based Dream Distributions
+### Prompted Dream Distributions
 
 Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. 
 This is a generative-based socialbot that uses large language models to generate most of the responses. 
 You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts),
 add prompt names to `PROMPTS_TO_CONSIDER` (comma-separated),
 and the provided information will be used in LLM-powered reply generation as a prompt.
-[Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_prompt_based)
+[Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_prompted)
 
 # Quick Start
 
@@ -138,10 +138,10 @@ When you need to restart particular docker container without re-building (make s
 AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.override.yml -f assistant_dists/dream/dev.yml restart container-name
 ```
 
-#### **Prompt-Based Dream**
+#### **Prompted Dream**
 
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream_prompt_based/docker-compose.override.yml -f assistant_dists/dream_prompt_based/dev.yml -f assistant_dists/dream_prompt_based/proxy.yml -f assistant_dists/dream_prompt_based/dream_persona.yml -f assistant_dists/dream_prompt_based/dream_persona_dev.yml -f assistant_dists/dream_prompt_based/transformers_lm.yml -f assistant_dists/dream_prompt_based/transformers_lm_dev.yml up --build```
+docker-compose -f docker-compose.yml -f assistant_dists/dream_prompted/docker-compose.override.yml -f assistant_dists/dream_prompted/dev.yml -f assistant_dists/dream_prompted/proxy.yml -f assistant_dists/dream_prompted/dream_persona.yml -f assistant_dists/dream_prompted/dream_persona_dev.yml -f assistant_dists/dream_prompted/transformers_lm.yml -f assistant_dists/dream_prompted/transformers_lm_dev.yml up --build```
 
 We've also included a config with GPU allocations for multi-GPU environments.
 
@@ -300,7 +300,7 @@ Dream Architecture is presented in the following image:
 | DFF Funfact skill             | 100 MiB RAM               | **[New DFF version]** Tells user fun facts                                                                                                                                                                         |
 | DFF Gaming skill              | 80 MiB RAM                | provides a video games discussion. Gaming Skill is for more general talk about video games                                                                                                                         |
 | DFF Gossip skill              | 95 MiB RAM                | DFF-based skill to discuss other people with news about them                                                                                                                                                       |
-| DFF Generative Prompt-Based skill      | 50 MiB RAM                | **[New DFF version]** DFF-based skill that provides language model generated answers based on specified prompts and the dialog context. The model to be used is specified in GENERATIVE_SERVICE_URL. For example, you may use Transformer LM service. |
+| DFF Generative Prompted skill      | 50 MiB RAM                | **[New DFF version]** DFF-based skill that provides language model generated answers based on specified prompts and the dialog context. The model to be used is specified in GENERATIVE_SERVICE_URL. For example, you may use Transformer LM service. |
 | DFF Grounding skill           | 90 MiB RAM                | **[New DFF version]** DFF-based skill to answer what is the topic of the conversation, to generate acknowledgement, to generate universal responses on some dialog acts by MIDAS                                   |
 | DFF Intent Responder          | 100 MiB RAM               | **[New DFF version]**  provides template-based replies for some of the intents detected by Intent Catcher annotator                                                                                                |
 | DFF Movie skill               | 1.1 GiB RAM               | is implemented using DFF and takes care of the conversations related to movies                                                                                                                                     |
