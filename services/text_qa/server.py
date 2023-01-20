@@ -10,7 +10,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-language = os.getenv("LANGUAGE")
+language = os.getenv("LANGUAGE", "EN")
 config_name = os.getenv("CONFIG")
 
 try:

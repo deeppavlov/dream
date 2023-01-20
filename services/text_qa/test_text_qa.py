@@ -2,7 +2,7 @@ import os
 import requests
 
 
-language = os.getenv("LANGUAGE")
+language = os.getenv("LANGUAGE", "EN")
 
 
 def main():
