@@ -4,8 +4,6 @@
 
 ## What is Dream Prompted distribution
 
-PROMPT SELCTOR!!!
-
 Dream Prompt-based distribution is an example of the prompt-based dialogue system. 
 
 Each Prompt-based Skill utilizes the **same prompt during the whole dialog**!
@@ -16,6 +14,7 @@ It contains the following skills:
 which generates a response to the current dialogue context taking into account the given prompt 
 (the **prompt is the same for all the dialogue steps**).
 
+#### DFF Dream Persona Prompted Skill
 The **DFF Dream Persona Prompted Skill** is a light-weight container sending requests to the generative service 
 which utilizes a neural network for prompt-based generation.
 DFF Dream Persona Prompted Skill accepts two main environmental variables:
@@ -24,6 +23,7 @@ DFF Dream Persona Prompted Skill accepts two main environmental variables:
   The service must utilize the same input-output format as Transformers-LM (`transformers_lm`). 
   * `N_UTTERANCES_CONTEXT` contains lengths of the considered context in terms of number of dialogue utterances.
 
+#### Prompt Selector
 The distribution may contain several Prompt-based skills. Therefore, the **Prompt Selector** component is presented. 
 The Prompt Selector is also a light-weight container utilizing **Sentence Ranker** component 
 (its URL is given in `.env` file as `SENTENCE_RANKER_SERVICE_URL`) to select `N_SENTENCES_TO_RETURN` 
@@ -31,8 +31,12 @@ the most relevant prompts (precisely, it returns ordered list of prompt names) a
 The `,`-joint list of the prompt names to be considered is given as an environmental variable `PROMPTS_TO_CONSIDER`.
 Each considered prompt should be located as `dream/common/prompts/<prompt_name>.json`.
 
-**Important!** If Prompt Selector annotations are detected in the user utterance, the Skill Selector turns on skills with names
-`dff_<prompt_name>_prompted_skill`. Therefore, a prompt name can contain `'_'` but not `'-'`.
+#### Skill Selector
+
+**Important!** If Prompt Selector annotations are detected in the user utterance, 
+the Skill Selector turns on skills with names `dff_<prompt_name>_prompted_skill` for each prompt_name from
+`N_SENTENCES_TO_RETURN`  the most relevant prompts detected by Prompt Selector. 
+Therefore, a prompt name can contain `'_'` but not `'-'`.
 
 ## How to Create a New Prompted Distribution
 
