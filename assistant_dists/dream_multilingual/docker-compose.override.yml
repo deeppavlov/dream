@@ -6,6 +6,10 @@ services:
           gpt2-generator:8132, toxic-classification:8013,
           sentiment-classification:8024, sentence-ranker:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
 
   convers-evaluation-selector:
     env_file: [.env]
