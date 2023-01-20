@@ -580,7 +580,6 @@ services:
     env_file: [ .env ]
     build:
       args:
-        LANGUAGE: EN
         CONFIG: qa_eng.json
         PORT: 8078
       context: services/text_qa
@@ -589,6 +588,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
+      - LANGUAGE=EN
     deploy:
       resources:
         limits:
