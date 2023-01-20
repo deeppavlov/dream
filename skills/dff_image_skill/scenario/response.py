@@ -26,7 +26,9 @@ def animals_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **
                 ]
             )
         else:
+            int_ctx.set_confidence(ctx, actor, 0.85)
             return "Cool! Why did you send me this picture?"
+    int_ctx.set_confidence(ctx, actor, 0.85)
     return "Cool! Why did you send me this picture?"
 
 
@@ -48,7 +50,9 @@ def food_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwa
                 ]
             )
         else:
+            int_ctx.set_confidence(ctx, actor, 0.85)
             return "Cool! Why did you send me this picture?"
+    int_ctx.set_confidence(ctx, actor, 0.85)
     return "Cool! Why did you send me this picture?"
 
 
@@ -65,7 +69,9 @@ def people_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **k
             int_ctx.set_confidence(ctx, actor, 0.85)
             return f"Do you enjoy {verb} with other people?"
         else:
+            int_ctx.set_confidence(ctx, actor, 0.85)
             return "Cool! Why did you send me this picture?"
+    int_ctx.set_confidence(ctx, actor, 0.85)
     return "Cool! Why did you send me this picture?"
 
 
@@ -84,4 +90,5 @@ def generic_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **
                 f"It looks interesting, what did you mean by sending me {caption}?",
             ]
         )
+    int_ctx.set_confidence(ctx, actor, 0.85)
     return "Cool! Why did you send me this picture?"

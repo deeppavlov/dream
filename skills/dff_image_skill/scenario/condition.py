@@ -18,9 +18,11 @@ def detect_animals_on_caption_condition(ctx: Context, actor: Actor, *args, **kwa
         .get("image_captioning", {})
         .get("caption", "")
     )
-    animal_on_caption = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("animal"))
-    if animal_on_caption != "":
-        return True
+    if caption != "" and caption is not None:
+        animal_on_caption = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("animal"))
+        if animal_on_caption != "":
+            return True
+        return False
     return False
 
 
@@ -31,9 +33,11 @@ def detect_food_on_caption_condition(ctx: Context, actor: Actor, *args, **kwargs
         .get("image_captioning", {})
         .get("caption", "")
     )
-    food_on_caption = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("food"))
-    if food_on_caption != "":
-        return True
+    if caption != "" and caption is not None:
+        food_on_caption = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("food"))
+        if food_on_caption != "":
+            return True
+        return False
     return False
 
 
@@ -44,9 +48,11 @@ def detect_people_on_caption_condition(ctx: Context, actor: Actor, *args, **kwar
         .get("image_captioning", {})
         .get("caption", "")
     )
-    person_on_caption = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("person"))
-    if person_on_caption != "":
-        return True
+    if caption != "" and caption is not None:
+        person_on_caption = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("person"))
+        if person_on_caption != "":
+            return True
+        return False
     return False
 
 
