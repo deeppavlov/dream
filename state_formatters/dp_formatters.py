@@ -977,7 +977,7 @@ def topic_recommendation_formatter(dialog: Dict):
 
 def midas_predictor_formatter(dialog: Dict):
     last_uttr = dialog["human_utterances"][-1]
-    midas_dist = get_intents(last_uttr, probs=True, which='midas')
+    midas_dist = get_intents(last_uttr, probs=True, which="midas")
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
 
 
