@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 USERS = {}
 ACTION_MAP = get_action_map()
 
+first_user = None
+
 bot_settings = BotSettings()
 mineflayer = require("mineflayer")
 pathfinder = require("mineflayer-pathfinder")
@@ -57,12 +59,19 @@ def on_chat(event, user, message, *args):
     global is_buffer
     global buffer
     global command_index
+    global first_user
     crash_reason = ""        
     success_flag = True
     coords = []
 
     if user == bot.username:
         return
+    
+    if first_user == None:
+        fisrt_user = user
+    elif (first_user != None) and (user != fisrt_user):
+        return
+    
 
     if message.startswith("!"):
         command_args = message[1:].split()
