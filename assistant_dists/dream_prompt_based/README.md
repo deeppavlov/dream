@@ -4,6 +4,8 @@
 
 ## What is Dream Prompt-based distribution
 
+PROMPT SELCTOR!!!
+
 Dream Prompt-based distribution is an example of the prompt-based dialogue system. 
 
 Each Prompt-based Skill utilizes the **same prompt during the whole dialog**!
