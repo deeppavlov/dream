@@ -20,3 +20,6 @@ The models (multitask and comparative single task) were trained with initial lea
 
 This model(with a distilbert-base-uncased backbone) takes only 2439 Mb for 9 tasks, whereas single-task models with the same backbone for every of these tasks take up almost the same memory(~2437 Mb for every of these 9 tasks).
 
+CPU memory use of this model is 2909 Mb. 
+
+
