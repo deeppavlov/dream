@@ -2,7 +2,7 @@ import logging
 from copy import deepcopy
 from typing import Dict, List
 
-from common.utils import get_entities
+from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
 logger = logging.getLogger(__name__)
@@ -976,10 +976,8 @@ def topic_recommendation_formatter(dialog: Dict):
 
 
 def midas_predictor_formatter(dialog: Dict):
-    annotations = dialog["human_utterances"][-1].get("annotations", {})
-    if "combined_classification" in annotations:  # use combined annotations
-        annotations = annotations["combined_classification"]
-    midas_dist = annotations.get("midas_classification", {})
+    last_uttr = dialog["human_utterances"][-1]
+    midas_dist = get_intents(last_uttr, probs=True, which='midas')
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
 
 
