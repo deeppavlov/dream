@@ -57,12 +57,20 @@ def detect_people_on_caption_condition(ctx: Context, actor: Actor, *args, **kwar
 
 
 def detect_other_on_caption_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    if any(
-        [
-            detect_animals_on_caption_condition(ctx, actor),
-            detect_people_on_caption_condition(ctx, actor),
-            detect_food_on_caption_condition(ctx, actor),
-        ]
-    ):
-        return False
-    return True
+    caption = (
+        int_ctx.get_last_human_utterance(ctx, actor)
+        .get("annotations", {})
+        .get("image_captioning", {})
+        .get("caption", "")
+    )
+    if caption != "" and caption is not None:
+        if any(
+            [
+                detect_animals_on_caption_condition(ctx, actor),
+                detect_people_on_caption_condition(ctx, actor),
+                detect_food_on_caption_condition(ctx, actor),
+            ]
+        ):
+            return False
+        return True
+    return False
