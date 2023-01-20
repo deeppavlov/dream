@@ -1,20 +1,16 @@
 [
     [
         [
-            "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
-            "Your welcome. I am going to order dinner now.",
-            "We can also arrange a tour for you. "
+            "Pizza is delicious!"
         ],
         [
-            0.9,
-            0.9,
             0.9
         ],
         [
             {
-                "dff_template_prompted_skill_state": {
+                "dff_dream_persona_prompted_skill_state": {
                     "shared_memory": {},
-                    "previous_human_utter_index": 2,
+                    "previous_human_utter_index": 1,
                     "history": {
                         "0": [
                             "generation",
@@ -23,51 +19,29 @@
                         "1": [
                             "generation",
                             "generative_response_node"
-                        ],
-                        "2": [
-                            "generation",
-                            "generative_response_node"
                         ]
                     },
                     "current_turn_dff_suspended": false,
                     "context": {
-                        "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
+                        "id": "83af493f-e4c4-4af0-82de-89cbdc534c96",
                         "labels": {
-                            "1": [
+                            "0": [
                                 "generation",
-                                "generative_response_node"
+                                "greeting"
                             ],
-                            "2": [
+                            "1": [
                                 "generation",
                                 "generative_response_node"
                             ]
                         },
                         "requests": {
-                            "1": "Good. What drinks do you have?",
-                            "2": "thank you."
+                            "0": "hi. how are things?",
+                            "1": "do you like pizza?"
                         },
                         "responses": {
-                            "1": [
+                            "0": [
                                 [
-                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
+                                    "I am Dream. Nice to meet you.",
                                     0.9,
                                     {},
                                     {},
@@ -76,243 +50,9 @@
                                     }
                                 ]
                             ],
-                            "2": [
-                                [
-                                    "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "Your welcome. I am going to order dinner now.",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We can also arrange a tour for you. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ]
-                            ]
-                        },
-                        "misc": {},
-                        "validation": false,
-                        "actor_state": {}
-                    }
-                },
-                "dff_shared_state": {
-                    "cross_links": {},
-                    "cross_states": {}
-                },
-                "used_links": {},
-                "age_group": "",
-                "disliked_skills": []
-            },
-            {
-                "dff_template_prompted_skill_state": {
-                    "shared_memory": {},
-                    "previous_human_utter_index": 2,
-                    "history": {
-                        "0": [
-                            "generation",
-                            "greeting"
-                        ],
-                        "1": [
-                            "generation",
-                            "generative_response_node"
-                        ],
-                        "2": [
-                            "generation",
-                            "generative_response_node"
-                        ]
-                    },
-                    "current_turn_dff_suspended": false,
-                    "context": {
-                        "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
-                        "labels": {
-                            "1": [
-                                "generation",
-                                "generative_response_node"
-                            ],
-                            "2": [
-                                "generation",
-                                "generative_response_node"
-                            ]
-                        },
-                        "requests": {
-                            "1": "Good. What drinks do you have?",
-                            "2": "thank you."
-                        },
-                        "responses": {
                             "1": [
                                 [
-                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ]
-                            ],
-                            "2": [
-                                [
-                                    "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "Your welcome. I am going to order dinner now.",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We can also arrange a tour for you. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ]
-                            ]
-                        },
-                        "misc": {},
-                        "validation": false,
-                        "actor_state": {}
-                    }
-                },
-                "dff_shared_state": {
-                    "cross_links": {},
-                    "cross_states": {}
-                },
-                "used_links": {},
-                "age_group": "",
-                "disliked_skills": []
-            },
-            {
-                "dff_template_prompted_skill_state": {
-                    "shared_memory": {},
-                    "previous_human_utter_index": 2,
-                    "history": {
-                        "0": [
-                            "generation",
-                            "greeting"
-                        ],
-                        "1": [
-                            "generation",
-                            "generative_response_node"
-                        ],
-                        "2": [
-                            "generation",
-                            "generative_response_node"
-                        ]
-                    },
-                    "current_turn_dff_suspended": false,
-                    "context": {
-                        "id": "698d2093-1fd0-4721-b5cd-553eeed238e2",
-                        "labels": {
-                            "1": [
-                                "generation",
-                                "generative_response_node"
-                            ],
-                            "2": [
-                                "generation",
-                                "generative_response_node"
-                            ]
-                        },
-                        "requests": {
-                            "1": "Good. What drinks do you have?",
-                            "2": "thank you."
-                        },
-                        "responses": {
-                            "1": [
-                                [
-                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte.",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We only serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We serve non-alcoholic drinks. We have different fizzy drinks, juices, tea, and coffee. As for coffee, the kinds are Espresso, Americano, Capucchino, and Latte. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ]
-                            ],
-                            "2": [
-                                [
-                                    "Welcome to Pizza Hut. You can find our restaurant in this direction. ",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "Your welcome. I am going to order dinner now.",
-                                    0.9,
-                                    {},
-                                    {},
-                                    {
-                                        "can_continue": "no"
-                                    }
-                                ],
-                                [
-                                    "We can also arrange a tour for you. ",
+                                    "Pizza is delicious!",
                                     0.9,
                                     {},
                                     {},
@@ -337,17 +77,9 @@
             }
         ],
         [
-            {},
-            {},
             {}
         ],
         [
-            {
-                "can_continue": "no"
-            },
-            {
-                "can_continue": "no"
-            },
             {
                 "can_continue": "no"
             }
