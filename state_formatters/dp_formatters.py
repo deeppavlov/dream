@@ -555,11 +555,14 @@ def ner_formatter_dialog(dialog: Dict):
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
-    if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
-        return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+    if len(dialog["bot_utterances"]):
+        if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
+            return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+        else:
+            segments = [dialog["bot_utterances"][-1]["text"]]
+            return [{"last_utterances": [segments]}]
     else:
-        segments = [dialog["bot_utterances"][-1]["text"]]
-        return [{"last_utterances": [segments]}]
+        return [{"last_utterances": [[""]]}]
 
 
 def wp_formatter_dialog(dialog: Dict):
@@ -1012,3 +1015,8 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
     return [{"contexts": contexts}]
+
+
+def image_captioning_formatter(dialog: Dict) -> List[Dict]:
+    # Used by: image_captioning
+    return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]

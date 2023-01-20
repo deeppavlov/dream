@@ -10,6 +10,10 @@ services:
           dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126, fact-retrieval:8130,
           text-qa:8078"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: RU
 
   dff-program-y-skill:
     env_file: [.env]
@@ -50,6 +54,7 @@ services:
         CONV_EVAL_STRENGTH: 0.4
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: RU
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
