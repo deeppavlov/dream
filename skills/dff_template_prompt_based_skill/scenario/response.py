@@ -19,6 +19,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 PROMPT_FILE = getenv("PROMPT_FILE")
+N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
 
@@ -29,31 +30,22 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 GENERATIVE_TIMEOUT = 4
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.5
+NAMING = {"human": "Human", "bot": "AI"}
 
 
 def compose_data_for_model(ctx, actor):
     global PROMPT
-    text_prompt = []
+    context = []
     stop_words = set(stopwords.words("english"))
-    human_uttrs = int_ctx.get_human_utterances(ctx, actor)
-    bot_uttrs = int_ctx.get_bot_utterances(ctx, actor)
-    if len(human_uttrs) > 0:
-        logger.info(f"utts: {human_uttrs[-1]}")
-        text_prompt.append(f'Human: {human_uttrs[-1]["text"]}')
-        if len(bot_uttrs) > 0:
-            text_prompt.insert(0, f'AI: {bot_uttrs[-1]["text"]}')
-        if len(human_uttrs) > 1:
-            text_prompt.insert(0, f'Human: {human_uttrs[-2]["text"]}')
-            text_prompt.insert(0, PROMPT)
-        words = word_tokenize(human_uttrs[-1]["text"])
-        words_filtered = []
-        for w in words:
-            if w not in stop_words:
-                words_filtered.append(w)
-    logger.info(f"prompt: {text_prompt}")
-    if text_prompt:
-        text_prompt = [re.sub(FIX_PUNCTUATION, "", x) for x in text_prompt]  # костыль
-    return text_prompt
+    # consider N_UTTERANCES_CONTEXT last utterances
+    context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
+    context = [f'{NAMING[uttr.get("user", {}).get("user_type")]}: {uttr.get("text", "")}' for uttr in context]
+    context = [PROMPT] + context
+
+    logger.info(f"prompt: {context}")
+    if context:
+        context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
+    return context
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:

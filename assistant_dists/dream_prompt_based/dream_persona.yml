@@ -13,6 +13,7 @@ services:
     environment:
       - PROMPT_FILE=common/prompts/dream_persona.json
       - GENERATIVE_SERVICE_URL=http://transformers-lm:8130/respond
+      - N_UTTERANCES_CONTEXT=3
     deploy:
       resources:
         limits:

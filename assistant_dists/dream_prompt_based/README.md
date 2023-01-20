@@ -18,8 +18,9 @@ The **DFF Dream Persona Prompt-based Skill** is a light-weight container sending
 which utilizes a neural network for prompt-based generation.
 DFF Dream Persona Prompt-based Skill accepts two main environmental variables:
   * `PROMPT_FILE`  contains a path to a JSON file containing dictionary with prompt, 
-  * `GENERATIVE_SERVICE_URL` contains a URL of the generative service to be used. 
+  * `GENERATIVE_SERVICE_URL` contains a URL of the generative service to be used.
   The service must utilize the same input-output format as Transformers-LM (`transformers_lm`). 
+  * `N_UTTERANCES_CONTEXT` contains lengths of the considered context in terms of number of dialogue utterances.
 
 The distribution may contain several Prompt-based skills. Therefore, the **Prompt Selector** component is presented. 
 The Prompt Selector is also a light-weight container utilizing **Sentence Ranker** component 
