@@ -992,11 +992,6 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def language_mistakes_tracker_formatter(dialog: Dict):
-    import json
-
-    json_object = json.dumps(dialog, indent=4)
-    with open("sample.json", "w") as outfile:
-        outfile.write(json_object)
     return [{"dialog": dialog}]
 
 

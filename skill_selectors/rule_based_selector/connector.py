@@ -31,6 +31,7 @@ from common.utils import yes_templates
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+prev_scenarios = []
 
 
 class RuleBasedSkillSelectorConnector:
@@ -71,6 +72,7 @@ class RuleBasedSkillSelectorConnector:
                 ((scenario_len - 1) == dialog_step_id)
                 and (dialog_step_id != 0)
                 and (prev_active_skill != "dff_mistakes_review_skill")
+                and ("dff_language_practice_skill" not in skills_for_uttr)
             ):
                 skills_for_uttr.append("dff_mistakes_review_skill")
 

@@ -148,7 +148,7 @@ def feedback_response():
                 start_selection = selection["startSelection"]
                 end_selection = selection["endSelection"]
                 selection2correct = original_sentence[start_selection:end_selection]
-                if selection2correct.lower() == correction.lower():
+                if selection2correct.replace(",", "").lower() == correction.replace(",", "").lower():
                     continue
                 elif (correction[:2] == ", ") and selection2correct.lower() == correction[2:].lower():
                     continue
@@ -157,6 +157,9 @@ def feedback_response():
                     continue
 
                 elif (correction[:2] == "? ") and selection2correct.lower() == correction[2:].lower():
+                    continue
+
+                elif correction in [".", ",", "?"]:
                     continue
 
                 if selection["subtype"] in unique_subtypes:

@@ -270,9 +270,6 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             if after_parsed[item[2][0]].lemma_ in FP_LEX_WORDS:
                                 continue
                             elif after_parsed[item[2][0]].lemma_ in FP_LEX_VERBS_TO_GRAM:
-                                logger.info(f"reason: {1}")
-                                logger.info(f"normalized_error: {normalized_error}")
-                                logger.info(f"normalized_correction: {normalized_correction}")
                                 correction["type"] = "grammatical"
                                 correction["subtype"] = "verb tense"
                                 correction["explanation"] = "verb tense"
@@ -301,9 +298,6 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                             correction["subtype"] = "plural form"
                             correction["explanation"] = "plural form"
                         else:
-                            logger.info(f"reason: {2}")
-                            logger.info(f"normalized_error: {normalized_error}")
-                            logger.info(f"normalized_correction: {normalized_correction}")
                             correction["type"] = "grammatical"
                             correction["subtype"] = "other"
                             correction["explanation"] = f"""Use of "{normalized_error}" is inappropriate here. """
@@ -325,21 +319,15 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                         correction["subtype"] = "plural form"
                         correction["explanation"] = "plural form"
                     else:
-                        logger.info(f"reason: {3}")
-                        logger.info(f"normalized_error: {normalized_error}")
-                        logger.info(f"normalized_correction: {normalized_correction}")
                         correction["type"] = "grammatical"
                         correction["subtype"] = "other"
-                        correction["explanation"] = f"""It's not good to use {normalized_error} here. """
+                        correction["explanation"] = f"""It's not good to use "{normalized_error}" here. """
                 else:
                     if normalized_error in ENG_ARTICLES:
                         correction["type"] = "grammatical"
                         correction["subtype"] = "article"
                         correction["explanation"] = "article"
                     else:
-                        logger.info(f"reason: {4}")
-                        logger.info(f"normalized_error: {normalized_error}")
-                        logger.info(f"normalized_correction: {normalized_correction}")
                         correction["type"] = "grammatical"
                         correction["subtype"] = "verb tense"
                         correction["explanation"] = "verb tense"
@@ -366,9 +354,6 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     correction["subtype"] = "extra preposition"
                     correction["explanation"] = "You used an extra preposition. "
                 else:
-                    logger.info(f"reason: {5}")
-                    logger.info(f"normalized_error: {normalized_error}")
-                    # logger.info(f"normalized_correction: {normalized_correction}")
                     correction["subtype"] = "extra word"
                     correction["explanation"] = f"""You used and extra word "{normalized_error}" here. """
             else:
@@ -376,9 +361,6 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                     correction["subtype"] = "extra prep"
                     correction["explanation"] = "You used an extra preposition. "
                 else:
-                    logger.info(f"reason: {6}")
-                    logger.info(f"normalized_error: {normalized_error}")
-                    # logger.info(f"normalized_correction: {normalized_correction}")
                     correction["subtype"] = "verb tense"
                     correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]
@@ -430,9 +412,6 @@ def classify_changes(opcodes, before, after, word_offsets, before_text):
                 else:
                     start -= 1
                     item[4].insert(0, before[start])
-                    logger.info(f"reason: {7}")
-                    # logger.info(f"normalized_error: {normalized_error}")
-                    logger.info(f"normalized_correction: {normalized_correction}")
                     correction["subtype"] = "verb tense"
                     correction["explanation"] = "verb tense"
             correction["startSelection"] = word_offsets[start][0]

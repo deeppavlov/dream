@@ -25,81 +25,73 @@ if LANGUAGE == "EN":
 else:
     df = pd.read_csv("common/dream_tutor/cerf_american.tsv", sep="\t")
 
-with open('common/google-10000-english-no-swears.txt') as f:
+with open("common/google-10000-english-no-swears.txt") as f:
     stopwords = f.readlines()
 
-st_time = time.time()
-words_cerf = list(df.word)
-# words_level_cerf = list(df.cerf)
-words_cerf = [word for word in words_cerf if word not in stopwords]
+words_cerf_A1 = list(df[df["cerf"] == "A1"]["word"])
+words_cerf_A2 = list(df[df["cerf"] == "A2"]["word"])
+words_cerf_B1 = list(df[df["cerf"] == "B1"]["word"])
+words_cerf_B2 = list(df[df["cerf"] == "B2"]["word"])
+words_cerf_C1 = list(df[df["cerf"] == "C1"]["word"])
+words_cerf_C2 = list(df[df["cerf"] == "C2"]["word"])
 
-logger.info(f"words_cerf len = {len(words_cerf)}")
+words_cerf = {
+    "A1": [word for word in words_cerf_A1 if word not in stopwords],
+    "A2": [word for word in words_cerf_A2 if word not in stopwords],
+    "B1": [word for word in words_cerf_B1 if word not in stopwords],
+    "B2": [word for word in words_cerf_B2 if word not in stopwords],
+    "C1": [word for word in words_cerf_C1 if word not in stopwords],
+    "C2": [word for word in words_cerf_C2 if word not in stopwords],
+}
+
 brackets_pattern = re.compile("[\(].*?[\)]")
 etc_pattern = re.compile(", etc.", re.IGNORECASE)
 spaces_pattern = re.compile(r"\s+")
 smth_pattern = re.compile(r"(\(sb's\)|sb's|sth|sth/sb|sb/sth|; )", re.IGNORECASE)
-# smth_pattern = re.compile(r"test", re.IGNORECASE)
 starting_pattern = re.compile(r"^(to |a |the )", re.IGNORECASE)
 stars_pattern = re.compile(r"\* \* \*")
+space_re_pattern = re.compile(r"\. \* \?")
+last_space_pattern = re.compile(r"\s$")
+
 
 def preprocess_words(phrase):
-    phrase = brackets_pattern.sub("", phrase)
-    # logger.info(f"phrase1 = {phrase}")
+    phrase = brackets_pattern.sub(".*?", phrase)
     phrase = etc_pattern.sub("", phrase)
-    # logger.info(f"phrase2 = {phrase}")
     phrase = smth_pattern.sub(".*?", phrase)
-    # logger.info(f"phrase3 = {phrase}")
     phrase = spaces_pattern.sub(" ", phrase)
-    # logger.info(f"phrase4 = {phrase}")
     phrase = phrase.strip()
-    # logger.info(f"phrase5 = {phrase}")
     phrase = starting_pattern.sub("", phrase)
-    # logger.info(f"phrase6 = {phrase}")
     doc_phrase = load_model(phrase)
-    # logger.info(f"phrase7 = {phrase}")
     phrase = " ".join([token.lemma_ for token in doc_phrase])
-    # logger.info(f"phrase8 = {phrase}")
     phrase = stars_pattern.sub(".*?", phrase)
-    # logger.info(f"phrase9 = {phrase}")
+    phrase = space_re_pattern.sub(".*?", phrase)
+    phrase = last_space_pattern.sub("", phrase)
     return phrase
 
-total_time = time.time() - st_time
-logger.info(f"compiling1 exec time = {total_time:.3f}s")
-clear_words_cerf = [preprocess_words(phrase) for phrase in words_cerf]
-total_time = time.time() - st_time
-logger.info(f"compiling2 exec time = {total_time:.3f}s")
-PHRASES_PATTERN = re.compile(join_words_in_or_pattern(clear_words_cerf), re.IGNORECASE)
-total_time = time.time() - st_time
-logger.info(f"compiling3 exec time = {total_time:.3f}s")
+
+cerf_mapping = {}
+for key, value in words_cerf.items():
+    cerf_mapping[key] = [preprocess_words(phrase) for phrase in value]
+
+PHRASES_PATTERN = {}
+for key, value in cerf_mapping.items():
+    PHRASES_PATTERN[key] = re.compile(join_words_in_or_pattern(value), re.IGNORECASE)
 
 
 def check_cerf(lemmas):
     user_cerf = {}
     counter = 0
-    uttes = " ".join(lemmas)
-    logger.info(f"""utterances: {uttes}""")
-    # found_phrases = re.findall(phrases_re, " ".join(lemmas), re.IGNORECASE)
-    found_phrases = PHRASES_PATTERN.findall(" ".join(lemmas))
-    found_phrases = list(set(found_phrases))
-    logger.info(f"""found_phrases: {found_phrases}""")
-    # logger.info(f"""words_cerf: {words_cerf}""")
-    # logger.info(f"""clear_words_cerf: {clear_words_cerf}""")
-    for found_phrase in found_phrases:
-        counter += 1
-        index_phrase = clear_words_cerf.index(found_phrase)
-        not_lemmatized_phrase = words_cerf[index_phrase]
-        df_word = df[df["word"] == not_lemmatized_phrase]
-        cerf = list(df_word["cerf"])[0]
-        if cerf not in user_cerf.keys():
-            user_cerf[cerf] = [not_lemmatized_phrase]
-        else:
-            user_cerf[cerf].append(not_lemmatized_phrase)
+    for key, value in PHRASES_PATTERN.items():
+        found_phrases = value.findall(" ".join(lemmas))
+        found_phrases = list(set(found_phrases))
+        found_phrases = [phrase for phrase in found_phrases if (len(phrase) < 30)]
+        user_cerf[key] = found_phrases
+        counter += len(found_phrases)
 
     count_cerf = {}
     for key, value in user_cerf.items():
         count_cerf[key] = round((len(value) / counter) * 100, 2)
 
-    logger.info(f"""user_cerf: {user_cerf}""")
     return user_cerf, count_cerf
 
 
@@ -138,8 +130,6 @@ def set_mistakes_review():
                 review["pecentage_vocabulary_used"] = percentage
                 ctx.misc["agent"]["response"].update({"mistakes_review": review})
                 return ctx
-
-            logger.info(f"mistakes_state = {mistakes_state}")
 
             expl_templates = ["You used the wrong X. ", "The X was incorrect. ", "There was a mistake in the X. "]
             comp_templates = [
@@ -187,7 +177,7 @@ def set_mistakes_review():
                     start_selection = selection["startSelection"]
                     end_selection = selection["endSelection"]
                     selection2correct = original_sentence[start_selection:end_selection]
-                    if selection2correct.lower() == correction.lower():
+                    if selection2correct.replace(",", "").lower() == correction.replace(",", "").lower():
                         continue
                     elif (correction[:2] == ", ") and selection2correct.lower() == correction[2:].lower():
                         continue
@@ -196,6 +186,9 @@ def set_mistakes_review():
                         continue
 
                     elif (correction[:2] == "? ") and selection2correct.lower() == correction[2:].lower():
+                        continue
+
+                    elif correction in [".", ",", "?"]:
                         continue
 
                     types_mistakes.append(selection["type"])

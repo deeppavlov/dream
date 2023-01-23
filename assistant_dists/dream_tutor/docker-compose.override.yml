@@ -113,7 +113,7 @@ services:
         SERVICE_PORT: 8131
       context: .
       dockerfile: skills/dff_mistakes_review_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8131 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8131 --timeout=600 --reload
     deploy:
       resources:
         limits:
