@@ -33,8 +33,6 @@ NAMING = {"human": "Human", "bot": "AI"}
 
 def compose_data_for_model(ctx, actor):
     global PROMPT
-    context = []
-    stop_words = set(stopwords.words("english"))
     # consider N_UTTERANCES_CONTEXT last utterances
     context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
     context = [f'{NAMING[uttr.get("user", {}).get("user_type")]}: {uttr.get("text", "")}' for uttr in context]
@@ -69,7 +67,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if len(request_data) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
-            json={"dialog_context": [request_data]},
+            json={"dialog_contexts": [request_data]},
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()

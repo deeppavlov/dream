@@ -78,7 +78,7 @@ except Exception as e:
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    contexts = request.json.get("dialog_context", [])
+    contexts = request.json.get("dialog_contexts", [])
     try:
         responses = []
         confidences = []
