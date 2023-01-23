@@ -48,7 +48,7 @@ rel_kinds_dict = {
     "like_sports": "type_of_sport"
 }
 
-DB = "test"
+DB = "test_italy_skill"
 TEAM = "yashkens|c77b"
 
 graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password="G5KMuz9dF1K2mD5cPz726oazSJJtkFLw")
