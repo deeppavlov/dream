@@ -6,6 +6,9 @@ from collections import Counter
 import pandas as pd
 import spacy
 import re
+import time
+import tqdm
+from common.utils import join_words_in_or_pattern
 
 from . import response as loc_rsp
 
@@ -25,37 +28,49 @@ else:
 with open('common/google-10000-english-no-swears.txt') as f:
     stopwords = f.readlines()
 
-
+st_time = time.time()
 words_cerf = list(df.word)
 # words_level_cerf = list(df.cerf)
 words_cerf = [word for word in words_cerf if word not in stopwords]
 
-clear_words_cerf = []
-for phrase in words_cerf:
-    phrase = re.sub("[\(].*?[\)]", "", phrase)
-    phrase = phrase.replace(", etc.", "")
-    phrase = phrase.replace("  ", " ")
-    phrase = phrase.replace("(sb's)", ".*?")
-    phrase = phrase.replace("sb's", ".*?")
-    phrase = phrase.replace("sth", ".*?")
-    phrase = phrase.replace("sth/sb", ".*?")
-    phrase = phrase.replace("sb/sth", ".*?")
-    phrase = phrase.replace("; ", ".*?")
-    if phrase[-1] == " ":
-        phrase = phrase[:-1]
-    if phrase[:3] == "to ":
-        phrase = phrase[3:]
-    elif phrase[:2] == "a ":
-        phrase = phrase[2:]
-    elif phrase[:4] == "the ":
-        phrase = phrase[4:] 
+logger.info(f"words_cerf len = {len(words_cerf)}")
+brackets_pattern = re.compile("[\(].*?[\)]")
+etc_pattern = re.compile(", etc.", re.IGNORECASE)
+spaces_pattern = re.compile(r"\s+")
+smth_pattern = re.compile(r"(\(sb's\)|sb's|sth|sth/sb|sb/sth|; )", re.IGNORECASE)
+# smth_pattern = re.compile(r"test", re.IGNORECASE)
+starting_pattern = re.compile(r"^(to |a |the )", re.IGNORECASE)
+stars_pattern = re.compile(r"\* \* \*")
 
+def preprocess_words(phrase):
+    phrase = brackets_pattern.sub("", phrase)
+    # logger.info(f"phrase1 = {phrase}")
+    phrase = etc_pattern.sub("", phrase)
+    # logger.info(f"phrase2 = {phrase}")
+    phrase = smth_pattern.sub(".*?", phrase)
+    # logger.info(f"phrase3 = {phrase}")
+    phrase = spaces_pattern.sub(" ", phrase)
+    # logger.info(f"phrase4 = {phrase}")
+    phrase = phrase.strip()
+    # logger.info(f"phrase5 = {phrase}")
+    phrase = starting_pattern.sub("", phrase)
+    # logger.info(f"phrase6 = {phrase}")
     doc_phrase = load_model(phrase)
+    # logger.info(f"phrase7 = {phrase}")
     phrase = " ".join([token.lemma_ for token in doc_phrase])
-    phrase = phrase.replace("* * *", ".*?")
-    clear_words_cerf.append(phrase)
+    # logger.info(f"phrase8 = {phrase}")
+    phrase = stars_pattern.sub(".*?", phrase)
+    # logger.info(f"phrase9 = {phrase}")
+    return phrase
 
-PHRASES_PATTERN = re.compile(r"\b(" + ("|".join(clear_words_cerf) + ")"), re.IGNORECASE)
+total_time = time.time() - st_time
+logger.info(f"compiling1 exec time = {total_time:.3f}s")
+clear_words_cerf = [preprocess_words(phrase) for phrase in words_cerf]
+total_time = time.time() - st_time
+logger.info(f"compiling2 exec time = {total_time:.3f}s")
+PHRASES_PATTERN = re.compile(join_words_in_or_pattern(clear_words_cerf), re.IGNORECASE)
+total_time = time.time() - st_time
+logger.info(f"compiling3 exec time = {total_time:.3f}s")
 
 
 def check_cerf(lemmas):
