@@ -68,7 +68,7 @@ This is a generative-based socialbot that uses large language models to generate
 You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts),
 add prompt names to `PROMPTS_TO_CONSIDER` (comma-separated),
 and the provided information will be used in LLM-powered reply generation as a prompt.
-[Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_prompted)
+[Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_persona_prompted)
 
 # Quick Start
 
@@ -141,7 +141,7 @@ AGENT_PORT=4242 docker-compose -f docker-compose.yml -f assistant_dists/dream/do
 #### **Prompted Dream**
 
 ```
-docker-compose -f docker-compose.yml -f assistant_dists/dream_prompted/docker-compose.override.yml -f assistant_dists/dream_prompted/dev.yml -f assistant_dists/dream_prompted/proxy.yml -f assistant_dists/dream_prompted/dream_persona.yml -f assistant_dists/dream_prompted/dream_persona_dev.yml -f assistant_dists/dream_prompted/transformers_lm.yml -f assistant_dists/dream_prompted/transformers_lm_dev.yml up --build```
+docker-compose -f docker-compose.yml -f assistant_dists/dream_persona_prompted/docker-compose.override.yml -f assistant_dists/dream_persona_prompted/dev.yml -f assistant_dists/dream_persona_prompted/proxy.yml -f assistant_dists/dream_persona_prompted/dream_persona.yml -f assistant_dists/dream_persona_prompted/dream_persona_dev.yml -f assistant_dists/dream_persona_prompted/transformers_lm.yml -f assistant_dists/dream_persona_prompted/transformers_lm_dev.yml up --build```
 
 We've also included a config with GPU allocations for multi-GPU environments.
 
