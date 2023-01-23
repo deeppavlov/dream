@@ -1,7 +1,10 @@
+import json
 import logging
+import re
 import requests
 import time
-from os import getenv
+from os import getenv, listdir
+from pathlib import Path
 
 import numpy as np
 import sentry_sdk
@@ -15,12 +18,21 @@ app = Flask(__name__)
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 N_SENTENCES_TO_RETURN = int(getenv("N_SENTENCES_TO_RETURN"))
-with open("common/persona_sentences.txt", "r") as f:
-    PERSONA_SENTENCES = f.read().splitlines()
-PERSONA_SENTENCES = [x.strip() for x in PERSONA_SENTENCES if len(x.strip())]
+# list of string names of prompts from common/prompts
+PROMPTS_TO_CONSIDER = getenv("PROMPTS_TO_CONSIDER", "").split(",")
+logger.info(f"prompt-selector considered prompts: {PROMPTS_TO_CONSIDER}")
+PROMPTS = []
+PROMPTS_NAMES = []
+for filename in listdir("common/prompts"):
+    prompt_name = Path(filename).stem
+    if ".json" in filename and prompt_name in PROMPTS_TO_CONSIDER:
+        data = json.load(open(f"common/prompts/{filename}", "r"))
+        PROMPTS.append(data["prompt"])
+        PROMPTS_NAMES.append(prompt_name)
 
 
-def get_result(request):
+def get_result(request, questions_only=False):
+    global PROMPTS, PROMPTS_NAMES
     st_time = time.time()
     contexts = request.json["contexts"]
     result = []
@@ -29,8 +41,13 @@ def get_result(request):
 
     for context_id, context in enumerate(contexts):
         str_context = " ".join(context)
-        for sent in PERSONA_SENTENCES:
-            pairs += [[str_context, sent]]
+        for prompt in PROMPTS:
+            if questions_only:
+                questions = re.findall(r"\nQuestion: (.*)\nAnswer:", prompt)
+                questions_list = " ".join(questions)
+                pairs += [[str_context, questions_list]]
+            else:
+                pairs += [[str_context, prompt]]
             context_ids += [context_id]
     context_ids = np.array(context_ids)
     try:
@@ -42,30 +59,30 @@ def get_result(request):
             curr_ids = np.where(context_ids == i)[0]
             most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
             curr_result = {
-                "persona": [PERSONA_SENTENCES[_id] for _id in most_relevant_sent_ids],
+                "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
                 "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
             }
-            logger.info(f"Persona: {curr_result['persona']}")
             result += [curr_result]
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = [{"persona": [], "max_similarity": 0.0}] * len(contexts)
+        result = [{"prompts": [], "max_similarity": 0.0}] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"relative-persona-extractor exec time: {total_time:.3f}s")
+    logger.info(f"prompt-selector exec time: {total_time:.3f}s")
+    logger.info(f"prompt-selector result: {result}")
     return result
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    result = get_result(request)
+    result = get_result(request, questions_only=True)
     return jsonify(result)
 
 
 @app.route("/respond_batch", methods=["POST"])
 def respond_batch():
-    result = get_result(request)
+    result = get_result(request, questions_only=True)
     return jsonify([{"batch": result}])
 
 
