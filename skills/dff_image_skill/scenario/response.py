@@ -6,6 +6,8 @@ import scenario.processing as loc_prs
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_RESPONSE = "Okay. Why did you send me this picture?"
+
 
 def animals_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
     caption = (
@@ -27,9 +29,9 @@ def animals_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **
             )
         else:
             int_ctx.set_confidence(ctx, actor, 0.85)
-            return "Cool! Why did you send me this picture?"
+            return DEFAULT_RESPONSE
     int_ctx.set_confidence(ctx, actor, 0.85)
-    return "Cool! Why did you send me this picture?"
+    return DEFAULT_RESPONSE
 
 
 def food_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
@@ -51,9 +53,9 @@ def food_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwa
             )
         else:
             int_ctx.set_confidence(ctx, actor, 0.85)
-            return "Cool! Why did you send me this picture?"
+            return DEFAULT_RESPONSE
     int_ctx.set_confidence(ctx, actor, 0.85)
-    return "Cool! Why did you send me this picture?"
+    return DEFAULT_RESPONSE
 
 
 def people_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
@@ -70,9 +72,9 @@ def people_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **k
             return f"Do you enjoy {verb} with other people?"
         else:
             int_ctx.set_confidence(ctx, actor, 0.85)
-            return "Cool! Why did you send me this picture?"
+            return DEFAULT_RESPONSE
     int_ctx.set_confidence(ctx, actor, 0.85)
-    return "Cool! Why did you send me this picture?"
+    return DEFAULT_RESPONSE
 
 
 def generic_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
@@ -91,4 +93,4 @@ def generic_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **
             ]
         )
     int_ctx.set_confidence(ctx, actor, 0.85)
-    return "Cool! Why did you send me this picture?"
+    return DEFAULT_RESPONSE

@@ -84,8 +84,7 @@ def respond():
                 if len(dialog["utterances"]) > 1:
                     assert len(dialog["human_utterances"]) > 0
                     assert len(dialog["bot_utterances"]) > 0
-                if user_uttr.get("attributes", {}).get("image") is not None:
-                    skills_for_uttr.append("dff_image_skill")
+
                 curr_confidences += [skill_data["confidence"]]
                 if skill_data["text"] and skill_data["confidence"]:
                     if not skill_data.get("annotations"):
