@@ -7,10 +7,10 @@ ENV N_SENTENCES_TO_RETURN ${N_SENTENCES_TO_RETURN}
 
 RUN mkdir /src
 
-COPY annotators/relative_persona_extractor/requirements.txt /src/requirements.txt
+COPY annotators/prompt_selector/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-COPY ./annotators/relative_persona_extractor/ /src/
+COPY ./annotators/prompt_selector/ /src/
 COPY ./common/ /src/common/
 
 WORKDIR /src
