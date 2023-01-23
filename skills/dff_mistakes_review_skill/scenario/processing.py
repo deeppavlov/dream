@@ -4,38 +4,87 @@ import random
 import json
 from collections import Counter
 import pandas as pd
+import spacy
+import re
 
 from . import response as loc_rsp
 
 from df_engine.core import Context, Actor
 
+LANGUAGE = os.getenv("LANGUAGE")
+
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+load_model = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+if LANGUAGE == "EN":
+    df = pd.read_csv("common/dream_tutor/cerf_british.tsv", sep="\t")
+else:
+    df = pd.read_csv("common/dream_tutor/cerf_american.tsv", sep="\t")
 
-def check_cerf(lemmas, lang="british"):
+with open('common/google-10000-english-no-swears.txt') as f:
+    stopwords = f.readlines()
+
+
+words_cerf = list(df.word)
+# words_level_cerf = list(df.cerf)
+words_cerf = [word for word in words_cerf if word not in stopwords]
+
+clear_words_cerf = []
+for phrase in words_cerf:
+    phrase = re.sub("[\(].*?[\)]", "", phrase)
+    phrase = phrase.replace(", etc.", "")
+    phrase = phrase.replace("  ", " ")
+    phrase = phrase.replace("(sb's)", ".*?")
+    phrase = phrase.replace("sb's", ".*?")
+    phrase = phrase.replace("sth", ".*?")
+    phrase = phrase.replace("sth/sb", ".*?")
+    phrase = phrase.replace("sb/sth", ".*?")
+    phrase = phrase.replace("; ", ".*?")
+    if phrase[-1] == " ":
+        phrase = phrase[:-1]
+    if phrase[:3] == "to ":
+        phrase = phrase[3:]
+    elif phrase[:2] == "a ":
+        phrase = phrase[2:]
+    elif phrase[:4] == "the ":
+        phrase = phrase[4:] 
+
+    doc_phrase = load_model(phrase)
+    phrase = " ".join([token.lemma_ for token in doc_phrase])
+    phrase = phrase.replace("* * *", ".*?")
+    clear_words_cerf.append(phrase)
+
+PHRASES_PATTERN = re.compile(r"\b(" + ("|".join(clear_words_cerf) + ")"), re.IGNORECASE)
+
+
+def check_cerf(lemmas):
     user_cerf = {}
-    if lang == "british":
-        df = pd.read_csv("/src/common/dream_tutor/cerf_british.tsv", sep="\t")
-    else:
-        df = pd.read_csv("/src/common/dream_tutor/cerf_american.tsv", sep="\t")
-
     counter = 0
-    words_cerf = list(df.word)
-    for lemma in lemmas:
-        if lemma in words_cerf:
-            counter += 1
-            df_word = df[df["word"] == lemma]
-            cerf = list(df_word["cerf"])[0]
-            if cerf not in user_cerf.keys():
-                user_cerf[cerf] = [lemma]
-            else:
-                user_cerf[cerf].append(lemma)
+    uttes = " ".join(lemmas)
+    logger.info(f"""utterances: {uttes}""")
+    # found_phrases = re.findall(phrases_re, " ".join(lemmas), re.IGNORECASE)
+    found_phrases = PHRASES_PATTERN.findall(" ".join(lemmas))
+    found_phrases = list(set(found_phrases))
+    logger.info(f"""found_phrases: {found_phrases}""")
+    # logger.info(f"""words_cerf: {words_cerf}""")
+    # logger.info(f"""clear_words_cerf: {clear_words_cerf}""")
+    for found_phrase in found_phrases:
+        counter += 1
+        index_phrase = clear_words_cerf.index(found_phrase)
+        not_lemmatized_phrase = words_cerf[index_phrase]
+        df_word = df[df["word"] == not_lemmatized_phrase]
+        cerf = list(df_word["cerf"])[0]
+        if cerf not in user_cerf.keys():
+            user_cerf[cerf] = [not_lemmatized_phrase]
+        else:
+            user_cerf[cerf].append(not_lemmatized_phrase)
 
     count_cerf = {}
     for key, value in user_cerf.items():
         count_cerf[key] = round((len(value) / counter) * 100, 2)
 
+    logger.info(f"""user_cerf: {user_cerf}""")
     return user_cerf, count_cerf
 
 

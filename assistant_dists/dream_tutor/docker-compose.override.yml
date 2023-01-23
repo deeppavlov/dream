@@ -93,6 +93,7 @@ services:
       args:
         SERVICE_NAME: dff_language_practice_skill
         SERVICE_PORT: 8130
+        LANGUAGE: EN
       context: .
       dockerfile: skills/dff_language_practice_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8130 --reload
