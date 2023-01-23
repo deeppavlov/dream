@@ -10,8 +10,6 @@ import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
 from df_engine.core import Context, Actor
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))

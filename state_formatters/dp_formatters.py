@@ -937,8 +937,9 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_dream_persona_prompted_skill_formatter(dialog):
     return utils.dff_formatter(
-        dialog, "dff_dream_persona_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"]
+        dialog,
+        "dff_dream_persona_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
     )
 
 
