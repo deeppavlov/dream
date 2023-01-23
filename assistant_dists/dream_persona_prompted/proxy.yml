@@ -45,7 +45,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8087
       - PORT=8087
 
-  transformers-lm:
+  transformers-lm-gptj:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/

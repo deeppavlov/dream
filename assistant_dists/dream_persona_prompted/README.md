@@ -40,32 +40,62 @@ Therefore, a prompt name can contain `'_'` but not `'-'`.
 
 # How to Create a New Prompted Distribution
 
-If one wants to create a new Prompt-based distribution (distribution containing prompt-based skill(s)), one should:
+If one wants to create a new prompted distribution (distribution containing prompt-based skill(s)), one should:
 1. Copy the `dream/assistant_dists/dream_persona_prompted` directory to `dream/assistant_dists/dream_custom_prompted`
 (this name is an example!).
-2. DFF Dream Persona Prompted Skill's container is described in 
-`dream/assistant_dists/dream_spacex_prompted/dream_persona*.yml` configs. 
-For each prompt-based skill, one needs to:
-   1. create a `dream/common/prompts/<prompt_name>.json` files containing a prompt.
-   2. copy files `dream_persona.yml` and `dream_persona_dev.yml` to `<prompt_name>.yml` and `<prompt_name>_dev.yml`;
-   3. in both files replace strings `dream-persona` with `<prompt-name>` (container names are using dashes) and 
+2. **For each prompt-based skill, one needs to**:
+   1. create a `dream/common/prompts/<prompt_name>.json` files containing a prompt. 
+   **Important!** `<prompt_name>` should only contain letters, numbers and underscores (`_`) but no dashes (`-`)!
+   2. in `dream/assistant_dists/dream_custom_prompted/` folder in files `docker-compose.override.yml`, `dev.yml` 
+   copy description of container `dream-persona` and replace strings `dream-persona` with `<prompt-name>` 
+   (container names are using dashes) and 
    `dream_persona` with `<prompt_name>` (component names are using underscores). 
    If your prompt name is written as a single word 
    (for example, `spacexfaq` not `spacex_faq`), replace both `dream-persona` and `dream_persona` with your prompt name.
-   4. change the `SERVICE_PORT` to an unused on your distribution one.
+   3. for each new container (a new container for each new DFF skill) change the `SERVICE_PORT` 
+   to an unused one.
 3. Choose the generative service to be used. For that one needs to:
-   1. change `dream/assistant_dists/dream_custom_prompted/transformers_lm*.yml` to containers 
-   with your generative service of interest.
-   2. in all prompt-based skills configs (from the step 2) change `GENERATIVE_SERVICE_URL` to your generative model. 
+   1. in `dream/assistant_dists/dream_custom_prompted/` folder in files `docker-compose.override.yml`, `dev.yml` 
+   replace `transformers-lm-gptj` container description to a new one. 
+   In particular, one may replace in `PRETRAINED_MODEL_NAME_OR_PATH` parameter 
+   a utilized Language Model (LM) `GPT-J` with another one from `Transformers` library. 
+   Please change a port (`8130` for `transformers-lm-gptj`) to unused ones. 
+   2. in all prompted skills' containers descriptions change `GENERATIVE_SERVICE_URL` to your generative model. 
    Take into account that the service name is constructed as `http://<container-name>:<port>/<endpoint>`. 
-4. For each prompt-based skill, one needs to create an input state formatter. To do that, one needs to:
-   1. copy `dream/state_formatters/dream_persona.py` to `dream/state_formatters/<prompt_name>.py`.
-   2. replace string  `dream_persona` with `<prompt_name>` (component names are using underscores). 
+4. For each prompted skill, one needs to create an input state formatter. To do that, one needs to:
+   1. in `dream/dp_formatters/state_formatters.py` duplicate function:
+   ```python
+   def dff_dream_persona_prompted_skill_formatter(dialog):
+       return utils.dff_formatter(
+           dialog, "dff_dream_persona_prompted_skill",
+           types_utterances=["human_utterances", "bot_utterances", "utterances"]
+       )
+   ```
+   2. replace string  `dream_persona` with `<prompt_name>` (component names are using underscores) in each duplicated function. 
 5. In `dream/assistant_dists/dream_custom_prompted/pipeline_conf.json` for each prompt-based skill, one needs to:
-   1. replace strings `dream-persona` with `<prompt-name>` (container names are using dashes) and 
+   1. copy description of DFF Dream Persona Prompted Skill:
+   ```json
+            "dff_dream_persona_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 4.5,
+                    "url": "http://dff-dream-persona-prompted-skill:8134/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+   ```
+   2. replace strings `dream-persona` with `<prompt-name>` (container names are using dashes) and 
    `dream_persona` with `<prompt_name>` (component names are using underscores). It will change the container name, 
    skill name, formatter name
-   2. replace port (`8134` in the example) to the assigned one in `<prompt_name>.yml`.
+   3. replace port (`8134` in the example) to the assigned one in 
+   `dream/assistant_dists/dream_custom_prompted/docker-compose.override.yml`.
+6. If one does not want to keep DFF Dream Persona Prompted Skill in their distribution, one should remove all mentions
+of DFF Dream Persona Prompted Skill container from `yml`-configs and `pipeline_conf.json` files.
 
 **Important!** Please, take into account that naming skill utilizing <prompt_name> according to the instruction above
 is very important to provide Skill Selector automatically turn on the prompt-based skills which are returned as 

@@ -45,7 +45,7 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm:
+  transformers-lm-gptj:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
