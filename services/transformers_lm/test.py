@@ -10,7 +10,7 @@ def test_respond():
     contexts = [
         [
             "Respond like a friendly chatbot",
-            "Hi! I am Marcus. How are you today?",
+            "Human: Hi! I am Marcus. How are you today?",
         ]
     ]
     result = requests.post(url, json={"dialog_contexts": contexts}).json()
