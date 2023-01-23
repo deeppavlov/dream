@@ -15,13 +15,13 @@ def main():
     }
     gold = [
         {
-            "max_similarity": 0.766472339630127,
-            "prompts": ["pizza", "spacex", "ielts"],
+            "prompts": ["pizza", "dream_persona"],
+            "max_similarity": 0.7664722204208374
         },
         {
-            "max_similarity": 0.7275472283363342,
-            "prompts": ["spacex", "ielts", "pizza"],
-        },
+            "prompts": ["pizza", "dream_persona"],
+            "max_similarity": 0.277923583984375
+        }
     ]
 
     result = requests.post(url, json=input_data).json()
