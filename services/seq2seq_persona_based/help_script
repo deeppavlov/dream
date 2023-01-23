@@ -1,0 +1,6 @@
+COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml -f assistant_dists/dream_mini_persona_based/docker-compose.override.yml -f assistant_dists/dream_mini_persona_based/dev.yml -f assistant_dists/dream_mini_persona_based/proxy.yml up --build
+
+docker-compose exec agent python -m deeppavlov_agent.run agent.channel=cmd agent.pipeline_config=assistant_dists/dream_mini_persona_based/pipeline_conf.json
+
+black --line-length=120 .
+./bin/run_codestyle.sh

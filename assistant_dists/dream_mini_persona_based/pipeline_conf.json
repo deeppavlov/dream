@@ -47,7 +47,7 @@
         "timeout"
       ]
     },
-    "bot_annotator_selector": {
+    "response_annotator_selectors": {
       "connector": {
         "protocol": "python",
         "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -60,13 +60,13 @@
         "selector"
       ]
     },
-    "post_annotators": {
+    "response_annotators": {
       "sentseg": {
         "connector": "connectors.sentseg",
         "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
         "previous_services": [
-          "bot_annotator_selector"
+          "response_annotator_selectors"
         ],
         "state_manager_method": "add_annotation_prev_bot_utt"
       }
@@ -201,11 +201,11 @@
         ],
         "state_manager_method": "add_hypothesis"
       },
-      "dialogpt_persona_based": {
+      "seq2seq_persona_based": {
         "connector": {
           "protocol": "http",
           "timeout": 3,
-          "url": "http://dialogpt-persona-based:8131/respond"
+          "url": "http://seq2seq-persona-based:8140/respond"
         },
         "dialog_formatter": "state_formatters.dp_formatters:persona_bot_formatter",
         "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -215,7 +215,7 @@
         "state_manager_method": "add_hypothesis"
       }
     },
-    "post_skill_selector_annotators": {
+    "candidate_annotators": {
       "badlisted_words": {
         "connector": {
           "protocol": "http",
@@ -253,7 +253,7 @@
         "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
         "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
         "previous_services": [
-          "post_skill_selector_annotators"
+          "candidate_annotators"
         ],
         "state_manager_method": "add_bot_utterance"
       }
