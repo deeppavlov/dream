@@ -19,21 +19,21 @@ def main():
     }
     gold = [
         {
-            "max_similarity": 0.6948127746582031, 
+            "max_similarity": 0.6948127746582031,
             "persona": [
-                "I like Italian food especially pasta and pizza.", 
-                "I like to watch football and basketball on TV.", 
-                "I like watching travel video blogs."
-            ]
+                "I like Italian food especially pasta and pizza.",
+                "I like to watch football and basketball on TV.",
+                "I like watching travel video blogs.",
+            ],
         },
         {
-            "max_similarity": 0.6451027989387512, 
+            "max_similarity": 0.6451027989387512,
             "persona": [
-                "I like watching travel video blogs.", 
-                "I like to watch football and basketball on TV.", 
-                "I like Italian food especially pasta and pizza."
-            ]
-        }
+                "I like watching travel video blogs.",
+                "I like to watch football and basketball on TV.",
+                "I like Italian food especially pasta and pizza.",
+            ],
+        },
     ]
 
     result = requests.post(url, json=input_data).json()
