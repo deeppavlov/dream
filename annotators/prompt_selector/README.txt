@@ -1,4 +1,4 @@
-# Relative Persona Extractor
+# Prompt selector
 
 An annotator that utilizes Sentence Ranker to find the most relevant to the current context sentences from the bot's persona description.
 
