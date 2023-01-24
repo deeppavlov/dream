@@ -59,34 +59,15 @@ flows = {
             },
         },
         "italy_start": {
-            # RESPONSE: "Do you like Italy anna?",
             RESPONSE: "What's your favourite place in Italy?",
-            # TRANSITIONS: {
-            #     ("travel_italy_general", "not_been_to_italy", 2): int_cnd.is_no_vars,
-            #     ("travel_italy_general", "like_italy", 1): cnd.true(),
-            # },
             TRANSITIONS: {
-                ("travel_italy_general", "fav_place", 2): int_cnd.has_entities("prop:favorite_place"),
+                ("concrete_place_flow", "fav_place", 2): int_cnd.has_entities("prop:favorite_place"),
                 ("travel_italy_general", "like_italy", 1): cnd.true(),
             },
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
                 "set_flag": loc_prs.set_flag("italy_travel_skill_active", True),
-            },
-        },
-        "fav_place": {
-            RESPONSE: "What are the odds? I also love {users_fav_place}.",
-            TRANSITIONS: {
-                ("travel_italy_general", "like_italy"): cnd.true(),
-            },
-            PROCESSING: {
-                "entity_extraction": int_prs.entities(
-                    users_fav_place=["prop:favorite_place","wiki:Q515", "default:this place"]
-                ),
-                "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.0),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
         },
         "like_italy": {
@@ -98,8 +79,8 @@ flows = {
                         dm_cnd.is_midas("opinion")
                     ]
                 ),
-                ("global_flow", "fallback", 1): int_cnd.is_no_vars,
-                ("travel_italy_general", "been_to_italy", 1): cnd.true(),
+                ("travel_italy_general", "neg_to_italy"): int_cnd.is_no_vars,
+                ("global_flow", "fallback"): cnd.true(),
             },
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
@@ -117,104 +98,42 @@ flows = {
                     {"can_continue": CAN_CONTINUE_SCENARIO},
                 ],
             ),
-            TRANSITIONS: {("travel_italy_general", "been_to_italy", 2): cnd.true()},
+            TRANSITIONS: {
+                ("concrete_place_flow", "when_visited"): cnd.true(),
+            },
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             MISC: {"dialog_act": ["opinion"]},
         }, 
-        "been_to_italy": { 
-            RESPONSE: "Have you ever been to Italy?",
-            TRANSITIONS: {
-                ("travel_italy_general", "when_visited"): int_cnd.is_yes_vars,
-                ("travel_italy_general", "not_been_to_italy"): int_cnd.is_no_vars,
-            },
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-            },
-        },
-        "when_visited": {
-            RESPONSE: loc_rsp.append_unused(
-                initial="My favourite time to visit Italy is summer. ",
-                phrases=[loc_rsp.WHEN_TRAVEL],
-            ),
-            TRANSITIONS: {("travel_italy_general", "who_with"): cnd.true()},
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-            },
-        },
-        "who_with": {
-            RESPONSE: loc_rsp.append_unused(
-                initial="Awesome! ",
-                phrases=[loc_rsp.WHO_TRAVEL_WITH],
-            ),
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-            },
-            TRANSITIONS: {
-                ("travel_italy_general", "told_who"): cnd.any(
-                    [
-                        dm_cnd.is_midas("statement"),
-                        dm_cnd.is_midas("opinion")
-                    ]
-                ),
-                ("travel_italy_general", "been_places"): cnd.true(),
-            },
-        },
-        "told_who": {
-            RESPONSE: int_rsp.multi_response(
-                replies=["It doesn't matter whether you travel to Italy alone or in company. It's fun at all times.", 
-                "In Italy you can find fun things to do both alone and in company."],
-                confidences=[1.0, 1.0],
-                hype_attr=[
-                    {"can_continue": MUST_CONTINUE},
-                    {"can_continue": CAN_CONTINUE_SCENARIO},
-                ],
-            ),
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-            },
-            TRANSITIONS: {("travel_italy_general", "been_places"): cnd.true()},
-            MISC: {"dialog_act": ["opinion"]},
-        },
-        "been_places": {
-            RESPONSE: 'I love this country. I travelled in Italy a lot and everything is beautiful about it. What city '
-            'did you visit in Italy?',
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-            }, 
-            TRANSITIONS: {
-                ("travel_italy_general", "not_been_to_italy"): int_cnd.is_no_vars,
-                ("concrete_place_flow", "ask_fav"): cnd.true(),
-            }, 
-        },
-        "not_been_to_italy": {
+        "neg_to_italy": {
             RESPONSE: 'What a pity! This country and its culture are truly inspiring. What about italian cuisine? Do you like it?',
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
-            TRANSITIONS: {("italian_food_flow", "food_start"): cnd.true()}, 
+            TRANSITIONS: {
+                ("italian_food_flow", "food_start"): int_cnd.is_yes_vars,
+                ("global_flow", "fallback"):cnd.true(),
+            }, 
         },
     },
     "concrete_place_flow": {
-        "ask_fav": {
-            RESPONSE: "Wow! I visited {user_fav_city}, too. What impressed you the most there?",
+        "fav_place": {
+            RESPONSE: "What are the odds? I also love {users_fav_place}. What impressed you the most there?",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    user_fav_city=["wiki:Q515", "tag:location", "default:your favourite city"]
+                    users_fav_place=["prop:favorite_place", "wiki:Q515", "default:this place"]
                 ),
-                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "slot_filling": int_prs.fill_responses_by_slots(),
+                "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
-            TRANSITIONS: {("concrete_place_flow", "day_activities"): cnd.true()},
+            TRANSITIONS: {
+                ("concrete_place_flow", "when_visited"): loc_cnd.sentiment_detected("negative"),
+                ("concrete_place_flow", "day_activities"): cnd.true(),
+            },
         },
         "day_activities": {
             RESPONSE: loc_rsp.append_unused(
@@ -226,13 +145,18 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
+                ("concrete_place_flow", "fav_activity", 2): int_cnd.has_entities("prop:favorite_activity"),
                 ("concrete_place_flow", "bot_activ_opinion"): loc_cnd.sentiment_detected("negative"),
-                "night_activities": cnd.true(),
+                ("concrete_place_flow","when_visited"): cnd.true(),
             },
         },
-        "night_activities": {
-            RESPONSE: "Sounds like you had much fun! How about your nights?",
+        "fav_activity": {
+            RESPONSE: "{user_fav_activity} is one of my favourite activities, too. What about your nights?",
             PROCESSING: {
+                "entity_extraction": int_prs.entities(
+                    user_fav_activity=["prop:favorite_activity", "default:This"]
+                ),
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
@@ -254,18 +178,102 @@ flows = {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
-            TRANSITIONS: {("italian_food_flow", "food_start"): cnd.true()},
+            TRANSITIONS: {("concrete_place_flow", "when_visited"): cnd.true()},
             MISC: {"dialog_act": ["opinion"]},
         },
-    },
-    "italian_food_flow": {
-        "food_start": { 
-            RESPONSE: "In Italy it's always a nosh-up. Do you agree?",
+        "when_visited": {
+            RESPONSE: loc_rsp.append_unused(
+                initial="My favourite time to visit Italy is summer. ",
+                phrases=[loc_rsp.WHEN_TRAVEL],
+            ),
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
-            TRANSITIONS: {("global_flow", "fallback"): cnd.true()},
+            TRANSITIONS: {
+                ("concrete_place_flow", "told_when", 2): int_cnd.has_entities("prop:favorite_season"),
+                ("italian_food_flow", "food_start"): cnd.true(),
+            },
+        },
+        "told_when": {
+            RESPONSE: 
+                "It's fun at all seasons but especially in {user_fav_season}.",
+            PROCESSING: {
+                "entity_extraction": int_prs.entities(
+                    user_fav_season=["prop:favorite_season", "default:summer"]
+                ),
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+            },
+            TRANSITIONS: {("italian_food_flow", "food_start"): cnd.true()},
+        },
+    },
+    "italian_food_flow": {
+        "food_start": { 
+            RESPONSE: "In Italy it's always a nosh-up. Is there any italian dish that you never get tired of eating?",
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+            },
+            TRANSITIONS: {
+                ("italian_food_flow", "fav_food"): int_cnd.has_entities("prop:favorite_food"),
+                ("italy_disappointments", "neg_experience"): cnd.true(),
+            },
+        },
+        "fav_food": {
+            RESPONSE: "Oh, {user_fav_food} is to-die-for. What drink does it go best with?",
+            PROCESSING: {
+                "entity_extraction": int_prs.entities(
+                    user_fav_food=["prop:favorite_food", "default:this dish"]
+                ),
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+            },
+            TRANSITIONS: {
+                ("italian_food_flow", "fav_drink"): int_cnd.has_entities("prop:favorite_drink"),
+                ("italy_disappointments", "neg_experience"): cnd.true(),
+            },
+        },
+        "fav_drink": {
+            RESPONSE: "It is a useful recommendation. I'll try {user_fav_drink} next time. Thank you!",
+            PROCESSING: {
+                "entity_extraction": int_prs.entities(
+                    user_fav_drink=["prop:favorite_drink", "default:this pairing"]
+                ),
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+            },
+            TRANSITIONS: {
+                ("italy_disappointments", "neg_experience"): cnd.true(),
+            },
+        },
+    },
+    "italy_disappointments": {
+        "neg_experience": {
+            RESPONSE: "You know what disappointed me the most in Florence? The parking! "
+            "I had to leave the car on the outskirts of the city. Was there anything you disliked in Italy?",
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+            },
+            TRANSITIONS: {
+                ("italy_disappointments", "sympathy"): int_cnd.has_entities("prop:dislike"),
+                ("global_flow", "fallback"): cnd.true(),
+            },
+        },
+        "sympathy": {
+            RESPONSE: "I had no idea. I would feel the same way about {user_dislike}.",
+            PROCESSING: {
+                "entity_extraction": int_prs.entities(
+                    user_dislike=["prop:dislike", "default:such situation"]
+                ),
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+            },
+            TRANSITIONS: {
+                ("global_flow", "fallback"): cnd.true(),
+            },
         },
     },
     "global_flow": {
@@ -288,3 +296,64 @@ actor = Actor(
 )
 
 logger.info("Actor created successfully")
+
+        # "italy_start": {
+            # RESPONSE: "Do you like Italy anna?",
+            # TRANSITIONS: {
+            #     ("travel_italy_general", "not_been_to_italy", 2): int_cnd.is_no_vars,
+            #     ("travel_italy_general", "like_italy", 1): cnd.true(),
+            # },
+
+                    # "who_with": {
+        #     RESPONSE: loc_rsp.append_unused(
+        #         initial="Awesome! ",
+        #         phrases=[loc_rsp.WHO_TRAVEL_WITH],
+        #     ),
+        #     PROCESSING: {
+        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+        #     },
+        #     TRANSITIONS: {
+        #         ("travel_italy_general", "told_who"): cnd.any(
+        #             [
+        #                 dm_cnd.is_midas("statement"),
+        #                 dm_cnd.is_midas("opinion")
+        #             ]
+        #         ),
+        #         ("travel_italy_general", "been_places"): cnd.true(),
+        #     },
+        # },
+
+                # "night_activities": {
+        #     RESPONSE: "Sounds like you had much fun! How about your nights?",
+        #     PROCESSING: {
+        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+        #     },
+        #     TRANSITIONS: {("concrete_place_flow", "bot_activ_opinion"): cnd.true()},
+        # },
+
+                # "been_to_italy": { 
+        #     RESPONSE: "Have you ever been to Italy?",
+        #     TRANSITIONS: {
+        #         ("travel_italy_general", "when_visited"): int_cnd.is_yes_vars,
+        #         ("travel_italy_general", "not_been_to_italy"): int_cnd.is_no_vars,
+        #     },
+        #     PROCESSING: {
+        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+        #     },
+        # },
+
+                # "been_places": {
+        #     RESPONSE: 'I love this country. I travelled in Italy a lot and everything is beautiful about it. What city '
+        #     'did you visit in Italy?',
+        #     PROCESSING: {
+        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+        #     }, 
+        #     TRANSITIONS: {
+        #         ("travel_italy_general", "not_been_to_italy"): int_cnd.is_no_vars,
+        #         ("concrete_place_flow", "ask_fav"): cnd.true(),
+        #     }, 
+        # },

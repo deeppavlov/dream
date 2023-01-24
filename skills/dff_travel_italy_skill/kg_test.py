@@ -4,10 +4,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DB = "test_italy_skill"
+# TEAM = ""
 TEAM = "yashkens|c77b"
 
-terminus_kg = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB)
+PASSWORD = ""  #insert your password here
 
-print(terminus_kg.ontology.get_all_entity_kinds())
+terminus_kg = TerminusdbKnowledgeGraph(
+    team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD
+    )
+
+# terminus_kg= TerminusdbKnowledgeGraph(team=TEAM, db_name=DB)
+
+# terminus_kg.drop_database()
 
 print(terminus_kg.get_all_entities())
