@@ -19,8 +19,8 @@ def animals_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **
     if caption != "" and caption is not None:
         animal = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("animal"))
         if animal != "" and animal is not None:
-            int_ctx.set_confidence(ctx, actor, 0.85)
-            return random.choice(
+            int_ctx.set_confidence(ctx, actor, 1.0)
+            response = random.choice(
                 [
                     "What a muzzle! Would you like to have an animal like that?",
                     "I would like to have an animal like that. I wonder if it eats a lot.",
@@ -29,9 +29,12 @@ def animals_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **
             )
         else:
             int_ctx.set_confidence(ctx, actor, 0.85)
-            return DEFAULT_RESPONSE
-    int_ctx.set_confidence(ctx, actor, 0.85)
-    return DEFAULT_RESPONSE
+            response = DEFAULT_RESPONSE
+    else:
+        int_ctx.set_confidence(ctx, actor, 0.85)
+        response = DEFAULT_RESPONSE
+    logger.info(f"dff-image-skill animals response: {response}")
+    return response
 
 
 def food_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
@@ -45,7 +48,7 @@ def food_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwa
         food = loc_prs.extract_entity(caption, loc_prs.get_all_possible_entities("food"))
         if food != "" and food is not None:
             int_ctx.set_confidence(ctx, actor, 0.85)
-            return random.choice(
+            response = random.choice(
                 [
                     f"Did you cook this {food} by yourself? It looks delicious!",
                     f"Would you like to eat this {food}?",
@@ -53,9 +56,12 @@ def food_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwa
             )
         else:
             int_ctx.set_confidence(ctx, actor, 0.85)
-            return DEFAULT_RESPONSE
-    int_ctx.set_confidence(ctx, actor, 0.85)
-    return DEFAULT_RESPONSE
+            response = DEFAULT_RESPONSE
+    else:
+        int_ctx.set_confidence(ctx, actor, 0.85)
+        response = DEFAULT_RESPONSE
+    logger.info(f"dff-image-skill food response: {response}")
+    return response
 
 
 def people_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
@@ -68,13 +74,16 @@ def people_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **k
     if caption != "" and caption is not None:
         verb = loc_prs.extract_verb_from_sentence(caption)
         if verb != "" and verb is not None:
-            int_ctx.set_confidence(ctx, actor, 0.85)
-            return f"Do you enjoy {verb} with other people?"
+            int_ctx.set_confidence(ctx, actor, 1.0)
+            response = f"Do you enjoy {verb} with other people?"
         else:
             int_ctx.set_confidence(ctx, actor, 0.85)
-            return DEFAULT_RESPONSE
-    int_ctx.set_confidence(ctx, actor, 0.85)
-    return DEFAULT_RESPONSE
+            response = DEFAULT_RESPONSE
+    else:
+        int_ctx.set_confidence(ctx, actor, 0.85)
+        response = DEFAULT_RESPONSE
+    logger.info(f"dff-image-skill people response: {response}")
+    return response
 
 
 def generic_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
@@ -85,12 +94,15 @@ def generic_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **
         .get("caption", "")
     )
     if caption != "" and caption is not None:
-        int_ctx.set_confidence(ctx, actor, 0.85)
-        return random.choice(
+        int_ctx.set_confidence(ctx, actor, 1.0)
+        response = random.choice(
             [
                 f"Cool! Why did you send me {caption}?",
                 f"It looks interesting, what did you mean by sending me {caption}?",
             ]
         )
-    int_ctx.set_confidence(ctx, actor, 0.85)
-    return DEFAULT_RESPONSE
+    else:
+        int_ctx.set_confidence(ctx, actor, 0.85)
+        response = DEFAULT_RESPONSE
+    logger.info(f"dff-image-skill generic response: {response}")
+    return response
