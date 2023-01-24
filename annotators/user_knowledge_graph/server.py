@@ -53,8 +53,6 @@ TEAM = "yashkens|c77b"
 
 graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password="G5KMuz9dF1K2mD5cPz726oazSJJtkFLw")
 
-graph.drop_database()
-
 logger.info('Graph Loaded!')
 
 
