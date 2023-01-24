@@ -1,18 +1,16 @@
+import json
 import logging
 import os
 import random
-import json
+import re
 from collections import Counter
+
 import pandas as pd
 import spacy
-import re
-import time
-import tqdm
 from common.utils import join_words_in_or_pattern
-
+from df_engine.core import Context, Actor
 from . import response as loc_rsp
 
-from df_engine.core import Context, Actor
 
 LANGUAGE = os.getenv("LANGUAGE")
 
@@ -25,24 +23,14 @@ if LANGUAGE == "EN":
 else:
     df = pd.read_csv("common/dream_tutor/cerf_american.tsv", sep="\t")
 
+# All 10k words?? I thought we would consider only 1k-2k depending on your estimation
 with open("common/google-10000-english-no-swears.txt") as f:
-    stopwords = f.readlines()
+    STOPWORDS = f.readlines()
 
-words_cerf_A1 = list(df[df["cerf"] == "A1"]["word"])
-words_cerf_A2 = list(df[df["cerf"] == "A2"]["word"])
-words_cerf_B1 = list(df[df["cerf"] == "B1"]["word"])
-words_cerf_B2 = list(df[df["cerf"] == "B2"]["word"])
-words_cerf_C1 = list(df[df["cerf"] == "C1"]["word"])
-words_cerf_C2 = list(df[df["cerf"] == "C2"]["word"])
-
-words_cerf = {
-    "A1": [word for word in words_cerf_A1 if word not in stopwords],
-    "A2": [word for word in words_cerf_A2 if word not in stopwords],
-    "B1": [word for word in words_cerf_B1 if word not in stopwords],
-    "B2": [word for word in words_cerf_B2 if word not in stopwords],
-    "C1": [word for word in words_cerf_C1 if word not in stopwords],
-    "C2": [word for word in words_cerf_C2 if word not in stopwords],
-}
+LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
+words_cerf = {level: list(df[df["cerf"] == level]["word"]) for level in LEVELS}
+for level in LEVELS:
+    words_cerf[level] = [word for word in words_cerf[level] if word not in STOPWORDS]
 
 brackets_pattern = re.compile("[\(].*?[\)]")
 etc_pattern = re.compile(", etc.", re.IGNORECASE)
@@ -51,7 +39,6 @@ smth_pattern = re.compile(r"(\(sb's\)|sb's|sth|sth/sb|sb/sth|; )", re.IGNORECASE
 starting_pattern = re.compile(r"^(to |a |the )", re.IGNORECASE)
 stars_pattern = re.compile(r"\* \* \*")
 space_re_pattern = re.compile(r"\. \* \?")
-last_space_pattern = re.compile(r"\s$")
 
 
 def preprocess_words(phrase):
@@ -65,7 +52,7 @@ def preprocess_words(phrase):
     phrase = " ".join([token.lemma_ for token in doc_phrase])
     phrase = stars_pattern.sub(".*?", phrase)
     phrase = space_re_pattern.sub(".*?", phrase)
-    phrase = last_space_pattern.sub("", phrase)
+    phrase = phrase.strip()
     return phrase
 
 
