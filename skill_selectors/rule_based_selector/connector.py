@@ -85,7 +85,7 @@ class RuleBasedSkillSelectorConnector:
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
-            is_factoid = get_factoid(user_uttr).get("is_factoid", 0.0) > 0.96
+            is_factoid = "is_factoid" in get_factoid(user_uttr, probs=False)
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
             if_choose_topic_detected = if_choose_topic(user_uttr, bot_uttr)
