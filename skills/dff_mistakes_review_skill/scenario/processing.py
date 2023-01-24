@@ -25,7 +25,7 @@ else:
 
 # All 10k words?? I thought we would consider only 1k-2k depending on your estimation
 with open("common/google-10000-english-no-swears.txt") as f:
-    STOPWORDS = f.readlines()
+    STOPWORDS = f.readlines()[:2000]
 
 LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
 words_cerf = {level: list(df[df["cerf"] == level]["word"]) for level in LEVELS}
