@@ -89,7 +89,6 @@ def people_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **k
                 [
                     "Are they your friends?",
                     "Do you know these people?",
-
                 ]
             )
     else:
