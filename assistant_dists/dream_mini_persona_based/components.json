@@ -1,0 +1,342 @@
+[
+    {
+        "name": "spelling_preprocessing",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Spelling Preprocessing",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "sentseg",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Sentseg",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "badlisted_words",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Badlisted Words",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "intent_catcher",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Intent Catcher",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "relative_persona_extractor",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Relative Persona Extractor",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "midas_classification",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Midas Classification",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dff_intent_responder_skill",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dff Intent Responder Skill",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dummy_skill",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dummy Skill",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dialogpt",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dialogpt",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dialogpt_persona_based",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dialogpt Persona Based",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "spelling_preprocessing",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Spelling Preprocessing",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "sentseg",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Sentseg",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "badlisted_words",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Badlisted Words",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "intent_catcher",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Intent Catcher",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "relative_persona_extractor",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Relative Persona Extractor",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "midas_classification",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Midas Classification",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dff_intent_responder_skill",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dff Intent Responder Skill",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dummy_skill",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dummy Skill",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dialogpt",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dialogpt",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "dialogpt_persona_based",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Dialogpt Persona Based",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_mini_persona_based distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    }
+]

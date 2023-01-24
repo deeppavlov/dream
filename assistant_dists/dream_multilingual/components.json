@@ -1,0 +1,104 @@
+[
+    {
+        "name": "toxic_classification",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Toxic Classification",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_multilingual distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "sentiment_classification",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Sentiment Classification",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_multilingual distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "gpt2_generator",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Gpt2 Generator",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_multilingual distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "toxic_classification",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Toxic Classification",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_multilingual distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "sentiment_classification",
+        "group": "annotators",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Sentiment Classification",
+            "author": "DeepPavlov",
+            "description": "One of the annotators used by dream_multilingual distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    },
+    {
+        "name": "gpt2_generator",
+        "group": "skills",
+        "is_editable": false,
+        "metadata": {
+            "type": "retrieval",
+            "display_name": "Gpt2 Generator",
+            "author": "DeepPavlov",
+            "description": "One of the skills used by dream_multilingual distribution. Add it to your distribution and try it out",
+            "version": "0.1.0",
+            "date_created": "2023-01-17T07:02:01",
+            "ram_usage": "1.0 GB",
+            "gpu_usage": "1.0 GB",
+            "disk_usage": "1.0 GB",
+            "execution_time": 1.5
+        }
+    }
+]
