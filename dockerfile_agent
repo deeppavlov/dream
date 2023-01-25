@@ -39,7 +39,7 @@ ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
 
 COPY . /dp-agent/.
-#COPY agent_settings.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py
+# COPY agent_settings.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py
 #RUN printf 'debug = False\nresponse_logger = False' > /dp-agent/dp_agent_settings.py
 
 

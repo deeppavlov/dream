@@ -15,4 +15,6 @@ services:
   mongo:
     command: mongod
     image: mongo:4.0.0
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
 version: '3.7'

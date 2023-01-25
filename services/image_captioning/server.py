@@ -1,5 +1,6 @@
 import os
-
+import requests
+from io import BytesIO
 import torch
 from torchvision import transforms
 import numpy as np
@@ -129,7 +130,8 @@ def respond():
     captions = []
     try:
         for img_path in img_paths:
-            image = Image.open(img_path)
+            response = requests.get(img_path)
+            image = Image.open(BytesIO(response.content))
             image.thumbnail((256, 256))
 
             # Construct input sample & preprocess for GPU if cuda available
