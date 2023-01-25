@@ -79,7 +79,8 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing:/src"
+      - "./annotators/spelling_preprocessing_dp:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8074:8074
   spacy-annotator:
