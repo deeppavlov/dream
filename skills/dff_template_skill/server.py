@@ -4,6 +4,8 @@ import logging
 import time
 import os
 import random
+from dff.script import Message
+from common.dff_release.integration.context import get_last_human_utterance
 
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
@@ -11,9 +13,9 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
 
-from common.dff.integration.actor import load_ctxs, get_response
+from common.dff_release.integration.actor import load_ctxs, get_response
 
-from scenario.main import actor
+from scenario.main import pipeline, db
 
 # import test_server
 
@@ -45,8 +47,10 @@ def handler(requested_data, random_seed=None):
             # for tests
             if random_seed:
                 random.seed(int(random_seed))
-            ctx = actor(ctx)
-            responses.append(get_response(ctx, actor))
+            last_request = get_last_human_utterance(ctx, pipeline.actor)["text"]
+            db[ctx.id] = ctx
+            ctx = pipeline(Message(text=last_request), ctx.id)
+            responses.append(get_response(ctx, pipeline.actor))
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
