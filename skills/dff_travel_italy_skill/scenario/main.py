@@ -145,16 +145,16 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("concrete_place_flow", "fav_activity", 2): int_cnd.has_entities("prop:favorite_activity"),
+                ("concrete_place_flow", "like_activity", 2): int_cnd.has_entities("prop:like_activity"),
                 ("concrete_place_flow", "bot_activ_opinion"): loc_cnd.sentiment_detected("negative"),
                 ("concrete_place_flow","when_visited"): cnd.true(),
             },
         },
-        "fav_activity": {
-            RESPONSE: "{user_fav_activity} is one of my favourite activities, too. What about your nights?",
+        "like_activity": {
+            RESPONSE: "{user_liked_activity} is one of the things I like to do as well. What about your nights?",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    user_fav_activity=["prop:favorite_activity", "default:This"]
+                    user_liked_activity=["prop:like_activity", "default:This"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
@@ -217,15 +217,15 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("italian_food_flow", "fav_food"): int_cnd.has_entities("prop:favorite_food"),
+                ("italian_food_flow", "fav_food"): int_cnd.has_entities("prop:like_food"),
                 ("italy_disappointments", "neg_experience"): cnd.true(),
             },
         },
         "fav_food": {
-            RESPONSE: "Oh, {user_fav_food} is to-die-for. What drink does it go best with?",
+            RESPONSE: "Oh, {user_likes_food} is to-die-for. What drink does it go best with?",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    user_fav_food=["prop:favorite_food", "default:this dish"]
+                    user_likes_food=["prop:like_food", "default:this dish"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
