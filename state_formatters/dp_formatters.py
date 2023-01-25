@@ -529,12 +529,10 @@ def skill_with_attributes_formatter_service(payload: List):
     """
     Formatter should use `"state_manager_method": "add_hypothesis"` in config!!!
     Because it returns list of hypothesis even if the payload is returned for one sample!
-
     Args:
         payload: if one sample, list of the following structure:
             (text, confidence, ^human_attributes, ^bot_attributes, attributes) [by ^ marked optional elements]
                 if several hypothesis, list of lists of the above structure
-
     Returns:
         list of dictionaries of the following structure:
             {"text": text, "confidence": confidence_value,
@@ -933,6 +931,10 @@ def dff_wiki_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
+
+
+def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_image_skill")
 
 
 def dff_dream_persona_prompted_skill_formatter(dialog):
