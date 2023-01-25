@@ -94,6 +94,8 @@ def cut_response(response):
 def respond():
     st_time = time.time()
     contexts = request.json.get("utterances_histories", [])
+    if len(contexts) == 0:
+        contexts = request.json.get("dialog_contexts", [])
 
     try:
         responses = []
@@ -136,6 +138,8 @@ def respond():
 def continue_last_uttr():
     st_time = time.time()
     contexts = request.json.get("utterances_histories", [])
+    if len(contexts) == 0:
+        contexts = request.json.get("dialog_contexts", [])
 
     try:
         responses = []
