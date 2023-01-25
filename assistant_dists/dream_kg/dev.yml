@@ -451,5 +451,5 @@ services:
       - "./skills/dff_travel_italy_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8131:8131
+      - 8136:8136
 version: "3.7"

@@ -957,7 +957,7 @@
             "dff_travel_italy_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://dff-travel-italy-skill:8131/respond"
+                    "url": "http://dff-travel-italy-skill:8136/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_travel_italy_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

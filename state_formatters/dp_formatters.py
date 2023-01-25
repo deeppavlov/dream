@@ -213,6 +213,7 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog_history_init = [uttr["text"] for uttr in dialog["utterances"][-2:]]
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     dialog_history = [uttr["text"] for uttr in dialog["utterances"][-2:]]
     entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
@@ -220,6 +221,7 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
     named_entities = dialog["human_utterances"][-1]["annotations"].get("ner", [{}])
     return [
         {
+            "utterances_init": [dialog_history_init],
             "utterances": [dialog_history],
             "entities_with_labels": [entities_with_labels],
             "named_entities": [named_entities],

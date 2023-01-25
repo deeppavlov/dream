@@ -21,7 +21,7 @@ services:
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, terminusdb:6363, storygpt:8126,
           prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8130, custom-entity-linking:8135,
-          dff-user-kg-skill:8132, dff-travel-italy-skill:8131"
+          dff-user-kg-skill:8132, dff-travel-italy-skill:8136"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
     env_file: [.env]
@@ -1343,11 +1343,11 @@ services:
     env_file: [.env]
     build:
       args:
-        SERVICE_PORT: 8131
+        SERVICE_PORT: 8136
         SERVICE_NAME: dff_travel_italy_skill
       context: .
       dockerfile: ./skills/dff_travel_italy_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8131 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8136 --reload
     deploy:
       resources:
         limits:
