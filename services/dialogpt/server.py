@@ -54,9 +54,11 @@ def generate_responses(context, model, tokenizer, continue_last_uttr=False):
         history_depth = MAX_HISTORY_DEPTH
         if len(context[-1].split()) > 3:
             history_depth = MAX_HISTORY_DEPTH - 1
-        context = context[-history_depth:-1]
+        starting_index = -history_depth
+    else:
+        starting_index = 0
 
-    for uttr in context:
+    for uttr in context[starting_index:-1]:
         encoded_context += [tokenizer.encode(uttr + " " + tokenizer.eos_token, return_tensors="pt")]
     if continue_last_uttr:
         encoded_context += [tokenizer.encode(context[-1] + " ", return_tensors="pt")]
