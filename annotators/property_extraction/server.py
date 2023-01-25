@@ -1,3 +1,4 @@
+import copy
 import logging
 import os
 import re
@@ -9,6 +10,7 @@ import spacy
 from flask import Flask, jsonify, request
 
 from deeppavlov import build_model
+from deeppavlov.models.kbqa.sentence_answer import sentence_answer
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -52,21 +54,38 @@ except Exception as e:
     raise e
 
 
+def sentrewrite(sentence, answer):
+    if any([sentence.startswith(elem) for elem in ["what's", "what is"]]):
+        for old_tok, new_tok in [("what's your", f"{answer} is my"), ("what is your", f"{answer} is my"),
+                                 ("what is", "{answer} is"), ("what's", "{answer} is")]:
+            sentence = sentence.replace(old_tok, new_tok)
+    else:
+        sentence = sentence_answer(sentence, answer)
+    return sentence
+
+
 def get_result(request):
     st_time = time.time()
     init_uttrs = request.json.get("utterances", [])
+    init_uttrs_cased = request.json.get("utterances_init", [])
+    if not init_uttrs_cased:
+        init_uttrs_cased = copy.deepcopy(init_uttrs)
     named_entities_batch = request.json.get("named_entities", [[] for _ in init_uttrs])
     entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in init_uttrs])
     entity_info_batch = request.json.get("entity_info", [[] for _ in init_uttrs])
-    uttrs = []
-    for uttr_list in init_uttrs:
+    logger.info(f"init_uttrs {init_uttrs}")
+    uttrs, uttrs_cased = [], []
+    for uttr_list, uttr_list_cased in zip(init_uttrs, init_uttrs_cased):
         if len(uttr_list) == 1:
             uttrs.append(uttr_list[0])
+            uttrs_cased.append(uttr_list[0])
         else:
-            utt_prev = uttr_list[-2].lower()
-            utt_cur = uttr_list[-1].lower()
+            utt_prev = uttr_list_cased[-2]
+            utt_cur = uttr_list_cased[-1]
+            utt_prev_l = utt_prev.lower()
+            utt_cur_l = utt_cur.lower()
             is_question = (
-                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]]) or "?" in utt_prev
+                any([utt_prev_l.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]]) or "?" in utt_prev_l
             )
 
             is_sentence = False
@@ -74,24 +93,33 @@ def get_result(request):
             if parsed_sentence:
                 tokens = [elem.text for elem in parsed_sentence]
                 tags = [elem.tag_ for elem in parsed_sentence]
-                found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP"]])
+                found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP", "VBD"]])
                 if found_verbs and len(tokens) > 2:
                     is_sentence = True
 
             if is_question and not is_sentence:
-                uttrs.append(f"{utt_prev} {utt_cur}")
+                if len(utt_cur_l.split()) <= 2:
+                    uttrs.append(sentrewrite(utt_prev_l, utt_cur_l))
+                    uttrs_cased.append(sentrewrite(utt_prev, utt_cur))
+                else:
+                    uttrs.append(f"{utt_prev_l} {utt_cur_l}")
+                    uttrs_cased.append(f"{utt_prev} {utt_cur}")
             else:
-                uttrs.append(utt_cur)
+                uttrs.append(utt_cur_l)
+                uttrs_cased.append(utt_cur)
 
     triplets_batch = []
     outputs, scores = generative_ie(uttrs)
-    for output in outputs:
+    for output, uttr in zip(outputs, uttrs_cased):
         triplet = ""
         fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", output)
         if fnd:
             triplet = list(fnd[0])
             if triplet[0] == "i":
                 triplet[0] = "user"
+            obj = triplet[2]
+            if obj.islower() and obj.capitalize() in uttr:
+                triplet[2] = obj.capitalize()
         triplets_batch.append(triplet)
     logger.info(f"outputs {outputs} scores {scores} triplets_batch {triplets_batch}")
     if rel_cls_flag:

@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8129/respond"
+    url = "http://0.0.0.0:8130/respond"
 
     request_data = [{"utterances": [["i live in moscow"]]}]
     gold_results = [[{"triplet": {"object": "moscow", "relation": "live in citystatecountry", "subject": "user"}}]]
