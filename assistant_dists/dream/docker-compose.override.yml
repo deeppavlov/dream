@@ -15,7 +15,7 @@ services:
           dff-friendship-skill:8086, entity-storer:8089,
           dff-book-skill:8032, dff-grounding-skill:8080,
           dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
-          midas-classification:8090, fact-random:8119, fact-retrieval:8100,
+          fact-random:8119, fact-retrieval:8100,
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
@@ -621,23 +621,16 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
-      args:
-        CONFIG: brillmoore_wikitypos_en.json
-        PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: EN
-      context: ./
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
+      context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 6.5G
+          memory: 50M
         reservations:
-          memory: 6.5G
+          memory: 50M
 
   dff-grounding-skill:
     env_file: [ .env ]
@@ -1193,6 +1186,7 @@ services:
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
         CONFIG_NAME: dialogpt_en.json
+        MAX_HISTORY_DEPTH: 2
       context: .
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
@@ -1226,9 +1220,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 2G
         reservations:
-          memory: 2.5G
+          memory: 2G
 
   relative-persona-extractor:
     env_file: [ .env ]
@@ -1236,7 +1230,7 @@ services:
       args:
         SERVICE_PORT: 8133
         SERVICE_NAME: relative_persona_extractor
-        N_SENTENCES_OT_RETURN: 3
+        N_SENTENCES_TO_RETURN: 3
       context: .
       dockerfile: ./annotators/relative_persona_extractor/Dockerfile
     command: flask run -h 0.0.0.0 -p 8133

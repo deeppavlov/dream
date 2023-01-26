@@ -102,12 +102,19 @@
       "next_step":["offered_advice"],
       "link": ""
     },
-    "love":{
+    "disgust":{
       "answers": [
-        "Oh, you are in a lovely mood, I see. That's cool. I love some drama movies a lot."
+         "I suppose that you don't enjoy the conversation. Do you want to talk about something else?"
       ],
       "next_step":[""],
       "link": "dff_movie_skill"
+    },
+    "surprise":{
+      "answers": [
+         "I see that you are surprised."
+      ],
+      "next_step":[""],
+      "link": ""
     },
     "anger":{
       "answers": [

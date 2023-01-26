@@ -37,7 +37,7 @@ def main():
     ]
 
     result = requests.post(url, json=input_data).json()
-    assert result == gold, print(result)
+    assert result == gold, print(f"Got: {result} but expected: {gold}")
     print("Success!")
 
 
