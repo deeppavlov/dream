@@ -13,7 +13,7 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
 
-from common.dff_release.integration.actor import load_ctxs, get_response
+from common.dff_release.integration.serializer import load_ctxs, get_response
 
 from scenario.main import pipeline, db
 
