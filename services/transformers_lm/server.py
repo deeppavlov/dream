@@ -20,7 +20,6 @@ CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 max_length = generation_params.get("max_length", 50)

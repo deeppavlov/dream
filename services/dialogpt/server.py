@@ -23,7 +23,8 @@ CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 2
+MAX_HISTORY_DEPTH = os.environ.get("MAX_HISTORY_DEPTH")
+MAX_HISTORY_DEPTH = int(MAX_HISTORY_DEPTH) if MAX_HISTORY_DEPTH else MAX_HISTORY_DEPTH
 smiles_pattern = re.compile(r":[)(DpP3]")
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
@@ -49,11 +50,15 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def generate_responses(context, model, tokenizer, continue_last_uttr=False):
     encoded_context = []
 
-    history_depth = MAX_HISTORY_DEPTH
-    if len(context[-1].split()) > 3:
-        history_depth = MAX_HISTORY_DEPTH - 1
+    if MAX_HISTORY_DEPTH:
+        history_depth = MAX_HISTORY_DEPTH
+        if len(context[-1].split()) > 3:
+            history_depth = MAX_HISTORY_DEPTH - 1
+        starting_index = -history_depth
+    else:
+        starting_index = 0
 
-    for uttr in context[-history_depth:-1]:
+    for uttr in context[starting_index:-1]:
         encoded_context += [tokenizer.encode(uttr + " " + tokenizer.eos_token, return_tensors="pt")]
     if continue_last_uttr:
         encoded_context += [tokenizer.encode(context[-1] + " ", return_tensors="pt")]
@@ -94,6 +99,8 @@ def cut_response(response):
 def respond():
     st_time = time.time()
     contexts = request.json.get("utterances_histories", [])
+    if len(contexts) == 0:
+        contexts = request.json.get("dialog_contexts", [])
 
     try:
         responses = []
@@ -136,6 +143,8 @@ def respond():
 def continue_last_uttr():
     st_time = time.time()
     contexts = request.json.get("utterances_histories", [])
+    if len(contexts) == 0:
+        contexts = request.json.get("dialog_contexts", [])
 
     try:
         responses = []
