@@ -36,52 +36,76 @@
             "info_for_user": ""
         },
         {
-            "utterance": "Good. Why are you looking for a new job? Why did you decide to have a chat with me today?",
-            "info_for_user": "Say that it is always a good idea to monitor the market and look at different opportunities."
+            "Q": "Why are you looking for a new job? Why did you decide to have a chat with me today?",
+            "P": "Say that it is always a good idea to monitor the market and look at different opportunities.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "What are you looking for? What kind of job or position would be of interest to you?",
-            "info_for_user": "Say that you are looking for new challenges. Mention industries you are most interested in."
+            "Q": "What are you looking for? What kind of job or position would be of interest to you?",
+            "P": "Say that you are looking for new challenges. Mention industries you are most interested in.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "Can you tell me about one of your career achievements you are most proud of?",
-            "info_for_user": "Describe one of the projects you worked on by describing a situation, project goals, your actions and results."
+            "Q": "Can you tell me about one of your career achievements you are most proud of?",
+            "P": "Describe one of the projects you worked on by describing a situation, project goals, your actions and results.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "Can you tell me about the key areas of your expertise? What areas do you consider yourself to be an expert in?",
-            "info_for_user": "Answer with a number of years of experience in your domain of choice. Mention your hard skills, such as tech skills, and soft skills, such as communication, management, etc."
+            "Q": "Can you tell me about the key areas of your expertise? What areas do you consider yourself to be an expert in?",
+            "P": "Answer with a number of years of experience in your domain of choice. Mention your hard skills, such as tech skills, and soft skills, such as communication, management, etc.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "What are your key strengths or superpowers?",
-            "info_for_user": "Focus on your responsibility, proactivity, attention to details, willingness to learn and adapt, focusing on company's business targets."
+            "Q": "What are your key strengths or superpowers?",
+            "P": "Focus on your responsibility, proactivity, attention to details, willingness to learn and adapt, focusing on company's business targets.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "What do you consider to be your areas for development?",
-            "info_for_user": "Say that continuous education and self development are key for you and that you never stop learning. Mention that you are working to improve your English speaking and presentational skills."
+            "Q": "What do you consider to be your areas for development?",
+            "P": "Say that continuous education and self development are key for you and that you never stop learning. Mention that you are working to improve your English speaking and presentational skills.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "What is the notice period at the company you currently work for?",
-            "info_for_user": "Say that it is usually around a month."
+            "Q": "What is the notice period at the company you currently work for?",
+            "P": "Say that it is usually around a month.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "What are your salary expectations?",
-            "info_for_user": "If you are not sure, say 50 thousand euros for example."
+            "Q": "What are your salary expectations?",
+            "P": "If you are not sure, say 50 thousand euros for example.",
+            "U": "",
+            "A": ""
         },
         {
-            "utterance": "Do you have any questions for me?",
-            "info_for_user": "Ask if you can work remotely if hired."
+            "Q": "Do you have any questions for me?",
+            "P": "Ask if you can work remotely if hired.",
+            "U": "",
+            "A": "Our company adapted a hybrid work model. This allows employees to split their time between working from office or from home. However, full-time office or fully remote options are also available. It will be totally up to you to decide."
         },
         {
-            "utterance": "Our company adapted a hybrid work model. This allows employees to split their time between working from office or from home. However, full-time office or fully remote options are also available. It will be totally up to you to decide.",
-            "info_for_user": "Ask about training programs for employees at the company."
+            "Q": "",
+            "P": "Ask about training programs for employees at the company.",
+            "U": "",
+            "A": "We encourage and strongly support our employees' professional development. We partner with various educational platforms and offer online training programs in a variety of areas covering everything imaginable, including technical skills, communications skills, effective leadership, and so much more."
         },
         {
-            "utterance": "We encourage and strongly support our employees' professional development. We partner with various educational platforms and offer online training programs in a variety of areas covering everything imaginable, including technical skills, communications skills, effective leadership, and so much more.",
-            "info_for_user": "Ask about the next steps"
+            "Q": "",
+            "P": "Ask about the next steps",
+            "U": "",
+            "A": "We are currently talking to a number of potential candidates. I will be able to share your CV with the team. If everything goes smoothly, we will invite you to the next interview with the hiring manager. And if that goes well, you may be expected to have the final interview with our CEO. We pay a lot of attention to the culture fit. So, don't be surprised."
         },
         {
-            "utterance": "We are currently talking to a number of potential candidates. I will be able to share your CV with the team. If everything goes smoothly, we will invite you to the next interview with the hiring manager. And if that goes well, you may be expected to have the final interview with our CEO. We pay a lot of attention to the culture fit. So, don't be surprised.",
-            "info_for_user": "Thank the HR manager for a pleasant conversation."
+            "Q": "",
+            "P": "Ask about the next steps",
+            "U": "",
+            "A": "We are currently talking to a number of potential candidates. I will be able to share your CV with the team. If everything goes smoothly, we will invite you to the next interview with the hiring manager. And if that goes well, you may be expected to have the final interview with our CEO. We pay a lot of attention to the culture fit. So, don't be surprised."
         },
         {
             "utterance": "Well, thank you, {user name}. I do appreciate you having found the time for our meeting today. I really enjoyed our conversation. And I will be looking forward to our next conversation. Bye-bye.",

@@ -25,12 +25,12 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {
-        TRANSITIONS: {("scenario", "main_node", 0.8): cnd.true()},
+        TRANSITIONS: {("scenario", "intro"): loc_cnd.is_intro()},
     },
     "service": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {("scenario", "main_node"): cnd.true()},
+            TRANSITIONS: {("scenario", "intro"): loc_cnd.is_intro()},
         },
         "fallback": {
             RESPONSE: "Ooops, something went wrong inside me! Could you repeat what you've just said?",
@@ -47,18 +47,23 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(),
             },
         },
-        "main_node": {
-            RESPONSE: loc_rsp.response_from_data(),
-            PROCESSING: {
-                "set_user_instructions": set_instructions.set_user_instructions(),
-                "set_situation_description": set_instructions.set_situation_description(),
-                "slot_filling": int_prs.fill_responses_by_slots(),
-            },
-            TRANSITIONS: {
-                "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
-                lbl.repeat(0.9): cnd.true(),
-            },
+        "intro": {
+            RESPONSE: loc_rsp.intro_response(),
+            PROCESSING: {"set_situation_description": set_instructions.set_situation_description()},
+            TRANSITIONS: {},
         },
+        # "main_node": {
+        #     RESPONSE: loc_rsp.response_from_data(),
+        #     PROCESSING: {
+        #         "set_user_instructions": set_instructions.set_user_instructions(),
+        #         "set_situation_description": set_instructions.set_situation_description(),
+        #         "slot_filling": int_prs.fill_responses_by_slots(),
+        #     },
+        #     TRANSITIONS: {
+        #         "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
+        #         lbl.repeat(0.9): cnd.true(),
+        #     },
+        # },
         "cancel_dialog": {
             RESPONSE: "Ok, let's finish here. Would you like me to comment on your performance?",
             PROCESSING: {},
