@@ -1,15 +1,11 @@
 import logging
-from typing import Union, Optional, List
+from typing import Union, Optional
 
-from dff.script import Context, Actor, Message
+from dff.script import Context, Actor, Message, MultiMessage
 
 
 logger = logging.getLogger(__name__)
 DEFAULT_CONFIDENCE = 0.0
-
-
-class MultiMessage(Message):
-    hypotheses: Optional[list] = None
 
 
 def multi_response(
@@ -31,7 +27,7 @@ def multi_response(
 
     def multi_response_handler(ctx: Context, actor: Actor) -> list:
         return MultiMessage(
-            hypotheses=[
+            messages=[
                 Message(
                     text=reply,
                     misc={"confidence": confidence, "human_attr": human_at, "bot_attr": bot_at, "hype_attr": hype_at},

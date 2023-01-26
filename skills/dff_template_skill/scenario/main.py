@@ -126,8 +126,8 @@ script = {
 
 db = dict()
 pipeline = Pipeline.from_script(
-    script=script, 
-    start_label=("service", "start"), 
-    fallback_label=("service", "fallback"), 
+    script=script,
+    start_label=("service", "start"),
+    fallback_label=("service", "fallback"),
     context_storage=db,
 )

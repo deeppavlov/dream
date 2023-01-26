@@ -42,7 +42,7 @@
                                 "annotations": null,
                                 "attachments": null,
                                 "commands": null,
-                                "hypotheses": [
+                                "messages": [
                                     {
                                         "annotations": null,
                                         "attachments": null,
@@ -123,7 +123,7 @@
                                 "annotations": null,
                                 "attachments": null,
                                 "commands": null,
-                                "hypotheses": [
+                                "messages": [
                                     {
                                         "annotations": null,
                                         "attachments": null,

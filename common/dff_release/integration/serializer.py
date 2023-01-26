@@ -54,9 +54,7 @@ class State(ExtraIgnoreModel):
     @root_validator(pre=True)
     def shift_state_history(cls, values):
         values["previous_human_utter_index"] = values["human_utter_index"]
-        values["history"][str(values["human_utter_index"])] = list(
-            values["context"].labels.values()
-        )[-1]   
+        values["history"][str(values["human_utter_index"])] = list(values["context"].labels.values())[-1]
         return values
 
     @root_validator(pre=True)
@@ -64,7 +62,7 @@ class State(ExtraIgnoreModel):
         context = values["context"]
         context.clear(2, ["requests", "responses", "labels"])
         del context.misc["agent"]
-        values["context"] = json.loads(context.json()) 
+        values["context"] = json.loads(context.json())
         return values
 
 
@@ -139,17 +137,15 @@ def get_response(ctx: Context, actor: Actor):
     response_parts = agent.get("response_parts", [])
     confidence = agent["response"].get("confidence", 0.85)
     state = State(context=ctx, **agent).dict()
-    human_attr = HumanAttr.parse_obj(agent).dict() | { f"{SERVICE_NAME}_state": state }
-    hype_attr = HypeAttr.parse_obj(agent).dict() | (
-        {"response_parts": response_parts} if response_parts else {}
-    )
+    human_attr = HumanAttr.parse_obj(agent).dict() | {f"{SERVICE_NAME}_state": state}
+    hype_attr = HypeAttr.parse_obj(agent).dict() | ({"response_parts": response_parts} if response_parts else {})
     response = ctx.last_response
-    hypotheses = getattr(response, "hypotheses", None)
-    if hypotheses is not None:
+    messages = getattr(response, "messages", None)
+    if messages is not None:
         responses = []
-        for hypothesis in hypotheses:
-            reply = hypothesis.text
-            misc = hypothesis.misc
+        for message in messages:
+            reply = message.text
+            misc = message.misc
             conf = misc.get("confidence") or confidence
             h_a = human_attr | misc.get("human_attr")
             attr = hype_attr | misc.get("hype_attr")
