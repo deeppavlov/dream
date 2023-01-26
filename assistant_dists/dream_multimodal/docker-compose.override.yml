@@ -11,6 +11,9 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
 
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
+
   dff-program-y-skill:
     env_file: [.env]
     build:
