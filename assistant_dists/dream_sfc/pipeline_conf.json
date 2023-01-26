@@ -284,26 +284,11 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "midas_classification": {
-                "is_enabled": true,
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://midas-classification:8090/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ],
-                "state_manager_method": "add_annotation"
-            },
             "combined_classification": {
                 "is_enabled": true,
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3.0,
+                    "timeout": 2.0,
                     "url": "http://combined-classification:8087/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",

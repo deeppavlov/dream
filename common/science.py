@@ -2,6 +2,7 @@ import re
 import json
 import pathlib
 from common.utils import join_sentences_in_or_pattern, join_words_in_or_pattern
+from common.utils import get_topics, TOPIC_GROUPS
 
 
 NICE_CHAT_ACKS = [
@@ -71,3 +72,13 @@ def skill_trigger_phrases():
 
 def science_skill_was_proposed(prev_bot_utt):
     return any([phrase.lower() in prev_bot_utt.get("text", "").lower() for phrase in TRIGGER_PHRASES])
+
+
+def about_science(annotated_utterance):
+    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    if any([topic in found_topics for topic in TOPIC_GROUPS["science"]]):
+        return True
+    elif re.findall(SCIENCE_COMPILED_PATTERN, annotated_utterance["text"]):
+        return True
+    else:
+        return False

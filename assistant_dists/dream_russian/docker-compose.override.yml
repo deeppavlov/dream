@@ -9,6 +9,10 @@ services:
           dff-friendship-skill:8086, entity-detection:8103, dialogpt:8091,
           dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: RU
 
   dff-program-y-skill:
     env_file: [.env]
@@ -49,6 +53,7 @@ services:
         CONV_EVAL_STRENGTH: 0.4
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: RU
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -323,6 +328,7 @@ services:
         SERVICE_PORT: 8091
         PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
         LANGUAGE: RU
+        MAX_HISTORY_DEPTH: 3
     command: flask run -h 0.0.0.0 -p 8091
     environment:
       - CUDA_VISIBLE_DEVICES=0

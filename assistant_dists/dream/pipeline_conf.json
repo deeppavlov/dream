@@ -298,21 +298,6 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "midas_classification": {
-                "is_enabled": true,
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://midas-classification:8090/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ],
-                "state_manager_method": "add_annotation"
-            },
             "combined_classification": {
                 "is_enabled": true,
                 "connector": {
@@ -400,7 +385,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:midas_predictor_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.midas_classification",
                     "annotators.combined_classification"
                 ],
                 "state_manager_method": "add_annotation"
@@ -1150,12 +1134,12 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dialogpt_persona_based": {
+            "seq2seq_persona_based": {
                 "is_enabled": true,
                 "connector": {
                     "protocol": "http",
                     "timeout": 3.0,
-                    "url": "http://dialogpt-persona-based:8131/respond"
+                    "url": "http://seq2seq-persona-based:8140/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:persona_bot_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

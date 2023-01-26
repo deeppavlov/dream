@@ -215,8 +215,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing_dp:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
   dff-grounding-skill:
@@ -272,6 +271,7 @@ services:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8087:8087
@@ -428,13 +428,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  dialogpt-persona-based:
+  seq2seq-persona-based:
     volumes:
-      - "./services/dialogpt_persona_based:/src"
+      - "./services/seq2seq_persona_based:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8131:8131
+      - 8140:8140
   relative-persona-extractor:
     volumes:
       - "./annotators/relative_persona_extractor:/src"

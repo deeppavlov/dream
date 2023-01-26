@@ -5,6 +5,7 @@ from copy import deepcopy
 from random import choice
 
 from common.custom_requests import request_triples_wikidata
+from common.factoid import FACTOID_THRESHOLD
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
@@ -108,9 +109,9 @@ high_priority_intents = {
 
 low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
-combined_classes = {
-    "factoid_classification": ["is_factoid", "is_conversational"],
-    "emotion_classification": ["anger", "fear", "joy", "love", "sadness", "surprise", "neutral"],
+combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
+    "emotion_classification": ["anger", "fear", "joy", "disgust", "sadness", "surprise", "neutral"],
+    "sentiment_classification": ["positive", "neutral", "negative"],
     "toxic_classification": [
         "identity_hate",
         "insult",
@@ -121,7 +122,59 @@ combined_classes = {
         "toxic",
         "not_toxic",
     ],
-    "sentiment_classification": ["positive", "negative", "neutral"],
+    "factoid_classification": ["is_factoid", "is_conversational"],
+    "midas_classification": [
+        "open_question_factual",
+        "open_question_opinion",
+        "open_question_personal",
+        "yes_no_question",
+        "clarifying_question",
+        "command",
+        "dev_command",
+        "appreciation",
+        "opinion",
+        "complaint",
+        "comment",
+        "statement",
+        "other_answers",
+        "pos_answer",
+        "neg_answer",
+    ],
+    "deeppavlov_topics": [
+        "Food",
+        "Books&Literature",
+        "Music",
+        "Gadgets",
+        "Movies&Tv",
+        "Leisure",
+        "Beauty",
+        "Clothes",
+        "Travel",
+        "News",
+        "Art&Hobbies",
+        "Videogames",
+        "Job",
+        "Home&Design",
+        "Depression",
+        "Celebrities&Events",
+        "Politics",
+        "Toys&Games",
+        "Animals&Pets",
+        "PersonalTransport",
+        "Garden",
+        "Family&Relationships",
+        "Health&Medicine",
+        "Religion",
+        "ArtificialIntelligence",
+        "Finance",
+        "Space",
+        "Disasters",
+        "Science&Technology",
+        "Psychology",
+        "MassTransit",
+        "Education",
+        "Sports",
+    ],
     "cobot_topics": [
         "Phatic",
         "Other",
@@ -172,6 +225,54 @@ combined_classes = {
         "Opinion_RequestIntent",
         "Multiple_GoalsIntent",
     ],
+}
+
+TOPIC_GROUPS = {
+    "food": ["Food", "Food_Drink"],
+    "books": ["Entertainment_Books", "Literature", "Books&Literature"],
+    "music": ["Music", "Entertainment_Music"],
+    "news": ["News"],
+    "politics": ["Politics"],
+    "sports": ["Sports"],
+    "religion": ["Religion"],
+    "movies": ["Entertainment_Movies", "Movies_TV", "Movies&Tv"],
+    "fashion": ["Clothes", "Fashion"],
+    "travel": ["Travel", "Travel_Geo"],
+    "celebrities": ["Celebrities", "Celebrities&Events"],
+    "art": ["Art_Event", "Art&Hobbies"],
+    "science": ["Science_and_Technology", "SciTech"],
+    "entertainment": ["Entertainment", "Entertainment_General"],
+    "games": ["Games", "Toys&Games", "Videogames"],
+    "animals": ["Pets_Animals", "Animals&Pets"],
+}
+
+
+MULTILABEL_TASKS = [
+    "emotion_classification",
+    "toxic_classification",
+]
+
+DP_THRESHOLDS = {
+    "Food": 0,
+    "Movies_TV": 0,
+    "Leisure": 0,
+    "Beauty": 0,
+    "Clothes": 0,
+    "Depression": 0,
+    "Celebrities&Events": 0,
+    "Family&Relationships": 0,
+    "Health&Medicine": 0,
+    "Education": 0,
+    "Sports": 0,
+    "Books&Literature": 0.3,
+    "Videogames": 0.3,
+    "Politics": 0.3,
+    "ArtificialIntelligence": 0.3,
+    "MassTransit": 0.3,
+}
+
+THRESHOLDS = {
+    "deeppavlov_topics": {class_: DP_THRESHOLDS.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]}
 }
 
 midas_classes = {
@@ -491,9 +592,16 @@ def get_all_not_used_templates(used_templates, all_templates):
 
 
 def _probs_to_labels(answer_probs, max_proba=True, threshold=0.5):
-    answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
-    if not answer_labels and max_proba:
-        answer_labels = [key for key in answer_probs if answer_probs[key] == max(answer_probs.values())]
+    if not answer_probs:
+        return []
+    if isinstance(threshold, dict):
+        answer_labels = [key for key in answer_probs if answer_probs[key] > threshold.get(key, 0)]
+        if max_proba:
+            answer_labels = [key for key in answer_labels if answer_probs[key] == max(answer_probs.values())]
+    else:
+        answer_labels = [label for label in answer_probs if answer_probs[label] > threshold]
+        if not answer_labels and max_proba:
+            answer_labels = [key for key in answer_probs if answer_probs[key] == max(answer_probs.values())]
     return answer_labels
 
 
@@ -507,7 +615,7 @@ def _labels_to_probs(answer_labels, all_labels):
     return answer_probs
 
 
-def _get_combined_annotations(annotated_utterance, model_name):
+def _get_combined_annotations(annotated_utterance, model_name, threshold=0.5):
     answer_probs, answer_labels = {}, []
     try:
         annotations = annotated_utterance["annotations"]
@@ -517,11 +625,18 @@ def _get_combined_annotations(annotated_utterance, model_name):
         if model_name in combined_annotations:
             answer_probs = combined_annotations[model_name]
         else:
-            raise Exception(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
-        if model_name == "toxic_classification" and "factoid_classification" not in combined_annotations:
-            answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+            logger.warning(f"Not found Model name {model_name} in combined annotations {combined_annotations}")
+        old_style_toxic = all(
+            [model_name == "toxic_classification", "factoid_classification" not in combined_annotations]
+        )
+        if model_name in MULTILABEL_TASKS or old_style_toxic:
+            answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
+        elif model_name == "factoid_classification" and answer_probs.get("is_factoid", 0) < threshold:
+            answer_labels = ["is_conversational"]
+        elif model_name == "deeppavlov_topics":
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=THRESHOLDS["deeppavlov_topics"])
         else:
-            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -553,7 +668,7 @@ def _process_old_sentiment(answer):
         return answer
 
 
-def _get_plain_annotations(annotated_utterance, model_name):
+def _get_plain_annotations(annotated_utterance, model_name, threshold=0.5):
     answer_probs, answer_labels = {}, []
     try:
         annotations = annotated_utterance["annotations"]
@@ -563,7 +678,7 @@ def _get_plain_annotations(annotated_utterance, model_name):
         if isinstance(answer, list):
             if model_name == "sentiment_classification":
                 answer_probs = _process_old_sentiment(answer)
-                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
             else:
                 answer_labels = answer
                 answer_probs = _labels_to_probs(answer_labels, combined_classes[model_name])
@@ -571,9 +686,11 @@ def _get_plain_annotations(annotated_utterance, model_name):
             answer_probs = answer
             if model_name == "toxic_classification":
                 # this function is only for plain annotations (when toxic_classification is a separate annotator)
-                answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=0.5)
+                answer_labels = _probs_to_labels(answer_probs, max_proba=False, threshold=threshold)
+            elif model_name == "factoid_classification" and answer_probs.get("is_factoid", 0) < threshold:
+                answer_labels = ["is_conversational"]
             else:
-                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=0.5)
+                answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
         logger.warning(e)
 
@@ -589,22 +706,28 @@ def print_combined(combined_output):
     logger.info(f"Combined classifier output is {combined_output}")
 
 
-def _get_etc_model(annotated_utterance, model_name, probs, default_probs, default_labels):
+def _get_etc_model(annotated_utterance, model_name, probs, default_probs, default_labels, threshold=0.5):
     """Function to get emotion classifier annotations from annotated utterance.
 
     Args:
         annotated_utterance: dictionary with annotated utterance, or annotations
         probs: return probabilities or not
-        default: default value to return. If it is None, returns empty dict/list depending on probs argument
+        default_probs: default probs to return.
+        default_labels: default labels to return.
+        Threshold: threshold for classification
     Returns:
         dictionary with emotion probablilties, if probs == True, or emotion labels if probs != True
     """
 
     try:
         if model_name in annotated_utterance.get("annotations", {}):
-            answer_probs, answer_labels = _get_plain_annotations(annotated_utterance, model_name=model_name)
+            answer_probs, answer_labels = _get_plain_annotations(
+                annotated_utterance, model_name=model_name, threshold=threshold
+            )
         elif "combined_classification" in annotated_utterance.get("annotations", {}):
-            answer_probs, answer_labels = _get_combined_annotations(annotated_utterance, model_name=model_name)
+            answer_probs, answer_labels = _get_combined_annotations(
+                annotated_utterance, model_name=model_name, threshold=threshold
+            )
         else:
             answer_probs, answer_labels = default_probs, default_labels
     except Exception as e:
@@ -655,6 +778,7 @@ def get_factoid(annotated_utterance, probs=True, default_probs=None, default_lab
         probs=probs,
         default_probs=default_probs,
         default_labels=default_labels,
+        threshold=FACTOID_THRESHOLD,
     )
 
 
@@ -708,7 +832,6 @@ def get_emotions(annotated_utterance, probs=True, default_probs=None, default_la
 
 def get_topics(annotated_utterance, probs=False, default_probs=None, default_labels=None, which="all"):
     """Function to get topics from particular annotator or all detected.
-
     Args:
         annotated_utterance: dictionary with annotated utterance
         probs: if False we return labels, otherwise we return probs
@@ -718,6 +841,7 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
             'all' means topics by `cobot_topics` and `cobot_dialogact_topics`,
             'cobot_topics' means topics by `cobot_topics`,
             'cobot_dialogact_topics' means topics by `cobot_dialogact_topics`.
+            'deeppavlov_topics' means topics by `deeppavlov_topics`.
 
     Returns:
         list of topic labels, if probs == False,
@@ -729,7 +853,6 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     cobot_topics_probs, cobot_topics_labels = {}, []
     if "cobot_topics" in annotations:
         cobot_topics_labels = _process_text(annotations.get("cobot_topics", {}))
-        cobot_topics_probs = _labels_to_probs(cobot_topics_labels, combined_classes.get("cobot_topics", {}))
     if "combined_classification" in annotations and not cobot_topics_labels:
         cobot_topics_probs, cobot_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="cobot_topics"
@@ -740,9 +863,9 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
 
     cobot_da_topics_probs, cobot_da_topics_labels = {}, []
     if "cobot_dialogact" in annotations and "topics" in annotations["cobot_dialogact"]:
-        cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact"]["topics"]
+        cobot_da_topics_labels = annotations["cobot_dialogact"]["topics"]
     elif "cobot_dialogact_topics" in annotations:
-        cobot_da_topics_labels = annotated_utterance["annotations"]["cobot_dialogact_topics"]
+        cobot_da_topics_labels = annotations["cobot_dialogact_topics"]
 
     if "combined_classification" in annotations and not cobot_da_topics_labels:
         cobot_da_topics_probs, cobot_da_topics_labels = _get_combined_annotations(
@@ -752,13 +875,20 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     if not cobot_da_topics_probs:
         cobot_da_topics_probs = _labels_to_probs(cobot_da_topics_labels, combined_classes["cobot_dialogact_topics"])
 
+    dp_topics_probs, dp_topics_labels = {}, []
+    if "combined_classification" in annotations and not dp_topics_labels:
+        dp_topics_probs, dp_topics_labels = _get_combined_annotations(
+            annotated_utterance, model_name="deeppavlov_topics"
+        )
     if which == "all":
-        answer_labels = cobot_topics_labels + cobot_da_topics_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs}
+        answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
         answer_probs, answer_labels = cobot_da_topics_probs, cobot_da_topics_labels
+    elif which == "deeppavlov_topics":
+        answer_probs, answer_labels = dp_topics_probs, dp_topics_labels
     else:
         logger.exception(f"Unknown input type in get_topics: {which}")
         answer_probs, answer_labels = default_probs, default_labels
@@ -771,7 +901,6 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
 
 def get_intents(annotated_utterance, probs=False, default_probs=None, default_labels=None, which="all"):
     """Function to get intents from particular annotator or all detected.
-
     Args:
         annotated_utterance: dictionary with annotated utterance
         probs: if False we return labels, otherwise we return probs
@@ -793,8 +922,11 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     intents = annotations.get("intent_catcher", {})
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
     detected_intent_probs = {key: 1 for key in detected_intents}
-
     midas_intent_probs = annotations.get("midas_classification", {})
+    if "combined_classification" in annotations and not midas_intent_probs:
+        midas_intent_probs, midas_intent_labels = _get_combined_annotations(
+            annotated_utterance, model_name="midas_classification"
+        )
     if isinstance(midas_intent_probs, dict) and midas_intent_probs:
         semantic_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_SEMANTIC_LABELS}
         functional_midas_probs = {k: v for k, v in midas_intent_probs.items() if k in MIDAS_FUNCTIONAL_LABELS}

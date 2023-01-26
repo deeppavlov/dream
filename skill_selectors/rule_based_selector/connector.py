@@ -14,7 +14,11 @@ from common.movies import extract_movies_names_from_annotations
 from common.response_selection import UNPREDICTABLE_SKILLS
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, GREETING_QUESTIONS_TEXTS
+from common.universal_templates import (
+    if_chat_about_particular_topic,
+    if_choose_topic,
+    GREETING_QUESTIONS_TEXTS,
+)
 from common.utils import (
     high_priority_intents,
     low_priority_intents,
@@ -24,12 +28,20 @@ from common.utils import (
     get_factoid,
 )
 from common.weather import if_special_weather_turn_on
-from common.wiki_skill import if_switch_wiki_skill, switch_wiki_skill_on_news, if_switch_test_skill
+from common.wiki_skill import (
+    if_switch_wiki_skill,
+    switch_wiki_skill_on_news,
+    if_switch_test_skill,
+)
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+HIGH_PRIORITY_INTENTS = int(getenv("HIGH_PRIORITY_INTENTS", 1))
+RESTRICTION_FOR_SENSITIVE_CASE = int(getenv("RESTRICTION_FOR_SENSITIVE_CASE", 1))
+ALWAYS_TURN_ON_ALL_SKILLS = int(getenv("ALWAYS_TURN_ON_ALL_SKILLS", 0))
 
 
 class RuleBasedSkillSelectorConnector:
@@ -40,6 +52,25 @@ class RuleBasedSkillSelectorConnector:
 
             skills_for_uttr = []
             user_uttr = dialog["human_utterances"][-1]
+
+            if ALWAYS_TURN_ON_ALL_SKILLS or user_uttr["attributes"].get("selected_skills", None) in ["all", []]:
+                logger.info("Selected skills: ALL")
+                total_time = time.time() - st_time
+                logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
+                # returning empty list of skills means trigger ALL skills for deeppavlov agent
+                asyncio.create_task(callback(task_id=payload["task_id"], response=[]))
+                return
+            elif len(user_uttr["attributes"].get("selected_skills", [])) > 0:
+                # can consider list os skill names or single skill name
+                skills_for_uttr = user_uttr["attributes"].get("selected_skills", [])
+                if isinstance(skills_for_uttr, str):
+                    skills_for_uttr = [skills_for_uttr]
+                logger.info(f"Selected skills: {skills_for_uttr}")
+                total_time = time.time() - st_time
+                logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
+                asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+                return
+
             user_uttr_text = user_uttr["text"].lower()
             user_uttr_annotations = user_uttr["annotations"]
             bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
@@ -54,14 +85,15 @@ class RuleBasedSkillSelectorConnector:
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
-            is_factoid = get_factoid(user_uttr).get("is_factoid", 0.0) > 0.96
+            is_factoid = "is_factoid" in get_factoid(user_uttr, probs=False)
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
             if_choose_topic_detected = if_choose_topic(user_uttr, bot_uttr)
             if_lets_chat_about_particular_topic_detected = if_chat_about_particular_topic(user_uttr, bot_uttr)
 
             dialog_len = len(dialog["human_utterances"])
-
+            if user_uttr.get("attributes", {}).get("image") is not None:
+                skills_for_uttr.append("dff_image_skill")
             exit_cond = "exit" in intent_catcher_intents and (
                 dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)
             )
@@ -87,11 +119,11 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("personality_catcher")  # TODO: rm crutch of personality_catcher
             elif user_uttr_text == "/get_dialog_id":
                 skills_for_uttr.append("dummy_skill")
-            elif high_priority_intent_detected:
+            elif high_priority_intent_detected and HIGH_PRIORITY_INTENTS:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
-            elif is_sensitive_topic_and_request(user_uttr):
+            elif is_sensitive_topic_and_request(user_uttr) and RESTRICTION_FOR_SENSITIVE_CASE:
                 # process user utterance with sensitive content, "safe mode"
 
                 # adding open-domain skills without opinion expression
@@ -141,6 +173,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dialogpt")  # generative skill
                 skills_for_uttr.append("dialogpt_persona_based")  # generative skill persona-based
+                skills_for_uttr.append("seq2seq_persona_based")  # generative skill persona-based
                 skills_for_uttr.append("small_talk_skill")
                 skills_for_uttr.append("knowledge_grounding_skill")
                 skills_for_uttr.append("convert_reddit")
@@ -148,7 +181,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_program_y_wide_skill")
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
-                skills_for_uttr.append("gpt2-generator")
+                skills_for_uttr.append("gpt2_generator")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -243,6 +276,12 @@ class RuleBasedSkillSelectorConnector:
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
 
+            # turn on skills if prompts are selected by prompt_selector
+            ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
+            if ranged_prompts:
+                for prompt_name in ranged_prompts:
+                    skills_for_uttr.append(f"dff_{prompt_name}_prompted_skill")
+
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
@@ -252,4 +291,9 @@ class RuleBasedSkillSelectorConnector:
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             logger.exception(e)
             sentry_sdk.capture_exception(e)
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_program_y_skill", "dummy_skill"]))
+            asyncio.create_task(
+                callback(
+                    task_id=payload["task_id"],
+                    response=["dff_program_y_skill", "dummy_skill"],
+                )
+            )
