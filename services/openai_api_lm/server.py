@@ -78,7 +78,7 @@ def respond():
         confidences = []
         for context in contexts:
             outputs = generate_responses("", context)
-            logger.info(f"outputs: {outputs}")
+            logger.info(f"openai-api-lm result: {outputs}")
             for response in outputs:
                 if len(response) >= 3:
                     # drop too short responses
