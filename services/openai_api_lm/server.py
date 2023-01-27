@@ -20,7 +20,6 @@ CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 logging.info(f"Generation parameters: {generation_params}")
@@ -40,18 +39,15 @@ def generate_responses(instruction, context, continue_last_uttr=False):
     else:
         dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
-
     response = openai.Completion.create(
         model=PRETRAINED_MODEL_NAME_OR_PATH,
         prompt=context,
         **generation_params
     )
-
     if isinstance(response, dict) and "choices" in response:
         outputs = [resp.get("text", "") for resp in response["choices"]]
     elif isinstance(response, str):
         outputs = [response]
-
     return outputs
 
 
@@ -95,5 +91,5 @@ def respond():
         confidences = [[ZERO_CONFIDENCE]] * len(contexts)
 
     total_time = time.time() - st_time
-    logger.info(f"transformers_lm exec time: {total_time:.3f}s")
+    logger.info(f"openai-api-lm exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences)))

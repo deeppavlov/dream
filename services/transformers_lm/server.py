@@ -14,6 +14,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+app = Flask(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
@@ -23,11 +24,9 @@ DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
+logging.info(f"Generation parameters: {generation_params}")
 max_length = generation_params.get("max_length", 50)
 del generation_params["max_length"]
-
-app = Flask(__name__)
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
@@ -71,7 +70,7 @@ try:
         continue_last_uttr=False,
     )
     logger.info(f"example response: {example_response}")
-    logger.info("transformers_lm is ready")
+    logger.info("transformers-lm is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -87,7 +86,7 @@ def respond():
         confidences = []
         for context in contexts:
             outputs = generate_responses("", context, model, tokenizer)
-            logger.info(f"outputs: {outputs}")
+            logger.info(f"transformers-lm result: {outputs}")
             for response in outputs:
                 if len(response) >= 3:
                     # drop too short responses
