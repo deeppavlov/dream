@@ -80,6 +80,8 @@ def generate_response(context, model, tokenizer):
 def respond():
     st_time = time.time()
     contexts = request.json.get("utterances_histories", [])
+    if len(contexts) == 0:
+        contexts = request.json.get("dialog_contexts", [])
 
     try:
         responses = []

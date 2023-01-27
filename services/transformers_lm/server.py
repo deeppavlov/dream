@@ -17,10 +17,10 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
+HALF_PRECISION = bool(os.environ.get("HALF_PRECISION", 0))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
-MAX_HISTORY_DEPTH = 3
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 max_length = generation_params.get("max_length", 50)
@@ -56,7 +56,10 @@ def generate_responses(instruction, context, model, tokenizer, continue_last_utt
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    if HALF_PRECISION:
+        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
+    else:
+        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")

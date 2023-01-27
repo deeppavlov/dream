@@ -11,6 +11,8 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 
 ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
+ARG MAX_HISTORY_DEPTH
+ENV MAX_HISTORY_DEPTH ${MAX_HISTORY_DEPTH}
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

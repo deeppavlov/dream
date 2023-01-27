@@ -11,6 +11,9 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
 
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
+
   dff-program-y-skill:
     env_file: [.env]
     build:
@@ -151,6 +154,7 @@ services:
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
         CONFIG_NAME: dialogpt_en.json
+        MAX_HISTORY_DEPTH: 2
       context: .
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
