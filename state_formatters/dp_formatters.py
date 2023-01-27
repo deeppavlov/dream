@@ -383,6 +383,18 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     ]
 
 
+def convert_nli_hypotheses_annotator_formatter(dialog: Dict) -> List[Dict]:
+    # Used by: convert_based_nli candidate annotators
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+    if len(dialog["bot_utterances"]):
+        vectorized_history = [u["annotations"]["convert_based_nli"] for u in dialog["bot_utterances"][-20:]
+                              if "convert_based_nli" in u["annotations"].keys()]
+    else:
+        vectorized_history = []
+    return [{"candidates": hypots, "history": vectorized_history}]
+
+
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)

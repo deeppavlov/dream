@@ -134,6 +134,19 @@
                     "skills"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
+            },
+            "convert_based_nli": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://convert-based-nli:8137/encode"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "previous_services": [
+                    "response_selectors"
+                ]
             }
         },
         "annotators": {
@@ -1064,6 +1077,19 @@
                     "url": "http://combined-classification:8087/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "convert_based_nli": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://convert-based-nli:8137/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:convert_nli_hypotheses_annotator_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"

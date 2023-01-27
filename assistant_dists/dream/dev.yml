@@ -441,6 +441,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8133:8133
+  convert-based-nli:
+    volumes:
+      - "./annotators/ConveRTBasedNLI:/src"
+    ports:
+      - 8137:8137
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
