@@ -19,21 +19,21 @@ annotator = ConveRTAnnotator()
 logger.info("Annotator is loaded.")
 
 
-@app.route("/conv_annot_candidate", methods=["POST"])
-def respond_candidate():
+@app.route("/batch_model", methods=["POST"])
+def respond_batch_model():
     start_time = time.time()
     candidates = request.json['candidates']
     history = request.json['history']
     result = annotator.candidate_selection(history, candidates)
     total_time = time.time() - start_time
-    logger.info(f"Annotator candidate selection time: {total_time: .3f}s")
-    return jsonify(str(result))
+    logger.info(f"Annotator candidate prediction time: {total_time: .3f}s")
+    return jsonify(result)
 
 
-@app.route("/conv_annot_response", methods=["POST"])
-def respond_response():
+@app.route("/encode", methods=["POST"])
+def respond_encode():
     start_time = time.time()
-    response = request.json['response']
+    response = request.json['sentences']
     result = annotator.response_encoding(response)
     total_time = time.time() - start_time
     logger.info(f"Annotator response encoding time: {total_time: .3f}s")
@@ -41,4 +41,4 @@ def respond_response():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8131)
+    app.run(debug=False, host="0.0.0.0", port=8137)

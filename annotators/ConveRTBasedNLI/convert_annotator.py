@@ -169,11 +169,12 @@ class ConveRTAnnotator:
                 if row_probab[2] < threshold:
                     row_probab[2] = -row_probab[2]
                 label = np.argmax(row_probab, axis=-1)
-                if rez_dict[cand]['decision'] != 2:
-                    rez_dict[cand] = {'decision': labels[label], labels[0]: row_probab[0], labels[1]: row_probab[1], labels[2]: np.abs(row_probab[2])}
-            return rez_dict
-        else:
-            return rez_dict
+                if rez_dict[cand]['decision'] != labels[2]:
+                    rez_dict[cand] = {'decision': labels[label], 
+                                      labels[0]: row_probab[0].astype(float), 
+                                      labels[1]: row_probab[1].astype(float), 
+                                      labels[2]: np.abs(row_probab[2]).astype(float)}            
+        return rez_dict
 
     def __multiple_responses_encoding(self, responses):
         return self.encoder.encode_sentences(responses)
