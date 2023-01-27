@@ -2,16 +2,17 @@
 
 import logging
 import os
-from typing import List, Any
+from typing import List, Any, Union
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
-from dff.script import Context, Actor, Message
+from dff.script import Context, Actor
 from dff.pipeline import Pipeline
 from pydantic import BaseModel, Field, Extra, root_validator
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.dff_api_v1.integration.context import get_last_human_utterance
+from common.dff_api_v1.integration.message import DreamMessage, DreamMultiMessage
 
 
 ignore_logger("root")
@@ -126,7 +127,17 @@ def load_ctxs(requested_data) -> List[Context]:
         clarification_request_flag_batch,
     ):
         ctx = Context.cast(state.get("context", {}))
-        agent = Agent(**locals())
+        agent = Agent(
+            human_utter_index=human_utter_index,
+            dialog=dialog,
+            state=state,
+            dff_shared_state=dff_shared_state,
+            entities=entities,
+            used_links=used_links,
+            age_group=age_group,
+            disliked_skills=disliked_skills,
+            clarification_request_flag=clarification_request_flag,
+        )
         ctx.misc["agent"] = agent.dict()
         ctxs += [ctx]
     return ctxs
@@ -139,26 +150,26 @@ def get_response(ctx: Context, actor: Actor):
     state = State(context=ctx, **agent).dict(exclude_none=True)
     human_attr = HumanAttr.parse_obj(agent).dict() | {f"{SERVICE_NAME}_state": state}
     hype_attr = HypeAttr.parse_obj(agent).dict() | ({"response_parts": response_parts} if response_parts else {})
-    response = ctx.last_response.dict()
-    messages = response.get("messages")
-    if messages is not None:
+    response = ctx.last_response
+    if isinstance(response, DreamMultiMessage):
         responses = []
         message: dict
-        for message in messages:
-            reply = message.get("text", "")
-            misc = message.get("misc", {})
-            conf = misc.get("confidence") or confidence
-            h_a = human_attr | misc.get("human_attr")
-            attr = hype_attr | misc.get("hype_attr")
-            responses += [(reply, conf, h_a, misc.get("bot_attr"), attr)]
+        for message in response.messages:
+            reply = message.text or ""
+            conf = message.confidence or confidence
+            h_a = human_attr | (message.human_attr or {})
+            attr = hype_attr | (message.hype_attr or {})
+            b_a = message.bot_attr or {}
+            responses += [(reply, conf, h_a, b_a, attr)]
         return list(zip(*responses))
     else:
-        return (response.get("text"), confidence, human_attr, {}, hype_attr)
+        return (response.text, confidence, human_attr, {}, hype_attr)
 
 
 def run_dff(ctx: Context, pipeline: Pipeline):
     last_request = get_last_human_utterance(ctx, pipeline.actor)["text"]
     pipeline.context_storage[ctx.id] = ctx
-    ctx = pipeline(Message(text=last_request), ctx.id)
+    ctx = pipeline(DreamMessage(text=last_request), ctx.id)
     response = get_response(ctx, pipeline.actor)
+    del pipeline.context_storage[ctx.id]
     return response

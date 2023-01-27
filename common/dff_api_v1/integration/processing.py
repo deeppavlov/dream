@@ -74,7 +74,7 @@ def fill_responses_by_slots():
         **kwargs,
     ) -> Context:
         last_response = ctx.last_response
-        if last_response.text is None:
+        if not last_response or last_response.text is None:
             return ctx
         for slot_name, slot_value in ctx.misc.get(DREAM_SLOTS_KEY, {}).items():
             last_response.text = last_response.text.replace("{" f"{slot_name}" "}", slot_value)

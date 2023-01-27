@@ -4,7 +4,6 @@ import re
 from dff.script import (
     Message,
     LOCAL,
-    PRE_TRANSITIONS_PROCESSING,
     PRE_RESPONSE_PROCESSING,
     TRANSITIONS,
     RESPONSE,
@@ -16,7 +15,7 @@ from dff.pipeline import Pipeline
 
 import common.dff_api_v1.integration.condition as int_cnd
 import common.dff_api_v1.integration.processing as int_prs
-import common.dff_api_v1.integration.response as int_rsp
+from common.dff_api_v1.integration.message import DreamMessage, DreamMultiMessage
 
 
 import common.constants as common_constants
@@ -52,11 +51,11 @@ script = {
     },
     "service": {
         "start": {
-            RESPONSE: Message(text=""),
+            RESPONSE: DreamMessage(text=""),
             TRANSITIONS: {("greeting", "node1"): cnd.true()},
         },
         "fallback": {
-            RESPONSE: Message(text="Ooops"),
+            RESPONSE: DreamMessage(text="Ooops"),
             TRANSITIONS: {
                 lbl.previous(): cnd.regexp(r"previous", re.IGNORECASE),
                 lbl.repeat(0.2): cnd.true(),
@@ -68,24 +67,27 @@ script = {
             PRE_RESPONSE_PROCESSING: {
                 "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue(),
-                # "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots()
+                # Attempt to fill slots on each turn inside the flow.
+                # Use inside the LOCAL node to avoid repetition.
             },
         },
         "node1": {
-            RESPONSE: int_rsp.multi_response(["Hi, how are you?", "Hi, what's up?"]),  # several hypotheses
+            RESPONSE: DreamMultiMessage(
+                messages=[DreamMessage(text="Hi, how are you?"), DreamMessage(text="Hi, what's up?")]
+            ),  # several hypotheses
             PRE_RESPONSE_PROCESSING: {
                 "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
             },
             TRANSITIONS: {"node2": cnd.regexp(r"how are you", re.IGNORECASE)},
         },
         "node2": {
-            RESPONSE: loc_rsp.example_response(Message(text="Good. What do you want to talk about?")),
+            RESPONSE: loc_rsp.example_response(DreamMessage(text="Good. What do you want to talk about?")),
             # loc_rsp.example_response is just for an example, you can use just str without example_response func
             TRANSITIONS: {"node3": loc_cnd.example_lets_talk_about()},
         },
         "node3": {
-            RESPONSE: Message(text="Sorry, I can not talk about that now. Maybe late. Do you like {topic}?"),
-            PRE_RESPONSE_PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
+            RESPONSE: DreamMessage(text="Sorry, I can not talk about that now. Maybe late. Do you like {topic}?"),
             TRANSITIONS: {
                 "node4": int_cnd.is_yes_vars,
                 "node5": int_cnd.is_no_vars,
@@ -94,30 +96,31 @@ script = {
             },
         },
         "node4": {
-            RESPONSE: Message(text="I like {topic} too, {user_name}"),
-            PRE_RESPONSE_PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
+            RESPONSE: DreamMessage(text="I like {topic} too, {user_name}"),
             TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node5": {
-            RESPONSE: Message(text="I do not like {topic} too, {user_name}"),
-            PRE_RESPONSE_PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
+            RESPONSE: DreamMessage(text="I do not like {topic} too, {user_name}"),
             TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node6": {
-            RESPONSE: Message(text="I have no opinion about {topic} too, {user_name}"),
-            PRE_RESPONSE_PROCESSING: {"fill_responses_by_slots": int_prs.fill_responses_by_slots()},
+            RESPONSE: DreamMessage(text="I have no opinion about {topic} too, {user_name}"),
             TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node7": {
-            RESPONSE: int_rsp.multi_response(
-                replies=["bye", "goodbye"],
-                confidences=[1.0, 0.5],
-                hype_attr=[
-                    {"can_continue": common_constants.MUST_CONTINUE},  # for the first hyp
-                    {"can_continue": common_constants.CAN_CONTINUE_SCENARIO},  # for the second hyp
-                ],
+            RESPONSE: DreamMultiMessage(
+                messages=[
+                    DreamMessage(
+                        text="bye", confidence=1.0, hype_attr={"can_continue": common_constants.MUST_CONTINUE}
+                    ),
+                    DreamMessage(
+                        text="goodbye",
+                        confidence=0.5,
+                        hype_attr={"can_continue": common_constants.CAN_CONTINUE_SCENARIO},
+                    ),
+                ]
             ),
-            PRE_TRANSITIONS_PROCESSING: {"set_confidence": int_prs.set_confidence(0.0)},
+            PRE_RESPONSE_PROCESSING: {"set_confidence": int_prs.set_confidence(0.0)},
         },
     },
 }

@@ -37,21 +37,9 @@
                             "0": {
                                 "messages": [
                                     {
-                                        "misc": {
-                                            "bot_attr": {},
-                                            "confidence": 0.0,
-                                            "human_attr": {},
-                                            "hype_attr": {}
-                                        },
                                         "text": "Hi, how are you?"
                                     }, 
                                     {
-                                        "misc": {
-                                            "bot_attr": {},
-                                            "confidence": 0.0,
-                                            "human_attr": {},
-                                            "hype_attr": {}
-                                        },
                                         "text": "Hi, what's up?"
                                     }
                                 ]
@@ -103,21 +91,9 @@
                             "0": {
                                 "messages": [
                                     {
-                                        "misc": {
-                                            "bot_attr": {},
-                                            "confidence": 0.0,
-                                            "human_attr": {},
-                                            "hype_attr": {}
-                                        },
                                         "text": "Hi, how are you?"
                                     }, 
                                     {
-                                        "misc": {
-                                            "bot_attr": {},
-                                            "confidence": 0.0,
-                                            "human_attr": {},
-                                            "hype_attr": {}
-                                        },
                                         "text": "Hi, what's up?"
                                     }
                                 ]
