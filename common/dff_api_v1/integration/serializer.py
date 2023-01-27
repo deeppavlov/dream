@@ -2,16 +2,17 @@
 
 import logging
 import os
-import json
 from typing import List, Any
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
+from dff.script import Context, Actor, Message
+from dff.pipeline import Pipeline
+from pydantic import BaseModel, Field, Extra, root_validator
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
+from common.dff_api_v1.integration.context import get_last_human_utterance
 
-from dff.script import Context, Actor
-from pydantic import BaseModel, Field, Extra, root_validator
 
 ignore_logger("root")
 
@@ -45,7 +46,7 @@ class HypeAttr(ExtraIgnoreModel):
 
 
 class State(ExtraIgnoreModel):
-    context: dict
+    context: Context
     previous_human_utter_index: int = -1
     current_turn_dff_suspended: bool = False
     history: dict = Field(default_factory=dict)
@@ -62,7 +63,6 @@ class State(ExtraIgnoreModel):
         context = values["context"]
         context.clear(2, ["requests", "responses", "labels"])
         del context.misc["agent"]
-        values["context"] = json.loads(context.json())
         return values
 
 
@@ -136,20 +136,29 @@ def get_response(ctx: Context, actor: Actor):
     agent = ctx.misc["agent"]
     response_parts = agent.get("response_parts", [])
     confidence = agent["response"].get("confidence", 0.85)
-    state = State(context=ctx, **agent).dict()
+    state = State(context=ctx, **agent).dict(exclude_none=True)
     human_attr = HumanAttr.parse_obj(agent).dict() | {f"{SERVICE_NAME}_state": state}
     hype_attr = HypeAttr.parse_obj(agent).dict() | ({"response_parts": response_parts} if response_parts else {})
-    response = ctx.last_response
-    messages = getattr(response, "messages", None)
+    response = ctx.last_response.dict()
+    messages = response.get("messages")
     if messages is not None:
         responses = []
+        message: dict
         for message in messages:
-            reply = message.text
-            misc = message.misc
+            reply = message.get("text", "")
+            misc = message.get("misc", {})
             conf = misc.get("confidence") or confidence
             h_a = human_attr | misc.get("human_attr")
             attr = hype_attr | misc.get("hype_attr")
             responses += [(reply, conf, h_a, misc.get("bot_attr"), attr)]
         return list(zip(*responses))
     else:
-        return (response.text, confidence, human_attr, {}, hype_attr)
+        return (response.get("text"), confidence, human_attr, {}, hype_attr)
+
+
+def run_dff(ctx: Context, pipeline: Pipeline):
+    last_request = get_last_human_utterance(ctx, pipeline.actor)["text"]
+    pipeline.context_storage[ctx.id] = ctx
+    ctx = pipeline(Message(text=last_request), ctx.id)
+    response = get_response(ctx, pipeline.actor)
+    return response

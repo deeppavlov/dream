@@ -30,23 +30,13 @@
                         },
                         "requests": {
                             "0": {
-                                "annotations": null,
-                                "attachments": null,
-                                "commands": null,
-                                "misc": null,
                                 "text": "hi."
                             }
                         },
                         "responses": {
                             "0": {
-                                "annotations": null,
-                                "attachments": null,
-                                "commands": null,
                                 "messages": [
                                     {
-                                        "annotations": null,
-                                        "attachments": null,
-                                        "commands": null,
                                         "misc": {
                                             "bot_attr": {},
                                             "confidence": 0.0,
@@ -56,9 +46,6 @@
                                         "text": "Hi, how are you?"
                                     }, 
                                     {
-                                        "annotations": null,
-                                        "attachments": null,
-                                        "commands": null,
                                         "misc": {
                                             "bot_attr": {},
                                             "confidence": 0.0,
@@ -67,9 +54,7 @@
                                         },
                                         "text": "Hi, what's up?"
                                     }
-                                ],
-                                "misc": null,
-                                "text": null
+                                ]
                             }
                         },
                         "misc": {
@@ -111,23 +96,13 @@
                         },
                         "requests": {
                             "0": {
-                                "annotations": null,
-                                "attachments": null,
-                                "commands": null,
-                                "misc": null,
                                 "text": "hi."
                             }
                         },
                         "responses": {
                             "0": {
-                                "annotations": null,
-                                "attachments": null,
-                                "commands": null,
                                 "messages": [
                                     {
-                                        "annotations": null,
-                                        "attachments": null,
-                                        "commands": null,
                                         "misc": {
                                             "bot_attr": {},
                                             "confidence": 0.0,
@@ -137,9 +112,6 @@
                                         "text": "Hi, how are you?"
                                     }, 
                                     {
-                                        "annotations": null,
-                                        "attachments": null,
-                                        "commands": null,
                                         "misc": {
                                             "bot_attr": {},
                                             "confidence": 0.0,
@@ -148,9 +120,7 @@
                                         },
                                         "text": "Hi, what's up?"
                                     }
-                                ],
-                                "misc": null,
-                                "text": null
+                                ]
                             }
                         },
                         "misc": {

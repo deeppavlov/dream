@@ -2,7 +2,7 @@ import logging
 
 from dff.script import Context, Actor
 
-from common.dff_release.integration import condition as int_cnd
+from common.dff_api_v1.integration import condition as int_cnd
 
 logger = logging.getLogger(__name__)
 # ....

@@ -8,7 +8,7 @@ from dff.script import Context, Actor
 import common.greeting as common_greeting
 import common.utils as common_utils
 import common.universal_templates as universal_templates
-import common.dff_release.integration.context as int_ctx
+import common.dff_api_v1.integration.context as int_ctx
 from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE
 from .facts_utils import provide_facts_request

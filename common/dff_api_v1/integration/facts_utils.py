@@ -7,7 +7,7 @@ import nltk
 import requests
 import sentry_sdk
 import common.constants as common_constants
-import common.dff_release.integration.context as context
+import common.dff_api_v1.integration.context as context
 from dff.script import Context, Actor
 
 from common.wiki_skill import (

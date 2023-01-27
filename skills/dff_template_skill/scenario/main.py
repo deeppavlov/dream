@@ -13,11 +13,10 @@ from dff.script import (
 import dff.script.conditions as cnd
 import dff.script.labels as lbl
 from dff.pipeline import Pipeline
-from dff.messengers.common import CallbackMessengerInterface
 
-import common.dff_release.integration.condition as int_cnd
-import common.dff_release.integration.processing as int_prs
-import common.dff_release.integration.response as int_rsp
+import common.dff_api_v1.integration.condition as int_cnd
+import common.dff_api_v1.integration.processing as int_prs
+import common.dff_api_v1.integration.response as int_rsp
 
 
 import common.constants as common_constants

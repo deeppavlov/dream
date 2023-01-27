@@ -3,7 +3,7 @@ FROM python:3.9.1
 # Do not change anything in this section 
 WORKDIR /src
 
-COPY common/dff_release/requirements.txt .
+COPY common/dff_api_v1/requirements.txt .
 RUN pip install -r requirements.txt
 
 # ###################### CUSTOM SECTION ######################################
