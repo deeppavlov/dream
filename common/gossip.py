@@ -1,6 +1,7 @@
 import re
 import logging
 from common.universal_templates import if_chat_about_particular_topic
+from common.utils import get_topics, TOPIC_GROUPS
 
 logger = logging.getLogger(__name__)
 
@@ -330,3 +331,13 @@ def check_is_celebrity_mentioned(human_utterance):
     if celebrity_name is not None:
         return True
     return False
+
+
+def about_celebrities(annotated_utterance):
+    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    if any([topic in found_topics for topic in TOPIC_GROUPS["celebrities"]]):
+        return True
+    elif re.findall(GOSSIP_COMPILED_PATTERN, annotated_utterance["text"]):
+        return True
+    else:
+        return False

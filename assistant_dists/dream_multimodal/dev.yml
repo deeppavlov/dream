@@ -5,6 +5,11 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
+  files:
+    ports:
+      - 3000:3000
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
@@ -43,8 +48,7 @@ services:
       - 8018:8018
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing_dp:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
   dialogpt:
@@ -63,6 +67,13 @@ services:
   image-captioning:
     volumes:
       - "./services/image_captioning:/src"
+      - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8123:8123
+  dff-image-skill:
+    volumes:
+      - "./skills/dff_image_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8188:8188
 version: "3.7"

@@ -1,6 +1,7 @@
 import re
 
 FACTOID_NOTSURE_CONFIDENCE = 0.1
+FACTOID_THRESHOLD = 0.5
 
 FACT_REGEXP = re.compile(r"fact about", re.IGNORECASE)
 WHAT_REGEXP = re.compile(

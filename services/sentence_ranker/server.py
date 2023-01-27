@@ -20,28 +20,12 @@ PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get(
 )
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 
-try:
-    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    model = AutoModel.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    if torch.cuda.is_available():
-        model.to("cuda")
-        logger.info("sentence-ranker is set to run on cuda")
-
-    logger.info("sentence-ranker is ready")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
-
-app = Flask(__name__)
-logging.getLogger("werkzeug").setLevel("WARNING")
-
 
 def get_sim_for_pair_embeddings(sentence_pairs_batch):
     # source code: https://towardsdatascience.com/bert-for-measuring-text-similarity-eec91c6bf9e1
     # initialize dictionary to store tokenized sentences
     tokens = {"input_ids": [], "attention_mask": []}
-
+    logger.info(f"sentence_pairs_batch {str(sentence_pairs_batch)}")
     for pair in sentence_pairs_batch:
         # encode each sentence and append to dictionary
         for sentence in pair:
@@ -75,6 +59,25 @@ def get_sim_for_pair_embeddings(sentence_pairs_batch):
     for i in range(len(sentence_pairs_batch)):
         scores += [cosine_similarity([mean_pooled[i * 2]], [mean_pooled[i * 2 + 1]]).tolist()[0][0]]
     return scores
+
+
+try:
+    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = AutoModel.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    if torch.cuda.is_available():
+        model.to("cuda")
+        logger.info("sentence-ranker is set to run on cuda")
+    test_scores = get_sim_for_pair_embeddings([["I really like dogs", "I really like cats"]])
+    if test_scores:
+        logger.info("test case processed")
+    logger.info("sentence-ranker is ready")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
+
+app = Flask(__name__)
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 @app.route("/respond", methods=["POST"])
