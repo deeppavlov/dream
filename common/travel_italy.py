@@ -1,8 +1,7 @@
 import re
 
 ITALY_PATTERN = re.compile(
-    r"(italy|italian(s)?|italian food|rome|venice|lago di garda|pizza|spaghetti)(\.|\?)|"
-    r"(travel\b|travelled\b|travelling\b|visit\b|visited\b|visiting\b)", 
+    r"(italy|italian(s)?|(italian)? city|people|language|rome|venice)(\.|\?)|", 
     re.IGNORECASE,
 )
 

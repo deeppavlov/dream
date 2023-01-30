@@ -43,12 +43,13 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("travel_italy_general", "italy_start", 2): loc_cnd.start_condition,
-            ("travel_italy_general", "italy_start", 1): cnd.all(     
+            ("travel_italy_general", "like_italy", 1): cnd.all(     
                 [
                     loc_cnd.is_proposed_skill,
                     cnd.neg(loc_cnd.check_flag("italy_travel_skill_active")),
                 ]
             ),
+            ("italian_food_flow", "food_start", 1.8): loc_cnd.asked_about_italian_cuisine,
         },
     },
     "travel_italy_general": {
@@ -60,18 +61,23 @@ flows = {
         },
         "italy_start": {
             RESPONSE: "What's your favourite place in Italy?",
-            TRANSITIONS: {
-                ("concrete_place_flow", "fav_place", 2): int_cnd.has_entities("prop:favorite_place"),
-                ("travel_italy_general", "like_italy", 1): cnd.true(),
-            },
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
                 "set_flag": loc_prs.set_flag("italy_travel_skill_active", True),
             },
+            TRANSITIONS: {
+                ("concrete_place_flow", "fav_place", 2): int_cnd.has_entities("prop:favorite_place"),
+                ("travel_italy_general", "like_italy", 1): cnd.true(),
+            },
         },
         "like_italy": {
-            RESPONSE: "Me, too. I like Italy for its nature. What do you like it for?",
+            RESPONSE: "I like Italy for its nature. What do you like it for?",
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_flag": loc_prs.set_flag("italy_travel_skill_active", True),
+            },
             TRANSITIONS: {
                 ("travel_italy_general", "told_why", 2): cnd.any(
                     [
@@ -81,11 +87,6 @@ flows = {
                 ),
                 ("travel_italy_general", "neg_to_italy"): int_cnd.is_no_vars,
                 ("global_flow", "fallback"): cnd.true(),
-            },
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-                "set_flag": loc_prs.set_flag("italy_travel_skill_active", True),
             },
         },
         "told_why": {
@@ -98,12 +99,12 @@ flows = {
                     {"can_continue": CAN_CONTINUE_SCENARIO},
                 ],
             ),
-            TRANSITIONS: {
-                ("concrete_place_flow", "when_visited"): cnd.true(),
-            },
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+            },
+            TRANSITIONS: {
+                ("concrete_place_flow", "when_visited"): cnd.true(),
             },
             MISC: {"dialog_act": ["opinion"]},
         }, 
@@ -131,7 +132,7 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("concrete_place_flow", "when_visited"): loc_cnd.sentiment_detected("negative"),
+                ("concrete_place_flow", "when_visited"): int_cnd.is_no_vars,
                 ("concrete_place_flow", "day_activities"): cnd.true(),
             },
         },
@@ -146,7 +147,7 @@ flows = {
             },
             TRANSITIONS: {
                 ("concrete_place_flow", "like_activity", 2): int_cnd.has_entities("prop:like_activity"),
-                ("concrete_place_flow", "bot_activ_opinion"): loc_cnd.sentiment_detected("negative"),
+                ("concrete_place_flow", "bot_activ_opinion"): int_cnd.is_no_vars,
                 ("concrete_place_flow","when_visited"): cnd.true(),
             },
         },
@@ -217,7 +218,7 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("italian_food_flow", "fav_food"): int_cnd.has_entities("prop:like_food"),
+                ("italian_food_flow", "fav_food"): int_cnd.has_entities("wiki:Q2095"), #"prop:like_food"
                 ("italy_disappointments", "neg_experience"): cnd.true(),
             },
         },
