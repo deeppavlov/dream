@@ -91,6 +91,7 @@ def add_any_relationship(utt, graph, entity_kind, entity_name, rel_type, user_id
 
     logger.info(f"create entity kind: {entity_kind}")
     graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
+    graph.ontology.create_property_kind_of_entity_kind(entity_kind=entity_kind, property_kind="Name", property_type=str)
 
     message = ""
     if not added_abstract_entity:
