@@ -57,7 +57,7 @@ class T5GenerativeIEPreprocessor(Component):
             lengths.append(len(input_ids))
         max_length = min(max(lengths), self.max_seq_length)
         for i in range(len(input_ids_batch)):
-            for j in range(max_length - len(input_ids_batch[i])):
+            for _ in range(max_length - len(input_ids_batch[i])):
                 input_ids_batch[i].append(0)
                 attention_mask_batch[i].append(0)
 
@@ -73,7 +73,7 @@ class T5GenerativeIEPreprocessor(Component):
                 lengths.append(len(input_ids))
             max_length = max(lengths)
             for i in range(len(target_ids_batch)):
-                for j in range(max_length - len(target_ids_batch[i])):
+                for _ in range(max_length - len(target_ids_batch[i])):
                     target_ids_batch[i].append(0)
 
             return input_ids_batch, attention_mask_batch, target_ids_batch
