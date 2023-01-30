@@ -102,6 +102,7 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
             new_entity_id = entity_kind + '/' + new_entity_id
             logger.info(f"Entity type to add: {entity_kind}")
             graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
+            graph.create_property_kind_of_entity_kind(entity_kind=entity_kind, property_kind="Name", property_type=str)
             graph.create_entity(entity_kind, new_entity_id, ["Name"], [entity_name])
             logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
 
