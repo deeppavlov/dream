@@ -62,7 +62,9 @@ Example of wiki parser annotations:
 
 # Parsing new Wikidata dump:
 
-Parsing dump to extract triplets:
+First, you should download a new Wikidata dump from https://dumps.wikimedia.org/wikidatawiki/entities/ in the format json.bz2.
+
+Parsing json.bz2 dump to extract triplets:
 
 ```bash
 python3 wiki_process.py -f <dump_fname> -d <directory_to_save_extracted_triplets>
@@ -79,6 +81,8 @@ Merge several .nt files into one file:
 ```bash
 python3 merge_wikidata_nt.py -nt <directory_for_nt_files>
 ```
+
+Then you should install the library https://github.com/rdfhdt/hdt-cpp. In the directory libhdt/tools you can find the tool rdf2hdt for converting .nt files to .hdt format (.hdt format is used in Wiki Parser).
 
 Make final Wikidata hdt file:
 
