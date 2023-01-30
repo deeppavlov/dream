@@ -8,9 +8,10 @@ import nltk
 import sentry_sdk
 import spacy
 from flask import Flask, jsonify, request
+from nltk import sent_tokenize
 
 from deeppavlov import build_model
-from deeppavlov.models.kbqa.sentence_answer import sentence_answer
+from src.sentence_answer import sentence_answer
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -55,12 +56,16 @@ except Exception as e:
 
 
 def sentrewrite(sentence, answer):
+    answer = answer.strip(".")
     if any([sentence.startswith(elem) for elem in ["what's", "what is"]]):
         for old_tok, new_tok in [("what's your", f"{answer} is my"), ("what is your", f"{answer} is my"),
                                  ("what is", "{answer} is"), ("what's", "{answer} is")]:
             sentence = sentence.replace(old_tok, new_tok)
-    else:
+    elif any([sentence.startswith(elem) for elem in ["where", "when"]]):
         sentence = sentence_answer(sentence, answer)
+    elif any([sentence.startswith(elem) for elem in ["is there"]]):
+        for old_tok, new_tok in [("is there any", f"{answer} is"), ("is there", f"{answer} is")]:
+            sentence = sentence.replace(old_tok, new_tok)
     return sentence
 
 
@@ -81,6 +86,8 @@ def get_result(request):
             uttrs_cased.append(uttr_list[0])
         else:
             utt_prev = uttr_list_cased[-2]
+            utt_prev_sentences = nltk.sent_tokenize(utt_prev)
+            utt_prev = utt_prev_sentences[-1]
             utt_cur = uttr_list_cased[-1]
             utt_prev_l = utt_prev.lower()
             utt_cur_l = utt_cur.lower()
@@ -97,6 +104,7 @@ def get_result(request):
                 if found_verbs and len(tokens) > 2:
                     is_sentence = True
 
+            logger.info(f"is_question: {is_question} --- is_sentence: {is_sentence}")
             if is_question and not is_sentence:
                 if len(utt_cur_l.split()) <= 2:
                     uttrs.append(sentrewrite(utt_prev_l, utt_cur_l))
@@ -108,6 +116,7 @@ def get_result(request):
                 uttrs.append(utt_cur_l)
                 uttrs_cased.append(utt_cur)
 
+    logger.info(f"input utterances: {uttrs}")
     triplets_batch = []
     outputs, scores = generative_ie(uttrs)
     for output, uttr in zip(outputs, uttrs_cased):
