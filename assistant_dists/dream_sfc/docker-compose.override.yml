@@ -491,10 +491,11 @@ services:
   news-api-annotator:
     env_file: [.env]
     build:
+      args:
+        ASYNC_SIZE: 3
       context: .
       dockerfile: ./annotators/news_api/Dockerfile
     environment:
-      - ASYNC_SIZE=3
       - FLASK_APP=server
     command: flask run -h 0.0.0.0 -p 8112
     deploy:
