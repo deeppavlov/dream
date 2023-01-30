@@ -2,7 +2,6 @@ import logging
 import re
 
 from dff.script import (
-    Message,
     LOCAL,
     PRE_RESPONSE_PROCESSING,
     TRANSITIONS,

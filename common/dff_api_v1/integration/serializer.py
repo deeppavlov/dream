@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import List, Any, Union
+from typing import List, Any
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
