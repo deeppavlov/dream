@@ -66,11 +66,11 @@ def add_name_property(graph, user_id, names):
     logger.info(f"I already have you in the graph! Updating your property name to {names[0]}!")
 
 
-def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets,
+def add_any_relationship(utt, graph, entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets,
                          existing_ids):
     """Creates an entity and a relation between it and the User from property extraction service."""
-    init_entity_kind = init_entity_kind.replace('_', '').title()
-    graph.ontology.create_property_kind_of_entity_kind(init_entity_kind, "Name")
+    entity_kind = entity_kind.replace('_', '').title()
+    graph.ontology.create_property_kind_of_entity_kind(entity_kind, "Name")
 
     logger.info(f"add_any_relationship, rel_type: {rel_type} --- entity_name: {entity_name} --- "
                 f"inflected: {inflect.singular_noun(entity_name)}")
@@ -81,16 +81,16 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
             rel_type.lower() in {"favorite_animal", "like_animal", "favorite_book", "like_read", "favorite_movie",
                                  "favorite_food", "like_food", "favorite_drink", "like_drink", "favorite_sport",
                                  "like_sports"} \
-            and not any([f" {word} {entity_name}" in text for word in ["the", "my", "his", "her"]]):
-        entity_kind = "Abstract"
-        new_entity_id = f"Abstract/{init_entity_kind}"
+            and not any([f" {word} {entity_name}" in text for word in ["the", "my", "his", "her"]]):    
+        new_entity_id = f"Abstract/{entity_name.capitalize()}"
         inflect_entity_name = inflect.singular_noun(entity_name)
         if inflect_entity_name:
             entity_name = inflect_entity_name
         logger.info(f"correcting type and name, entity_kind: {entity_kind}, entity_name: {entity_name}")
         added_abstract_entity = True
-    else:
-        entity_kind = init_entity_kind
+
+    logger.info(f"create entity kind: {entity_kind}")
+    graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
 
     message = ""
     if not added_abstract_entity:
@@ -101,11 +101,10 @@ def add_any_relationship(utt, graph, init_entity_kind, entity_name, rel_type, us
             new_entity_id = str(uuid.uuid4())
             new_entity_id = entity_kind + '/' + new_entity_id
             logger.info(f"Entity type to add: {entity_kind}")
-            graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
             graph.create_entity(entity_kind, new_entity_id, ["Name"], [entity_name])
             logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
 
-    logger.info(f"define rel_name, entity_kind {entity_kind} --- init_entity_kind {init_entity_kind}")
+    logger.info(f"define rel_name, entity_kind {entity_kind} --- entity_kind {entity_kind}")
     rel_name = rel_type
 
     if (user_id, rel_name, new_entity_id) in ex_triplets:
