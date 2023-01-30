@@ -24,12 +24,12 @@ with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 logging.info(f"Generation parameters: {generation_params}")
 
-OPENAI_KEY = os.environ.get("OPENAI_KEY", "")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 OPENAI_ORGANIZATION = os.environ.get("OPENAI_ORGANIZATION", "")
 assert OPENAI_ORGANIZATION, logger.error(f"Error: OpenAI organization is not specified in env")
-assert OPENAI_KEY, logger.error(f"Error: OpenAI key is not specified in env")
+assert OPENAI_API_KEY, logger.error(f"Error: OpenAI API key is not specified in env")
 openai.organization = OPENAI_ORGANIZATION
-openai.api_key = OPENAI_KEY
+openai.api_key = OPENAI_API_KEY
 
 
 def generate_responses(instruction, context, continue_last_uttr=False):
