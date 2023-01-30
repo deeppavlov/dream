@@ -76,34 +76,32 @@ def add_any_relationship(utt, graph, entity_kind, entity_name, rel_type, user_id
                 f"inflected: {inflect.singular_noun(entity_name)}")
     text = utt.get("text", "")
 
-    added_abstract_entity = False
     if USE_ABSTRACT_KINDS and \
             rel_type.lower() in {"favorite_animal", "like_animal", "favorite_book", "like_read", "favorite_movie",
                                  "favorite_food", "like_food", "favorite_drink", "like_drink", "favorite_sport",
                                  "like_sports"} \
             and not any([f" {word} {entity_name}" in text for word in ["the", "my", "his", "her"]]):    
-        new_entity_id = f"Abstract/{entity_name.capitalize()}"
+        entity_kind = f"Abstract{entity_kind.capitalize()}"
         inflect_entity_name = inflect.singular_noun(entity_name)
         if inflect_entity_name:
             entity_name = inflect_entity_name
         logger.info(f"correcting type and name, entity_kind: {entity_kind}, entity_name: {entity_name}")
-        added_abstract_entity = True
 
     logger.info(f"create entity kind: {entity_kind}")
     graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
-    graph.ontology.create_property_kind_of_entity_kind(entity_kind=entity_kind, property_kind="Name", property_type=str)
+    graph.ontology.create_property_kind_of_entity_kind(entity_kind=entity_kind, property_kind="Name",
+                                                       property_type=str)
 
     message = ""
-    if not added_abstract_entity:
-        if (entity_name, entity_kind) in entities_with_types:
-            new_entity_id = entities_with_types[(entity_name, entity_kind)]
-            message += f"entity exists: {new_entity_id} --- "
-        else:
-            new_entity_id = str(uuid.uuid4())
-            new_entity_id = entity_kind + '/' + new_entity_id
-            logger.info(f"Entity type to add: {entity_kind}")
-            graph.create_entity(entity_kind, new_entity_id, ["Name"], [entity_name])
-            logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
+    if (entity_name, entity_kind) in entities_with_types:
+        new_entity_id = entities_with_types[(entity_name, entity_kind)]
+        message += f"entity exists: {new_entity_id} --- "
+    else:
+        new_entity_id = str(uuid.uuid4())
+        new_entity_id = entity_kind + '/' + new_entity_id
+        logger.info(f"Entity type to add: {entity_kind}")
+        graph.create_entity(entity_kind, new_entity_id, ["Name"], [entity_name])
+        logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
 
     logger.info(f"define rel_name, entity_kind {entity_kind} --- entity_kind {entity_kind}")
     rel_name = rel_type
