@@ -6,13 +6,13 @@ from typing import List, Any
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
-from dff.script import Context, Actor
+from dff.script import Context, Actor, MultiMessage
 from dff.pipeline import Pipeline
 from pydantic import BaseModel, Field, Extra, root_validator
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.dff_api_v1.integration.context import get_last_human_utterance
-from common.dff_api_v1.integration.message import DreamMessage, DreamMultiMessage
+from common.dff_api_v1.integration.message import DreamMessage
 
 
 ignore_logger("root")
@@ -151,7 +151,7 @@ def get_response(ctx: Context, actor: Actor):
     human_attr = HumanAttr.parse_obj(agent).dict() | {f"{SERVICE_NAME}_state": state}
     hype_attr = HypeAttr.parse_obj(agent).dict() | ({"response_parts": response_parts} if response_parts else {})
     response = ctx.last_response
-    if isinstance(response, DreamMultiMessage):
+    if isinstance(response, MultiMessage):
         responses = []
         message: dict
         for message in response.messages:

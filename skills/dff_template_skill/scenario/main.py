@@ -10,11 +10,12 @@ from dff.script import (
 )
 import dff.script.conditions as cnd
 import dff.script.labels as lbl
+from dff.script import MultiMessage
 from dff.pipeline import Pipeline
 
 import common.dff_api_v1.integration.condition as int_cnd
 import common.dff_api_v1.integration.processing as int_prs
-from common.dff_api_v1.integration.message import DreamMessage, DreamMultiMessage
+from common.dff_api_v1.integration.message import DreamMessage
 
 
 import common.constants as common_constants
@@ -72,7 +73,7 @@ script = {
             },
         },
         "node1": {
-            RESPONSE: DreamMultiMessage(
+            RESPONSE: MultiMessage(
                 messages=[DreamMessage(text="Hi, how are you?"), DreamMessage(text="Hi, what's up?")]
             ),  # several hypotheses
             PRE_RESPONSE_PROCESSING: {
@@ -107,7 +108,7 @@ script = {
             TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node7": {
-            RESPONSE: DreamMultiMessage(
+            RESPONSE: MultiMessage(
                 messages=[
                     DreamMessage(
                         text="bye", confidence=1.0, hype_attr={"can_continue": common_constants.MUST_CONTINUE}
