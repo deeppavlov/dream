@@ -1,5 +1,4 @@
 import argparse
-import random
 import json
 import multiprocessing as mp
 import os
@@ -200,7 +199,7 @@ def run(i):
                                             out.write(line + "\n")
                                         else:
                                             obj_line = obj[0].replace('"', "'")
-                                            if re.findall("[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_line):
+                                            if re.findall(r"[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_line):
                                                 line = f'<http://we/{elem}> <http://wpd/{rel}> "{obj_line}^^T" .'
                                             else:
                                                 line = f'<http://we/{elem}> <http://wpd/{rel}> "{obj_line}^^D" .'
@@ -214,19 +213,28 @@ def run(i):
                                         out.write(line + "\n")
 
                                         if obj_1.startswith("Q"):
-                                            line = f"<http://ws/{i}_{num_statements}> <http://wps/{rel}> <http://we/{obj_1}> ."
+                                            line = (
+                                                f"<http://ws/{i}_{num_statements}> <http://wps/{rel}> "
+                                                + f"<http://we/{obj_1}> ."
+                                            )
                                             out.write(line + "\n")
                                             line = f"<http://we/{elem}> <http://wpd/{rel}> <http://we/{obj_1}> ."
                                             out.write(line + "\n")
                                         else:
                                             obj_1 = obj_1.replace('"', "'")
-                                            if re.findall("[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_1):
-                                                line = f'<http://ws/{i}_{num_statements}> <http://wps/{rel}> "{obj_1}^^T" .'
+                                            if re.findall(r"[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_1):
+                                                line = (
+                                                    f"<http://ws/{i}_{num_statements}> <http://wps/{rel}> "
+                                                    + f'"{obj_1}^^T" .'
+                                                )
                                             else:
-                                                line = f'<http://ws/{i}_{num_statements}> <http://wps/{rel}> "{obj_1}^^D" .'
+                                                line = (
+                                                    f"<http://ws/{i}_{num_statements}> <http://wps/{rel}> "
+                                                    + f'"{obj_1}^^D" .'
+                                                )
                                             out.write(line + "\n")
 
-                                            if re.findall("[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_1):
+                                            if re.findall(r"[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_1):
                                                 line = f'<http://we/{elem}> <http://wpd/{rel}> "{obj_1}^^T" .'
                                             else:
                                                 line = f'<http://we/{elem}> <http://wpd/{rel}> "{obj_1}^^D" .'
@@ -239,14 +247,23 @@ def run(i):
                                             else:
                                                 if cur_rel:
                                                     if obj_elem.startswith("Q"):
-                                                        line = f"<http://ws/{i}_{num_statements}> <http://wpq/{cur_rel}> <http://we/{obj_elem}> ."
+                                                        line = (
+                                                            f"<http://ws/{i}_{num_statements}> "
+                                                            + f"<http://wpq/{cur_rel}> <http://we/{obj_elem}> ."
+                                                        )
                                                         out.write(line + "\n")
                                                     else:
                                                         obj_elem = obj_elem.replace('"', "'")
-                                                        if re.findall("[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_elem):
-                                                            line = f'<http://ws/{i}_{num_statements}> <http://wpq/{cur_rel}> "{obj_elem}^^T" .'
+                                                        if re.findall(r"[\d]{3,4}-[\d]{1,2}-[\d]{1,2}", obj_elem):
+                                                            line = (
+                                                                f"<http://ws/{i}_{num_statements}> "
+                                                                + f'<http://wpq/{cur_rel}> "{obj_elem}^^T" .'
+                                                            )
                                                         else:
-                                                            line = f'<http://ws/{i}_{num_statements}> <http://wpq/{cur_rel}> "{obj_elem}^^D" .'
+                                                            line = (
+                                                                f"<http://ws/{i}_{num_statements}> "
+                                                                + f'<http://wpq/{cur_rel}> "{obj_elem}^^D" .'
+                                                            )
                                                         out.write(line + "\n")
 
                                         added_triplets += len(obj)

@@ -2,7 +2,6 @@ import argparse
 import bz2
 import json
 import multiprocessing as mp
-from collections import defaultdict
 from logging import getLogger
 
 
@@ -25,7 +24,6 @@ num_processors = 50
 def process_sample(entity_dict):
     entity_id = ""
     triplets = []
-    entity_in_russian = False
     if "id" in entity_dict:
         entity_id = entity_dict["id"]
         try:
