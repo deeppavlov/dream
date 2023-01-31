@@ -67,7 +67,14 @@ flows = {
                 "set_flag": loc_prs.set_flag("italy_travel_skill_active", True),
             },
             TRANSITIONS: {
-                ("concrete_place_flow", "fav_place", 2): int_cnd.has_entities("prop:favorite_place"),
+                ("concrete_place_flow", "fav_place", 2): cnd.any(
+                    [
+                        int_cnd.has_entities("wiki:Q747074"), #Q38 - Italy, Q747074 - commune of Italy
+                        int_cnd.has_entities("wiki:Q515"), # Q515 - city
+                        int_cnd.has_entities("wiki:Q1549591") #Q1549591 - big city
+                    ]
+
+                ),
                 ("travel_italy_general", "like_italy", 1): cnd.true(),
             },
         },
@@ -125,7 +132,7 @@ flows = {
             RESPONSE: "What are the odds? I also love {users_fav_place}. What impressed you the most there?",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    users_fav_place=["prop:favorite_place", "wiki:Q515", "default:this place"]
+                    users_fav_place=["prop:favorite_place", "default:this place"]
                 ),
                 "slot_filling": int_prs.fill_responses_by_slots(),
                 "set_confidence": int_prs.set_confidence(1.0),
@@ -146,7 +153,12 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("concrete_place_flow", "like_activity", 2): int_cnd.has_entities("prop:like_activity"),
+                ("concrete_place_flow", "like_activity", 2): cnd.any(
+                    [
+                        int_cnd.has_entities("prop:like_activity"),
+                        int_cnd.has_entities("prop:favorite_activity")
+                    ]
+                ),
                 ("concrete_place_flow", "bot_activ_opinion"): int_cnd.is_no_vars,
                 ("concrete_place_flow","when_visited"): cnd.true(),
             },
@@ -192,7 +204,12 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("concrete_place_flow", "told_when", 2): int_cnd.has_entities("prop:favorite_season"),
+                ("concrete_place_flow", "told_when", 2): cnd.any(
+                    [
+                        int_cnd.has_entities("prop:favorite_season"),
+                        int_cnd.has_entities("prop:like_season")
+                    ]
+                ),
                 ("italian_food_flow", "food_start"): cnd.true(),
             },
         },
@@ -201,7 +218,7 @@ flows = {
                 "It's fun at all seasons but especially in {user_fav_season}.",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    user_fav_season=["prop:favorite_season", "default:summer"]
+                    user_fav_season=["prop:favorite_season", "default:this time"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
@@ -218,21 +235,31 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
-                ("italian_food_flow", "fav_food"): int_cnd.has_entities("wiki:Q2095"), #"prop:like_food"
+                ("italian_food_flow", "fav_food"): cnd.any(
+                    [
+                        int_cnd.has_entities("prop:like_food"), 
+                        int_cnd.has_entities("prop:favorite_food")
+                    ]
+                ),
                 ("italy_disappointments", "neg_experience"): cnd.true(),
             },
         },
         "fav_food": {
-            RESPONSE: "Oh, {user_likes_food} is to-die-for. What drink does it go best with?",
+            RESPONSE: "Oh, {user_fav_food} is to-die-for. What drink does it go best with?",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    user_likes_food=["prop:like_food", "default:this dish"]
+                    user_fav_food=["prop:favorite_food", "default:this dish"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
             },
             TRANSITIONS: {
-                ("italian_food_flow", "fav_drink"): int_cnd.has_entities("prop:favorite_drink"),
+                ("italian_food_flow", "fav_drink"): cnd.any(
+                    [
+                        int_cnd.has_entities("prop:favorite_drink"),
+                        int_cnd.has_entities("prop:like_drink")
+                    ]
+                ),
                 ("italy_disappointments", "neg_experience"): cnd.true(),
             },
         },
