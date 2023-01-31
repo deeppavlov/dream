@@ -189,7 +189,7 @@ def is_question(vars):
 
 
 def check_conceptnet(vars):
-    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get("conceptnet", {})
+    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get("comet_conceptnet", {})
     conceptnet = False
     food_item = None
     for elem, triplets in annotations_conceptnet.items():

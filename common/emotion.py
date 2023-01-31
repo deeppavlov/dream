@@ -149,7 +149,7 @@ def is_boring(annotated_uttr):
 
 def is_pain(annotated_uttr):
     uttr_text = annotated_uttr["text"]
-    for entity in annotated_uttr.get("conceptnet", {}):
+    for entity in annotated_uttr.get("annotations", {}).get("comet_conceptnet", {}):
         if "pain" in entity.get("isSymbolOf", []):
             return True
     return re.search(PAIN_TEMPLATE, uttr_text) and not re.search(NOT_PAIN_TEMPLATE, uttr_text)

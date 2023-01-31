@@ -182,7 +182,7 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
-            "conceptnet": {
+            "comet_conceptnet": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,

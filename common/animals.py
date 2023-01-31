@@ -100,7 +100,7 @@ def check_about_animals(user_uttr):
 
 def mentioned_animal(annotations):
     flag = False
-    conceptnet = annotations.get("conceptnet", {})
+    conceptnet = annotations.get("comet_conceptnet", {})
     for elem, triplets in conceptnet.items():
         if "SymbolOf" in triplets:
             objects = triplets["SymbolOf"]
@@ -131,7 +131,7 @@ def find_entity_by_types(annotations, types_to_find):
 
 
 def find_entity_conceptnet(annotations, types_to_find):
-    conceptnet = annotations.get("conceptnet", {})
+    conceptnet = annotations.get("comet_conceptnet", {})
     for elem, triplets in conceptnet.items():
         if "SymbolOf" in triplets:
             objects = triplets["SymbolOf"]
