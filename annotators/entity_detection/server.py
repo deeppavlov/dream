@@ -35,22 +35,33 @@ stopwords = set(stopwords.words("english"))
 nlp = spacy.load("en_core_web_sm")
 
 replace_tag_dict = {
-    "softwareapplication": "product", "gamename": "product", "device": "product", "vehicle": "product",
-    "channelname": "org", "organization":"org",
-    "wear": "misc", "sportrole": "misc",
+    "softwareapplication": "product",
+    "gamename": "product",
+    "device": "product",
+    "vehicle": "product",
+    "channelname": "org",
+    "organization": "org",
+    "wear": "misc",
+    "sportrole": "misc",
     "bookname": "literary_work",
     "party": "political_party",
     "position": "occupation",
     "sport": "type_of_sport",
     "venue": "sports_venue",
-    "sport": "music_genre",
-    "videoname": "film",   
+    "genre": "music_genre",
+    "videoname": "film",
     "songname": "song",
     "location": "loc",
     "person": "per",
     "sportteam": "sport_team",
-    "anaphor": "black", "date": "black", "number": "black", "year": "black", "duration": "black", "ordinal": "black"
+    "anaphor": "black",
+    "date": "black",
+    "number": "black",
+    "year": "black",
+    "duration": "black",
+    "ordinal": "black",
 }
+
 
 def get_result(request, what_to_annotate):
     st_time = time.time()
@@ -120,7 +131,11 @@ def get_result(request, what_to_annotate):
                     entity_init = uttr[start_offset:end_offset]
                     if entity_init.lower() == entity:
                         entity = entity_init
-                    if entity.lower() not in stopwords and len(entity) > 2 and not (len(entity.split()) == 1 and nlp(entity)[0].pos_ == "PRON"):
+                    if (
+                        entity.lower() not in stopwords
+                        and len(entity) > 2
+                        and not (len(entity.split()) == 1 and nlp(entity)[0].pos_ == "PRON")
+                    ):
                         entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                         entity = DOUBLE_SPACES.sub(" ", entity).strip()
                         finegrained_tag = replace_tag_dict.get(tag.lower(), tag.lower())

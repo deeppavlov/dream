@@ -101,7 +101,7 @@ class EntityLinker(Component, Serializable):
             "event": ["championship", "sports_season", "sports_event"],
             "film": ["work_of_art", "road"],
             "misc": ["animal", "language", "law", "food", "nation"],
-            "sport_team": ["association_football_club", "sports_league", "national_sports_team"]
+            "sport_team": ["association_football_club", "sports_league", "national_sports_team"],
         }
         self.word_searcher = None
         if self.words_dict_filename:

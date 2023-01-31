@@ -12,19 +12,24 @@ def main():
     gold_results = [
         [
             {
-                'entities': ['capital', 'russia'],
-                'labelled_entities': [
-                    {'finegrained_label': [['misc', 0.7]], 'label': 'misc', 'offsets': [12, 19], 'text': 'capital'}, 
-                    {'finegrained_label': [['loc', 0.9927]], 'label': 'location', 'offsets': [23, 29], 'text': 'russia'}
-                ]
+                "entities": ["capital", "russia"],
+                "labelled_entities": [
+                    {"finegrained_label": [["misc", 0.7]], "label": "misc", "offsets": [12, 19], "text": "capital"},
+                    {
+                        "finegrained_label": [["loc", 0.9927]],
+                        "label": "location",
+                        "offsets": [23, 29],
+                        "text": "russia",
+                    },
+                ],
             }
         ],
         [
             {
-                'entities': ['politics'],
-                'labelled_entities': [
-                    {'finegrained_label': [['misc', 0.7]], 'label': 'misc', 'offsets': [17, 25], 'text': 'politics'}
-                ]
+                "entities": ["politics"],
+                "labelled_entities": [
+                    {"finegrained_label": [["misc", 0.7]], "label": "misc", "offsets": [17, 25], "text": "politics"}
+                ],
             }
         ],
     ]
@@ -35,7 +40,6 @@ def main():
         print(result)
         if result == gold_result:
             count += 1
-
     assert count == len(request_data)
     print("Success")
 
