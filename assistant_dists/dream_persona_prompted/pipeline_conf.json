@@ -246,7 +246,7 @@
         }
     },
     "metadata": {
-        "display_name": "ChatGPT-based Prompted Dream",
+        "display_name": "GPT-J-based Dream Persona Prompted Assistant",
         "author": "DeepPavlov",
         "description": "Mini version of DeepPavlov Dream Socialbot with the use of prompted generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload specify own prompts (json files) to be used in LLM-powered reply generation.",
         "version": "0.0.1",
