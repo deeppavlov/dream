@@ -149,12 +149,17 @@ class ConveRTAnnotator:
         self.model.save(CACHE_DIR + '/model.h5')
         self.model_path = CACHE_DIR + '/model.h5'
     
-    def candidate_selection(self, vectorized_history, candidates, threshold=0.8):
+    def candidate_selection(self, candidates, bot_uttr_history, threshold=0.8):
         self.model = tf.keras.models.load_model(self.model_path)
         labels = {0: 'entailment', 1: 'neutral', 2: 'contradiction'}
-        rez_dict = dict(zip(candidates, [{'decision': labels[0], labels[0]: 1.0, labels[1]: 0.0, labels[2]: 0.0}]*len(candidates)))
-        if vectorized_history:
-            vectorized_candidates = self.__multiple_responses_encoding(candidates)
+        base_dict = {'decision': labels[0],
+                     labels[0]: 0.0,
+                     labels[1]: 1.0,
+                     labels[2]: 0.0}
+        rez_list = list(base_dict.copy() for _ in range(len(candidates)))
+        if bot_uttr_history:
+            vectorized_candidates = self.__response_encoding(candidates)
+            vectorized_history = self.__response_encoding(bot_uttr_history)
             combinations = list(itertools.product(vectorized_history, vectorized_candidates))
             history_arr = []
             candidates_arr = []
@@ -164,21 +169,16 @@ class ConveRTAnnotator:
             pred_rez = self.model.predict([history_arr, candidates_arr])
             for i in range(len(pred_rez)):
                 j = i % len(candidates)
-                cand = candidates[j]
                 row_probab = pred_rez[i]
                 if row_probab[2] < threshold:
                     row_probab[2] = -row_probab[2]
-                label = np.argmax(row_probab, axis=-1)
-                if rez_dict[cand]['decision'] != labels[2]:
-                    rez_dict[cand] = {'decision': labels[label], 
-                                      labels[0]: row_probab[0].astype(float), 
-                                      labels[1]: row_probab[1].astype(float), 
-                                      labels[2]: np.abs(row_probab[2]).astype(float)}            
-        return rez_dict
+                label = int(np.argmax(row_probab, axis=-1))
+                if rez_list[j]['decision'] != labels[2]:
+                    rez_list[j] = {'decision': labels[label],
+                                   labels[0]: row_probab[0].astype(float),
+                                   labels[1]: row_probab[1].astype(float),
+                                   labels[2]: np.abs(row_probab[2]).astype(float)}
+        return rez_list
 
-    def __multiple_responses_encoding(self, responses):
+    def __response_encoding(self, responses):
         return self.encoder.encode_sentences(responses)
-
-    def response_encoding(self, response):
-        encoded_response = self.encoder.encode_sentences(response)[0]
-        return encoded_response.tolist()

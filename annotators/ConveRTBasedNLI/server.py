@@ -20,20 +20,23 @@ logger.info("Annotator is loaded.")
 
 
 @app.route("/batch_model", methods=["POST"])
-def respond_batch_model():
+def respond_batch():
     start_time = time.time()
-    candidates = request.json['candidates']
-    history = request.json['history']
-    result = annotator.candidate_selection(history, candidates)
+    candidates = request.json.get("candidates", [])
+    history = request.json.get("history", [])
+    logger.info(f"Candidates: {candidates}")
+    logger.info(f"History: {history}")
+    result = annotator.candidate_selection(candidates, history)
     total_time = time.time() - start_time
     logger.info(f"Annotator candidate prediction time: {total_time: .3f}s")
-    return jsonify(result)
+    return jsonify([{"batch": result}])
 
 
 @app.route("/encode", methods=["POST"])
 def respond_encode():
     start_time = time.time()
-    response = request.json['sentences']
+    response = request.json.get("sentences", [])
+    logger.info(f"sentence: {response}")
     result = annotator.response_encoding(response)
     total_time = time.time() - start_time
     logger.info(f"Annotator response encoding time: {total_time: .3f}s")

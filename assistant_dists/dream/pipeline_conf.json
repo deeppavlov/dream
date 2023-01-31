@@ -131,22 +131,9 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "skills"
+                    "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
-            },
-            "convert_based_nli": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://convert-based-nli:8137/encode"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_prev_bot_utt",
-                "previous_services": [
-                    "response_selectors"
-                ]
             }
         },
         "annotators": {
