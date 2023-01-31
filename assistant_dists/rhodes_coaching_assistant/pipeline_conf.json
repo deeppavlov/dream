@@ -104,6 +104,20 @@
                 ],
                 "state_manager_method": "add_annotation"
             },
+            "intent_catcher": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://intent-catcher:8014/detect"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ]
+            },
             "prompt_selector": {
                 "connector": {
                     "protocol": "http",
@@ -135,13 +149,13 @@
             }
         },
         "skills": {
-            "dff_dream_persona_prompted_skill": {
+            "dff_rhodes_coaching_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.5,
-                    "url": "http://dff-dream-persona-prompted-skill:8134/respond"
+                    "url": "http://dff-rhodes-coaching-prompted-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -154,6 +168,19 @@
                     "class_name": "skills.dummy_skill.connector:DummySkillConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dff_intent_responder_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-intent-responder-skill:8012/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
