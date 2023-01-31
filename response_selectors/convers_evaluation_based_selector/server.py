@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import logging
-import pprint
+
+# import pprint
 import random
 
 import re
@@ -21,6 +22,7 @@ from common.utils import (
     substitute_nonwords,
     is_toxic_or_badlisted_utterance,
 )
+from common.response_selection import ACTIVE_SKILLS
 from tag_based_selection import tag_based_response_selection
 from utils import (
     add_question_to_statement,
@@ -65,6 +67,7 @@ def respond():
     selected_confidences = []
     selected_human_attributes = []
     selected_bot_attributes = []
+    selected_attributes = []
 
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_confidences = []
@@ -73,8 +76,8 @@ def respond():
 
         try:
             curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
-            logger.info("Curr candidates:")
-            logger.info(pprint.pformat(curr_candidates, compact=False))
+            # logger.info("Curr candidates:")
+            # logger.info(pprint.pformat(curr_candidates, compact=False))
 
             for skill_data in curr_candidates:
                 if len(dialog["utterances"]) > 1:
@@ -109,7 +112,7 @@ def respond():
             curr_scores = np.array(curr_scores)
             curr_confidences = np.array(curr_confidences)
             # now we collected all current candidates and their annotations. select response among them
-            best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes = select_response(
+            best_skill_name, best_text, best_confidence, best_human_attrs, best_bot_attrs, best_attrs = select_response(
                 curr_candidates,
                 curr_scores,
                 curr_confidences,
@@ -133,23 +136,27 @@ def respond():
                     "skill_name": "dummy_skill",
                     "active_skill": "dummy_skill",
                 }
-            best_skill_name = best_cand["skill_name"]
-            best_text = best_cand["text"]
-            best_confidence = best_cand["confidence"]
-            best_human_attributes = best_cand.get("human_attributes", {})
-            best_bot_attributes = best_cand.get("bot_attributes", {})
+            best_skill_name = best_cand.pop("skill_name")
+            best_text = best_cand.pop("text")
+            best_confidence = best_cand.pop("confidence")
+            best_human_attrs = best_cand.pop("human_attributes", {})
+            best_bot_attrs = best_cand.pop("bot_attributes", {})
+            best_cand.pop("annotations", {})
+            best_attrs = best_cand
 
         selected_skill_names.append(best_skill_name)
         selected_texts.append(best_text)
         selected_confidences.append(best_confidence)
-        selected_human_attributes.append(best_human_attributes)
-        selected_bot_attributes.append(best_bot_attributes)
+        selected_human_attributes.append(best_human_attrs)
+        selected_bot_attributes.append(best_bot_attrs)
+        selected_attributes.append(best_attrs)
 
     logger.info(
         f"Choose selected_skill_names: {selected_skill_names};"
         f"selected_texts {selected_texts}; selected_confidences {selected_confidences};"
         f"selected human attributes: {selected_human_attributes}; "
-        f"selected bot attributes: {selected_bot_attributes}"
+        f"selected bot attributes: {selected_bot_attributes}; "
+        f"selected attributes: {selected_attributes}"
     )
 
     total_time = time.time() - st_time
@@ -162,12 +169,15 @@ def respond():
                 selected_confidences,
                 selected_human_attributes,
                 selected_bot_attributes,
+                selected_attributes,
             )
         )
     )
 
 
-def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxics, bot_utterances):
+def rule_score_based_selection(
+    dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
+):
     curr_single_scores = []
 
     bot_utt_counter = Counter(bot_utterances)
@@ -291,6 +301,13 @@ def rule_score_based_selection(dialog, candidates, scores, confidences, is_toxic
             dummy_question = candidates[i]["text"]
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
+        if (
+            (skill_names[i] in ACTIVE_SKILLS)
+            and (skill_names[i] in all_prev_active_skills)
+            and (skill_names[i] != all_prev_active_skills[-1])
+        ):
+            confidences[i] *= 0.9
+
         if curr_score is None:
             score = scores[i]
             confidence = confidences[i]
@@ -356,7 +373,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     else:
         logger.info("Confidence & ConvEvaluationAnnotator Scores based selection")
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
-            dialog, candidates, scores, confidences, is_toxics, bot_utterances
+            dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
         )
 
     logger.info(f"Best candidate: {best_candidate}")
@@ -397,7 +414,15 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     if dialog["human_utterances"][-1]["text"] == "/get_dialog_id":
         best_text = "Your dialog's id: " + str(dialog["dialog_id"])
 
-    return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes
+    candidates[best_id].pop("skill_name")
+    candidates[best_id].pop("text")
+    candidates[best_id].pop("confidence")
+    candidates[best_id].pop("human_attributes", {})
+    candidates[best_id].pop("bot_attributes", {})
+    candidates[best_id].pop("annotations", {})
+    best_attrs = candidates[best_id]
+
+    return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes, best_attrs
 
 
 if __name__ == "__main__":

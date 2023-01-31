@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y --allow-unauthenticated git wget && rm 
 
 WORKDIR /src
 
+COPY ./requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
+RUN python -c "import nltk; nltk.download('punkt')"
+
 # install parlai
 RUN pip install git+https://github.com/Saraharas/ParlAI@v0.9.4-kg-batch-2models#egg=ParlAI
 
@@ -31,12 +35,7 @@ RUN wget $MODEL2_ARG -q -P /opt/conda/lib/python3.7/site-packages/data/models &&
 tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
 rm /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz
 
-
 WORKDIR /src
-
-COPY ./requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
-RUN python -c "import nltk; nltk.download('punkt')"
 
 COPY . /src
 

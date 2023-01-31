@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 COPY annotators/ConversationEvaluator/ ./
 COPY common/ common/
 
-CMD gunicorn --workers=1 --bind 0.0.0.0:8004 --timeout=300 server:app
+CMD gunicorn --workers=1 --bind 0.0.0.0:8004 --timeout=1200 server:app

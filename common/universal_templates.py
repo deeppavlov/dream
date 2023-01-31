@@ -214,7 +214,7 @@ COMPILE_LETS_TALK = re.compile(
 COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(
     join_sentences_in_or_pattern(
         [
-            r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE),
+            r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + join_words_in_or_pattern(TALK_LIKE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(TALK_LIKE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(LIKE_TEMPLATE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(ASK_TEMPLATE),
@@ -232,6 +232,7 @@ COMPILE_LETS_TALK_ABOUT_SOMETHING = re.compile(
             join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
             join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
             r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s?" + ABOUT_SOMETHING + END,
+            r"why (do not|don't) (we|us|me|you|to) " + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
         ]
     ),
     re.IGNORECASE,
@@ -267,6 +268,8 @@ COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(
             join_words_in_or_pattern(WANT_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
             join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
             r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
+            r"why (do not|don't) (we|us|me|you|to) " + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
+            r"why (do not|don't) (we|us|me|you|to) " + "discuss" + r"\s" + ANY_WORDS + END,
         ]
     ),
     re.IGNORECASE,
@@ -348,10 +351,17 @@ def if_switch_topic(uttr):
 
 
 def book_movie_music_found(annotated_uttr):
-    cobot_dialogacts = set(get_topics(annotated_uttr, which="cobot_dialogact_topics"))
-    named_cobot_dialogacts = {"Entertainment_Books", "Entertainment_Movies", "Entertainment_Music"}
-    dialogact_met = len(named_cobot_dialogacts & cobot_dialogacts) > 0
-    return dialogact_met
+    topics = set(get_topics(annotated_uttr, which="all"))
+    target_topics = {
+        "Entertainment_Books",
+        "Books&Literature",
+        "Movies_TV",
+        "Entertainment_Movies",
+        "Music",
+        "Entertainment_Music",
+    }
+    target_topic_met = len(target_topics & topics) > 0
+    return target_topic_met
 
 
 def is_switch_topic(annotated_uttr):

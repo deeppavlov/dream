@@ -7,7 +7,8 @@
                     "human_encounters": [],
                     "bot_encounters": [],
                     "human_attitude": "like",
-                    "bot_attitude": null
+                    "bot_attitude": null,
+                    "mentioned_by_bot": false
                 },
                 "jewelry": {
                     "name": "jewelry",
@@ -20,7 +21,8 @@
                         }
                     ],
                     "human_attitude": null,
-                    "bot_attitude": "like"
+                    "bot_attitude": "like",
+                    "mentioned_by_bot": true
                 }
             }
         }

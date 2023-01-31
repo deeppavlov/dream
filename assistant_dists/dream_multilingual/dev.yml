@@ -1,0 +1,38 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  convers-evaluation-selector:
+    volumes:
+      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8009:8009
+  gpt2-generator:
+    volumes:
+      - "./services/gpt2_generator:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8132:8132
+  toxic-classification:
+    volumes:
+      - "./annotators/MultilingualToxicClassification:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8013:8013
+  sentiment-classification:
+    volumes:
+      - "./annotators/MultilingualSentimentClassification:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8024:8024
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
+version: "3.7"

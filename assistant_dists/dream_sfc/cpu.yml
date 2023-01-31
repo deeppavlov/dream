@@ -33,9 +33,6 @@ services:
   fact-retrieval:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  hypothesis-scorer:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   entity-detection:
     environment:
       CUDA_VISIBLE_DEVICES: ""
@@ -46,4 +43,7 @@ services:
   speech-function-classifier:
     environment:
       DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  intent-catcher:
+    environment:
       CUDA_VISIBLE_DEVICES: ""

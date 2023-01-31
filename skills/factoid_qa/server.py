@@ -28,7 +28,6 @@ TEXT_QA_URL = getenv("TEXT_QA_URL")
 use_annotators_output = True
 FACTOID_DEFAULT_CONFIDENCE = 0.99  # otherwise dummy often beats it
 ASKED_ABOUT_FACT_PROB = 0.99
-FACTOID_CLASS_THRESHOLD = 0.5
 
 templates_dict = json.load(open("templates_dict.json", "r"))
 
@@ -249,8 +248,7 @@ def respond():
         names = [j for j in names + probable_subjects if j in fact_dict.keys()]
         names = list(set(names))
         nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
-        factoid_conf = get_factoid(uttr)
-        is_factoid_cls = factoid_conf.get("is_factoid", 0.0) > 0.9
+        is_factoid_cls = "is_factoid" in get_factoid(uttr, probs=False)
         is_factoid = is_factoid_cls and (names or nounphrases) and check_factoid(last_phrase)
         is_factoid_sents.append(is_factoid)
         ner_outputs_to_classify.append(names)
@@ -272,10 +270,16 @@ def respond():
         curr_ann_uttr = dialog["human_utterances"][-1]
         prev_ann_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
         annotations = curr_ann_uttr["annotations"]
-        tell_me_about_intent = annotations.get("intent_catcher", {}).get("lets_chat_about", {}).get(
-            "detected", 0
-        ) == 1 or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+        tell_me_about_intent = (
+            annotations.get("intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
+            or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+            or re.findall(full_template, curr_ann_uttr.get("text", ""))
+        )
 
+        logger.info(
+            f"factoid_qa --- text {curr_ann_uttr.get('text', '')} --- "
+            f"find {re.findall(full_template, curr_ann_uttr.get('text', ''))}"
+        )
         if "sentrewrite" in annotations:
             text_rewritten = annotations["sentrewrite"]["modified_sents"][-1]
         else:
@@ -316,9 +320,11 @@ def respond():
         attr = {}
         curr_ann_uttr = dialog["human_utterances"][-1]
         prev_ann_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
-        tell_me_about_intent = curr_ann_uttr["annotations"].get("intent_catcher", {}).get("lets_chat_about", {}).get(
-            "detected", 0
-        ) == 1 or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+        tell_me_about_intent = (
+            curr_ann_uttr["annotations"].get("intent_catcher", {}).get("lets_chat_about", {}).get("detected", 0) == 1
+            or if_chat_about_particular_topic(curr_ann_uttr, prev_ann_uttr)
+            or re.findall(full_template, curr_ann_uttr.get("text", ""))
+        )
 
         if "sentrewrite" in curr_ann_uttr["annotations"]:
             curr_uttr_rewritten = curr_ann_uttr["annotations"]["sentrewrite"]["modified_sents"][-1]
@@ -366,7 +372,7 @@ def respond():
         responses.append(response)
         confidences.append(confidence)
         attributes.append(attr)
-    logger.info(f"Responses {responses}")
+    logger.info(f"Responses: {responses} --- confidences: {confidences}")
     total_time = time.time() - st_time
     logger.info(f"factoid_qa exec time: {total_time:.3f}s")
     return jsonify(list(zip(responses, confidences, attributes)))

@@ -28,4 +28,4 @@ RUN python -m deeppavlov download ${CONFIG_NAME}
 RUN python train_model_if_not_exist.py
 
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200

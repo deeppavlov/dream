@@ -19,4 +19,4 @@ COPY common/ common/
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
-CMD gunicorn --workers=1 --bind 0.0.0.0:8082 --timeout=300 server:app
+CMD gunicorn --workers=1 --bind 0.0.0.0:8082 --timeout=1200 server:app
