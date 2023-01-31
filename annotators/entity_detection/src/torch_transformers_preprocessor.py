@@ -14,6 +14,7 @@
 
 import re
 import random
+from pathlib import Path
 from logging import getLogger
 from typing import Tuple, List, Union
 
@@ -70,8 +71,11 @@ class TorchTransformersNerPreprocessor(Component):
         self.max_seq_length = max_seq_length
         self.max_subword_length = max_subword_length
         self.subword_mask_mode = subword_mask_mode
-        vocab_file = str(expand_path(vocab_file))
-        self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
+        if Path(vocab_file).is_file():
+            vocab_file = str(expand_path(vocab_file))
+            self.tokenizer = AutoTokenizer(vocab_file=vocab_file, do_lower_case=do_lower_case)
+        else:
+            self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         self.token_masking_prob = token_masking_prob
 
     def __call__(self, tokens: Union[List[List[str]], List[str]], tags: List[List[str]] = None, **kwargs):

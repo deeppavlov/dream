@@ -340,15 +340,14 @@ class TorchTransformersSequenceTagger(TorchModel):
         else:
             return pred
 
-        return pred
-
     @overrides
     def load(self, fname=None):
         if fname is not None:
             self.load_path = fname
 
-        self.pretrained_bert = str(expand_path(self.pretrained_bert))
         if self.pretrained_bert:
+            if Path(self.pretrained_bert).is_file():
+                self.pretrained_bert = str(expand_path(self.pretrained_bert))
             config = AutoConfig.from_pretrained(
                 self.pretrained_bert, num_labels=self.n_classes, output_attentions=False, output_hidden_states=False
             )

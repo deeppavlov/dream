@@ -29,14 +29,9 @@
         "in": ["x_chunk", "chunk_nums", "chunk_sentences_offsets", "chunk_sentences"],
         "out": ["entity_substr", "entity_offsets", "tags", "probas", "sentences_offsets",
                 "sentences", "tokens", "tokens_conf", "entity_positions", "sentences_tokens"]
-      },
-      {
-        "config_path": "src/el_tags_infer.json",
-        "in": ["text", "entity_offsets", "entity_substr"],
-        "out": ["finegrained_tags"]
       }
     ],
-    "out": ["entity_substr", "entity_offsets", "entity_positions", "tokens", "tags", "finegrained_tags", "sentences_offsets", "sentences", "probas", "tokens_conf"]
+    "out": ["entity_substr", "entity_offsets", "entity_positions", "tokens", "tags", "sentences_offsets", "sentences", "probas", "tokens_conf"]
   },
   "metadata": {
     "variables": {
@@ -44,8 +39,8 @@
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
       "MODELS_PATH": "{ROOT_PATH}/models",
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs",
-      "NER_PATH": "{MODELS_PATH}/entity_detection_wikipedia_distilbert",
-      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/distilbert_base_uncased"
+      "NER_PATH": "{MODELS_PATH}/dialog_entity_detection",
+      "TRANSFORMER": "bert-base-uncased"
     },
     "download": [
     ]

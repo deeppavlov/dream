@@ -1075,7 +1075,6 @@ services:
     build:
       args:
         SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
-        EL_TAG_CONFIG: src/el_tags_infer.json
         CONFIG: entity_detection_eng.json
         LOWERCASE: 1
         PORT: 8103

@@ -14,6 +14,7 @@
 
 import re
 import time
+from pathlib import Path
 from logging import getLogger
 from string import punctuation
 from typing import List, Tuple
@@ -57,9 +58,12 @@ class NerChunker(Component):
         self.max_chunk_len = max_chunk_len
         self.batch_size = batch_size
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
-        vocab_file = str(expand_path(vocab_file))
+        if Path(vocab_file).is_file():
+            vocab_file = str(expand_path(vocab_file))
+            self.tokenizer = AutoTokenizer(vocab_file=vocab_file, do_lower_case=do_lower_case)
+        else:
+            self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         self.do_lower_case = do_lower_case
-        self.tokenizer = AutoTokenizer.from_pretrained(vocab_file)
         self.punct_ext = punctuation + " " + "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         self.russian_letters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 

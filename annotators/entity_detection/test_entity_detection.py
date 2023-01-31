@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8103/respond"
+    url = "http://0.0.0.0:9103/respond"
 
     request_data = [
         {"sentences": [["what is the capital of russia?"]]},
@@ -12,24 +12,19 @@ def main():
     gold_results = [
         [
             {
-                "entities": ["capital", "russia"],
-                "labelled_entities": [
-                    {"text": "capital", "offsets": [12, 19], "label": "misc", "finegrained_label": [["misc", 1.0]]},
-                    {
-                        "text": "russia",
-                        "offsets": [23, 29],
-                        "label": "location",
-                        "finegrained_label": [["country", 0.953]],
-                    },
-                ],
+                'entities': ['capital', 'russia'],
+                'labelled_entities': [
+                    {'finegrained_label': [['misc', 0.7]], 'label': 'misc', 'offsets': [12, 19], 'text': 'capital'}, 
+                    {'finegrained_label': [['loc', 0.9927]], 'label': 'location', 'offsets': [23, 29], 'text': 'russia'}
+                ]
             }
         ],
         [
             {
-                "entities": ["politics"],
-                "labelled_entities": [
-                    {"text": "politics", "offsets": [17, 25], "label": "misc", "finegrained_label": [["misc", 1.0]]}
-                ],
+                'entities': ['politics'],
+                'labelled_entities': [
+                    {'finegrained_label': [['misc', 0.7]], 'label': 'misc', 'offsets': [17, 25], 'text': 'politics'}
+                ]
             }
         ],
     ]
@@ -37,6 +32,7 @@ def main():
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
+        print(result)
         if result == gold_result:
             count += 1
 

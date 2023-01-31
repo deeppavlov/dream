@@ -94,18 +94,14 @@ class EntityLinker(Component, Serializable):
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
         self.not_found_str = "not in wiki"
         self.related_tags = {
-            "loc": ["gpe", "country", "city", "us_state", "river"],
-            "gpe": ["loc", "country", "city", "us_state"],
-            "work_of_art": ["product", "law"],
+            "loc": ["gpe", "country", "city", "us_state", "river", "county"],
             "product": ["work_of_art"],
-            "law": ["work_of_art"],
-            "org": ["fac", "business"],
-            "business": ["org"],
-            "actor": ["per"],
-            "athlete": ["per"],
-            "musician": ["per"],
-            "politician": ["per"],
-            "writer": ["per"],
+            "org": ["fac", "business", "norp"],
+            "per": ["actor", "athlete", "musician", "politician", "writer"],
+            "event": ["championship", "sports_season", "sports_event"],
+            "film": ["work_of_art", "road"],
+            "misc": ["animal", "language", "law", "food", "nation"],
+            "sport_team": ["association_football_club", "sports_league", "national_sports_team"]
         }
         self.word_searcher = None
         if self.words_dict_filename:
