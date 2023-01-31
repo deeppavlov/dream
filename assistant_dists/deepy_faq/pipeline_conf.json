@@ -34,7 +34,7 @@
             "faq_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://faq_skill:3772/respond"
+                    "url": "http://faq-skill:3772/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_skill_formatter",
@@ -60,7 +60,7 @@
                 "connector": {
                     "protocol": "python",
                     "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3774/model"
+                    "url": "http://emotion-classification:3774/model"
                 },
               "dialog_formatter": "dp_formatters:hypotheses_list",
               "response_formatter": "dp_formatters:simple_formatter_service",
@@ -72,7 +72,7 @@
             "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3773/respond"
+                    "url": "http://rule-based-response-selector:3773/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_response_selector_formatter_service",

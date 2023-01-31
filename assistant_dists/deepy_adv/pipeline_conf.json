@@ -32,7 +32,7 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://entity_linking:3556/model"
+                    "url": "http://entity-linking:3556/model"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:entity_linking_formatter",
@@ -66,7 +66,7 @@
             "harvesters_maintenance_gobot_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://harvesters_maintenance_gobot_skill:3552/respond"
+                    "url": "http://harvesters-maintenance-gobot-skill:3552/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_skill_formatter",
@@ -92,7 +92,7 @@
                 "connector": {
                     "protocol": "python",
                     "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3554/model"
+                    "url": "http://emotion-classification:3554/model"
                 },
               "dialog_formatter": "dp_formatters:hypotheses_list",
               "response_formatter": "dp_formatters:simple_formatter_service",
@@ -104,7 +104,7 @@
             "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3553/respond"
+                    "url": "http://rule-based-response-selector:3553/respond"
                 },
                 "dialog_formatter": "dp_formatters:full_dialog",
                 "response_formatter": "dp_formatters:base_response_selector_formatter_service",
