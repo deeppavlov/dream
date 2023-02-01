@@ -24,21 +24,20 @@ with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 logging.info(f"Generation parameters: {generation_params}")
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-OPENAI_ORGANIZATION = os.environ.get("OPENAI_ORGANIZATION", "")
-assert OPENAI_ORGANIZATION, logger.error(f"Error: OpenAI organization is not specified in env")
-assert OPENAI_API_KEY, logger.error(f"Error: OpenAI API key is not specified in env")
-openai.organization = OPENAI_ORGANIZATION
-openai.api_key = OPENAI_API_KEY
 
-
-def generate_responses(instruction, context, continue_last_uttr=False):
+def generate_responses(instruction, context, openai_api_key, openai_org, continue_last_uttr=False):
     outputs = []
     if continue_last_uttr:
         dialog_context = instruction + "\n" + "\n".join(context)
     else:
         dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
+
+    assert openai_org, logger.error(f"Error: OpenAI organization is not specified in env")
+    assert openai_api_key, logger.error(f"Error: OpenAI API key is not specified in env")
+    openai.organization = openai_org
+    openai.api_key = openai_api_key
+
     response = openai.Completion.create(
         model=PRETRAINED_MODEL_NAME_OR_PATH,
         prompt=context,
@@ -51,29 +50,18 @@ def generate_responses(instruction, context, continue_last_uttr=False):
     return outputs
 
 
-try:
-    example_response = generate_responses(
-        "",
-        ["Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "],
-        continue_last_uttr=False,
-    )
-    logger.info(f"example response: {example_response}")
-    logger.info("openai-api-lm is ready")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
-
-
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
+    openai_api_keys = request.json.get("openai_api_keys", [])
+    openai_organizations = request.json.get("openai_organizations", [])
+
     try:
         responses = []
         confidences = []
-        for context in contexts:
-            outputs = generate_responses("", context)
+        for context, openai_api_key, openai_org in zip(contexts, openai_api_keys, openai_organizations):
+            outputs = generate_responses("", context, openai_api_key, openai_org)
             logger.info(f"openai-api-lm result: {outputs}")
             for response in outputs:
                 if len(response) >= 3:
