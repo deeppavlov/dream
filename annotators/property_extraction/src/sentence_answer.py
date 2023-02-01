@@ -33,12 +33,8 @@ def find_inflect_dict(sent_nodes):
     inflect_dict = {}
     for node in sent_nodes:
         if node.dep_ == "aux" and node.tag_ == "VBD" and (node.head.tag_ == "VBP" or node.head.tag_ == "VB"):
-            new_verb = node.head._.inflect("VBD")
-            inflect_dict[node.head.text] = new_verb
             inflect_dict[node.text] = ""
         if node.dep_ == "aux" and node.tag_ == "VBZ" and node.head.tag_ == "VB":
-            new_verb = node.head._.inflect("VBZ")
-            inflect_dict[node.head.text] = new_verb
             inflect_dict[node.text] = ""
     return inflect_dict
 

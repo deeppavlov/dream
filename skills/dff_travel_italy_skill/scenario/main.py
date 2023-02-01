@@ -49,7 +49,12 @@ flows = {
                     cnd.neg(loc_cnd.check_flag("italy_travel_skill_active")),
                 ]
             ),
-            ("italian_food_flow", "food_start", 1.8): loc_cnd.asked_about_italian_cuisine,
+            ("italian_food_flow", "food_start", 1.8): cnd.all(
+                [
+                    loc_cnd.asked_about_italian_cuisine,
+                    cnd.neg(loc_cnd.check_flag("food_start_visited")),
+                ]
+            ),
         },
     },
     "travel_italy_general": {
@@ -233,6 +238,7 @@ flows = {
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_flag": loc_prs.set_flag("food_start_visited", True),
             },
             TRANSITIONS: {
                 ("italian_food_flow", "fav_food"): cnd.any(
