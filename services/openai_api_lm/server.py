@@ -33,10 +33,10 @@ def generate_responses(instruction, context, openai_api_key, openai_org, continu
         dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
 
-    assert openai_org, logger.error(f"Error: OpenAI organization is not specified in env")
     assert openai_api_key, logger.error(f"Error: OpenAI API key is not specified in env")
-    openai.organization = openai_org
     openai.api_key = openai_api_key
+    if openai_org:
+        openai.organization = openai_org
 
     response = openai.Completion.create(
         model=PRETRAINED_MODEL_NAME_OR_PATH,
@@ -55,7 +55,8 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     openai_api_keys = request.json.get("openai_api_keys", [])
-    openai_organizations = request.json.get("openai_organizations", [])
+    openai_organizations = request.json.get("openai_organizations", None)
+    openai_organizations = [None] * len(contexts) if openai_organizations is None else openai_organizations
 
     try:
         responses = []
