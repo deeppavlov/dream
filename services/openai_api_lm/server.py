@@ -35,8 +35,7 @@ def generate_responses(instruction, context, openai_api_key, openai_org, continu
 
     assert openai_api_key, logger.error(f"Error: OpenAI API key is not specified in env")
     openai.api_key = openai_api_key
-    if openai_org:
-        openai.organization = openai_org
+    openai.organization = openai_org if openai_org else None
 
     response = openai.Completion.create(
         model=PRETRAINED_MODEL_NAME_OR_PATH,
