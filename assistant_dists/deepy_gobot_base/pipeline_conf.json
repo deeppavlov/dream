@@ -3,6 +3,10 @@
     "services": {
         "last_chance_service": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -15,6 +19,10 @@
         },
         "timeout_service": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -28,6 +36,10 @@
         "annotators": {
             "spelling_preprocessing": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -41,6 +53,10 @@
         "response_annotators": {
             "emotion_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "python",
                     "url": "http://emotion_classification:3884/model",
@@ -57,6 +73,10 @@
         "skills": {
             "harvesters_maintenance_gobot_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "url": "http://harvesters_maintenance_gobot_skill:3882/respond"
@@ -70,6 +90,10 @@
             },
             "dff_program_y_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -86,6 +110,10 @@
         "response_selectors": {
             "rule_based_response_selector": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "url": "http://rule_based_response_selector:3883/respond"

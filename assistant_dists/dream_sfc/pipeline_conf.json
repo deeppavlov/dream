@@ -19,6 +19,10 @@
     "services": {
         "last_chance_service": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -49,6 +53,10 @@
         },
         "timeout_service": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -80,6 +88,10 @@
         "annotators": {
             "spelling_preprocessing": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -91,6 +103,10 @@
             },
             "sentseg": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -101,6 +117,10 @@
             },
             "spacy_nounphrases": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -115,6 +135,10 @@
             },
             "conceptnet": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -131,6 +155,10 @@
             },
             "badlisted_words": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -145,6 +173,10 @@
             },
             "asr": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -156,6 +188,10 @@
             },
             "intent_catcher": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -171,6 +207,10 @@
             },
             "fact_random": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -187,6 +227,10 @@
             },
             "fact_retrieval": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -203,6 +247,10 @@
             },
             "ner": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -214,6 +262,10 @@
             },
             "entity_detection": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -229,6 +281,10 @@
             },
             "kbqa": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -243,6 +299,10 @@
             },
             "entity_linking": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -259,6 +319,10 @@
             },
             "wiki_parser": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -273,6 +337,10 @@
             },
             "sentrewrite": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -286,6 +354,10 @@
             },
             "combined_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -300,6 +372,10 @@
             },
             "entity_storer": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -315,6 +391,10 @@
             },
             "news_api_annotator": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -333,6 +413,10 @@
             },
             "topic_recommendation": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -349,6 +433,10 @@
             },
             "user_persona_extractor": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -363,6 +451,10 @@
             },
             "speech_function_classifier": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -378,6 +470,10 @@
             },
             "speech_function_predictor": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -394,6 +490,10 @@
         "response_annotators": {
             "sentseg": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -404,6 +504,10 @@
             },
             "ner": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.ner",
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -415,6 +519,10 @@
             },
             "sentrewrite": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.sentrewrite",
                 "dialog_formatter": "state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -427,6 +535,10 @@
             },
             "spacy_nounphrases": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -441,6 +553,10 @@
             },
             "speech_function_classifier": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -457,6 +573,10 @@
         },
         "response_annotator_selectors": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -476,6 +596,10 @@
         "candidate_annotators": {
             "speech_function_classifier": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -490,6 +614,10 @@
             },
             "speech_function_predictor": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -504,6 +632,10 @@
             },
             "badlisted_words": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -518,6 +650,10 @@
             },
             "convers_evaluator_annotator": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -532,6 +668,10 @@
             },
             "spacy_nounphrases": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -546,6 +686,10 @@
             },
             "entity_detection": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -560,6 +704,10 @@
             },
             "midas_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -574,6 +722,10 @@
             },
             "combined_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -590,6 +742,10 @@
         "skill_selectors": {
             "rule_based_selector": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "python",
                     "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
@@ -607,6 +763,10 @@
         "skills": {
             "dff_sport_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -621,6 +781,10 @@
             },
             "eliza": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -635,6 +799,10 @@
             },
             "dff_program_y_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -649,6 +817,10 @@
             },
             "personality_catcher": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -663,6 +835,10 @@
             },
             "dff_intent_responder_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -677,6 +853,10 @@
             },
             "dummy_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "python",
                     "class_name": "skills.dummy_skill.connector:DummySkillConnector"
@@ -690,6 +870,10 @@
             },
             "alexa_handler": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "python",
                     "class_name": "skills.alexa_handler.connector:AlexaHandlerConnector"
@@ -703,6 +887,10 @@
             },
             "dummy_skill_dialog": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -717,6 +905,10 @@
             },
             "misheard_asr": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -731,6 +923,10 @@
             },
             "dff_program_y_dangerous_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -745,6 +941,10 @@
             },
             "dff_movie_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -759,6 +959,10 @@
             },
             "emotion_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -773,6 +977,10 @@
             },
             "convert_reddit": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -787,6 +995,10 @@
             },
             "personal_info_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -801,6 +1013,10 @@
             },
             "dff_coronavirus_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -815,6 +1031,10 @@
             },
             "dff_weather_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -829,6 +1049,10 @@
             },
             "dff_short_story_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 3.0,
@@ -843,6 +1067,10 @@
             },
             "meta_script_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -857,6 +1085,10 @@
             },
             "small_talk_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -871,6 +1103,10 @@
             },
             "game_cooperative_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -885,6 +1121,10 @@
             },
             "dff_program_y_wide_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -899,6 +1139,10 @@
             },
             "news_api_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -913,6 +1157,10 @@
             },
             "comet_dialog_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -927,6 +1175,10 @@
             },
             "dff_grounding_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -941,6 +1193,10 @@
             },
             "factoid_qa": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -955,6 +1211,10 @@
             },
             "dff_animals_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -969,6 +1229,10 @@
             },
             "dff_gaming_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -983,6 +1247,10 @@
             },
             "dff_friendship_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -997,6 +1265,10 @@
             },
             "knowledge_grounding_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1011,6 +1283,10 @@
             },
             "dff_travel_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1025,6 +1301,10 @@
             },
             "dff_food_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1039,6 +1319,10 @@
             },
             "dff_science_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1053,6 +1337,10 @@
             },
             "dff_music_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1067,6 +1355,10 @@
             },
             "dff_funfact_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1081,6 +1373,10 @@
             },
             "dff_gossip_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1097,6 +1393,10 @@
             },
             "dff_bot_persona_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1111,6 +1411,10 @@
             },
             "dff_wiki_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1125,6 +1429,10 @@
             },
             "dff_book_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1139,6 +1447,10 @@
             },
             "dff_art_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1153,6 +1465,10 @@
             },
             "dff_template_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1169,6 +1485,10 @@
         "response_selectors": {
             "convers_evaluation_selector": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,

@@ -3,6 +3,10 @@
         "annotators": {
             "toxic_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -14,6 +18,10 @@
             },
             "sentiment_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -27,6 +35,10 @@
         "candidate_annotators": {
             "sentence_ranker": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -41,6 +53,10 @@
             },
             "toxic_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -55,6 +71,10 @@
             },
             "sentiment_classification": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -71,6 +91,10 @@
         "skill_selectors": {
             "rule_based_selector": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "python",
                     "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
@@ -88,6 +112,10 @@
         "skills": {
             "gpt2_generator": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -104,6 +132,10 @@
         "response_selectors": {
             "convers_evaluation_selector": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,

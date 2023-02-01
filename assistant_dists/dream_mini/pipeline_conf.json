@@ -9,6 +9,10 @@
     "services": {
         "last_chance_service": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -30,6 +34,10 @@
         },
         "timeout_service": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -52,6 +60,10 @@
         "annotators": {
             "spelling_preprocessing": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -63,6 +75,10 @@
             },
             "sentseg": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -73,6 +89,10 @@
             },
             "badlisted_words": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -87,6 +107,10 @@
             },
             "intent_catcher": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -104,6 +128,10 @@
         "response_annotators": {
             "sentseg": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -115,6 +143,10 @@
         },
         "response_annotator_selectors": {
             "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            },
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -130,6 +162,10 @@
         "candidate_annotators": {
             "badlisted_words": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -144,6 +180,10 @@
             },
             "sentence_ranker": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -160,6 +200,10 @@
         "skill_selectors": {
             "rule_based_selector": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "python",
                     "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
@@ -177,6 +221,10 @@
         "skills": {
             "dff_program_y_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -191,6 +239,10 @@
             },
             "dff_intent_responder_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -205,6 +257,10 @@
             },
             "dummy_skill": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "python",
                     "class_name": "skills.dummy_skill.connector:DummySkillConnector"
@@ -218,6 +274,10 @@
             },
             "dialogpt": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -234,6 +294,10 @@
         "response_selectors": {
             "convers_evaluation_selector": {
                 "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
