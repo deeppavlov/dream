@@ -2,7 +2,7 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:8136/respond"
+    url = "http://0.0.0.0:8131/respond"
     contexts = [
         [
             "Respond like a friendly chatbot",
