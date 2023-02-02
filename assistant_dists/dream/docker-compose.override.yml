@@ -1306,7 +1306,7 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: t5_generative_ie_infer.json
+        CONFIG: t5_generative_ie_lite_infer.json
         PORT: 8129
         SRC_DIR: annotators/property_extraction/
       context: ./

@@ -33,12 +33,8 @@ def find_inflect_dict(sent_nodes):
     inflect_dict = {}
     for node in sent_nodes:
         if node.dep_ == "aux" and node.tag_ == "VBD" and (node.head.tag_ == "VBP" or node.head.tag_ == "VB"):
-            new_verb = node.head._.inflect("VBD")
-            inflect_dict[node.head.text] = new_verb
             inflect_dict[node.text] = ""
         if node.dep_ == "aux" and node.tag_ == "VBZ" and node.head.tag_ == "VB":
-            new_verb = node.head._.inflect("VBZ")
-            inflect_dict[node.head.text] = new_verb
             inflect_dict[node.text] = ""
     return inflect_dict
 
@@ -139,7 +135,7 @@ def sentence_answer(question, entity_title, entities=None, template_answer=None)
         if template_answer and entities:
             answer = template_answer.replace("[ent]", entities[0]).replace("[ans]", entity_title)
         elif wh_node.text.lower() in ["what", "who", "how"]:
-            fnd_date = re.findall(rf"what (day|year) (.*)\?", question, re.IGNORECASE)
+            fnd_date = re.findall(r"what (day|year) (.*)\?", question, re.IGNORECASE)
             fnd_wh = re.findall(r"what (is|was) the name of (.*) (which|that) (.*)\?", question, re.IGNORECASE)
             fnd_name = re.findall(r"what (is|was) the name (.*)\?", question, re.IGNORECASE)
             if fnd_date:
