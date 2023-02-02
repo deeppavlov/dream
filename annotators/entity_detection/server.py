@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 config_name = os.getenv("CONFIG")
-lowercase = int(os.getenv("LOWERCASE", "1"))
 finegrained = int(os.getenv("FINEGRAINED", "0"))
 
 try:
@@ -85,10 +84,7 @@ def get_result(request, what_to_annotate):
                 concat_utt = f"{prev_utt} {last_utt}"
             else:
                 concat_utt = last_utt
-            if lowercase:
-                utts_list.append(concat_utt.lower())
-            else:
-                utts_list.append(concat_utt)
+            utts_list.append(concat_utt)
             utts_list_init.append(concat_utt)
             utts_nums.append(n)
 
@@ -101,12 +97,10 @@ def get_result(request, what_to_annotate):
                 entity_substr_batch,
                 entity_offsets_batch,
                 entity_positions_batch,
-                tokens_batch,
                 tags_batch,
                 sentences_offsets_batch,
                 sentences_batch,
                 probas_batch,
-                tokens_conf_batch,
             ) = entity_detection(utts_list)
             logger.info(f"entity_substr_batch {entity_substr_batch} tags_batch {tags_batch}")
             for (
