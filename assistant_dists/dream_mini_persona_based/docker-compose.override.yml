@@ -131,23 +131,16 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
-      args:
-        CONFIG: brillmoore_wikitypos_en.json
-        PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: EN
-      context: ./
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
+      context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 6.5G
+          memory: 50M
         reservations:
-          memory: 6.5G
+          memory: 50M
 
   dialogpt:
     env_file: [ .env ]
@@ -158,6 +151,7 @@ services:
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
         CONFIG_NAME: dialogpt_en.json
+        MAX_HISTORY_DEPTH: 2
       context: .
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
@@ -194,24 +188,24 @@ services:
     build:
       args:
         SERVICE_PORT: 8140
-        SERVICE_NAME: seq2seq_persona_based 
+        SERVICE_NAME: seq2seq_persona_based
+        PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bart-base-en-persona-chat
+        PAIR_DIALOG_HISTORY_LENGTH: 2
+        CHAT_EVERY_SENT_MAX_LENGTH: 25
+        PERSONA_EVERY_SENT_MAX_LENGTH: 19
+        GENERATION_PARAMS_CONFIG: bart-base-en-persona-chat_v1.json
       context: .
       dockerfile: ./services/seq2seq_persona_based/Dockerfile
     command: flask run -h 0.0.0.0 -p 8140
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
-      - PRETRAINED_MODEL_NAME_OR_PATH=DeepPavlov/bart-base-en-persona-chat
-      - PAIR_DIALOG_HISTORY_LENGTH=2 
-      - CHAT_EVERY_SENT_MAX_LENGTH=25
-      - PERSONA_EVERY_SENT_MAX_LENGTH=19
-      - GENERATION_PARAMS_CONFIG=bart-base-en-persona-chat_v1.json
     deploy:
       resources:
         limits:
-          memory: 2.5G
+          memory: 2G
         reservations:
-          memory: 2.5G
+          memory: 2G
 
   relative-persona-extractor:
     env_file: [ .env ]
@@ -219,7 +213,7 @@ services:
       args:
         SERVICE_PORT: 8133
         SERVICE_NAME: relative_persona_extractor
-        N_SENTENCES_OT_RETURN: 3
+        N_SENTENCES_TO_RETURN: 3
       context: .
       dockerfile: ./annotators/relative_persona_extractor/Dockerfile
     command: flask run -h 0.0.0.0 -p 8133

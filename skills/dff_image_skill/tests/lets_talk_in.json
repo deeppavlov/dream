@@ -1,0 +1,410 @@
+{
+    "human_utter_index_batch": [
+        14
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "",
+                    "annotations": {
+                        "spelling_preprocessing": "",
+                        "sentseg": {
+                            "punct_sent": "",
+                            "segments": [
+                                ""
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "image_captioning": {
+                            "caption": "a kitten isolated on a white background",
+                            "image_id": "42"
+                        }
+                    },
+                    "user": {
+                        "id": "639876f976b2962019b5ad48",
+                        "user_external_id": "201223105",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_image_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "80f98394-6b2c-4f45-be54-56160ae12dd7",
+                                    "labels": {
+                                        "0": [
+                                            "caption_response",
+                                            "animals_node"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": ""
+                                    },
+                                    "responses": {
+                                        "0": "I would like to have an animal like that. I wonder if it eats a lot."
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "4": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ]
+                                },
+                                "previous_human_utter_index": 4,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "",
+                    "annotations": {
+                        "spelling_preprocessing": "",
+                        "sentseg": {
+                            "punct_sent": "",
+                            "segments": [
+                                ""
+                            ]
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "image_captioning": {
+                            "caption": "two people standing on top of a mountain",
+                            "image_id": "42"
+                        }
+                    },
+                    "user": {
+                        "id": "639876f976b2962019b5ad48",
+                        "user_external_id": "201223105",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_image_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "80f98394-6b2c-4f45-be54-56160ae12dd7",
+                                    "labels": {
+                                        "0": [
+                                            "caption_response",
+                                            "animals_node"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": ""
+                                    },
+                                    "responses": {
+                                        "0": "I would like to have an animal like that. I wonder if it eats a lot."
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "4": [
+                                        "caption_response",
+                                        "animals_node"
+                                    ]
+                                },
+                                "previous_human_utter_index": 4,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": ",.,?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": ",.,?",
+                            "segments": [
+                                ",.",
+                                ",?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dialogpt",
+                    "user": {
+                        "id": "63c923636572d14b2f602840",
+                        "persona": {},
+                        "attributes": {},
+                        "user_type": "bot"
+                    }
+                }
+            ]
+        }
+    ],
+    "dff_image_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "80f98394-6b2c-4f45-be54-56160ae12dd7",
+                "labels": {
+                    "0": [
+                        "caption_response",
+                        "animals_node"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": ""
+                },
+                "responses": {
+                    "0": "I would like to have an animal like that. I wonder if it eats a lot."
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "4": [
+                    "caption_response",
+                    "animals_node"
+                ]
+            },
+            "previous_human_utter_index": 4,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

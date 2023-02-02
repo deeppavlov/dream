@@ -329,6 +329,7 @@ services:
         SERVICE_PORT: 8091
         PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
         LANGUAGE: RU
+        MAX_HISTORY_DEPTH: 3
     command: flask run -h 0.0.0.0 -p 8091
     environment:
       - CUDA_VISIBLE_DEVICES=0

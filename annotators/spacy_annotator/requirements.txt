@@ -4,6 +4,7 @@ gunicorn==20.0.4
 sentry-sdk==0.13.4
 requests==2.22.0
 spacy==3.2.0
+typer==0.4.1
 click<=8.0.4
 jinja2<=3.0.3
 Werkzeug<=2.0.3
