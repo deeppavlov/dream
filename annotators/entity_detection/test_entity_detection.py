@@ -14,7 +14,7 @@ def main():
             {
                 "entities": ["capital", "russia"],
                 "labelled_entities": [
-                    {"finegrained_label": [["misc", 0.7]], "label": "misc", "offsets": [12, 19], "text": "capital"},
+                    {"finegrained_label": [["misc", 0.871]], "label": "misc", "offsets": [12, 19], "text": "capital"},
                     {
                         "finegrained_label": [["loc", 0.9927]],
                         "label": "location",
@@ -28,7 +28,7 @@ def main():
             {
                 "entities": ["politics"],
                 "labelled_entities": [
-                    {"finegrained_label": [["misc", 0.7]], "label": "misc", "offsets": [17, 25], "text": "politics"}
+                    {"finegrained_label": [["misc", 0.9984]], "label": "misc", "offsets": [17, 25], "text": "politics"}
                 ],
             }
         ],
@@ -37,7 +37,6 @@ def main():
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
-        print(result)
         if result == gold_result:
             count += 1
     assert count == len(request_data)
