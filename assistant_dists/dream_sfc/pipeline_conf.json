@@ -1037,7 +1037,7 @@
             "entity_detection": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://entity-detection:8103/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",

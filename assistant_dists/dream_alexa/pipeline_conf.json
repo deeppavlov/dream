@@ -913,7 +913,7 @@
             "dialogpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 3,
                     "url": "http://dialogpt:8125/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",

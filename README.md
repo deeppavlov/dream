@@ -325,41 +325,6 @@ Dream Architecture is presented in the following image:
 
 # Components Russian Version
 
-Dream Architecture is presented in the following image:
-![DREAM](RussianDREAM.png)
-
-## Annotators
-| Name                        | Requirements | Description                                                                                                                                                                    |
-|-----------------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Rule Based Selector         |              | Algorithm that selects list of skills to generate candidate responses to the current context based on topics, entities, emotions, toxicity, dialogue acts and dialogue history |
-| Convers Evaluation Selector | 50 MB RAM    | Algorithm that selects a final responses among the given list of candidate responses                                                                                           |
-
-| Name                   | Requirements            | Description                                                                                                                                                                                  |
-|------------------------|-------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Badlisted Words        | 50 MB RAM               | detects obscene Russian words from the badlist                                                                                                                                               |
-| Entity Detection       | 3  GB RAM               | extracts entities and their types from utterances                                                                                                                                            |
-| Entity Linking         | 500 MB RAM, ?? GB GPU   | finds Wikidata entity ids for the entities detected with Entity Detection                                                                                                                    |
-| Intent Catcher         | 900 MB RAM              | classifies user utterances into a number of predefined intents which are trained on a set of phrases and regexps                                                                             |
-| NER                    | 1.7 GB RAM, 4.9 GB GPU  | extracts person names, names of locations, organizations from uncased text using ruBert-based (pyTorch) model                                                                                |
-| Sentseg                | 2.4 GB RAM, 4.9 GB GPU  | recovers punctuation using ruBert-based (pyTorch) model and splits into sentences                                                                                                            |
-| Spacy Annotator        | 250 MB RAM              | token-wise annotations by Spacy                                                                                                                                                              |
-| Spelling Preprocessing | 8 GB RAM                | Russian Levenshtein correction model                                                                                                                                                         |
-| Toxic Classification   | 3.5 GB RAM, 3 GB GPU    | Toxic classification model from Transformers specified as PRETRAINED_MODEL_NAME_OR_PATH                                                                                                      |
-| Wiki Parser            | 100 MB RAM              | extracts Wikidata triplets for the entities detected with Entity Linking                                                                                                                     |
-| DialogRPT              | 3.8 GB RAM,  2 GB GPU   | DialogRPT model which is based on [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2) and fine-tuned on Russian Pikabu Comment sequences |
-
-## Skills & Services
-| Name                   | Requirements              | Description                                                                                                                         |
-|------------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| DialoGPT               | 2.8 GB RAM, 2 GB GPU      | [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2)                             |
-| Dummy Skill            | a part of agent container | a fallback skill with multiple non-toxic candidate responses and random Russian questions                                           |
-| Personal Info Skill    | 40 MB RAM                 | queries and stores user's name, birthplace, and location                                                                            |
-| DFF Generative Skill   | 50 MB RAM                 | **[New DFF version]** generative skill which uses DialoGPT service to generate 3 different hypotheses                               |
-| DFF Intent Responder   | 50 MB RAM                 | provides template-based replies for some of the intents detected by Intent Catcher annotator                                        |
-| DFF Program Y Skill    | 80 MB RAM                 | **[New DFF version]** Chatbot Program Y (https://github.com/keiffster/program-y) adapted for Dream socialbot                        |
-| DFF Friendship Skill   | 70 MB RAM                 | **[New DFF version]** DFF-based skill to greet the user in the beginning of the dialog, and forward the user to some scripted skill |
-
-
 # Components Multilingual Version
 
 Dream Architecture is presented in the following image:
@@ -374,9 +339,9 @@ Dream Architecture is presented in the following image:
 | Sentence Ranker          | 2.5 GB RAM, 1.8 GB GPU   | for a pair of sentences predicts a floating point value. For multilingual version, return cosine similarity between embeddings from multilingual sentence BERT |
 
 ## Skills & Services
-| Name           | Requirements          | Description                                                                                                                                       |
-|----------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| GPT2 Generator | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
+| Name              | Requirements          | Description                                                                                                                                       |
+|-------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| GPT2 Multilingual | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
 
 # Papers
 
