@@ -45,7 +45,7 @@ if os.getenv("LANGUAGE", "EN") == "RU":
 else:
     lang = "@en"
 
-FAST = int(os.getenv("FAST"))
+FAST = int(os.getenv("FAST", "0"))
 
 wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata2022.hdt"
 document = HDTDocument(wiki_filename)
