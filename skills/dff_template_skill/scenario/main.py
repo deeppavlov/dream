@@ -3,6 +3,7 @@ import re
 
 from dff.script import (
     LOCAL,
+    PRE_TRANSITIONS_PROCESSING,
     PRE_RESPONSE_PROCESSING,
     TRANSITIONS,
     RESPONSE,
@@ -10,7 +11,7 @@ from dff.script import (
 )
 import dff.script.conditions as cnd
 import dff.script.labels as lbl
-from dff.script import MultiMessage
+from dff.script import MultiMessage, Actor
 from dff.pipeline import Pipeline
 
 import common.dff_api_v1.integration.condition as int_cnd
@@ -52,6 +53,9 @@ script = {
     "service": {
         "start": {
             RESPONSE: DreamMessage(text=""),
+            PRE_TRANSITIONS_PROCESSING: {
+                "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
+            },
             TRANSITIONS: {("greeting", "node1"): cnd.true()},
         },
         "fallback": {
@@ -76,9 +80,6 @@ script = {
             RESPONSE: MultiMessage(
                 messages=[DreamMessage(text="Hi, how are you?"), DreamMessage(text="Hi, what's up?")]
             ),  # several hypotheses
-            PRE_RESPONSE_PROCESSING: {
-                "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
-            },
             TRANSITIONS: {"node2": cnd.regexp(r"how are you", re.IGNORECASE)},
         },
         "node2": {
@@ -127,9 +128,14 @@ script = {
 
 
 db = dict()
-pipeline = Pipeline.from_script(
+actor = Actor(
     script=script,
     start_label=("service", "start"),
     fallback_label=("service", "fallback"),
-    context_storage=db,
 )
+pipeline = Pipeline.from_dict(dict(
+    components=[
+        actor,
+    ],
+    context_storage=db,
+))
