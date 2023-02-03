@@ -253,7 +253,9 @@ def get_comet_atomic(topic, relation, TOPICS=None):
         # send request to COMeT service on `topic & relation`
         try:
             comet_result = custom_request(
-                meta_script_skill_constants.COMET_ATOMIC_SERVICE_URL, {"input": f"{topic}", "category": relation}, timeout=1.0
+                meta_script_skill_constants.COMET_ATOMIC_SERVICE_URL,
+                {"input": f"{topic}", "category": relation},
+                timeout=1.0,
             )
         except (requests.ConnectTimeout, requests.ReadTimeout) as e:
             logger.error("COMeT Atomic result Timeout")
