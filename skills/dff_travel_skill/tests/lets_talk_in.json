@@ -222,7 +222,7 @@
                                 "let's talk about traveling."
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "traveling": {
                                 "Causes": [
                                     "get somewhere",

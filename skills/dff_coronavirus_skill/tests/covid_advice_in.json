@@ -146,7 +146,7 @@
                                 "detected": 0
                             }
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "coronavirus": {
                                 "Causes": [
                                     "death",

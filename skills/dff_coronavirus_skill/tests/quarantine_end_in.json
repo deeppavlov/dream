@@ -49,7 +49,7 @@
                                 "toxic": 0.0015363097190856934
                             }
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "1 very specific question": {
                                 "Causes": [
                                     "answer",

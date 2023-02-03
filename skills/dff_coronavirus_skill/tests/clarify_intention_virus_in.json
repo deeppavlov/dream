@@ -182,7 +182,7 @@
                                 "yes_no_question": 0.8554881811141968
                             }
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "1 very specific question": {
                                 "Causes": [
                                     "answer",

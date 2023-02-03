@@ -55,7 +55,7 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "recording": {
                                 "Causes": [
                                     "false information",
@@ -415,7 +415,7 @@
                             []
                         ],
                         "fact_random": [],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "the secret information": {
                                 "Causes": [
                                     "person to be deceive",
