@@ -41,6 +41,7 @@
             "sentseg": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1.5,
                     "url": "http://sentseg:8011/sentseg"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
@@ -51,7 +52,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://intent-catcher:3557/detect"
+                    "url": "http://intent-catcher:8014/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
