@@ -374,7 +374,7 @@ services:
       args:
         GRAPH: atomic
         SERVICE_HOME: ./annotators/COMeT
-        SERVICE_NAME: comet-atomic
+        SERVICE_NAME: comet_atomic
         SERVICE_PORT: 8053
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
@@ -396,7 +396,7 @@ services:
       args:
         GRAPH: conceptnet
         SERVICE_HOME: ./annotators/COMeT/
-        SERVICE_NAME: comet-conceptnet
+        SERVICE_NAME: comet_conceptnet
         SERVICE_PORT: 8065
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle

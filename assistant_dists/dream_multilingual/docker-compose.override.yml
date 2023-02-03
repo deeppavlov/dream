@@ -50,7 +50,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8132
-        SERVICE_NAME: gpt2-multilingual
+        SERVICE_NAME: gpt2_generator
         CONFIG_NAME: mgpt.json
         PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
         N_HYPOTHESES_TO_GENERATE: 3
@@ -72,7 +72,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8013
-        SERVICE_NAME: toxic-classification-multilingual
+        SERVICE_NAME: toxic_classification
         PRETRAINED_MODEL_NAME_OR_PATH: https://github.com/unitaryai/detoxify/releases/download/v0.4-alpha/multilingual_debiased-0b549669.ckpt
       context: ./annotators/MultilingualToxicClassification/
     command: flask run -h 0.0.0.0 -p 8013
@@ -91,7 +91,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8024
-        SERVICE_NAME: sentiment-classification-multilingual
+        SERVICE_NAME: sentiment_classification
         PRETRAINED_MODEL_NAME_OR_PATH: cardiffnlp/twitter-xlm-roberta-base-sentiment
       context: ./annotators/MultilingualSentimentClassification/
     command: flask run -h 0.0.0.0 -p 8024
