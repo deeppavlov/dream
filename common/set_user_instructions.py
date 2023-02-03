@@ -16,22 +16,20 @@ def set_user_instructions():
             user_uttr = ctx.misc["agent"]["dialog"]["human_utterances"][-1]
             last_utterance = user_uttr.get("user", {})
             processed_node = ctx.last_request
-            try:
-                practice_skill_state = last_utterance.get("attributes", {}).get("dff_language_practice_skill_state", {})
-                dialog_step_id = practice_skill_state["shared_memory"]["dialog_step_id"]
-                dialog_step_id += 1
-                dialog_script_name = practice_skill_state["shared_memory"]["dialog_script_name"]
-            except:
-                for filename in os.listdir("data"):
-                    f = os.path.join("data", filename)
-                    if os.path.isfile(f):
-                        dialog = json.load(open(f))
-                        keywords = dialog["keywords"]
-                        for keyword in keywords:
-                            if keyword in processed_node.lower():
-                                dialog_script_name = filename.replace(".json", "")
-                                dialog_step_id = 0
-                                continue
+            practice_skill_state = last_utterance.get("attributes", {}).get("dff_language_practice_skill_state", {})
+            dialog_step_id = practice_skill_state.get("shared_memory", {}).get("dialog_step_id", 0)
+            dialog_step_id += 1
+            dialog_script_name = practice_skill_state.get("shared_memory", {}).get("dialog_script_name", None)
+            for filename in os.listdir("data"):
+                f = os.path.join("data", filename)
+                if os.path.isfile(f):
+                    dialog = json.load(open(f))
+                    keywords = dialog["keywords"]
+                    for keyword in keywords:
+                        if keyword in processed_node.lower():
+                            dialog_script_name = filename.replace(".json", "")
+                            dialog_step_id = 0
+                            continue
 
             if dialog_script_name != None:
                 f = f"data/{dialog_script_name}.json"
