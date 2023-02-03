@@ -119,14 +119,17 @@ def get_current_user_id(ctx: Context, actor: Actor) -> bool:
     
 
 def has_entity_in_graph(property):
-    user_id = get_current_user_id()
-    current_user_id = "User/" + user_id
-    DB = "test_italy_skill"
-    TEAM = "yashkens|c77b"
-    PASSWORD = "" #insert your password here
-    graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD)
-    user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
-    if property in user_existing_entities:
-        return True
+    def has_entity_in_graph_handler(ctx: Context, actor: Actor) -> Context:
+        user_id = get_current_user_id(ctx, actor)
+        current_user_id = "User/" + user_id
+        DB = "test_italy_skill"
+        TEAM = "yashkens|c77b"
+        PASSWORD = "" #insert your password here
+        graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD)
+        user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
+        if property in user_existing_entities:
+            return True
+        
+        return False
     
-    return False
+    return has_entity_in_graph_handler
