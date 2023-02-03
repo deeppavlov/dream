@@ -324,26 +324,6 @@ Dream Architecture is presented in the following image:
 | DFF Weather Skill                | 1.4 GB RAM                | **[New DFF version]** uses the OpenWeatherMap service to get the forecast for the user's location                                                                                                                                                             |
 | DFF Wiki Skill                   | 150 MB RAM                | used for making scenarios with the extraction of entities, slot filling, facts insertion, and acknowledgements                                                                                                                                                |
 
-# Components Russian Version
-
-# Components Multilingual Version
-
-Dream Architecture is presented in the following image:
-![DREAM](multilingualDREAM.png)
-
-## Annotators
-
-| Name                     | Requirements             | Description                                                                                                                                                    |
-|--------------------------|--------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Sentiment Classification | 2 GB RAM, 2 GB GPU       | classifies sentiment to positive, negative and neutral classes                                                                                                 |
-| Toxic Classification     | 3  GB RAM, 2 GB GPU      | classifies toxicity: identity_attack, insult, obscene, severe_toxicity, sexual_explicit, threat, toxicity                                                      |
-| Sentence Ranker          | 2.5 GB RAM, 1.8 GB GPU   | for a pair of sentences predicts a floating point value. For multilingual version, return cosine similarity between embeddings from multilingual sentence BERT |
-
-## Skills & Services
-| Name              | Requirements          | Description                                                                                                                                       |
-|-------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| GPT2 Multilingual | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
-
 # Papers
 
 ### Alexa Prize 3
