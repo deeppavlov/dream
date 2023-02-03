@@ -11,7 +11,7 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   dff-program-y-ru-skill:
-  convers-evaluation-selector:
+  convers-evaluation-selector-ru:
   dff-intent-responder-ru-skill:
   dff-generative-ru-skill:
   intent-catcher-ru:

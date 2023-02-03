@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_russian/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "dff-program-y-ru-skill:8008, convers-evaluation-selector:8009, 
+      WAIT_HOSTS: "dff-program-y-ru-skill:8008, convers-evaluation-selector-ru:8009, 
           dff-intent-responder-ru-skill:8012, intent-catcher-ru:8014, badlisted-words-ru:8018,
           ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011,
           spelling-preprocessing-ru:8074, entity-linking-ru:8075, wiki-parser-ru:8077, dff-generative-ru-skill:8092,
@@ -31,7 +31,7 @@ services:
         reservations:
           memory: 128M
 
-  convers-evaluation-selector:
+  convers-evaluation-selector-ru:
     env_file: [.env]
     build:
       args:
@@ -141,7 +141,7 @@ services:
       context: ./annotators/toxic_classification_ru/
       args:
         SERVICE_PORT: 8126
-        PRETRAINED_MODEL_NAME_OR_PATH: "SkolkovoInstitute/russian_toxicity_classifier"
+        PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
         LANGUAGE: RU
     command: flask run -h 0.0.0.0 -p 8126
     environment:

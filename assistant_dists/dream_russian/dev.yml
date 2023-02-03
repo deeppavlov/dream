@@ -11,7 +11,7 @@ services:
       - "./common:/src/common"
     ports:
       - 8008:8008
-  convers-evaluation-selector:
+  convers-evaluation-selector-ru:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
       - "./common:/src/common"
