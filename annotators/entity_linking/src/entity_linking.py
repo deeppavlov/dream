@@ -238,6 +238,8 @@ class EntityLinker(Component, Serializable):
                     entity_substr = entity_substr.replace(symb_old, symb_new)
                 cand_ent_init = defaultdict(set)
                 if len(entity_substr) > 1:
+                    if tags and isinstance(tags[0], str):
+                        tags = [tags]
                     cand_ent_init = self.find_exact_match(entity_substr, tags)
                     all_low_conf = True
                     for entity_id in cand_ent_init:
