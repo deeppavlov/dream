@@ -3,6 +3,7 @@ import re
 import sentry_sdk
 from os import getenv
 import random
+from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 import df_engine.conditions as cnd
 import df_engine.labels as lbl
@@ -42,14 +43,15 @@ ZERO_CONFIDENCE = 0.0
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("travel_italy_general", "italy_start", 2): loc_cnd.start_condition,
+            ("italian_food_flow", "tell_more", 2): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
+            ("travel_italy_general", "italy_start", 1.8): loc_cnd.start_condition,
             ("travel_italy_general", "like_italy", 1): cnd.all(     
                 [
                     loc_cnd.is_proposed_skill,
                     cnd.neg(loc_cnd.check_flag("italy_travel_skill_active")),
                 ]
             ),
-            ("italian_food_flow", "food_start", 1.8): cnd.all(
+            ("italian_food_flow", "food_start", 1.5): cnd.all(
                 [
                     loc_cnd.asked_about_italian_cuisine,
                     cnd.neg(loc_cnd.check_flag("food_start_visited")),
@@ -266,6 +268,16 @@ flows = {
                         int_cnd.has_entities("prop:like_drink")
                     ]
                 ),
+                ("italy_disappointments", "neg_experience"): cnd.true(),
+            },
+        },
+        "tell_more": {
+            RESPONSE: "Do you have some interesting story about {user_fav_food}? Where and how did you first try it?",
+            PROCESSING: {
+                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+            },
+            TRANSITIONS: {
                 ("italy_disappointments", "neg_experience"): cnd.true(),
             },
         },

@@ -4,6 +4,8 @@ from typing import Callable, Any
 import sentry_sdk
 from os import getenv
 import functools
+import json
+from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 from df_engine.core import Context, Actor
 import df_engine.conditions as cnd
@@ -58,6 +60,9 @@ def check_flag(prop: str) -> Callable:
     return check_flag_handler
 
 def start_condition(ctx: Context, actor: Actor) -> bool:
+    # with open("new.json", "w") as ctx_file:               # to get contents of ctx.misc["agent"]
+    #     json.dump(ctx.misc["agent"], ctx_file, indent=2)
+    
     return if_chat_about_particular_topic(
         int_ctx.get_last_human_utterance(ctx, actor),
         int_ctx.get_last_bot_utterance(ctx, actor),
@@ -78,6 +83,7 @@ def is_proposed_skill(ctx: Context, actor: Actor) -> bool:
 
 def travel_italy_skill_switch(ctx: Context, actor: Actor) -> bool:
     user_uttr = int_ctx.get_last_human_utterance(ctx, actor)
+
     return re.findall(ITALY_PATTERN, user_uttr["text"])
 
 def sentiment_detected(name: str = "positive", threshold: float = 0.6) -> Callable:
@@ -105,3 +111,22 @@ def example_lets_talk_about():
         return int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)
 
     return example_lets_talk_about_handler
+
+def get_current_user_id(ctx: Context, actor: Actor) -> bool:
+    user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]["id"]
+
+    return user_id
+    
+
+def has_entity_in_graph(property):
+    user_id = get_current_user_id()
+    current_user_id = "User/" + user_id
+    DB = "test_italy_skill"
+    TEAM = "yashkens|c77b"
+    PASSWORD = "" #insert your password here
+    graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD)
+    user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
+    if property in user_existing_entities:
+        return True
+    
+    return False
