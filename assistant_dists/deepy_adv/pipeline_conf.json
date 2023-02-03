@@ -102,7 +102,7 @@
             }
         },
         "response_selectors": {
-            "rule_based_response_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://rule-based-response-selector:8005/respond"
