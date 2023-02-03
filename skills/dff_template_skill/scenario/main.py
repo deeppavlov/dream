@@ -133,9 +133,11 @@ actor = Actor(
     start_label=("service", "start"),
     fallback_label=("service", "fallback"),
 )
-pipeline = Pipeline.from_dict(dict(
-    components=[
-        actor,
-    ],
-    context_storage=db,
-))
+pipeline = Pipeline.from_dict(
+    dict(
+        components=[
+            actor,
+        ],
+        context_storage=db,
+    )
+)
