@@ -3,6 +3,11 @@
 Dream Architecture is presented in the following image:
 ![DREAM](multilingualDREAM.png)
 
+| Name                | Requirements | Description                                                                                                                                                                    |
+|---------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Rule Based Selector |              | Algorithm that selects list of skills to generate candidate responses to the current context based on topics, entities, emotions, toxicity, dialogue acts and dialogue history |
+| Response Selector   | 50 MB RAM    | Algorithm that selects a final responses among the given list of candidate responses                                                                                           |
+
 ## Annotators
 
 | Name                     | Requirements             | Description                                                                                                                                                    |
@@ -12,9 +17,9 @@ Dream Architecture is presented in the following image:
 | Sentence Ranker          | 2.5 GB RAM, 1.8 GB GPU   | for a pair of sentences predicts a floating point value. For multilingual version, return cosine similarity between embeddings from multilingual sentence BERT |
 
 ## Skills & Services
-| Name              | Requirements          | Description                                                                                                                                       |
-|-------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| GPT2 Multilingual | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
+| Name                | Requirements          | Description                                                                                                                                       |
+|---------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| GPT-2 Multilingual  | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
 
 # Papers
 

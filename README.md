@@ -215,10 +215,10 @@ By default, `proxy.yml` contains all available proxy definitions.
 Dream Architecture is presented in the following image:
 ![DREAM](DREAM.png)
 
-| Name                        | Requirements | Description                                                                                                                                                                    |
-|-----------------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Rule Based Selector         |              | Algorithm that selects list of skills to generate candidate responses to the current context based on topics, entities, emotions, toxicity, dialogue acts and dialogue history |
-| Convers Evaluation Selector | 50 MB RAM    | Algorithm that selects a final responses among the given list of candidate responses                                                                                           |
+| Name                | Requirements | Description                                                                                                                                                                    |
+|---------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Rule Based Selector |              | Algorithm that selects list of skills to generate candidate responses to the current context based on topics, entities, emotions, toxicity, dialogue acts and dialogue history |
+| Response Selector   | 50 MB RAM    | Algorithm that selects a final responses among the given list of candidate responses                                                                                           |
 
 ## Annotators
 

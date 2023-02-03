@@ -182,11 +182,12 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 Архитектура Russian Dream  представлена на изображении:
 ![DREAM](RussianDREAM.png)
 
+| Name                | Requirements | Description                                                                                                                                                                    |
+|---------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Rule Based Selector |              | Algorithm that selects list of skills to generate candidate responses to the current context based on topics, entities, emotions, toxicity, dialogue acts and dialogue history |
+| Response Selector   | 50 MB RAM    | Algorithm that selects a final responses among the given list of candidate responses                                                                                           |
+
 ## Annotators
-| Name                        | Requirements | Description                                                                                                                                                                    |
-|-----------------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Rule Based Selector         |              | Algorithm that selects list of skills to generate candidate responses to the current context based on topics, entities, emotions, toxicity, dialogue acts and dialogue history |
-| Convers Evaluation Selector | 50 MB RAM    | Algorithm that selects a final responses among the given list of candidate responses                                                                                           |
 
 | Name                   | Requirements           | Description                                                                                                                                                                                  |
 |------------------------|------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
