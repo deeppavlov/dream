@@ -133,3 +133,5 @@ def has_entity_in_graph(property):
         return False
     
     return has_entity_in_graph_handler
+    
+    
