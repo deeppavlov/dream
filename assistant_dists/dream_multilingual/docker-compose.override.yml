@@ -12,7 +12,7 @@ services:
       LANGUAGE: EN
 
   convers-evaluation-selector:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -41,9 +41,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   gpt2-multilingual:
     env_file: [ .env ]

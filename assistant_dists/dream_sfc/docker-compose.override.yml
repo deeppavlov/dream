@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_sfc/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, convers-evaluation-selector:8009, personality-catcher:8010,
+          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, scripts-priority-selector:8009, personality-catcher:8010,
           intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
           sentrewrite:8017, ner:8021, dff-program-y-dangerous:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
@@ -104,27 +104,27 @@ services:
         reservations:
           memory: 1.5G
 
-  convers-evaluation-selector:
+  scripts-priority-selector:
     env_file: [.env]
     build:
       args:
         TAG_BASED_SELECTION: 1
         CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.1
+        PROMPT_PROBA: 0.3
         ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 0
+        PRIORITIZE_WITH_REQUIRED_ACT: 1
         PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
-        IGNORE_DISLIKED_SKILLS: 0
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 1
+        IGNORE_DISLIKED_SKILLS: 1
         GREETING_FIRST: 1
         RESTRICTION_FOR_SENSITIVE_CASE: 1
         PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
         MAX_TURNS_WITHOUT_SCRIPTS: 7
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
-        PRIORITIZE_SCRIPTED_SKILLS: 0
-        CONFIDENCE_STRENGTH: 0.8
+        PRIORITIZE_SCRIPTED_SKILLS: 1
+        CONFIDENCE_STRENGTH: 2.0
         CONV_EVAL_STRENGTH: 0.4
-        PRIORITIZE_HUMAN_INITIATIVE: 1
+        PRIORITIZE_HUMAN_INITIATIVE: 0
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
