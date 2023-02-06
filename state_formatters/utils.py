@@ -275,6 +275,7 @@ def dff_formatter(
             "age_group_batch": [age_group],
             "disliked_skills_batch": [disliked_skills],
             "clarification_request_flag_batch": [clarification_request_flag],
+            "dialog_id_batch": [dialog["dialog_id"]],
         }
     ]
 

@@ -304,6 +304,32 @@ def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
         return [{"sentences": [""]}]
 
 
+def last_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
+    if len(dialog["bot_utterances"]):
+        return [{"bot_utterances": [dialog["bot_utterances"][-1]], "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
+    else:
+        return [{"bot_utterances": [{}], "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
+
+
+def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
+    if len(dialog["bot_utterances"]):
+        return [
+            {
+                "last_human_utterances": [dialog["human_utterances"][-1]],
+                "bot_utterances": [dialog["bot_utterances"][-1]],
+                "dialog_ids": [dialog.get("dialog_id", "unknown")],
+            }
+        ]
+    else:
+        return [
+            {
+                "last_human_utterances": [dialog["human_utterances"][-1]],
+                "bot_utterances": [{}],
+                "dialog_ids": [dialog.get("dialog_id", "unknown")],
+            }
+        ]
+
+
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
     entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
@@ -1083,3 +1109,10 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
+
+
+def robot_formatter(dialog: Dict) -> Dict:
+    """This formatter currently provides the JSON as is, without modifying it.
+    Either edit it later or choose one of the existing formatters"""
+    detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
+    return [{"detected": detected}]

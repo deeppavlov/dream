@@ -13,6 +13,7 @@ def main_test():
         tests = json.load(open("tests_RU.json"))
     else:
         tests = json.load(open("tests.json"))
+
     for test in tests:
         r = requests.post(url=url, json={"sentences": [[test["sentence"]]]})
         assert r.ok

@@ -78,11 +78,13 @@ class IntentsJsonReader(DatasetReader):
                     with open(Path(generated_data_path).joinpath(file_name), "r") as fp:
                         data[data_type] = json.load(fp)
                 else:
-                    with open(file, "r") as fp:
+                    with open(file, "r", encoding="utf-8") as fp:
                         all_data = json.load(fp)
                         intent_phrases = OrderedDict(all_data["intent_phrases"])
                         random_phrases = all_data["random_phrases"]
+                        # print('Словарь json загружен успешно')
                         random_phrases = self.generate_phrases(random_phrases["phrases"], random_phrases["punctuation"])
+                        
 
                     intent_data = {}
                     for intent, intent_samples in intent_phrases.items():
