@@ -11,7 +11,7 @@ from dff.script import (
 )
 import dff.script.conditions as cnd
 import dff.script.labels as lbl
-from dff.script import MultiMessage, Actor
+from dff.script import MultiMessage
 from dff.pipeline import Pipeline
 
 import common.dff_api_v1.integration.condition as int_cnd
