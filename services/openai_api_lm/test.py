@@ -9,9 +9,14 @@ def test_respond():
             "Human: Hi! I am Marcus. How are you today?",
         ]
     ]
-    result = requests.post(url, json={"dialog_contexts": contexts,
-                                      "openai_api_keys": ["MYKEY"] * len(contexts),
-                                      "openai_organizations": ["MYORG"] * len(contexts)}).json()
+    result = requests.post(
+        url,
+        json={
+            "dialog_contexts": contexts,
+            "openai_api_keys": ["MYKEY"] * len(contexts),
+            "openai_organizations": ["MYORG"] * len(contexts),
+        },
+    ).json()
     print(result)
     assert [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
     print("Success!")

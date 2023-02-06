@@ -33,15 +33,11 @@ def generate_responses(instruction, context, openai_api_key, openai_org, continu
         dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
 
-    assert openai_api_key, logger.error(f"Error: OpenAI API key is not specified in env")
+    assert openai_api_key, logger.error("Error: OpenAI API key is not specified in env")
     openai.api_key = openai_api_key
     openai.organization = openai_org if openai_org else None
 
-    response = openai.Completion.create(
-        model=PRETRAINED_MODEL_NAME_OR_PATH,
-        prompt=context,
-        **generation_params
-    )
+    response = openai.Completion.create(model=PRETRAINED_MODEL_NAME_OR_PATH, prompt=context, **generation_params)
     if isinstance(response, dict) and "choices" in response:
         outputs = [resp.get("text", "") for resp in response["choices"]]
     elif isinstance(response, str):
