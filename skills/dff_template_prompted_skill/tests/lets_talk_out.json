@@ -1,0 +1,88 @@
+[
+    [
+        [
+            "Pizza is delicious!"
+        ],
+        [
+            0.9
+        ],
+        [
+            {
+                "dff_dream_persona_prompted_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 1,
+                    "history": {
+                        "0": [
+                            "generation",
+                            "greeting"
+                        ],
+                        "1": [
+                            "generation",
+                            "generative_response_node"
+                        ]
+                    },
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "83af493f-e4c4-4af0-82de-89cbdc534c96",
+                        "labels": {
+                            "0": [
+                                "generation",
+                                "greeting"
+                            ],
+                            "1": [
+                                "generation",
+                                "generative_response_node"
+                            ]
+                        },
+                        "requests": {
+                            "0": "hi. how are things?",
+                            "1": "do you like pizza?"
+                        },
+                        "responses": {
+                            "0": [
+                                [
+                                    "I am Dream. Nice to meet you.",
+                                    0.9,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ],
+                            "1": [
+                                [
+                                    "Pizza is delicious!",
+                                    0.9,
+                                    {},
+                                    {},
+                                    {
+                                        "can_continue": "no"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {},
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "",
+                "disliked_skills": []
+            }
+        ],
+        [
+            {}
+        ],
+        [
+            {
+                "can_continue": "no"
+            }
+        ]
+    ]
+]

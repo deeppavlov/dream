@@ -13,25 +13,18 @@ services:
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   spelling-preprocessing:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
-      args:
-        CONFIG: brillmoore_wikitypos_en.json
-        PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: EN
-      context: ./
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
+      context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 6.5G
+          memory: 50M
         reservations:
-          memory: 6.5G
+          memory: 50M
 
   harvesters_maintenance_gobot_skill:
     build:

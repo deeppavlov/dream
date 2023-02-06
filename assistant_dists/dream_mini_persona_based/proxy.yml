@@ -71,6 +71,15 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8125
       - PORT=8125
+  
+  seq2seq-persona-based:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8140
+      - PORT=8140
 
   sentence-ranker:
     command: [ "nginx", "-g", "daemon off;" ]
@@ -80,15 +89,6 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8128
       - PORT=8128
-
-  dialogpt-persona-based:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8131
-      - PORT=8125
 
   relative-persona-extractor:
     command: [ "nginx", "-g", "daemon off;" ]

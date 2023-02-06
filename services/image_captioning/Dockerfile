@@ -32,7 +32,7 @@ RUN apt-get install wget -y
 
 RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
 
-RUN gdown 1WBQl0WlzvdctslJyLNgedYpRrWAZC69X -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
+RUN wget http://files.deeppavlov.ai/dream_data/image_captioning/caption.pt -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
 
 COPY . /ofa
 

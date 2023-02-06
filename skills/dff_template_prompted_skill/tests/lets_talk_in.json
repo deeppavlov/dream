@@ -1,0 +1,369 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi. how are things?",
+                    "annotations": {
+                        "spelling_preprocessing": "hi how are things",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "prompt_selector": {
+                            "max_similarity": 0.675865650177002,
+                            "prompts": [
+                                "dream_persona",
+                                "pizza"
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi. how are things?",
+                            "segments": [
+                                "hi.",
+                                "how are things?"
+                            ]
+                        }
+                    },
+                    "user": {
+                        "id": "d464898749c94bd6ad95ebdcffd812af",
+                        "user_external_id": "lkdfjgldfgdf",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "do you like pizza?",
+                    "annotations": {
+                        "spelling_preprocessing": "do you like pizza",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "prompt_selector": {
+                            "max_similarity": 0.6777223348617554,
+                            "prompts": [
+                                "pizza",
+                                "dream_persona"
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "do you like pizza?",
+                            "segments": [
+                                "do you like pizza?"
+                            ]
+                        }
+                    },
+                    "user": {
+                        "id": "63ca64fe2d09eb93d1c06d96",
+                        "user_external_id": "lkdfjgldfgdf",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_dream_persona_prompted_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "83af493f-e4c4-4af0-82de-89cbdc534c96",
+                                    "labels": {
+                                        "0": [
+                                            "generation",
+                                            "greeting"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": "hi. how are things?"
+                                    },
+                                    "responses": {
+                                        "0": [
+                                            [
+                                                "I am Dream. Nice to meet you.",
+                                                0.9,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ]
+                                        ]
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "generation",
+                                        "greeting"
+                                    ]
+                                },
+                                "previous_human_utter_index": 0,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a Dream Socialbot! I am Dream. Nice to meet you.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a Dream Socialbot! I am Dream. Nice to meet you.",
+                            "segments": [
+                                "Hi, this is a Dream Socialbot!",
+                                "I am Dream.",
+                                "Nice to meet you."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_dream_persona_prompted_skill",
+                    "user": {
+                        "id": "c079e604fdb048808114ed00d4b63574",
+                        "persona": {},
+                        "attributes": {},
+                        "user_type": "bot"
+                    }
+                }
+            ],
+            "utterances": [
+                {
+                    "text": "hi. how are things?",
+                    "annotations": {
+                        "spelling_preprocessing": "hi how are things",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "prompt_selector": {
+                            "max_similarity": 0.675865650177002,
+                            "prompts": [
+                                "dream_persona",
+                                "pizza"
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi. how are things?",
+                            "segments": [
+                                "hi.",
+                                "how are things?"
+                            ]
+                        }
+                    },
+                    "user": {
+                        "id": "d464898749c94bd6ad95ebdcffd812af",
+                        "user_external_id": "lkdfjgldfgdf",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "Hi, this is a Dream Socialbot! I am Dream. Nice to meet you.",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a Dream Socialbot! I am Dream. Nice to meet you.",
+                            "segments": [
+                                "Hi, this is a Dream Socialbot!",
+                                "I am Dream.",
+                                "Nice to meet you."
+                            ]
+                        }
+                    },
+                    "active_skill": "dff_dream_persona_prompted_skill",
+                    "user": {
+                        "id": "c079e604fdb048808114ed00d4b63574",
+                        "persona": {},
+                        "attributes": {},
+                        "user_type": "bot"
+                    }
+                },
+                {
+                    "text": "do you like pizza?",
+                    "annotations": {
+                        "spelling_preprocessing": "do you like pizza",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "prompt_selector": {
+                            "max_similarity": 0.6777223348617554,
+                            "prompts": [
+                                "pizza",
+                                "dream_persona"
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "do you like pizza?",
+                            "segments": [
+                                "do you like pizza?"
+                            ]
+                        }
+                    },
+                    "user": {
+                        "id": "63ca64fe2d09eb93d1c06d96",
+                        "user_external_id": "lkdfjgldfgdf",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_dream_persona_prompted_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "83af493f-e4c4-4af0-82de-89cbdc534c96",
+                                    "labels": {
+                                        "0": [
+                                            "generation",
+                                            "greeting"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": "hi. how are things?"
+                                    },
+                                    "responses": {
+                                        "0": [
+                                            [
+                                                "I am Dream. Nice to meet you.",
+                                                0.9,
+                                                {},
+                                                {},
+                                                {
+                                                    "can_continue": "no"
+                                                }
+                                            ]
+                                        ]
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "generation",
+                                        "greeting"
+                                    ]
+                                },
+                                "previous_human_utter_index": 0,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
+                    }
+                }
+            ]
+        }
+    ],
+    "dff_dream_persona_prompted_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "83af493f-e4c4-4af0-82de-89cbdc534c96",
+                "labels": {
+                    "0": [
+                        "generation",
+                        "greeting"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": "hi. how are things?"
+                },
+                "responses": {
+                    "0": [
+                        [
+                            "I am Dream. Nice to meet you.",
+                            0.9,
+                            {},
+                            {},
+                            {
+                                "can_continue": "no"
+                            }
+                        ]
+                    ]
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "generation",
+                    "greeting"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

@@ -1,5 +1,6 @@
 import os
-
+import requests
+from io import BytesIO
 import torch
 from torchvision import transforms
 import numpy as np
@@ -125,11 +126,12 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def respond():
     st_time = time.time()
 
-    img_paths = request.json.get("text", [])
+    img_paths = request.json.get("image_paths", [])
     captions = []
     try:
         for img_path in img_paths:
-            image = Image.open(img_path)
+            response = requests.get(img_path)
+            image = Image.open(BytesIO(response.content))
             image.thumbnail((256, 256))
 
             # Construct input sample & preprocess for GPU if cuda available
@@ -140,12 +142,14 @@ def respond():
             with torch.no_grad():
                 caption, scores = eval_step(task, generator, models, sample)
 
-            captions.append(caption)
+            captions.append(caption[0])
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
+        captions = [{}] * len(img_paths)
 
     total_time = time.time() - st_time
-    logger.info(f"captioning exec time: {total_time:.3f}s")
-    return jsonify({"caption": captions})
+    logger.info(f"image-captioning exec time: {total_time:.3f}s")
+    logger.info(f"image-captioning result: {captions}")
+    return jsonify(captions)

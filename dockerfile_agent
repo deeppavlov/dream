@@ -1,5 +1,6 @@
 FROM python:3.7-slim-stretch
 
+
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y --fix-missing && \
@@ -28,7 +29,9 @@ RUN mkdir /pavlov && \
     pip install -e .
 
 RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pyaml openpyxl==3.0.0 xlrd==1.2.0 ruamel-yaml==0.17.21
-RUN pip install pip install deeppavlov-agent==2.3.0a0
+
+ARG AGENT_COMMIT=020b4ca9b6d5c6b13098e1f9dee5fcecaf236ae5
+RUN pip install https://codeload.github.com/deeppavlov/dp-agent/tar.gz/${AGENT_COMMIT}
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -36,7 +39,7 @@ ENV PYTHONPATH "${PYTHONPATH}:/dp-agent"
 ENV DPA_LAUNCHING_ENV "docker"
 
 COPY . /dp-agent/.
-#COPY agent_settings.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py
+# COPY agent_settings.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py
 #RUN printf 'debug = False\nresponse_logger = False' > /dp-agent/dp_agent_settings.py
 
 

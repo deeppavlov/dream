@@ -1,4 +1,5 @@
 import re
+from common.utils import get_topics, TOPIC_GROUPS
 
 OPINION_REQUESTS_ABOUT_MUSIC = [
     "What kind of music do you like?",
@@ -27,3 +28,13 @@ VARIOUS_GENRES_TEMPLATE = r"(classic|symphony|contemporary|techno|electro|dubste
 
 def skill_trigger_phrases():
     return OPINION_REQUESTS_ABOUT_MUSIC
+
+
+def about_music(annotated_utterance):
+    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    if any([music_topic in found_topics for music_topic in TOPIC_GROUPS["music"]]):
+        return True
+    elif re.findall(MUSIC_COMPILED_PATTERN, annotated_utterance["text"]):
+        return True
+    else:
+        return False
