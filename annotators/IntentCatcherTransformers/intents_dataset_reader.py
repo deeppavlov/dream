@@ -84,7 +84,6 @@ class IntentsJsonReader(DatasetReader):
                         random_phrases = all_data["random_phrases"]
                         # print('Словарь json загружен успешно')
                         random_phrases = self.generate_phrases(random_phrases["phrases"], random_phrases["punctuation"])
-                        
 
                     intent_data = {}
                     for intent, intent_samples in intent_phrases.items():
