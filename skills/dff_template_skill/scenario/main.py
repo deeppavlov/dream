@@ -53,6 +53,8 @@ script = {
     "service": {
         "start": {
             RESPONSE: DreamMessage(text=""),
+            # We simulate extraction of two slots at the dialog start.
+            # Slot values are then used in the dialog.
             PRE_TRANSITIONS_PROCESSING: {
                 "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
             },
@@ -110,6 +112,8 @@ script = {
         },
         "node7": {
             RESPONSE: MultiMessage(
+                # DreamMessage attributes, like confidence and can_continue status
+                # can be used to override the parameters extracted by Dream engine.
                 messages=[
                     DreamMessage(
                         text="bye", confidence=1.0, hype_attr={"can_continue": common_constants.MUST_CONTINUE}
@@ -128,16 +132,9 @@ script = {
 
 
 db = dict()
-actor = Actor(
+pipeline = Pipeline.from_script(
     script=script,
     start_label=("service", "start"),
     fallback_label=("service", "fallback"),
-)
-pipeline = Pipeline.from_dict(
-    dict(
-        components=[
-            actor,
-        ],
-        context_storage=db,
-    )
+    context_storage=db,
 )
