@@ -7,6 +7,7 @@ import common.test_utils as test_utils
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
+LANGUAGE = os.getenv("LANGUAGE", "EN")
 
 
 def handler(requested_data, random_seed):
@@ -17,13 +18,13 @@ def handler(requested_data, random_seed):
 def run_test(handler):
     in_data, out_data = test_utils.get_dataset()
     for test_name in in_data:
-        if "RU" in INTENT_RESPONSE_PHRASES_FNAME and "RU" not in test_name:
+        if LANGUAGE == "RU" and "RU" not in test_name:
             # if russian language, skip english tests
             continue
-        elif "robot" in INTENT_RESPONSE_PHRASES_FNAME and "robot" not in test_name:
+        elif LANGUAGE == "EN" and "EN" not in test_name:
+            # if russian language, skip english tests
             continue
-        elif any([t not in INTENT_RESPONSE_PHRASES_FNAME and t in test_name for t in ["RU", "robot"]]):
-            continue
+
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")
         is_equal_flag, msg = test_utils.compare_structs(out_data[test_name], hypothesis, ignored_keys=["id"])
