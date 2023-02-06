@@ -105,13 +105,13 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
+        N_SENTENCES_TO_RETURN: 3
+        PROMPTS_TO_CONSIDER: dream_persona,pizza
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
     environment:
       - FLASK_APP=server
-      - N_SENTENCES_TO_RETURN=3
-      - PROMPTS_TO_CONSIDER=dream_persona,pizza
     deploy:
       resources:
         limits:
@@ -165,13 +165,12 @@ services:
       args:
         SERVICE_PORT: 8134
         SERVICE_NAME: dff_dream_persona_prompted_skill
+        PROMPT_FILE: common/prompts/dream_persona.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        N_UTTERANCES_CONTEXT: 3
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload
-    environment:
-      - PROMPT_FILE=common/prompts/dream_persona.json
-      - GENERATIVE_SERVICE_URL=http://transformers-lm-gptj:8130/respond
-      - N_UTTERANCES_CONTEXT=3
     deploy:
       resources:
         limits:
