@@ -29,6 +29,7 @@
         "num_entities_to_return": 5,
         "lemmatize": true,
         "use_tags": true,
+        "use_related_tags": true,
         "use_descriptions": true,
         "full_paragraph": true,
         "return_confidences": true,
