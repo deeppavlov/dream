@@ -18,9 +18,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get(
-    "PRETRAINED_MODEL_NAME_OR_PATH", "SkolkovoInstitute/russian_toxicity_classifier"
-)
+PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH", "s-nlp/russian_toxicity_classifier")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 
 cuda = torch.cuda.is_available()
@@ -33,8 +31,8 @@ else:
 logger.info(f"toxic-classification is set to run on {device}")
 
 try:
-    tokenizer = BertTokenizer.from_pretrained("SkolkovoInstitute/russian_toxicity_classifier")
-    model = BertForSequenceClassification.from_pretrained("SkolkovoInstitute/russian_toxicity_classifier")
+    tokenizer = BertTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = BertForSequenceClassification.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model.eval()
     if cuda:
         model.cuda()
