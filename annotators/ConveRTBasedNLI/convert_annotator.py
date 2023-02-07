@@ -5,7 +5,6 @@ import itertools
 
 from encoder import Encoder
 import tensorflow as tf
-import tensorflow_hub as tfhub
 import tensorflow_datasets as tfds
 
 
@@ -40,17 +39,18 @@ class DataGenerator(tf.compat.v2.keras.utils.Sequence):
         premise = np.load(file_path)['arr_0'][0]
         hypothesis = np.load(file_path)['arr_0'][1]
         label = np.load(file_path)['arr_1']
-        label = l.reshape((len(label), 1))
+        label = label.reshape((len(label), 1))
         return premise, hypothesis, label
 
 
 class ConveRTAnnotator:
     def __init__(self):
         self.encoder = Encoder()
+        self.model = None
 
-        try:
+        if TRAINED_MODEL_PATH:
             self.model_path = TRAINED_MODEL_PATH
-        except:
+        else:
             self.__prepare_data()
             self.__create_model()
             self.__train_model()
@@ -150,13 +150,16 @@ class ConveRTAnnotator:
         self.model_path = CACHE_DIR + '/model.h5'
     
     def candidate_selection(self, candidates, bot_uttr_history, threshold=0.8):
-        self.model = tf.keras.models.load_model(self.model_path)
+        bot_uttr_history = bot_uttr_history[0]
+        logger.info(f"{bot_uttr_history}")
+        self.model = tf.keras.models.load_model('model.h5')
         labels = {0: 'entailment', 1: 'neutral', 2: 'contradiction'}
         base_dict = {'decision': labels[0],
                      labels[0]: 0.0,
                      labels[1]: 1.0,
                      labels[2]: 0.0}
         rez_list = list(base_dict.copy() for _ in range(len(candidates)))
+
         if bot_uttr_history:
             vectorized_candidates = self.__response_encoding(candidates)
             vectorized_history = self.__response_encoding(bot_uttr_history)

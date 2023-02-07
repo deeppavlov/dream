@@ -387,11 +387,9 @@ def convert_nli_hypotheses_annotator_formatter(dialog: Dict) -> List[Dict]:
     # Used by: convert_based_nli candidate annotators
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
-    if len(dialog["bot_utterances"]):
-        history = [u["text"] for u in dialog["bot_utterances"][-20:]]
-    else:
-        history = []
-    return [{"candidates": hypots, "history": history}]
+    last_bot_utterances = [u["text"] for u in dialog["bot_utterances"][-20:]]
+    last_bot_utterances = [last_bot_utterances for h in hypotheses]
+    return [{"sentences": hypots, "last_bot_utterances": last_bot_utterances}]
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
