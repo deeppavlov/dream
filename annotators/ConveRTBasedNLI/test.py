@@ -1,14 +1,12 @@
 import requests
-from encoder import Encoder
 
 
 def main():
-    encoder = Encoder()
     url = "http://0.0.0.0:8137/batch_model"
-    input_data = {"candidates": ["Do you like ice cream?", "It's going to be sunny today", 
+    input_data = {"sentences": ["Do you like ice cream?", "It's going to be sunny today",
                                  "I love dogs", "Do you want to know some interesting fact?", 
                                  "Wolves have small teeth"], 
-                  "history": ["I hate dogs", "Wolves have big teeth", "The moon is a satellite of the earth"]}
+                  "last_bot_utterances": ["I hate dogs", "Wolves have big teeth", "The moon is a satellite of the earth"]}
     result = requests.post(url, json=input_data)
     desired_output = [{'decision': 'neutral',
                        'entailment': 0.001990885240957141,

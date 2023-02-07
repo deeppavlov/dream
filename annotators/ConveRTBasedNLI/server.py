@@ -1,5 +1,4 @@
 import logging
-import numpy as np
 import time
 from os import getenv
 
@@ -22,25 +21,14 @@ logger.info("Annotator is loaded.")
 @app.route("/batch_model", methods=["POST"])
 def respond_batch():
     start_time = time.time()
-    candidates = request.json.get("candidates", [])
-    history = request.json.get("history", [])
-    logger.info(f"Candidates: {candidates}")
-    logger.info(f"History: {history}")
-    result = annotator.candidate_selection(candidates, history)
+    sentences = request.json.get("sentences", [])
+    last_bot_utterances = request.json.get("last_bot_utterances", [])
+    logger.debug(f"Sentences: {sentences}")
+    logger.debug(f"Last bot utterances: {last_bot_utterances}")
+    result = annotator.candidate_selection(sentences, last_bot_utterances)
     total_time = time.time() - start_time
-    logger.info(f"Annotator candidate prediction time: {total_time: .3f}s")
+    logger.info(f"convert-based-nli exec time: {round(total_time, 2)} sec")
     return jsonify([{"batch": result}])
-
-
-@app.route("/encode", methods=["POST"])
-def respond_encode():
-    start_time = time.time()
-    response = request.json.get("sentences", [])
-    logger.info(f"sentence: {response}")
-    result = annotator.response_encoding(response)
-    total_time = time.time() - start_time
-    logger.info(f"Annotator response encoding time: {total_time: .3f}s")
-    return jsonify(result)
 
 
 if __name__ == "__main__":
