@@ -28,6 +28,7 @@ flows = {
         TRANSITIONS: {
             ("scenario", "intro"): loc_cnd.is_intro(),
             ("scenario", "is_known_question"): cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
+            ("scenario", "not_known_question"): int_cnd.is_question
         },
     },
     "service": {
@@ -36,6 +37,7 @@ flows = {
             TRANSITIONS: {
                 ("scenario", "intro"): loc_cnd.is_intro(),
                 ("scenario", "is_known_question"): cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
+                ("scenario", "not_known_question"): int_cnd.is_question
             },
         },
         "fallback": {
@@ -60,6 +62,11 @@ flows = {
         },
         "is_known_question": {
             RESPONSE: loc_rsp.answer_known_question(),
+            PROCESSING: {},
+            TRANSITIONS: {},
+        },
+        "not_known_question":{
+            RESPONSE: "That's a good question! Unfortunately, I don't know the answer yet.",
             PROCESSING: {},
             TRANSITIONS: {},
         },
