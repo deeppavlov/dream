@@ -25,12 +25,18 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {
-        TRANSITIONS: {("scenario", "intro"): loc_cnd.is_intro()},
+        TRANSITIONS: {
+            ("scenario", "intro"): loc_cnd.is_intro(),
+            ("scenario", "is_known_question"): cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
+        },
     },
     "service": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {("scenario", "intro"): loc_cnd.is_intro()},
+            TRANSITIONS: {
+                ("scenario", "intro"): loc_cnd.is_intro(),
+                ("scenario", "is_known_question"): cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
+            },
         },
         "fallback": {
             RESPONSE: "Ooops, something went wrong inside me! Could you repeat what you've just said?",
@@ -50,6 +56,11 @@ flows = {
         "intro": {
             RESPONSE: loc_rsp.intro_response(),
             PROCESSING: {"set_situation_description": set_instructions.set_situation_description()},
+            TRANSITIONS: {},
+        },
+        "is_known_question": {
+            RESPONSE: loc_rsp.answer_known_question(),
+            PROCESSING: {},
             TRANSITIONS: {},
         },
         # "main_node": {

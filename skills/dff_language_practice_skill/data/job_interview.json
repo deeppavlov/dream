@@ -102,12 +102,6 @@
             "A": "We are currently talking to a number of potential candidates. I will be able to share your CV with the team. If everything goes smoothly, we will invite you to the next interview with the hiring manager. And if that goes well, you may be expected to have the final interview with our CEO. We pay a lot of attention to the culture fit. So, don't be surprised."
         },
         {
-            "Q": "",
-            "P": "Ask about the next steps",
-            "U": "",
-            "A": "We are currently talking to a number of potential candidates. I will be able to share your CV with the team. If everything goes smoothly, we will invite you to the next interview with the hiring manager. And if that goes well, you may be expected to have the final interview with our CEO. We pay a lot of attention to the culture fit. So, don't be surprised."
-        },
-        {
             "utterance": "Well, thank you, {user name}. I do appreciate you having found the time for our meeting today. I really enjoyed our conversation. And I will be looking forward to our next conversation. Bye-bye.",
             "info_for_user": ""
         }

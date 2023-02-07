@@ -69,4 +69,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8086:8086
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+    ports:
+      - 8128:8128
 version: '3.7'
