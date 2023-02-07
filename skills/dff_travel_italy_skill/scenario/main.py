@@ -43,14 +43,14 @@ ZERO_CONFIDENCE = 0.0
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("italian_food_flow", "tell_more", 2): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
-            ("travel_italy_general", "italy_start", 1.8): loc_cnd.start_condition,
+            ("travel_italy_general", "italy_start", 2): loc_cnd.start_condition,
             ("travel_italy_general", "like_italy", 1): cnd.all(     
                 [
                     loc_cnd.is_proposed_skill,
                     cnd.neg(loc_cnd.check_flag("italy_travel_skill_active")),
                 ]
             ),
+            ("italian_food_flow_restart", "bot_excitement", 1.8): cnd.regexp(re.compile(r"favorite food")), 
             ("italian_food_flow", "food_start", 1.5): cnd.all(
                 [
                     loc_cnd.asked_about_italian_cuisine,
@@ -271,16 +271,6 @@ flows = {
                 ("italy_disappointments", "neg_experience"): cnd.true(),
             },
         },
-        "tell_more": {
-            RESPONSE: "Do you have some interesting story about {user_fav_food}? Where and how did you first try it?",
-            PROCESSING: {
-                "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-            },
-            TRANSITIONS: {
-                ("italy_disappointments", "neg_experience"): cnd.true(),
-            },
-        },
         "fav_drink": {
             RESPONSE: "It is a useful recommendation. I'll try {user_fav_drink} next time. Thank you!",
             PROCESSING: {
@@ -288,6 +278,29 @@ flows = {
                     user_fav_drink=["prop:favorite_drink", "default:this pairing"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+            },
+            TRANSITIONS: {
+                ("italy_disappointments", "neg_experience"): cnd.true(),
+            },
+        },
+    },
+    "italian_food_flow_restart": {
+        "bot_excitement": {
+            RESPONSE: "It must have been yummy!",
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+            },
+            TRANSITIONS: {
+                ("italian_food_flow_restart", "tell_more"): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
+                ("italy_disappointments", "neg_experience"): cnd.true(),
+            },
+        },
+        "tell_more": {
+            RESPONSE: "Do you have some interesting story about {FAVORITE_FOOD}? Where and how did you first try it?",
+            PROCESSING: {
+                "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
             },
             TRANSITIONS: {
@@ -342,64 +355,3 @@ actor = Actor(
 )
 
 logger.info("Actor created successfully")
-
-        # "italy_start": {
-            # RESPONSE: "Do you like Italy anna?",
-            # TRANSITIONS: {
-            #     ("travel_italy_general", "not_been_to_italy", 2): int_cnd.is_no_vars,
-            #     ("travel_italy_general", "like_italy", 1): cnd.true(),
-            # },
-
-                    # "who_with": {
-        #     RESPONSE: loc_rsp.append_unused(
-        #         initial="Awesome! ",
-        #         phrases=[loc_rsp.WHO_TRAVEL_WITH],
-        #     ),
-        #     PROCESSING: {
-        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-        #     },
-        #     TRANSITIONS: {
-        #         ("travel_italy_general", "told_who"): cnd.any(
-        #             [
-        #                 dm_cnd.is_midas("statement"),
-        #                 dm_cnd.is_midas("opinion")
-        #             ]
-        #         ),
-        #         ("travel_italy_general", "been_places"): cnd.true(),
-        #     },
-        # },
-
-                # "night_activities": {
-        #     RESPONSE: "Sounds like you had much fun! How about your nights?",
-        #     PROCESSING: {
-        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-        #     },
-        #     TRANSITIONS: {("concrete_place_flow", "bot_activ_opinion"): cnd.true()},
-        # },
-
-                # "been_to_italy": { 
-        #     RESPONSE: "Have you ever been to Italy?",
-        #     TRANSITIONS: {
-        #         ("travel_italy_general", "when_visited"): int_cnd.is_yes_vars,
-        #         ("travel_italy_general", "not_been_to_italy"): int_cnd.is_no_vars,
-        #     },
-        #     PROCESSING: {
-        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-        #     },
-        # },
-
-                # "been_places": {
-        #     RESPONSE: 'I love this country. I travelled in Italy a lot and everything is beautiful about it. What city '
-        #     'did you visit in Italy?',
-        #     PROCESSING: {
-        #         "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-        #         "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-        #     }, 
-        #     TRANSITIONS: {
-        #         ("travel_italy_general", "not_been_to_italy"): int_cnd.is_no_vars,
-        #         ("concrete_place_flow", "ask_fav"): cnd.true(),
-        #     }, 
-        # },

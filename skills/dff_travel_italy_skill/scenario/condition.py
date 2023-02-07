@@ -113,22 +113,26 @@ def example_lets_talk_about():
     return example_lets_talk_about_handler
 
 def get_current_user_id(ctx: Context, actor: Actor) -> bool:
-    user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]["id"]
+    if "agent" in ctx.misc:
+        user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]["id"]
 
-    return user_id
+        return user_id
+    
+    return None
     
 
 def has_entity_in_graph(property):
     def has_entity_in_graph_handler(ctx: Context, actor: Actor) -> Context:
         user_id = get_current_user_id(ctx, actor)
-        current_user_id = "User/" + user_id
-        DB = "test_italy_skill"
-        TEAM = "yashkens|c77b"
-        PASSWORD = "" #insert your password here
-        graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD)
-        user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
-        if property in user_existing_entities:
-            return True
+        if user_id:
+            current_user_id = "User/" + user_id
+            DB = "test_italy_skill"
+            TEAM = "yashkens|c77b"
+            PASSWORD = "" #insert your password here
+            graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD)
+            user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
+            if property in user_existing_entities:
+                return True
         
         return False
     
