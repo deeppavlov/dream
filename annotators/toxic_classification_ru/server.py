@@ -18,9 +18,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get(
-    "PRETRAINED_MODEL_NAME_OR_PATH", "s-nlp/russian_toxicity_classifier"
-)
+PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH", "s-nlp/russian_toxicity_classifier")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 
 cuda = torch.cuda.is_available()
