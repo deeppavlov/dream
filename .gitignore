@@ -142,3 +142,9 @@ kubernetes/models
 docker-compose-one-replica.yml
 
 *.pem
+
+mesh-transformer-jax
+
+docker-compose.yml
+
+.gitignore

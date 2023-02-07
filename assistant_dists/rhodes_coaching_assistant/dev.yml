@@ -72,5 +72,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8134:8134
+    restart: on-failure
 
 version: "3.7"
