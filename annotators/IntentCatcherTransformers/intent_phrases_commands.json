@@ -74,10 +74,6 @@
                 "?"
             ]
         },
-
-
-
-
         "what_are_you_talking_about": {
             "phrases": [
                 "(alexa ){0,1}what are ((you)|(we)) ((talking about)|(discussing))",
