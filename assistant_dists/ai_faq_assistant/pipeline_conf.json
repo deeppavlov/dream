@@ -149,13 +149,13 @@
             }
         },
         "skills": {
-            "dff_ai_prompted_skill": {
+            "dff_ai_faq_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.5,
-                    "url": "http://dff-ai-prompted-skill:8134/respond"
+                    "url": "http://dff-ai-faq-prompted-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_ai_prompted_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_ai_faq_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
