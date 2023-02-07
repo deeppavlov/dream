@@ -1027,10 +1027,34 @@ def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
 
 
+def dff_ai_faq_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_ai_faq_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_da_costa_clothes_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_da_costa_clothes_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
 def dff_dream_persona_prompted_skill_formatter(dialog):
     return utils.dff_formatter(
         dialog,
         "dff_dream_persona_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_empathetic_marketing_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_empathetic_marketing_prompted_skill",
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
     )
 
