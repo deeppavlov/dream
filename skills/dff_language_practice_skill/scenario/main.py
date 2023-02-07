@@ -26,6 +26,9 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
+            ("scenario", "cancel_dialog"): cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
+            ("scenario", "repeat"): cnd.regexp(r"\brepeat\b", re.IGNORECASE),
+            ("scenario", "previous"): cnd.regexp(r"\bprevious\b", re.IGNORECASE),
             ("scenario", "intro"): loc_cnd.is_intro(),
             ("scenario", "is_known_question"): cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
             ("scenario", "not_known_question"): int_cnd.is_question,
@@ -35,12 +38,7 @@ flows = {
     "service": {
         "start": {
             RESPONSE: "",
-            TRANSITIONS: {
-                ("scenario", "intro"): loc_cnd.is_intro(),
-                ("scenario", "is_known_question"): cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
-                ("scenario", "not_known_question"): int_cnd.is_question,
-                ("scenario", "bot_question"): cnd.true(),
-            },
+            TRANSITIONS: {("scenario", "intro"): loc_cnd.is_intro()},
         },
         "fallback": {
             RESPONSE: "Ooops, something went wrong inside me! Could you repeat what you've just said?",
@@ -76,6 +74,8 @@ flows = {
             RESPONSE: loc_rsp.follow_scenario_response(),
             PROCESSING: {},
             TRANSITIONS: {
+                "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
+                "repeat": cnd.regexp(r"\brepeat\b", re.IGNORECASE),
                 "is_known_question": cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
                 "not_known_question": int_cnd.is_question,
                 "acknowledgement": cnd.true(),
@@ -86,24 +86,22 @@ flows = {
             PROCESSING: {},
             TRANSITIONS: {},
         },
-        # "main_node": {
-        #     RESPONSE: loc_rsp.response_from_data(),
-        #     PROCESSING: {
-        #         "set_user_instructions": set_instructions.set_user_instructions(),
-        #         "set_situation_description": set_instructions.set_situation_description(),
-        #         "slot_filling": int_prs.fill_responses_by_slots(),
-        #     },
-        #     TRANSITIONS: {
-        #         "cancel_dialog": cnd.regexp(r"\b(stop|finish|quit)\b", re.IGNORECASE),
-        #         lbl.repeat(0.9): cnd.true(),
-        #     },
-        # },
         "cancel_dialog": {
             RESPONSE: "Ok, let's finish here. Would you like me to comment on your performance?",
             PROCESSING: {},
             TRANSITIONS: {"no_feedback_needed": int_cnd.is_no_vars},
         },
         "no_feedback_needed": {RESPONSE: "As you wish!"},
+        "repeat": {
+            RESPONSE: loc_rsp.repeat_response(),
+            PROCESSING: {},
+            TRANSITIONS: {},
+        },
+        "previous": {
+            RESPONSE: loc_rsp.previous_response(),
+            PROCESSING: {},
+            TRANSITIONS: {},
+        },
     },
 }
 

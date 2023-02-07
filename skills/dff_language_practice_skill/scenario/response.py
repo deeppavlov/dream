@@ -86,11 +86,17 @@ def answer_known_question():
 def follow_scenario_response():
     def follow_scenario_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         if not ctx.validation:
+            processed_node = ctx.last_request
             shared_memory = int_ctx.get_shared_memory(ctx, actor)
             dialog_script_name = shared_memory.get("dialog_script_name", None)
+            dialog_step_id = shared_memory.get("dialog_step_id", 0)
             dialog = scenarios[dialog_script_name]
             if dialog_script_name not in used_nodes_ids.keys():
                 used_nodes_ids[dialog_script_name] = []
+
+            if "repeat" in processed_node.lower():
+                int_ctx.save_to_shared_memory(ctx, actor, dialog_step_id=dialog_step_id)
+                return dialog["utterances"][1:-1][dialog_step_id]["Q"]
 
             for i, utt in bot_questions[dialog_script_name]:
                 if i not in used_nodes_ids[dialog_script_name]:
@@ -110,3 +116,24 @@ def acknowledgement_response():
             return random.choice(acknowledgements)
 
     return acknowledgement_response_handler
+
+
+def repeat_response():
+    def repeat_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        if not ctx.validation:
+            return ctx.misc["agent"]["dialog"]["bot_utterances"][-1]["text"]
+
+    return repeat_response_handler
+
+
+def previous_response():
+    def previous_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        if not ctx.validation:
+            human_utterances = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]
+            state = human_utterances["attributes"]["dff_language_practice_skill_state"]
+            responses = state["context"]["responses"]
+            prev_index = list(responses.keys())[-2]
+            reply = responses[prev_index]
+            return reply
+
+    return previous_response_handler
