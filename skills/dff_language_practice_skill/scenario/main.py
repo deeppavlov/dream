@@ -75,6 +75,15 @@ flows = {
         "bot_question": {
             RESPONSE: loc_rsp.follow_scenario_response(),
             PROCESSING: {},
+            TRANSITIONS: {
+                "is_known_question": cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
+                "not_known_question": int_cnd.is_question,
+                "acknowledgement": cnd.true(),
+            },
+        },
+        "acknowledgement": {
+            RESPONSE: loc_rsp.acknowledgement_response(),
+            PROCESSING: {},
             TRANSITIONS: {},
         },
         # "main_node": {

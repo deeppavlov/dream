@@ -7,6 +7,7 @@ from os import getenv
 
 from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
+from common.acknowledgements import GENERAL_ACKNOWLEDGEMENTS
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 
@@ -33,6 +34,8 @@ for filename in os.listdir("data"):
         bot_questions[filename.replace(".json", "")] = not_user_questions
 
 used_nodes_ids = {}
+
+acknowledgements = GENERAL_ACKNOWLEDGEMENTS["EN"]["positive"] + GENERAL_ACKNOWLEDGEMENTS["EN"]["neutral"]
 
 
 def example_response(reply: str):
@@ -99,3 +102,11 @@ def follow_scenario_response():
             return dialog["utterances"][-1]["utterance"]
 
     return follow_scenario_response_handler
+
+
+def acknowledgement_response():
+    def acknowledgement_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+        if not ctx.validation:
+            return random.choice(acknowledgements)
+
+    return acknowledgement_response_handler
