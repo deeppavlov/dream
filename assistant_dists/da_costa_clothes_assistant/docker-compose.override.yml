@@ -2,9 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/da_costa_clothes_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, 
-                   dff-intent-responder-skill:8012, intent-catcher:8014,
-                   spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130"
+      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, dff-intent-responder-skill:8012, intent-catcher:8014, spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -144,7 +142,7 @@ services:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
         N_SENTENCES_TO_RETURN: 3
-        PROMPTS_TO_CONSIDER: da_costa_clothes,pizza
+        PROMPTS_TO_CONSIDER: da_costa_clothes
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
