@@ -18,14 +18,14 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8018
       - PORT=8018
 
-  spelling-preprocessing:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8074
-      - PORT=8074
+  # spelling-preprocessing:
+  #   command: ["nginx", "-g", "daemon off;"]
+  #   build:
+  #     context: dp/proxy/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PROXY_PASS=dream.deeppavlov.ai:8074
+  #     - PORT=8074
 
   dff-intent-responder-skill:
     command: ["nginx", "-g", "daemon off;"]
