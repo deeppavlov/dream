@@ -21,6 +21,7 @@ from common.utils import (
     low_priority_intents,
     substitute_nonwords,
     is_toxic_or_badlisted_utterance,
+    is_contradiction_utterance,
 )
 from common.response_selection import ACTIVE_SKILLS
 from tag_based_selection import tag_based_response_selection
@@ -91,9 +92,13 @@ def respond():
                         logger.warning(f"Valid skill data without annotations: {skill_data}")
 
                 is_toxic_utterance = is_toxic_or_badlisted_utterance(skill_data)
-                curr_is_toxics.append(is_toxic_utterance)
+                is_contr_utterance = is_contradiction_utterance(skill_data)
 
-                if is_toxic_utterance:
+                is_toxic_or_contr_utterance = is_toxic_utterance or is_contr_utterance
+
+                curr_is_toxics.append(is_toxic_or_contr_utterance)
+
+                if is_toxic_or_contr_utterance:
                     with sentry_sdk.push_scope() as scope:
                         scope.set_extra("utterance", skill_data["text"])
                         scope.set_extra("selected_skills", skill_data)

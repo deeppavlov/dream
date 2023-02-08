@@ -1289,6 +1289,13 @@ def is_toxic_or_badlisted_utterance(annotated_utterance):
     return toxic_result or any([badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]])
 
 
+def is_contradiction_utterance(annotated_utterance):
+    contradiction_result = annotated_utterance.get("annotations", {}).get("convert_based_nli")["decision"]
+    contradiction_result = True if "contradiction" in contradiction_result else False
+
+    return contradiction_result
+
+
 FACTOID_PATTERNS = re.compile(
     r"^(do you know |((can |could )you )tell me )?(please )?"
     r"((what|who|which|where) (is|are|was|were)\b|how to\b|when)",

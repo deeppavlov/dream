@@ -151,10 +151,9 @@ class ConveRTAnnotator:
     
     def candidate_selection(self, candidates, bot_uttr_history, threshold=0.8):
         bot_uttr_history = bot_uttr_history[0]
-        logger.info(f"{bot_uttr_history}")
         self.model = tf.keras.models.load_model('model.h5')
         labels = {0: 'entailment', 1: 'neutral', 2: 'contradiction'}
-        base_dict = {'decision': labels[0],
+        base_dict = {'decision': labels[1],
                      labels[0]: 0.0,
                      labels[1]: 1.0,
                      labels[2]: 0.0}
