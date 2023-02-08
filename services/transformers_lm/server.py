@@ -30,9 +30,12 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
+def generate_responses(context, model, tokenizer, continue_last_uttr=False):
     outputs = []
-    dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
+    if continue_last_uttr:
+        dialog_context = "\n".join(context)
+    else:
+        dialog_context = "\n".join(context) + "\n" + "AI:"
     logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
     with torch.no_grad():
@@ -64,11 +67,9 @@ try:
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
     example_response = generate_responses(
-        "",
         ["Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "],
         model,
-        tokenizer,
-        continue_last_uttr=False,
+        tokenizer
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -86,7 +87,7 @@ def respond():
         responses = []
         confidences = []
         for context in contexts:
-            outputs = generate_responses("", context, model, tokenizer)
+            outputs = generate_responses(context, model, tokenizer)
             logger.info(f"outputs: {outputs}")
             for response in outputs:
                 if len(response) >= 3:
