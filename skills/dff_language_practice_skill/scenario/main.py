@@ -10,10 +10,6 @@ import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
 import common.dff.integration.response as int_rsp
 
-import common.set_user_instructions as set_instructions
-import common.set_user_instructions as set_situation_description
-
-
 import common.constants as common_constants
 
 from . import condition as loc_cnd
@@ -57,7 +53,7 @@ flows = {
         },
         "intro": {
             RESPONSE: loc_rsp.intro_response(),
-            PROCESSING: {"set_situation_description": set_instructions.set_situation_description()},
+            PROCESSING: {},
             TRANSITIONS: {},
         },
         "is_known_question": {

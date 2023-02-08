@@ -57,6 +57,8 @@ def intro_response():
             dialog = scenarios[dialog_script_name]
             reply = dialog["utterances"][0]["utterance"]
             int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
+            description = dialog["situation_description"]
+            ctx.misc["agent"]["response"].update({"situation_description": description})
             return reply
 
     return intro_response_handler
@@ -95,6 +97,9 @@ def follow_scenario_response():
 
             if "repeat" in processed_node.lower():
                 int_ctx.save_to_shared_memory(ctx, actor, dialog_step_id=dialog_step_id)
+                int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
+                instructions = dialog["utterances"][1:-1][dialog_step_id]["P"]
+                ctx.misc["agent"]["response"].update({"user_instructions": instructions})
                 return dialog["utterances"][1:-1][dialog_step_id]["Q"]
 
             for i, utt in bot_questions[dialog_script_name]:
@@ -102,9 +107,15 @@ def follow_scenario_response():
                     used_nodes_ids[dialog_script_name].append(i)
                     int_ctx.save_to_shared_memory(ctx, actor, dialog_step_id=i)
                     int_ctx.save_to_shared_memory(ctx, actor, used_nodes_ids=used_nodes_ids)
+                    int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
+                    instructions = dialog["utterances"][1:-1][i]["P"]
+                    ctx.misc["agent"]["response"].update({"user_instructions": instructions})
                     return dialog["utterances"][1:-1][i]["Q"]
 
             int_ctx.save_to_shared_memory(ctx, actor, dialog_step_id=-1)
+            int_ctx.save_to_shared_memory(ctx, actor, dialog_script_name=dialog_script_name)
+            instructions = dialog["utterances"][-1]["info_for_user"]
+            ctx.misc["agent"]["response"].update({"user_instructions": instructions})
             return dialog["utterances"][-1]["utterance"]
 
     return follow_scenario_response_handler
