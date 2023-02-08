@@ -21,6 +21,8 @@ HALF_PRECISION = bool(os.environ.get("HALF_PRECISION", 0))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
+NAMING = ["AI", "Human"]
+
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 max_length = generation_params.get("max_length", 50)
@@ -30,13 +32,19 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, model, tokenizer, continue_last_uttr=False):
+def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
     outputs = []
+    dialog_context = ""
+    if prompt:
+        dialog_context += prompt + "\n"
+    s = len(context) % 2
+    context = [f'{NAMING[(s + uttr_id) % 2]}: {uttr}' for uttr_id, uttr in enumerate(context)]
     if continue_last_uttr:
         dialog_context = "\n".join(context)
     else:
-        dialog_context = "\n".join(context) + "\n" + "AI:"
-    logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
+        dialog_context = "\n".join(context) + f"\n{NAMING[0]}:"
+
+    logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
     with torch.no_grad():
         if torch.cuda.is_available():
@@ -69,7 +77,8 @@ try:
     example_response = generate_responses(
         ["Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "],
         model,
-        tokenizer
+        tokenizer,
+        "You are a SpaceX Assistant."
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -83,11 +92,13 @@ except Exception as e:
 def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
+    prompts = request.json.get("prompts", [])
+
     try:
         responses = []
         confidences = []
-        for context in contexts:
-            outputs = generate_responses(context, model, tokenizer)
+        for context, prompt in zip(contexts, prompts):
+            outputs = generate_responses(context, model, tokenizer, prompt)
             logger.info(f"outputs: {outputs}")
             for response in outputs:
                 if len(response) >= 3:

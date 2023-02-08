@@ -9,11 +9,13 @@ def test_respond():
     url = "http://0.0.0.0:8130/respond"
     contexts = [
         [
-            "Respond like a friendly chatbot",
-            "Human: Hi! I am Marcus. How are you today?",
+            "Hi! I am Marcus. How are you today?",
         ]
     ]
-    result = requests.post(url, json={"dialog_contexts": contexts}).json()
+    prompts = [
+         "Respond like a friendly chatbot",
+    ]
+    result = requests.post(url, json={"dialog_contexts": contexts, "prompts": prompts}).json()
     print(result)
     assert [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
     print("Success")

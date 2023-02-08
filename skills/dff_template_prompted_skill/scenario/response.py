@@ -28,7 +28,6 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 GENERATIVE_TIMEOUT = 4
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.5
-NAMING = {"human": "Human", "bot": "AI"}
 
 
 def compose_data_for_model(ctx, actor):
@@ -70,21 +69,21 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             json={"dialog_contexts": [request_data]},
             timeout=GENERATIVE_TIMEOUT,
         )
-        hypotheses = response.json()
+        hypotheses = response.json()[0]
     else:
         hypotheses = []
     logger.info(f"hyps: {hypotheses}")
-    if hypotheses:
-        for hyp in hypotheses:
-            confidence = DEFAULT_CONFIDENCE
-            hyp_text = " ".join(hyp[0].split())
-            if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-                hyp_text += "."
-                confidence = LOW_CONFIDENCE
-            gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+    for hyp in hypotheses:
+        confidence = DEFAULT_CONFIDENCE
+        hyp_text = " ".join(hyp.split())
+        if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
+            hyp_text += "."
+            confidence = LOW_CONFIDENCE
+        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""
+
     return int_rsp.multi_response(
         replies=curr_responses,
         confidences=curr_confidences,
