@@ -1,0 +1,97 @@
+{
+    "CEFR": "B1",
+    "situation_description": "You have just landed in Zurich. You're waiting for your luggage, but it doesn't seem to be there. You contact a baggage claim representative.",
+    "keywords": ["luggage", "baggage", "suitcase"],
+    "expected_language": [
+        "Luggage seems to be missing",
+        "Stop over",
+        "Layover",
+        "Boarding pass",
+        "Luggage receipt",
+        "Luggage check",
+        "Suitcase",
+        "Personal stuff",
+        "To say for sure",
+        "To stay for a week",
+        "Coming Friday",
+        "How long does it take to",
+        "Not my fault",
+        "Airline's responsibility",
+        "Deliver it at no cost to me"
+    ],
+    "recommendations": {
+        "grammar": ["link to grammar expercise"],
+        "vocabulary": ["link to vocabulary expercise"],
+        "pronunciation": ["link to pronunciation expercise"]
+    },
+    "utterances": [
+        {
+            "utterance": "Hello, how can I help?",
+            "info_for_user": "Explain what the problem is."
+        },
+        {
+            "Q": "What is your flight number?",
+            "P": "QR948",
+            "U": "",
+            "A": ""
+        },
+        {
+            "Q": "It's a direct flight, isn't it?",
+            "P": "You changed planes in Doha",
+            "U": "",
+            "A": ""
+        },
+        {
+            "Q": "Do you have any boarding documents you can give me?",
+            "P": "Say that you have a receipt for 2 pieces of luggage and a permit to board (name these documents)",
+            "U": "",
+            "A": ""
+        },
+        {
+            "Q": "What was in the suitcases and were there any valuables?",
+            "P": "Answer the question",
+            "U": "",
+            "A": ""
+        },
+        {
+            "Q": "How much money did you have and in what currency?",
+            "P": "Euro, give an approximate number",
+            "U": "",
+            "A": ""
+        },
+        {
+            "Q": "Where do you plan to stay and for how long?",
+            "P": "Say the name of the hotel and say that you are leaving on Friday (this week)",
+            "U": "",
+            "A": ""
+        },
+        {
+            "Q": "How can we contact you when the luggage is found?",
+            "P": "Give a representative you phone number and email address",
+            "U": "",
+            "A": ""
+        },
+        {
+            "Q": "",
+            "P": "Ask about average time for finding luggage",
+            "U": "",
+            "A": "It takes on average around 2 to 4 days"
+        },
+        {
+            "Q": "",
+            "P": "Ask about delivery of your luggage",
+            "U": "",
+            "A": "We can deliver your luggage but there will be a delivery fee of about 50 euros"
+        },
+        {
+            "Q": "",
+            "P": "Refuse to pay and give reasons for this. Ask for free delivery of your luggage",
+            "U": "",
+            "A": "You are right, but it depends on whether the luggage was misplaced by the airport service or delayed by the airline. We will call you as soon as your luggage is found and see what we can do! Anything else I can help with?"
+        },
+        {
+            "utterance": "Well, thank you.",
+            "info_for_user": ""
+        }
+    ]
+}

@@ -46,6 +46,7 @@ def example_response(reply: str):
 def intro_response():
     def intro_response_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         if not ctx.validation:
+            dialog_script_name = None
             processed_node = ctx.last_request
             for name, dialog in scenarios.items():
                 keywords = dialog["keywords"]
@@ -89,9 +90,13 @@ def follow_scenario_response():
             processed_node = ctx.last_request
             shared_memory = int_ctx.get_shared_memory(ctx, actor)
             dialog_script_name = shared_memory.get("dialog_script_name", None)
+            if dialog_script_name == None:
+                return "We can role play some discussions on different topics."
+
             dialog_step_id = shared_memory.get("dialog_step_id", 0)
             dialog = scenarios[dialog_script_name]
             used_nodes_ids = shared_memory.get("used_nodes_ids", {})
+
             if dialog_script_name not in used_nodes_ids.keys():
                 used_nodes_ids[dialog_script_name] = []
 

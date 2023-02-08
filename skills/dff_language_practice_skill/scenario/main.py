@@ -74,7 +74,7 @@ flows = {
                 "repeat": cnd.regexp(r"\brepeat\b", re.IGNORECASE),
                 "is_known_question": cnd.all([int_cnd.is_question, loc_cnd.is_known_question()]),
                 "not_known_question": int_cnd.is_question,
-                "acknowledgement": cnd.true(),
+                "acknowledgement": loc_cnd.is_acknowledgement(),
             },
         },
         "acknowledgement": {

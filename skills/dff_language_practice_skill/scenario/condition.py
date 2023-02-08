@@ -85,3 +85,19 @@ def is_known_question():
         return False
 
     return is_known_question_handler
+
+
+def is_acknowledgement():
+    def is_acknowledgement_handler(ctx: Context, actor: Actor, *args, **kwargs):
+        if not ctx.validation:
+            human_utterances = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]
+            state = human_utterances["attributes"]["dff_language_practice_skill_state"]
+            responses = state["context"]["responses"]
+            prev_index = list(responses.keys())[-2]
+            prev_reply = responses[prev_index]
+            if prev_reply != "We can role play some discussions on different topics.":
+                return True
+
+        return False
+
+    return is_acknowledgement_handler

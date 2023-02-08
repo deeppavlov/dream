@@ -992,6 +992,10 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def language_mistakes_tracker_formatter(dialog: Dict):
+    # import json
+    # json_object = json.dumps(dialog, indent=4)
+    # with open("sample.json", "w") as outfile:
+    #     outfile.write(json_object)
     return [{"dialog": dialog}]
 
 
@@ -1043,9 +1047,4 @@ def gector_formatter(dialog: Dict, model_args_names=("raw_input",)):
         "instance_info": {"subject": "eng"},
     }
     response = [{"input_data": [data]}]
-    import json
-
-    json_object = json.dumps(response, indent=4)
-    with open("sample_gector.json", "w") as outfile:
-        outfile.write(json_object)
     return [{"input_data": [data]}]
