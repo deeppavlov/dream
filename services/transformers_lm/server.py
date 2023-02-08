@@ -40,9 +40,9 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
     s = len(context) % 2
     context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
     if continue_last_uttr:
-        dialog_context = "\n".join(context)
+        dialog_context += "\n".join(context)
     else:
-        dialog_context = "\n".join(context) + f"\n{NAMING[0]}:"
+        dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
 
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
