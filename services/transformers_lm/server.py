@@ -75,7 +75,7 @@ try:
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
     example_response = generate_responses(
-        ["Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "],
+        ["What is the goal of SpaceX?"],
         model,
         tokenizer,
         "You are a SpaceX Assistant."
