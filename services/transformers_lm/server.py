@@ -38,7 +38,7 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [f'{NAMING[(s + uttr_id) % 2]}: {uttr}' for uttr_id, uttr in enumerate(context)]
+    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
     if continue_last_uttr:
         dialog_context = "\n".join(context)
     else:
@@ -75,10 +75,7 @@ try:
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"],
-        model,
-        tokenizer,
-        "You are a SpaceX Assistant."
+        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant."
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")

@@ -11,16 +11,13 @@ def test_respond():
         [
             "Hi! I am Marcus. How are you today?",
             "Hi Marcus! I am fine. How are you?",
-            "I am great. What are your plans for today?"
+            "I am great. What are your plans for today?",
         ],
-        [
-            "Hi Marcus! I am fine. How are you?",
-            "I am great. What are your plans for today?"
-        ]
+        ["Hi Marcus! I am fine. How are you?", "I am great. What are your plans for today?"],
     ]
     prompts = [
-         "Respond like a friendly chatbot",
-         "Respond like a friendly chatbot",
+        "Respond like a friendly chatbot",
+        "Respond like a friendly chatbot",
     ]
     result = requests.post(url, json={"dialog_contexts": contexts, "prompts": prompts}).json()
     print(result)
