@@ -33,8 +33,6 @@ for filename in os.listdir("data"):
         not_user_questions = [(i, x["Q"]) for i, x in enumerate(utts) if x["Q"] != ""]
         bot_questions[filename.replace(".json", "")] = not_user_questions
 
-used_nodes_ids = {}
-
 acknowledgements = GENERAL_ACKNOWLEDGEMENTS["EN"]["positive"] + GENERAL_ACKNOWLEDGEMENTS["EN"]["neutral"]
 
 
@@ -91,6 +89,7 @@ def follow_scenario_response():
             dialog_script_name = shared_memory.get("dialog_script_name", None)
             dialog_step_id = shared_memory.get("dialog_step_id", 0)
             dialog = scenarios[dialog_script_name]
+            used_nodes_ids = shared_memory.get("used_nodes_ids", {})
             if dialog_script_name not in used_nodes_ids.keys():
                 used_nodes_ids[dialog_script_name] = []
 
@@ -102,6 +101,7 @@ def follow_scenario_response():
                 if i not in used_nodes_ids[dialog_script_name]:
                     used_nodes_ids[dialog_script_name].append(i)
                     int_ctx.save_to_shared_memory(ctx, actor, dialog_step_id=i)
+                    int_ctx.save_to_shared_memory(ctx, actor, used_nodes_ids=used_nodes_ids)
                     return dialog["utterances"][1:-1][i]["Q"]
 
             int_ctx.save_to_shared_memory(ctx, actor, dialog_step_id=-1)
