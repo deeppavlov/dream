@@ -565,6 +565,7 @@ services:
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
+        FAST: 1
       context: ./
       dockerfile: annotators/wiki_parser/Dockerfile
     command: flask run -h 0.0.0.0 -p 8077
@@ -605,7 +606,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
+        COMMIT: 283a25e322e8fedc6ff0c159e4ec76bb165ae405
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
