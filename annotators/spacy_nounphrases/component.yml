@@ -9,13 +9,13 @@ spacy-nounphrases:
   ram_usage: 180M
   execution_time: 1.0
   endpoints:
-    annotators:
-      port: 8006
-      endpoint: respond
-    response_annotators:
-      port: 8006
-      endpoint: respond
-    candidate_annotators:
-      port: 8006
-      endpoint: respond_batch
-  date_created: '2023-02-08T23:12:50'
+  - group: annotators
+    port: 8006
+    endpoint: respond
+  - group: response_annotators
+    port: 8006
+    endpoint: respond
+  - group: candidate_annotators
+    port: 8006
+    endpoint: respond_batch
+  date_created: '2023-02-09T15:14:06'

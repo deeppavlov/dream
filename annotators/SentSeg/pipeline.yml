@@ -1,0 +1,9 @@
+sentseg:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.5
+    url: http://sentseg:8011/sentseg
+  dialog_formatter: dp_formatters:last_utt_dialog
+  response_formatter: dp_formatters:simple_formatter_service
+  state_manager_method: add_annotation

@@ -11,13 +11,13 @@ sentence-ranker:
   gpu_usage: 2.1G
   execution_time: 1.0
   endpoints:
-    candidate_annotators:
-      port: 8128
-      endpoint: respond
+  - group: candidate_annotators
+    port: 8128
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8128
     PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
 sentence-ranker-multilingual:
   name: sentence-ranker-multilingual
   display_name: Sentence Ranker
@@ -32,10 +32,10 @@ sentence-ranker-multilingual:
   gpu_usage: 1.8G
   execution_time: 1.0
   endpoints:
-    candidate_annotators:
-      port: 8128
-      endpoint: respond
+  - group: candidate_annotators
+    port: 8128
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8128
     PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

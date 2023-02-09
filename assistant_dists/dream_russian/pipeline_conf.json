@@ -80,8 +80,8 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing",
-                    "config": "spelling-preprocessing"
+                    "directory": "annotators/spelling_preprocessing_dp/",
+                    "config": "spelling-preprocessing-ru"
                 }
             },
             "spacy_annotator": {
@@ -95,8 +95,8 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "annotators/spacy_annotator/",
+                    "config": "spacy-annotator-ru"
                 }
             },
             "sentseg": {
@@ -128,8 +128,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "config": "badlisted-words"
+                    "directory": "annotators/BadlistedWordsDetector_ru/",
+                    "config": "badlisted-words-ru"
                 }
             },
             "toxic_classification": {
@@ -146,8 +146,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "annotators/toxic_classification_ru/",
+                    "config": "toxic-classification-ru"
                 }
             },
             "intent_catcher": {
@@ -165,8 +165,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers",
-                    "config": "intent-catcher"
+                    "directory": "annotators/IntentCatcherTransformers/",
+                    "config": "intent-catcher-ru"
                 }
             },
             "ner": {
@@ -199,8 +199,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
-                    "config": "entity-detection"
+                    "directory": "annotators/entity_detection_rus/",
+                    "config": "entity-detection-ru"
                 }
             },
             "entity_linking": {
@@ -218,8 +218,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_linking",
-                    "config": "entity-linking"
+                    "directory": "annotators/entity_linking_rus/",
+                    "config": "entity-linking-ru"
                 }
             },
             "wiki_parser": {
@@ -236,8 +236,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/wiki_parser",
-                    "config": "wiki-parser"
+                    "directory": "annotators/wiki_parser/",
+                    "config": "wiki-parser-ru"
                 }
             }
         },
@@ -324,7 +324,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
+                    "directory": "annotators/BadlistedWordsDetector/",
                     "config": "badlisted-words"
                 }
             },
@@ -360,7 +360,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
+                    "directory": "annotators/entity_detection/",
                     "config": "entity-detection"
                 }
             },
@@ -419,8 +419,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill",
-                    "config": "dff-program-y-skill"
+                    "directory": "skills/dff_program_y_skill/",
+                    "config": "dff-program-y-ru-skill"
                 }
             },
             "dff_intent_responder_skill": {
@@ -437,8 +437,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill",
-                    "config": "dff-intent-responder-skill"
+                    "directory": "skills/dff_intent_responder_skill/",
+                    "config": "dff-intent-responder-ru-skill"
                 }
             },
             "dummy_skill": {
@@ -472,8 +472,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personal_info_skill",
-                    "config": "personal-info-skill"
+                    "directory": "skills/personal_info_skill/",
+                    "config": "personal-info-ru-skill"
                 }
             },
             "dff_friendship_skill": {
@@ -490,8 +490,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_friendship_skill",
-                    "config": "dff-friendship-skill"
+                    "directory": "skills/dff_friendship_skill/",
+                    "config": "dff-friendship-ru-skill"
                 }
             },
             "dff_generative_skill": {
@@ -508,8 +508,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "skills/dff_generative_skill/",
+                    "config": "dff-generative-ru-skill"
                 }
             },
             "dff_template_skill": {
@@ -526,7 +526,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_skill",
+                    "directory": "skills/dff_template_skill/",
                     "config": "dff-template-skill"
                 }
             }
@@ -546,8 +546,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "config": "convers-evaluation-selector"
+                    "directory": "response_selectors/convers_evaluation_based_selector/",
+                    "config": "convers-evaluation-selector-ru"
                 }
             }
         }

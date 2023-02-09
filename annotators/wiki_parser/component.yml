@@ -9,9 +9,9 @@ wiki-parser:
   ram_usage: 100M
   execution_time: 1.0
   endpoints:
-    annotators:
-      port: 8077
-      endpoint: model
+  - group: annotators
+    port: 8077
+    endpoint: model
   build_args:
     WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt
     WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
@@ -20,7 +20,7 @@ wiki-parser:
     PORT: 8077
     SRC_DIR: annotators/wiki_parser
     COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
 wiki-parser-ru:
   name: wiki-parser-ru
   display_name: Wiki Parser
@@ -32,9 +32,9 @@ wiki-parser-ru:
   ram_usage: 100M
   execution_time: 1.0
   endpoints:
-    annotators:
-      port: 8077
-      endpoint: model
+  - group: annotators
+    port: 8077
+    endpoint: model
   build_args:
     WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt
     WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1
@@ -44,4 +44,4 @@ wiki-parser-ru:
     SRC_DIR: annotators/wiki_parser
     COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
     LANGUAGE: RU
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

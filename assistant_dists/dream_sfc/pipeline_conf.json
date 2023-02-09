@@ -97,7 +97,7 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing",
+                    "directory": "annotators/spelling_preprocessing/",
                     "config": "spelling-preprocessing"
                 }
             },
@@ -129,7 +129,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases",
+                    "directory": "annotators/spacy_nounphrases/",
                     "config": "spacy-nounphrases"
                 }
             },
@@ -149,7 +149,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/COMeT",
+                    "directory": "annotators/COMeT/",
                     "config": "comet-conceptnet"
                 }
             },
@@ -167,7 +167,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
+                    "directory": "annotators/BadlistedWordsDetector/",
                     "config": "badlisted-words"
                 }
             },
@@ -182,7 +182,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/asr",
+                    "directory": "annotators/asr/",
                     "config": "asr"
                 }
             },
@@ -201,7 +201,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers",
+                    "directory": "annotators/IntentCatcherTransformers/",
                     "config": "intent-catcher"
                 }
             },
@@ -221,7 +221,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fact_random",
+                    "directory": "annotators/fact_random/",
                     "config": "fact-random"
                 }
             },
@@ -241,7 +241,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fact_retrieval",
+                    "directory": "annotators/fact_retrieval/",
                     "config": "fact-retrieval"
                 }
             },
@@ -275,7 +275,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
+                    "directory": "annotators/entity_detection/",
                     "config": "entity-detection"
                 }
             },
@@ -293,7 +293,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/kbqa",
+                    "directory": "annotators/kbqa/",
                     "config": "kbqa"
                 }
             },
@@ -313,7 +313,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_linking",
+                    "directory": "annotators/entity_linking/",
                     "config": "entity-linking"
                 }
             },
@@ -331,7 +331,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/wiki_parser",
+                    "directory": "annotators/wiki_parser/",
                     "config": "wiki-parser"
                 }
             },
@@ -366,7 +366,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification",
+                    "directory": "annotators/combined_classification/",
                     "config": "combined-classification"
                 }
             },
@@ -385,7 +385,7 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_storer",
+                    "directory": "annotators/entity_storer/",
                     "config": "entity-storer"
                 }
             },
@@ -407,7 +407,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/news_api",
+                    "directory": "annotators/news_api/",
                     "config": "news-api-annotator"
                 }
             },
@@ -427,7 +427,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/topic_recommendation",
+                    "directory": "annotators/topic_recommendation/",
                     "config": "topic-recommendation"
                 }
             },
@@ -445,7 +445,7 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/user_persona_extractor",
+                    "directory": "annotators/user_persona_extractor/",
                     "config": "user-persona-extractor"
                 }
             },
@@ -464,7 +464,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_classifier",
+                    "directory": "annotators/speech_function_classifier/",
                     "config": "speech-function-classifier"
                 }
             },
@@ -482,7 +482,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_predictor",
+                    "directory": "annotators/speech_function_predictor/",
                     "config": "speech-function-predictor"
                 }
             }
@@ -547,7 +547,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases",
+                    "directory": "annotators/spacy_nounphrases/",
                     "config": "spacy-nounphrases"
                 }
             },
@@ -566,7 +566,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_classifier",
+                    "directory": "annotators/speech_function_classifier/",
                     "config": "speech-function-classifier"
                 }
             }
@@ -608,7 +608,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_classifier",
+                    "directory": "annotators/speech_function_classifier/",
                     "config": "speech-function-classifier"
                 }
             },
@@ -626,7 +626,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_predictor",
+                    "directory": "annotators/speech_function_predictor/",
                     "config": "speech-function-predictor"
                 }
             },
@@ -644,7 +644,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
+                    "directory": "annotators/BadlistedWordsDetector/",
                     "config": "badlisted-words"
                 }
             },
@@ -662,7 +662,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/ConversationEvaluator",
+                    "directory": "annotators/ConversationEvaluator/",
                     "config": "convers-evaluator-annotator"
                 }
             },
@@ -680,7 +680,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases",
+                    "directory": "annotators/spacy_nounphrases/",
                     "config": "spacy-nounphrases"
                 }
             },
@@ -698,7 +698,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
+                    "directory": "annotators/entity_detection/",
                     "config": "entity-detection"
                 }
             },
@@ -734,7 +734,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification",
+                    "directory": "annotators/combined_classification/",
                     "config": "combined-classification"
                 }
             }
@@ -775,7 +775,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_sport_skill",
+                    "directory": "skills/dff_sport_skill/",
                     "config": "dff-sport-skill"
                 }
             },
@@ -793,7 +793,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/eliza",
+                    "directory": "skills/eliza/",
                     "config": "eliza"
                 }
             },
@@ -811,7 +811,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill",
+                    "directory": "skills/dff_program_y_skill/",
                     "config": "dff-program-y-skill"
                 }
             },
@@ -829,7 +829,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personality_catcher",
+                    "directory": "skills/personality_catcher/",
                     "config": "personality-catcher"
                 }
             },
@@ -847,7 +847,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill",
+                    "directory": "skills/dff_intent_responder_skill/",
                     "config": "dff-intent-responder-skill"
                 }
             },
@@ -899,7 +899,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill_dialog",
+                    "directory": "skills/dummy_skill_dialog/",
                     "config": "dummy-skill-dialog"
                 }
             },
@@ -917,7 +917,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/misheard_asr",
+                    "directory": "skills/misheard_asr/",
                     "config": "misheard-asr"
                 }
             },
@@ -935,7 +935,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_dangerous_skill",
+                    "directory": "skills/dff_program_y_dangerous_skill/",
                     "config": "dff-program-y-dangerous-skill"
                 }
             },
@@ -953,7 +953,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_movie_skill",
+                    "directory": "skills/dff_movie_skill/",
                     "config": "dff-movie-skill"
                 }
             },
@@ -971,7 +971,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/emotion_skill",
+                    "directory": "skills/emotion_skill/",
                     "config": "emotion-skill"
                 }
             },
@@ -989,7 +989,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/convert_reddit",
+                    "directory": "skills/convert_reddit/",
                     "config": "convert-reddit"
                 }
             },
@@ -1007,7 +1007,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personal_info_skill",
+                    "directory": "skills/personal_info_skill/",
                     "config": "personal-info-skill"
                 }
             },
@@ -1025,7 +1025,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_coronavirus_skill",
+                    "directory": "skills/dff_coronavirus_skill/",
                     "config": "dff-coronavirus-skill"
                 }
             },
@@ -1043,7 +1043,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_weather_skill",
+                    "directory": "skills/dff_weather_skill/",
                     "config": "dff-weather-skill"
                 }
             },
@@ -1061,7 +1061,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_short_story_skill",
+                    "directory": "skills/dff_short_story_skill/",
                     "config": "dff-short-story-skill"
                 }
             },
@@ -1079,7 +1079,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/meta_script_skill",
+                    "directory": "skills/meta_script_skill/",
                     "config": "meta-script-skill"
                 }
             },
@@ -1097,7 +1097,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/small_talk_skill",
+                    "directory": "skills/small_talk_skill/",
                     "config": "small-talk-skill"
                 }
             },
@@ -1115,7 +1115,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/game_cooperative_skill",
+                    "directory": "skills/game_cooperative_skill/",
                     "config": "game-cooperative-skill"
                 }
             },
@@ -1133,7 +1133,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_wide_skill",
+                    "directory": "skills/dff_program_y_wide_skill/",
                     "config": "dff-program-y-wide-skill"
                 }
             },
@@ -1151,7 +1151,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/news_api_skill",
+                    "directory": "skills/news_api_skill/",
                     "config": "news-api-skill"
                 }
             },
@@ -1169,7 +1169,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/meta_script_skill",
+                    "directory": "skills/meta_script_skill/",
                     "config": "meta-script-skill"
                 }
             },
@@ -1187,7 +1187,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_grounding_skill",
+                    "directory": "skills/dff_grounding_skill/",
                     "config": "dff-grounding-skill"
                 }
             },
@@ -1205,7 +1205,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/factoid_qa",
+                    "directory": "skills/factoid_qa/",
                     "config": "factoid-qa"
                 }
             },
@@ -1223,7 +1223,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_animals_skill",
+                    "directory": "skills/dff_animals_skill/",
                     "config": "dff-animals-skill"
                 }
             },
@@ -1241,7 +1241,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_gaming_skill",
+                    "directory": "skills/dff_gaming_skill/",
                     "config": "dff-gaming-skill"
                 }
             },
@@ -1259,7 +1259,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_friendship_skill",
+                    "directory": "skills/dff_friendship_skill/",
                     "config": "dff-friendship-skill"
                 }
             },
@@ -1277,7 +1277,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/knowledge_grounding_skill",
+                    "directory": "skills/knowledge_grounding_skill/",
                     "config": "knowledge-grounding-skill"
                 }
             },
@@ -1295,7 +1295,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_travel_skill",
+                    "directory": "skills/dff_travel_skill/",
                     "config": "dff-travel-skill"
                 }
             },
@@ -1313,7 +1313,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_food_skill",
+                    "directory": "skills/dff_food_skill/",
                     "config": "dff-food-skill"
                 }
             },
@@ -1331,7 +1331,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_science_skill",
+                    "directory": "skills/dff_science_skill/",
                     "config": "dff-science-skill"
                 }
             },
@@ -1349,7 +1349,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_music_skill",
+                    "directory": "skills/dff_music_skill/",
                     "config": "dff-music-skill"
                 }
             },
@@ -1367,7 +1367,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_funfact_skill",
+                    "directory": "skills/dff_funfact_skill/",
                     "config": "dff-funfact-skill"
                 }
             },
@@ -1387,7 +1387,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_gossip_skill",
+                    "directory": "skills/dff_gossip_skill/",
                     "config": "dff-gossip-skill"
                 }
             },
@@ -1405,7 +1405,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_bot_persona_skill",
+                    "directory": "skills/dff_bot_persona_skill/",
                     "config": "dff-bot-persona-skill"
                 }
             },
@@ -1423,7 +1423,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_wiki_skill",
+                    "directory": "skills/dff_wiki_skill/",
                     "config": "dff-wiki-skill"
                 }
             },
@@ -1441,7 +1441,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_book_sfc_skill",
+                    "directory": "skills/dff_book_sfc_skill/",
                     "config": "dff-book-sfc-skill"
                 }
             },
@@ -1459,7 +1459,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_art_skill",
+                    "directory": "skills/dff_art_skill/",
                     "config": "dff-art-skill"
                 }
             },
@@ -1477,7 +1477,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_skill",
+                    "directory": "skills/dff_template_skill/",
                     "config": "dff-template-skill"
                 }
             }
@@ -1497,8 +1497,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "config": "convers-evaluation-selector"
+                    "directory": "response_selectors/convers_evaluation_based_selector/",
+                    "config": "scripts-priority-selector"
                 }
             }
         }

@@ -11,11 +11,11 @@ dff-short-story-skill:
   ram_usage: 90M
   execution_time: 3.0
   endpoints:
-    skills:
-      port: 8057
-      endpoint: respond
+  - group: skills
+    port: 8057
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8057
     SERVICE_NAME: dff_short_story_skill
     STORY_TYPE: generated
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

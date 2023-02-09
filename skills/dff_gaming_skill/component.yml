@@ -11,12 +11,12 @@ dff-gaming-skill:
   ram_usage: 80M
   execution_time: 2.0
   endpoints:
-    skills:
-      port: 8115
-      endpoint: respond
+  - group: skills
+    port: 8115
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8115
     SERVICE_NAME: dff_gaming_skill
     GAMES_IGDB_SEARCH_RESULTS_URL: http://files.deeppavlov.ai/alexaprize_data/games_igdb_search_results_v2.json
     GAMES_IGDB_IDS_URL: http://files.deeppavlov.ai/alexaprize_data/game_igdb_ids_v2.json
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

@@ -10,7 +10,7 @@ harvesters-maintenance-gobot-skill:
   ram_usage: 50M
   execution_time: 0.5
   endpoints:
-    skills:
-      port: 3882
-      endpoint: respond
-  date_created: '2023-02-08T23:12:50'
+  - group: skills
+    port: 3882
+    endpoint: respond
+  date_created: '2023-02-09T15:14:06'

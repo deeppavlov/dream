@@ -10,9 +10,9 @@ convers-evaluation-no-scripts-selector:
   ram_usage: 50M
   execution_time: 1.0
   endpoints:
-    response_selectors:
-      port: 8009
-      endpoint: respond
+  - group: response_selectors
+    port: 8009
+    endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
     CALL_BY_NAME_PROBABILITY: 0.5
@@ -32,7 +32,7 @@ convers-evaluation-no-scripts-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
 convers-evaluation-selector:
   name: convers-evaluation-selector
   display_name: Response Selector
@@ -45,9 +45,9 @@ convers-evaluation-selector:
   ram_usage: 50M
   execution_time: 1.0
   endpoints:
-    response_selectors:
-      port: 8009
-      endpoint: respond
+  - group: response_selectors
+    port: 8009
+    endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
     CALL_BY_NAME_PROBABILITY: 0.5
@@ -67,7 +67,7 @@ convers-evaluation-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
 convers-evaluation-selector-ru:
   name: convers-evaluation-selector-ru
   display_name: Response Selector
@@ -80,9 +80,9 @@ convers-evaluation-selector-ru:
   ram_usage: 50M
   execution_time: 1.0
   endpoints:
-    response_selectors:
-      port: 8009
-      endpoint: respond
+  - group: response_selectors
+    port: 8009
+    endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
     CALL_BY_NAME_PROBABILITY: 0.5
@@ -103,7 +103,7 @@ convers-evaluation-selector-ru:
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
     LANGUAGE: RU
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
 scripts-priority-selector:
   name: scripts-priority-selector
   display_name: Response Selector
@@ -116,9 +116,9 @@ scripts-priority-selector:
   ram_usage: 50M
   execution_time: 1.0
   endpoints:
-    response_selectors:
-      port: 8009
-      endpoint: respond
+  - group: response_selectors
+    port: 8009
+    endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
     CALL_BY_NAME_PROBABILITY: 0.5
@@ -138,4 +138,4 @@ scripts-priority-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 0
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

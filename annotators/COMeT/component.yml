@@ -10,9 +10,9 @@ comet-atomic:
   gpu_usage: 1.1G
   execution_time: 2.0
   endpoints:
-    services:
-      port: 8053
-      endpoint: respond
+  - group: services
+    port: 8053
+    endpoint: respond
   build_args:
     GRAPH: atomic
     SERVICE_HOME: ./annotators/COMeT
@@ -21,7 +21,7 @@ comet-atomic:
     PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
     PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
     DECODING_ALGO: beam-3
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
 comet-conceptnet:
   name: comet-conceptnet
   display_name: COMeT ConceptNet
@@ -34,9 +34,9 @@ comet-conceptnet:
   gpu_usage: 1.1G
   execution_time: 2.0
   endpoints:
-    annotators:
-      port: 8065
-      endpoint: comet_annotator
+  - group: annotators
+    port: 8065
+    endpoint: comet_annotator
   build_args:
     GRAPH: conceptnet
     SERVICE_HOME: ./annotators/COMeT/
@@ -45,4 +45,4 @@ comet-conceptnet:
     PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
     PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
     DECODING_ALGO: beam-3
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

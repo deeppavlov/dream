@@ -11,11 +11,11 @@ dff-generative-ru-skill:
   ram_usage: 50M
   execution_time: 4.0
   endpoints:
-    skills:
-      port: 8092
-      endpoint: respond
+  - group: skills
+    port: 8092
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8092
     SERVICE_NAME: dff_generative_skill
     LANGUAGE: RU
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

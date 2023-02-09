@@ -69,7 +69,7 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing",
+                    "directory": "annotators/spelling_preprocessing/",
                     "config": "spelling-preprocessing"
                 }
             },
@@ -101,7 +101,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
+                    "directory": "annotators/BadlistedWordsDetector/",
                     "config": "badlisted-words"
                 }
             },
@@ -119,7 +119,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/prompt_selector",
+                    "directory": "annotators/prompt_selector/",
                     "config": "prompt-selector"
                 }
             }
@@ -173,7 +173,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
+                    "directory": "annotators/BadlistedWordsDetector/",
                     "config": "badlisted-words"
                 }
             },
@@ -191,7 +191,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification",
+                    "directory": "annotators/combined_classification/",
                     "config": "combined-classification"
                 }
             },
@@ -209,7 +209,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/sentence_ranker",
+                    "directory": "services/sentence_ranker/",
                     "config": "sentence-ranker"
                 }
             }
@@ -250,7 +250,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_prompted_skill",
+                    "directory": "skills/dff_template_prompted_skill/",
                     "config": "dff-dream-persona-prompted-skill"
                 }
             },
@@ -287,8 +287,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "config": "convers-evaluation-selector"
+                    "directory": "response_selectors/convers_evaluation_based_selector/",
+                    "config": "convers-evaluation-no-scripts-selector"
                 }
             }
         }

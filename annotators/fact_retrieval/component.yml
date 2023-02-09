@@ -10,9 +10,9 @@ fact-retrieval:
   gpu_usage: 1.2G
   execution_time: 1.0
   endpoints:
-    annotators:
-      port: 8100
-      endpoint: model
+  - group: annotators
+    port: 8100
+    endpoint: model
   build_args:
     CONFIG: configs/fact_retrieval_page.json
     CONFIG_WIKI: configs/page_extractor.json
@@ -21,4 +21,4 @@ fact-retrieval:
     SRC_DIR: annotators/fact_retrieval/
     COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
     N_FACTS: 3
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

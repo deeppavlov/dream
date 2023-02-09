@@ -11,10 +11,10 @@ dff-weather-skill:
   ram_usage: 1.4G
   execution_time: 2.0
   endpoints:
-    skills:
-      port: 8037
-      endpoint: respond
+  - group: skills
+    port: 8037
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8037
     SERVICE_NAME: dff_weather_skill
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

@@ -11,15 +11,15 @@ dff-intent-responder-ru-skill:
   ram_usage: 50M
   execution_time: 2.0
   endpoints:
-    skills:
-      port: 8012
-      endpoint: respond
+  - group: skills
+    port: 8012
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8012
     SERVICE_NAME: dff_intent_responder_skill
     INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_RU.json
     LANGUAGE: RU
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
 dff-intent-responder-skill:
   name: dff-intent-responder-skill
   display_name: Custom Responses
@@ -33,11 +33,11 @@ dff-intent-responder-skill:
   ram_usage: 100M
   execution_time: 2.0
   endpoints:
-    skills:
-      port: 8012
-      endpoint: respond
+  - group: skills
+    port: 8012
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8012
     SERVICE_NAME: dff_intent_responder_skill
     INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

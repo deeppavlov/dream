@@ -45,7 +45,7 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing",
+                    "directory": "annotators/spelling_preprocessing/",
                     "config": "spelling-preprocessing"
                 }
             }
@@ -65,8 +65,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "annotators/emotion_classification_deepy/",
+                    "config": "emotion-classification-deepy"
                 }
             }
         },
@@ -84,8 +84,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "skills/harvesters_maintenance_gobot_skill_deepy/",
+                    "config": "harvesters-maintenance-gobot-skill"
                 }
             },
             "dff_program_y_skill": {
@@ -102,8 +102,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "skills/dff_program_y_skill/",
+                    "config": "dff-program-y-skill"
                 }
             }
         },
@@ -121,8 +121,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "response_selectors/rule_based_response_selector/",
+                    "config": "rule-based-response-selector"
                 }
             }
         }

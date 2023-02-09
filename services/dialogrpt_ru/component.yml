@@ -11,11 +11,11 @@ dialogrpt-ru:
   gpu_usage: 2G
   execution_time: 1.0
   endpoints:
-    candidate_annotators:
-      port: 8122
-      endpoint: respond
+  - group: candidate_annotators
+    port: 8122
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8122
     PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
     TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

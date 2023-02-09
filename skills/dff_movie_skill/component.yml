@@ -11,12 +11,12 @@ dff-movie-skill:
   ram_usage: 1.1G
   execution_time: 2.0
   endpoints:
-    skills:
-      port: 8023
-      endpoint: respond
+  - group: skills
+    port: 8023
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8023
     SERVICE_NAME: dff_movie_skill
     DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v2.json
     MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

@@ -12,8 +12,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "annotators/MultilingualToxicClassification/",
+                    "config": "toxic-classification-multilingual"
                 }
             },
             "sentiment_classification": {
@@ -27,8 +27,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "annotators/MultilingualSentimentClassification/",
+                    "config": "sentiment-classification-multilingual"
                 }
             }
         },
@@ -47,8 +47,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/sentence_ranker",
-                    "config": "sentence-ranker"
+                    "directory": "services/sentence_ranker/",
+                    "config": "sentence-ranker-multilingual"
                 }
             },
             "toxic_classification": {
@@ -65,8 +65,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "annotators/MultilingualToxicClassification/",
+                    "config": "toxic-classification-multilingual"
                 }
             },
             "sentiment_classification": {
@@ -83,8 +83,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "annotators/MultilingualSentimentClassification/",
+                    "config": "sentiment-classification-multilingual"
                 }
             }
         },
@@ -124,8 +124,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
+                    "directory": "services/gpt2_generator/",
+                    "config": "gpt2-multilingual"
                 }
             }
         },
@@ -144,7 +144,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
+                    "directory": "response_selectors/convers_evaluation_based_selector/",
                     "config": "convers-evaluation-selector"
                 }
             }

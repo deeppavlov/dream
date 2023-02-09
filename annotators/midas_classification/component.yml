@@ -10,9 +10,9 @@ midas-classification:
   gpu_usage: 4.5G
   execution_time: 1.0
   endpoints:
-    annotators:
-      port: 8090
-      endpoint: model
+  - group: annotators
+    port: 8090
+    endpoint: model
   build_args:
     CONFIG: midas_conv_bert.json
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'

@@ -10,14 +10,14 @@ toxic-classification-ru:
   gpu_usage: 3G
   execution_time: 1.0
   endpoints:
-    annotators:
-      port: 8126
-      endpoint: respond
-    candidate_annotators:
-      port: 8126
-      endpoint: respond_batch
+  - group: annotators
+    port: 8126
+    endpoint: respond
+  - group: candidate_annotators
+    port: 8126
+    endpoint: respond_batch
   build_args:
     SERVICE_PORT: 8126
     PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
     LANGUAGE: RU
-  date_created: '2023-02-08T23:12:50'
+  date_created: '2023-02-09T15:14:06'
