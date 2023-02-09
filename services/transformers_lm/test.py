@@ -1,8 +1,4 @@
-import os
 import requests
-
-
-N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
 
 
 def test_respond():
