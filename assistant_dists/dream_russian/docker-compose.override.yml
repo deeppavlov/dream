@@ -141,7 +141,7 @@ services:
       context: ./annotators/toxic_classification_ru/
       args:
         SERVICE_PORT: 8126
-        PRETRAINED_MODEL_NAME_OR_PATH: "SkolkovoInstitute/russian_toxicity_classifier"
+        PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
         LANGUAGE: RU
     command: flask run -h 0.0.0.0 -p 8126
     environment:
@@ -245,6 +245,7 @@ services:
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
         LANGUAGE: RU
+        FAST: 1
       context: ./
       dockerfile: annotators/wiki_parser/Dockerfile
     command: flask run -h 0.0.0.0 -p 8077
