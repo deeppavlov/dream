@@ -61,7 +61,10 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = containers.is_container_running(DIALOGPT_SERVICE_URL)
+    result = containers.is_container_running(
+        DIALOGPT_SERVICE_URL,
+        {"dialog_contexts": [[{"speaker": "human", "text": "hi"}]]}
+    )
     if result:
         break
     else:
