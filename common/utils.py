@@ -1322,3 +1322,23 @@ FACTS_EXTRA_WORDS = re.compile(
 def get_dialog_breakdown_annotations(annotated_utterance):
     breakdown = annotated_utterance.get("annotations", {}).get("dialog_breakdown", {}).get("breakdown", 0.0) > 0.5
     return breakdown
+
+
+def get_comet_conceptnet_annotations(annotated_utterance):
+    """
+    COMeT ConceptNet annotations look like (entity names are keys):
+    {
+        '123ss': {
+            'SymbolOf': ['space', 'time', 'justice'],
+            'HasProperty': ['number', 'one of six number', 'long'],
+            'Causes': ['death', 'death and destruction', 'war'],
+            'CausesDesire': ['go to work', 'go to play', 'sleep']
+        }
+    }
+    """
+    if "comet_conceptnet" in annotated_utterance.get("annotations", {}):
+        return annotated_utterance.get("annotations", {}).get("comet_conceptnet", {})
+    elif "conceptnet" in annotated_utterance.get("annotations", {}):
+        return annotated_utterance.get("annotations", {}).get("conceptnet", {})
+    else:
+        return {}

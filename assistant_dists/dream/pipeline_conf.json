@@ -151,7 +151,7 @@
                     "config": "rake-keywords"
                 }
             },
-            "conceptnet": {
+            "comet_conceptnet": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -1427,7 +1427,7 @@
             "dialogpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
+                    "timeout": 3.0,
                     "url": "http://dialogpt:8125/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
@@ -1480,7 +1480,7 @@
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,

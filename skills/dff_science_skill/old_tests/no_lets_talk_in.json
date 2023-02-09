@@ -155,7 +155,7 @@
                                 "Phatic"
                             ]
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",
@@ -380,7 +380,7 @@
                         "ner": [
                             []
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "pets": {
                                 "Causes": [
                                     "you get fat",

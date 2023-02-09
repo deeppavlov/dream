@@ -25,7 +25,7 @@
                             "factoid": 0.9995535016059875,
                             "conversational": 0.00044644641457125545
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "london": {
                                 "Causes": [
                                     "poverty",
@@ -556,7 +556,7 @@
                             "factoid": 0.23766659200191498,
                             "conversational": 0.7623334527015686
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "cold weather": {
                                 "Causes": [
                                     "frostbite",

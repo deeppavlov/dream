@@ -15,10 +15,6 @@ flows = {
     "generation": {
         "start_node": {
             RESPONSE: "",
-            TRANSITIONS: {"greeting": cnd.true()},
-        },
-        "greeting": {
-            RESPONSE: loc_rsp.generative_response,
             TRANSITIONS: {"generative_response_node": cnd.true()},
         },
         "generative_response_node": {

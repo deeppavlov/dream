@@ -3,12 +3,12 @@
         "sentseg": {
             "protocol": "http",
             "timeout": 1.5,
-            "url": "http://sentseg:8011/sentseg"
+            "url": "http://sentseg-ru:8011/sentseg"
         },
         "ner": {
             "protocol": "http",
             "timeout": 1.5,
-            "url": "http://ner:8021/ner"
+            "url": "http://ner-ru:8021/ner"
         }
     },
     "services": {
@@ -73,7 +73,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://spelling-preprocessing:8074/respond"
+                    "url": "http://spelling-preprocessing-ru:8074/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -88,7 +88,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://spacy-annotator:8125/respond"
+                    "url": "http://spacy-annotator-ru:8129/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -117,7 +117,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words"
+                    "url": "http://badlisted-words-ru:8018/badlisted_words"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_and_tokenized_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -136,7 +136,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://toxic-classification:8126/respond"
+                    "url": "http://toxic-classification-ru:8126/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -154,7 +154,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://intent-catcher:8014/detect"
+                    "url": "http://intent-catcher-ru:8014/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -188,7 +188,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://entity-detection:8103/respond"
+                    "url": "http://entity-detection-ru:8103/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -207,7 +207,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://entity-linking:8075/model"
+                    "url": "http://entity-linking-ru:8075/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -226,7 +226,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://wiki-parser:8077/model"
+                    "url": "http://wiki-parser-ru:8077/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -409,7 +409,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-program-y-skill:8008/respond"
+                    "url": "http://dff-program-y-ru-skill:8008/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -427,7 +427,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-intent-responder-skill:8012/respond"
+                    "url": "http://dff-intent-responder-ru-skill:8012/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -462,7 +462,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://personal-info-skill:8030/respond"
+                    "url": "http://personal-info-ru-skill:8030/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -480,7 +480,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-friendship-skill:8086/respond"
+                    "url": "http://dff-friendship-ru-skill:8086/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_friendship_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -498,7 +498,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.0,
-                    "url": "http://dff-generative-skill:8092/respond"
+                    "url": "http://dff-generative-ru-skill:8092/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_generative_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -532,11 +532,11 @@
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://convers-evaluation-selector-ru:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",

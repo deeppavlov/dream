@@ -44,7 +44,7 @@ services:
           memory: 1.5G
 
   convers-evaluation-selector:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -73,9 +73,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   dff-intent-responder-skill:
     env_file: [ .env ]

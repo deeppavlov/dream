@@ -55,7 +55,7 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "coronavirus": {
                                 "Causes": [
                                     "death",

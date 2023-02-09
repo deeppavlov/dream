@@ -50,7 +50,7 @@
                             "factoid": 0.9995551705360413,
                             "conversational": 0.0004448493418749422
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "coronavirus": {
                                 "Causes": [
                                     "death",
