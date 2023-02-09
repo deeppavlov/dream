@@ -8,7 +8,7 @@ import common.dff.integration.context as int_ctx
 logger = logging.getLogger(__name__)
 
 
-def intent_catcher_exists_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+def command_selector_exists_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if ctx.validation:
         return False
 

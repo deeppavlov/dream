@@ -19,13 +19,13 @@ flows = {
     },
     GLOBAL: {
         TRANSITIONS: {
-            ("context_driven_response", "intent_catcher"): loc_cnd.intent_catcher_exists_condition,
+            ("context_driven_response", "command_selector"): loc_cnd.command_selector_exists_condition,
             ("simple", "default"): cnd.true(),
         },
     },
     "context_driven_response": {
-        "intent_catcher": {
-            RESPONSE: rsp.intent_catcher_response,
+        "command_selector": {
+            RESPONSE: rsp.command_selector_response,
             PROCESSING: {"set_confidence": rsp.set_confidence_from_input},
         },
     },

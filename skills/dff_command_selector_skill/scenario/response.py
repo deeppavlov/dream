@@ -3,14 +3,14 @@ from copy import deepcopy
 
 import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
-from common.utils import high_priority_intents
+from common.utils import command_intents
 from df_engine.core import Actor, Context
 
 
 logger = logging.getLogger(__name__)
 
 
-def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
     intention, confidence = get_detected_intents(annotated_utterance)
     logger.info(f"Detected intents: {intention}")
@@ -58,7 +58,7 @@ def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
     intent, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
-    if intent in high_priority_intents["dff_command_selector_skill"]:
+    if intent in command_intents:
         int_ctx.set_confidence(ctx, actor, 1.0)
     else:
         int_ctx.set_confidence(ctx, actor, confidence)
