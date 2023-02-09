@@ -19,8 +19,6 @@ PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
 HALF_PRECISION = bool(os.environ.get("HALF_PRECISION", 0))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
-DEFAULT_CONFIDENCE = 0.9
-ZERO_CONFIDENCE = 0.0
 NAMING = ["AI", "Human"]
 
 with open(CONFIG_NAME, "r") as f:
@@ -95,7 +93,6 @@ def respond():
 
     try:
         responses = []
-        confidences = []
         for context, prompt in zip(contexts, prompts):
             outputs = generate_responses(context, model, tokenizer, prompt)
             logger.info(f"outputs: {outputs}")
@@ -103,17 +100,14 @@ def respond():
                 if len(response) >= 3:
                     # drop too short responses
                     responses += [response]
-                    confidences += [DEFAULT_CONFIDENCE]
                 else:
                     responses += [""]
-                    confidences += [ZERO_CONFIDENCE]
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
-        confidences = [[ZERO_CONFIDENCE]] * len(contexts)
 
     total_time = time.time() - st_time
     logger.info(f"transformers_lm exec time: {total_time:.3f}s")
-    return jsonify(list(zip(responses, confidences)))
+    return jsonify(responses)
