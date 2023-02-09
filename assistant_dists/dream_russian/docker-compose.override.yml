@@ -8,7 +8,7 @@ services:
           spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, dff-generative-skill:8092,
           dff-friendship-skill:8086, entity-detection:8103, dialogpt:8091,
           dff-template-skill:8120, spacy-annotator:8125, dialogrpt:8122, toxic-classification:8126"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-600}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
@@ -141,7 +141,7 @@ services:
       context: ./annotators/toxic_classification_ru/
       args:
         SERVICE_PORT: 8126
-        PRETRAINED_MODEL_NAME_OR_PATH: "SkolkovoInstitute/russian_toxicity_classifier"
+        PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
         LANGUAGE: RU
     command: flask run -h 0.0.0.0 -p 8126
     environment:
@@ -245,6 +245,7 @@ services:
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
         LANGUAGE: RU
+        FAST: 1
       context: ./
       dockerfile: annotators/wiki_parser/Dockerfile
     command: flask run -h 0.0.0.0 -p 8077
@@ -328,6 +329,7 @@ services:
         SERVICE_PORT: 8091
         PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
         LANGUAGE: RU
+        MAX_HISTORY_DEPTH: 3
     command: flask run -h 0.0.0.0 -p 8091
     environment:
       - CUDA_VISIBLE_DEVICES=0

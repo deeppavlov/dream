@@ -9,7 +9,7 @@ def main():
         {"x_init": ["How old is Donald Trump?"], "entities": [["Donald Trump"]], "entity_tags": [[["per", 1.0]]]},
     ]
 
-    gold_answers = ["Donald Trump is 45th and current president of the United States.", "Donald Trump is 75 years old."]
+    gold_answers = ["Donald Trump is 45th president of the United States (2017–2021).", "Donald Trump is 77 years old."]
     count = 0
     for data, gold_ans in zip(request_data, gold_answers):
         result = requests.post(url, json=data).json()
