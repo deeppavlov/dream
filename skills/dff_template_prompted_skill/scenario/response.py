@@ -69,7 +69,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = response.json()[0]
     else:
         hypotheses = []
-    logger.info(f"hyps: {hypotheses}")
+    logger.info(f"generated hypotheses: {hypotheses}")
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
         hyp_text = " ".join(hyp.split())

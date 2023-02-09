@@ -96,9 +96,8 @@ def respond():
         for context, prompt in zip(contexts, prompts):
             curr_responses = []
             outputs = generate_responses(context, model, tokenizer, prompt)
-            logger.info(f"outputs: {outputs}")
             for response in outputs:
-                if len(response) >= 3:
+                if len(response) >= 2:
                     curr_responses += [response]
                 else:
                     curr_responses += [""]
@@ -109,6 +108,7 @@ def respond():
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
 
+    logger.info(f"transformers_lm output: {responses}")
     total_time = time.time() - st_time
     logger.info(f"transformers_lm exec time: {total_time:.3f}s")
     return jsonify(responses)
