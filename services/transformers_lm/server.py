@@ -90,6 +90,8 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
+    if len(contexts) > 0 and len(prompts) == 0:
+        prompts = [""] * len(contexts)
 
     try:
         responses = []
