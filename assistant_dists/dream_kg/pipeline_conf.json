@@ -336,7 +336,8 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.property_extraction"
+                    "annotators.property_extraction",
+                    "annotators.custom_entity_linking"
                 ]
             },
             "wiki_parser": {
