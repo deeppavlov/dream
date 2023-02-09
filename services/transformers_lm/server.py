@@ -57,8 +57,8 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
-        logger.info(f"full output: {[output]}")
         result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
+        logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
     return outputs
 
@@ -94,14 +94,15 @@ def respond():
     try:
         responses = []
         for context, prompt in zip(contexts, prompts):
+            curr_responses = []
             outputs = generate_responses(context, model, tokenizer, prompt)
             logger.info(f"outputs: {outputs}")
             for response in outputs:
                 if len(response) >= 3:
-                    # drop too short responses
-                    responses += [response]
+                    curr_responses += [response]
                 else:
-                    responses += [""]
+                    curr_responses += [""]
+            responses += [curr_responses]
 
     except Exception as exc:
         logger.exception(exc)
