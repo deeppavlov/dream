@@ -62,8 +62,7 @@ def handler(requested_data, random_seed=None):
 
 while True:
     result = containers.is_container_running(
-        GENERATIVE_SERVICE_URL,
-        {"dialog_contexts": [["hi!"]], "prompts": ["Respond like a friendly chatbot."]}
+        GENERATIVE_SERVICE_URL, {"dialog_contexts": [["hi!"]], "prompts": ["Respond like a friendly chatbot."]}
     )
     if result:
         break
