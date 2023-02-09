@@ -1,0 +1,22 @@
+sentseg-ru:
+  name: sentseg-ru
+  display_name: Sentence Segmentation
+  container_name: sentseg-ru
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: recovers punctuation using ruBert-based (pyTorch) model and splits
+    into sentences
+  ram_usage: 2.4G
+  gpu_usage: 4.9G
+  execution_time: 1.5
+  endpoints:
+    annotators:
+      port: 8011
+      endpoint: respond
+    response_annotators:
+      port: 8011
+      endpoint: respond
+  build_args:
+    CONFIG: sentseg_ru_bert_torch.json
+  date_created: '2023-02-08T23:12:50'

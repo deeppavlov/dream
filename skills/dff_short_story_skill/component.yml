@@ -1,0 +1,21 @@
+dff-short-story-skill:
+  name: dff-short-story-skill
+  display_name: Short Story Skill
+  container_name: dff-short-story-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: 'tells user short stories from 3 categories: (1) bedtime stories, such
+    as fables and moral stories, (2) horror stories, and (3) funny ones'
+  ram_usage: 90M
+  execution_time: 3.0
+  endpoints:
+    skills:
+      port: 8057
+      endpoint: respond
+  build_args:
+    SERVICE_PORT: 8057
+    SERVICE_NAME: dff_short_story_skill
+    STORY_TYPE: generated
+  date_created: '2023-02-08T23:12:50'

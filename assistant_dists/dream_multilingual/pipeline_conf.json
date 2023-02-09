@@ -2,11 +2,6 @@
     "services": {
         "annotators": {
             "toxic_classification": {
-                "is_enabled": true,
-                "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -14,14 +9,14 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
-            },
-            "sentiment_classification": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            },
+            "sentiment_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -29,16 +24,16 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
-            }
-        },
-        "candidate_annotators": {
-            "sentence_ranker": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "candidate_annotators": {
+            "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -49,14 +44,14 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "toxic_classification": {
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "services/sentence_ranker",
+                    "config": "sentence-ranker"
+                }
+            },
+            "toxic_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -67,14 +62,14 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "sentiment_classification": {
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            },
+            "sentiment_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -85,16 +80,16 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            }
-        },
-        "skill_selectors": {
-            "rule_based_selector": {
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "skill_selectors": {
+            "rule_based_selector": {
                 "connector": {
                     "protocol": "python",
                     "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
@@ -106,16 +101,16 @@
                 ],
                 "tags": [
                     "selector"
-                ]
-            }
-        },
-        "skills": {
-            "gpt2_generator": {
+                ],
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "skills": {
+            "gpt2_generator": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
@@ -126,16 +121,16 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
-            }
-        },
-        "response_selectors": {
-            "convers_evaluation_selector": {
+                "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "response_selectors": {
+            "convers_evaluation_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -146,7 +141,12 @@
                 "previous_services": [
                     "candidate_annotators"
                 ],
-                "state_manager_method": "add_bot_utterance"
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "directory": "response_selectors/convers_evaluation_based_selector",
+                    "config": "convers-evaluation-selector"
+                }
             }
         }
     },

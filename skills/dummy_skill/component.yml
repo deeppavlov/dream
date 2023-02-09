@@ -1,0 +1,16 @@
+agent:
+  name: agent
+  display_name: Dummy Skill
+  container_name: agent
+  component_type: Fallback
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: a fallback skill with multiple non-toxic candidate responses
+  ram_usage: 100M
+  execution_time: 0.1
+  endpoints:
+    skills:
+      port: 4242
+      endpoint: respond
+  date_created: '2023-02-08T23:12:50'

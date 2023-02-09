@@ -1,0 +1,23 @@
+combined-classification:
+  name: combined-classification
+  display_name: Combined Classification
+  container_name: combined-classification
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: BERT-based model including topic classification, dialog acts classification,
+    sentiment, toxicity, emotion, factoid classification
+  ram_usage: 1.5G
+  gpu_usage: 3.5G
+  execution_time: 2.0
+  endpoints:
+    annotators:
+      port: 8087
+      endpoint: model
+    candidate_annotators:
+      port: 8087
+      endpoint: batch_model
+  build_args:
+    CONFIG: combined_classifier.json
+    PORT: 8087
+  date_created: '2023-02-08T23:12:50'

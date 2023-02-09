@@ -8,11 +8,6 @@
     },
     "services": {
         "last_chance_service": {
-            "is_enabled": true,
-            "source": {
-                "directory": "/services/something",
-                "config": "something_name"
-            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -30,14 +25,14 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "last_chance"
-            ]
-        },
-        "timeout_service": {
+            ],
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
                 "config": "something_name"
-            },
+            }
+        },
+        "timeout_service": {
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -55,15 +50,15 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "timeout"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            }
         },
         "annotators": {
             "spelling_preprocessing": {
-                "is_enabled": true,
-                "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -71,28 +66,28 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
-            },
-            "sentseg": {
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "annotators/spelling_preprocessing",
+                    "config": "spelling-preprocessing"
+                }
+            },
+            "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
-                "state_manager_method": "add_annotation"
-            },
-            "badlisted_words": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            },
+            "badlisted_words": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -103,14 +98,14 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
-                "state_manager_method": "add_annotation"
-            },
-            "intent_catcher": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "annotators/BadlistedWordsDetector",
+                    "config": "badlisted-words"
+                }
+            },
+            "intent_catcher": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -122,14 +117,14 @@
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
-                "state_manager_method": "add_annotation"
-            },
-            "relative_persona_extractor": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "annotators/IntentCatcherTransformers",
+                    "config": "intent-catcher"
+                }
+            },
+            "relative_persona_extractor": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -140,14 +135,14 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
-                "state_manager_method": "add_annotation"
-            },
-            "midas_classification": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "annotators/relative_persona_extractor",
+                    "config": "relative-persona-extractor"
+                }
+            },
+            "midas_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -159,31 +154,31 @@
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/midas_classification",
+                    "config": "midas-classification"
+                }
             }
         },
         "response_annotators": {
             "sentseg": {
-                "is_enabled": true,
-                "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "response_annotator_selectors"
                 ],
-                "state_manager_method": "add_annotation_prev_bot_utt"
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                }
             }
         },
         "response_annotator_selectors": {
-            "is_enabled": true,
-            "source": {
-                "directory": "/services/something",
-                "config": "something_name"
-            },
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
@@ -194,15 +189,15 @@
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
             "tags": [
                 "selector"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            }
         },
         "candidate_annotators": {
             "badlisted_words": {
-                "is_enabled": true,
-                "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -213,14 +208,14 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "sentence_ranker": {
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "annotators/BadlistedWordsDetector",
+                    "config": "badlisted-words"
+                }
+            },
+            "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -231,16 +226,16 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "services/sentence_ranker",
+                    "config": "sentence-ranker"
+                }
             }
         },
         "skill_selectors": {
             "rule_based_selector": {
-                "is_enabled": true,
-                "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
                 "connector": {
                     "protocol": "python",
                     "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
@@ -252,16 +247,16 @@
                 ],
                 "tags": [
                     "selector"
-                ]
-            }
-        },
-        "skills": {
-            "dff_intent_responder_skill": {
+                ],
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "skills": {
+            "dff_intent_responder_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -272,14 +267,14 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "dummy_skill": {
+                "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "skills/dff_intent_responder_skill",
+                    "config": "dff-intent-responder-skill"
+                }
+            },
+            "dummy_skill": {
                 "connector": {
                     "protocol": "python",
                     "class_name": "skills.dummy_skill.connector:DummySkillConnector"
@@ -289,14 +284,14 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "dialogpt": {
+                "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            },
+            "dialogpt": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 3.0,
@@ -307,14 +302,14 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "seq2seq_persona_based": {
+                "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "services/dialogpt",
+                    "config": "dialogpt"
+                }
+            },
+            "seq2seq_persona_based": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 3.0,
@@ -325,16 +320,16 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "services/seq2seq_persona_based",
+                    "config": "seq2seq-persona-based"
+                }
             }
         },
         "response_selectors": {
             "convers_evaluation_selector": {
-                "is_enabled": true,
-                "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -345,7 +340,12 @@
                 "previous_services": [
                     "candidate_annotators"
                 ],
-                "state_manager_method": "add_bot_utterance"
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "directory": "response_selectors/convers_evaluation_based_selector",
+                    "config": "convers-evaluation-selector"
+                }
             }
         }
     },

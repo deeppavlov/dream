@@ -1,0 +1,27 @@
+entity-detection:
+  name: entity-detection
+  display_name: Entity Detection
+  container_name: entity-detection
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: extracts entities and their types from utterances
+  ram_usage: 1.5G
+  gpu_usage: 3.2G
+  execution_time: 2.0
+  endpoints:
+    annotators:
+      port: 8103
+      endpoint: respond
+    candidate_annotators:
+      port: 8103
+      endpoint: respond_batch
+  build_args:
+    SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
+    EL_TAG_CONFIG: src/el_tags_infer.json
+    CONFIG: entity_detection_eng.json
+    LOWERCASE: 1
+    PORT: 8103
+    SRC_DIR: annotators/entity_detection/
+    FINEGRAINED: 0
+  date_created: '2023-02-08T23:12:50'

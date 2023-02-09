@@ -1,0 +1,19 @@
+dff-template-skill:
+  name: dff-template-skill
+  display_name: Template Skill
+  container_name: dff-template-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: DFF-based skill that provides an example of DFF usage
+  ram_usage: 50M
+  execution_time: 2.0
+  endpoints:
+    skills:
+      port: 8120
+      endpoint: respond
+  build_args:
+    SERVICE_PORT: 8120
+    SERVICE_NAME: dff_template_skill
+  date_created: '2023-02-08T23:12:50'

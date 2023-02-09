@@ -1,0 +1,12 @@
+midas-classification:
+  annotators:
+    connector:
+      protocol: http
+      timeout: 1.0
+      url: http://midas-classification:8090/model
+    dialog_formatter: state_formatters.dp_formatters:utt_sentseg_punct_dialog
+    response_formatter: state_formatters.dp_formatters:simple_formatter_service
+    previous_services:
+    - annotators.spelling_preprocessing
+    - annotators.sentseg
+    state_manager_method: add_annotation

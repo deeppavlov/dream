@@ -1,0 +1,41 @@
+intent-catcher:
+  name: intent-catcher
+  display_name: Intent Catcher
+  container_name: intent-catcher
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: classifies user utterances into a number of predefined intents which
+    are trained on a set of phrases and regexps
+  ram_usage: 1.7G
+  gpu_usage: 2.4G
+  execution_time: 1.0
+  endpoints:
+    annotators:
+      port: 8014
+      endpoint: detect
+  build_args:
+    SERVICE_PORT: 8014
+    CONFIG_NAME: intents_model_dp_config.json
+    INTENT_PHRASES_PATH: intent_phrases.json
+  date_created: '2023-02-08T23:12:50'
+intent-catcher-ru:
+  name: intent-catcher-ru
+  display_name: Intent Catcher
+  container_name: intent-catcher-ru
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: classifies user utterances into a number of predefined intents which
+    are trained on a set of phrases and regexps
+  ram_usage: 900M
+  execution_time: 1.0
+  endpoints:
+    annotators:
+      port: 8014
+      endpoint: detect
+  build_args:
+    SERVICE_PORT: 8014
+    CONFIG_NAME: intents_model_dp_config_RU.json
+    INTENT_PHRASES_PATH: intent_phrases_RU.json
+  date_created: '2023-02-08T23:12:50'

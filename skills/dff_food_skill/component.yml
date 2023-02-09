@@ -1,0 +1,19 @@
+dff-food-skill:
+  name: dff-food-skill
+  display_name: Food Skill
+  container_name: dff-food-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: constructed with DFF to encourage food-related conversation
+  ram_usage: 150M
+  execution_time: 2.0
+  endpoints:
+    skills:
+      port: 8097
+      endpoint: respond
+  build_args:
+    SERVICE_PORT: 8097
+    SERVICE_NAME: dff_food_skill
+  date_created: '2023-02-08T23:12:50'

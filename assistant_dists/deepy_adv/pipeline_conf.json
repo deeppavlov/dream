@@ -2,11 +2,6 @@
     "connectors": {},
     "services": {
         "last_chance_service": {
-            "is_enabled": true,
-            "source": {
-                "directory": "/services/something",
-                "config": "something_name"
-            },
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -15,14 +10,14 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "last_chance"
-            ]
-        },
-        "timeout_service": {
+            ],
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
                 "config": "something_name"
-            },
+            }
+        },
+        "timeout_service": {
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
@@ -31,15 +26,15 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "timeout"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "/services/something",
+                "config": "something_name"
+            }
         },
         "annotators": {
             "spelling_preprocessing": {
-                "is_enabled": true,
-                "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -47,42 +42,42 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
-            },
-            "entity_linking": {
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "config": "something_name"
-                },
+                    "directory": "annotators/spelling_preprocessing",
+                    "config": "spelling-preprocessing"
+                }
+            },
+            "entity_linking": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://entity_linking:3556/model"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:entity_linking_formatter",
-                "state_manager_method": "add_annotation"
-            },
-            "sentseg": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            },
+            "sentseg": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://sentseg:3558/sentseg"
                 },
                 "dialog_formatter": "dp_formatters:last_utt_dialog",
                 "response_formatter": "dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
-            },
-            "intent_catcher": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            },
+            "intent_catcher": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -94,16 +89,16 @@
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
-                "state_manager_method": "add_annotation"
-            }
-        },
-        "response_annotators": {
-            "emotion_classification": {
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "response_annotators": {
+            "emotion_classification": {
                 "connector": {
                     "protocol": "python",
                     "url": "http://emotion_classification:3554/model",
@@ -114,16 +109,16 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            }
-        },
-        "skills": {
-            "harvesters_maintenance_gobot_skill": {
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "skills": {
+            "harvesters_maintenance_gobot_skill": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://harvesters_maintenance_gobot_skill:3552/respond"
@@ -133,14 +128,14 @@
                 "previous_services": [
                     "annotators"
                 ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "dff_program_y_skill": {
+                "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            },
+            "dff_program_y_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
@@ -151,16 +146,16 @@
                 "previous_services": [
                     "annotators"
                 ],
-                "state_manager_method": "add_hypothesis"
-            }
-        },
-        "response_selectors": {
-            "rule_based_response_selector": {
+                "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
                     "config": "something_name"
-                },
+                }
+            }
+        },
+        "response_selectors": {
+            "rule_based_response_selector": {
                 "connector": {
                     "protocol": "http",
                     "url": "http://rule_based_response_selector:3553/respond"
@@ -170,7 +165,12 @@
                 "previous_services": [
                     "response_annotators"
                 ],
-                "state_manager_method": "add_bot_utterance"
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "directory": "/services/something",
+                    "config": "something_name"
+                }
             }
         }
     },

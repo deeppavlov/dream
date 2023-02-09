@@ -1,0 +1,41 @@
+sentence-ranker:
+  name: sentence-ranker
+  display_name: Sentence Ranker
+  container_name: sentence-ranker
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: ranking model given as `PRETRAINED_MODEL_NAME_OR_PATH` which for a
+    pair os sentences returns a float score of correspondence
+  ram_usage: 1.2G
+  gpu_usage: 2.1G
+  execution_time: 1.0
+  endpoints:
+    candidate_annotators:
+      port: 8128
+      endpoint: respond
+  build_args:
+    SERVICE_PORT: 8128
+    PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+  date_created: '2023-02-08T23:12:50'
+sentence-ranker-multilingual:
+  name: sentence-ranker-multilingual
+  display_name: Sentence Ranker
+  container_name: sentence-ranker-multilingual
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: for a pair of sentences predicts a floating point value. For multilingual
+    version, return cosine similarity between embeddings from multilingual sentence
+    BERT
+  ram_usage: 2.5G
+  gpu_usage: 1.8G
+  execution_time: 1.0
+  endpoints:
+    candidate_annotators:
+      port: 8128
+      endpoint: respond
+  build_args:
+    SERVICE_PORT: 8128
+    PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
+  date_created: '2023-02-08T23:12:50'

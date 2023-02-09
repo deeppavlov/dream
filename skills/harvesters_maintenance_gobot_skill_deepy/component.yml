@@ -1,0 +1,16 @@
+harvesters-maintenance-gobot-skill:
+  name: harvesters-maintenance-gobot-skill
+  display_name: Harvesters Maintenance Gobot Skill
+  container_name: harvesters-maintenance-gobot-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: ''
+  ram_usage: 50M
+  execution_time: 0.5
+  endpoints:
+    skills:
+      port: 3882
+      endpoint: respond
+  date_created: '2023-02-08T23:12:50'

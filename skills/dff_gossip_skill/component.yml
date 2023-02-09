@@ -1,0 +1,19 @@
+dff-gossip-skill:
+  name: dff-gossip-skill
+  display_name: Gossip Skill
+  container_name: dff-gossip-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: DFF-based skill to discuss other people with news about them
+  ram_usage: 95M
+  execution_time: 2.0
+  endpoints:
+    skills:
+      port: 8109
+      endpoint: respond
+  build_args:
+    SERVICE_PORT: 8109
+    SERVICE_NAME: dff_gossip_skill
+  date_created: '2023-02-08T23:12:50'

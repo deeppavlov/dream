@@ -1,0 +1,16 @@
+faq-skill:
+  name: faq-skill
+  display_name: Faq Skill
+  container_name: faq-skill
+  component_type: FAQ
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: ''
+  ram_usage: 50M
+  execution_time: 0.5
+  endpoints:
+    skills:
+      port: 3772
+      endpoint: respond
+  date_created: '2023-02-08T23:12:50'

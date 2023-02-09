@@ -1,0 +1,18 @@
+midas-classification:
+  name: midas-classification
+  display_name: MIDAS Classification
+  container_name: midas-classification
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: BERT-based model trained on a semantic classes subset of MIDAS dataset
+  ram_usage: 1.1G
+  gpu_usage: 4.5G
+  execution_time: 1.0
+  endpoints:
+    annotators:
+      port: 8090
+      endpoint: model
+  build_args:
+    CONFIG: midas_conv_bert.json
+  date_created: '2023-02-08T23:12:50'
