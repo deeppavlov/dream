@@ -70,7 +70,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             json={"dialog_contexts": [request_data]},
             timeout=3.8,
         )
-        hypotheses = response.json()["generated_responses"][0]
+        hypotheses = response.json()[0]
     else:
         hypotheses = []
     logger.info(f"hyps: {hypotheses}")

@@ -199,4 +199,4 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"dialogpt exec time: {total_time:.3f}s")
 
-    return jsonify({"generated_responses": batch_generated_responses})
+    return jsonify(batch_generated_responses)
