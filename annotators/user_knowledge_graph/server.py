@@ -121,7 +121,7 @@ def add_any_property(graph, user_id, property_type, property_value):
     if property_type == "<blank>":
         property_type = "other"
     property_type = '_'.join(property_type.split(' '))
-    graph.ontology.create_property_kind_of_entity_kind("User", [property_type])
+    graph.ontology.create_property_kind_of_entity_kind("User", property_type)
     graph.create_or_update_property_of_entity(
         entity_id=user_id,
         property_kind=property_type,
@@ -230,11 +230,12 @@ def get_result(request):
     ex_triplets = []
     if user_id in existing_ids:
         entity_rel_info = graph.search_for_relationships(id_a=user_id)
-        for rel, objects in entity_rel_info:
-            for obj in objects:
-                ex_triplets.append((user_id, rel, obj))
-                if obj in found_kg_ids:
-                    kg_parser_annotations.append([user_id, rel, obj])
+        for dic in entity_rel_info:
+            rel = dic["rel"]
+            obj = dic["id_b"]
+            ex_triplets.append((user_id, rel, obj))
+            if obj in found_kg_ids:
+                kg_parser_annotations.append([user_id, rel, obj])
         logger.info(f"User with id {user_id} already exists!")
     else:
         if len(graph.ontology.get_entity_kind("User")) == 1:
