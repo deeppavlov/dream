@@ -111,7 +111,7 @@ services:
       args:
         SERVICE_PORT: 8012
         SERVICE_NAME: dff_command_selector_skill
-        LANGUAGE: RU
+        LANGUAGE: EN
         ROS_FSM_SERVER: http://robot-fake-server:8137
       context: .
       dockerfile: ./skills/dff_command_selector_skill/Dockerfile
