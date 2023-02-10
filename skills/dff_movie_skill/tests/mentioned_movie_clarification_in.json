@@ -186,7 +186,7 @@
                                 "hi."
                             ]
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "entity_linking": [],
                         "news_api_annotator": [
                             {
@@ -282,7 +282,7 @@
                                 "i was watching dans paris."
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "dans paris": {
                                 "Causes": [
                                     "terrorism",

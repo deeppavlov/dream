@@ -140,7 +140,7 @@
                         },
                         "entity_detection": {},
                         "entity_linking": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
