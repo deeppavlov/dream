@@ -15,7 +15,7 @@ services:
       LANGUAGE: RU
 
   dff-program-y-ru-skill:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8008
@@ -32,7 +32,7 @@ services:
           memory: 128M
 
   convers-evaluation-selector-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -67,7 +67,7 @@ services:
           memory: 256M
 
   dff-intent-responder-ru-skill:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8012
@@ -85,7 +85,7 @@ services:
           memory: 128M
 
   sentseg-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         CONFIG: sentseg_ru_bert_torch.json
@@ -102,7 +102,7 @@ services:
           memory: 3G
 
   intent-catcher-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       context: .
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
@@ -122,7 +122,7 @@ services:
           memory: 3.5G
 
   badlisted-words-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       context: annotators/BadlistedWordsDetector_ru/
     command: flask run -h 0.0.0.0 -p 8018
@@ -136,7 +136,7 @@ services:
           memory: 128M
 
   toxic-classification-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       context: ./annotators/toxic_classification_ru/
       args:
@@ -155,7 +155,7 @@ services:
           memory: 3G
 
   ner-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
@@ -177,7 +177,7 @@ services:
           memory: 2G
   
   entity-detection-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         CONFIG: entity_detection_rus.json
@@ -198,7 +198,7 @@ services:
           memory: 3.5G
 
   personal-info-ru-skill:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
@@ -215,7 +215,7 @@ services:
           memory: 128M
 
   entity-linking-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         CONFIG: entity_linking_rus.json
@@ -234,7 +234,7 @@ services:
           memory: 700M
 
   wiki-parser-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt
@@ -260,7 +260,7 @@ services:
           memory: 256M
 
   spelling-preprocessing-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         CONFIG: levenshtein_corrector_ru.json
@@ -281,7 +281,7 @@ services:
           memory: 8G
 
   spacy-annotator-ru:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8129
@@ -302,7 +302,7 @@ services:
           memory: 256M
 
   dff-friendship-ru-skill:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8086
@@ -322,7 +322,7 @@ services:
           memory: 128M
 
   dialogpt-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       context: ./services/dialogpt_RU/
       args:
@@ -342,7 +342,7 @@ services:
           memory: 3G
 
   dff-generative-ru-skill:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8092
@@ -360,7 +360,7 @@ services:
           memory: 128M
 
   dialogrpt-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       context: ./services/dialogrpt_ru/
       args:
@@ -379,7 +379,7 @@ services:
           memory: 4G
 
   dff-template-skill:
-    env_file: [.env]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8120

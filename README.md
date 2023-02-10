@@ -45,7 +45,7 @@ This is almost the same version of the DREAM socialbot as at
 Some API services are replaced with trainable models.
 Some services (e.g., News Annotator, Game Skill, Weather Skill) require private keys for underlying APIs,
 most of them can be obtained for free.
-If you want to use these services in local deployments, add your keys to the environmental variables (e.g., `./.env`).
+If you want to use these services in local deployments, add your keys to the environmental variables (e.g., `./.env`, `./.env_ru`).
 This version of Dream Socialbot consumes a lot of resources
 because of its modular architecture and original goals (participation in Alexa Prize Challenge).
 We provide a demo of Dream Socialbot on [our website](https://demo.deeppavlov.ai).
