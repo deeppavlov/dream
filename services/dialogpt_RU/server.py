@@ -156,6 +156,11 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
+@app.post("/ping")
+def ping():
+    return "pong"
+
+
 def generate(context, num_return_sequences, context_depth):
     bot_input_ids = format_dialogue_for_inference(
         context, context_depth=context_depth, encode=True, tokenizer=tokenizer
