@@ -14,8 +14,8 @@ from common.constants import CAN_NOT_CONTINUE
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-DIALOGPT_SERVICE_URL = getenv("DIALOGPT_SERVICE_URL")
-assert DIALOGPT_SERVICE_URL
+GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
+assert GENERATIVE_SERVICE_URL
 
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
@@ -66,7 +66,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"request_data: {request_data}")
     if len(request_data) > 0:
         response = requests.post(
-            DIALOGPT_SERVICE_URL,
+            GENERATIVE_SERVICE_URL,
             json={"dialog_contexts": [request_data]},
             timeout=3.8,
         )
