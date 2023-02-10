@@ -1,5 +1,5 @@
 harvesters-maintenance-gobot-skill:
-  name: harvesters-maintenance-gobot-skill
+  name: harvesters_maintenance_gobot_skill
   display_name: Harvesters Maintenance Gobot Skill
   container_name: harvesters-maintenance-gobot-skill
   component_type: Script-based w/o NNs
@@ -13,4 +13,4 @@ harvesters-maintenance-gobot-skill:
   - group: skills
     port: 3882
     endpoint: respond
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

@@ -1,5 +1,5 @@
 intent-catcher:
-  name: intent-catcher
+  name: intent_catcher
   display_name: Intent Catcher
   container_name: intent-catcher
   model_type: NN-based
@@ -18,9 +18,9 @@ intent-catcher:
     SERVICE_PORT: 8014
     CONFIG_NAME: intents_model_dp_config.json
     INTENT_PHRASES_PATH: intent_phrases.json
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'
 intent-catcher-ru:
-  name: intent-catcher-ru
+  name: intent_catcher
   display_name: Intent Catcher
   container_name: intent-catcher-ru
   model_type: NN-based
@@ -38,4 +38,4 @@ intent-catcher-ru:
     SERVICE_PORT: 8014
     CONFIG_NAME: intents_model_dp_config_RU.json
     INTENT_PHRASES_PATH: intent_phrases_RU.json
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

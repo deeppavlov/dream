@@ -1,5 +1,5 @@
 dff-coronavirus-skill:
-  name: dff-coronavirus-skill
+  name: dff_coronavirus_skill
   display_name: Coronavirus Skill
   container_name: dff-coronavirus-skill
   component_type: Script-based w/o NNs
@@ -18,4 +18,4 @@ dff-coronavirus-skill:
   build_args:
     SERVICE_PORT: 8061
     SERVICE_NAME: dff_coronavirus_skill
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

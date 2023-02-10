@@ -1,5 +1,5 @@
 gpt2-multilingual:
-  name: gpt2-multilingual
+  name: gpt2_generator
   display_name: GPT-2 Multilingual
   container_name: gpt2-multilingual
   component_type: Script-based with NNs
@@ -22,4 +22,4 @@ gpt2-multilingual:
     PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
     N_HYPOTHESES_TO_GENERATE: 3
     MAX_HISTORY_DEPTH: 3
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

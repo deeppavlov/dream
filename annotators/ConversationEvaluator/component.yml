@@ -1,5 +1,5 @@
 convers-evaluator-annotator:
-  name: convers-evaluator-annotator
+  name: convers_evaluator_annotator
   display_name: Conversation Evaluator
   container_name: convers-evaluator-annotator
   model_type: NN-based
@@ -19,4 +19,4 @@ convers-evaluator-annotator:
     CONFIG: conveval.json
     PORT: 8004
     DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

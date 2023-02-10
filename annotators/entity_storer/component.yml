@@ -1,5 +1,5 @@
 entity-storer:
-  name: entity-storer
+  name: entity_storer
   display_name: Entity Storer
   container_name: entity-storer
   model_type: Dictionary/Pattern-based
@@ -17,4 +17,4 @@ entity-storer:
   build_args:
     WORK_DIR: annotators/entity_storer
     SERVICE_PORT: 8089
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

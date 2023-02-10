@@ -1,5 +1,5 @@
 dff-intent-responder-ru-skill:
-  name: dff-intent-responder-ru-skill
+  name: dff_intent_responder_skill
   display_name: Custom Responses
   container_name: dff-intent-responder-ru-skill
   component_type: Script-based w/o NNs
@@ -19,9 +19,9 @@ dff-intent-responder-ru-skill:
     SERVICE_NAME: dff_intent_responder_skill
     INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_RU.json
     LANGUAGE: RU
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'
 dff-intent-responder-skill:
-  name: dff-intent-responder-skill
+  name: dff_intent_responder_skill
   display_name: Custom Responses
   container_name: dff-intent-responder-skill
   component_type: Script-based w/o NNs
@@ -40,4 +40,4 @@ dff-intent-responder-skill:
     SERVICE_PORT: 8012
     SERVICE_NAME: dff_intent_responder_skill
     INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

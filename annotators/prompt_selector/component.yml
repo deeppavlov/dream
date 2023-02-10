@@ -1,5 +1,5 @@
 prompt-selector:
-  name: prompt-selector
+  name: prompt_selector
   display_name: Prompt Selector
   container_name: prompt-selector
   model_type: Dictionary/Pattern-based
@@ -18,4 +18,4 @@ prompt-selector:
     SERVICE_NAME: prompt_selector
     N_SENTENCES_TO_RETURN: 3
     PROMPTS_TO_CONSIDER: dream_persona,pizza
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

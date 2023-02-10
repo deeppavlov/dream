@@ -1,5 +1,5 @@
 news-api-annotator:
-  name: news-api-annotator
+  name: news_api_annotator
   display_name: News API Annotator
   container_name: news-api-annotator
   model_type: External API
@@ -15,4 +15,4 @@ news-api-annotator:
     endpoint: respond
   build_args:
     ASYNC_SIZE: 3
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

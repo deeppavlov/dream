@@ -1,5 +1,5 @@
 relative-persona-extractor:
-  name: relative-persona-extractor
+  name: relative_persona_extractor
   display_name: Relative Persona Extractor
   container_name: relative-persona-extractor
   model_type: Dictionary/Pattern-based
@@ -17,4 +17,4 @@ relative-persona-extractor:
     SERVICE_PORT: 8133
     SERVICE_NAME: relative_persona_extractor
     N_SENTENCES_TO_RETURN: 3
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

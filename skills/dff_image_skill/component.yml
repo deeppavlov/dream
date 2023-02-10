@@ -1,5 +1,5 @@
 dff-image-skill:
-  name: dff-image-skill
+  name: dff_image_skill
   display_name: Image Skill
   container_name: dff-image-skill
   component_type: Script-based w/o NNs
@@ -19,4 +19,4 @@ dff-image-skill:
     SERVICE_PORT: 8188
     SERVICE_NAME: dff_image_skill
     LANGUAGE: EN
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

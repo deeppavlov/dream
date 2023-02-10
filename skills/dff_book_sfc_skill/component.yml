@@ -1,5 +1,5 @@
 dff-book-sfc-skill:
-  name: dff-book-sfc-skill
+  name: dff_book_sfc_skill
   display_name: Book Skill
   container_name: dff-book-sfc-skill
   model_type: Dictionary/Pattern-based
@@ -21,4 +21,4 @@ dff-book-sfc-skill:
     SERVICE_PORT: 8034
     SERVICE_NAME: dff_book_sfc_skill
     QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

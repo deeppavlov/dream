@@ -1,5 +1,5 @@
 dff-animals-skill:
-  name: dff-animals-skill
+  name: dff_animals_skill
   display_name: Animals Skill
   container_name: dff-animals-skill
   component_type: Script-based w/o NNs
@@ -18,4 +18,4 @@ dff-animals-skill:
     SERVICE_PORT: 8094
     SERVICE_NAME: dff_animals_skill
     BREED_FACTS_DB: http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

@@ -1,5 +1,5 @@
 dff-food-skill:
-  name: dff-food-skill
+  name: dff_food_skill
   display_name: Food Skill
   container_name: dff-food-skill
   component_type: Script-based w/o NNs
@@ -16,4 +16,4 @@ dff-food-skill:
   build_args:
     SERVICE_PORT: 8097
     SERVICE_NAME: dff_food_skill
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

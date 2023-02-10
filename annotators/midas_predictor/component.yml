@@ -1,5 +1,5 @@
 midas-predictor:
-  name: midas-predictor
+  name: midas_predictor
   display_name: MIDAS Predictor
   container_name: midas-predictor
   model_type: Dictionary/Pattern-based
@@ -15,4 +15,4 @@ midas-predictor:
   build_args:
     SERVICE_PORT: 8121
     SERVICE_NAME: midas_predictor
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

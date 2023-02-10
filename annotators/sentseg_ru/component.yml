@@ -1,5 +1,5 @@
 sentseg-ru:
-  name: sentseg-ru
+  name: sentseg
   display_name: Sentence Segmentation
   container_name: sentseg-ru
   model_type: NN-based
@@ -19,4 +19,4 @@ sentseg-ru:
     endpoint: respond
   build_args:
     CONFIG: sentseg_ru_bert_torch.json
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

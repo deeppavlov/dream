@@ -1,5 +1,5 @@
 spelling-preprocessing:
-  name: spelling-preprocessing
+  name: spelling_preprocessing
   display_name: Spell Checking
   container_name: spelling-preprocessing
   model_type: Dictionary/Pattern-based
@@ -13,4 +13,4 @@ spelling-preprocessing:
   - group: annotators
     port: 8074
     endpoint: respond
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

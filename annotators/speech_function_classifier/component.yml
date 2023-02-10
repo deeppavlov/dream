@@ -1,5 +1,5 @@
 speech-function-classifier:
-  name: speech-function-classifier
+  name: speech_function_classifier
   display_name: Speech Function Classifier
   container_name: speech-function-classifier
   model_type: NN-based
@@ -23,4 +23,4 @@ speech-function-classifier:
   build_args:
     SERVICE_PORT: 8108
     SERVICE_NAME: speech_function_classifier
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

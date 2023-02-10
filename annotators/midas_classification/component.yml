@@ -1,5 +1,5 @@
 midas-classification:
-  name: midas-classification
+  name: midas_classification
   display_name: MIDAS Classification
   container_name: midas-classification
   model_type: NN-based
@@ -15,4 +15,4 @@ midas-classification:
     endpoint: model
   build_args:
     CONFIG: midas_conv_bert.json
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

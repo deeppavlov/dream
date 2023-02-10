@@ -1,5 +1,5 @@
 combined-classification:
-  name: combined-classification
+  name: combined_classification
   display_name: Combined Classification
   container_name: combined-classification
   model_type: NN-based
@@ -20,4 +20,4 @@ combined-classification:
   build_args:
     CONFIG: combined_classifier.json
     PORT: 8087
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

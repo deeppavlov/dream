@@ -1,5 +1,5 @@
 spelling-preprocessing-ru:
-  name: spelling-preprocessing-ru
+  name: spelling_preprocessing
   display_name: Spell Checking
   container_name: spelling-preprocessing-ru
   model_type: ML-based
@@ -18,4 +18,4 @@ spelling-preprocessing-ru:
     SRC_DIR: annotators/spelling_preprocessing_dp
     COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
     LANGUAGE: RU
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

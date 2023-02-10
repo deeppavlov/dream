@@ -1,5 +1,5 @@
 dff-program-y-wide-skill:
-  name: dff-program-y-wide-skill
+  name: dff_program_y_wide_skill
   display_name: Program Y Wide Skill
   container_name: dff-program-y-wide-skill
   component_type: Script-based w/o NNs
@@ -17,4 +17,4 @@ dff-program-y-wide-skill:
   build_args:
     SERVICE_PORT: 8064
     SERVICE_NAME: dff_program_y_wide_skill
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

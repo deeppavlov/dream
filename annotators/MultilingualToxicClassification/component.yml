@@ -1,5 +1,5 @@
 toxic-classification-multilingual:
-  name: toxic-classification-multilingual
+  name: toxic_classification
   display_name: Toxic Classification
   container_name: toxic-classification-multilingual
   model_type: NN-based
@@ -21,4 +21,4 @@ toxic-classification-multilingual:
     SERVICE_PORT: 8013
     SERVICE_NAME: toxic_classification
     PRETRAINED_MODEL_NAME_OR_PATH: https://github.com/unitaryai/detoxify/releases/download/v0.4-alpha/multilingual_debiased-0b549669.ckpt
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

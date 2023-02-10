@@ -1,5 +1,5 @@
 wiki-parser:
-  name: wiki-parser
+  name: wiki_parser
   display_name: Wiki Parser
   container_name: wiki-parser
   model_type: Dictionary/Pattern-based
@@ -20,9 +20,9 @@ wiki-parser:
     PORT: 8077
     SRC_DIR: annotators/wiki_parser
     COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'
 wiki-parser-ru:
-  name: wiki-parser-ru
+  name: wiki_parser
   display_name: Wiki Parser
   container_name: wiki-parser-ru
   model_type: Dictionary/Pattern-based
@@ -44,4 +44,4 @@ wiki-parser-ru:
     SRC_DIR: annotators/wiki_parser
     COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
     LANGUAGE: RU
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

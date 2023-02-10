@@ -1,5 +1,5 @@
 convers-evaluation-no-scripts-selector:
-  name: convers-evaluation-no-scripts-selector
+  name: response_selector
   display_name: Response Selector
   container_name: convers-evaluation-no-scripts-selector
   model_type: Dictionary/Pattern-based
@@ -32,9 +32,9 @@ convers-evaluation-no-scripts-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'
 convers-evaluation-selector:
-  name: convers-evaluation-selector
+  name: response_selector
   display_name: Response Selector
   container_name: convers-evaluation-selector
   model_type: Dictionary/Pattern-based
@@ -67,9 +67,9 @@ convers-evaluation-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'
 convers-evaluation-selector-ru:
-  name: convers-evaluation-selector-ru
+  name: response_selector
   display_name: Response Selector
   container_name: convers-evaluation-selector-ru
   model_type: Dictionary/Pattern-based
@@ -103,9 +103,9 @@ convers-evaluation-selector-ru:
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
     LANGUAGE: RU
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'
 scripts-priority-selector:
-  name: scripts-priority-selector
+  name: response_selector
   display_name: Response Selector
   container_name: scripts-priority-selector
   model_type: Dictionary/Pattern-based
@@ -138,4 +138,4 @@ scripts-priority-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 0
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'

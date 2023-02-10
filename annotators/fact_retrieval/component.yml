@@ -1,5 +1,5 @@
 fact-retrieval:
-  name: fact-retrieval
+  name: fact_retrieval
   display_name: Fact Retrieval
   container_name: fact-retrieval
   model_type: NN-based
@@ -21,4 +21,4 @@ fact-retrieval:
     SRC_DIR: annotators/fact_retrieval/
     COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
     N_FACTS: 3
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:31'

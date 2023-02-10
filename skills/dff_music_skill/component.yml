@@ -1,5 +1,5 @@
 dff-music-skill:
-  name: dff-music-skill
+  name: dff_music_skill
   display_name: Music Skill
   container_name: dff-music-skill
   component_type: Script-based w/o NNs
@@ -16,4 +16,4 @@ dff-music-skill:
   build_args:
     SERVICE_PORT: 8099
     SERVICE_NAME: dff_music_skill
-  date_created: '2023-02-09T15:14:06'
+  date_created: '2023-02-10T08:04:32'
