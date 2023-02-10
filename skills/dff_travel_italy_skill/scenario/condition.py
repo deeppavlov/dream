@@ -6,6 +6,7 @@ from os import getenv
 import functools
 import json
 from deeppavlov_kg import TerminusdbKnowledgeGraph
+from scenario.config import KG_DB_NAME, KG_TEAM_NAME, KG_PASSWORD, KG_SERVER
 
 from df_engine.core import Context, Actor
 import df_engine.conditions as cnd
@@ -37,6 +38,7 @@ from common.utils import (
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 USE_CACHE = True
 
@@ -112,6 +114,7 @@ def example_lets_talk_about():
 
     return example_lets_talk_about_handler
 
+
 def get_current_user_id(ctx: Context, actor: Actor) -> bool:
     if "agent" in ctx.misc:
         user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]["id"]
@@ -121,15 +124,12 @@ def get_current_user_id(ctx: Context, actor: Actor) -> bool:
     return None
     
 
-def has_entity_in_graph(property):
+def has_entity_in_graph(property, team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD):
     def has_entity_in_graph_handler(ctx: Context, actor: Actor) -> Context:
         user_id = get_current_user_id(ctx, actor)
         if user_id:
             current_user_id = "User/" + user_id
-            DB = "test_italy_skill"
-            TEAM = "yashkens|c77b"
-            PASSWORD = "" #insert your password here
-            graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD)
+            graph = TerminusdbKnowledgeGraph(team=team, db_name=db_name, server=server, password=password)
             user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
             if property in user_existing_entities:
                 return True

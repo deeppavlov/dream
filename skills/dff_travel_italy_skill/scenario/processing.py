@@ -3,8 +3,10 @@ import logging
 import random
 from typing import Any, Callable, Optional, Iterator
 from deeppavlov_kg import TerminusdbKnowledgeGraph
+from scenario.config import KG_DB_NAME, KG_TEAM_NAME, KG_PASSWORD, KG_SERVER
 
 from common.dff.integration.processing import save_slots_to_ctx
+from scenario.condition import get_current_user_id
 from df_engine.core import Context, Actor
 
 logger = logging.getLogger(__name__)
@@ -34,15 +36,7 @@ def set_flag(label: str, value: bool = True) -> Callable:
     return set_flag_handler
 
 
-def get_current_user_id(ctx: Context, actor: Actor) -> bool:
-    if "agent" in ctx.misc:
-        user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]["id"]
-
-        return user_id
-    
-    return None
-
-def fill_responses_by_slots_from_graph():
+def fill_responses_by_slots_from_graph(team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD):
     def fill_responses_by_slots_processing(
         ctx: Context,
         actor: Actor,
@@ -51,17 +45,13 @@ def fill_responses_by_slots_from_graph():
     ) -> Context:
         processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
         user_id = get_current_user_id(ctx, actor)
-        # if user_id:
         current_user_id = "User/" + user_id
-        DB = "test_italy_skill"
-        TEAM = "yashkens|c77b"
-        PASSWORD = "" #insert your password here
-        graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password=PASSWORD)
+        graph = TerminusdbKnowledgeGraph(team=team, db_name=db_name, server=server, password=password)
         user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
         entity = 'FAVORITE_FOOD'
         entity_type = entity + '/AbstractFood'
-        entity_id = user_existing_entities[entity_type][0]
-        slot_value = graph.get_properties_of_entity(entity_id)['Name']
+        entity_with_id = user_existing_entities[entity_type][0]
+        slot_value = graph.get_properties_of_entity(entity_with_id)['Name']
         processed_node.response = processed_node.response.replace("{" f"{entity}" "}", slot_value)
         ctx.a_s["processed_node"] = processed_node
         return ctx

@@ -50,7 +50,7 @@ flows = {
                     cnd.neg(loc_cnd.check_flag("italy_travel_skill_active")),
                 ]
             ),
-            ("italian_food_flow_restart", "bot_excitement", 1.8): cnd.regexp(re.compile(r"favorite food")), 
+            ("italian_food_flow_restart", "tell_more", 1.8): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
             ("italian_food_flow", "food_start", 1.5): cnd.all(
                 [
                     loc_cnd.asked_about_italian_cuisine,
@@ -286,19 +286,8 @@ flows = {
         },
     },
     "italian_food_flow_restart": {
-        "bot_excitement": {
-            RESPONSE: "It must have been yummy!",
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-            },
-            TRANSITIONS: {
-                ("italian_food_flow_restart", "tell_more"): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
-                ("italy_disappointments", "neg_experience"): cnd.true(),
-            },
-        },
         "tell_more": {
-            RESPONSE: "Do you have some interesting story about {FAVORITE_FOOD}? Where and how did you first try it?",
+            RESPONSE: "Aha, so was it {FAVORITE_FOOD}? If so, where and how did you first try it?",
             PROCESSING: {
                 "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
