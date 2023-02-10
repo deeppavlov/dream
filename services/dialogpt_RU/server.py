@@ -156,7 +156,7 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-@app.post("/ping")
+@app.route("/ping", methods=["POST"])
 def ping():
     return "pong"
 
