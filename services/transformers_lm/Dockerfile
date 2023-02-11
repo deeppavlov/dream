@@ -10,6 +10,8 @@ ARG CONFIG_NAME
 ENV CONFIG_NAME ${CONFIG_NAME}
 ARG HALF_PRECISION
 ENV HALF_PRECISION ${HALF_PRECISION}
+ARG MAX_LEN_GEN_TEXT
+ENV MAX_LEN_GEN_TEXT ${MAX_LEN_GEN_TEXT}
 
 COPY ./services/transformers_lm/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

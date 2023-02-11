@@ -17,13 +17,20 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
-HALF_PRECISION = bool(os.environ.get("HALF_PRECISION", 0))
+HALF_PRECISION = bool(int(os.environ.get("HALF_PRECISION", 0)))
+MAX_LEN_GEN_TEXT = int(os.environ.get("MAX_LEN_GEN_TEXT", 0))
+logger.info(f"MAX_LEN_GEN_TEXT: {MAX_LEN_GEN_TEXT}")
+logger.info(f"HALF_PRECISION: {HALF_PRECISION}")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 DEFAULT_CONFIDENCE = 0.9
 ZERO_CONFIDENCE = 0.0
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
-max_length = generation_params.get("max_length", 50)
+if not MAX_LEN_GEN_TEXT:
+    max_length = generation_params.get("max_length", 50)
+else:
+    max_length = MAX_LEN_GEN_TEXT
+logger.info(f"max_length: {max_length}")
 del generation_params["max_length"]
 
 app = Flask(__name__)
