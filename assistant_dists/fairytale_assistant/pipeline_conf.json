@@ -152,7 +152,7 @@
             "dff_fairytale_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 4.5,
+                    "timeout": 12,
                     "url": "http://dff-fairytale-prompted-skill:8137/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_fairytale_prompted_skill_formatter",
