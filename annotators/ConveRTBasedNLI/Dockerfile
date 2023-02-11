@@ -1,7 +1,7 @@
 FROM python:3.7.4
 
 ARG DATA_URL=https://github.com/davidalami/ConveRT/releases/download/1.0/nocontext_tf_model.tar.gz
-ARG NEL_URL=https://github.com/Kolpnick/dream/blob/convert_based_nli/annotators/ConveRTBasedNLI/model.h5
+ARG NEL_URL=https://github.com/Kolpnick/dream/raw/convert_based_nli/annotators/ConveRTBasedNLI/model.h5
 
 ENV CACHE_DIR /cache
 ENV TRAINED_MODEL_PATH /data/nli_model/model.h5

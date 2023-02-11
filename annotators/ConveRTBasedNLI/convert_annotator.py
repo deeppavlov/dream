@@ -150,36 +150,41 @@ class ConveRTAnnotator:
         self.model_path = CACHE_DIR + '/model.h5'
     
     def candidate_selection(self, candidates, bot_uttr_history, threshold=0.8):
-        bot_uttr_history = bot_uttr_history[0]
-        self.model = tf.keras.models.load_model('model.h5')
+        self.model = tf.keras.models.load_model(self.model_path)
         labels = {0: 'entailment', 1: 'neutral', 2: 'contradiction'}
         base_dict = {'decision': labels[1],
                      labels[0]: 0.0,
                      labels[1]: 1.0,
                      labels[2]: 0.0}
-        rez_list = list(base_dict.copy() for _ in range(len(candidates)))
 
-        if bot_uttr_history:
+        rez_list = list(base_dict.copy() for _ in range(len(candidates)))
+        unique_history = {u for b in bot_uttr_history for u in b}
+
+        if unique_history and candidates:
             vectorized_candidates = self.__response_encoding(candidates)
-            vectorized_history = self.__response_encoding(bot_uttr_history)
-            combinations = list(itertools.product(vectorized_history, vectorized_candidates))
-            history_arr = []
+            vectorized_history = self.__response_encoding(list(unique_history))
+
+            vectorized_history = dict(zip(unique_history, vectorized_history))
+            history_arr = [vectorized_history.get(u) for b in bot_uttr_history for u in b]
             candidates_arr = []
-            for item in combinations:
-                history_arr.append(item[0])
-                candidates_arr.append(item[1])
+            for i in range(len(candidates)):
+                candidates_arr.extend([vectorized_candidates[i]] * len(bot_uttr_history[i]))
+
             pred_rez = self.model.predict([history_arr, candidates_arr])
-            for i in range(len(pred_rez)):
-                j = i % len(candidates)
-                row_probab = pred_rez[i]
-                if row_probab[2] < threshold:
-                    row_probab[2] = -row_probab[2]
-                label = int(np.argmax(row_probab, axis=-1))
-                if rez_list[j]['decision'] != labels[2]:
-                    rez_list[j] = {'decision': labels[label],
-                                   labels[0]: row_probab[0].astype(float),
-                                   labels[1]: row_probab[1].astype(float),
-                                   labels[2]: np.abs(row_probab[2]).astype(float)}
+            pred_rez_idx = 0
+            for i in range(len(candidates)):
+                for _ in range(len(bot_uttr_history[i])):
+                    row_probab = pred_rez[pred_rez_idx]
+                    if row_probab[2] < threshold:
+                        row_probab[2] = -row_probab[2]
+                    label = int(np.argmax(row_probab, axis=-1))
+                    if rez_list[i]['decision'] != labels[2]:
+                        rez_list[i] = {'decision': labels[label],
+                                       labels[0]: row_probab[0].astype(float),
+                                       labels[1]: row_probab[1].astype(float),
+                                       labels[2]: np.abs(row_probab[2]).astype(float)}
+                    pred_rez_idx += 1
+        logger.info(rez_list)
         return rez_list
 
     def __response_encoding(self, responses):
