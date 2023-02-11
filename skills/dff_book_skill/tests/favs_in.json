@@ -51,7 +51,7 @@
                             "this book",
                             "a teenager"
                         ],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [
@@ -527,7 +527,7 @@
                         },
                         "cobot_nounphrases": [],
                         "entity_linking": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,

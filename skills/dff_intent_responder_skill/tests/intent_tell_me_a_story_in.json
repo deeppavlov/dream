@@ -176,7 +176,7 @@
                             }
                         ],
                         "entity_linking": [],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "sing": {
                                 "SymbolOf": [
                                     "passion",
@@ -467,7 +467,7 @@
                             "utt_num": 18,
                             "wiki_skill_entities_info": {}
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "story": {
                                 "SymbolOf": [
                                     "life",

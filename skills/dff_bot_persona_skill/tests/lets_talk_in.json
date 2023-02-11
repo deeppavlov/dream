@@ -66,7 +66,7 @@
                             "entities": [],
                             "labelled_entities": []
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "ruth": {
                                 "Causes": [
                                     "you feel good",
@@ -366,7 +366,7 @@
                                 }
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "your favorite number": {
                                 "Causes": [
                                     "happiness",

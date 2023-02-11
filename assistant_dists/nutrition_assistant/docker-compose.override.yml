@@ -66,9 +66,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   badlisted-words:
     env_file: [ .env ]

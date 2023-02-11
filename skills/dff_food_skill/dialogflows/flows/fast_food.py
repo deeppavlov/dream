@@ -15,7 +15,7 @@ import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 from common.constants import CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
 from common.universal_templates import DONOTKNOW_LIKE, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
-from common.utils import get_entities, join_words_in_or_pattern
+from common.utils import get_entities, join_words_in_or_pattern, get_comet_conceptnet_annotations
 from common.food import (
     FAST_FOOD_FACTS,
     FAST_FOOD_QUESTIONS,
@@ -117,7 +117,7 @@ def is_question(vars):
 
 
 def check_conceptnet(vars):
-    annotations_conceptnet = state_utils.get_last_human_utterance(vars)["annotations"].get("conceptnet", {})
+    annotations_conceptnet = get_comet_conceptnet_annotations(state_utils.get_last_human_utterance(vars))
     conceptnet = False
     food_item = None
     for elem, triplets in annotations_conceptnet.items():
