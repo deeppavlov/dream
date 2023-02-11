@@ -181,7 +181,7 @@ services:
         SERVICE_NAME: transformers_lm_gptj
         PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
         CONFIG_NAME: gpt_j_6b.json
-        HALF_PRECISION: 0
+        HALF_PRECISION: 1
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8130
