@@ -12,13 +12,15 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
 HALF_PRECISION = bool(int(os.environ.get("HALF_PRECISION", 0)))
-MAX_LEN_GEN_TEXT = int(os.environ.get("MAX_LEN_GEN_TEXT", 0))
+MAX_LEN_GEN_TEXT = os.environ.get("MAX_LEN_GEN_TEXT", 0)
 logger.info(f"MAX_LEN_GEN_TEXT: {MAX_LEN_GEN_TEXT}")
 logger.info(f"HALF_PRECISION: {HALF_PRECISION}")
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
@@ -29,7 +31,7 @@ with open(CONFIG_NAME, "r") as f:
 if not MAX_LEN_GEN_TEXT:
     max_length = generation_params.get("max_length", 50)
 else:
-    max_length = MAX_LEN_GEN_TEXT
+    max_length = int(MAX_LEN_GEN_TEXT)
 logger.info(f"max_length: {max_length}")
 del generation_params["max_length"]
 
@@ -37,7 +39,9 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
+def generate_responses(
+    instruction, context, model, tokenizer, continue_last_uttr=False
+):
     outputs = []
     dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
     logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
@@ -64,7 +68,9 @@ def generate_responses(instruction, context, model, tokenizer, continue_last_utt
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if HALF_PRECISION:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
+        model = AutoModelForCausalLM.from_pretrained(
+            PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16
+        )
     else:
         model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
@@ -72,7 +78,9 @@ try:
         logger.info("transformers_lm is set to run on cuda")
     example_response = generate_responses(
         "",
-        ["Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "],
+        [
+            "Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "
+        ],
         model,
         tokenizer,
         continue_last_uttr=False,
