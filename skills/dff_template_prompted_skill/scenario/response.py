@@ -75,10 +75,17 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
         hyp_text = " ".join(hyp.split())
+        # !!! That can be added for fairytale skill
+        # if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
+        #     hyp_text = (
+        #         hyp_text.rsplit(".", 1)[0] + " Do you want to know how the story ended?"
+        #     )
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        gathering_responses(
+            hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+        )
 
     if len(curr_responses) == 0:
         return ""
