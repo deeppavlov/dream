@@ -36,7 +36,7 @@ def set_flag(label: str, value: bool = True) -> Callable:
     return set_flag_handler
 
 
-def fill_responses_by_slots_from_graph(team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD):
+def fill_responses_by_slots_from_graph():
     def fill_responses_by_slots_processing(
         ctx: Context,
         actor: Actor,
@@ -46,7 +46,7 @@ def fill_responses_by_slots_from_graph(team=KG_TEAM_NAME, db_name=KG_DB_NAME, se
         processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
         user_id = get_current_user_id(ctx, actor)
         current_user_id = "User/" + user_id
-        graph = TerminusdbKnowledgeGraph(team=team, db_name=db_name, server=server, password=password)
+        graph = TerminusdbKnowledgeGraph(team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD)
         user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
         entity = 'FAVORITE_FOOD'
         entity_type = entity + '/AbstractFood'

@@ -124,12 +124,12 @@ def get_current_user_id(ctx: Context, actor: Actor) -> bool:
     return None
     
 
-def has_entity_in_graph(property, team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD):
+def has_entity_in_graph(property):
     def has_entity_in_graph_handler(ctx: Context, actor: Actor) -> Context:
         user_id = get_current_user_id(ctx, actor)
         if user_id:
             current_user_id = "User/" + user_id
-            graph = TerminusdbKnowledgeGraph(team=team, db_name=db_name, server=server, password=password)
+            graph = TerminusdbKnowledgeGraph(team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD)
             user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
             if property in user_existing_entities:
                 return True

@@ -1,4 +1,7 @@
 import os  
+from dotenv import load_dotenv
+
+load_dotenv()
 
 KG_DB_NAME = os.getenv("KG_DB_NAME")
 KG_TEAM_NAME = os.getenv("KG_TEAM_NAME") 
