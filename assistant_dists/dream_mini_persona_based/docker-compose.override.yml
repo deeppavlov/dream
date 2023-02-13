@@ -73,9 +73,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   dff-intent-responder-skill:
     env_file: [ .env ]

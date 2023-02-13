@@ -244,7 +244,7 @@
       }
     },
     "response_selectors": {
-      "convers_evaluation_selector": {
+      "response_selector": {
         "connector": {
           "protocol": "http",
           "timeout": 1,

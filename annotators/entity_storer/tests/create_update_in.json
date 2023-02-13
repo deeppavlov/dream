@@ -154,7 +154,7 @@
                         "ner": [
                             []
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "apples": {
                                 "Causes": [
                                     "food poison",

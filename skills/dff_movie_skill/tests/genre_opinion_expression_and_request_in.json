@@ -181,7 +181,7 @@
                                 "hi."
                             ]
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "entity_linking": [],
                         "news_api_annotator": [
                             {
@@ -290,7 +290,7 @@
                                 "Phatic"
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "comedies": {
                                 "Causes": [
                                     "laughter",

@@ -181,7 +181,7 @@
                                 "hi."
                             ]
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "entity_linking": [],
                         "news_api_annotator": [
                             {
@@ -369,7 +369,7 @@
                                 "Literature"
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "thrillers": {
                                 "Causes": [
                                     "death",
