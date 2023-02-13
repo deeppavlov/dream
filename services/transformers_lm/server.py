@@ -22,10 +22,14 @@ CONFIG_NAME = os.environ.get("CONFIG_NAME")
 HALF_PRECISION = bool(int(os.environ.get("HALF_PRECISION", 0)))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
+MAX_LEN_GEN_TEXT = os.environ.get("MAX_LEN_GEN_TEXT", 0)
 
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
-max_length = generation_params.get("max_length", 50)
+if not MAX_LEN_GEN_TEXT:
+    max_length = generation_params.get("max_length", 50)
+else:
+    max_length = int(MAX_LEN_GEN_TEXT)
 del generation_params["max_length"]
 
 app = Flask(__name__)
