@@ -98,7 +98,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/spelling_preprocessing/",
-                    "config": "spelling-preprocessing"
+                    "container": "spelling-preprocessing",
+                    "endpoint": "respond"
                 }
             },
             "sentseg": {
@@ -130,7 +131,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/spacy_nounphrases/",
-                    "config": "spacy-nounphrases"
+                    "container": "spacy-nounphrases",
+                    "endpoint": "respond"
                 }
             },
             "rake_keywords": {
@@ -148,7 +150,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/rake_keywords/",
-                    "config": "rake-keywords"
+                    "container": "rake-keywords",
+                    "endpoint": "respond"
                 }
             },
             "comet_conceptnet": {
@@ -168,7 +171,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/COMeT/",
-                    "config": "comet-conceptnet"
+                    "container": "comet-conceptnet",
+                    "endpoint": "comet_annotator"
                 }
             },
             "badlisted_words": {
@@ -186,7 +190,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/BadlistedWordsDetector/",
-                    "config": "badlisted-words"
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words"
                 }
             },
             "asr": {
@@ -201,7 +206,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/asr/",
-                    "config": "asr"
+                    "container": "asr",
+                    "endpoint": "asr_check"
                 }
             },
             "intent_catcher": {
@@ -220,7 +226,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/IntentCatcherTransformers/",
-                    "config": "intent-catcher"
+                    "container": "intent-catcher",
+                    "endpoint": "detect"
                 }
             },
             "fact_random": {
@@ -240,7 +247,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/fact_random/",
-                    "config": "fact-random"
+                    "container": "fact-random",
+                    "endpoint": "respond"
                 }
             },
             "fact_retrieval": {
@@ -260,7 +268,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/fact_retrieval/",
-                    "config": "fact-retrieval"
+                    "container": "fact-retrieval",
+                    "endpoint": "model"
                 }
             },
             "ner": {
@@ -294,7 +303,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/entity_detection/",
-                    "config": "entity-detection"
+                    "container": "entity-detection",
+                    "endpoint": "respond"
                 }
             },
             "kbqa": {
@@ -312,7 +322,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/kbqa/",
-                    "config": "kbqa"
+                    "container": "kbqa",
+                    "endpoint": "model"
                 }
             },
             "entity_linking": {
@@ -332,7 +343,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/entity_linking/",
-                    "config": "entity-linking"
+                    "container": "entity-linking",
+                    "endpoint": "model"
                 }
             },
             "wiki_parser": {
@@ -350,7 +362,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/wiki_parser/",
-                    "config": "wiki-parser"
+                    "container": "wiki-parser",
+                    "endpoint": "model"
                 }
             },
             "sentrewrite": {
@@ -385,7 +398,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/combined_classification/",
-                    "config": "combined-classification"
+                    "container": "combined-classification",
+                    "endpoint": "model"
                 }
             },
             "entity_storer": {
@@ -404,7 +418,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/entity_storer/",
-                    "config": "entity-storer"
+                    "container": "entity-storer",
+                    "endpoint": "respond"
                 }
             },
             "news_api_annotator": {
@@ -426,7 +441,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/news_api/",
-                    "config": "news-api-annotator"
+                    "container": "news-api-annotator",
+                    "endpoint": "respond"
                 }
             },
             "topic_recommendation": {
@@ -446,7 +462,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/topic_recommendation/",
-                    "config": "topic-recommendation"
+                    "container": "topic-recommendation",
+                    "endpoint": "respond"
                 }
             },
             "user_persona_extractor": {
@@ -464,7 +481,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/user_persona_extractor/",
-                    "config": "user-persona-extractor"
+                    "container": "user-persona-extractor",
+                    "endpoint": "respond"
                 }
             },
             "midas_predictor": {
@@ -482,7 +500,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/midas_predictor/",
-                    "config": "midas-predictor"
+                    "container": "midas-predictor",
+                    "endpoint": "respond"
                 }
             },
             "relative_persona_extractor": {
@@ -500,7 +519,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/relative_persona_extractor/",
-                    "config": "relative-persona-extractor"
+                    "container": "relative-persona-extractor",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -565,7 +585,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/spacy_nounphrases/",
-                    "config": "spacy-nounphrases"
+                    "container": "spacy-nounphrases",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -606,7 +627,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/BadlistedWordsDetector/",
-                    "config": "badlisted-words"
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words_batch"
                 }
             },
             "convers_evaluator_annotator": {
@@ -624,7 +646,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/ConversationEvaluator/",
-                    "config": "convers-evaluator-annotator"
+                    "container": "convers-evaluator-annotator",
+                    "endpoint": "batch_model"
                 }
             },
             "spacy_nounphrases": {
@@ -642,7 +665,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/spacy_nounphrases/",
-                    "config": "spacy-nounphrases"
+                    "container": "spacy-nounphrases",
+                    "endpoint": "respond_batch"
                 }
             },
             "entity_detection": {
@@ -660,7 +684,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/entity_detection/",
-                    "config": "entity-detection"
+                    "container": "entity-detection",
+                    "endpoint": "respond_batch"
                 }
             },
             "midas_classification": {
@@ -696,7 +721,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/combined_classification/",
-                    "config": "combined-classification"
+                    "container": "combined-classification",
+                    "endpoint": "batch_model"
                 }
             }
         },
@@ -737,7 +763,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_sport_skill/",
-                    "config": "dff-sport-skill"
+                    "container": "dff-sport-skill",
+                    "endpoint": "respond"
                 }
             },
             "eliza": {
@@ -755,7 +782,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/eliza/",
-                    "config": "eliza"
+                    "container": "eliza",
+                    "endpoint": "respond"
                 }
             },
             "dff_program_y_skill": {
@@ -773,7 +801,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_program_y_skill/",
-                    "config": "dff-program-y-skill"
+                    "container": "dff-program-y-skill",
+                    "endpoint": "respond"
                 }
             },
             "personality_catcher": {
@@ -791,7 +820,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/personality_catcher/",
-                    "config": "personality-catcher"
+                    "container": "personality-catcher",
+                    "endpoint": "personality_catcher"
                 }
             },
             "dff_intent_responder_skill": {
@@ -809,7 +839,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_intent_responder_skill/",
-                    "config": "dff-intent-responder-skill"
+                    "container": "dff-intent-responder-skill",
+                    "endpoint": "respond"
                 }
             },
             "dummy_skill": {
@@ -861,7 +892,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dummy_skill_dialog/",
-                    "config": "dummy-skill-dialog"
+                    "container": "dummy-skill-dialog",
+                    "endpoint": "respond"
                 }
             },
             "misheard_asr": {
@@ -879,7 +911,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/misheard_asr/",
-                    "config": "misheard-asr"
+                    "container": "misheard-asr",
+                    "endpoint": "misheard_respond"
                 }
             },
             "dff_program_y_dangerous_skill": {
@@ -897,7 +930,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_program_y_dangerous_skill/",
-                    "config": "dff-program-y-dangerous-skill"
+                    "container": "dff-program-y-dangerous-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_movie_skill": {
@@ -915,7 +949,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_movie_skill/",
-                    "config": "dff-movie-skill"
+                    "container": "dff-movie-skill",
+                    "endpoint": "respond"
                 }
             },
             "emotion_skill": {
@@ -933,7 +968,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/emotion_skill/",
-                    "config": "emotion-skill"
+                    "container": "emotion-skill",
+                    "endpoint": "respond"
                 }
             },
             "convert_reddit": {
@@ -951,7 +987,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/convert_reddit/",
-                    "config": "convert-reddit"
+                    "container": "convert-reddit",
+                    "endpoint": "convert_reddit"
                 }
             },
             "personal_info_skill": {
@@ -969,7 +1006,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/personal_info_skill/",
-                    "config": "personal-info-skill"
+                    "container": "personal-info-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_coronavirus_skill": {
@@ -987,7 +1025,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_coronavirus_skill/",
-                    "config": "dff-coronavirus-skill"
+                    "container": "dff-coronavirus-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_weather_skill": {
@@ -1005,7 +1044,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_weather_skill/",
-                    "config": "dff-weather-skill"
+                    "container": "dff-weather-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_short_story_skill": {
@@ -1023,7 +1063,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_short_story_skill/",
-                    "config": "dff-short-story-skill"
+                    "container": "dff-short-story-skill",
+                    "endpoint": "respond"
                 }
             },
             "meta_script_skill": {
@@ -1041,7 +1082,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/meta_script_skill/",
-                    "config": "meta-script-skill"
+                    "container": "meta-script-skill",
+                    "endpoint": "meta_script"
                 }
             },
             "small_talk_skill": {
@@ -1059,7 +1101,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/small_talk_skill/",
-                    "config": "small-talk-skill"
+                    "container": "small-talk-skill",
+                    "endpoint": "respond"
                 }
             },
             "game_cooperative_skill": {
@@ -1077,7 +1120,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/game_cooperative_skill/",
-                    "config": "game-cooperative-skill"
+                    "container": "game-cooperative-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_program_y_wide_skill": {
@@ -1095,7 +1139,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_program_y_wide_skill/",
-                    "config": "dff-program-y-wide-skill"
+                    "container": "dff-program-y-wide-skill",
+                    "endpoint": "respond"
                 }
             },
             "news_api_skill": {
@@ -1113,7 +1158,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/news_api_skill/",
-                    "config": "news-api-skill"
+                    "container": "news-api-skill",
+                    "endpoint": "respond"
                 }
             },
             "comet_dialog_skill": {
@@ -1131,7 +1177,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/meta_script_skill/",
-                    "config": "meta-script-skill"
+                    "container": "meta-script-skill",
+                    "endpoint": "comet_dialog"
                 }
             },
             "dff_grounding_skill": {
@@ -1149,7 +1196,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_grounding_skill/",
-                    "config": "dff-grounding-skill"
+                    "container": "dff-grounding-skill",
+                    "endpoint": "respond"
                 }
             },
             "factoid_qa": {
@@ -1167,7 +1215,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/factoid_qa/",
-                    "config": "factoid-qa"
+                    "container": "factoid-qa",
+                    "endpoint": "respond"
                 }
             },
             "dff_animals_skill": {
@@ -1185,7 +1234,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_animals_skill/",
-                    "config": "dff-animals-skill"
+                    "container": "dff-animals-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_gaming_skill": {
@@ -1203,7 +1253,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_gaming_skill/",
-                    "config": "dff-gaming-skill"
+                    "container": "dff-gaming-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_friendship_skill": {
@@ -1221,7 +1272,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_friendship_skill/",
-                    "config": "dff-friendship-skill"
+                    "container": "dff-friendship-skill",
+                    "endpoint": "respond"
                 }
             },
             "knowledge_grounding_skill": {
@@ -1239,7 +1291,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/knowledge_grounding_skill/",
-                    "config": "knowledge-grounding-skill"
+                    "container": "knowledge-grounding-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_travel_skill": {
@@ -1257,7 +1310,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_travel_skill/",
-                    "config": "dff-travel-skill"
+                    "container": "dff-travel-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_food_skill": {
@@ -1275,7 +1329,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_food_skill/",
-                    "config": "dff-food-skill"
+                    "container": "dff-food-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_science_skill": {
@@ -1293,7 +1348,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_science_skill/",
-                    "config": "dff-science-skill"
+                    "container": "dff-science-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_music_skill": {
@@ -1311,7 +1367,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_music_skill/",
-                    "config": "dff-music-skill"
+                    "container": "dff-music-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_funfact_skill": {
@@ -1329,7 +1386,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_funfact_skill/",
-                    "config": "dff-funfact-skill"
+                    "container": "dff-funfact-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_gossip_skill": {
@@ -1349,7 +1407,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_gossip_skill/",
-                    "config": "dff-gossip-skill"
+                    "container": "dff-gossip-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_bot_persona_skill": {
@@ -1367,7 +1426,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_bot_persona_skill/",
-                    "config": "dff-bot-persona-skill"
+                    "container": "dff-bot-persona-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_wiki_skill": {
@@ -1385,7 +1445,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_wiki_skill/",
-                    "config": "dff-wiki-skill"
+                    "container": "dff-wiki-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_book_skill": {
@@ -1403,7 +1464,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_book_skill/",
-                    "config": "dff-book-skill"
+                    "container": "dff-book-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_art_skill": {
@@ -1421,7 +1483,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_art_skill/",
-                    "config": "dff-art-skill"
+                    "container": "dff-art-skill",
+                    "endpoint": "respond"
                 }
             },
             "dialogpt": {
@@ -1439,7 +1502,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "services/dialogpt/",
-                    "config": "dialogpt"
+                    "container": "dialogpt",
+                    "endpoint": "respond"
                 }
             },
             "seq2seq_persona_based": {
@@ -1457,7 +1521,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "services/seq2seq_persona_based/",
-                    "config": "seq2seq-persona-based"
+                    "container": "seq2seq-persona-based",
+                    "endpoint": "respond"
                 }
             },
             "dff_template_skill": {
@@ -1475,7 +1540,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_template_skill/",
-                    "config": "dff-template-skill"
+                    "container": "dff-template-skill",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -1495,7 +1561,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "response_selectors/convers_evaluation_based_selector/",
-                    "config": "convers-evaluation-selector"
+                    "container": "convers-evaluation-selector",
+                    "endpoint": "respond"
                 }
             }
         }

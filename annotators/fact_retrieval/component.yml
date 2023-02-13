@@ -21,4 +21,4 @@ fact-retrieval:
     SRC_DIR: annotators/fact_retrieval/
     COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
     N_FACTS: 3
-  date_created: '2023-02-10T08:04:31'
+  date_created: '2023-02-13T15:00:32'

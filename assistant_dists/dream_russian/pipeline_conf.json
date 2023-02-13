@@ -81,7 +81,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/spelling_preprocessing_dp/",
-                    "config": "spelling-preprocessing-ru"
+                    "container": "spelling-preprocessing-ru",
+                    "endpoint": "respond"
                 }
             },
             "spacy_annotator": {
@@ -96,7 +97,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/spacy_annotator/",
-                    "config": "spacy-annotator-ru"
+                    "container": "spacy-annotator-ru",
+                    "endpoint": "respond"
                 }
             },
             "sentseg": {
@@ -129,7 +131,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/BadlistedWordsDetector_ru/",
-                    "config": "badlisted-words-ru"
+                    "container": "badlisted-words-ru",
+                    "endpoint": "badlisted_words"
                 }
             },
             "toxic_classification": {
@@ -147,7 +150,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/toxic_classification_ru/",
-                    "config": "toxic-classification-ru"
+                    "container": "toxic-classification-ru",
+                    "endpoint": "respond"
                 }
             },
             "intent_catcher": {
@@ -166,7 +170,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/IntentCatcherTransformers/",
-                    "config": "intent-catcher-ru"
+                    "container": "intent-catcher-ru",
+                    "endpoint": "detect"
                 }
             },
             "ner": {
@@ -200,7 +205,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/entity_detection_rus/",
-                    "config": "entity-detection-ru"
+                    "container": "entity-detection-ru",
+                    "endpoint": "respond"
                 }
             },
             "entity_linking": {
@@ -219,7 +225,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/entity_linking_rus/",
-                    "config": "entity-linking-ru"
+                    "container": "entity-linking-ru",
+                    "endpoint": "model"
                 }
             },
             "wiki_parser": {
@@ -237,7 +244,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/wiki_parser/",
-                    "config": "wiki-parser-ru"
+                    "container": "wiki-parser-ru",
+                    "endpoint": "model"
                 }
             }
         },
@@ -325,7 +333,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/BadlistedWordsDetector/",
-                    "config": "badlisted-words"
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words_batch"
                 }
             },
             "toxic_classification": {
@@ -361,7 +370,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/entity_detection/",
-                    "config": "entity-detection"
+                    "container": "entity-detection",
+                    "endpoint": "respond_batch"
                 }
             },
             "dialogrpt": {
@@ -420,7 +430,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_program_y_skill/",
-                    "config": "dff-program-y-ru-skill"
+                    "container": "dff-program-y-ru-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_intent_responder_skill": {
@@ -438,7 +449,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_intent_responder_skill/",
-                    "config": "dff-intent-responder-ru-skill"
+                    "container": "dff-intent-responder-ru-skill",
+                    "endpoint": "respond"
                 }
             },
             "dummy_skill": {
@@ -473,7 +485,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/personal_info_skill/",
-                    "config": "personal-info-ru-skill"
+                    "container": "personal-info-ru-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_friendship_skill": {
@@ -491,7 +504,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_friendship_skill/",
-                    "config": "dff-friendship-ru-skill"
+                    "container": "dff-friendship-ru-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_generative_skill": {
@@ -509,7 +523,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_generative_skill/",
-                    "config": "dff-generative-ru-skill"
+                    "container": "dff-generative-ru-skill",
+                    "endpoint": "respond"
                 }
             },
             "dff_template_skill": {
@@ -527,7 +542,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_template_skill/",
-                    "config": "dff-template-skill"
+                    "container": "dff-template-skill",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -547,7 +563,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "response_selectors/convers_evaluation_based_selector/",
-                    "config": "convers-evaluation-selector-ru"
+                    "container": "convers-evaluation-selector-ru",
+                    "endpoint": "respond"
                 }
             }
         }

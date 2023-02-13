@@ -13,7 +13,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/MultilingualToxicClassification/",
-                    "config": "toxic-classification-multilingual"
+                    "container": "toxic-classification-multilingual",
+                    "endpoint": "respond"
                 }
             },
             "sentiment_classification": {
@@ -28,7 +29,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/MultilingualSentimentClassification/",
-                    "config": "sentiment-classification-multilingual"
+                    "container": "sentiment-classification-multilingual",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -48,7 +50,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "services/sentence_ranker/",
-                    "config": "sentence-ranker-multilingual"
+                    "container": "sentence-ranker-multilingual",
+                    "endpoint": "respond"
                 }
             },
             "toxic_classification": {
@@ -66,7 +69,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/MultilingualToxicClassification/",
-                    "config": "toxic-classification-multilingual"
+                    "container": "toxic-classification-multilingual",
+                    "endpoint": "respond_batch"
                 }
             },
             "sentiment_classification": {
@@ -84,7 +88,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/MultilingualSentimentClassification/",
-                    "config": "sentiment-classification-multilingual"
+                    "container": "sentiment-classification-multilingual",
+                    "endpoint": "respond_batch"
                 }
             }
         },
@@ -125,7 +130,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "services/gpt2_generator/",
-                    "config": "gpt2-multilingual"
+                    "container": "gpt2-multilingual",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -145,7 +151,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "response_selectors/convers_evaluation_based_selector/",
-                    "config": "convers-evaluation-selector"
+                    "container": "convers-evaluation-selector",
+                    "endpoint": "respond"
                 }
             }
         }

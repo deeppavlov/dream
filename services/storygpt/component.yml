@@ -19,4 +19,4 @@ storygpt:
     SERVICE_NAME: storygpt
     PRETRAINED_MODEL_NAME_OR_PATH: gpt2-medium
     FINETUNED_GPT_URL: http://files.deeppavlov.ai/dream_data/story_skill/filtered_ROCStories_gpt_medium.pt
-  date_created: '2023-02-10T08:04:32'
+  date_created: '2023-02-13T15:00:32'

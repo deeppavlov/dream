@@ -70,7 +70,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/spelling_preprocessing/",
-                    "config": "spelling-preprocessing"
+                    "container": "spelling-preprocessing",
+                    "endpoint": "respond"
                 }
             },
             "sentseg": {
@@ -102,7 +103,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/BadlistedWordsDetector/",
-                    "config": "badlisted-words"
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words"
                 }
             },
             "prompt_selector": {
@@ -120,7 +122,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/prompt_selector/",
-                    "config": "prompt-selector"
+                    "container": "prompt-selector",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -174,7 +177,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/BadlistedWordsDetector/",
-                    "config": "badlisted-words"
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words_batch"
                 }
             },
             "combined_classification": {
@@ -192,7 +196,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/combined_classification/",
-                    "config": "combined-classification"
+                    "container": "combined-classification",
+                    "endpoint": "batch_model"
                 }
             },
             "sentence_ranker": {
@@ -210,7 +215,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "services/sentence_ranker/",
-                    "config": "sentence-ranker"
+                    "container": "sentence-ranker",
+                    "endpoint": "respond"
                 }
             }
         },
@@ -251,7 +257,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_template_prompted_skill/",
-                    "config": "dff-dream-persona-prompted-skill"
+                    "container": "dff-dream-persona-prompted-skill",
+                    "endpoint": "respond"
                 }
             },
             "dummy_skill": {
@@ -288,7 +295,8 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "response_selectors/convers_evaluation_based_selector/",
-                    "config": "convers-evaluation-no-scripts-selector"
+                    "container": "convers-evaluation-no-scripts-selector",
+                    "endpoint": "respond"
                 }
             }
         }
