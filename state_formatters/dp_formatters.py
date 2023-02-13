@@ -497,6 +497,10 @@ def persona_bot_formatter(dialog: Dict):
     ]
 
 
+def full_dialog(dialog: Dict):
+    return [{"dialogs": [dialog]}]
+
+
 def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector
