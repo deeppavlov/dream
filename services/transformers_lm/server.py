@@ -12,14 +12,13 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
-HALF_PRECISION = bool(int(os.environ.get("HALF_PRECISION", 0)))
+HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
+HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
 MAX_LEN_GEN_TEXT = os.environ.get("MAX_LEN_GEN_TEXT", 0)
@@ -42,9 +41,7 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [
-        f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)
-    ]
+    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
     if continue_last_uttr:
         dialog_context += "\n".join(context)
     else:
@@ -74,9 +71,7 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if HALF_PRECISION:
-        model = AutoModelForCausalLM.from_pretrained(
-            PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16
-        )
+        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
     else:
         model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
