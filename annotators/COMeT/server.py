@@ -66,6 +66,7 @@ async def comet_base_handler(input_event: comet_engine.input_event_model):
 @app.post("/comet_annotator", response_model=comet_engine.annotator_response_model)
 async def comet_annotator_handler(input_event: comet_engine.annotator_input_model):
     result = annotator_handler(input_event.dict())
+    logger.info(f"comet_annotator result: {result}")
     return result
 
 

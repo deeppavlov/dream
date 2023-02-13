@@ -1,7 +1,7 @@
 import re
 
 from common.greeting import HOW_ARE_YOU_RESPONSES
-from common.utils import get_emotions
+from common.utils import get_emotions, get_comet_conceptnet_annotations
 from common.universal_templates import if_chat_about_particular_topic
 
 
@@ -149,8 +149,9 @@ def is_boring(annotated_uttr):
 
 def is_pain(annotated_uttr):
     uttr_text = annotated_uttr["text"]
-    for entity in annotated_uttr.get("conceptnet", {}):
-        if "pain" in entity.get("isSymbolOf", []):
+
+    for elem, triplets in get_comet_conceptnet_annotations(annotated_uttr).items():
+        if "SymbolOf" in triplets and "pain" in triplets["SymbolOf"]:
             return True
     return re.search(PAIN_TEMPLATE, uttr_text) and not re.search(NOT_PAIN_TEMPLATE, uttr_text)
 

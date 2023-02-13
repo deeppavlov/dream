@@ -182,7 +182,7 @@
                             ]
                         },
                         "entity_linking": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "kbqa": {
                             "answer": "",
                             "confidence": 0.0,
@@ -369,7 +369,7 @@
                                 "Movies_TV"
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "movies": {
                                 "Causes": [
                                     "laughter",

@@ -531,7 +531,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8006
       - PORT=8006
 
-  convers-evaluation-selector:
+  scripts-priority-selector:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/

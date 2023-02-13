@@ -42,7 +42,7 @@
                             "conversational": 0.9955614805221558
                         },
                         "cobot_nounphrases": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentseg": {
                             "punct_sent": "tell me.",
                             "segments": [
@@ -250,7 +250,7 @@
                                 "toxic": 0.0072702765464782715
                             }
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [

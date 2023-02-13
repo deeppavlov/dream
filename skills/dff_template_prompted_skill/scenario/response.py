@@ -28,17 +28,13 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 GENERATIVE_TIMEOUT = 4
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.5
-NAMING = {"human": "Human", "bot": "AI"}
 
 
 def compose_data_for_model(ctx, actor):
-    global PROMPT
     # consider N_UTTERANCES_CONTEXT last utterances
     context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
-    context = [f'{NAMING[uttr.get("user", {}).get("user_type")]}: {uttr.get("text", "")}' for uttr in context]
-    context = [PROMPT] + context
+    context = [uttr.get("text", "") for uttr in context]
 
-    logger.info(f"prompt: {context}")
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
     return context
@@ -62,29 +58,29 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_bot_attrs += [bot_attr]
             curr_attrs += [attr]
 
-    request_data = compose_data_for_model(ctx, actor)
-    logger.info(f"request_data: {request_data}")
-    if len(request_data) > 0:
+    dialog_contexts = compose_data_for_model(ctx, actor)
+    logger.info(f"dialog_contexts: {dialog_contexts}")
+    if len(dialog_contexts) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
-            json={"dialog_contexts": [request_data]},
+            json={"dialog_contexts": [dialog_contexts], "prompts": [PROMPT]},
             timeout=GENERATIVE_TIMEOUT,
         )
-        hypotheses = response.json()
+        hypotheses = response.json()[0]
     else:
         hypotheses = []
-    logger.info(f"hyps: {hypotheses}")
-    if hypotheses:
-        for hyp in hypotheses:
-            confidence = DEFAULT_CONFIDENCE
-            hyp_text = " ".join(hyp[0].split())
-            if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-                hyp_text += "."
-                confidence = LOW_CONFIDENCE
-            gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+    logger.info(f"generated hypotheses: {hypotheses}")
+    for hyp in hypotheses:
+        confidence = DEFAULT_CONFIDENCE
+        hyp_text = " ".join(hyp.split())
+        if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
+            hyp_text += "."
+            confidence = LOW_CONFIDENCE
+        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""
+
     return int_rsp.multi_response(
         replies=curr_responses,
         confidences=curr_confidences,

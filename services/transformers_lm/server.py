@@ -19,8 +19,8 @@ PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
 HALF_PRECISION = bool(os.environ.get("HALF_PRECISION", 0))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
-DEFAULT_CONFIDENCE = 0.9
-ZERO_CONFIDENCE = 0.0
+NAMING = ["AI", "Human"]
+
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
 max_length = generation_params.get("max_length", 50)
@@ -30,10 +30,19 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(instruction, context, model, tokenizer, continue_last_uttr=False):
+def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
     outputs = []
-    dialog_context = instruction + "\n" + "\n".join(context) + "\n" + "AI:"
-    logger.info(f"context inside generate_responses seen as: {[dialog_context]}")
+    dialog_context = ""
+    if prompt:
+        dialog_context += prompt + "\n"
+    s = len(context) % 2
+    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+    if continue_last_uttr:
+        dialog_context += "\n".join(context)
+    else:
+        dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
+
+    logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
     with torch.no_grad():
         if torch.cuda.is_available():
@@ -48,8 +57,8 @@ def generate_responses(instruction, context, model, tokenizer, continue_last_utt
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
-        logger.info(f"full output: {[output]}")
         result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
+        logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
     return outputs
 
@@ -64,11 +73,7 @@ try:
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
     example_response = generate_responses(
-        "",
-        ["Question: What is the goal of SpaceX? Answer: To revolutionize space transportation. "],
-        model,
-        tokenizer,
-        continue_last_uttr=False,
+        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant."
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -78,31 +83,37 @@ except Exception as e:
     raise e
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
+    prompts = request.json.get("prompts", [])
+    if len(contexts) > 0 and len(prompts) == 0:
+        prompts = [""] * len(contexts)
+
     try:
         responses = []
-        confidences = []
-        for context in contexts:
-            outputs = generate_responses("", context, model, tokenizer)
-            logger.info(f"outputs: {outputs}")
+        for context, prompt in zip(contexts, prompts):
+            curr_responses = []
+            outputs = generate_responses(context, model, tokenizer, prompt)
             for response in outputs:
-                if len(response) >= 3:
-                    # drop too short responses
-                    responses += [response]
-                    confidences += [DEFAULT_CONFIDENCE]
+                if len(response) >= 2:
+                    curr_responses += [response]
                 else:
-                    responses += [""]
-                    confidences += [ZERO_CONFIDENCE]
+                    curr_responses += [""]
+            responses += [curr_responses]
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
-        confidences = [[ZERO_CONFIDENCE]] * len(contexts)
 
+    logger.info(f"transformers_lm output: {responses}")
     total_time = time.time() - st_time
     logger.info(f"transformers_lm exec time: {total_time:.3f}s")
-    return jsonify(list(zip(responses, confidences)))
+    return jsonify(responses)

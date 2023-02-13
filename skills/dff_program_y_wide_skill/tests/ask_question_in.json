@@ -22,7 +22,7 @@
                             "factoid": 0.009537393227219582,
                             "conversational": 0.990462601184845
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "combined_classification": {
                             "cobot_dialogact_intents": {
                                 "General_ChatIntent": 0.9982210397720337
