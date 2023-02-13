@@ -7,6 +7,7 @@ RUN rm -r /etc/apt/sources.list.d && \
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt
+RUN pip install pyopenssl --upgrade
 RUN python -m deeppavlov install gobot_md_yaml_minimal && \
     python -m deeppavlov download gobot_md_yaml_minimal
 
