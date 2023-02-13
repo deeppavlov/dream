@@ -47,9 +47,9 @@ def generate_responses(context, openai_api_key, openai_org, prompt, continue_las
 
     response = openai.Completion.create(model=PRETRAINED_MODEL_NAME_OR_PATH, prompt=context, **generation_params)
     if isinstance(response, dict) and "choices" in response:
-        outputs = [resp.get("text", "") for resp in response["choices"]]
+        outputs = [resp.get("text", "").strip() for resp in response["choices"]]
     elif isinstance(response, str):
-        outputs = [response]
+        outputs = [response.strip()]
     return outputs
 
 

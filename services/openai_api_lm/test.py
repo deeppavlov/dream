@@ -20,7 +20,7 @@ def test_respond():
         json={
             "dialog_contexts": contexts,
             "openai_api_keys": ["MYKEY"] * len(contexts),
-            "openai_organizations": ["MYORG"] * len(contexts),
+            "openai_organizations": [None] * len(contexts),
             "prompts": prompts,
         },
     ).json()
