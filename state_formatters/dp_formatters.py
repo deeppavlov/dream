@@ -529,6 +529,10 @@ def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
+def base_skill_formatter(payload: Dict):
+    return [{"text": payload[0], "confidence": payload[1]}]
+
+
 def skill_with_attributes_formatter_service(payload: List):
     """
     Formatter should use `"state_manager_method": "add_hypothesis"` in config!!!
