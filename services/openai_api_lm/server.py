@@ -77,7 +77,7 @@ def respond():
             responses += [curr_responses]
 
     except Exception as exc:
-        logger.exception(exc)
+        logger.info(exc)
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
 
