@@ -19,7 +19,7 @@ GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split()
+ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}s": [getenv(var, None)] for var in ENVVARS_TO_SEND}
 
 assert GENERATIVE_SERVICE_URL
