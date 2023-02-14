@@ -19,12 +19,11 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
-HALF_PRECISION = bool(int(os.environ.get("HALF_PRECISION", 0)))
-MAX_LEN_GEN_TEXT = os.environ.get("MAX_LEN_GEN_TEXT", 0)
-logger.info(f"MAX_LEN_GEN_TEXT: {MAX_LEN_GEN_TEXT}")
-logger.info(f"HALF_PRECISION: {HALF_PRECISION}")
+HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
+HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
+MAX_LEN_GEN_TEXT = os.environ.get("MAX_LEN_GEN_TEXT", 0)
 
 with open(CONFIG_NAME, "r") as f:
     generation_params = json.load(f)
@@ -32,7 +31,6 @@ if not MAX_LEN_GEN_TEXT:
     max_length = generation_params.get("max_length", 50)
 else:
     max_length = int(MAX_LEN_GEN_TEXT)
-logger.info(f"max_length: {max_length}")
 del generation_params["max_length"]
 
 app = Flask(__name__)
@@ -45,7 +43,9 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+    context = [
+        f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)
+    ]
     if continue_last_uttr:
         dialog_context += "\n".join(context)
     else:
