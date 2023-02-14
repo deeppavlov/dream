@@ -1,11 +1,8 @@
 services:
   agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/deepy_faq/pipeline_conf.json'
     volumes:
-      - "./assistant_dists/deepy_faq:/dp-agent"
-      - "./skill_selectors/:/dp-agent/skill_selectors/"
-      - "./state_formatters/:/dp-agent/state_formatters/"
-      - "./skills/:/dp-agent/skills/"
-      - "./common/:/dp-agent/common/"
+      - ".:/dp-agent"
     environment:
       WAIT_HOSTS: "spelling-preprocessing:8074, faq-skill:3772, rule-based-response-selector:8005,
         emotion-classification-deepy:8015, dff-program-y-skill:8008"
