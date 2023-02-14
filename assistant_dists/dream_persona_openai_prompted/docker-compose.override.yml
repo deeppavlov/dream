@@ -167,6 +167,7 @@ services:
         PROMPT_FILE: common/prompts/dream_persona.json
         GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
         N_UTTERANCES_CONTEXT: 3
+        ENVVARS_TO_SEND: openai_api_key,openai_organization
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload

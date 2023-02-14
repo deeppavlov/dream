@@ -18,8 +18,14 @@ logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
+ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split()
+sending_variables = {f"{var}s": [getenv(var, None)] for var in ENVVARS_TO_SEND}
+
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
+for var_value in sending_variables.values():
+    assert not(var_value is None)
 
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
@@ -63,7 +69,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if len(dialog_contexts) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
-            json={"dialog_contexts": [dialog_contexts], "prompts": [PROMPT]},
+            json={"dialog_contexts": [dialog_contexts], "prompts": [PROMPT], **sending_variables},
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()[0]
