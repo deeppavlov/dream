@@ -14,7 +14,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "timeout_service": {
@@ -30,7 +30,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "annotators": {

@@ -48,7 +48,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "timeout_service": {
@@ -82,7 +82,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "annotators": {
@@ -113,7 +113,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "spacy_nounphrases": {
@@ -265,7 +265,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "entity_detection": {
@@ -361,7 +361,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "combined_classification": {
@@ -479,7 +479,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "ner": {
@@ -494,7 +494,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "sentrewrite": {
@@ -510,7 +510,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "spacy_nounphrases": {
@@ -551,7 +551,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "candidate_annotators": {
@@ -646,7 +646,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "combined_classification": {
@@ -686,7 +686,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             }
         },
@@ -800,7 +800,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "alexa_handler": {
@@ -817,7 +817,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "dummy_skill_dialog": {

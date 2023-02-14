@@ -29,7 +29,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "timeout_service": {
@@ -54,7 +54,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "annotators": {
@@ -85,7 +85,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "badlisted_words": {
@@ -179,7 +179,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             }
         },
@@ -198,7 +198,7 @@
             "is_enabled": true,
             "source": {
                 "directory": "/services/something",
-                "config": "something_name"
+                "container": "something_name"
             }
         },
         "candidate_annotators": {
@@ -258,7 +258,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             }
         },
@@ -296,7 +296,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "/services/something",
-                    "config": "something_name"
+                    "container": "something_name"
                 }
             },
             "dialogpt": {
