@@ -13,9 +13,7 @@ from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 PROMPT_FILE = getenv("PROMPT_FILE")
@@ -83,9 +81,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(
-            hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
-        )
+        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""
