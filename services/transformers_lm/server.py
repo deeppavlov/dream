@@ -19,7 +19,8 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 CONFIG_NAME = os.environ.get("CONFIG_NAME")
-HALF_PRECISION = bool(int(os.environ.get("HALF_PRECISION", 0)))
+HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
+HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
 MAX_LEN_GEN_TEXT = os.environ.get("MAX_LEN_GEN_TEXT", 0)
