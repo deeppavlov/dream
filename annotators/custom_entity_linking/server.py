@@ -28,11 +28,12 @@ except Exception as e:
 @app.route("/add_entities", methods=["POST"])
 def add_entities():
     inp = request.json
+    user_id = inp.get("user_id", "")
     entity_info = inp.get("entity_info", {})
     entity_substr_list = entity_info.get("entity_substr", [])
     entity_ids_list = entity_info.get("entity_ids", [])
     tags_list = entity_info.get("tags", [])
-    el[0].add_custom_entities(entity_substr_list, entity_ids_list, tags_list)
+    el[0].add_custom_entities(user_id, entity_substr_list, entity_ids_list, tags_list)
     logger.info(f"added entities {entity_info}")
     return {}
 
@@ -41,6 +42,7 @@ def add_entities():
 def respond():
     st_time = time.time()
     inp = request.json
+    user_ids = inp.get("user_id", [""])
     entity_substr_batch = inp.get("entity_substr", [[""]])
     entity_tags_batch = inp.get(
         "entity_tags", [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
@@ -68,7 +70,7 @@ def respond():
             entity_ids_batch,
             conf_batch,
             entity_id_tags_batch,
-        ) = el(entity_substr_batch, entity_tags_batch, opt_context_batch)
+        ) = el(user_ids, entity_substr_batch, entity_tags_batch, opt_context_batch)
         entity_info_batch = []
         for (
             entity_substr_list,

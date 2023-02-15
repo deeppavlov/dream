@@ -271,7 +271,8 @@ def get_result(request):
         ids_list.append(user_id)
         tags_list.append("Name")
     if substr_list:
-        requests.post(CUSTOM_EL_ADD, json={"entity_info": {"entity_substr": substr_list,
+        requests.post(CUSTOM_EL_ADD, json={"used_id": str(utt.get("user", {}).get("id", "")),
+                                           "entity_info": {"entity_substr": substr_list,
                                                            "entity_ids": ids_list, "tags": tags_list}})
     logger.info(f"kg_parser_annotations: {kg_parser_annotations}")
 

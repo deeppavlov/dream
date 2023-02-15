@@ -82,70 +82,69 @@ class EntityLinker(Component, Serializable):
     def load(self) -> None:
         if not os.path.exists(self.load_path):
             os.makedirs(self.load_path)
-        if os.path.exists(self.load_path / "custom_database.db"):
-            os.remove(self.load_path / "custom_database.db")
         self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
         self.cur = self.conn.cursor()
         self.cur.execute("CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
-                         "UNINDEXED, tag, tokenize = 'porter ascii');")
+                         "UNINDEXED, tag, user_id, tokenize = 'porter ascii');")
 
     def save(self) -> None:
         pass
 
-    def add_custom_entities(self, entity_substr_list, entity_ids_list, tags_list):
+    def add_custom_entities(self, user_id, entity_substr_list, entity_ids_list, tags_list):
         if self.conn is None:
             if not os.path.exists(self.load_path):
                 os.makedirs(self.load_path)
             self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
             self.cur = self.conn.cursor()
             self.cur.execute("CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
-                             "UNINDEXED, tag, tokenize = 'porter ascii');")
-        
+                             "UNINDEXED, tag, user_id, tokenize = 'porter ascii');")
+
         for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
             entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")
-            query_str = f"title:{entity_substr} AND tag:{tag}"
-            
+            query_str = f"title:{entity_substr} AND tag:{tag} AND user_id:{user_id}"
+
             query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
             res = self.cur.execute(query, (query_str,)).fetchall()
             if res and res[0][3] == "name" and res[0][1] == entity_id and tag == "name":
-                query = "DELETE FROM inverted_index WHERE entity_id=? AND tag=?;"
-                self.cur.execute(query, (entity_id, tag))
+                query = "DELETE FROM inverted_index WHERE entity_id=? AND tag=? AND user_id=?;"
+                self.cur.execute(query, (entity_id, tag, user_id))
                 self.cur.execute("INSERT INTO inverted_index "
-                                 "VALUES (?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag))
+                                 "VALUES (?, ?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag, user_id))
                 self.conn.commit()
             elif not res:
                 self.cur.execute("INSERT INTO inverted_index "
-                                 "VALUES (?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag))
+                                 "VALUES (?, ?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag, user_id))
                 self.conn.commit()
 
     def __call__(
         self,
+        user_ids: List[str],
         entity_substr_batch: List[List[str]],
         entity_tags_batch: List[List[str]] = None,
-        sentences_batch: List[List[str]] = None,
+        sent_batch: List[List[str]] = None,
         entity_offsets_batch: List[List[List[int]]] = None,
-        sentences_offsets_batch: List[List[Tuple[int, int]]] = None,
+        sent_offsets_batch: List[List[Tuple[int, int]]] = None,
     ):
-        if sentences_offsets_batch is None and sentences_batch is not None:
-            sentences_offsets_batch = []
-            for sentences_list in sentences_batch:
-                sentences_offsets_list = []
+        if sent_offsets_batch is None and sent_batch is not None:
+            sent_offsets_batch = []
+            for sent_list in sent_batch:
+                sent_offsets_list = []
                 start = 0
-                for sentence in sentences_list:
+                for sentence in sent_list:
                     end = start + len(sentence)
-                    sentences_offsets_list.append([start, end])
+                    sent_offsets_list.append([start, end])
                     start = end + 1
-                sentences_offsets_batch.append(sentences_offsets_list)
+                sent_offsets_batch.append(sent_offsets_list)
 
-        if sentences_batch is None:
-            sentences_batch = [[] for _ in entity_substr_batch]
-            sentences_offsets_batch = [[] for _ in entity_substr_batch]
+        if sent_batch is None:
+            sent_batch = [[] for _ in entity_substr_batch]
+            sent_offsets_batch = [[] for _ in entity_substr_batch]
 
-        log.info(f"sentences_batch {sentences_batch}")
-        if entity_offsets_batch is None and sentences_batch is not None:
+        log.info(f"sent_batch {sent_batch}")
+        if entity_offsets_batch is None and sent_batch is not None:
             entity_offsets_batch = []
-            for entity_substr_list, sentences_list in zip(entity_substr_batch, sentences_batch):
-                text = " ".join(sentences_list).lower()
+            for entity_substr_list, sent_list in zip(entity_substr_batch, sent_batch):
+                text = " ".join(sent_list).lower()
                 log.info(f"text {text}")
                 entity_offsets_list = []
                 for entity_substr in entity_substr_list:
@@ -155,17 +154,18 @@ class EntityLinker(Component, Serializable):
                 entity_offsets_batch.append(entity_offsets_list)
 
         entity_ids_batch, entity_conf_batch, entity_id_tags_batch = [], [], []
-        for entity_substr_list, entity_offsets_list, entity_tags_list, sentences_list, sentences_offsets_list in zip(
-            entity_substr_batch, entity_offsets_batch, entity_tags_batch, sentences_batch, sentences_offsets_batch
+        for user_id, entity_substr_list, entity_offsets_list, entity_tags_list, sent_list, sent_offsets_list in zip(
+            user_ids, entity_substr_batch, entity_offsets_batch, entity_tags_batch, sent_batch, sent_offsets_batch
         ):
             entity_ids_list, entity_conf_list, entity_id_tags_list = self.link_entities(
+                user_id,
                 entity_substr_list,
                 entity_offsets_list,
                 entity_tags_list,
-                sentences_list,
-                sentences_offsets_list,
+                sent_list,
+                sent_offsets_list,
             )
-            log.info(f"entity_ids_list {entity_ids_list} entity_conf_list {entity_conf_list}")
+            log.info(f"user_id: {user_id} entity_ids_list: {entity_ids_list} entity_conf_list: {entity_conf_list}")
             
             entity_ids_batch.append(entity_ids_list[:self.num_entities_to_return])
             entity_conf_batch.append(entity_conf_list[:self.num_entities_to_return])
@@ -174,6 +174,7 @@ class EntityLinker(Component, Serializable):
 
     def link_entities(
         self,
+        user_id: str,
         entity_substr_list: List[str],
         entity_offsets_list: List[List[int]],
         entity_tags_list: List[str],
@@ -196,21 +197,21 @@ class EntityLinker(Component, Serializable):
                     for start in ["a ", "the ", "my ", "his ", "her "]:
                         if entity_substr.startswith(start):
                             entity_substr = entity_substr[len(start):]
-                    cand_ent_init = self.find_exact_match(entity_substr, tags)
+                    cand_ent_init = self.find_exact_match(user_id, entity_substr, tags)
                     clean_tags = [tag for tag, conf in tags]
                     entity_substr_split = [
                         word for word in entity_substr.split(" ") if word not in self.stopwords and len(word) > 0
                     ]
                     if len(entity_substr_split) == 1 and self.stemmer.stem(entity_substr) != entity_substr:
                         entity_substr_stemmed = self.stemmer.stem(entity_substr)
-                        stem_cand_ent_init = self.find_exact_match(entity_substr_stemmed, tags)
+                        stem_cand_ent_init = self.find_exact_match(user_id, entity_substr_stemmed, tags)
                         cand_ent_init = {**cand_ent_init, **stem_cand_ent_init}
                     if not cand_ent_init and len(entity_substr_split) > 1:
-                        cand_ent_init = self.find_fuzzy_match(entity_substr_split, tags)
+                        cand_ent_init = self.find_fuzzy_match(user_id, entity_substr_split, tags)
                     if not cand_ent_init:
-                        cand_ent_init = self.find_exact_match(entity_substr)
+                        cand_ent_init = self.find_exact_match(user_id, entity_substr)
                     if not cand_ent_init:
-                        cand_ent_init = self.find_fuzzy_match(entity_substr_split)
+                        cand_ent_init = self.find_fuzzy_match(user_id, entity_substr_split)
 
                 cand_ent_scores = []
                 for entity in cand_ent_init:
@@ -242,25 +243,27 @@ class EntityLinker(Component, Serializable):
                 cand_ent_init[entity_id].add((substr_score, entity_rels, 1.0, f_tag))
         return cand_ent_init
 
-    def find_exact_match(self, entity_substr, tags=None):
+    def find_exact_match(self, user_id, entity_substr, tags=None):
         entity_substr = entity_substr.lower()
         entity_substr_split = entity_substr.split()
         cand_ent_init = defaultdict(set)
 
-        query = "SELECT * FROM inverted_index WHERE title MATCH ?;"
-        res = self.cur.execute(query, (entity_substr,))
+        query_str = f"title:{entity_substr} AND user_id:{user_id}"
+        query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
+        res = self.cur.execute(query, (query_str,))
         entities_and_ids = res.fetchall()
         
         if entities_and_ids:
             cand_ent_init = self.process_cand_ent(cand_ent_init, entities_and_ids, entity_substr_split, tags)
         return cand_ent_init
 
-    def find_fuzzy_match(self, entity_substr_split, tags=None):
+    def find_fuzzy_match(self, user_id, entity_substr_split, tags=None):
         entity_substr_split = [word.lower() for word in entity_substr_split]
         cand_ent_init = defaultdict(set)
         for word in entity_substr_split:
-            query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(word)
-            res = self.cur.execute(query)
+            query_str = f"title:{word} AND user_id:{user_id}"
+            query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
+            res = self.cur.execute(query, (query_str,))
             part_entities_and_ids = res.fetchall()
             cand_ent_init = self.process_cand_ent(cand_ent_init, part_entities_and_ids, entity_substr_split, tags)
         return cand_ent_init
