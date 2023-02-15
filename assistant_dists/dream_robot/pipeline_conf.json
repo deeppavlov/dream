@@ -52,12 +52,14 @@
                 "timeout"
             ]
         },
-        "bot_annotator_selector": {
+        "response_annotator_selectors": {
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
                 "annotator_names": [
-                    "sentseg"
+                    "sentseg",
+                    "ner",
+                    "spacy_nounphrases"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -65,13 +67,23 @@
                 "selector"
             ]
         },
-        "post_annotators": {
+        "response_annotators": {
             "sentseg": {
                 "connector": "connectors.sentseg",
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "bot_annotator_selector"
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt"
+            },
+            "ner": {
+                "connector": "connectors.ner",
+                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors",
+                    "response_annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt"
             }
@@ -81,7 +93,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://spelling-preprocessing:8074/response"
+                    "url": "http://spelling-preprocessing:8074/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -89,6 +101,19 @@
             },
             "sentseg": {
                 "connector": "connectors.sentseg",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
+            "spacy_nounphrases": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://spacy-nounphrases:8006/respond"
+                },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
@@ -113,7 +138,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://intent-catcher:8014/detect"
+                    "url": "http://intent-catcher-commands:8014/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -219,7 +244,7 @@
             "dialogpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 3,
                     "url": "http://dialogpt:8125/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
@@ -228,22 +253,9 @@
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
-            },
-            "robot_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://robot:8130/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:robot_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
             }
         },
-        "post_skill_selector_annotators": {
+        "candidate_annotators": {
             "badlisted_words": {
                 "connector": {
                     "protocol": "http",
@@ -260,17 +272,45 @@
             "convers_evaluator_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 2,
                     "url": "http://convers-evaluator-annotator:8004/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convers_evaluator_annotator_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "spacy_nounphrases": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://spacy-nounphrases:8006/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "entity_detection": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://entity-detection:8103/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
                 "state_manager_method": "add_hypothesis_annotation_batch"
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
@@ -279,10 +319,20 @@
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
-                    "post_skill_selector_annotators"
+                    "candidate_annotators"
                 ],
                 "state_manager_method": "add_bot_utterance"
             }
         }
+    },
+    "metadata": {
+        "display_name": "Dream Robot",
+        "author": "DeepPavlov",
+        "description": "Full version of DeepPavlov Dream Socialbot",
+        "version": "0.1.0",
+        "date_created": "2022-12-12T12:12:00",
+        "ram_usage": "50 GB",
+        "gpu_usage": "50 GB",
+        "disk_usage": "50 GB"
     }
 }

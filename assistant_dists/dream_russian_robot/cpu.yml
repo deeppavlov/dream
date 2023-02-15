@@ -1,18 +1,21 @@
 version: '3.7'
 services:
-  ner:
+  ner-ru:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  dialogpt:
+  dialogpt-ru:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  dialogrpt:
+  dialogrpt-ru:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  toxic-classification:
+  sentseg-ru:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  intent-catcher:
+  toxic-classification-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  intent-catcher-commands-ru:
     environment:
       CUDA_VISIBLE_DEVICES: ""

@@ -11,6 +11,12 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8004:8004
+  spacy-nounphrases:
+    volumes:
+      - "./annotators/spacy_nounphrases:/src"
+      - "./common:/src/common"
+    ports:
+      - 8006:8006
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
@@ -40,11 +46,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8015:8015
-  intent-catcher:
+  intent-catcher-commands:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8014:8014
   badlisted-words:
@@ -61,6 +68,7 @@ services:
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
   entity-detection:

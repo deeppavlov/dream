@@ -3,12 +3,17 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_robot/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
-          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021, 
+          dff-intent-responder-skill:8012, intent-catcher-commands:8014, badlisted-words:8018,
+          spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, 
           dff-command-selector-skill:8015, robot-command-sender:8135, robot-notifications:8136, robot-fake-server:8137"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+
   convers-evaluator-annotator:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: conveval.json
@@ -27,8 +32,23 @@ services:
         reservations:
           memory: 2G
 
+  spacy-nounphrases:
+    env_file: [ .env ]
+    build:
+      context: .
+      dockerfile: ./annotators/spacy_nounphrases/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8006
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
   dff-program-y-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8008
@@ -44,9 +64,8 @@ services:
         reservations:
           memory: 1024M
 
-
   sentseg:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/SentSeg/
     command: flask run -h 0.0.0.0 -p 8011
@@ -60,7 +79,7 @@ services:
           memory: 1.5G
 
   convers-evaluation-selector:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -76,6 +95,10 @@ services:
         PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
         ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 0
         PRIORITIZE_SCRIPTED_SKILLS: 0
+        CONFIDENCE_STRENGTH: 0.8
+        CONV_EVAL_STRENGTH: 0.4
+        PRIORITIZE_HUMAN_INITIATIVE: 1
+        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -123,7 +146,7 @@ services:
         reservations:
           memory: 128M
 
-  intent-catcher:
+  intent-catcher-commands:
     env_file: [.env]
     build:
       context: .
@@ -144,7 +167,7 @@ services:
           memory: 3.5G
 
   badlisted-words:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
@@ -158,7 +181,7 @@ services:
           memory: 256M
 
   spelling-preprocessing:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
@@ -179,7 +202,10 @@ services:
         SERVICE_NAME: dialogpt
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
-      context: ./services/dialogpt/
+        CONFIG_NAME: dialogpt_en.json
+        MAX_HISTORY_DEPTH: 2
+      context: .
+      dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
     environment:
       - CUDA_VISIBLE_DEVICES=0
@@ -192,11 +218,10 @@ services:
           memory: 2G
 
   entity-detection:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
-        SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
-        EL_TAG_CONFIG: src/el_tags_infer.json
+        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
         CONFIG: entity_detection_eng.json
         LOWERCASE: 1
         PORT: 8103
@@ -207,7 +232,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8103
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -216,19 +241,26 @@ services:
           memory: 2.5G
 
   ner:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
-      context: ./annotators/NER/
+      args:
+        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+        PORT: 8021
+        SRC_DIR: annotators/NER_deeppavlov
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+      context: ./
+      dockerfile: annotators/NER_deeppavlov/Dockerfile
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     tty: true
     deploy:
       resources:
         limits:
-          memory: 1512M
+          memory: 2G
         reservations:
-          memory: 1512M
+          memory: 2G
 
   robot-command-sender:
     env_file: [ .env ]

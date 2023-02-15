@@ -10,32 +10,38 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  dff-program-y-skill:
-  convers-evaluation-selector:
-  dff-intent-responder-skill:
-  dff-command-selector-skill:
-  dff-generative-skill:
-  intent-catcher:
+  dff-program-y-ru-skill:
+  convers-evaluation-selector-ru:
+  dff-intent-responder-ru-skill:
+  dff-command-selector-ru-skill:
+  dff-generative-ru-skill:
+  intent-catcher-commands-ru:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  badlisted-words:
-  toxic-classification:
+  badlisted-words-ru:
+  toxic-classification-ru:
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  ner:
+  ner-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  personal-info-skill:
-  dff-friendship-skill:
-  entity-detection:
+  personal-info-ru-skill:
+  spelling-preprocessing-ru:
+  dff-friendship-ru-skill:
+  entity-detection-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-  dialogpt:
+  sentseg-ru:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  dialogrpt:
+  dialogpt-ru:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=6
+  dialogrpt-ru:
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
 version: '3.7'
