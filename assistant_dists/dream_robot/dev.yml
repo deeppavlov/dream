@@ -75,10 +75,23 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
-  robot:
+  robot-command-sender:
     volumes:
-      - "./skills/robot_skill:/src"
+      - "./services/robot_command_sender:/src"
+      - "./common:/src/common"
     ports:
-      - 8130:8130
+      - 8135:8135
+  robot-notifications:
+    volumes:
+      - "./services/robot_notifications:/src"
+      - "./common:/src/common"
+    ports:
+      - 8136:8136
+  robot-fake-server:
+    volumes:
+      - "./services/robot_fake_server:/src"
+      - "./common:/src/common"
+    ports:
+      - 8137:8137
 
 version: "3.7"

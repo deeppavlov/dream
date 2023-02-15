@@ -116,11 +116,5 @@ services:
       - "./common:/src/common"
     ports:
       - 8137:8137
-  dff-template-skill:
-    volumes:
-      - "./skills/dff_template_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8120:8120
 
 version: "3.7"
