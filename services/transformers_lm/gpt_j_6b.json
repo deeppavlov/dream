@@ -4,5 +4,5 @@
   "top_p": 0.9,
   "temperature": 0.9,
   "do_sample": true,
-  "num_return_sequences": 3
+  "num_return_sequences": 1
 }
