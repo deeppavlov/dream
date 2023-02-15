@@ -1308,11 +1308,11 @@ services:
     build:
       args:
         CONFIG: t5_generative_ie_lite_infer.json
-        PORT: 8129
+        PORT: 8136
         SRC_DIR: annotators/property_extraction/
       context: ./
       dockerfile: annotators/property_extraction/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8129
+    command: flask run -h 0.0.0.0 -p 8136
     environment:
       - FLASK_APP=server
     deploy:

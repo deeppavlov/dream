@@ -14,4 +14,4 @@ COPY $SRC_DIR /src
 
 WORKDIR /src
 
-CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8129
+CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8136

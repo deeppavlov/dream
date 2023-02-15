@@ -452,5 +452,5 @@ services:
       - "./annotators/property_extraction:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8129:8129
+      - 8136:8136
 version: "3.7"
