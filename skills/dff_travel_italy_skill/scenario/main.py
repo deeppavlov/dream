@@ -43,10 +43,10 @@ ZERO_CONFIDENCE = 0.0
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("travel_italy_general", "italy_start", 2): loc_cnd.start_condition,
-            ("travel_italy_general", "like_italy", 1): loc_cnd.is_proposed_skill,
-            ("italian_food_flow_restart", "tell_more", 1.8): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
-            ("italian_food_flow", "food_start", 1.5): cnd.all(
+            ("travel_italy_general", "italy_start"): loc_cnd.start_condition,
+            ("travel_italy_general", "like_italy"): loc_cnd.is_proposed_skill,
+            ("italian_food_flow_restart", "tell_more"): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
+            ("italian_food_flow", "food_start"): cnd.all(
                 [
                     loc_cnd.asked_about_italian_cuisine,
                     cnd.neg(loc_cnd.check_flag("food_start_visited")),
@@ -253,6 +253,7 @@ flows = {
                     user_fav_food=["prop:favorite_food", "default:this dish"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
             },
             TRANSITIONS: {
@@ -272,6 +273,7 @@ flows = {
                     user_fav_drink=["prop:favorite_drink", "default:this pairing"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
+                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
                 "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
             },
             TRANSITIONS: {
