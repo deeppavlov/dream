@@ -32,26 +32,27 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://entity_linking:3556/model"
+                    "url": "http://entity-linking-deepy:8075/model"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:entity_linking_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:entity_linking_formatter",
                 "state_manager_method": "add_annotation"
             },
             "sentseg": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://sentseg:3558/sentseg"
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:simple_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://intent-catcher:3557/detect"
+                    "url": "http://intent-catcher:8014/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -66,10 +67,10 @@
             "harvesters_maintenance_gobot_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://harvesters_maintenance_gobot_skill:3552/respond"
+                    "url": "http://harvesters-maintenance-gobot-skill:3882/respond"
                 },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_skill_formatter",
                 "state_manager_method": "add_hypothesis",
                 "previous_services": ["annotators"]
             },
@@ -77,7 +78,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-program-y-skill:3555/respond"
+                    "url": "http://dff-program-y-skill:8008/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -91,23 +92,23 @@
             "emotion_classification": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3554/model"
+                    "class_name": "assistant_dists.deepy_adv.connectors:BatchConnector",
+                    "url": "http://emotion-classification-deepy:8015/model"
                 },
-              "dialog_formatter": "dp_formatters:hypotheses_list",
-              "response_formatter": "dp_formatters:simple_formatter_service",
+              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
               "previous_services": ["skills"],
               "state_manager_method": "add_hypothesis_annotation_batch"
             }
         },
         "response_selectors": {
-            "rule_based_response_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3553/respond"
+                    "url": "http://rule-based-response-selector:8005/respond"
                 },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_response_selector_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": ["response_annotators"],
                 "state_manager_method": "add_bot_utterance"
             }

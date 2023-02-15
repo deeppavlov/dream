@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_alexa/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009,
+          spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, scripts-priority-selector:8009,
           personality-catcher:8010, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           sentrewrite:8017, ner:8021, dff-program-y-dangerous-skill:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
@@ -104,7 +104,7 @@ services:
         reservations:
           memory: 1.5G
 
-  convers-evaluation-selector:
+  scripts-priority-selector:
     env_file: [.env]
     build:
       args:
@@ -374,7 +374,7 @@ services:
       args:
         GRAPH: atomic
         SERVICE_HOME: ./annotators/COMeT
-        SERVICE_NAME: comet-atomic
+        SERVICE_NAME: comet_atomic
         SERVICE_PORT: 8053
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
@@ -396,7 +396,7 @@ services:
       args:
         GRAPH: conceptnet
         SERVICE_HOME: ./annotators/COMeT/
-        SERVICE_NAME: comet-conceptnet
+        SERVICE_NAME: comet_conceptnet
         SERVICE_PORT: 8065
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
@@ -549,6 +549,7 @@ services:
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
+        FAST: 1
       context: ./
       dockerfile: annotators/wiki_parser/Dockerfile
     command: flask run -h 0.0.0.0 -p 8077
@@ -1055,13 +1056,12 @@ services:
           memory: 512M
         reservations:
           memory: 512M
- 
+
   entity-detection:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
-        SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
-        EL_TAG_CONFIG: src/el_tags_infer.json
+        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
         CONFIG: entity_detection_eng.json
         LOWERCASE: 1
         PORT: 8103

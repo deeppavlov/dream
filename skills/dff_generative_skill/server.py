@@ -23,7 +23,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-DIALOGPT_SERVICE_URL = os.environ["DIALOGPT_SERVICE_URL"]
+GENERATIVE_SERVICE_URL = os.environ["GENERATIVE_SERVICE_URL"]
 
 logging.basicConfig(
     format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s",
@@ -61,7 +61,7 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = containers.is_container_running(DIALOGPT_SERVICE_URL)
+    result = containers.is_container_running(GENERATIVE_SERVICE_URL)
     if result:
         break
     else:

@@ -55,7 +55,7 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "star wars": {
                                 "Causes": [
                                     "global thermonuclear war",
@@ -639,7 +639,7 @@
                             "factoid": 0.0006235070759430528,
                             "conversational": 0.9993764758110046
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",

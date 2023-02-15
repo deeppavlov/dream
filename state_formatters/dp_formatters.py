@@ -526,6 +526,10 @@ def persona_bot_formatter(dialog: Dict):
     ]
 
 
+def full_dialog(dialog: Dict):
+    return [{"dialogs": [dialog]}]
+
+
 def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector
@@ -552,6 +556,10 @@ def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="modified_sents")
     return [{"dialogs": [dialog]}]
+
+
+def base_skill_formatter(payload: Dict):
+    return [{"text": payload[0], "confidence": payload[1]}]
 
 
 def skill_with_attributes_formatter_service(payload: List):

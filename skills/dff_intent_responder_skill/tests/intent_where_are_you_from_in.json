@@ -162,7 +162,7 @@
                             }
                         ],
                         "entity_linking": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
@@ -374,7 +374,7 @@
                             }
                         ],
                         "entity_linking": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [

@@ -19,8 +19,8 @@ services:
           dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, seq2seq-persona-based:8140,
-          property-extraction:8129, dff-template-skill:8120"
+          midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, seq2seq-persona-based:8140, sentence-ranker:8128,
+          dff-template-skill:8120, property-extraction:8136"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -390,7 +390,7 @@ services:
       args:
         GRAPH: atomic
         SERVICE_HOME: ./annotators/COMeT
-        SERVICE_NAME: comet-atomic
+        SERVICE_NAME: comet_atomic
         SERVICE_PORT: 8053
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
@@ -412,7 +412,7 @@ services:
       args:
         GRAPH: conceptnet
         SERVICE_HOME: ./annotators/COMeT/
-        SERVICE_NAME: comet-conceptnet
+        SERVICE_NAME: comet_conceptnet
         SERVICE_PORT: 8065
         PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
@@ -565,6 +565,7 @@ services:
         PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
+        FAST: 1
       context: ./
       dockerfile: annotators/wiki_parser/Dockerfile
     command: flask run -h 0.0.0.0 -p 8077
@@ -605,7 +606,7 @@ services:
         CONFIG: kbqa_cq_mt_bert_lite.json
         PORT: 8072
         SRC_DIR: annotators/kbqa/
-        COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
+        COMMIT: 283a25e322e8fedc6ff0c159e4ec76bb165ae405
       context: ./
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
@@ -1075,8 +1076,7 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
-        EL_TAG_CONFIG: src/el_tags_infer.json
+        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
         CONFIG: entity_detection_eng.json
         LOWERCASE: 1
         PORT: 8103
@@ -1085,6 +1085,7 @@ services:
       context: ./
       dockerfile: annotators/entity_detection/Dockerfile
     command: flask run -h 0.0.0.0 -p 8103
+    environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=0
     deploy:

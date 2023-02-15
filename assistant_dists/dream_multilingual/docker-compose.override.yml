@@ -3,16 +3,16 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_multilingual/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluation-selector:8009, 
-          gpt2-generator:8132, toxic-classification:8013,
-          sentiment-classification:8024, sentence-ranker:8128"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+          gpt2-multilingual:8132, toxic-classification-multilingual:8013,
+          sentiment-classification-multilingual:8024, sentence-ranker-multilingual:8128"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
 
   convers-evaluation-selector:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -41,16 +41,16 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
-  gpt2-generator:
+  gpt2-multilingual:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8132
-        SERVICE_NAME: gpt2-generator
+        SERVICE_NAME: gpt2_generator
         CONFIG_NAME: mgpt.json
         PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
         N_HYPOTHESES_TO_GENERATE: 3
@@ -67,12 +67,12 @@ services:
         reservations:
           memory: 6G
 
-  toxic-classification:
+  toxic-classification-multilingual:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8013
-        SERVICE_NAME: toxic-classification
+        SERVICE_NAME: toxic_classification
         PRETRAINED_MODEL_NAME_OR_PATH: https://github.com/unitaryai/detoxify/releases/download/v0.4-alpha/multilingual_debiased-0b549669.ckpt
       context: ./annotators/MultilingualToxicClassification/
     command: flask run -h 0.0.0.0 -p 8013
@@ -86,12 +86,12 @@ services:
         reservations:
           memory: 3.5G
 
-  sentiment-classification:
+  sentiment-classification-multilingual:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8024
-        SERVICE_NAME: sentiment-classification
+        SERVICE_NAME: sentiment_classification
         PRETRAINED_MODEL_NAME_OR_PATH: cardiffnlp/twitter-xlm-roberta-base-sentiment
       context: ./annotators/MultilingualSentimentClassification/
     command: flask run -h 0.0.0.0 -p 8024
@@ -105,7 +105,7 @@ services:
         reservations:
           memory: 3.5G
 
-  sentence-ranker:
+  sentence-ranker-multilingual:
     env_file: [ .env ]
     build:
       args:

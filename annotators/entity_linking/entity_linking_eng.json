@@ -10,7 +10,7 @@
         "descr_encoder_weights_path": "{MODELS_PATH}/entity_descr_nll_ranking/descr_encoder.pth.tar",
         "special_token_id": 30522,
         "descr_batch_size": 10,
-        "device": "cpu"
+        "device": "gpu"
       },
       {
         "class_name": "src.entity_linking:EntityLinker",
@@ -29,6 +29,7 @@
         "num_entities_to_return": 5,
         "lemmatize": true,
         "use_tags": true,
+        "use_related_tags": true,
         "use_descriptions": true,
         "full_paragraph": true,
         "return_confidences": true,

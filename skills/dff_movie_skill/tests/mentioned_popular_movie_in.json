@@ -52,7 +52,7 @@
                             "factoid": 0.009537387639284134,
                             "conversational": 0.990462601184845
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "midas_classification": [
                             {
                                 "appreciation": 0.003737201215699315,
@@ -291,7 +291,7 @@
                         "ner": [
                             []
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "conjuring": {
                                 "Causes": [
                                     "hallucination",

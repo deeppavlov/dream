@@ -184,7 +184,7 @@
                                 "no."
                             ]
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "entity_linking": [],
                         "topic_recommendation": [
                             "dff_gossip_skill",
@@ -313,7 +313,7 @@
                         "ner": [
                             []
                         ],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "cobot_dialogact": {
                             "intents": [
                                 "General_ChatIntent"

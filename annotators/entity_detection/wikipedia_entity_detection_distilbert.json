@@ -11,9 +11,9 @@
     "in_y": ["y"],
     "pipe": [
       {
-        "class_name": "src.torch_transformers_preprocessor:TorchTransformersNerPreprocessor",
+        "class_name": "torch_transformers_ner_preprocessor",
         "vocab_file": "{TRANSFORMER}",
-        "do_lower_case": false,
+        "do_lower_case": true,
         "max_seq_length": 512,
         "max_subword_length": 15,
         "token_masking_prob": 0.0,
@@ -32,11 +32,10 @@
         "out": ["y_ind"]
       },
       {
-        "class_name": "src.torch_transformers_sequence_tagger:TorchTransformersSequenceTagger",
+        "class_name": "torch_transformers_sequence_tagger",
         "n_tags": "#tag_vocab.len",
         "pretrained_bert": "{TRANSFORMER}",
         "attention_probs_keep_prob": 0.5,
-        "return_probas": true,
         "encoder_layer_ids": [-1],
         "optimizer": "AdamW",
         "optimizer_parameters": {
@@ -81,9 +80,6 @@
     "validation_patience": 10,
     "val_every_n_batches": 100,
     "log_every_n_batches": 100,
-    "show_examples": false,
-    "pytest_max_batches": 2,
-    "pytest_batch_size": 8,
     "evaluation_targets": ["valid", "test"],
     "class_name": "torch_trainer"
   },
@@ -91,21 +87,17 @@
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
-      "MODELS_PATH": "{ROOT_PATH}/models",
-      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/distilbert_base_uncased",
-      "MODEL_PATH": "{MODELS_PATH}/entity_detection_wikipedia_distilbert"
+      "TRANSFORMER": "bert-base-uncased",
+      "MODEL_PATH": "{ROOT_PATH}/models/dialog_entity_detection"
     },
     "requirements": [
       "{DEEPPAVLOV_PATH}/requirements/transformers.txt",
-      "{DEEPPAVLOV_PATH}/requirements/pytorch16.txt"
+      "{DEEPPAVLOV_PATH}/requirements/pytorch.txt",
+      "{DEEPPAVLOV_PATH}/requirements/torchcrf.txt"
     ],
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/deeppavlov_data/entity_linking/distilbert_base_uncased.tar.gz",
-        "subdir": "{DOWNLOADS_PATH}/torch_bert_models/distilbert_base_uncased"
-      },
-      {
-        "url": "http://files.deeppavlov.ai/v1/ner/entity_detection_wikipedia_distilbert.tar.gz",
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/dialog_entity_detection/dialog_entity_detection_dream.tar.gz",
         "subdir": "{MODEL_PATH}"
       }
     ]
