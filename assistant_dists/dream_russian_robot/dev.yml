@@ -29,7 +29,7 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8011:8011
-  dff-command-selector-skill:
+  dff-command-selector-ru-skill:
     volumes:
       - "./skills/dff_command_selector_skill:/src"
       - "./common:/src/common"

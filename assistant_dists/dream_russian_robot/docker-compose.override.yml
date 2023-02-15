@@ -8,7 +8,7 @@ services:
           spelling-preprocessing-ru:8074, dff-generative-ru-skill:8092,
           dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
           spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8126,
-          dff-command-selector-skill:8015, robot-command-sender:8135, robot-notifications:8136, robot-fake-server:8137"
+          dff-command-selector-ru-skill:8015, robot-command-sender:8135, robot-notifications:8136, robot-fake-server:8137"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
