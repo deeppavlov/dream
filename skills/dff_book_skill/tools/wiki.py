@@ -301,7 +301,7 @@ def get_booklist(plain_author_name: str) -> str:
 
 def best_plain_book_by_author(
     plain_author_name: str,
-    default_phrase: str = '',
+    default_phrase: str = "",
     plain_last_bookname: Optional[str] = None,
     top_n_best_books: int = 1,
 ) -> Optional[str]:
