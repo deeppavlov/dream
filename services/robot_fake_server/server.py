@@ -20,10 +20,11 @@ def respond_is_command_valid():
     st_time = time.time()
     command = request.json.get("command", None)
     # dialog_id = request.json.get("dialog_id", None)
-    if "forward" in command:
-        results = {"result": False}
-    else:
+    valid_commands = {"track_object", "turn_around", "move_forward", "move_backward", "open_door", "move_to_point"}
+    if command in valid_commands:
         results = {"result": True}
+    else:
+        results = {"result": False}
     logger.info(f"fake-robot-server `is_command_valid` results: {results}")
 
     total_time = time.time() - st_time
