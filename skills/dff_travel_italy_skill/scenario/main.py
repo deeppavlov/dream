@@ -44,12 +44,7 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("travel_italy_general", "italy_start", 2): loc_cnd.start_condition,
-            ("travel_italy_general", "like_italy", 1): cnd.all(     
-                [
-                    loc_cnd.is_proposed_skill,
-                    cnd.neg(loc_cnd.check_flag("italy_travel_skill_active")),
-                ]
-            ),
+            ("travel_italy_general", "like_italy", 1): loc_cnd.is_proposed_skill,
             ("italian_food_flow_restart", "tell_more", 1.8): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
             ("italian_food_flow", "food_start", 1.5): cnd.all(
                 [
@@ -120,7 +115,6 @@ flows = {
             TRANSITIONS: {
                 ("concrete_place_flow", "when_visited"): cnd.true(),
             },
-            MISC: {"dialog_act": ["opinion"]},
         }, 
         "neg_to_italy": {
             RESPONSE: 'What a pity! This country and its culture are truly inspiring. What about italian cuisine? Do you like it?',
