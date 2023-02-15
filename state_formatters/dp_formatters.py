@@ -1124,3 +1124,7 @@ def robot_formatter(dialog: Dict) -> Dict:
     Either edit it later or choose one of the existing formatters"""
     detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
     return [{"detected": detected}]
+
+
+def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_command_selector_skill")
