@@ -49,7 +49,7 @@
                             }
                         },
                         "entity_detection": {},
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",

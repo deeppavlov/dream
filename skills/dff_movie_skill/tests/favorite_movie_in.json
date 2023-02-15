@@ -181,7 +181,7 @@
                                 "hi."
                             ]
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "entity_linking": [],
                         "news_api_annotator": [
                             {
@@ -377,7 +377,7 @@
                                 "Movies_TV"
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "movie": {
                                 "Causes": [
                                     "laughter",

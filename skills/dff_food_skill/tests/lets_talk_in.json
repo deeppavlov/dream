@@ -51,7 +51,7 @@
                                 }
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "food": {
                                 "Causes": [
                                     "you feel full",

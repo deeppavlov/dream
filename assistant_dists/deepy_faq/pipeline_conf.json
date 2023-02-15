@@ -34,10 +34,10 @@
             "faq_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://faq_skill:3772/respond"
+                    "url": "http://faq-skill:3772/respond"
                 },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_skill_formatter",
                 "state_manager_method": "add_hypothesis",
                 "previous_services": ["annotators"]
             },
@@ -45,7 +45,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-program-y-skill:3775/respond"
+                    "url": "http://dff-program-y-skill:8008/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -59,23 +59,23 @@
             "emotion_classification": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3774/model"
+                    "class_name": "assistant_dists.deepy_faq.connectors:BatchConnector",
+                    "url": "http://emotion-classification-deepy:8015/model"
                 },
-              "dialog_formatter": "dp_formatters:hypotheses_list",
-              "response_formatter": "dp_formatters:simple_formatter_service",
+              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
               "previous_services": ["skills"],
               "state_manager_method": "add_hypothesis_annotation_batch"
             }
         },
         "response_selectors": {
-            "rule_based_response_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3773/respond"
+                    "url": "http://rule-based-response-selector:8005/respond"
                 },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_response_selector_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": ["response_annotators"],
                 "state_manager_method": "add_bot_utterance"
             }

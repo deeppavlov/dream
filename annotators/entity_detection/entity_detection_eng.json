@@ -3,12 +3,12 @@
     "in": ["text"],
     "pipe": [
       {
-        "class_name": "src.ner_chunker:NerChunker",
+        "class_name": "ner_chunker",
         "batch_size": 16,
         "max_chunk_len" : 180,
         "max_seq_len" : 400,
         "vocab_file": "{TRANSFORMER}",
-        "do_lower_case": false,
+        "lowercase": true,
         "in": ["text"],
         "out": ["x_chunk", "chunk_nums", "chunk_sentences_offsets", "chunk_sentences"]
       },
@@ -17,35 +17,26 @@
         "o_tag": "O",
         "tags_file": "{NER_PATH}/tag.dict",
         "return_entities_with_tags": true,
-        "add_nouns": true,
-        "class_name": "src.entity_detection_parser:EntityDetectionParser",
+        "class_name": "entity_detection_parser",
         "id": "edp"
       },
       {
-        "class_name": "src.ner_chunker:NerChunkModel",
-        "add_nouns": true,
-        "ner": {"config_path": "src/wikipedia_entity_detection_distilbert.json"},
+        "class_name": "ner_chunk_model",
+        "ner": {"config_path": "./wikipedia_entity_detection_distilbert.json"},
         "ner_parser": "#edp",
         "in": ["x_chunk", "chunk_nums", "chunk_sentences_offsets", "chunk_sentences"],
-        "out": ["entity_substr", "entity_offsets", "tags", "probas", "sentences_offsets",
-                "sentences", "tokens", "tokens_conf", "entity_positions", "sentences_tokens"]
-      },
-      {
-        "config_path": "src/el_tags_infer.json",
-        "in": ["text", "entity_offsets", "entity_substr"],
-        "out": ["finegrained_tags"]
+        "out": ["entity_substr", "entity_offsets", "entity_positions", "tags", "sentences_offsets", "sentences", "probas"]
       }
     ],
-    "out": ["entity_substr", "entity_offsets", "entity_positions", "tokens", "tags", "finegrained_tags", "sentences_offsets", "sentences", "probas", "tokens_conf"]
+    "out": ["entity_substr", "entity_offsets", "entity_positions", "tags", "sentences_offsets", "sentences", "probas"]
   },
   "metadata": {
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
-      "MODELS_PATH": "{ROOT_PATH}/models",
       "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs",
-      "NER_PATH": "{MODELS_PATH}/entity_detection_wikipedia_distilbert",
-      "TRANSFORMER": "{DOWNLOADS_PATH}/torch_bert_models/distilbert_base_uncased"
+      "NER_PATH": "{ROOT_PATH}/models/dialog_entity_detection",
+      "TRANSFORMER": "bert-base-uncased"
     },
     "download": [
     ]

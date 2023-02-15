@@ -41,7 +41,7 @@ services:
   dff-program-y-skill:
   personality-catcher:
   sentseg:
-  convers-evaluation-selector:
+  scripts-priority-selector:
   sentrewrite:
   dff-intent-responder-skill:
   intent-catcher:

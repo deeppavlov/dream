@@ -57,7 +57,7 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "1 very specific question": {
                                 "Causes": [
                                     "answer",

@@ -163,7 +163,7 @@
                                 "yes_no_question": 0.011187417432665825
                             }
                         ],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "entity_linking": [],
                         "sentrewrite": {
                             "clusters": [],
@@ -396,7 +396,7 @@
                             ]
                         },
                         "entity_linking": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "fact_retrieval": {
                             "facts": [],
                             "topic_facts": []
