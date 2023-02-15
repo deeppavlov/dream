@@ -1005,18 +1005,21 @@ def get_entities(annotated_utterance, only_named=False, with_labels=False, retur
     entities = []
     if not only_named:
         if "entity_detection" in annotated_utterance.get("annotations", {}):
+            # for english and russian languages
             labelled_entities = annotated_utterance["annotations"]["entity_detection"].get("labelled_entities", [])
             # skip some labels
             entities = [ent for ent in labelled_entities if ent["label"] not in COBOT_ENTITIES_SKIP_LABELS]
             if not with_labels:
                 entities = [ent["text"] for ent in entities]
         elif "spacy_nounphrases" in annotated_utterance.get("annotations", {}):
+            # for english language
             entities = annotated_utterance.get("annotations", {}).get("spacy_nounphrases", [])
             if with_labels:
                 # actually there are no labels for cobot nounphrases
                 # so, let's make it as for cobot_entities format
                 entities = [{"text": ent, "label": "misc"} for ent in entities]
-        if len(entities) == 0 and "spacy_annotator" in annotated_utterance.get("annotations", {}):
+        elif "spacy_annotator" in annotated_utterance.get("annotations", {}):
+            # for russian language
             words = annotated_utterance["annotations"]["spacy_annotator"]
             for word in words:
                 if word.get("pos_", "") == "NOUN":
