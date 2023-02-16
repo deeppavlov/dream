@@ -51,7 +51,6 @@ def respond():
             entity_substr_batch,
             entity_ids_batch,
             conf_batch,
-            entity_id_tags_batch,
             entity_pages_batch,
             first_pars_batch,
             dbpedia_types_batch,
@@ -61,35 +60,21 @@ def respond():
             entity_substr_list,
             entity_ids_list,
             conf_list,
-            entity_id_tags_list,
             entity_pages_list,
             first_pars_list,
             dbpedia_types_list,
         ) in zip(
-            entity_substr_batch,
-            entity_ids_batch,
-            conf_batch,
-            entity_id_tags_batch,
-            entity_pages_batch,
-            first_pars_batch,
-            dbpedia_types_batch,
+            entity_substr_batch, entity_ids_batch, conf_batch, entity_pages_batch, first_pars_batch, dbpedia_types_batch
         ):
             entity_info_list = []
-            for entity_substr, entity_ids, confs, entity_id_tags, entity_pages, first_pars, dbpedia_types in zip(
-                entity_substr_list,
-                entity_ids_list,
-                conf_list,
-                entity_id_tags_list,
-                entity_pages_list,
-                first_pars_list,
-                dbpedia_types_list,
+            for entity_substr, entity_ids, confs, entity_pages, first_pars, dbpedia_types in zip(
+                entity_substr_list, entity_ids_list, conf_list, entity_pages_list, first_pars_list, dbpedia_types_list
             ):
                 entity_info = {}
                 entity_info["entity_substr"] = entity_substr
                 entity_info["entity_ids"] = entity_ids
                 entity_info["confidences"] = [float(elem[2]) for elem in confs]
                 entity_info["tokens_match_conf"] = [float(elem[0]) for elem in confs]
-                entity_info["entity_id_tags"] = entity_id_tags
                 entity_info["pages_titles"] = entity_pages
                 entity_info["first_paragraphs"] = first_pars
                 entity_info["dbpedia_types"] = dbpedia_types

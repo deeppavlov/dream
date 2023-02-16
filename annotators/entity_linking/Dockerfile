@@ -6,6 +6,12 @@ RUN apt-key del 7fa2af80  && \
     -o cuda-keyring_1.0-1_all.deb && \
     dpkg -i cuda-keyring_1.0-1_all.deb
 RUN apt-get -y update
+RUN apt-get install -y build-essential zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm \
+    libncurses5-dev libncursesw5-dev xz-utils libffi-dev liblzma-dev
+
+RUN apt-get -y update && \
+    apt-get install -y software-properties-common && \
+    apt-get update && apt-get install git -y
 
 RUN apt-get install -y sqlite3
 

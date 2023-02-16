@@ -15,7 +15,7 @@
       {
         "class_name": "src.entity_linking:EntityLinker",
         "in": ["entity_substr", "entity_tags", "sentences"],
-        "out": ["entity_ids", "entity_conf", "entity_id_tags", "entity_pages", "first_pars", "dbpedia_types"],
+        "out": ["entity_ids", "entity_conf", "entity_pages", "first_pars", "dbpedia_types"],
         "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream",
         "add_info_filename": "{DOWNLOADS_PATH}/entity_linking_eng/el_eng_dream/add_info.db",
         "tags_filename": "{MODELS_PATH}/finegrained_tags/tag.dict",
@@ -36,7 +36,7 @@
         "lang": "en"
       }
     ],
-    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_id_tags", "entity_pages", "first_pars", "dbpedia_types"]
+    "out": ["entity_substr", "entity_ids", "entity_conf", "entity_pages", "first_pars", "dbpedia_types"]
   },
   "metadata": {
     "variables": {
