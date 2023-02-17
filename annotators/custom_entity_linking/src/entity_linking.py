@@ -232,13 +232,13 @@ class EntityLinker(Component, Serializable):
 
     def process_cand_ent(self, cand_ent_init, entities_and_ids, entity_substr_split, tags):
         if tags:
-            for entity_title, entity_id, entity_rels, f_tag in entities_and_ids:
+            for entity_title, entity_id, entity_rels, f_tag, user_id in entities_and_ids:
                 for tag, tag_conf in tags:
                     if tag == f_tag:
                         substr_score = self.calc_substr_score(entity_title, entity_substr_split)
                         cand_ent_init[entity_id].add((substr_score, entity_rels, tag_conf, f_tag))
         else:
-            for entity_title, entity_id, entity_rels, f_tag in entities_and_ids:
+            for entity_title, entity_id, entity_rels, f_tag, user_id in entities_and_ids:
                 substr_score = self.calc_substr_score(entity_title, entity_substr_split)
                 cand_ent_init[entity_id].add((substr_score, entity_rels, 1.0, f_tag))
         return cand_ent_init
