@@ -167,6 +167,7 @@ services:
         SERVICE_NAME: dff_dream_persona_prompted_skill
         PROMPT_FILE: common/prompts/dream_persona.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_TIMEOUT: 5
         N_UTTERANCES_CONTEXT: 3
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile

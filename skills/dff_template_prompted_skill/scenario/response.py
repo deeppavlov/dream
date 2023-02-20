@@ -15,6 +15,7 @@ from df_engine.core import Context, Actor
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
+GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
@@ -25,7 +26,6 @@ with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
-GENERATIVE_TIMEOUT = 4
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.5
 
