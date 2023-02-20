@@ -17,6 +17,10 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+    GENERATIVE_SERVICE_CONFIG = json.load(f)
+
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 assert GENERATIVE_SERVICE_URL
@@ -63,7 +67,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if len(dialog_contexts) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
-            json={"dialog_contexts": [dialog_contexts], "prompts": [PROMPT]},
+            json={"dialog_contexts": [dialog_contexts], "prompts": [PROMPT], "configs": [GENERATIVE_SERVICE_CONFIG]},
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()[0]

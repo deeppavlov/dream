@@ -16,26 +16,16 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-CONFIG_NAME = os.environ.get("CONFIG_NAME")
 HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
-MAX_LEN_GEN_TEXT = os.environ.get("MAX_LEN_GEN_TEXT", 0)
-
-with open(CONFIG_NAME, "r") as f:
-    generation_params = json.load(f)
-if not MAX_LEN_GEN_TEXT:
-    max_length = generation_params.get("max_length", 50)
-else:
-    max_length = int(MAX_LEN_GEN_TEXT)
-del generation_params["max_length"]
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
+def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
     outputs = []
     dialog_context = ""
     if prompt:
@@ -46,6 +36,9 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
         dialog_context += "\n".join(context)
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
+
+    max_length = generation_params.get("max_length", 50)
+    generation_params.pop("max_length", None)
 
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
@@ -98,14 +91,15 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
+    configs = request.json.get("configs", [])
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
     try:
         responses = []
-        for context, prompt in zip(contexts, prompts):
+        for context, prompt, config in zip(contexts, prompts, configs):
             curr_responses = []
-            outputs = generate_responses(context, model, tokenizer, prompt)
+            outputs = generate_responses(context, model, tokenizer, prompt, config)
             for response in outputs:
                 if len(response) >= 2:
                     curr_responses += [response]
