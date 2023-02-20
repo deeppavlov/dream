@@ -3,8 +3,8 @@ harvesters-maintenance-gobot-skill:
   connector:
     protocol: http
     url: http://harvesters-maintenance-gobot-skill:3882/respond
-  dialog_formatter: dp_formatters:full_dialog
-  response_formatter: dp_formatters:base_skill_formatter
+  dialog_formatter: state_formatters.dp_formatters:full_dialog
+  response_formatter: state_formatters.dp_formatters:base_skill_formatter
   previous_services:
   - annotators
   state_manager_method: add_hypothesis

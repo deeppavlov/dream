@@ -4,6 +4,6 @@ sentseg:
     protocol: http
     timeout: 1.5
     url: http://sentseg:8011/sentseg
-  dialog_formatter: dp_formatters:last_utt_dialog
-  response_formatter: dp_formatters:simple_formatter_service
+  dialog_formatter: state_formatters.dp_formatters:last_utt_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
   state_manager_method: add_annotation

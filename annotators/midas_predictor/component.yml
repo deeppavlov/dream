@@ -15,4 +15,4 @@ midas-predictor:
   build_args:
     SERVICE_PORT: 8121
     SERVICE_NAME: midas_predictor
-  date_created: '2023-02-13T15:00:32'
+  date_created: '2023-02-20T17:45:11'

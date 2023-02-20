@@ -20,4 +20,4 @@ combined-classification:
   build_args:
     CONFIG: combined_classifier.json
     PORT: 8087
-  date_created: '2023-02-13T15:00:32'
+  date_created: '2023-02-20T17:45:11'

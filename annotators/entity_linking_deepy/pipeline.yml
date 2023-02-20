@@ -3,6 +3,6 @@ entity-linking-deepy:
   connector:
     protocol: http
     url: http://entity-linking-deepy:8075/model
-  dialog_formatter: dp_formatters:last_utt_dialog
-  response_formatter: dp_formatters:entity_linking_formatter
+  dialog_formatter: state_formatters.dp_formatters:last_utt_dialog
+  response_formatter: state_formatters.dp_formatters:entity_linking_formatter
   state_manager_method: add_annotation
