@@ -55,8 +55,8 @@
                     "protocol": "http",
                     "url": "http://entity-linking-deepy:8075/model"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:entity_linking_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:entity_linking_formatter",
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
@@ -71,8 +71,8 @@
                     "timeout": 1.5,
                     "url": "http://sentseg:8011/sentseg"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:simple_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
@@ -109,8 +109,8 @@
                     "url": "http://emotion-classification-deepy:8015/model",
                     "class_name": "connectors:BatchConnector"
                 },
-                "dialog_formatter": "dp_formatters:hypotheses_list",
-                "response_formatter": "dp_formatters:simple_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"
                 ],
@@ -129,8 +129,8 @@
                     "protocol": "http",
                     "url": "http://harvesters-maintenance-gobot-skill:3882/respond"
                 },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_skill_formatter",
                 "previous_services": [
                     "annotators"
                 ],
@@ -168,8 +168,8 @@
                     "protocol": "http",
                     "url": "http://rule-based-response-selector:8005/respond"
                 },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_response_selector_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "response_annotators"
                 ],

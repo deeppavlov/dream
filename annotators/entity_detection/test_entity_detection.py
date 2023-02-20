@@ -14,12 +14,12 @@ def main():
             {
                 "entities": ["capital", "russia"],
                 "labelled_entities": [
-                    {"text": "capital", "offsets": [12, 19], "label": "misc", "finegrained_label": [["misc", 1.0]]},
+                    {"finegrained_label": [["misc", 0.871]], "label": "misc", "offsets": [12, 19], "text": "capital"},
                     {
-                        "text": "russia",
-                        "offsets": [23, 29],
+                        "finegrained_label": [["loc", 0.9927]],
                         "label": "location",
-                        "finegrained_label": [["country", 0.953]],
+                        "offsets": [23, 29],
+                        "text": "russia",
                     },
                 ],
             }
@@ -28,7 +28,7 @@ def main():
             {
                 "entities": ["politics"],
                 "labelled_entities": [
-                    {"text": "politics", "offsets": [17, 25], "label": "misc", "finegrained_label": [["misc", 1.0]]}
+                    {"finegrained_label": [["misc", 0.9984]], "label": "misc", "offsets": [17, 25], "text": "politics"}
                 ],
             }
         ],
@@ -39,7 +39,6 @@ def main():
         result = requests.post(url, json=data).json()
         if result == gold_result:
             count += 1
-
     assert count == len(request_data)
     print("Success")
 
