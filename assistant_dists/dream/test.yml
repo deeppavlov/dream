@@ -74,6 +74,8 @@ services:
   entity-linking:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   wiki-parser:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
