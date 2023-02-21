@@ -84,7 +84,7 @@ services:
   ner:
     volumes:
       - './annotators/NER_deeppavlov:/src'
-      - "/archive/evseev/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
   eliza:

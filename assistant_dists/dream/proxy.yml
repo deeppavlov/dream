@@ -277,7 +277,7 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8074
       - PORT=8074
-  
+
   entity-linking:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
