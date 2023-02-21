@@ -20,7 +20,7 @@ services:
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, seq2seq-persona-based:8140, sentence-ranker:8128,
-          dff-template-skill:8120"
+          property-extraction:8136, dff-template-skill:8120"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -583,15 +583,15 @@ services:
     env_file: [ .env ]
     build:
       args:
-        CONFIG: qa.json
+        CONFIG: qa_eng.json
         PORT: 8078
-        COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
       context: services/text_qa
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
+      - LANGUAGE=EN
     deploy:
       resources:
         limits:
@@ -1076,8 +1076,7 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
-        EL_TAG_CONFIG: src/el_tags_infer.json
+        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
         CONFIG: entity_detection_eng.json
         LOWERCASE: 1
         PORT: 8103
@@ -1303,6 +1302,25 @@ services:
           memory: 10G
         reservations:
           memory: 10G
+
+  property-extraction:
+    env_file: [.env]
+    build:
+      args:
+        CONFIG: t5_generative_ie_lite_infer.json
+        PORT: 8136
+        SRC_DIR: annotators/property_extraction/
+      context: ./
+      dockerfile: annotators/property_extraction/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8136
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 7G
+        reservations:
+          memory: 7G
 
   dff-template-skill:
     env_file: [ .env ]
