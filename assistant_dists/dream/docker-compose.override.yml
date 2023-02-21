@@ -550,9 +550,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 23G
+          memory: 2.5G
         reservations:
-          memory: 23G
+          memory: 2.5G
 
   wiki-parser:
     env_file: [ .env ]
