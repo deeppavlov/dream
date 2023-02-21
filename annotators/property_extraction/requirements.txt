@@ -1,0 +1,14 @@
+pyopenssl==22.0.0
+Flask==1.1.1
+itsdangerous==2.0.1
+nltk==3.2.5
+numpy==1.18.0
+gunicorn==19.9.0
+requests==2.27.1
+jinja2<=3.0.3
+Werkzeug<=2.0.3
+sentry-sdk==0.12.3
+spacy==2.2.3
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm==2.2.5
+torch==1.7.1
+transformers==4.10.1
