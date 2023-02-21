@@ -76,7 +76,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if len(dialog_contexts) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
-            json={"dialog_contexts": [dialog_contexts], "prompts": [PROMPT], "configs": [GENERATIVE_SERVICE_CONFIG], **sending_variables},
+            json={
+                "dialog_contexts": [dialog_contexts],
+                "prompts": [PROMPT],
+                "configs": [GENERATIVE_SERVICE_CONFIG],
+                **sending_variables,
+            },
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()[0]
