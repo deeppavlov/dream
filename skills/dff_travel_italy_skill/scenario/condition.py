@@ -15,7 +15,7 @@ import common.dff.integration.condition as int_cnd
 import common.dff.integration.context as int_ctx
 
 from common.travel_italy import ITALY_PATTERN, italy_travel_skill_was_proposed
-from common.food import FOOD_WORDS
+from common.food import FOOD_WORDS, FAVORITE_FOOD_WORDS
 
 from common.universal_templates import (
     NOT_LIKE_PATTERN,
@@ -107,6 +107,8 @@ exit_skill = cnd.any(
 )
 
 asked_about_italian_cuisine = cnd.regexp(re.compile(FOOD_WORDS, re.IGNORECASE))
+
+uttr_about_favorite_food = cnd.regexp(re.compile(FAVORITE_FOOD_WORDS, re.IGNORECASE))
 
 def example_lets_talk_about():
     def example_lets_talk_about_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:

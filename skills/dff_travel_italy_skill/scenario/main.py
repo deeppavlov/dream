@@ -45,7 +45,12 @@ flows = {
         TRANSITIONS: {
             ("travel_italy_general", "italy_start"): loc_cnd.start_condition,
             ("travel_italy_general", "like_italy"): loc_cnd.is_proposed_skill,
-            ("italian_food_flow_restart", "tell_more"): loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
+            ("italian_food_flow_restart", "tell_more"): cnd.all(
+                [
+                    loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
+                    loc_cnd.uttr_about_favorite_food,
+                ]
+            ),
             ("italian_food_flow", "food_start"): cnd.all(
                 [
                     loc_cnd.asked_about_italian_cuisine,
