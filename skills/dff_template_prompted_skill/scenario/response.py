@@ -24,8 +24,11 @@ sending_variables = {f"{var}s": [getenv(var, None)] for var in ENVVARS_TO_SEND}
 
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
-for var_value in sending_variables.values():
-    assert not(var_value is None)
+# check if at least one of the env variables is not None
+if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+    raise NotImplementedError(
+        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
+    )
 
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
