@@ -206,7 +206,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://fact-retrieval:8130/respond"
+                    "url": "http://fact-retrieval-ru:8130/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_rus_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -340,7 +340,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://text-qa:8078/model"
+                    "url": "http://text-qa-ru:8078/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

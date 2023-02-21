@@ -50,14 +50,14 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   dff-template-skill:
-  fact-retrieval:
+  fact-retrieval-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=4
-  text-qa:
+      - CUDA_VISIBLE_DEVICES=5
+  text-qa-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=4
+      - CUDA_VISIBLE_DEVICES=5
 version: '3.7'
