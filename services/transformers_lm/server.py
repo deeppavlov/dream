@@ -70,12 +70,12 @@ try:
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
     default_config = {
-      "max_length": 60,
-      "min_length": 8,
-      "top_p": 0.9,
-      "temperature": 0.9,
-      "do_sample": True,
-      "num_return_sequences": 1
+        "max_length": 60,
+        "min_length": 8,
+        "top_p": 0.9,
+        "temperature": 0.9,
+        "do_sample": True,
+        "num_return_sequences": 1,
     }
     example_response = generate_responses(
         ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
