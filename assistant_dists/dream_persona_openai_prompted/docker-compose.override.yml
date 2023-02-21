@@ -144,7 +144,6 @@ services:
         SERVICE_PORT: 8131
         SERVICE_NAME: davinci3
         PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
-        CONFIG_NAME: text-davinci-003.json
       context: .
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8131
@@ -166,6 +165,8 @@ services:
         SERVICE_NAME: dff_dream_persona_prompted_skill
         PROMPT_FILE: common/prompts/dream_persona.json
         GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+        GENERATIVE_TIMEOUT: 5
         N_UTTERANCES_CONTEXT: 3
         ENVVARS_TO_SEND: openai_api_key,openai_organization
       context: .

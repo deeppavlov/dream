@@ -16,19 +16,14 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-CONFIG_NAME = os.environ.get("CONFIG_NAME")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
-
-with open(CONFIG_NAME, "r") as f:
-    generation_params = json.load(f)
-logger.info(f"Generation parameters: {generation_params}")
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, openai_api_key, openai_org, prompt, continue_last_uttr=False):
+def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
     outputs = []
     dialog_context = ""
     if prompt:
@@ -58,6 +53,7 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
+    configs = request.json.get("configs", [])
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
     openai_api_keys = request.json.get("openai_api_keys", [])
@@ -66,9 +62,11 @@ def respond():
 
     try:
         responses = []
-        for context, openai_api_key, openai_org, prompt in zip(contexts, openai_api_keys, openai_orgs, prompts):
+        for context, openai_api_key, openai_org, prompt, config in zip(
+            contexts, openai_api_keys, openai_orgs, prompts, configs
+        ):
             curr_responses = []
-            outputs = generate_responses(context, openai_api_key, openai_org, prompt)
+            outputs = generate_responses(context, openai_api_key, openai_org, prompt, config)
             for response in outputs:
                 if len(response) >= 2:
                     curr_responses += [response]
