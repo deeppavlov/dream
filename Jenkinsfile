@@ -265,7 +265,7 @@ pipeline {
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
               sh '''
-                tests/runtests.sh MODE=clean
+                tests/runtests_russian.sh MODE=clean
                 tests/runtests_multilingual.sh MODE=build
               '''
             }

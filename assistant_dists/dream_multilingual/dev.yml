@@ -11,25 +11,25 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  gpt2-generator:
+  gpt2-multilingual:
     volumes:
       - "./services/gpt2_generator:/src"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8132:8132
-  toxic-classification:
+  toxic-classification-multilingual:
     volumes:
       - "./annotators/MultilingualToxicClassification:/src"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8013:8013
-  sentiment-classification:
+  sentiment-classification-multilingual:
     volumes:
       - "./annotators/MultilingualSentimentClassification:/src"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8024:8024
-  sentence-ranker:
+  sentence-ranker-multilingual:
     volumes:
       - "./services/sentence_ranker:/src"
       - "~/.deeppavlov/cache:/root/.cache"

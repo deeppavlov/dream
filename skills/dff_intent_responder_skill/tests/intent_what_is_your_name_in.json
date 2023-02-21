@@ -162,7 +162,7 @@
                             }
                         ],
                         "entity_linking": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
@@ -373,7 +373,7 @@
                                 "yes_no_question": 0.010274818167090416
                             }
                         ],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "entity_linking": [],
                         "sentrewrite": {
                             "clusters": [],

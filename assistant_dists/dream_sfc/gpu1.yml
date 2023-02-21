@@ -55,7 +55,7 @@ services:
     restart: unless-stopped
   sentseg:
     restart: unless-stopped
-  convers-evaluation-selector:
+  scripts-priority-selector:
     restart: unless-stopped
   sentrewrite:
     restart: unless-stopped

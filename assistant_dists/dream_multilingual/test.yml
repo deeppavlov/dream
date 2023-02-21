@@ -4,16 +4,16 @@ services:
       - "/cephfs/home/ignatov/artifacts:/output"
     ports:
       - ${AGENT_PORT}:4242
-  gpt2-generator:
+  gpt2-multilingual:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  toxic-classification:
+  toxic-classification-multilingual:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  sentiment-classification:
+  sentiment-classification-multilingual:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  sentence-ranker:
+  sentence-ranker-multilingual:
     environment:
       - CUDA_VISIBLE_DEVICES=7
   mongo:

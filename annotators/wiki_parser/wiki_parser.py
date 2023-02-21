@@ -44,6 +44,9 @@ if os.getenv("LANGUAGE", "EN") == "RU":
     lang = "@ru"
 else:
     lang = "@en"
+
+FAST = int(os.getenv("FAST", "0"))
+
 wiki_filename = "/root/.deeppavlov/downloads/wikidata/wikidata2022.hdt"
 document = HDTDocument(wiki_filename)
 USE_CACHE = True
@@ -681,7 +684,8 @@ else:
 manager = mp.Manager()
 
 
-def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], utt_num: int, wiki_parser_output):
+def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], utt_num: int):
+    wiki_parser_output = []
     for parser_info, query in zip(parser_info_list, queries_list):
         if parser_info == "find_rels":
             rels = []
@@ -865,11 +869,23 @@ def execute_queries_list(parser_info_list: List[str], queries_list: List[Any], u
             wiki_parser_output.append(list(triplets))
         else:
             raise ValueError(f"Unsupported query type {parser_info}")
+        return wiki_parser_output
+
+
+def execute_queries_list_mp(parser_info_list: List[str], queries_list: List[Any], utt_num: int, wiki_parser_output):
+    for elem in execute_queries_list_mp(parser_info_list, queries_list, utt_num):
+        wiki_parser_output.append(elem)
 
 
 def wp_call(parser_info_list: List[str], queries_list: List[Any], utt_num: int) -> List[Any]:
-    wiki_parser_output = manager.list()
-    p = mp.Process(target=execute_queries_list, args=(parser_info_list, queries_list, utt_num, wiki_parser_output))
-    p.start()
-    p.join()
+    if FAST:
+        wiki_parser_output = execute_queries_list(parser_info_list, queries_list, utt_num)
+    else:
+        wiki_parser_output = manager.list()
+        p = mp.Process(
+            target=execute_queries_list_mp, args=(parser_info_list, queries_list, utt_num, wiki_parser_output)
+        )
+        p.start()
+        p.join()
+    log.info(f"wiki_parser_output: {wiki_parser_output}")
     return list(wiki_parser_output)

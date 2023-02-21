@@ -156,6 +156,11 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 def generate(context, num_return_sequences, context_depth):
     bot_input_ids = format_dialogue_for_inference(
         context, context_depth=context_depth, encode=True, tokenizer=tokenizer
@@ -199,4 +204,4 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"dialogpt exec time: {total_time:.3f}s")
 
-    return jsonify({"generated_responses": batch_generated_responses})
+    return jsonify(batch_generated_responses)

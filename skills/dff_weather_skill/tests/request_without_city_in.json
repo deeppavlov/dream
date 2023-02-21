@@ -24,7 +24,7 @@
                             "factoid": 0.9974457025527954,
                             "conversational": 0.0025543677620589733
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "weather": {
                                 "Causes": [
                                     "snow",

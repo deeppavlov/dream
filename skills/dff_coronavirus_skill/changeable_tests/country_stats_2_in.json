@@ -294,7 +294,7 @@
                                 ]
                             }
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "1 very specific question": {
                                 "Causes": [
                                     "answer",
@@ -568,7 +568,7 @@
                             "factoid": 0.004948326386511326,
                             "conversational": 0.9950516819953918
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentseg": {
                             "punct_sent": "yes.",
                             "segments": [
