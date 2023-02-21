@@ -1,10 +1,10 @@
 {
   "chainer": {
-    "in": ["entity_substr", "entity_tags", "sentences"],
+    "in": ["user_ids", "entity_substr", "entity_tags", "sentences"],
     "pipe": [
       {
         "class_name": "src.entity_linking:EntityLinker",
-        "in": ["entity_substr", "entity_tags", "sentences"],
+        "in": ["user_ids", "entity_substr", "entity_tags", "sentences"],
         "out": ["entity_ids", "entity_conf", "entity_id_tags"],
         "load_path": "{DOWNLOADS_PATH}/entity_linking_eng/custom_el_eng_dream",
         "rank_in_runtime": true,
