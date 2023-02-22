@@ -301,7 +301,7 @@ def get_booklist(plain_author_name: str) -> str:
 
 def best_plain_book_by_author(
     plain_author_name: str,
-    default_phrase: str,
+    default_phrase: str = None,
     plain_last_bookname: Optional[str] = None,
     top_n_best_books: int = 1,
 ) -> Optional[str]:
@@ -309,6 +309,7 @@ def best_plain_book_by_author(
     Look up a book for an author
     """
     logger.debug(f"Calling best_plain_book_by_author for {plain_author_name} {plain_last_bookname}")
+    default_phrase = "" if default_phrase is None else default_phrase
     # best books
     last_bookname = "NO_BOOK"
     try:

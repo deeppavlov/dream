@@ -144,7 +144,6 @@ services:
         SERVICE_PORT: 8130
         SERVICE_NAME: transformers_lm_gptj
         PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
-        CONFIG_NAME: gpt_j_6b.json
         HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
@@ -167,6 +166,8 @@ services:
         SERVICE_NAME: dff_dream_persona_prompted_skill
         PROMPT_FILE: common/prompts/dream_persona.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 5
         N_UTTERANCES_CONTEXT: 3
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile

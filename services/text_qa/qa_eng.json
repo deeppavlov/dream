@@ -1,0 +1,30 @@
+{
+  "chainer": {
+    "in": ["question_raw", "top_facts"],
+    "pipe": [
+      {
+        "class_name": "string_multiplier",
+        "in": ["question_raw", "top_facts"],
+        "out":["questions"]
+      },
+      {
+        "class_name": "logit_ranker",
+        "batch_size": 32,
+        "squad_model": {"config_path": "./qa_squad2_bert.json"},
+        "sort_noans": true,
+        "return_answer_sentence": true,
+        "in": ["top_facts", "questions"],
+        "out": ["answer", "answer_score", "answer_place", "answer_sentence"]
+      }
+    ],
+    "out": ["answer", "answer_score", "answer_place", "answer_sentence"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    }
+  }
+}

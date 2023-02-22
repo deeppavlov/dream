@@ -1,0 +1,29 @@
+{
+  "chainer": {
+    "in": ["tfidf_doc_ids", "entity_pages"],
+    "pipe": [
+      {
+        "class_name": "src.ruwiki_db.wiki_sqlite:WikiSQLiteVocab",
+        "in": ["tfidf_doc_ids", "entity_pages"],
+        "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "total_pages", "from_linked_page", "numbers"],
+        "shuffle": false,
+        "load_path": "{DOWNLOADS_PATH}/odqa/ruwiki_par_doc_fast.db"
+      }
+    ],
+    "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "total_pages", "from_linked_page", "numbers"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "CONFIGS_PATH": "{DEEPPAVLOV_PATH}/configs"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/odqa_dream_rus/ruwiki_par_doc_fast.tar.gz",
+        "subdir": "{DOWNLOADS_PATH}/odqa"
+      }
+    ]
+  }
+}
