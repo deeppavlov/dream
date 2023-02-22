@@ -1,0 +1,22 @@
+property-extraction:
+  name: property_extraction
+  display_name: Property Extraction
+  container_name: property-extraction
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: extracts user attributes from utterances
+  ram_usage: 6.3G
+  execution_time: 1.0
+  endpoints:
+  - group: annotators
+    port: 8136
+    endpoint: respond
+  - group: response_annotators
+    port: 8136
+    endpoint: respond
+  build_args:
+    CONFIG: t5_generative_ie_lite_infer.json
+    PORT: 8136
+    SRC_DIR: annotators/property_extraction/
+  date_created: '2023-02-22T22:42:12'

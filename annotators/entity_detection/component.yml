@@ -17,11 +17,10 @@ entity-detection:
     port: 8103
     endpoint: respond_batch
   build_args:
-    SEQ_TAG_CONFIG: src/wikipedia_entity_detection_distilbert.json
-    EL_TAG_CONFIG: src/el_tags_infer.json
+    SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
     CONFIG: entity_detection_eng.json
     LOWERCASE: 1
     PORT: 8103
     SRC_DIR: annotators/entity_detection/
     FINEGRAINED: 0
-  date_created: '2023-02-20T17:45:11'
+  date_created: '2023-02-22T22:42:12'

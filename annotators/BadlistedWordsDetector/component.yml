@@ -15,4 +15,4 @@ badlisted-words:
   - group: candidate_annotators
     port: 8018
     endpoint: badlisted_words_batch
-  date_created: '2023-02-20T17:45:11'
+  date_created: '2023-02-22T22:42:12'

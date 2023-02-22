@@ -20,6 +20,5 @@ transformers-lm-gptj:
     SERVICE_PORT: 8130
     SERVICE_NAME: transformers_lm_gptj
     PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
-    CONFIG_NAME: gpt_j_6b.json
     HALF_PRECISION: 0
-  date_created: '2023-02-20T17:45:11'
+  date_created: '2023-02-22T22:42:12'

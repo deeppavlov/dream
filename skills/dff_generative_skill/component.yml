@@ -18,4 +18,5 @@ dff-generative-ru-skill:
     SERVICE_PORT: 8092
     SERVICE_NAME: dff_generative_skill
     LANGUAGE: RU
-  date_created: '2023-02-20T17:45:11'
+    GENERATIVE_SERVICE_URL: http://dialogpt-ru:8125/respond
+  date_created: '2023-02-22T22:42:12'

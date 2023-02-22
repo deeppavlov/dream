@@ -13,9 +13,12 @@ kbqa:
   - group: annotators
     port: 8072
     endpoint: model
+  - group: annotators
+    port: 8072
+    endpoint: model
   build_args:
     CONFIG: kbqa_cq_mt_bert_lite.json
     PORT: 8072
     SRC_DIR: annotators/kbqa/
     COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
-  date_created: '2023-02-20T17:45:11'
+  date_created: '2023-02-22T22:42:12'

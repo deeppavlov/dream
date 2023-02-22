@@ -2,11 +2,12 @@ entity-linking:
   name: entity_linking
   display_name: Entity Linking
   container_name: entity-linking
-  model_type: ML-based
+  model_type: NN-based
   is_customizable: false
   author: DeepPavlov
   description: finds Wikidata entity ids for the entities detected with Entity Detection
-  ram_usage: 640M
+  ram_usage: 2.5G
+  gpu_usage: 1.3G
   execution_time: 1.0
   endpoints:
   - group: annotators
@@ -16,4 +17,4 @@ entity-linking:
     CONFIG: entity_linking_eng.json
     PORT: 8075
     SRC_DIR: annotators/entity_linking
-  date_created: '2023-02-20T17:45:11'
+  date_created: '2023-02-22T22:42:12'
