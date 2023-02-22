@@ -245,7 +245,7 @@
             "dff_dream_persona_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 5.0,
                     "url": "http://dff-dream-persona-prompted-skill:8134/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter",

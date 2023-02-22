@@ -21,7 +21,7 @@ comet-atomic:
     PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
     PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
     DECODING_ALGO: beam-3
-  date_created: '2023-02-22T22:42:12'
+  date_created: '2023-02-22T22:48:14'
 comet-conceptnet:
   name: comet_conceptnet
   display_name: COMeT ConceptNet
@@ -45,4 +45,4 @@ comet-conceptnet:
     PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
     PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
     DECODING_ALGO: beam-3
-  date_created: '2023-02-22T22:42:12'
+  date_created: '2023-02-22T22:48:14'

@@ -24,4 +24,4 @@ fact-retrieval-ru:
     TOP_N: 20
     PORT: 8130
     SRC_DIR: annotators/fact_retrieval_rus
-  date_created: '2023-02-22T22:42:12'
+  date_created: '2023-02-22T22:48:14'

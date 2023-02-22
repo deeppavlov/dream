@@ -24,4 +24,4 @@ seq2seq-persona-based:
     CHAT_EVERY_SENT_MAX_LENGTH: 25
     PERSONA_EVERY_SENT_MAX_LENGTH: 19
     GENERATION_PARAMS_CONFIG: bart-base-en-persona-chat_v1.json
-  date_created: '2023-02-22T22:42:12'
+  date_created: '2023-02-22T22:48:14'

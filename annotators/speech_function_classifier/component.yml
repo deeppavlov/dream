@@ -23,4 +23,4 @@ speech-function-classifier:
   build_args:
     SERVICE_PORT: 8108
     SERVICE_NAME: speech_function_classifier
-  date_created: '2023-02-22T22:42:12'
+  date_created: '2023-02-22T22:48:14'

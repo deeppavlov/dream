@@ -232,15 +232,21 @@
             "fact_retrieval": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 1.0,
                     "url": "http://fact-retrieval-ru:8130/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_rus_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
                 "previous_services": [
                     "annotators.entity_linking"
-                ]
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/fact_retrieval_rus/",
+                    "container": "fact-retrieval-ru",
+                    "endpoint": "respond"
+                }
             },
             "wiki_parser": {
                 "connector": {
@@ -551,12 +557,18 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_template_skill/",
+                    "container": "dff-template-skill",
+                    "endpoint": "respond"
+                }
             },
             "text_qa": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 2.0,
                     "url": "http://text-qa-ru:8078/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -567,9 +579,9 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_skill/",
-                    "container": "dff-template-skill",
-                    "endpoint": "respond"
+                    "directory": "services/text_qa/",
+                    "container": "text-qa-ru",
+                    "endpoint": "model"
                 }
             }
         },

@@ -16,4 +16,4 @@ game-cooperative-skill:
     endpoint: respond
   build_args:
     SERVICE_PORT: 8068
-  date_created: '2023-02-22T22:42:12'
+  date_created: '2023-02-22T22:48:15'
