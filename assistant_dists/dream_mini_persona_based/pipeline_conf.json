@@ -28,8 +28,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "/services/something",
-                "container": "something_name"
+                "directory": "",
+                "container": ""
             }
         },
         "timeout_service": {
@@ -53,8 +53,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "/services/something",
-                "container": "something_name"
+                "directory": "",
+                "container": ""
             }
         },
         "annotators": {
@@ -84,8 +84,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "container": "something_name"
+                    "directory": "",
+                    "container": ""
                 }
             },
             "badlisted_words": {
@@ -178,8 +178,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "container": "something_name"
+                    "directory": "",
+                    "container": ""
                 }
             }
         },
@@ -197,8 +197,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "/services/something",
-                "container": "something_name"
+                "directory": "",
+                "container": ""
             }
         },
         "candidate_annotators": {
@@ -257,8 +257,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "container": "something_name"
+                    "directory": "",
+                    "container": ""
                 }
             }
         },
@@ -295,8 +295,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "/services/something",
-                    "container": "something_name"
+                    "directory": "",
+                    "container": ""
                 }
             },
             "dialogpt": {
