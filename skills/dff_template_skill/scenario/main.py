@@ -1,7 +1,11 @@
 import logging
 import re
 
+
+import dff.script.conditions as cnd
+import dff.script.labels as lbl
 from dff.script import (
+    MultiMessage,
     LOCAL,
     PRE_TRANSITIONS_PROCESSING,
     PRE_RESPONSE_PROCESSING,
@@ -9,9 +13,6 @@ from dff.script import (
     RESPONSE,
     GLOBAL,
 )
-import dff.script.conditions as cnd
-import dff.script.labels as lbl
-from dff.script import MultiMessage
 from dff.pipeline import Pipeline
 
 import common.dff_api_v1.integration.condition as int_cnd
