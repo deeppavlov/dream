@@ -10,11 +10,15 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
+language = os.getenv("LANGUAGE", "EN")
 config_name = os.getenv("CONFIG")
 
 try:
     qa = build_model(config_name, download=True)
-    test_res = qa(["What is the capital of Russia?"], [["Moscow is the capital of Russia."]])
+    if language == "EN":
+        test_res = qa(["What is the capital of Russia?"], [["Moscow is the capital of Russia."]])
+    else:
+        test_res = qa(["Какая столица России?"], [["Москва - столица России."]])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
@@ -32,12 +36,11 @@ def respond():
     qa_res = [["", 0.0, 0, ""] for _ in questions]
     try:
         tm_st = time.time()
-        logger.info(f"questions {questions} facts {facts}")
         qa_res = qa(questions, facts)
         qa_res = [[elem[i] for elem in qa_res] for i in range(len(qa_res[0]))]
         for i in range(len(qa_res)):
             qa_res[i][1] = float(qa_res[i][1])
-        logger.info(f"text_qa exec time: {time.time() - tm_st} qa_res {qa_res}")
+        logger.info(f"text_qa exec time: {time.time() - tm_st}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

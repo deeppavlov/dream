@@ -229,6 +229,19 @@
                     "endpoint": "model"
                 }
             },
+            "fact_retrieval": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://fact-retrieval-ru:8130/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_rus_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.entity_linking"
+                ]
+            },
             "wiki_parser": {
                 "connector": {
                     "protocol": "http",
@@ -534,6 +547,19 @@
                     "url": "http://dff-template-skill:8120/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "text_qa": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://text-qa-ru:8078/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

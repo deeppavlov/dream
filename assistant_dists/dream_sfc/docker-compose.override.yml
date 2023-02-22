@@ -27,7 +27,7 @@ services:
       LANGUAGE: EN
 
   convers-evaluator-annotator:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: conveval.json
@@ -47,7 +47,7 @@ services:
           memory: 2G
 
   spacy-nounphrases:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/spacy_nounphrases/Dockerfile
@@ -62,7 +62,7 @@ services:
           memory: 256M
 
   dff-program-y-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8008
@@ -79,7 +79,7 @@ services:
           memory: 1024M
 
   personality-catcher:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./skills/personality_catcher/
     command: uvicorn server:app --host 0.0.0.0 --port 8010
@@ -91,7 +91,7 @@ services:
           memory: 50M
 
   sentseg:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/SentSeg/
     command: flask run -h 0.0.0.0 -p 8011
@@ -105,7 +105,7 @@ services:
           memory: 1.5G
 
   scripts-priority-selector:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
@@ -139,7 +139,7 @@ services:
           memory: 100M
 
   sentrewrite:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/SentRewrite/
     command: flask run -h 0.0.0.0 -p 8017
@@ -170,7 +170,7 @@ services:
           memory: 128M
 
   intent-catcher:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
@@ -190,7 +190,7 @@ services:
           memory: 3.5G
 
   badlisted-words:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
@@ -204,7 +204,7 @@ services:
           memory: 256M
 
   dff-program-y-dangerous-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8022
@@ -220,7 +220,7 @@ services:
           memory: 1024M
 
   dff-movie-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8023
@@ -263,7 +263,7 @@ services:
           memory: 2G
 
   eliza:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./skills/eliza/
     command: flask run -h 0.0.0.0 -p 8047
@@ -277,7 +277,7 @@ services:
           memory: 80M
 
   convert-reddit:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./skills/convert_reddit/
     command: flask run -h 0.0.0.0 -p 8029
@@ -291,7 +291,7 @@ services:
           memory: 1536M
 
   personal-info-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./skills/personal_info_skill/Dockerfile
@@ -306,7 +306,7 @@ services:
           memory: 128M
 
   asr:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/asr/Dockerfile
@@ -321,7 +321,7 @@ services:
           memory: 80M
 
   misheard-asr:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./skills/misheard_asr/Dockerfile
@@ -336,7 +336,7 @@ services:
           memory: 128M
 
   emotion-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./skills/emotion_skill/Dockerfile
@@ -351,7 +351,7 @@ services:
           memory: 80M
 
   dummy-skill-dialog:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_NAME: dummy_skill_dialog
@@ -369,7 +369,7 @@ services:
           memory: 768M
 
   comet-atomic:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/COMeT/Dockerfile
@@ -391,7 +391,7 @@ services:
           memory: 3.5G
 
   comet-conceptnet:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/COMeT/Dockerfile
@@ -413,7 +413,7 @@ services:
           memory: 3.5G
 
   meta-script-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: skills/meta_script_skill/Dockerfile
@@ -428,7 +428,7 @@ services:
           memory: 256M
 
   small-talk-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./skills/small_talk_skill/Dockerfile
@@ -443,7 +443,7 @@ services:
           memory: 80M
 
   game-cooperative-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8068
@@ -460,7 +460,7 @@ services:
           memory: 256M
 
   dff-program-y-wide-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8064
@@ -476,7 +476,7 @@ services:
           memory: 1024M
 
   news-api-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./skills/news_api_skill/Dockerfile
@@ -491,7 +491,7 @@ services:
           memory: 128M
 
   news-api-annotator:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         ASYNC_SIZE: 3
@@ -508,7 +508,7 @@ services:
           memory: 256M
 
   factoid-qa:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./skills/factoid_qa/Dockerfile
@@ -523,7 +523,7 @@ services:
           memory: 256M
 
   entity-linking:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: entity_linking_eng.json
@@ -566,18 +566,18 @@ services:
           memory: 256M
 
   text-qa:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
-        CONFIG: qa.json
+        CONFIG: qa_eng.json
         PORT: 8078
-        COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
       context: services/text_qa
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
+      - LANGUAGE=EN
     deploy:
       resources:
         limits:
@@ -586,7 +586,7 @@ services:
           memory: 3G
 
   kbqa:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: kbqa_cq_mt_bert_lite.json
@@ -621,7 +621,7 @@ services:
           memory: 50M
 
   dff-grounding-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8080
@@ -637,7 +637,7 @@ services:
           memory: 128M
 
   knowledge-grounding:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         MODEL_CKPT: 3_sent_62_epochs
@@ -657,7 +657,7 @@ services:
           memory: 4G
 
   dff-gaming-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8115
@@ -678,7 +678,7 @@ services:
           memory: 512M
 
   dff-friendship-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8086
@@ -697,7 +697,7 @@ services:
           memory: 256M
 
   entity-storer:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: annotators/entity_storer/Dockerfile
@@ -715,7 +715,7 @@ services:
           memory: 384M
 
   knowledge-grounding-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./skills/knowledge_grounding_skill/Dockerfile
@@ -731,7 +731,7 @@ services:
           memory: 200M
 
   combined-classification:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: combined_classifier.json
@@ -748,7 +748,7 @@ services:
           memory: 2G
 
   dff-animals-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8094
@@ -768,7 +768,7 @@ services:
           memory: 512M
 
   dff-travel-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8096
@@ -787,7 +787,7 @@ services:
           memory: 768M
 
   dff-sport-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8098
@@ -806,7 +806,7 @@ services:
           memory: 256M
 
   dff-food-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8097
@@ -825,7 +825,7 @@ services:
           memory: 256M
 
   dff-science-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8101
@@ -844,7 +844,7 @@ services:
           memory: 256M
 
   dff-music-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8099
@@ -863,7 +863,7 @@ services:
           memory: 512M
 
   dff-gossip-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8109
@@ -880,7 +880,7 @@ services:
 
 
   midas-classification:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8090
@@ -899,7 +899,7 @@ services:
           memory: 3G
 
   fact-random:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8119
@@ -917,7 +917,7 @@ services:
           memory: 256M
 
   fact-retrieval:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: configs/fact_retrieval_page.json
@@ -941,7 +941,7 @@ services:
           memory: 4G
 
   dff-bot-persona-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8105
@@ -957,7 +957,7 @@ services:
           memory: 256M
 
   dff-funfact-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8104
@@ -976,7 +976,7 @@ services:
           memory: 256M
 
   dff-wiki-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8111
@@ -996,7 +996,7 @@ services:
           memory: 256M
 
   topic-recommendation:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/topic_recommendation/
     command: flask run -h 0.0.0.0 -p 8113
@@ -1010,7 +1010,7 @@ services:
           memory: 256M
 
   user-persona-extractor:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/user_persona_extractor/Dockerfile
@@ -1025,7 +1025,7 @@ services:
           memory: 80M
 
   wiki-facts:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8116
@@ -1046,7 +1046,7 @@ services:
           memory: 3.5G
 
   dff-art-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8117
@@ -1085,7 +1085,7 @@ services:
           memory: 2.5G
 
   dff-coronavirus-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8061
@@ -1101,7 +1101,7 @@ services:
           memory: 192M
 
   dff-short-story-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8057
@@ -1118,7 +1118,7 @@ services:
           memory: 128M
 
   dff-weather-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8037
@@ -1134,7 +1134,7 @@ services:
           memory: 1G
 
   dff-book-sfc-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8034
@@ -1151,7 +1151,7 @@ services:
           memory: 512M
 
   dff-template-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8120
