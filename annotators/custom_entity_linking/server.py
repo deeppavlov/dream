@@ -14,7 +14,7 @@ app = Flask(__name__)
 config_name = os.getenv("CONFIG")
 
 abstract_rels = {"favorite animal", "like animal", "favorite book", "like read", "favorite movie", "favorite_food",
-                 "like_food", "favorite_drink", "like_drink", "favorite_sport", "like_sports"}
+                 "like food", "favorite drink", "like drink", "favorite sport", "like sports"}
 
 try:
     el = build_model(config_name, download=True)
