@@ -84,8 +84,7 @@ class EntityLinker(Component, Serializable):
             os.makedirs(self.load_path)
         self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
         self.cur = self.conn.cursor()
-        self.cur.execute("CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
-                         "UNINDEXED, tag, user_id, tokenize = 'porter ascii');")
+        log.info("Connected to index")
 
     def save(self) -> None:
         pass

@@ -6,6 +6,7 @@ import re
 import inflect
 import requests
 from flask import Flask, jsonify, request
+from pathlib import Path
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 from common.utils import get_named_persons
@@ -20,6 +21,7 @@ inflect = inflect.engine()
 CUSTOM_EL_ADD = os.getenv("CUSTOM_EL_ADD")
 logger.info(f"URL of custom EL: {CUSTOM_EL_ADD}")
 USE_ABSTRACT_KINDS = True
+INDEX_LOAD_PATH=Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
 
 # read all relations & properties to add them into ontology
 rel_type_dict = {}
@@ -51,10 +53,17 @@ rel_kinds_dict = {
 DB = "test_italy_skill"
 TEAM = "yashkens|c77b"
 
-graph = TerminusdbKnowledgeGraph(team=TEAM, db_name=DB, server="https://7063.deeppavlov.ai/", password="G5KMuz9dF1K2mD5cPz726oazSJJtkFLw")
+graph = TerminusdbKnowledgeGraph(
+    team=TEAM,
+    db_name=DB,
+    server="https://7063.deeppavlov.ai/",
+    password="G5KMuz9dF1K2mD5cPz726oazSJJtkFLw",
+    index_load_path=INDEX_LOAD_PATH
+)
 
 logger.info('Graph Loaded!')
 
+# graph.ontology.drop_database(drop_index=True)
 
 def add_name_property(graph, user_id, names):
     """Adds User Name property."""
@@ -281,9 +290,11 @@ def get_result(request):
         ids_list.append(user_id)
         tags_list.append("Name")
     if substr_list:
-        requests.post(CUSTOM_EL_ADD, json={"user_id": str(utt.get("user", {}).get("id", "")),
-                                           "entity_info": {"entity_substr": substr_list,
-                                                           "entity_ids": ids_list, "tags": tags_list}})
+        user_id = utt.get("user", {}).get("id", "")
+        logger.debug(f"""Adding to index user_id '{user_id}' "entity_info": "entity_substr": {substr_list},
+                                                           "entity_ids": {ids_list}, "tags": {tags_list}""")
+        graph.index.set_active_user_id(str(user_id))
+        graph.index.add_entities(substr_list, ids_list, tags_list)
     logger.info(f"kg_parser_annotations: {kg_parser_annotations}")
 
     return [{'added_to_graph': added, "triplets": kg_parser_annotations}]

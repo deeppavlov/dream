@@ -14,7 +14,7 @@ RUN pip install -U pip wheel setuptools
 COPY annotators/user_knowledge_graph/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -m nltk.downloader wordnet
-RUN pip install git+https://github.com/deeppavlov/custom_kg_svc.git@test/custom_el
+RUN pip install git+https://github.com/deeppavlov/custom_kg_svc.git@feat/support_index
 COPY annotators/user_knowledge_graph/ ./
 
 ARG PORT
