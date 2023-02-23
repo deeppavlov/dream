@@ -87,21 +87,31 @@ def add_any_relationship(utt, graph, entity_kind, entity_name, rel_type, user_id
             entity_name = inflect_entity_name
         logger.info(f"correcting type and name, entity_kind: {entity_kind}, entity_name: {entity_name}")
 
-    logger.info(f"create entity kind: {entity_kind}")
-    graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
-    graph.ontology.create_property_kind_of_entity_kind(entity_kind=entity_kind, property_kind="Name",
-                                                       property_type=str)
+    try:
+        logger.debug(f"Creating entity kind: {entity_kind}")
+        graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
+        logger.info(f"Created entity kind: {entity_kind}")
+    except ValueError:
+        logger.info(f"Kind '{entity_kind}' is already in DB")
 
-    message = ""
+    entity_kind_properties = graph.ontology.get_entity_kind(entity_kind)
+    if "Name" not in entity_kind_properties:
+        logger.debug(f"Creating property kind 'Name' for kind '{entity_kind}'")
+        graph.ontology.create_property_kind_of_entity_kind(
+            entity_kind=entity_kind, property_kind="Name", property_type=str
+        )
+        logger.info(f"Created property kind 'Name' for kind '{entity_kind}'")
+    else:
+        logger.info(f"Kind '{entity_kind}' already has Name as a property") # try run it and observe debuging messages
     if (entity_name, entity_kind) in entities_with_types:
         new_entity_id = entities_with_types[(entity_name, entity_kind)]
-        message += f"entity exists: {new_entity_id} --- "
+        logger.info(f"Entity exists: '{new_entity_id}'")
     else:
         new_entity_id = str(uuid.uuid4())
         new_entity_id = entity_kind + '/' + new_entity_id
-        logger.info(f"Entity type to add: {entity_kind}")
+        logger.debug(f"Adding entity with kind: {entity_kind} -- new_entity_id:'{new_entity_id}'")
         graph.create_entity(entity_kind, new_entity_id, ["Name"], [entity_name])
-        logger.info(f"Added entity {entity_name} with Kind {entity_kind}! and connected it with the User {user_id}! ")
+        logger.info(f"Added entity '{new_entity_id}' with Kind '{entity_kind}' and property Name '{entity_name}'!")
 
     logger.info(f"define rel_name, entity_kind {entity_kind} --- entity_kind {entity_kind}")
     rel_name = rel_type
