@@ -5,6 +5,7 @@ requests==2.22.0
 numpy==1.17.2
 sentry-sdk==0.14.1
 spacy==2.1.0
+importlib_metadata<5
 nltk==3.2.5
 jinja2<=3.0.3
 Werkzeug<=2.0.3

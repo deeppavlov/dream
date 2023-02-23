@@ -245,7 +245,7 @@
                                 "which": "human"
                             }
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "books": {
                                 "SymbolOf": [
                                     "knowledge",

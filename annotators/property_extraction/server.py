@@ -8,7 +8,6 @@ import nltk
 import sentry_sdk
 import spacy
 from flask import Flask, jsonify, request
-from nltk import sent_tokenize
 
 from deeppavlov import build_model
 from src.sentence_answer import sentence_answer
@@ -55,17 +54,23 @@ except Exception as e:
     raise e
 
 
-def sentrewrite(sentence, answer):
-    answer = answer.strip(".")
+def sentrewrite(sentence, init_answer):
+    answer = init_answer.strip(".")
     if any([sentence.startswith(elem) for elem in ["what's", "what is"]]):
-        for old_tok, new_tok in [("what's your", f"{answer} is my"), ("what is your", f"{answer} is my"),
-                                 ("what is", "{answer} is"), ("what's", "{answer} is")]:
+        for old_tok, new_tok in [
+            ("what's your", f"{answer} is my"),
+            ("what is your", f"{answer} is my"),
+            ("what is", "{answer} is"),
+            ("what's", "{answer} is"),
+        ]:
             sentence = sentence.replace(old_tok, new_tok)
     elif any([sentence.startswith(elem) for elem in ["where", "when"]]):
         sentence = sentence_answer(sentence, answer)
     elif any([sentence.startswith(elem) for elem in ["is there"]]):
         for old_tok, new_tok in [("is there any", f"{answer} is"), ("is there", f"{answer} is")]:
             sentence = sentence.replace(old_tok, new_tok)
+    else:
+        sentence = f"{sentence} {init_answer}"
     return sentence
 
 
@@ -91,8 +96,9 @@ def get_result(request):
             utt_cur = uttr_list_cased[-1]
             utt_prev_l = utt_prev.lower()
             utt_cur_l = utt_cur.lower()
-            is_question = (
-                any([utt_prev_l.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]]) or "?" in utt_prev_l
+            is_q = (
+                any([utt_prev_l.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
+                or "?" in utt_prev_l
             )
 
             is_sentence = False
@@ -104,8 +110,8 @@ def get_result(request):
                 if found_verbs and len(tokens) > 2:
                     is_sentence = True
 
-            logger.info(f"is_question: {is_question} --- is_sentence: {is_sentence}")
-            if is_question and not is_sentence:
+            logger.info(f"is_q: {is_q} --- is_s: {is_sentence} --- utt_prev: {utt_prev_l} --- utt_cur: {utt_cur_l}")
+            if is_q and not is_sentence:
                 if len(utt_cur_l.split()) <= 2:
                     uttrs.append(sentrewrite(utt_prev_l, utt_cur_l))
                     uttrs_cased.append(sentrewrite(utt_prev, utt_cur))

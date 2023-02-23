@@ -15,12 +15,12 @@ ENV TOKENIZER_NAME_OR_PATH ${TOKENIZER_NAME_OR_PATH}
 
 RUN mkdir /data/
 
-RUN wget -c -q http://files.deeppavlov.ai/deeppavlov_data/${PRETRAINED_MODEL_FNAME} -P /data/
-
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
+RUN wget -c -q http://files.deeppavlov.ai/deeppavlov_data/${PRETRAINED_MODEL_FNAME} -P /data/
+
 COPY . /src
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=300
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
 

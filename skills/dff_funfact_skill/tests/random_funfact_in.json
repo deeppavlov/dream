@@ -62,7 +62,7 @@
                                 }
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "fun fact": {
                                 "Causes": [
                                     "fun",
@@ -332,7 +332,7 @@
                                 }
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "fun fact": {
                                 "Causes": [
                                     "fun",

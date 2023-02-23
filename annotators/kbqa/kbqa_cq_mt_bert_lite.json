@@ -19,7 +19,7 @@
       {
         "class_name": "wiki_parser",
         "id": "wiki_p",
-        "wiki_filename": "{DOWNLOADS_PATH}/wikidata/wikidata_lite.hdt",
+        "wiki_filename": "{DOWNLOADS_PATH}/wikidata/wikidata2022.hdt",
         "file_format": "hdt",
         "max_comb_num": 1000,
         "lang": "@en"
@@ -121,11 +121,11 @@
         "subdir": "{DOWNLOADS_PATH}/wikidata_eng"
       },
       {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt",
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt",
         "subdir": "{DOWNLOADS_PATH}/wikidata"
       },
       {
-        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata_lite.hdt.index.v1-1",
+        "url": "http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1",
         "subdir": "{DOWNLOADS_PATH}/wikidata"
       },
       {

@@ -55,6 +55,7 @@ class T5GenerativeIE(TorchModel):
         top_n: int = 1,
         batch_decode: bool = False,
         scores_thres: float = -0.17,
+        device: str = "cpu",
         **kwargs,
     ) -> None:
 
@@ -77,6 +78,7 @@ class T5GenerativeIE(TorchModel):
         self.scores_thres = scores_thres
 
         super().__init__(
+            device=device,
             optimizer=optimizer,
             optimizer_parameters=optimizer_parameters,
             learning_rate_drop_patience=learning_rate_drop_patience,
@@ -85,6 +87,7 @@ class T5GenerativeIE(TorchModel):
             min_learning_rate=min_learning_rate,
             **kwargs,
         )
+        self.device = torch.device("cuda" if torch.cuda.is_available() and device == "gpu" else "cpu")
 
     def train_on_batch(self, input_ids_batch, attention_mask_batch, target_ids_batch) -> Dict:
         input_ids_batch = torch.LongTensor(input_ids_batch).to(self.device)

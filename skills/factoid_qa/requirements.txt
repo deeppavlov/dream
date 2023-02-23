@@ -1,4 +1,4 @@
-pyopenssl==22.0.0
+pyopenssl==23.0.0
 flask==1.1.1
 itsdangerous==2.0.1
 gunicorn==19.9.0

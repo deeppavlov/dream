@@ -1,0 +1,39 @@
+{
+  "chainer": {
+    "in": ["question_init", "entity_substr", "tags", "entity_pages"],
+    "pipe": [
+      {
+        "class_name": "src.question_sign_checker:QuestionSignChecker",
+        "in": ["question_init"],
+        "out": ["question_raw"]
+      },
+      {
+        "config_path": "src/tfidf_ranker/ru_ranker_tfidf_wiki_postpr.json",
+        "in": ["question_raw", "entity_substr", "tags"],
+        "out": ["tfidf_doc_ids"]
+      },
+      {
+        "config_path": "src/ruwiki_db/wiki_db.json",
+        "in": ["tfidf_doc_ids", "entity_pages"],
+        "out": ["tfidf_doc_text", "total_tfidf_doc_ids", "doc_pages", "from_linked_page", "numbers"]
+      },
+      {
+        "class_name": "src.filter_docs:FilterDocs",
+        "top_n": 800,
+        "in": ["question_raw", "total_tfidf_doc_ids", "tfidf_doc_text", "doc_pages"],
+        "out": ["filtered_doc_ids", "filtered_doc_text", "filtered_doc_pages"]
+      },
+      {
+        "class_name": "string_multiplier",
+        "in": ["question_raw", "filtered_doc_text"],
+        "out":["questions"]
+      },
+      {
+        "config_path": "src/cross_att_ranker/paragraph_ranking.json",
+        "in": ["question_raw", "filtered_doc_ids", "filtered_doc_text"],
+        "out": ["scores"]
+      }
+    ],
+    "out": ["filtered_doc_text", "scores", "from_linked_page", "numbers"]
+  }
+}

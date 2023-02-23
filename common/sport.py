@@ -1,4 +1,6 @@
 import re
+from common.utils import get_topics, TOPIC_GROUPS
+
 
 ##################################################################################################################
 # LINK
@@ -71,7 +73,7 @@ ING_FORMS = {
     "long jump": "long jumping",
 }
 REVERSE_ING_FORMS = {ING_FORMS[key]: key for key in ING_FORMS}
-regexp_ing_forms = rf"|".join([rf"\b{k}" for k in ING_FORMS.values()])
+regexp_ing_forms = r"|".join([rf"\b{k}" for k in ING_FORMS.values()])
 SPORTS = rf"({regexp_ing_forms}|{SPORTS_NO_ING})"
 KIND_OF_SPORTS_TEMPLATE = re.compile(
     SPORTS,
@@ -140,3 +142,15 @@ LAST_CHANCE_TEMPLATE = [
     "Oh, this is the first time I hear about this. " "Tell me more about that",
     "This is probably very interesting. Tell me more about that.",
 ]
+
+
+def about_sport(annotated_utterance):
+    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    if any([topic in found_topics for topic in TOPIC_GROUPS["sport"]]):
+        return True
+    elif re.findall(KIND_OF_SPORTS_TEMPLATE, annotated_utterance["text"]):
+        return True
+    elif re.findall(KIND_OF_COMPETITION_TEMPLATE, annotated_utterance["text"]):
+        return True
+    else:
+        return False

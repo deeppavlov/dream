@@ -45,6 +45,8 @@ SPECIAL_SKILLS = {
         "dff_short_story_skill",
         "game_cooperative_skill",
         "dialogpt",
+        "dialogpt_persona_based",
+        "seq2seq_persona_based",
     ],
 }
 

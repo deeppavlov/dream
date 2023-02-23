@@ -113,22 +113,26 @@ def remove_clarification_turns_from_dialog(dialog):
 def replace_with_annotated_utterances(dialog, mode="punct_sent"):
     if mode == "punct_sent":
         for utt in dialog["utterances"] + dialog["human_utterances"]:
+            utt["orig_text"] = utt["text"]
             if "sentseg" in utt["annotations"]:
                 utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
     elif mode == "segments":
         for utt in dialog["utterances"] + dialog["human_utterances"] + dialog["bot_utterances"]:
+            utt["orig_text"] = utt["text"]
             if "sentseg" in utt["annotations"]:
                 utt["text"] = deepcopy(utt["annotations"]["sentseg"]["segments"])
             elif isinstance(utt["text"], str):
                 utt["text"] = [utt["text"]]
     elif mode == "modified_sents":
         for utt in dialog["utterances"] + dialog["human_utterances"]:
+            utt["orig_text"] = utt["text"]
             if "sentrewrite" in utt["annotations"]:
                 utt["text"] = utt["annotations"]["sentrewrite"]["modified_sents"][-1]
             elif "sentseg" in utt["annotations"]:
                 utt["text"] = utt["annotations"]["sentseg"]["punct_sent"]
     elif mode == "clean_sent":
         for utt in dialog["utterances"] + dialog["human_utterances"] + dialog["bot_utterances"]:
+            utt["orig_text"] = utt["text"]
             utt["text"] = clean_text(utt["text"])
     return dialog
 
@@ -216,8 +220,9 @@ def count_ongoing_skill_utterances(bot_utterances: List[Dict], skill: str) -> in
 
 
 def dff_formatter(
-    dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1, used_annotations=None
+    dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1, used_annotations=None, types_utterances=None
 ) -> List[Dict]:
+    types_utterances = ["human_utterances", "bot_utterances"] if types_utterances is None else types_utterances
     # DialoFlow Framework formatter
     state_name = f"{service_name}_state"
     human_utter_index = len(dialog["human_utterances"]) - 1
@@ -256,7 +261,7 @@ def dff_formatter(
     # rm all execpt human_utterances, bot_utterances
     # we need only: text, annotations, active_skill
     new_dialog = clean_up_utterances_to_avoid_unwanted_keys(
-        dialog, types_utterances=["human_utterances", "bot_utterances"], used_annotations=used_annotations
+        dialog, types_utterances=types_utterances, used_annotations=used_annotations
     )
 
     return [

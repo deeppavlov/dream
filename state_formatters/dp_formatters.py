@@ -2,7 +2,8 @@ import logging
 from copy import deepcopy
 from typing import Dict, List
 
-from common.utils import get_entities
+
+from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
 logger = logging.getLogger(__name__)
@@ -29,12 +30,7 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
     last_utterance = dialog["human_utterances"][-1]["annotations"].get(
         "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
     )
-    return [
-        {
-            "last_utterance_batch": [last_utterance],
-            "human_utterance_history_batch": [history],
-        }
-    ]
+    return [{"last_utterance_batch": [last_utterance], "human_utterance_history_batch": [history]}]
 
 
 def cobot_qa_formatter_service(payload: List):
@@ -51,7 +47,14 @@ def misheard_asr_formatter_service(payload: List):
     hyps = []
     for resp, conf, ha, ba in zip(payload[0], payload[1], payload[2], payload[3]):
         if len(resp) > 0 and conf > 0:
-            hyps.append({"text": resp, "confidence": conf, "human_attributes": ha, "bot_attributes": ba})
+            hyps.append(
+                {
+                    "text": resp,
+                    "confidence": conf,
+                    "human_attributes": ha,
+                    "bot_attributes": ba,
+                }
+            )
     return hyps
 
 
@@ -111,7 +114,11 @@ def personality_catcher_formatter_service(payload: List):
 def cobot_classifiers_formatter_service(payload: List):
     # Used by: cobot_classifiers_formatter, sentiment_formatter
     if len(payload) == 3:
-        return {"text": payload[0], "confidence": payload[1], "is_badlisted": payload[2]}
+        return {
+            "text": payload[0],
+            "confidence": payload[1],
+            "is_badlisted": payload[2],
+        }
     elif len(payload) == 2:
         return {"text": payload[0], "confidence": payload[1]}
     elif len(payload) == 1:
@@ -148,6 +155,15 @@ def base_response_selector_formatter_service(payload: List):
             "human_attributes": payload[3],
             "bot_attributes": payload[4],
         }
+    elif len(payload) == 6:
+        return {
+            "skill_name": payload[0],
+            "text": payload[1],
+            "confidence": payload[2],
+            "human_attributes": payload[3],
+            "bot_attributes": payload[4],
+            "attributes": payload[5],
+        }
 
 
 def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -160,7 +176,12 @@ def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
     for utt in dialog["utterances"]:
         annotation_histories.append(deepcopy(utt["annotations"]))
         utterances_histories.append(utt["text"])
-    return [{"utterances_histories": [utterances_histories], "annotation_histories": [annotation_histories]}]
+    return [
+        {
+            "utterances_histories": [utterances_histories],
+            "annotation_histories": [annotation_histories],
+        }
+    ]
 
 
 def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
@@ -172,7 +193,12 @@ def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
     for utt in dialog["utterances"][:-1]:
         annotation_histories.append(deepcopy(utt["annotations"]))
         utterances_histories.append(utt["text"])
-    return [{"utterances_histories": [utterances_histories], "annotation_histories": [annotation_histories]}]
+    return [
+        {
+            "utterances_histories": [utterances_histories],
+            "annotation_histories": [annotation_histories],
+        }
+    ]
 
 
 def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -213,7 +239,6 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
-    dialog_history_init = [uttr["text"] for uttr in dialog["utterances"][-2:]]
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     dialog_history = [uttr["text"] for uttr in dialog["utterances"][-2:]]
     entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
@@ -221,7 +246,6 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
     named_entities = dialog["human_utterances"][-1]["annotations"].get("ner", [{}])
     return [
         {
-            "utterances_init": [dialog_history_init],
             "utterances": [dialog_history],
             "entities_with_labels": [entities_with_labels],
             "named_entities": [named_entities],
@@ -231,9 +255,13 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    if dialog["bot_utterances"]:
+        dialog_history = [dialog["bot_utterances"][-1]["text"]]
+    else:
+        dialog_history = [""]
     return [
         {
-            "utterances": [dialog["bot_utterances"][-1]["text"]],
+            "utterances": [dialog_history],
         }
     ]
 
@@ -383,7 +411,12 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     sent = dialog["human_utterances"][-1]["annotations"].get(
         "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
     )
-    return [{"sentences": [sent], "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]]}]
+    return [
+        {
+            "sentences": [sent],
+            "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
+        }
+    ]
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
@@ -441,7 +474,10 @@ def simple_batch_formatter_service(payload: List):
                 "is_badlisted": payload["batch"][i][2],
             }
         elif len(payload["batch"][i]) == 2:
-            payload["batch"][i] = {"text": payload["batch"][i][0], "confidence": payload["batch"][i][1]}
+            payload["batch"][i] = {
+                "text": payload["batch"][i][0],
+                "confidence": payload["batch"][i][1],
+            }
         elif len(payload["batch"][i]) == 1:
             payload["batch"][i] = {"text": payload["batch"][i][0]}
         elif len(payload["batch"][i]) == 0:
@@ -451,7 +487,10 @@ def simple_batch_formatter_service(payload: List):
 
 def cobot_dialogact_batch_formatter_service(payload: List):
     for i in range(len(payload["batch"])):
-        payload["batch"][i] = {"intents": payload["batch"][i][0], "topics": payload["batch"][i][1]}
+        payload["batch"][i] = {
+            "intents": payload["batch"][i][0],
+            "topics": payload["batch"][i][1],
+        }
 
     return payload
 
@@ -476,6 +515,28 @@ def utt_non_punct_dialog(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
+def persona_bot_formatter(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    distill_dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    last_uttr = distill_dialog["human_utterances"][-1]
+
+    utterances_histories = [utt["text"] for utt in distill_dialog["utterances"]]
+    amount_utterances_history = 3
+    utterances_histories = utterances_histories[-amount_utterances_history:]
+
+    return [
+        {
+            "utterances_histories": [utterances_histories],
+            "last_annotated_utterances": [last_uttr],
+        }
+    ]
+
+
+def full_dialog(dialog: Dict):
+    return [{"dialogs": [dialog]}]
+
+
 def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector
@@ -483,6 +544,7 @@ def full_history_dialog(dialog: Dict):
     all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
     all_prev_active_skills = [skill_name for skill_name in all_prev_active_skills if skill_name][-15:]
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=10)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     return [{"dialogs": [dialog], "all_prev_active_skills": [all_prev_active_skills]}]
 
 
@@ -503,16 +565,18 @@ def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
+def base_skill_formatter(payload: Dict):
+    return [{"text": payload[0], "confidence": payload[1]}]
+
+
 def skill_with_attributes_formatter_service(payload: List):
     """
     Formatter should use `"state_manager_method": "add_hypothesis"` in config!!!
     Because it returns list of hypothesis even if the payload is returned for one sample!
-
     Args:
         payload: if one sample, list of the following structure:
             (text, confidence, ^human_attributes, ^bot_attributes, attributes) [by ^ marked optional elements]
                 if several hypothesis, list of lists of the above structure
-
     Returns:
         list of dictionaries of the following structure:
             {"text": text, "confidence": confidence_value,
@@ -576,11 +640,14 @@ def ner_formatter_dialog(dialog: Dict):
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
-    if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
-        return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+    if len(dialog["bot_utterances"]):
+        if "sentseg" in dialog["bot_utterances"][-1]["annotations"]:
+            return [{"last_utterances": [dialog["bot_utterances"][-1]["annotations"]["sentseg"]["segments"]]}]
+        else:
+            segments = [dialog["bot_utterances"][-1]["text"]]
+            return [{"last_utterances": [segments]}]
     else:
-        segments = [dialog["bot_utterances"][-1]["text"]]
-        return [{"last_utterances": [segments]}]
+        return [{"last_utterances": [[""]]}]
 
 
 def wp_formatter_dialog(dialog: Dict):
@@ -607,7 +674,13 @@ def wp_formatter_dialog(dialog: Dict):
     parser_info = ["find_top_triplets"]
     if not input_entity_info_list:
         input_entity_info_list = [{}]
-    return [{"parser_info": parser_info, "query": [input_entity_info_list], "utt_num": utt_index}]
+    return [
+        {
+            "parser_info": parser_info,
+            "query": [input_entity_info_list],
+            "utt_num": utt_index,
+        }
+    ]
 
 
 def prepare_el_input(dialog: Dict):
@@ -624,6 +697,12 @@ def prepare_el_input(dialog: Dict):
                 entity_tags_list.append([[entity["label"].lower(), 1.0]])
             else:
                 entity_tags_list.append([["misc", 1.0]])
+    triplets = dialog["human_utterances"][-1]["annotations"].get("property_extraction", [{}])
+    for triplet in triplets:
+        object_entity_substr = triplet.get("object", "")
+        if object_entity_substr and object_entity_substr not in entity_substr_list:
+            entity_substr_list.append(object_entity_substr)
+            entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
@@ -669,7 +748,13 @@ def kbqa_formatter_dialog(dialog: Dict):
             else:
                 entity_tags_list.append([["misc", 1.0]])
 
-    return [{"x_init": sentences, "entities": [entity_substr_list], "entity_tags": [entity_tags_list]}]
+    return [
+        {
+            "x_init": sentences,
+            "entities": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+        }
+    ]
 
 
 def fact_random_formatter_dialog(dialog: Dict):
@@ -721,6 +806,30 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
     ]
 
 
+def fact_retrieval_rus_formatter_dialog(dialog: Dict):
+    # Used by: odqa annotator
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-2:]])]
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list, entity_tags_list, entity_pages_list = [], [], []
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+            entity_tags_list.append(entity_info["entity_tags"])
+            entity_pages_list.append(entity_info["entity_pages"])
+    return [
+        {
+            "dialog_history": [dialog_history],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "entity_pages": [entity_pages_list],
+        }
+    ]
+
+
 def short_story_formatter_dialog(dialog: Dict):
     # Used by: short_story_skill
     return [
@@ -750,15 +859,20 @@ def dialog_breakdown_formatter(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = " ".join([uttr["text"] for uttr in dialog["utterances"][-4:-1]])
-    return [{"context": [context], "curr_utterance": [dialog["human_utterances"][-1]["text"]]}]
+    return [
+        {
+            "context": [context],
+            "curr_utterance": [dialog["human_utterances"][-1]["text"]],
+        }
+    ]
 
 
 def entity_storer_formatter(dialog: Dict) -> List[Dict]:
     human_utter_index = len(dialog["human_utterances"]) - 1
     attributes = {"entities": dialog.get("human", {}).get("attributes", {}).get("entities", {})}
 
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1, human_last_turns=2)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="clean_sent")
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=5, human_last_turns=2)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
 
     # rm all execpt human_utterances, bot_utterances
     # we need only: text, annotations, active_skill
@@ -838,7 +952,7 @@ def dff_generative_skill_formatter(dialog: Dict) -> List[Dict]:
 def dff_travel_italy_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_travel_italy_skill")
 
-    
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
@@ -909,8 +1023,22 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
 
 
-def dff_kg_personality_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_kg_personality_skill")
+def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_image_skill")
+
+
+def dff_dream_persona_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_dream_persona_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_prompted_skill_formatter(dialog, skill_name=None):
+    return utils.dff_formatter(
+        dialog, skill_name, types_utterances=["human_utterances", "bot_utterances", "utterances"]
+    )
 
 
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
@@ -972,7 +1100,12 @@ def speech_function_annotation(dialog: Dict):
     human_function = dialog["human_utterances"][-1].get("annotations", {}).get("speech_function_classifier", [""])[-1]
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     resp = [
-        {"prev_phrase": prev_phrase, "prev_speech_function": human_function, "phrase": h["text"]} for h in hypotheses
+        {
+            "prev_phrase": prev_phrase,
+            "prev_speech_function": human_function,
+            "phrase": h["text"],
+        }
+        for h in hypotheses
     ]
     return [resp]
 
@@ -1015,8 +1148,8 @@ def topic_recommendation_formatter(dialog: Dict):
 
 
 def midas_predictor_formatter(dialog: Dict):
-    midas_dist = dialog["human_utterances"][-1].get("annotations", {}).get("midas_classification", [{}])[-1]
-
+    last_uttr = dialog["human_utterances"][-1]
+    midas_dist = get_intents(last_uttr, probs=True, which="midas")
     return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
 
 
@@ -1029,37 +1162,14 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
     return [{"dialog_contexts": contexts, "hypotheses": hypots}]
 
 
-def wp_kg_formatter_dialog(dialog: Dict):
-    # Used by: wiki_parser_kg annotator
-    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
-    utt_index = len(dialog["human_utterances"])
-    input_entity_info_list = []
-    if entity_info_list:
-        for entity_info in entity_info_list:
-            if (
-                entity_info
-                and "entity_substr" in entity_info
-                and "entity_ids" in entity_info
-                and "tokens_match_conf" in entity_info
-            ):
-                input_entity_info_list.append(
-                    {
-                        "entity_substr": entity_info["entity_substr"],
-                        "entity_ids": entity_info["entity_ids"][:5],
-                        "confidences": entity_info["confidences"][:5],
-                        "tokens_match_conf": entity_info["tokens_match_conf"][:5],
-                    }
-                )
-    parser_info = ["find_top_triplets"]
-    if not input_entity_info_list:
-        input_entity_info_list = [{}]
-    return [{"parser_info": parser_info, "query": [input_entity_info_list], "utt_num": utt_index}]
-
-
-def entity_extraction_kg_formatter_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: entity_extraction_kg annotator
-    num_last_utterances = 2
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+def context_formatter_dialog(dialog: Dict) -> List[Dict]:
+    num_last_utterances = 4
+    dialog = utils.get_last_n_turns(dialog, total_last_turns=num_last_utterances)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
-    return [{"texts": context}]
+    contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+    return [{"contexts": contexts}]
+
+
+def image_captioning_formatter(dialog: Dict) -> List[Dict]:
+    # Used by: image_captioning
+    return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]

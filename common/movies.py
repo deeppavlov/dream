@@ -2,7 +2,7 @@ import re
 from random import choice
 
 from common.fact_retrieval import topic_types
-from common.utils import get_entities
+from common.utils import get_entities, get_topics, TOPIC_GROUPS
 
 
 MOVIE_SKILL_CHECK_PHRASE = "the recent movie"
@@ -246,3 +246,13 @@ def extract_movies_names_from_annotations(annotated_uttr, check_full_utterance=F
     # if check_full_utterance:
     #     movies_titles += [re.sub(r"[\.\?,!]", "", annotated_uttr["text"]).strip()]
     return movies_titles
+
+
+def about_movies(annotated_utterance):
+    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    if any([topic in found_topics for topic in TOPIC_GROUPS["movies"]]):
+        return True
+    elif re.findall(MOVIE_COMPILED_PATTERN, annotated_utterance["text"]):
+        return True
+    else:
+        return False

@@ -4,7 +4,6 @@ import logging
 import time
 import os
 import random
-import requests
 
 import sentry_sdk
 from flask import Flask, request, jsonify
@@ -12,6 +11,7 @@ from healthcheck import HealthCheck
 from sentry_sdk.integrations.logging import ignore_logger
 
 from common.dff.integration.actor import load_ctxs, get_response
+from common import containers
 from scenario.main import actor
 
 import test_server
@@ -23,27 +23,18 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-DIALOGPT_SERVICE_URL = os.environ["DIALOGPT_SERVICE_URL"]
+GENERATIVE_SERVICE_URL = os.environ["GENERATIVE_SERVICE_URL"]
 
-logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(
+    format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s",
+    level=logging.DEBUG,
+)
 logger = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
-
-
-def is_container_running():
-    try:
-        requested_data = [{"speaker": "human", "text": "привет"}]
-        response = requests.post(DIALOGPT_SERVICE_URL, json={"dialog_contexts": [requested_data]}, timeout=1)
-        if response.status_code == 200:
-            return True
-    except Exception as exc:
-        print(exc)
-        return False
-    return False
 
 
 def handler(requested_data, random_seed=None):
@@ -70,7 +61,7 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = is_container_running()
+    result = containers.is_container_running(GENERATIVE_SERVICE_URL)
     if result:
         break
     else:

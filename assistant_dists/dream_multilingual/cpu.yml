@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  gpt2-multilingual:
+    environment:
+      DEVICE: cuda
+      CUDA_VISIBLE_DEVICES: ""
+  toxic-classification-multilingual:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  sentiment-classification-multilingual:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  sentence-ranker-multilingual:
+    environment:
+      DEVICE: cuda
+      CUDA_VISIBLE_DEVICES: ""

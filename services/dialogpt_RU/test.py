@@ -12,8 +12,8 @@ def test_respond():
         ]
     ]
 
-    request_data = {"dialog_contexts": dialog_contexts}
-    result = requests.post(url, json=request_data).json()["generated_responses"][0]
+    request_data = {"dialog_contexts": dialog_contexts, "num_return_sequences": 5}
+    result = requests.post(url, json=request_data).json()[0]
 
     assert len(result) == 5 and len(result[0]) > 0, f"Got\n{result}"
     print("Success!")

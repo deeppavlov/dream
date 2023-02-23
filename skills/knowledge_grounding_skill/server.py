@@ -508,7 +508,7 @@ def respond():
                             "Seems like ",
                             "Makes sense. ",
                             # "Here's what I've heard: ", "Here's something else I've heard: ",
-                            "It reminds me that",
+                            "It reminds me that ",
                             "This comes to my mind: ",
                             "",
                         ]

@@ -11,12 +11,12 @@ log = getLogger(__name__)
 # Spacy checks en_core_web_sm package presence with pkg_resources, but pkg_resources is initialized with interpreter,
 # sot it doesn't see en_core_web_sm installed after interpreter initialization, so we use importlib.reload below.
 
-if 'en-core-web-sm' not in pkg_resources.working_set.by_key.keys():
+if "en-core-web-sm" not in pkg_resources.working_set.by_key.keys():
     importlib.reload(pkg_resources)
 
 # TODO: move nlp to sentence_answer, sentence_answer to rel_ranking_infer and revise en_core_web_sm requirement,
 # TODO: make proper downloading with spacy.cli.download
-nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load("en_core_web_sm")
 
 pronouns = ["who", "what", "when", "where", "how"]
 
@@ -71,8 +71,11 @@ def find_tokens_to_replace(wh_node_head, main_head, question_tokens, question):
     wh_node_head_desc = []
     if wh_node_head:
         wh_node_head_desc = [node for node in wh_node_head.children if node.text != "?"]
-        wh_node_head_dep = [node.dep_ for node in wh_node_head.children if
-                            (node.text != "?" and node.dep_ not in ["aux", "prep"] and node.text.lower() not in pronouns)]
+        wh_node_head_dep = [
+            node.dep_
+            for node in wh_node_head.children
+            if (node.text != "?" and node.dep_ not in ["aux", "prep"] and node.text.lower() not in pronouns)
+        ]
     for node in wh_node_head_desc:
         if node.dep_ == "nsubj" and len(wh_node_head_dep) > 1 or node.text.lower() in pronouns or node.dep_ == "aux":
             question_tokens_to_replace.append(node.text)
@@ -89,7 +92,7 @@ def find_tokens_to_replace(wh_node_head, main_head, question_tokens, question):
             if redundant_replace_substr:
                 break
 
-    redundant_replace_substr = ' '.join(redundant_replace_substr)
+    redundant_replace_substr = " ".join(redundant_replace_substr)
 
     question_replace_substr = []
 
@@ -100,7 +103,7 @@ def find_tokens_to_replace(wh_node_head, main_head, question_tokens, question):
             if question_replace_substr:
                 break
 
-    question_replace_substr = ' '.join(question_replace_substr)
+    question_replace_substr = " ".join(question_replace_substr)
 
     return redundant_replace_substr, question_replace_substr
 
@@ -116,26 +119,27 @@ def sentence_answer(question, entity_title, entities=None, template_answer=None)
 
     inflect_dict = find_inflect_dict(sent_nodes)
     wh_node, wh_node_head, main_head = find_wh_node(sent_nodes)
-    redundant_replace_substr, question_replace_substr = find_tokens_to_replace(wh_node_head, main_head,
-                                                                               question_tokens, question)
+    redundant_replace_substr, question_replace_substr = find_tokens_to_replace(
+        wh_node_head, main_head, question_tokens, question
+    )
     log.debug(f"redundant_replace_substr {redundant_replace_substr} question_replace_substr {question_replace_substr}")
     if redundant_replace_substr:
-        answer = question.replace(redundant_replace_substr, '')
+        answer = question.replace(redundant_replace_substr, "")
     else:
         answer = question
 
-    if answer.endswith('?'):
-        answer = answer.replace('?', '').strip()
+    if answer.endswith("?"):
+        answer = answer.replace("?", "").strip()
 
     if question_replace_substr:
         if template_answer and entities:
             answer = template_answer.replace("[ent]", entities[0]).replace("[ans]", entity_title)
         elif wh_node.text.lower() in ["what", "who", "how"]:
-            fnd_date = re.findall(f"what (day|year) (.*)\?", question, re.IGNORECASE)
-            fnd_wh = re.findall("what (is|was) the name of (.*) (which|that) (.*)\?", question, re.IGNORECASE)
-            fnd_name = re.findall("what (is|was) the name (.*)\?", question, re.IGNORECASE)
+            fnd_date = re.findall(r"what (day|year) (.*)\?", question, re.IGNORECASE)
+            fnd_wh = re.findall(r"what (is|was) the name of (.*) (which|that) (.*)\?", question, re.IGNORECASE)
+            fnd_name = re.findall(r"what (is|was) the name (.*)\?", question, re.IGNORECASE)
             if fnd_date:
-                fnd_date_aux = re.findall(f"what (day|year) (is|was) ({entities[0]}) (.*)\?", question, re.IGNORECASE)
+                fnd_date_aux = re.findall(rf"what (day|year) (is|was) ({entities[0]}) (.*)\?", question, re.IGNORECASE)
                 if fnd_date_aux:
                     answer = f"{entities[0]} {fnd_date_aux[0][1]} {fnd_date_aux[0][3]} on {entity_title}"
                 else:
@@ -149,25 +153,25 @@ def sentence_answer(question, entity_title, entities=None, template_answer=None)
                 answer = f"{entity_title} {aux_verb} {sent_cut}"
             else:
                 if reverse:
-                    answer = answer.replace(question_replace_substr, '')
+                    answer = answer.replace(question_replace_substr, "")
                     answer = f"{answer} {entity_title}"
                 else:
                     answer = answer.replace(question_replace_substr, entity_title)
         elif wh_node.text.lower() in ["when", "where"] and entities:
-            sent_cut = re.findall(f"(when|where) (was|is) {entities[0]} (.*)\?", question, re.IGNORECASE)
+            sent_cut = re.findall(rf"(when|where) (was|is) {entities[0]} (.*)\?", question, re.IGNORECASE)
             if sent_cut:
                 if sent_cut[0][0].lower() == "when":
                     answer = f"{entities[0]} {sent_cut[0][1]} {sent_cut[0][2]} on {entity_title}"
                 else:
                     answer = f"{entities[0]} {sent_cut[0][1]} {sent_cut[0][2]} in {entity_title}"
             else:
-                answer = answer.replace(question_replace_substr, '')
+                answer = answer.replace(question_replace_substr, "")
                 answer = f"{answer} in {entity_title}"
 
     for old_tok, new_tok in inflect_dict.items():
         answer = answer.replace(old_tok, new_tok)
-    answer = re.sub("\s+", " ", answer).strip()
+    answer = re.sub(r"\s+", " ", answer).strip()
 
-    answer = answer + '.'
+    answer = answer + "."
 
     return answer

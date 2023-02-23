@@ -74,6 +74,8 @@ services:
   entity-linking:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   wiki-parser:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -125,8 +127,14 @@ services:
   prompt-storygpt:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  infilling:
+  seq2seq-persona-based:
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=9
+  sentence-ranker:
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   dff-template-skill:
+  property-extraction:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
 version: '3.7'
