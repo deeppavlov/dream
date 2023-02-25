@@ -1,3 +1,4 @@
+import json
 import logging
 import uuid
 import os
@@ -50,7 +51,7 @@ rel_kinds_dict = {
     "like_sports": "type_of_sport"
 }
 
-DB = "test_italy_skill"
+DB = "test_italy_skill1"
 TEAM = "yashkens|c77b"
 
 graph = TerminusdbKnowledgeGraph(
@@ -230,9 +231,10 @@ def get_result(request):
             entities_with_types[(entity_info["entity_substr"], entity_info["entity_id_tags"][0])] = \
                 entity_info["entity_ids"][0]
             found_kg_ids.append(entity_info["entity_ids"][0])
-
+    logger.info(f"Entities_with_types: {entities_with_types}")
     logger.info(f"Text: {uttrs[0]['text']}")
-    logger.info(f"Property Extraction: {annotations.get('property_extraction', [])}")
+    property_extraction_result = annotations.get('property_extraction', [])
+    logger.info(f"Property Extraction: {property_extraction_result}")
 
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
@@ -244,6 +246,22 @@ def get_result(request):
     all_entities = graph.get_all_entities()
     existing_ids = [entity["@id"] for entity in all_entities]
     logger.info(f"Existing ids: {existing_ids}")
+
+    prompts = []
+    for prop in property_extraction_result:
+        logger.debug(f"property: {prop}")
+        if "triplet" not in prop or "subject" not in prop["triplet"]:
+            pass
+        elif prop["triplet"]["subject"] == "user":
+            user_relationships = graph.search_for_relationships(id_a=user_id)
+            
+            for rel in user_relationships:
+                for entity in all_entities:
+                    if rel.get("id_b") == entity.get("@id") and entity.get("Name") == prop["triplet"]["object"]:
+                        prompts.append(f"Task: You MUST repeat the fact below and use it in your answer.\n\n Fact: Yeah, I know you {rel['rel'].replace('_', ' ').lower()} {entity.get('Name')}")
+                    else:
+                        logger.info(f"rel -- {rel}\n entity -- {entity}")
+    logger.info(f"prompts -- {prompts}")
 
     kg_parser_annotations = []
     ex_triplets = []
@@ -296,6 +314,12 @@ def get_result(request):
         graph.index.set_active_user_id(str(user_id))
         graph.index.add_entities(substr_list, ids_list, tags_list)
     logger.info(f"kg_parser_annotations: {kg_parser_annotations}")
+
+    prompts = {"prompt": ". ".join(prompts)}
+    prompts = json.dumps(prompts)
+    PROMPT_FILE = os.getenv("PROMPT_FILE")
+    with open(PROMPT_FILE, "w") as f:
+        f.write(prompts)    
 
     return [{'added_to_graph': added, "triplets": kg_parser_annotations}]
 
