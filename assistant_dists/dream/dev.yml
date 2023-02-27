@@ -447,4 +447,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  property-extraction:
+    volumes:
+      - "./annotators/property_extraction:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8136:8136
 version: "3.7"

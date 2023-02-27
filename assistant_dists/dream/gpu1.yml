@@ -203,4 +203,8 @@ services:
       - CUDA_VISIBLE_DEVICES=9
   dff-template-skill:
     restart: unless-stopped
+  property-extraction:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
 version: '3.7'
