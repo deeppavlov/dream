@@ -83,8 +83,10 @@ class EntityLinker(Component, Serializable):
             os.makedirs(self.load_path)
         self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
         self.cur = self.conn.cursor()
-        self.cur.execute("CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
-                         "UNINDEXED, tag, user_id, tokenize = 'porter ascii');")
+        self.cur.execute(
+            "CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
+            "UNINDEXED, tag, user_id, tokenize = 'porter ascii');"
+        )
 
     def save(self) -> None:
         pass
@@ -95,8 +97,10 @@ class EntityLinker(Component, Serializable):
                 os.makedirs(self.load_path)
             self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
             self.cur = self.conn.cursor()
-            self.cur.execute("CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
-                             "UNINDEXED, tag, user_id, tokenize = 'porter ascii');")
+            self.cur.execute(
+                "CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
+                "UNINDEXED, tag, user_id, tokenize = 'porter ascii');"
+            )
 
         for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
             entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")
@@ -107,12 +111,16 @@ class EntityLinker(Component, Serializable):
             if res and res[0][3] == "name" and res[0][1] == entity_id and tag == "name":
                 query = "DELETE FROM inverted_index WHERE entity_id=? AND tag=? AND user_id=?;"
                 self.cur.execute(query, (entity_id, tag, user_id))
-                self.cur.execute("INSERT INTO inverted_index "
-                                 "VALUES (?, ?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag, user_id))
+                self.cur.execute(
+                    "INSERT INTO inverted_index " "VALUES (?, ?, ?, ?, ?);",
+                    (entity_substr.lower(), entity_id, 1, tag, user_id),
+                )
                 self.conn.commit()
             elif not res:
-                self.cur.execute("INSERT INTO inverted_index "
-                                 "VALUES (?, ?, ?, ?, ?);", (entity_substr.lower(), entity_id, 1, tag, user_id))
+                self.cur.execute(
+                    "INSERT INTO inverted_index " "VALUES (?, ?, ?, ?, ?);",
+                    (entity_substr.lower(), entity_id, 1, tag, user_id),
+                )
                 self.conn.commit()
 
     def __call__(
@@ -166,9 +174,9 @@ class EntityLinker(Component, Serializable):
             )
             log.info(f"user_id: {user_id} entity_ids_list: {entity_ids_list} entity_conf_list: {entity_conf_list}")
 
-            entity_ids_batch.append(entity_ids_list[:self.num_entities_to_return])
-            entity_conf_batch.append(entity_conf_list[:self.num_entities_to_return])
-            entity_id_tags_batch.append(entity_id_tags_list[:self.num_entities_to_return])
+            entity_ids_batch.append(entity_ids_list[: self.num_entities_to_return])
+            entity_conf_batch.append(entity_conf_list[: self.num_entities_to_return])
+            entity_id_tags_batch.append(entity_id_tags_list[: self.num_entities_to_return])
         return entity_ids_batch, entity_conf_batch, entity_id_tags_batch
 
     def link_entities(
@@ -193,7 +201,7 @@ class EntityLinker(Component, Serializable):
                 if len(entity_substr) > 1:
                     for start in ["a ", "the ", "my ", "his ", "her "]:
                         if entity_substr.startswith(start):
-                            entity_substr = entity_substr[len(start):]
+                            entity_substr = entity_substr[len(start) :]
                     cand_ent_init = self.find_exact_match(user_id, entity_substr, tags)
                     entity_substr_split = [
                         word for word in entity_substr.split(" ") if word not in self.stopwords and len(word) > 0

@@ -703,8 +703,15 @@ def custom_el_formatter_dialog(dialog: Dict):
     entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
     property_extraction = dialog["human_utterances"][-1]["annotations"].get("property_extraction", {})
     user_id = str(dialog["human_utterances"][-1].get("user", {}).get("id", ""))
-    return [{"user_id": [user_id], "entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list],
-             "context": [context], "property_extraction": [property_extraction]}]
+    return [
+        {
+            "user_id": [user_id],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "context": [context],
+            "property_extraction": [property_extraction],
+        }
+    ]
 
 
 def kbqa_formatter_dialog(dialog: Dict):

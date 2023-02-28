@@ -5,11 +5,10 @@ use_context = True
 
 def main():
     url = "http://0.0.0.0:8137"
-    inserted_data = {"user_id": "1234",
-                     "entity_info": {"entity_substr": ["forrest gump"],
-                                     "entity_ids": ["film/123"],
-                                     "tags": ["film"]}
-                     }
+    inserted_data = {
+        "user_id": "1234",
+        "entity_info": {"entity_substr": ["forrest gump"], "entity_ids": ["film/123"], "tags": ["film"]},
+    }
     requests.post(f"{url}/add_entities", json=inserted_data)
 
     request_data = [
@@ -17,7 +16,7 @@ def main():
             "user_id": ["1234"],
             "entity_substr": [["forrest gump"]],
             "entity_tags": [[[("film", 1.0)]]],
-            "context": [["who directed forrest gump?"]]
+            "context": [["who directed forrest gump?"]],
         }
     ]
     gold_results = [["film/123"]]

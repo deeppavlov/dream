@@ -13,8 +13,19 @@ app = Flask(__name__)
 
 config_name = os.getenv("CONFIG")
 
-abstract_rels = {"favorite animal", "like animal", "favorite book", "like read", "favorite movie", "favorite_food",
-                 "like_food", "favorite_drink", "like_drink", "favorite_sport", "like_sports"}
+abstract_rels = {
+    "favorite animal",
+    "like animal",
+    "favorite book",
+    "like read",
+    "favorite movie",
+    "favorite_food",
+    "like_food",
+    "favorite_drink",
+    "like_drink",
+    "favorite_sport",
+    "like_sports",
+}
 
 try:
     el = build_model(config_name, download=True)
@@ -72,20 +83,8 @@ def respond():
             entity_id_tags_batch,
         ) = el(user_ids, entity_substr_batch, entity_tags_batch, opt_context_batch)
         entity_info_batch = []
-        for (
-            entity_substr_list,
-            entity_ids_list,
-            conf_list,
-            entity_id_tags_list,
-            prex_info,
-            context
-        ) in zip(
-            entity_substr_batch,
-            entity_ids_batch,
-            conf_batch,
-            entity_id_tags_batch,
-            prex_info_batch,
-            opt_context_batch
+        for (entity_substr_list, entity_ids_list, conf_list, entity_id_tags_list, prex_info, context) in zip(
+            entity_substr_batch, entity_ids_batch, conf_batch, entity_id_tags_batch, prex_info_batch, opt_context_batch
         ):
             if context:
                 context = " ".join(context)
@@ -109,8 +108,9 @@ def respond():
                 entity_id_tags_list,
             ):
                 entity_info = {}
-                is_abstract = rel.lower().replace("_", " ") in abstract_rels \
-                    and not any([f" {word} {entity_substr}" in context for word in ["the", "my", "his", "her"]])
+                is_abstract = rel.lower().replace("_", " ") in abstract_rels and not any(
+                    [f" {word} {entity_substr}" in context for word in ["the", "my", "his", "her"]]
+                )
 
                 f_entity_ids, f_confs, f_entity_id_tags = [], [], []
                 for entity_id, conf, entity_id_tag in zip(entity_ids, confs, entity_id_tags):
