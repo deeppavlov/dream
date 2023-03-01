@@ -109,8 +109,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "",
-                    "container": ""
+                    "directory": "skill_selectors/rule_based_selector",
+                    "container": "agent"
                 }
             }
         },

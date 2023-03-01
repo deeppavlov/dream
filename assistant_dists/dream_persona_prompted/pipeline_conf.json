@@ -28,7 +28,7 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "",
+                "directory": ".",
                 "container": ""
             }
         },
@@ -53,7 +53,7 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "",
+                "directory": ".",
                 "container": ""
             }
         },
@@ -84,7 +84,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "",
+                    "directory": ".",
                     "container": ""
                 }
             },
@@ -138,7 +138,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "",
+                    "directory": ".",
                     "container": ""
                 }
             }
@@ -157,7 +157,7 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "",
+                "directory": ".",
                 "container": ""
             }
         },
@@ -236,8 +236,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "",
-                    "container": ""
+                    "directory": "skill_selectors/rule_based_selector",
+                    "container": "agent"
                 }
             }
         },
@@ -274,7 +274,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "",
+                    "directory": ".",
                     "container": ""
                 }
             }
