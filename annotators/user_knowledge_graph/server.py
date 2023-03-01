@@ -258,11 +258,12 @@ def get_result(request):
             for rel in user_relationships:
                 for entity in all_entities:
                     if rel.get("id_b") == entity.get("@id") and entity.get("Name") == prop["triplet"]["object"]:
-                        prompts.append(f"Task: You MUST repeat the fact below and use it in your answer.\n\n Fact: Yeah, I know you {rel['rel'].replace('_', ' ').lower()} {entity.get('Name')}")
+                        prompts.append(f"I know that the user {rel['rel'].replace('_', ' ').lower()} {entity.get('Name')}.")
                     else:
                         logger.info(f"rel -- {rel}\n entity -- {entity}")
-    logger.info(f"prompts -- {prompts}")
-
+    prompt = "\n".join(prompts)
+    prompt = ["Respond to a new friend as a kind friendly person. You MUST provide all information in the list of facts.\n\nThe list of facts:", prompt]
+    logger.info(f"prompt -- {prompt}")
     kg_parser_annotations = []
     ex_triplets = []
     if user_id in existing_ids:
@@ -315,13 +316,7 @@ def get_result(request):
         graph.index.add_entities(substr_list, ids_list, tags_list)
     logger.info(f"kg_parser_annotations: {kg_parser_annotations}")
 
-    prompts = {"prompt": ". ".join(prompts)}
-    prompts = json.dumps(prompts)
-    PROMPT_FILE = os.getenv("PROMPT_FILE")
-    with open(PROMPT_FILE, "w") as f:
-        f.write(prompts)    
-
-    return [{'added_to_graph': added, "triplets": kg_parser_annotations}]
+    return [{'added_to_graph': added, "triplets": kg_parser_annotations, "prompt": prompt}]
 
 
 @app.route("/respond", methods=["POST"])
