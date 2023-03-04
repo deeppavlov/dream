@@ -1134,7 +1134,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8034
-        SERVICE_NAME: dff_book_sfc_skill
+        SERVICE_NAME: dff_book_skill
         QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
       context: .
       dockerfile: ./skills/dff_book_sfc_skill/Dockerfile
