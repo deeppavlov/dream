@@ -33,20 +33,6 @@ services:
       - "./annotators/combined_classification:/src"
     ports:
       - 8087:8087
-  dff-intent-responder-skill:
-    volumes:
-      - "./skills/dff_intent_responder_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8012:8012
-  intent-catcher:
-    volumes:
-      - "./annotators/IntentCatcherTransformers:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8014:8014
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
@@ -59,13 +45,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm-gptj:
+  openai-api-chatgpt:
     volumes:
-      - "./services/transformers_lm:/src"
+      - "./services/openai_api_lm:/src"
       - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8130:8130
+      - 8145:8145
   dff-fairytale-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
