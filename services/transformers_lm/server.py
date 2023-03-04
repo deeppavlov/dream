@@ -4,6 +4,7 @@ import time
 
 import sentry_sdk
 import torch
+from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
-logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
 
 app = Flask(__name__)
@@ -54,9 +55,12 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
-        result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
+        result_cut = output.replace(dialog_context + " ", "")
+        result_cut = GENERATIVE_ROBOT_TEMPLATE.sub("\n", result_cut).strip()
+        result_cut = result_cut.split("\n")[0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
+
     return outputs
 
 
