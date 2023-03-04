@@ -14,4 +14,7 @@ topic-recommendation:
   - group: annotators
     port: 8113
     endpoint: respond
-  date_created: '2023-02-22T22:48:14'
+  build_args:
+    SERVICE_PORT: 8113
+    SERVICE_NAME: topic_recommendation
+  date_created: '2023-03-04T19:27:44'

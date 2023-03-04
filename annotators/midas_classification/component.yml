@@ -8,11 +8,16 @@ midas-classification:
   description: BERT-based model trained on a semantic classes subset of MIDAS dataset
   ram_usage: 1.1G
   gpu_usage: 4.5G
-  execution_time: 1.0
+  execution_time: 2.0
   endpoints:
   - group: annotators
     port: 8090
     endpoint: model
+  - group: services
+    port: 8090
+    endpoint: respond
   build_args:
+    SERVICE_PORT: 8090
+    SERVICE_NAME: midas_classification
     CONFIG: midas_conv_bert.json
-  date_created: '2023-02-22T22:48:14'
+  date_created: '2023-03-04T19:27:44'

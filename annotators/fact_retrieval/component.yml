@@ -14,6 +14,8 @@ fact-retrieval:
     port: 8100
     endpoint: model
   build_args:
+    SERVICE_PORT: 8100
+    SERVICE_NAME: fact_retrieval
     CONFIG: configs/fact_retrieval_page.json
     CONFIG_WIKI: configs/page_extractor.json
     CONFIG_WHOW: configs/whow_page_extractor.json
@@ -21,4 +23,4 @@ fact-retrieval:
     SRC_DIR: annotators/fact_retrieval/
     COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
     N_FACTS: 3
-  date_created: '2023-02-22T22:48:14'
+  date_created: '2023-03-04T19:27:44'

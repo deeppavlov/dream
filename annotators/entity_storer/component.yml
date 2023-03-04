@@ -15,6 +15,7 @@ entity-storer:
     port: 8089
     endpoint: respond
   build_args:
-    WORK_DIR: annotators/entity_storer
     SERVICE_PORT: 8089
-  date_created: '2023-02-22T22:48:14'
+    SERVICE_NAME: entity_storer
+    WORK_DIR: annotators/entity_storer
+  date_created: '2023-03-04T19:27:44'

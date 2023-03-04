@@ -256,7 +256,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_prompted_skill/",
+                    "directory": "skills/dff_template_prompted_skill",
                     "container": "dff-dream-persona-prompted-skill",
                     "endpoint": "respond"
                 }

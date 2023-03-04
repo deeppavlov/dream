@@ -6,11 +6,11 @@ harvesters-maintenance-skill:
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
-  description: ''
-  ram_usage: 50M
+  description: Harvesters maintenance skill
+  ram_usage: 30M
   execution_time: 0.5
   endpoints:
   - group: skills
     port: 3662
     endpoint: respond
-  date_created: '2023-02-22T22:48:15'
+  date_created: '2023-03-04T19:27:44'

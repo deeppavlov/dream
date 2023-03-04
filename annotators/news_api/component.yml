@@ -13,6 +13,11 @@ news-api-annotator:
   - group: annotators
     port: 8112
     endpoint: respond
+  - group: services
+    port: 8112
+    endpoint: respond
   build_args:
+    SERVICE_PORT: 8112
+    SERVICE_NAME: news_api_annotator
     ASYNC_SIZE: 3
-  date_created: '2023-02-22T22:48:14'
+  date_created: '2023-03-04T19:27:44'

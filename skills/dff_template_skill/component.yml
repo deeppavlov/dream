@@ -1,6 +1,6 @@
 dff-template-skill:
   name: dff_template_skill
-  display_name: Template Skill
+  display_name: DFF Template Skill
   container_name: dff-template-skill
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
@@ -13,10 +13,7 @@ dff-template-skill:
   - group: skills
     port: 8120
     endpoint: respond
-  - group: skills
-    port: 8120
-    endpoint: respond
   build_args:
     SERVICE_PORT: 8120
     SERVICE_NAME: dff_template_skill
-  date_created: '2023-02-22T22:48:14'
+  date_created: '2023-03-04T19:27:44'

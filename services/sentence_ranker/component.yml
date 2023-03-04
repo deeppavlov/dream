@@ -9,15 +9,19 @@ sentence-ranker:
     pair os sentences returns a float score of correspondence
   ram_usage: 1.2G
   gpu_usage: 2.1G
-  execution_time: 1.0
+  execution_time: 2.0
   endpoints:
   - group: candidate_annotators
     port: 8128
     endpoint: respond
+  - group: services
+    port: 8128
+    endpoint: respond
   build_args:
     SERVICE_PORT: 8128
+    SERVICE_NAME: sentence_ranker
     PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
-  date_created: '2023-02-22T22:48:14'
+  date_created: '2023-03-04T19:27:44'
 sentence-ranker-multilingual:
   name: sentence_ranker
   display_name: Sentence Ranker
@@ -38,4 +42,4 @@ sentence-ranker-multilingual:
   build_args:
     SERVICE_PORT: 8128
     PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
-  date_created: '2023-02-22T22:48:14'
+  date_created: '2023-03-04T19:27:44'
