@@ -2,12 +2,12 @@ import requests
 
 
 DEFAULT_CONFIG = {
-  "max_length": 60,
-  "min_length": 8,
-  "top_p": 0.9,
-  "temperature": 0.9,
-  "do_sample": True,
-  "num_return_sequences": 2
+    "max_length": 60,
+    "min_length": 8,
+    "top_p": 0.9,
+    "temperature": 0.9,
+    "do_sample": True,
+    "num_return_sequences": 2,
 }
 
 
