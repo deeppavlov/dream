@@ -3,7 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-no-scripts-selector:8009, badlisted-words:8018, combined-classification:8087, 
-                   spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130"
+                   spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130,
+                   dff-dream-persona-gpt-j-prompted-skill:8134"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -74,6 +75,9 @@ services:
   badlisted-words:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8018
+        SERVICE_NAME: badlisted_words
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
@@ -88,6 +92,9 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
@@ -124,6 +131,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
         PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
@@ -158,7 +166,7 @@ services:
         reservations:
           memory: 40G
 
-  dff-dream-persona-prompted-skill:
+  dff-dream-persona-gpt-j-prompted-skill:
     env_file: [ .env ]
     build:
       args:

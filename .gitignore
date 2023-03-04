@@ -142,3 +142,6 @@ kubernetes/models
 docker-compose-one-replica.yml
 
 *.pem
+
+# personal env keys and tokens
+.env_secret
