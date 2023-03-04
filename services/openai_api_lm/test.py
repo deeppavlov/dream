@@ -30,6 +30,7 @@ def test_respond():
             "OPENAI_API_KEY_list": [OPENAI_API_KEY] * len(contexts),
             "OPENAI_ORGANIZATION_list": [OPENAI_ORGANIZATION] * len(contexts),
             "prompts": prompts,
+            "configs": ["openai-text-davinci-003.json"] * len(contexts),
         },
     ).json()
     print(result)

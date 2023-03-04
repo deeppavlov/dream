@@ -79,7 +79,7 @@ def respond():
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
 
-    logger.info(f"openai-api-lm result: {responses}")
+    logger.info(f"openai-api result: {responses}")
     total_time = time.time() - st_time
-    logger.info(f"openai-api-lm exec time: {total_time:.3f}s")
+    logger.info(f"openai-api exec time: {total_time:.3f}s")
     return jsonify(responses)
