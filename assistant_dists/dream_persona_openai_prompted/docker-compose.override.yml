@@ -158,7 +158,7 @@ services:
           memory: 50M
 
   dff-dream-persona-davinci3-prompted-skill:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8137
