@@ -56,8 +56,8 @@ def respond():
     configs = request.json.get("configs", [])
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
-    openai_api_keys = request.json.get("openai_api_keys", [])
-    openai_orgs = request.json.get("openai_organizations", None)
+    openai_api_keys = request.json.get("OPENAI_API_KEY_list", [])
+    openai_orgs = request.json.get("OPENAI_ORGANIZATION_list", None)
     openai_orgs = [None] * len(contexts) if openai_orgs is None else openai_orgs
 
     try:
