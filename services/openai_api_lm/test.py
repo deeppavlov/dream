@@ -3,13 +3,13 @@ from os import getenv
 
 
 # ATTENTION!!! This test is only working if you assign `OPENAI_API_KEY` env variable
+OPENAI_API_KEY = getenv("OPENAI_API_KEY", None)
+OPENAI_ORGANIZATION = getenv("OPENAI_ORGANIZATION", None)
+assert OPENAI_API_KEY, print("No OpenAI API key is given in env vars")
 
 
 def test_respond():
     url = "http://0.0.0.0:8131/respond"
-    OPENAI_API_KEY = getenv("OPENAI_API_KEY", None)
-    OPENAI_ORGANIZATION = getenv("OPENAI_ORGANIZATION", None)
-    assert OPENAI_API_KEY, print("No OpenAI API key is given in env vars")
 
     contexts = [
         [
