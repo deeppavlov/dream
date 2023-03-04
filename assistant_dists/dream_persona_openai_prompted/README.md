@@ -79,7 +79,7 @@ If one wants to create a new prompted distribution (distribution containing prom
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.5,
-                    "url": "http://dff-dream-persona-prompted-skill:8134/respond"
+                    "url": "http://dff-dream-persona-davinci3-prompted-skill:8134/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
