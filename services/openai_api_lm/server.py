@@ -1,5 +1,5 @@
 import logging
-import json
+import re
 import os
 import time
 
@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
+ROBOT_TEMPLATE = re.compile(r"(^Robot:\s?|^AI:\s?)", re.IGNORECASE)
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -45,6 +46,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
         outputs = [resp.get("text", "").strip() for resp in response["choices"]]
     elif isinstance(response, str):
         outputs = [response.strip()]
+    outputs = [ROBOT_TEMPLATE.sub("", resp) for resp in outputs]
     return outputs
 
 
