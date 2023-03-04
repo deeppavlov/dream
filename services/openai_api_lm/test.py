@@ -1,18 +1,16 @@
 import requests
+from os import getenv
 
 
-DEFAULT_CONFIG = {
-    "max_length": 60,
-    "min_length": 8,
-    "top_p": 0.9,
-    "temperature": 0.9,
-    "do_sample": True,
-    "num_return_sequences": 2,
-}
+# ATTENTION!!! This test is only working if you assign `OPENAI_API_KEY` env variable
+OPENAI_API_KEY = getenv("OPENAI_API_KEY", None)
+OPENAI_ORGANIZATION = getenv("OPENAI_ORGANIZATION", None)
+assert OPENAI_API_KEY, print("No OpenAI API key is given in env vars")
+DEFAULT_CONFIG = {"max_tokens": 64, "temperature": 0.4, "top_p": 1.0, "frequency_penalty": 0, "presence_penalty": 0}
 
 
 def test_respond():
-    url = "http://0.0.0.0:8130/respond"
+    url = "http://0.0.0.0:8131/respond"
     contexts = [
         [
             "Hi! I am Marcus. How are you today?",
@@ -31,6 +29,8 @@ def test_respond():
             "dialog_contexts": contexts,
             "prompts": prompts,
             "configs": [DEFAULT_CONFIG] * len(contexts),
+            "OPENAI_API_KEY_list": [OPENAI_API_KEY] * len(contexts),
+            "OPENAI_ORGANIZATION_list": [OPENAI_ORGANIZATION] * len(contexts),
         },
     ).json()
     print(result)

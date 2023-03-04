@@ -45,18 +45,17 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm-gptj:
+  openai-api-davinci3:
     volumes:
-      - "./services/transformers_lm:/src"
+      - "./services/openai_api_lm:/src"
       - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8130:8130
-  dff-dream-persona-gpt-j-prompted-skill:
+      - 8131:8131
+  dff-dream-persona-davinci3-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8134:8134
+      - 8137:8137
 
 version: "3.7"
