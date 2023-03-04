@@ -48,6 +48,11 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     return outputs
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
@@ -75,7 +80,7 @@ def respond():
             responses += [curr_responses]
 
     except Exception as exc:
-        logger.info(exc)
+        logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
 
