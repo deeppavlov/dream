@@ -2,7 +2,10 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/da_costa_clothes_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, badlisted-words:8018, combined-classification:8087, dff-intent-responder-skill:8012, intent-catcher:8014, spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, dff-da-costa-clothes-prompted-skill:8137"
+      WAIT_HOSTS: "sentseg:8011, convers-evaluation-no-scripts-selector:8009, badlisted-words:8018, combined-classification:8087,
+      dff-intent-responder-skill:8012, intent-catcher:8014,
+      spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130,
+      dff-da-costa-clothes-prompted-skill:8144"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -36,7 +39,7 @@ services:
         reservations:
           memory: 2G
 
-  convers-evaluation-selector:
+  convers-evaluation-no-scripts-selector:
     env_file: [ .env ]
     build:
       args:
@@ -66,9 +69,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   badlisted-words:
     env_file: [ .env ]
@@ -198,7 +201,7 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8137
+        SERVICE_PORT: 8144
         SERVICE_NAME: dff_da_costa_clothes_prompted_skill
         PROMPT_FILE: common/prompts/da_costa_clothes.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
@@ -207,7 +210,7 @@ services:
         N_UTTERANCES_CONTEXT: 3
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8137 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8144 --reload
     deploy:
       resources:
         limits:

@@ -152,8 +152,8 @@
             "dff_fairytale_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 12,
-                    "url": "http://dff-fairytale-prompted-skill:8137/respond"
+                    "timeout": 5,
+                    "url": "http://dff-fairytale-prompted-skill:8139/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_fairytale_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -230,11 +230,11 @@
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://convers-evaluation-no-scripts-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -246,7 +246,7 @@
         }
     },
     "metadata": {
-        "display_name": "da Costa Clothes Assistant",
+        "display_name": "Fairytail Assistant",
         "author": "da Costa Industries",
         "description": "Stay protected in every season with da Costa Industries Clothes Assistant! Experience the ultimate comfort and protection, no matter the weather. Stay warm in winter a...",
         "version": "0.0.1",

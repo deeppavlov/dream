@@ -152,8 +152,8 @@
             "dff_da_costa_clothes_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 4.5,
-                    "url": "http://dff-da-costa-clothes-prompted-skill:8137/respond"
+                    "timeout": 5,
+                    "url": "http://dff-da-costa-clothes-prompted-skill:8144/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_da_costa_clothes_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -230,11 +230,11 @@
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://convers-evaluation-no-scripts-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
