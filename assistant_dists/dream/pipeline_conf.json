@@ -47,8 +47,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": ".",
-                "container": ""
+                "directory": "services/last_chance_service",
+                "container": "agent"
             }
         },
         "timeout_service": {
@@ -81,8 +81,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": ".",
-                "container": ""
+                "directory": "services/timeout_service",
+                "container": "agent"
             }
         },
         "annotators": {
@@ -97,7 +97,7 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing/",
+                    "directory": "annotators/spelling_preprocessing",
                     "container": "spelling-preprocessing",
                     "endpoint": "respond"
                 }
@@ -116,7 +116,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg/",
+                    "directory": "annotators/SentSeg",
                     "container": "sentseg",
                     "endpoint": "sentseg"
                 }
@@ -135,7 +135,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases/",
+                    "directory": "annotators/spacy_nounphrases",
                     "container": "spacy-nounphrases",
                     "endpoint": "respond"
                 }
@@ -154,7 +154,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/rake_keywords/",
+                    "directory": "annotators/rake_keywords",
                     "container": "rake-keywords",
                     "endpoint": "respond"
                 }
@@ -175,7 +175,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/COMeT/",
+                    "directory": "annotators/COMeT",
                     "container": "comet-conceptnet",
                     "endpoint": "comet_annotator"
                 }
@@ -194,7 +194,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector/",
+                    "directory": "annotators/BadlistedWordsDetector",
                     "container": "badlisted-words",
                     "endpoint": "badlisted_words"
                 }
@@ -210,7 +210,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/asr/",
+                    "directory": "annotators/asr",
                     "container": "asr",
                     "endpoint": "asr_check"
                 }
@@ -230,7 +230,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers/",
+                    "directory": "annotators/IntentCatcherTransformers",
                     "container": "intent-catcher",
                     "endpoint": "detect"
                 }
@@ -251,7 +251,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fact_random/",
+                    "directory": "annotators/fact_random",
                     "container": "fact-random",
                     "endpoint": "respond"
                 }
@@ -272,7 +272,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fact_retrieval/",
+                    "directory": "annotators/fact_retrieval",
                     "container": "fact-retrieval",
                     "endpoint": "model"
                 }
@@ -290,11 +290,7 @@
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "directory": ".",
-                    "container": ""
-                }
+                "is_enabled": true
             },
             "entity_detection": {
                 "connector": {
@@ -311,7 +307,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection/",
+                    "directory": "annotators/entity_detection",
                     "container": "entity-detection",
                     "endpoint": "respond"
                 }
@@ -330,7 +326,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/kbqa/",
+                    "directory": "annotators/kbqa",
                     "container": "kbqa",
                     "endpoint": "model"
                 }
@@ -351,7 +347,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_linking/",
+                    "directory": "annotators/entity_linking",
                     "container": "entity-linking",
                     "endpoint": "model"
                 }
@@ -370,7 +366,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/wiki_parser/",
+                    "directory": "annotators/wiki_parser",
                     "container": "wiki-parser",
                     "endpoint": "model"
                 }
@@ -410,7 +406,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification/",
+                    "directory": "annotators/combined_classification",
                     "container": "combined-classification",
                     "endpoint": "model"
                 }
@@ -430,7 +426,7 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_storer/",
+                    "directory": "annotators/entity_storer",
                     "container": "entity-storer",
                     "endpoint": "respond"
                 }
@@ -453,7 +449,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/news_api/",
+                    "directory": "annotators/news_api",
                     "container": "news-api-annotator",
                     "endpoint": "respond"
                 }
@@ -474,7 +470,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/topic_recommendation/",
+                    "directory": "annotators/topic_recommendation",
                     "container": "topic-recommendation",
                     "endpoint": "respond"
                 }
@@ -493,7 +489,7 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/user_persona_extractor/",
+                    "directory": "annotators/user_persona_extractor",
                     "container": "user-persona-extractor",
                     "endpoint": "respond"
                 }
@@ -512,7 +508,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/midas_predictor/",
+                    "directory": "annotators/midas_predictor",
                     "container": "midas-predictor",
                     "endpoint": "respond"
                 }
@@ -531,7 +527,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/relative_persona_extractor/",
+                    "directory": "annotators/relative_persona_extractor",
                     "container": "relative-persona-extractor",
                     "endpoint": "respond"
                 }
@@ -550,11 +546,7 @@
                     "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true,
-                "source": {
-                    "directory": ".",
-                    "container": ""
-                }
+                "is_enabled": true
             },
             "ner": {
                 "connector": {
@@ -569,11 +561,7 @@
                     "response_annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true,
-                "source": {
-                    "directory": ".",
-                    "container": ""
-                }
+                "is_enabled": true
             },
             "sentrewrite": {
                 "connector": {
@@ -609,7 +597,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases/",
+                    "directory": "annotators/spacy_nounphrases",
                     "container": "spacy-nounphrases",
                     "endpoint": "respond"
                 }
@@ -651,7 +639,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector/",
+                    "directory": "annotators/BadlistedWordsDetector",
                     "container": "badlisted-words",
                     "endpoint": "badlisted_words_batch"
                 }
@@ -670,7 +658,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/ConversationEvaluator/",
+                    "directory": "annotators/ConversationEvaluator",
                     "container": "convers-evaluator-annotator",
                     "endpoint": "batch_model"
                 }
@@ -689,7 +677,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases/",
+                    "directory": "annotators/spacy_nounphrases",
                     "container": "spacy-nounphrases",
                     "endpoint": "respond_batch"
                 }
@@ -708,7 +696,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection/",
+                    "directory": "annotators/entity_detection",
                     "container": "entity-detection",
                     "endpoint": "respond_batch"
                 }
@@ -745,7 +733,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification/",
+                    "directory": "annotators/combined_classification",
                     "container": "combined-classification",
                     "endpoint": "batch_model"
                 }
@@ -787,7 +775,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_sport_skill/",
+                    "directory": "skills/dff_sport_skill",
                     "container": "dff-sport-skill",
                     "endpoint": "respond"
                 }
@@ -806,7 +794,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/eliza/",
+                    "directory": "skills/eliza",
                     "container": "eliza",
                     "endpoint": "respond"
                 }
@@ -825,7 +813,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill/",
+                    "directory": "skills/dff_program_y_skill",
                     "container": "dff-program-y-skill",
                     "endpoint": "respond"
                 }
@@ -844,7 +832,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personality_catcher/",
+                    "directory": "skills/personality_catcher",
                     "container": "personality-catcher",
                     "endpoint": "personality_catcher"
                 }
@@ -863,7 +851,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill/",
+                    "directory": "skills/dff_intent_responder_skill",
                     "container": "dff-intent-responder-skill",
                     "endpoint": "respond"
                 }
@@ -916,7 +904,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill_dialog/",
+                    "directory": "skills/dummy_skill_dialog",
                     "container": "dummy-skill-dialog",
                     "endpoint": "respond"
                 }
@@ -935,7 +923,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/misheard_asr/",
+                    "directory": "skills/misheard_asr",
                     "container": "misheard-asr",
                     "endpoint": "misheard_respond"
                 }
@@ -954,7 +942,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_dangerous_skill/",
+                    "directory": "skills/dff_program_y_dangerous_skill",
                     "container": "dff-program-y-dangerous-skill",
                     "endpoint": "respond"
                 }
@@ -973,7 +961,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_movie_skill/",
+                    "directory": "skills/dff_movie_skill",
                     "container": "dff-movie-skill",
                     "endpoint": "respond"
                 }
@@ -992,7 +980,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/emotion_skill/",
+                    "directory": "skills/emotion_skill",
                     "container": "emotion-skill",
                     "endpoint": "respond"
                 }
@@ -1011,7 +999,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/convert_reddit/",
+                    "directory": "skills/convert_reddit",
                     "container": "convert-reddit",
                     "endpoint": "convert_reddit"
                 }
@@ -1030,7 +1018,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personal_info_skill/",
+                    "directory": "skills/personal_info_skill",
                     "container": "personal-info-skill",
                     "endpoint": "respond"
                 }
@@ -1049,7 +1037,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_coronavirus_skill/",
+                    "directory": "skills/dff_coronavirus_skill",
                     "container": "dff-coronavirus-skill",
                     "endpoint": "respond"
                 }
@@ -1068,7 +1056,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_weather_skill/",
+                    "directory": "skills/dff_weather_skill",
                     "container": "dff-weather-skill",
                     "endpoint": "respond"
                 }
@@ -1087,7 +1075,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_short_story_skill/",
+                    "directory": "skills/dff_short_story_skill",
                     "container": "dff-short-story-skill",
                     "endpoint": "respond"
                 }
@@ -1106,7 +1094,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/meta_script_skill/",
+                    "directory": "skills/meta_script_skill",
                     "container": "meta-script-skill",
                     "endpoint": "meta_script"
                 }
@@ -1125,7 +1113,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/small_talk_skill/",
+                    "directory": "skills/small_talk_skill",
                     "container": "small-talk-skill",
                     "endpoint": "respond"
                 }
@@ -1144,7 +1132,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/game_cooperative_skill/",
+                    "directory": "skills/game_cooperative_skill",
                     "container": "game-cooperative-skill",
                     "endpoint": "respond"
                 }
@@ -1163,7 +1151,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_wide_skill/",
+                    "directory": "skills/dff_program_y_wide_skill",
                     "container": "dff-program-y-wide-skill",
                     "endpoint": "respond"
                 }
@@ -1182,7 +1170,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/news_api_skill/",
+                    "directory": "skills/news_api_skill",
                     "container": "news-api-skill",
                     "endpoint": "respond"
                 }
@@ -1201,7 +1189,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/meta_script_skill/",
+                    "directory": "skills/meta_script_skill",
                     "container": "meta-script-skill",
                     "endpoint": "comet_dialog"
                 }
@@ -1220,7 +1208,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_grounding_skill/",
+                    "directory": "skills/dff_grounding_skill",
                     "container": "dff-grounding-skill",
                     "endpoint": "respond"
                 }
@@ -1239,7 +1227,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/factoid_qa/",
+                    "directory": "skills/factoid_qa",
                     "container": "factoid-qa",
                     "endpoint": "respond"
                 }
@@ -1258,7 +1246,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_animals_skill/",
+                    "directory": "skills/dff_animals_skill",
                     "container": "dff-animals-skill",
                     "endpoint": "respond"
                 }
@@ -1277,7 +1265,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_gaming_skill/",
+                    "directory": "skills/dff_gaming_skill",
                     "container": "dff-gaming-skill",
                     "endpoint": "respond"
                 }
@@ -1296,7 +1284,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_friendship_skill/",
+                    "directory": "skills/dff_friendship_skill",
                     "container": "dff-friendship-skill",
                     "endpoint": "respond"
                 }
@@ -1315,7 +1303,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/knowledge_grounding_skill/",
+                    "directory": "skills/knowledge_grounding_skill",
                     "container": "knowledge-grounding-skill",
                     "endpoint": "respond"
                 }
@@ -1334,7 +1322,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_travel_skill/",
+                    "directory": "skills/dff_travel_skill",
                     "container": "dff-travel-skill",
                     "endpoint": "respond"
                 }
@@ -1353,7 +1341,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_food_skill/",
+                    "directory": "skills/dff_food_skill",
                     "container": "dff-food-skill",
                     "endpoint": "respond"
                 }
@@ -1372,7 +1360,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_science_skill/",
+                    "directory": "skills/dff_science_skill",
                     "container": "dff-science-skill",
                     "endpoint": "respond"
                 }
@@ -1391,7 +1379,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_music_skill/",
+                    "directory": "skills/dff_music_skill",
                     "container": "dff-music-skill",
                     "endpoint": "respond"
                 }
@@ -1410,7 +1398,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_funfact_skill/",
+                    "directory": "skills/dff_funfact_skill",
                     "container": "dff-funfact-skill",
                     "endpoint": "respond"
                 }
@@ -1431,7 +1419,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_gossip_skill/",
+                    "directory": "skills/dff_gossip_skill",
                     "container": "dff-gossip-skill",
                     "endpoint": "respond"
                 }
@@ -1450,7 +1438,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_bot_persona_skill/",
+                    "directory": "skills/dff_bot_persona_skill",
                     "container": "dff-bot-persona-skill",
                     "endpoint": "respond"
                 }
@@ -1469,7 +1457,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_wiki_skill/",
+                    "directory": "skills/dff_wiki_skill",
                     "container": "dff-wiki-skill",
                     "endpoint": "respond"
                 }
@@ -1488,7 +1476,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_book_skill/",
+                    "directory": "skills/dff_book_skill",
                     "container": "dff-book-skill",
                     "endpoint": "respond"
                 }
@@ -1507,7 +1495,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_art_skill/",
+                    "directory": "skills/dff_art_skill",
                     "container": "dff-art-skill",
                     "endpoint": "respond"
                 }
@@ -1526,7 +1514,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/dialogpt/",
+                    "directory": "services/dialogpt",
                     "container": "dialogpt",
                     "endpoint": "respond"
                 }
@@ -1545,7 +1533,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/seq2seq_persona_based/",
+                    "directory": "services/seq2seq_persona_based",
                     "container": "seq2seq-persona-based",
                     "endpoint": "respond"
                 }
@@ -1564,7 +1552,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_skill/",
+                    "directory": "skills/dff_template_skill",
                     "container": "dff-template-skill",
                     "endpoint": "respond"
                 }
@@ -1585,7 +1573,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector/",
+                    "directory": "response_selectors/convers_evaluation_based_selector",
                     "container": "convers-evaluation-selector",
                     "endpoint": "respond"
                 }

@@ -13,8 +13,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": ".",
-                "container": ""
+                "directory": "services/last_chance_service",
+                "container": "agent"
             }
         },
         "timeout_service": {
@@ -29,8 +29,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": ".",
-                "container": ""
+                "directory": "services/timeout_service",
+                "container": "agent"
             }
         },
         "annotators": {
@@ -45,7 +45,7 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing/",
+                    "directory": "annotators/spelling_preprocessing",
                     "container": "spelling-preprocessing",
                     "endpoint": "respond"
                 }
@@ -66,7 +66,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/emotion_classification_deepy/",
+                    "directory": "annotators/emotion_classification_deepy",
                     "container": "emotion-classification-deepy",
                     "endpoint": "model"
                 }
@@ -86,7 +86,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/harvesters_maintenance_skill_deepy/",
+                    "directory": "skills/harvesters_maintenance_skill_deepy",
                     "container": "harvesters-maintenance-skill",
                     "endpoint": "respond"
                 }
@@ -105,7 +105,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill/",
+                    "directory": "skills/dff_program_y_skill",
                     "container": "dff-program-y-skill",
                     "endpoint": "respond"
                 }
@@ -125,7 +125,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/rule_based_response_selector/",
+                    "directory": "response_selectors/rule_based_response_selector",
                     "container": "rule-based-response-selector",
                     "endpoint": "respond"
                 }

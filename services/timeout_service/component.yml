@@ -1,0 +1,14 @@
+agent:
+  name: timeout_service
+  display_name: Timeout Service
+  container_name: agent
+  is_customizable: false
+  author: DeepPavlov
+  description: Timeout Service
+  ram_usage: 100M
+  execution_time: 2.0
+  endpoints:
+  - group: timeout_service
+    port: 4242
+    endpoint: respond
+  date_created: '2023-03-04T19:27:44'

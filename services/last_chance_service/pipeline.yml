@@ -1,0 +1,10 @@
+agent:
+- group: last_chance_service
+  connector:
+    protocol: python
+    class_name: PredefinedTextConnector
+    response_text: Sorry, something went wrong inside. Please tell me, what did you
+      say.
+  state_manager_method: add_bot_utterance_last_chance
+  tags:
+    - last_chance

@@ -28,8 +28,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": ".",
-                "container": ""
+                "directory": "services/last_chance_service",
+                "container": "agent"
             }
         },
         "timeout_service": {
@@ -53,8 +53,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": ".",
-                "container": ""
+                "directory": "services/timeout_service",
+                "container": "agent"
             }
         },
         "annotators": {
@@ -69,7 +69,7 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing/",
+                    "directory": "annotators/spelling_preprocessing",
                     "container": "spelling-preprocessing",
                     "endpoint": "respond"
                 }
@@ -82,11 +82,7 @@
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "directory": ".",
-                    "container": ""
-                }
+                "is_enabled": true
             },
             "badlisted_words": {
                 "connector": {
@@ -102,7 +98,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector/",
+                    "directory": "annotators/BadlistedWordsDetector",
                     "container": "badlisted-words",
                     "endpoint": "badlisted_words"
                 }
@@ -122,7 +118,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers/",
+                    "directory": "annotators/IntentCatcherTransformers",
                     "container": "intent-catcher",
                     "endpoint": "detect"
                 }
@@ -138,7 +134,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/image_captioning/",
+                    "directory": "services/image_captioning",
                     "container": "image-captioning",
                     "endpoint": "respond"
                 }
@@ -153,11 +149,7 @@
                     "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true,
-                "source": {
-                    "directory": ".",
-                    "container": ""
-                }
+                "is_enabled": true
             }
         },
         "response_annotator_selectors": {
@@ -193,7 +185,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector/",
+                    "directory": "annotators/BadlistedWordsDetector",
                     "container": "badlisted-words",
                     "endpoint": "badlisted_words_batch"
                 }
@@ -212,7 +204,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/sentence_ranker/",
+                    "directory": "services/sentence_ranker",
                     "container": "sentence-ranker",
                     "endpoint": "respond"
                 }
@@ -254,7 +246,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill/",
+                    "directory": "skills/dff_program_y_skill",
                     "container": "dff-program-y-skill",
                     "endpoint": "respond"
                 }
@@ -273,7 +265,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill/",
+                    "directory": "skills/dff_intent_responder_skill",
                     "container": "dff-intent-responder-skill",
                     "endpoint": "respond"
                 }
@@ -309,7 +301,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/dialogpt/",
+                    "directory": "services/dialogpt",
                     "container": "dialogpt",
                     "endpoint": "respond"
                 }
@@ -328,7 +320,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_image_skill/",
+                    "directory": "skills/dff_image_skill",
                     "container": "dff-image-skill",
                     "endpoint": "respond"
                 }
@@ -349,7 +341,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector/",
+                    "directory": "response_selectors/convers_evaluation_based_selector",
                     "container": "convers-evaluation-selector",
                     "endpoint": "respond"
                 }
