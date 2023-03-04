@@ -333,15 +333,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8085
       - PORT=8085
 
-  midas-classification:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8090
-      - PORT=8090
-
   combined-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:

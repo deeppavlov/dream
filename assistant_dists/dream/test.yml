@@ -23,11 +23,6 @@ services:
   knowledge-grounding:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  midas-classification:
-    environment:
-      - CUDA_VISIBLE_DEVICES=6
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
   combined-classification:
     environment:
       - CUDA_VISIBLE_DEVICES=7
