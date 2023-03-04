@@ -34,10 +34,10 @@ def test_respond():
         url,
         json={
             "dialog_contexts": contexts,
-            "OPENAI_API_KEY_list": [OPENAI_API_KEY] * len(contexts),
-            "OPENAI_ORGANIZATION_list": [OPENAI_ORGANIZATION] * len(contexts),
             "prompts": prompts,
             "configs": [DEFAULT_CONFIG] * len(contexts),
+            "OPENAI_API_KEY_list": [OPENAI_API_KEY] * len(contexts),
+            "OPENAI_ORGANIZATION_list": [OPENAI_ORGANIZATION] * len(contexts),
         },
     ).json()
     print(result)
