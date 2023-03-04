@@ -22,7 +22,9 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
 
-GENERATIVE_ROBOT_TEMPLATE = re.compile(r"(AI:|Robot:|ROBOT:|Computer:|COMPUTER:)\s?")
+GENERATIVE_ROBOT_TEMPLATE = re.compile(
+    r"(AI:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:)\s?"
+)
 DUMMY_DONTKNOW_RESPONSES = {
     "EN": [
         "What do you want to talk about?",
