@@ -222,6 +222,8 @@ services:
     env_file: [ .env_ru ]
     build:
       args:
+        SERVICE_PORT: 8075
+        SERVICE_NAME: entity_linking
         CONFIG: entity_linking_rus.json
         PORT: 8075
         SRC_DIR: annotators/entity_linking_rus
@@ -241,6 +243,8 @@ services:
     env_file: [ .env_ru ]
     build:
       args:
+        SERVICE_PORT: 8077
+        SERVICE_NAME: wiki_parser
         WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt
         WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
         WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
@@ -424,6 +428,8 @@ services:
     env_file: [ .env ]
     build:
       args:
+        SERVICE_PORT: 8078
+        SERVICE_NAME: text_qa
         CONFIG: qa_rus.json
         PORT: 8078
       context: services/text_qa
