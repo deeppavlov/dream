@@ -1,8 +1,16 @@
 import requests
+from os import getenv
+
+
+# ATTENTION!!! This test is only working if you assign `OPENAI_API_KEY` env variable
 
 
 def test_respond():
     url = "http://0.0.0.0:8131/respond"
+    OPENAI_API_KEY = getenv("OPENAI_API_KEY", None)
+    OPENAI_ORGANIZATION = getenv("OPENAI_ORGANIZATION", None)
+    assert OPENAI_API_KEY, print("No OpenAI API key is given in env vars")
+
     contexts = [
         [
             "Hi! I am Marcus. How are you today?",
@@ -19,13 +27,14 @@ def test_respond():
         url,
         json={
             "dialog_contexts": contexts,
-            "openai_api_keys": ["MYKEY"] * len(contexts),
-            "openai_organizations": [None] * len(contexts),
+            "OPENAI_API_KEY_list": [OPENAI_API_KEY] * len(contexts),
+            "OPENAI_ORGANIZATION_list": [OPENAI_ORGANIZATION] * len(contexts),
             "prompts": prompts,
         },
     ).json()
     print(result)
-    assert [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
+
+    assert len(result) and [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
     print("Success!")
 
 
