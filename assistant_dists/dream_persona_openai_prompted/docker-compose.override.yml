@@ -154,9 +154,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   dff-dream-persona-davinci3-prompted-skill:
     env_file: [ .env,.env_secret ]
