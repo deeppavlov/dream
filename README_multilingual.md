@@ -19,7 +19,7 @@ Dream Architecture is presented in the following image:
 ## Skills & Services
 | Name               | Requirements          | Description                                                                                                                                       |
 |--------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| GPT2 Multilingual  | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
+| GPT-2 Multilingual | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
 
 # Papers
 
