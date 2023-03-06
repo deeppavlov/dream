@@ -248,9 +248,9 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.extend(get_linked_to_skills(dialog))
                 skills_for_uttr.extend(get_previously_active_skill(dialog))
 
-                logger.info(f'VOICE NOT YET DETECTED: {user_uttr["attributes"].get("sound")}')
-                if user_uttr["attributes"].get("sound") is not None:
-                    logger.info(f'VOICE DETECTED: {user_uttr["attributes"].get("sound")}')
+                logger.info(f'VOICE NOT YET DETECTED: {user_uttr["attributes"].get("sound_path")}')
+                if user_uttr["attributes"].get("sound_path") is not None:
+                    logger.info(f'VOICE DETECTED: {user_uttr["attributes"].get("sound_path")}')
                     if "dff_voice_skill" not in skills_for_uttr:
                         skills_for_uttr.append("dff_voice_skill")
                 else:
