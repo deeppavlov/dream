@@ -19,12 +19,12 @@ abstract_rels = {
     "favorite book",
     "like read",
     "favorite movie",
-    "favorite_food",
-    "like_food",
-    "favorite_drink",
-    "like_drink",
-    "favorite_sport",
-    "like_sports",
+    "favorite food",
+    "like food",
+    "favorite drink",
+    "like drink",
+    "favorite sport",
+    "like sports",
 }
 
 try:
