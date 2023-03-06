@@ -2,9 +2,13 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_multimodal/pipeline_conf.json'
     environment:
+      # WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+      #     dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
+      #     spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188"
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128,
+          voice-service:8333, dff-voice-skill:8444"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -193,14 +197,51 @@ services:
         reservations:
           memory: 3G
 
-  image-captioning:
+  # image-captioning:
+  #   env_file: [ .env ]
+  #   build:
+  #     args:
+  #       SERVICE_PORT: 8123
+  #       SERVICE_NAME: image_captioning
+  #     context: ./services/image_captioning/
+  #   command: flask run -h 0.0.0.0 -p 8123
+  #   environment:
+  #     - CUDA_VISIBLE_DEVICES=0
+  #     - FLASK_APP=server
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 5G
+  #       reservations:
+  #         memory: 5G
+
+  # dff-image-skill:
+  #   env_file: [.env]
+  #   build:
+  #     args:
+  #       SERVICE_PORT: 8188
+  #       SERVICE_NAME: dff_image_skill
+  #       LANGUAGE: EN
+  #     context: .
+  #     dockerfile: ./skills/dff_image_skill/Dockerfile
+  #   command: gunicorn --workers=1 server:app -b 0.0.0.0:8188 --reload
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 1024M
+  #       reservations:
+  #         memory: 1024M
+
+  voice-service:
+    ports:
+        - "8333:8333"
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8123
-        SERVICE_NAME: image_captioning
-      context: ./services/image_captioning/
-    command: flask run -h 0.0.0.0 -p 8123
+        SERVICE_PORT: 8333
+        SERVICE_NAME: voice_service
+      context: ./services/voice_service/
+    command: python -m flask run -h 0.0.0.0 -p 8333
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -211,21 +252,25 @@ services:
         reservations:
           memory: 5G
 
-  dff-image-skill:
-    env_file: [.env]
+  dff-voice-skill:
+    ports:
+        - "8444:8444"
+    env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8188
-        SERVICE_NAME: dff_image_skill
-        LANGUAGE: EN
+        SERVICE_PORT: 8444
+        SERVICE_NAME: dff_voice_skill
       context: .
-      dockerfile: ./skills/dff_image_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8188 --reload
+      dockerfile: ./skills/dff_voice_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8444 --reload
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 5G
         reservations:
-          memory: 1024M
+          memory: 5G
           
 version: '3.7'

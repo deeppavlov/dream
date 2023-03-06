@@ -118,13 +118,13 @@
                     "annotators.sentseg"
                 ]
             },
-            "image_captioning": {
+            "voice_service": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3,
-                    "url": "http://image-captioning:8123/respond"
+                    "timeout": 16, 
+                    "url": "http://voice-service:8333/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:image_captioning_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:voice_formatter_service",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
             }
@@ -197,13 +197,13 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dff_image_skill": {
+            "dff_voice_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-image-skill:8188/respond"
+                    "timeout": 5, 
+                    "url": "http://dff-voice-skill:8444/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_image_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_voice_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
