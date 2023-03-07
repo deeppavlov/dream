@@ -15,6 +15,7 @@ ENV FLASK_APP ${FLASK_APP}
 
 RUN apt update
 RUN apt install libsndfile1 -y
+RUN apt install ffmpeg
 
 RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
 
