@@ -48,7 +48,7 @@ def respond():
     filename = filename_els[-1]
 
     logger.info(f"dot split -1: {filename.split('.')[-1]}, filename: {filename}")
-    if filename.split('.')[-1] == '.oga':
+    if filename.split('.')[-1] == 'oga':
         file = URLopener()
         file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
         data, rate = sf.read(os.path.join(INFERENCE_DIR, filename))
