@@ -49,10 +49,16 @@ def respond():
 
     logger.info(f"dot split -1: {filename.split('.')[-1]}, filename: {filename}")
     if filename.split('.')[-1] == 'oga':
-        file = URLopener()
-        file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
-        data, rate = sf.read(os.path.join(INFERENCE_DIR, filename))
-        sf.write(os.path.join(INFERENCE_DIR, filename[:-4] + ".wav"), data, rate)
+        # file = URLopener()
+        # file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
+        # data, rate = sf.read(os.path.join(INFERENCE_DIR, filename))
+        # sf.write(os.path.join(INFERENCE_DIR, filename[:-4] + ".wav"), data, rate)
+
+        import subprocess
+        process = subprocess.run(['ffmpeg', '-i', os.path.join(INFERENCE_DIR, filename), os.path.join(INFERENCE_DIR, filename[:-4] + ".wav")])
+        if process.returncode != 0:
+            raise Exception("Something went wrong")
+
         captions = infer(INFERENCE_PARAMS)
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
     else:
