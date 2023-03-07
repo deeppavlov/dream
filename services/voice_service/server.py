@@ -17,7 +17,7 @@ INFERENCE_PARAMS = {
     'dataset_rootdir': '/src/aux_files/data',
     'features_output_dir': '/src/aux_files/data/clotho_dataset',
     'pretrained_pickle_files_dir': '/src/aux_files/wavetransformer/outputs',
-    'pretrained_models_dir': '/src/aux_files/wavetransformer/data',
+    'pretrained_models_dir': '/src/aux_files/wavetransformer/outputs',
 }
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
