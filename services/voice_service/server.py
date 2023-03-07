@@ -39,7 +39,6 @@ def respond():
     type = request.json.get("sound_type")
 
     logger.info(f"path: {path}")
-    logger.info(f"strpath: {str(path)}")
 
     filename_extract = path[0]
     logger.info(filename_extract)
@@ -49,8 +48,8 @@ def respond():
 
     logger.info(f"dot split -1: {filename.split('.')[-1]}, filename: {filename}")
     if filename.split('.')[-1] == 'oga':
-        # file = URLopener()
-        # file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
+        file = URLopener()
+        file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
         # data, rate = sf.read(os.path.join(INFERENCE_DIR, filename))
         # sf.write(os.path.join(INFERENCE_DIR, filename[:-4] + ".wav"), data, rate)
 
