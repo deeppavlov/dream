@@ -16,7 +16,7 @@ INFERENCE_DIR = "/src/aux_files/data/clotho_audio_files/"
 INFERENCE_PARAMS = {
     'dataset_rootdir': '/src/aux_files/data',
     'features_output_dir': '/src/aux_files/data/clotho_dataset',
-    'pretrained_pickles_dir': '/src/aux_files/wavetransformer/outputs',
+    'pretrained_pickle_files_dir': '/src/aux_files/wavetransformer/outputs',
     'pretrained_models_dir': '/src/aux_files/wavetransformer/data',
 }
 
