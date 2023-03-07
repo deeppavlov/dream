@@ -18,7 +18,7 @@ def voice_message_detected(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def short_sound(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration")[0]
+    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration")
     logger.debug(f'short_sound debug: {int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {})}')
     if duration < 5:
         return True
@@ -26,7 +26,7 @@ def short_sound(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 
 def long_sound(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration")[0]
+    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration")
     logger.debug(f'long_sound debug: {int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {})}')
     if duration >= 5:
         return True

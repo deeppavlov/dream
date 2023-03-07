@@ -130,6 +130,13 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     del ctx.misc["agent"]
     state["context"] = json.loads(ctx.json())
 
+    sound_attr = {
+        "sound_path": agent["response"].get("sound_path", ""),
+        "sound_duration": agent["response"].get("sound_duration", 0),
+        "sound_type": agent["response"].get("sound_type", ""),
+        "captions": agent["response"].get("captions", "No cap")
+    }
+
     human_attr = {
         f"{SERVICE_NAME}_state": state,
         "dff_shared_state": dff_shared_state,
@@ -137,6 +144,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "age_group": age_group,
         "disliked_skills": disliked_skills,
     }
+    hype_attr["sound_attr"] = sound_attr
     hype_attr = {"can_continue": can_continue}
     if response_parts:
         hype_attr["response_parts"] = response_parts

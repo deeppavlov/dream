@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def caption(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
-    cap = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("caption", ["No cap"])
+    cap = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("captions", "No cap")
 
     int_ctx.set_confidence(ctx, actor, 1)
     
@@ -21,7 +21,7 @@ def caption(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -
 
 
 def long_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
-    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", ["0"])
+    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", "0")
 
     int_ctx.set_confidence(ctx, actor, 1)
     
@@ -29,7 +29,7 @@ def long_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwa
 
     
 def short_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
-    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", ["0"])
+    duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", "0")
 
     int_ctx.set_confidence(ctx, actor, 1)
 
