@@ -50,8 +50,6 @@ def respond():
     if filename.split('.')[-1] == 'oga':
         file = URLopener()
         file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
-        # data, rate = sf.read(os.path.join(INFERENCE_DIR, filename))
-        # sf.write(os.path.join(INFERENCE_DIR, filename[:-4] + ".wav"), data, rate)
 
         import subprocess
         process = subprocess.run(['ffmpeg', '-i', os.path.join(INFERENCE_DIR, filename), os.path.join(INFERENCE_DIR, filename[:-4] + ".wav")])
