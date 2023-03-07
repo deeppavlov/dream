@@ -43,9 +43,7 @@ def respond():
 
     filename_extract = path[0]
     logger.info(filename_extract)
-    filename_split = filename_extract[::-1]
-    logger.info(filename_split)
-    filename_els = filename_split.split("=")
+    filename_els = filename_extract.split("=")
     logger.info(filename_els)
     filename = filename_els[-1]
 
