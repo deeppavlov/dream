@@ -25,7 +25,7 @@ def caption(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -
 def long_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
     duration = 0
     if not ctx.validation:
-        duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", "0")
+        duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", ["0"])[0]
 
     int_ctx.set_confidence(ctx, actor, 1)
     
@@ -35,7 +35,7 @@ def long_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwa
 def short_response(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
     duration = 0
     if not ctx.validation:
-        duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", "0")
+        duration = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("voice_service", {}).get("sound_duration", ["0"])[0]
 
     int_ctx.set_confidence(ctx, actor, 1)
 
