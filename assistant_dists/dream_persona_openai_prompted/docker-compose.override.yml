@@ -102,9 +102,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   prompt-selector:
     env_file: [ .env ]
@@ -122,9 +122,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   sentence-ranker:
     env_file: [ .env ]

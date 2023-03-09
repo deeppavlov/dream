@@ -108,9 +108,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   sentseg:
     env_file: [ .env ]
@@ -297,9 +297,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   convert-reddit:
     env_file: [ .env ]
@@ -341,9 +341,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   misheard-asr:
     env_file: [ .env ]
@@ -371,9 +371,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   dummy-skill-dialog:
     env_file: [ .env ]
@@ -461,9 +461,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   game-cooperative-skill:
     env_file: [ .env ]
@@ -659,9 +659,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   dff-grounding-skill:
     env_file: [ .env ]
@@ -1078,9 +1078,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   wiki-facts:
     env_file: [ .env ]
@@ -1222,9 +1222,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   dialogpt:
     env_file: [ .env ]
@@ -1288,9 +1288,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   sentence-ranker:
     env_file: [ .env ]
