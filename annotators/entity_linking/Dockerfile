@@ -19,12 +19,12 @@ ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 ARG CONFIG
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 COPY ./annotators/entity_linking/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
