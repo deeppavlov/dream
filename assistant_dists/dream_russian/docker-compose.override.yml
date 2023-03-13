@@ -163,7 +163,7 @@ services:
     build:
       args:
         CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
-        PORT: 8021
+        SERVICE_PORT: 8021
         SRC_DIR: annotators/NER_deeppavlov
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
       context: ./
@@ -185,7 +185,7 @@ services:
     build:
       args:
         CONFIG: entity_detection_rus.json
-        PORT: 8103
+        SERVICE_PORT: 8103
         SRC_DIR: annotators/entity_detection_rus
         LANGUAGE: RU
       context: ./
@@ -225,7 +225,6 @@ services:
         SERVICE_PORT: 8075
         SERVICE_NAME: entity_linking
         CONFIG: entity_linking_rus.json
-        PORT: 8075
         SRC_DIR: annotators/entity_linking_rus
         LANGUAGE: RU
       context: ./
@@ -249,7 +248,6 @@ services:
         WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
         WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
         CONFIG: wiki_parser.json
-        PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
         LANGUAGE: RU
@@ -272,7 +270,7 @@ services:
     build:
       args:
         CONFIG: levenshtein_corrector_ru.json
-        PORT: 8074
+        SERVICE_PORT: 8074
         SRC_DIR: annotators/spelling_preprocessing_dp
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
         LANGUAGE: RU
@@ -409,7 +407,7 @@ services:
         CONFIG: fact_retrieval_rus.json
         COMMIT: c8264bf82eaa3ed138395ab68f71d47a4175f2fc
         TOP_N: 20
-        PORT: 8130
+        SERVICE_PORT: 8130
         SRC_DIR: annotators/fact_retrieval_rus
       context: ./
       dockerfile: annotators/fact_retrieval_rus/Dockerfile
@@ -431,7 +429,6 @@ services:
         SERVICE_PORT: 8078
         SERVICE_NAME: text_qa
         CONFIG: qa_rus.json
-        PORT: 8078
       context: services/text_qa
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078
