@@ -30,12 +30,6 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  midas-classification:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=6
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
   combined-classification:
     restart: unless-stopped
     environment:
