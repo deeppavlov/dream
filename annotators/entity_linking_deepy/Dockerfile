@@ -2,11 +2,11 @@ FROM deeppavlov/base-gpu:0.12.1
 
 ARG CONFIG
 ARG COMMIT
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 RUN pip install pybind11==2.2.4
 RUN pip install hdt==2.3
@@ -25,4 +25,4 @@ COPY $SRC_DIR /src
 
 WORKDIR /src
 
-CMD python -m deeppavlov riseapi $CONFIG -p $PORT -d
+CMD python -m deeppavlov riseapi $CONFIG -p $SERVICE_PORT -d

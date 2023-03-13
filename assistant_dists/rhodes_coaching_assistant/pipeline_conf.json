@@ -1,0 +1,231 @@
+{
+    "connectors": {
+        "sentseg": {
+            "protocol": "http",
+            "timeout": 1.5,
+            "url": "http://sentseg:8011/sentseg"
+        }
+    },
+    "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "segments": [
+                            "Sorry, something went wrong inside.",
+                            "Please tell me, what did you say."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ]
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                        "segments": [
+                            "Sorry, I need to think more on that.",
+                            "Let's talk about something else."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ]
+        },
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ]
+        },
+        "response_annotators": {
+            "sentseg": {
+                "connector": "connectors.sentseg",
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt"
+            }
+        },
+        "annotators": {
+            "spelling_preprocessing": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://spelling-preprocessing:8074/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
+            },
+            "sentseg": {
+                "connector": "connectors.sentseg",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
+            "badlisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://badlisted-words:8018/badlisted_words"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation"
+            },
+            "prompt_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://prompt-selector:8135/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ]
+            }
+        },
+        "skill_selectors": {
+            "rule_based_selector": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ]
+            }
+        },
+        "skills": {
+            "dff_rhodes_coaching_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://dff-rhodes-coaching-prompted-skill:8142/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            },
+            "dummy_skill": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis"
+            }
+        },
+        "candidate_annotators": {
+            "badlisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://badlisted-words:8018/badlisted_words_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "combined_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://combined-classification:8087/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            },
+            "sentence_ranker": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://sentence-ranker:8128/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch"
+            }
+        },
+        "response_selectors": {
+            "response_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://convers-evaluation-no-scripts-selector:8009/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "candidate_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance"
+            }
+        }
+    },
+    "metadata": {
+        "display_name": "Rhodes Coaching Assistant",
+        "author": "Rhodes & Co",
+        "description": "Unlock your full potential with Rhodes & Co's patented AI assistant! Reach peak performance at work and at home. Get into top form effortlessly and inspire others with.",
+        "version": "0.0.1",
+        "date_created": "2023-01-10T02:00:00",
+        "ram_usage": "50 GB",
+        "gpu_usage": "50 GB",
+        "disk_usage": "50 GB"
+    }
+}
