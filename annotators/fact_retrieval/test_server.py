@@ -5,9 +5,9 @@ import requests
 import common.test_utils as test_utils
 
 
-PORT = int(os.getenv("PORT"))
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-URL = f"http://0.0.0.0:{PORT}/model"
+URL = f"http://0.0.0.0:{SERVICE_PORT}/model"
 
 
 def handler(requested_data, random_seed):
