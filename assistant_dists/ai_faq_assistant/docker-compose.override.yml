@@ -26,7 +26,7 @@ services:
     build:
       args:
         CONFIG: combined_classifier.json
-         SERVICE_PORT: 8087
+        SERVICE_PORT: 8087
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
     environment:

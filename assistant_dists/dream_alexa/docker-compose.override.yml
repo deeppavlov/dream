@@ -31,7 +31,7 @@ services:
     build:
       args:
         CONFIG: conveval.json
-         SERVICE_PORT: 8004
+        SERVICE_PORT: 8004
         DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
       context: .
       dockerfile: ./annotators/ConversationEvaluator/Dockerfile
@@ -251,7 +251,7 @@ services:
     build:
       args:
         CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
-         SERVICE_PORT: 8021
+        SERVICE_PORT: 8021
         SRC_DIR: annotators/NER_deeppavlov
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
       context: ./
@@ -542,7 +542,6 @@ services:
         SERVICE_PORT: 8075
         SERVICE_NAME: entity_linking
         CONFIG: entity_linking_eng.json
-         SERVICE_PORT: 8075
         SRC_DIR: annotators/entity_linking
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
@@ -565,7 +564,6 @@ services:
         WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
         WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
         CONFIG: wiki_parser.json
-         SERVICE_PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
         FAST: 1
@@ -589,7 +587,6 @@ services:
         SERVICE_PORT: 8078
         SERVICE_NAME: text_qa
         CONFIG: qa_eng.json
-         SERVICE_PORT: 8078
       context: services/text_qa
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078
@@ -611,7 +608,6 @@ services:
         SERVICE_PORT: 8072
         SERVICE_NAME: kbqa
         CONFIG: kbqa_cq_mt_bert_lite.json
-         SERVICE_PORT: 8072
         SRC_DIR: annotators/kbqa/
         COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
       context: ./
@@ -767,7 +763,6 @@ services:
         SERVICE_PORT: 8087
         SERVICE_NAME: combined_classification
         CONFIG: combined_classifier.json
-         SERVICE_PORT: 8087
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
     environment:
@@ -957,7 +952,6 @@ services:
         CONFIG: configs/fact_retrieval_page.json
         CONFIG_WIKI: configs/page_extractor.json
         CONFIG_WHOW: configs/whow_page_extractor.json
-         SERVICE_PORT: 8100
         SRC_DIR: annotators/fact_retrieval/
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
         N_FACTS: 3
@@ -1109,7 +1103,7 @@ services:
         SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
         CONFIG: entity_detection_eng.json
         LOWERCASE: 1
-         SERVICE_PORT: 8103
+        SERVICE_PORT: 8103
         SRC_DIR: annotators/entity_detection/
         FINEGRAINED: 0
       context: ./
