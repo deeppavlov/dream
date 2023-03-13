@@ -47,7 +47,7 @@ def respond():
     filename = filename_els[-1]
 
     logger.info(f"dot split -1: {filename.split('.')[-1]}, filename: {filename}")
-    if filename.split('.')[-1] == 'oga':
+    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3']:
         file = URLopener()
         file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
 
@@ -55,10 +55,15 @@ def respond():
         process = subprocess.run(['ffmpeg', '-i', os.path.join(INFERENCE_DIR, filename), os.path.join(INFERENCE_DIR, filename[:-4] + ".wav")])
         if process.returncode != 0:
             raise Exception("Something went wrong")
-
+    try:
+        for i in os.listdir(INFERENCE_DIR):
+            if i.split(".")[-1] == 'wav':
+                break
+        else:
+            raise Exception("No files for inference found")
         captions = infer(INFERENCE_PARAMS)
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
-    else:
+    except:
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
 
     logger.info(f"VOICE_SERVICE RESPONSE: {responses}")
