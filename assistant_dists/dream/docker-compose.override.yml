@@ -1391,6 +1391,7 @@ services:
       args:
         SERVICE_PORT: 8141
         SERVICE_NAME: masked_lm
+        PRETRAINED_MODEL_NAME_OR_PATH: "bert-base-uncased"
     command: flask run -h 0.0.0.0 -p 8141
     environment:
       - CUDA_VISIBLE_DEVICES=0
