@@ -21,9 +21,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
     ports:
       - 8074:8074
 
