@@ -22,9 +22,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
     ports:
       - 8074:8074
 
@@ -69,7 +69,6 @@ services:
         SERVICE_PORT: 8075
         SERVICE_NAME: entity_linking
         CONFIG: entity_linking_deepy.json
-        PORT: 8075
         SRC_DIR: annotators/entity_linking_deepy
       context: ./
       dockerfile: annotators/entity_linking_deepy/Dockerfile

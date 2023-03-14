@@ -3,8 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-no-scripts-selector:8009, badlisted-words:8018, combined-classification:8087, 
-                   spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130,
-                   dff-dream-persona-gpt-j-prompted-skill:8134"
+        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130,
+        dff-dream-persona-gpt-j-prompted-skill:8134"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -26,7 +26,7 @@ services:
     build:
       args:
         CONFIG: combined_classifier.json
-        PORT: 8087
+        SERVICE_PORT: 8087
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
     environment:
@@ -102,9 +102,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   prompt-selector:
     env_file: [ .env ]
@@ -122,9 +122,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   sentence-ranker:
     env_file: [ .env ]

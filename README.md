@@ -199,7 +199,7 @@ convers-evaluator-annotator:
     dockerfile: Dockerfile
   environment:
     - PROXY_PASS=dream.deeppavlov.ai:8004
-    - PORT=8004
+    - SERVICE_PORT=8004
 ```
 
 and include this config in your deployment command:
