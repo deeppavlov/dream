@@ -16,4 +16,4 @@ user-persona-extractor:
   build_args:
     SERVICE_PORT: 8114
     SERVICE_NAME: user_persona_extractor
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

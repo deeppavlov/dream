@@ -18,7 +18,7 @@ openai-api-chatgpt:
     SERVICE_PORT: 8145
     SERVICE_NAME: openai_api_chatgpt
     PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'
 openai-api-davinci3:
   name: openai_api_davinci3
   display_name: GPT-3.5
@@ -39,4 +39,4 @@ openai-api-davinci3:
     SERVICE_PORT: 8131
     SERVICE_NAME: openai_api_davinci3
     PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

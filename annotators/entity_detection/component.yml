@@ -21,7 +21,7 @@ entity-detection:
     SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
     CONFIG: entity_detection_eng.json
     LOWERCASE: 1
-    PORT: 8103
+    SERVICE_PORT: 8103
     SRC_DIR: annotators/entity_detection/
     FINEGRAINED: 0
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

@@ -14,4 +14,12 @@ agent:
   - group: skill_selectors
     port: 4242
     endpoint: respond
-  date_created: '2023-03-04T19:27:44'
+  - group: skill_selectors
+    port: 4242
+    endpoint: respond
+  build_args:
+    HIGH_PRIORITY_INTENTS: 1
+    RESTRICTION_FOR_SENSITIVE_CASE: 1
+    ALWAYS_TURN_ON_ALL_SKILLS: 0
+    LANGUAGE: EN
+  date_created: '2023-03-15T00:08:10'

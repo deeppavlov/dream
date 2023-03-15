@@ -32,7 +32,9 @@ convers-evaluation-no-scripts-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-15T00:08:10'
 convers-evaluation-selector:
   name: response_selector
   display_name: Response Selector
@@ -67,7 +69,9 @@ convers-evaluation-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-15T00:08:10'
 convers-evaluation-selector-ru:
   name: response_selector
   display_name: Response Selector
@@ -103,7 +107,9 @@ convers-evaluation-selector-ru:
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
     LANGUAGE: RU
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-15T00:08:10'
 scripts-priority-selector:
   name: response_selector
   display_name: Response Selector
@@ -138,4 +144,6 @@ scripts-priority-selector:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 0
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-15T00:08:10'

@@ -75,14 +75,23 @@
                 }
             },
             "sentseg": {
-                "connector": "connectors.sentseg",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/SentSeg",
+                    "container": "sentseg",
+                    "endpoint": "sentseg"
+                }
             },
             "badlisted_words": {
                 "connector": {
@@ -165,14 +174,23 @@
         },
         "response_annotators": {
             "sentseg": {
-                "connector": "connectors.sentseg",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/SentSeg",
+                    "container": "sentseg",
+                    "endpoint": "sentseg"
+                }
             }
         },
         "response_annotator_selectors": {

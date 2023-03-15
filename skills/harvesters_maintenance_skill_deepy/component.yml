@@ -13,4 +13,7 @@ harvesters-maintenance-skill:
   - group: skills
     port: 3662
     endpoint: respond
-  date_created: '2023-03-04T19:27:44'
+  build_args:
+    SERVICE_PORT: '3662'
+    SERVICE_NAME: harvesters_maintenance_skill
+  date_created: '2023-03-15T00:08:10'

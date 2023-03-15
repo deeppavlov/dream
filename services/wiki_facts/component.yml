@@ -18,4 +18,4 @@ wiki-facts:
     CONFIG: page_extractor.json
     SRC_DIR: services/wiki_facts
     COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

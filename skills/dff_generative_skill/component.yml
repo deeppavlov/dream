@@ -19,4 +19,4 @@ dff-generative-ru-skill:
     SERVICE_NAME: dff_generative_skill
     LANGUAGE: RU
     GENERATIVE_SERVICE_URL: http://dialogpt-ru:8125/respond
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

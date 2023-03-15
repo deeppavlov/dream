@@ -13,10 +13,12 @@ sentseg-ru:
   endpoints:
   - group: annotators
     port: 8011
-    endpoint: respond
+    endpoint: sentseg
   - group: response_annotators
     port: 8011
-    endpoint: respond
+    endpoint: sentseg
   build_args:
     CONFIG: sentseg_ru_bert_torch.json
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_PORT: '8011'
+    SERVICE_NAME: sentseg
+  date_created: '2023-03-15T00:08:10'

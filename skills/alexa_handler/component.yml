@@ -13,4 +13,7 @@ agent:
   - group: skills
     port: 4242
     endpoint: respond
-  date_created: '2023-03-04T19:27:44'
+  build_args:
+    SERVICE_PORT: 4242
+    SERVICE_NAME: alexa_handler
+  date_created: '2023-03-15T00:08:10'

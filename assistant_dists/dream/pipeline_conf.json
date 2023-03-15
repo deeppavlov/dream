@@ -290,7 +290,12 @@
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/NER_deeppavlov",
+                    "container": "ner",
+                    "endpoint": "ner"
+                }
             },
             "entity_detection": {
                 "connector": {
@@ -388,8 +393,9 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": ".",
-                    "container": ""
+                    "directory": "annotators/SentRewrite",
+                    "container": "sentrewrite",
+                    "endpoint": "sentrewrite"
                 }
             },
             "combined_classification": {
@@ -546,7 +552,12 @@
                     "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/SentSeg",
+                    "container": "sentseg",
+                    "endpoint": "sentseg"
+                }
             },
             "ner": {
                 "connector": {
@@ -561,7 +572,12 @@
                     "response_annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/NER_deeppavlov",
+                    "container": "ner",
+                    "endpoint": "ner"
+                }
             },
             "sentrewrite": {
                 "connector": {
@@ -579,8 +595,9 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": ".",
-                    "container": ""
+                    "directory": "annotators/SentRewrite",
+                    "container": "sentrewrite",
+                    "endpoint": "sentrewrite"
                 }
             },
             "spacy_nounphrases": {
@@ -715,8 +732,9 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": ".",
-                    "container": ""
+                    "directory": "annotators/midas_classification",
+                    "container": "midas-classification",
+                    "endpoint": "batch_model"
                 }
             },
             "combined_classification": {

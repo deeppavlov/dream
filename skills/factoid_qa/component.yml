@@ -16,4 +16,4 @@ factoid-qa:
   build_args:
     SERVICE_PORT: 8071
     SERVICE_NAME: factoid_qa
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

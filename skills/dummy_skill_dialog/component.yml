@@ -17,4 +17,6 @@ dummy-skill-dialog:
     endpoint: respond
   build_args:
     DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_PORT: '8052'
+    SERVICE_NAME: dummy_skill_dialog
+  date_created: '2023-03-15T00:08:10'

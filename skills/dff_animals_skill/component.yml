@@ -18,4 +18,4 @@ dff-animals-skill:
     SERVICE_PORT: 8094
     SERVICE_NAME: dff_animals_skill
     BREED_FACTS_DB: http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

@@ -22,5 +22,6 @@ combined-classification:
     endpoint: batch_model
   build_args:
     CONFIG: combined_classifier.json
-    PORT: 8087
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_PORT: 8087
+    SERVICE_NAME: combined_classification
+  date_created: '2023-03-15T00:08:10'

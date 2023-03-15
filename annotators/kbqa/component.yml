@@ -26,7 +26,6 @@ kbqa:
     SERVICE_PORT: 8072
     SERVICE_NAME: kbqa
     CONFIG: kbqa_cq_mt_bert_lite.json
-    PORT: 8072
     SRC_DIR: annotators/kbqa/
     COMMIT: 283a25e322e8fedc6ff0c159e4ec76bb165ae405
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

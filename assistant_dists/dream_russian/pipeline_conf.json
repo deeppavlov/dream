@@ -102,14 +102,23 @@
                 }
             },
             "sentseg": {
-                "connector": "connectors.sentseg",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg-ru:8011/sentseg"
+                },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/sentseg_ru",
+                    "container": "sentseg-ru",
+                    "endpoint": "sentseg"
+                }
             },
             "badlisted_words": {
                 "connector": {
@@ -171,7 +180,11 @@
                 }
             },
             "ner": {
-                "connector": "connectors.ner",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://ner-ru:8021/ner"
+                },
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
@@ -179,7 +192,12 @@
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/NER_deeppavlov",
+                    "container": "ner-ru",
+                    "endpoint": "ner"
+                }
             },
             "entity_detection": {
                 "connector": {
@@ -262,17 +280,30 @@
         },
         "response_annotators": {
             "sentseg": {
-                "connector": "connectors.sentseg",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg-ru:8011/sentseg"
+                },
                 "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/sentseg_ru",
+                    "container": "sentseg-ru",
+                    "endpoint": "sentseg"
+                }
             },
             "ner": {
-                "connector": "connectors.ner",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://ner-ru:8021/ner"
+                },
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
@@ -280,7 +311,12 @@
                     "response_annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/NER_deeppavlov",
+                    "container": "ner-ru",
+                    "endpoint": "ner"
+                }
             }
         },
         "response_annotator_selectors": {
@@ -307,7 +343,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://spacy-annotator:8125/respond_batch"
+                    "url": "http://spacy-annotator-ru:8129/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -317,8 +353,9 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": ".",
-                    "container": ""
+                    "directory": "annotators/spacy_annotator",
+                    "container": "spacy-annotator-ru",
+                    "endpoint": "respond_batch"
                 }
             },
             "badlisted_words": {
@@ -344,7 +381,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://toxic-classification:8126/respond_batch"
+                    "url": "http://toxic-classification-ru:8126/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -354,8 +391,9 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": ".",
-                    "container": ""
+                    "directory": "annotators/toxic_classification_ru",
+                    "container": "toxic-classification-ru",
+                    "endpoint": "respond_batch"
                 }
             },
             "entity_detection": {
@@ -381,7 +419,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://dialogrpt:8122/respond"
+                    "url": "http://dialogrpt-ru:8122/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_with_context_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -391,8 +429,9 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": ".",
-                    "container": ""
+                    "directory": "services/dialogrpt_ru",
+                    "container": "dialogrpt-ru",
+                    "endpoint": "respond"
                 }
             }
         },

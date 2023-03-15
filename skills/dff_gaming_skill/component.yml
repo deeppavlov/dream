@@ -19,4 +19,4 @@ dff-gaming-skill:
     SERVICE_NAME: dff_gaming_skill
     GAMES_IGDB_SEARCH_RESULTS_URL: http://files.deeppavlov.ai/alexaprize_data/games_igdb_search_results_v2.json
     GAMES_IGDB_IDS_URL: http://files.deeppavlov.ai/alexaprize_data/game_igdb_ids_v2.json
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

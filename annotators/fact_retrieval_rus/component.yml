@@ -22,6 +22,7 @@ fact-retrieval-ru:
     CONFIG: fact_retrieval_rus.json
     COMMIT: c8264bf82eaa3ed138395ab68f71d47a4175f2fc
     TOP_N: 20
-    PORT: 8130
+    SERVICE_PORT: 8130
     SRC_DIR: annotators/fact_retrieval_rus
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_NAME: fact_retrieval
+  date_created: '2023-03-15T00:08:10'

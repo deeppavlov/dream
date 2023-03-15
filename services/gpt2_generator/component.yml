@@ -22,4 +22,4 @@ gpt2-multilingual:
     PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
     N_HYPOTHESES_TO_GENERATE: 3
     MAX_HISTORY_DEPTH: 3
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

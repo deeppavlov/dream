@@ -20,4 +20,4 @@ news-api-annotator:
     SERVICE_PORT: 8112
     SERVICE_NAME: news_api_annotator
     ASYNC_SIZE: 3
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

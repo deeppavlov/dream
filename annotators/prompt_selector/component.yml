@@ -36,4 +36,4 @@ prompt-selector:
     SERVICE_NAME: prompt_selector
     N_SENTENCES_TO_RETURN: 3
     PROMPTS_TO_CONSIDER: rhodes_coaching
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

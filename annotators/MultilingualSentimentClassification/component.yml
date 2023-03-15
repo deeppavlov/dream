@@ -20,4 +20,4 @@ sentiment-classification-multilingual:
     SERVICE_PORT: 8024
     SERVICE_NAME: sentiment_classification
     PRETRAINED_MODEL_NAME_OR_PATH: cardiffnlp/twitter-xlm-roberta-base-sentiment
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

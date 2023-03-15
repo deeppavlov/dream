@@ -17,7 +17,8 @@ entity-detection-ru:
     endpoint: respond_batch
   build_args:
     CONFIG: entity_detection_rus.json
-    PORT: 8103
+    SERVICE_PORT: 8103
     SRC_DIR: annotators/entity_detection_rus
     LANGUAGE: RU
-  date_created: '2023-03-04T19:27:44'
+    SERVICE_NAME: entity_detection
+  date_created: '2023-03-15T00:08:10'

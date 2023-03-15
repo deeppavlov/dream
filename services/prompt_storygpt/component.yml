@@ -20,4 +20,4 @@ prompt-storygpt:
     MODELS_URL: http://files.deeppavlov.ai/dream_data/story_skill/finetuned2.tar.gz
     BART_MODEL_NAME: facebook/bart-large
     FINETUNED_MODEL_NAME: /data/finetuned2
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'

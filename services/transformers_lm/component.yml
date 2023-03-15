@@ -21,4 +21,4 @@ transformers-lm-gptj:
     SERVICE_NAME: transformers_lm_gptj
     PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
     HALF_PRECISION: 0
-  date_created: '2023-03-04T19:27:44'
+  date_created: '2023-03-15T00:08:10'
