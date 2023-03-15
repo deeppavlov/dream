@@ -44,7 +44,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
             } for uttr_id, uttr in enumerate(context)
         ]
         logger.info(f"context inside generate_responses seen as: {messages}")
-        response = openai.Completion.create(
+        response = openai.ChatCompletion.create(
             model=PRETRAINED_MODEL_NAME_OR_PATH,
             messages=messages
         )
