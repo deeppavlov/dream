@@ -1,3 +1,4 @@
+import os
 import requests
 
 
@@ -9,10 +10,11 @@ DEFAULT_CONFIG = {
     "do_sample": True,
     "num_return_sequences": 2,
 }
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
 
 def test_respond():
-    url = "http://0.0.0.0:8130/respond"
+    url = f"http://0.0.0.0:{SERVICE_PORT}/respond"
     contexts = [
         [
             "Hi! I am Marcus. How are you today?",

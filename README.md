@@ -275,6 +275,7 @@ Dream Architecture is presented in the following image:
 | ChatGPT                | 100 MB RAM              | generative service based on OpenAI API service, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this service, `gpt-3.5-turbo` is used.                                                      |
 | Prompt StoryGPT        | 3 GB RAM, 4 GB GPU      | generative service based on fine-tuned GPT-2, for the given topic represented by one noun returns short story on a given topic                                                                                                             |
 | GPT-J 6B               | 1.5 GB RAM, 24.2 GB GPU | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this service, [GPT-J model](https://huggingface.co/EleutherAI/gpt-j-6B) is used. |
+| BLOOMZ 7B              | 3 GB RAM, 29 GB GPU     | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this service, [GPT-J model](https://huggingface.co/EleutherAI/gpt-j-6B) is used. |
 
 ## Skills
 | Name                               | Requirements              | Description                                                                                                                                                                                                                                                   |
