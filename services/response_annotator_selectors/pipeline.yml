@@ -5,7 +5,6 @@ agent:
     class_name: skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector
     annotator_names:
       - sentseg
-    response_formatter: state_formatters.dp_formatters:simple_formatter_service
   state_manager_method: add_bot_utterance_last_chance
   tags:
     - selector
