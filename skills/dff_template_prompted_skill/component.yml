@@ -206,3 +206,27 @@ dff-rhodes-coaching-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-15T00:08:10'
+dff-dream-persona-prompted-skill:
+  name: dff_dream_persona_prompted_skill
+  display_name: DFF Dream Persona Prompted Skill
+  container_name: dff-dream-persona-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: PLEASE CHECK MY COMPONENT CARD DFF Dream Persona Prompted Skill
+  ram_usage: 150M
+  execution_time: 5.0
+  endpoints:
+  - group: skills
+    port: 8134
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8142
+    SERVICE_NAME: dff_dream_persona_prompted_skill
+    PROMPT_FILE: common/prompts/persona_prompted_skill.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-15T00:08:10'
