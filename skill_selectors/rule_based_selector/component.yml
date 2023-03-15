@@ -14,9 +14,6 @@ agent:
   - group: skill_selectors
     port: 4242
     endpoint: respond
-  - group: skill_selectors
-    port: 4242
-    endpoint: respond
   build_args:
     HIGH_PRIORITY_INTENTS: 1
     RESTRICTION_FOR_SENSITIVE_CASE: 1

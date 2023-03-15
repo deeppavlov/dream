@@ -67,6 +67,7 @@
             "tags": [
                 "selector"
             ],
+            "is_enabled": true,
             "source": {
                 "directory": "services/response_annotator_selectors",
                 "container": "agent"
@@ -181,7 +182,12 @@
                 ],
                 "tags": [
                     "selector"
-                ]
+                ],
+                "is_enabled": true,
+                "source": {
+                    "directory": "skill_selectors/rule_based_selector",
+                    "container": "agent"
+                }
             }
         },
         "skills": {
@@ -214,7 +220,12 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dummy_skill",
+                    "container": "agent"
+                }
             }
         },
         "candidate_annotators": {

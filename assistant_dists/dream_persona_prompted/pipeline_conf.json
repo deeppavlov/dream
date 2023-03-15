@@ -167,8 +167,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": ".",
-                "container": ""
+                "directory": "services/response_annotator_selectors",
+                "container": "agent"
             }
         },
         "candidate_annotators": {
@@ -284,8 +284,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": ".",
-                    "container": ""
+                    "directory": "skills/dummy_skill",
+                    "container": "agent"
                 }
             }
         },

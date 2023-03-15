@@ -13,9 +13,6 @@ agent:
   - group: skills
     port: 4242
     endpoint: respond
-  - group: skills
-    port: 4242
-    endpoint: respond
   build_args:
     LANGUAGE: EN
   date_created: '2023-03-15T00:08:10'
