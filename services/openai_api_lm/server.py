@@ -32,7 +32,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     openai.organization = openai_org if openai_org else None
 
     if PRETRAINED_MODEL_NAME_OR_PATH == "gpt-3.5-turbo":
-        logger.info(f"model=gpt-3.5-turbo, use special chat completion endpoint")
+        logger.info("model=gpt-3.5-turbo, use special chat completion endpoint")
         s = len(context) % 2
         messages = [
             {"role": "system", "content": prompt},
@@ -41,13 +41,11 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
             {
                 "role": f"{CHATGPT_ROLES[(s + uttr_id) % 2]}",
                 "content": uttr,
-            } for uttr_id, uttr in enumerate(context)
+            }
+            for uttr_id, uttr in enumerate(context)
         ]
         logger.info(f"context inside generate_responses seen as: {messages}")
-        response = openai.ChatCompletion.create(
-            model=PRETRAINED_MODEL_NAME_OR_PATH,
-            messages=messages
-        )
+        response = openai.ChatCompletion.create(model=PRETRAINED_MODEL_NAME_OR_PATH, messages=messages)
     else:
         dialog_context = ""
         if prompt:
