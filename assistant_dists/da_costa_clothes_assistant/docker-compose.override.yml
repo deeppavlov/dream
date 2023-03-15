@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/da_costa_clothes_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-no-scripts-selector:8009, badlisted-words:8018, combined-classification:8087, 
-        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
+        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-bloomz7b:8146, 
         dff-da-costa-clothes-prompted-skill:8144"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
