@@ -267,7 +267,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_template_prompted_skill",
-                    "container": "dff-dream-persona-prompted-skill",
+                    "container": "dff-dream-persona-gpt-j-prompted-skill",
                     "endpoint": "respond"
                 }
             },

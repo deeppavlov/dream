@@ -9,13 +9,13 @@ dff-animals-skill:
   description: 'is created using DFF and has three branches of conversation about
     animals: user''s pets, pets of the socialbot, and wild animals'
   ram_usage: 200M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8094
   endpoints:
   - group: skills
-    port: 8094
     endpoint: respond
   build_args:
     SERVICE_PORT: 8094
     SERVICE_NAME: dff_animals_skill
     BREED_FACTS_DB: http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

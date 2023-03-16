@@ -10,12 +10,12 @@ faq-skill:
     This FAQ Assistant chats with you while explaining the simplest topics from today's
     technology world.
   ram_usage: 150M
-  execution_time: 0.5
+  gpu_usage: null
+  port: 3772
   endpoints:
   - group: skills
-    port: 3772
     endpoint: respond
   build_args:
     SERVICE_PORT: '3772'
     SERVICE_NAME: faq_skill
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

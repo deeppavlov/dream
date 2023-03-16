@@ -2,16 +2,17 @@ convers-evaluation-no-scripts-selector:
   name: response_selector
   display_name: Response Selector
   container_name: convers-evaluation-no-scripts-selector
+  component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
   ram_usage: 50M
-  execution_time: 1.0
+  gpu_usage: null
+  port: 8009
   endpoints:
   - group: response_selectors
-    port: 8009
     endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
@@ -34,21 +35,22 @@ convers-evaluation-no-scripts-selector:
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
     SERVICE_PORT: '8009'
     SERVICE_NAME: response_selector
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'
 convers-evaluation-selector:
   name: response_selector
   display_name: Response Selector
   container_name: convers-evaluation-selector
+  component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
   ram_usage: 50M
-  execution_time: 1.0
+  gpu_usage: null
+  port: 8009
   endpoints:
   - group: response_selectors
-    port: 8009
     endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
@@ -71,21 +73,22 @@ convers-evaluation-selector:
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
     SERVICE_PORT: '8009'
     SERVICE_NAME: response_selector
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'
 convers-evaluation-selector-ru:
   name: response_selector
   display_name: Response Selector
   container_name: convers-evaluation-selector-ru
+  component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
   ram_usage: 50M
-  execution_time: 1.0
+  gpu_usage: null
+  port: 8009
   endpoints:
   - group: response_selectors
-    port: 8009
     endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
@@ -109,21 +112,22 @@ convers-evaluation-selector-ru:
     LANGUAGE: RU
     SERVICE_PORT: '8009'
     SERVICE_NAME: response_selector
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'
 scripts-priority-selector:
   name: response_selector
   display_name: Response Selector
   container_name: scripts-priority-selector
+  component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
   ram_usage: 50M
-  execution_time: 1.0
+  gpu_usage: null
+  port: 8009
   endpoints:
   - group: response_selectors
-    port: 8009
     endpoint: respond
   build_args:
     TAG_BASED_SELECTION: 1
@@ -146,4 +150,4 @@ scripts-priority-selector:
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
     SERVICE_PORT: '8009'
     SERVICE_NAME: response_selector
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

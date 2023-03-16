@@ -2,6 +2,7 @@ transformers-lm-gptj:
   name: transformers_lm_gptj
   display_name: GPT-J 6B
   container_name: transformers-lm-gptj
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
@@ -11,14 +12,13 @@ transformers-lm-gptj:
     used.
   ram_usage: 1.5G
   gpu_usage: 24.2G
-  execution_time: 2.0
+  port: 8130
   endpoints:
   - group: services
-    port: 8130
     endpoint: respond
   build_args:
     SERVICE_PORT: 8130
     SERVICE_NAME: transformers_lm_gptj
     PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
     HALF_PRECISION: 0
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

@@ -8,12 +8,12 @@ dff-gossip-skill:
   author: DeepPavlov
   description: DFF-based skill to discuss other people with news about them
   ram_usage: 95M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8109
   endpoints:
   - group: skills
-    port: 8109
     endpoint: respond
   build_args:
     SERVICE_PORT: 8109
     SERVICE_NAME: dff_gossip_skill
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

@@ -2,18 +2,18 @@ spacy-annotator-ru:
   name: spacy_annotator
   display_name: Spacy Annotator
   container_name: spacy-annotator-ru
+  component_type: null
   model_type: ML-based
   is_customizable: false
   author: DeepPavlov
   description: token-wise annotations by Spacy
   ram_usage: 250M
-  execution_time: 1.0
+  gpu_usage: null
+  port: 8129
   endpoints:
   - group: annotators
-    port: 8129
     endpoint: respond
   - group: candidate_annotators
-    port: 8129
     endpoint: respond_batch
   build_args:
     SERVICE_PORT: 8129
@@ -22,4 +22,4 @@ spacy-annotator-ru:
     TOKEN_ATTRIBUTES: pos_|dep_|lemma_|ent_iob_|ent_type_|morph
     ANNOTATE_BATCH_WITH_TOKENS_ONLY: 1
     SERVICE_NAME: spacy_annotator
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

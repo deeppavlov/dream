@@ -8,11 +8,13 @@ agent:
   author: DeepPavlov
   description: a fallback skill with multiple non-toxic candidate responses
   ram_usage: 100M
-  execution_time: 0.1
+  gpu_usage: null
+  port: 4242
   endpoints:
   - group: skills
-    port: 4242
+    endpoint: respond
+  - group: skills
     endpoint: respond
   build_args:
     LANGUAGE: EN
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

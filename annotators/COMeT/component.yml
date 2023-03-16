@@ -2,16 +2,16 @@ comet-atomic:
   name: comet_atomic
   display_name: COMeT Atomic
   container_name: comet-atomic
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
   description: Commonsense prediction models COMeT Atomic
   ram_usage: 2G
   gpu_usage: 1.1G
-  execution_time: 2.0
+  port: 8053
   endpoints:
   - group: services
-    port: 8053
     endpoint: comet
   build_args:
     GRAPH: atomic
@@ -21,24 +21,23 @@ comet-atomic:
     PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/comet/atomic_pretrained_model.pickle
     PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle
     DECODING_ALGO: beam-3
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'
 comet-conceptnet:
   name: comet_conceptnet
   display_name: COMeT ConceptNet
   container_name: comet-conceptnet
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
   description: Commonsense prediction models COMeT  ConceptNet
   ram_usage: 2G
   gpu_usage: 1.1G
-  execution_time: 2.0
+  port: 8065
   endpoints:
   - group: annotators
-    port: 8065
     endpoint: comet_annotator
   - group: services
-    port: 8065
     endpoint: comet
   build_args:
     GRAPH: conceptnet
@@ -48,4 +47,4 @@ comet-conceptnet:
     PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
     PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
     DECODING_ALGO: beam-3
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

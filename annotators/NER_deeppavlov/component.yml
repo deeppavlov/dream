@@ -2,6 +2,7 @@ ner:
   name: ner
   display_name: NER
   container_name: ner
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
@@ -9,13 +10,11 @@ ner:
     text
   ram_usage: 2.2G
   gpu_usage: 5G
-  execution_time: 1.5
+  port: 8021
   endpoints:
   - group: annotators
-    port: 8021
     endpoint: ner
   - group: response_annotators
-    port: 8021
     endpoint: ner
   build_args:
     CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
@@ -23,11 +22,12 @@ ner:
     SRC_DIR: annotators/NER_deeppavlov
     COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
     SERVICE_NAME: ner
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'
 ner-ru:
   name: ner
   display_name: NER
   container_name: ner-ru
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
@@ -35,13 +35,11 @@ ner-ru:
     text using ruBert-based (pyTorch) model
   ram_usage: 1.7G
   gpu_usage: 4.9G
-  execution_time: 1.5
+  port: 8021
   endpoints:
   - group: annotators
-    port: 8021
     endpoint: ner
   - group: response_annotators
-    port: 8021
     endpoint: ner
   build_args:
     CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
@@ -49,4 +47,4 @@ ner-ru:
     SRC_DIR: annotators/NER_deeppavlov
     COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
     SERVICE_NAME: ner
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

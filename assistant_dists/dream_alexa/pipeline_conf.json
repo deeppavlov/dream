@@ -382,7 +382,7 @@
             "midas_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 1.0,
                     "url": "http://midas-classification:8090/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -391,7 +391,13 @@
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/midas_classification",
+                    "container": "midas-classification",
+                    "endpoint": "model"
+                }
             },
             "combined_classification": {
                 "connector": {

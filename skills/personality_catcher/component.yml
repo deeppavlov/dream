@@ -8,12 +8,12 @@ personality-catcher:
   author: DeepPavlov
   description: ''
   ram_usage: 30M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8010
   endpoints:
   - group: skills
-    port: 8010
     endpoint: personality_catcher
   build_args:
     SERVICE_PORT: '8010'
     SERVICE_NAME: personality_catcher
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

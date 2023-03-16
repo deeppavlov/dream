@@ -2,6 +2,7 @@ sentseg-ru:
   name: sentseg
   display_name: Sentence Segmentation
   container_name: sentseg-ru
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
@@ -9,16 +10,14 @@ sentseg-ru:
     into sentences
   ram_usage: 2.4G
   gpu_usage: 4.9G
-  execution_time: 1.5
+  port: 8011
   endpoints:
   - group: annotators
-    port: 8011
     endpoint: sentseg
   - group: response_annotators
-    port: 8011
     endpoint: sentseg
   build_args:
     CONFIG: sentseg_ru_bert_torch.json
     SERVICE_PORT: '8011'
     SERVICE_NAME: sentseg
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

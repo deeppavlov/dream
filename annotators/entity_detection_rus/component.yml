@@ -2,18 +2,18 @@ entity-detection-ru:
   name: entity_detection
   display_name: Entity Detection
   container_name: entity-detection-ru
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
   description: extracts entities and their types from utterances
   ram_usage: 5.5G
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8103
   endpoints:
   - group: annotators
-    port: 8103
     endpoint: respond
   - group: candidate_annotators
-    port: 8103
     endpoint: respond_batch
   build_args:
     CONFIG: entity_detection_rus.json
@@ -21,4 +21,4 @@ entity-detection-ru:
     SRC_DIR: annotators/entity_detection_rus
     LANGUAGE: RU
     SERVICE_NAME: entity_detection
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

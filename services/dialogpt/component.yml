@@ -2,6 +2,7 @@ dialogpt:
   name: dialogpt
   display_name: DialoGPT
   container_name: dialogpt
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
@@ -10,13 +11,11 @@ dialogpt:
     `microsoft/DialoGPT-small` with 0.2-0.5 sec on GPU)
   ram_usage: 1.2G
   gpu_usage: 2.1G
-  execution_time: 2.0
+  port: 8125
   endpoints:
   - group: skills
-    port: 8125
     endpoint: respond
   - group: services
-    port: 8125
     endpoint: continue
   build_args:
     SERVICE_PORT: 8125
@@ -25,4 +24,4 @@ dialogpt:
     N_HYPOTHESES_TO_GENERATE: 5
     CONFIG_NAME: dialogpt_en.json
     MAX_HISTORY_DEPTH: 2
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

@@ -2,22 +2,22 @@ news-api-annotator:
   name: news_api_annotator
   display_name: News API Annotator
   container_name: news-api-annotator
+  component_type: null
   model_type: External API
   is_customizable: false
   author: DeepPavlov
   description: extracts the latest news about entities or topics using the GNews API.
     DeepPavlov Dream deployments utilize our own API key.
   ram_usage: 80M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8112
   endpoints:
   - group: annotators
-    port: 8112
     endpoint: respond
   - group: services
-    port: 8112
     endpoint: respond
   build_args:
     SERVICE_PORT: 8112
     SERVICE_NAME: news_api_annotator
     ASYNC_SIZE: 3
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

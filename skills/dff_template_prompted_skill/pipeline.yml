@@ -42,6 +42,17 @@ dff-da-costa-clothes-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+dff-dream-persona-gpt-j-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://dff-dream-persona-gpt-j-prompted-skill:8134/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
 dff-nutrition-prompted-skill:
 - group: skills
   connector:
@@ -74,15 +85,4 @@ dff-dream-persona-davinci3-prompted-skill:
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
-  state_manager_method: add_hypothesis
-dff-dream-persona-prompted-skill:
-- group: skills
-  connector:
-    protocol: http
-    timeout: 5
-    url: http://dff-dream-persona-prompted-skill:8134/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter
-  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
-  previous_services:
-    - skill_selectors
   state_manager_method: add_hypothesis

@@ -9,12 +9,12 @@ small-talk-skill:
   description: asks questions using the hand-written scripts for 25 topics, including
     but not limited to love, sports, work, pets, etc.
   ram_usage: 35M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8062
   endpoints:
   - group: skills
-    port: 8062
     endpoint: respond
   build_args:
     SERVICE_PORT: '8062'
     SERVICE_NAME: small_talk_skill
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

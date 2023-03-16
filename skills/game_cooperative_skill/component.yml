@@ -9,12 +9,12 @@ game-cooperative-skill:
   description: 'provides user with a conversation about computer games: the charts
     of the best games for the past year, past month, and last week'
   ram_usage: 100M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8068
   endpoints:
   - group: skills
-    port: 8068
     endpoint: respond
   build_args:
     SERVICE_PORT: 8068
     SERVICE_NAME: game_cooperative_skill
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

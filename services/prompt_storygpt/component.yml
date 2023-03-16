@@ -2,6 +2,7 @@ prompt-storygpt:
   name: prompt_storygpt
   display_name: Prompt StoryGPT
   container_name: prompt-storygpt
+  component_type: null
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
@@ -9,10 +10,9 @@ prompt-storygpt:
     by one noun returns short story on a given topic
   ram_usage: 3G
   gpu_usage: 4G
-  execution_time: 2.0
+  port: 8127
   endpoints:
   - group: services
-    port: 8127
     endpoint: respond
   build_args:
     SERVICE_PORT: 8127
@@ -20,4 +20,4 @@ prompt-storygpt:
     MODELS_URL: http://files.deeppavlov.ai/dream_data/story_skill/finetuned2.tar.gz
     BART_MODEL_NAME: facebook/bart-large
     FINETUNED_MODEL_NAME: /data/finetuned2
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

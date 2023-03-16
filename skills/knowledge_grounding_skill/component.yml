@@ -9,12 +9,12 @@ knowledge-grounding-skill:
   description: generates a response based on the dialogue history and provided knowledge
     related to the current conversation topic
   ram_usage: 100M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8085
   endpoints:
   - group: skills
-    port: 8085
     endpoint: respond
   build_args:
     SERVICE_PORT: 8085
     SERVICE_NAME: knowledge_grounding_skill
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'

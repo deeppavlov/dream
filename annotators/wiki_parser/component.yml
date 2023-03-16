@@ -2,18 +2,18 @@ wiki-parser:
   name: wiki_parser
   display_name: Wiki Parser
   container_name: wiki-parser
+  component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
   description: extracts Wikidata triplets for the entities detected with Entity Linking
   ram_usage: 100M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8077
   endpoints:
   - group: annotators
-    port: 8077
     endpoint: model
   - group: services
-    port: 8077
     endpoint: model
   build_args:
     SERVICE_PORT: 8077
@@ -25,23 +25,23 @@ wiki-parser:
     SRC_DIR: annotators/wiki_parser
     COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
     FAST: 1
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'
 wiki-parser-ru:
   name: wiki_parser
   display_name: Wiki Parser
   container_name: wiki-parser-ru
+  component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
   description: extracts Wikidata triplets for the entities detected with Entity Linking
   ram_usage: 100M
-  execution_time: 2.0
+  gpu_usage: null
+  port: 8077
   endpoints:
   - group: annotators
-    port: 8077
     endpoint: model
   - group: services
-    port: 8077
     endpoint: model
   build_args:
     SERVICE_PORT: 8077
@@ -54,4 +54,4 @@ wiki-parser-ru:
     COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
     LANGUAGE: RU
     FAST: 1
-  date_created: '2023-03-15T00:08:10'
+  date_created: '2023-03-16T09:45:32'
