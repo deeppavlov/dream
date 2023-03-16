@@ -1,0 +1,21 @@
+relative-persona-extractor:
+  name: relative_persona_extractor
+  display_name: Relative Persona Extractor
+  container_name: relative-persona-extractor
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Annotator utilizing Sentence Ranker to rank persona sentences and selecting
+    `N_SENTENCES_TO_RETURN` the most relevant sentences
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8133
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8133
+    SERVICE_NAME: relative_persona_extractor
+    N_SENTENCES_TO_RETURN: 3
+  date_created: '2023-03-16T09:45:32'

@@ -1,0 +1,19 @@
+dff-science-skill:
+  name: dff_science_skill
+  display_name: Science Skill
+  container_name: dff-science-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: DFF-based skill to discuss science
+  ram_usage: 90M
+  gpu_usage: null
+  port: 8101
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8101
+    SERVICE_NAME: dff_science_skill
+  date_created: '2023-03-16T09:45:32'

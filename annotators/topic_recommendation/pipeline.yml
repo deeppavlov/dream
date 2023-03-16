@@ -1,0 +1,13 @@
+topic-recommendation:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://topic-recommendation:8113/respond
+  dialog_formatter: state_formatters.dp_formatters:topic_recommendation_formatter
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.spelling_preprocessing
+  - annotators.sentseg
+  - annotators.combined_classification
+  state_manager_method: add_annotation

@@ -1,0 +1,19 @@
+agent:
+  name: alexa_handler
+  display_name: Alexa Handler
+  container_name: agent
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: handler for several specific Alexa commands
+  ram_usage: 30M
+  gpu_usage: null
+  port: 4242
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 4242
+    SERVICE_NAME: alexa_handler
+  date_created: '2023-03-16T09:45:32'

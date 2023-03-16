@@ -1,0 +1,43 @@
+dff-intent-responder-ru-skill:
+  name: dff_intent_responder_skill
+  display_name: Custom Responses
+  container_name: dff-intent-responder-ru-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: provides template-based replies for some of the intents detected by
+    Intent Catcher annotator
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8012
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8012
+    SERVICE_NAME: dff_intent_responder_skill
+    INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases_RU.json
+    LANGUAGE: RU
+  date_created: '2023-03-16T09:45:32'
+dff-intent-responder-skill:
+  name: dff_intent_responder_skill
+  display_name: Custom Responses
+  container_name: dff-intent-responder-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: provides template-based replies for some of the intents detected by
+    Intent Catcher annotator
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8012
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8012
+    SERVICE_NAME: dff_intent_responder_skill
+    INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
+  date_created: '2023-03-16T09:45:32'

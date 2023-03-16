@@ -1,0 +1,22 @@
+dff-movie-skill:
+  name: dff_movie_skill
+  display_name: Movie Skill
+  container_name: dff-movie-skill
+  component_type: Script-based w/o NNs
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: is implemented using DFF and takes care of the conversations related
+    to movies
+  ram_usage: 1.1G
+  gpu_usage: null
+  port: 8023
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8023
+    SERVICE_NAME: dff_movie_skill
+    DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v2.json
+    MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
+  date_created: '2023-03-16T09:45:32'

@@ -1,0 +1,23 @@
+toxic-classification-multilingual:
+  name: toxic_classification
+  display_name: Toxic Classification
+  container_name: toxic-classification-multilingual
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: 'classifies toxicity: identity_attack, insult, obscene, severe_toxicity,
+    sexual_explicit, threat, toxicity'
+  ram_usage: 3G
+  gpu_usage: 2G
+  port: 8013
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  - group: candidate_annotators
+    endpoint: respond_batch
+  build_args:
+    SERVICE_PORT: 8013
+    SERVICE_NAME: toxic_classification
+    PRETRAINED_MODEL_NAME_OR_PATH: https://github.com/unitaryai/detoxify/releases/download/v0.4-alpha/multilingual_debiased-0b549669.ckpt
+  date_created: '2023-03-16T09:45:32'

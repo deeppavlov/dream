@@ -1,0 +1,22 @@
+meta-script-skill:
+  name: comet_dialog_skill
+  display_name: Comet Dialog skill
+  container_name: meta-script-skill
+  component_type: Script-based w/o NNs
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: uses COMeT ConceptNet model to express an opinion, to ask a question
+    or give a comment about user's actions mentioned in the dialogue
+  ram_usage: 300M
+  gpu_usage: null
+  port: 8054
+  endpoints:
+  - group: skills
+    endpoint: meta_script
+  - group: skills
+    endpoint: comet_dialog
+  build_args:
+    SERVICE_PORT: '8054'
+    SERVICE_NAME: comet_dialog_skill
+  date_created: '2023-03-16T09:45:32'

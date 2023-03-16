@@ -1,0 +1,20 @@
+user-persona-extractor:
+  name: user_persona_extractor
+  display_name: User Persona Extractor
+  container_name: user-persona-extractor
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: determines which age category the user belongs to based on some key
+    words
+  ram_usage: 40M
+  gpu_usage: null
+  port: 8114
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8114
+    SERVICE_NAME: user_persona_extractor
+  date_created: '2023-03-16T09:45:32'

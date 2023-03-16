@@ -1,0 +1,20 @@
+misheard-asr:
+  name: misheard_asr
+  display_name: Misheard ASR
+  container_name: misheard-asr
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: uses the ASR Processor annotations to give feedback to the user when
+    ASR confidence is too low
+  ram_usage: 40M
+  gpu_usage: null
+  port: 8033
+  endpoints:
+  - group: skills
+    endpoint: misheard_respond
+  build_args:
+    SERVICE_PORT: '8033'
+    SERVICE_NAME: misheard_asr
+  date_created: '2023-03-16T09:45:32'

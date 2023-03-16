@@ -1,0 +1,23 @@
+spacy-nounphrases:
+  name: spacy_nounphrases
+  display_name: Spacy Nounphrases
+  container_name: spacy-nounphrases
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: extracts nounphrases using Spacy and filters out generic ones
+  ram_usage: 180M
+  gpu_usage: null
+  port: 8006
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  - group: response_annotators
+    endpoint: respond
+  - group: candidate_annotators
+    endpoint: respond_batch
+  build_args:
+    SERVICE_PORT: 8006
+    SERVICE_NAME: spacy_nounphrases
+  date_created: '2023-03-16T09:45:32'

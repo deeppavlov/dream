@@ -1,0 +1,19 @@
+image-captioning:
+  name: image_captioning
+  display_name: Image Captioning
+  container_name: image-captioning
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: creates text representation of a received image
+  ram_usage: 4G
+  gpu_usage: 5.4G
+  port: 8123
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8123
+    SERVICE_NAME: image_captioning
+  date_created: '2023-03-16T09:45:32'

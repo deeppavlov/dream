@@ -1,0 +1,26 @@
+sentrewrite:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://sentrewrite:8017/sentrewrite
+  dialog_formatter: state_formatters.dp_formatters:sent_rewrite_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.spelling_preprocessing
+  - annotators.sentseg
+  - annotators.ner
+  - response_annotators.ner
+  state_manager_method: add_annotation
+- group: response_annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://sentrewrite:8017/sentrewrite
+  dialog_formatter: state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - response_annotator_selectors
+  - response_annotators.sentseg
+  - response_annotators.ner
+  state_manager_method: add_annotation_prev_bot_utt

@@ -1,0 +1,12 @@
+entity-storer:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://entity-storer:8089/respond
+  dialog_formatter: state_formatters.dp_formatters:entity_storer_formatter
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.combined_classification
+  - annotators.intent_catcher
+  state_manager_method: update_attributes
