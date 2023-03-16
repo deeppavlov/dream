@@ -1,0 +1,19 @@
+dff-music-skill:
+  name: dff_music_skill
+  display_name: Music Skill
+  container_name: dff-music-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: DFF-based skill to discuss music
+  ram_usage: 70M
+  gpu_usage: null
+  port: 8099
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8099
+    SERVICE_NAME: dff_music_skill
+  date_created: '2023-03-16T09:45:32'

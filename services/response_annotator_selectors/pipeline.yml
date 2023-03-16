@@ -1,0 +1,10 @@
+agent:
+- group: response_annotator_selectors
+  connector:
+    protocol: python
+    class_name: skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector
+    annotator_names:
+      - sentseg
+  state_manager_method: add_bot_utterance_last_chance
+  tags:
+    - selector

@@ -1,0 +1,24 @@
+sentseg:
+  name: sentseg
+  display_name: Sentence Segmentation
+  container_name: sentseg
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: allows us to handle long and complex user's utterances by splitting
+    them into sentences and recovering punctuation
+  ram_usage: 1G
+  gpu_usage: null
+  port: 8011
+  endpoints:
+  - group: annotators
+    endpoint: sentseg
+  - group: annotators
+    endpoint: sentseg
+  - group: response_annotators
+    endpoint: sentseg
+  build_args:
+    SERVICE_PORT: '8011'
+    SERVICE_NAME: sentseg
+  date_created: '2023-03-16T09:45:32'

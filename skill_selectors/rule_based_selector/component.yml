@@ -1,0 +1,25 @@
+agent:
+  name: rule_based_selector
+  display_name: Rule-based Skill Selector
+  container_name: agent
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects list of skills to generate candidate responses
+    to the current context based on topics, entities, emotions, toxicity, dialogue
+    acts and dialogue history
+  ram_usage: 100M
+  gpu_usage: null
+  port: 4242
+  endpoints:
+  - group: skill_selectors
+    endpoint: respond
+  - group: skill_selectors
+    endpoint: respond
+  build_args:
+    HIGH_PRIORITY_INTENTS: 1
+    RESTRICTION_FOR_SENSITIVE_CASE: 1
+    ALWAYS_TURN_ON_ALL_SKILLS: 0
+    LANGUAGE: EN
+  date_created: '2023-03-16T09:45:32'

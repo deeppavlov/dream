@@ -1,0 +1,24 @@
+knowledge-grounding:
+  name: knowledge_grounding
+  display_name: Knowledge Grounding
+  container_name: knowledge-grounding
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on BlenderBot architecture providing a response
+    to the context taking into account an additional text paragraph
+  ram_usage: 2G
+  gpu_usage: 2.1G
+  port: 8083
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8083
+    SERVICE_NAME: knowledge_grounding
+    MODEL_CKPT: 3_sent_62_epochs
+    DATA_ARG: http://files.deeppavlov.ai/alexaprize_data/parlai_grounding_knowledge/parlai_topical_chat_data.tar.gz
+    MODEL1_ARG: http://files.deeppavlov.ai/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_1_sent_48_epochs.tar.gz
+    MODEL2_ARG: http://files.deeppavlov.ai/alexaprize_data/parlai_grounding_knowledge/topical_chat_blender90_3_sent_62_epochs.tar.gz
+  date_created: '2023-03-16T09:45:32'

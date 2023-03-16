@@ -1,0 +1,11 @@
+eliza:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://eliza:8047/respond
+  dialog_formatter: state_formatters.dp_formatters:eliza_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:base_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

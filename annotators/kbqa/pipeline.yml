@@ -1,0 +1,11 @@
+kbqa:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://kbqa:8072/model
+  dialog_formatter: state_formatters.dp_formatters:kbqa_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  required_previous_services:
+  - annotators.entity_linking
+  state_manager_method: add_annotation

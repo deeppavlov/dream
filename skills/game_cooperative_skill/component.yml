@@ -1,0 +1,20 @@
+game-cooperative-skill:
+  name: game_cooperative_skill
+  display_name: Games Statistics Skill
+  container_name: game-cooperative-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: 'provides user with a conversation about computer games: the charts
+    of the best games for the past year, past month, and last week'
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8068
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8068
+    SERVICE_NAME: game_cooperative_skill
+  date_created: '2023-03-16T09:45:32'

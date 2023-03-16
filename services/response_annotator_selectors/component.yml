@@ -1,0 +1,14 @@
+agent:
+  name: response_annotator_selectors
+  display_name: Response Annotator Selectors
+  container_name: agent
+  is_customizable: false
+  author: DeepPavlov
+  description: Response Annotator Selectors
+  ram_usage: 100M
+  gpu_usage: null
+  port: 4242
+  endpoints:
+  - group: response_annotator_selectors
+    endpoint: respond
+  date_created: '2023-03-04T19:27:44'

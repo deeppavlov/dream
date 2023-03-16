@@ -1,0 +1,9 @@
+image-captioning:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 3.0
+    url: http://image-captioning:8123/respond
+  dialog_formatter: state_formatters.dp_formatters:image_captioning_formatter
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  state_manager_method: add_annotation

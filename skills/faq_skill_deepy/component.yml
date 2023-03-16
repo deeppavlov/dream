@@ -1,0 +1,21 @@
+faq-skill:
+  name: faq_skill
+  display_name: AI FAQ Skill
+  container_name: faq-skill
+  component_type: FAQ
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Everything you wanted to know about modern AI but was afraid to ask!
+    This FAQ Assistant chats with you while explaining the simplest topics from today's
+    technology world.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 3772
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: '3772'
+    SERVICE_NAME: faq_skill
+  date_created: '2023-03-16T09:45:32'

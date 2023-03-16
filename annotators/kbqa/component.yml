@@ -1,0 +1,28 @@
+kbqa:
+  name: kbqa
+  display_name: KBQA
+  container_name: kbqa
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: answers user's factoid questions based on Wikidata KB
+  ram_usage: 2G
+  gpu_usage: 1.4G
+  port: 8072
+  endpoints:
+  - group: annotators
+    endpoint: model
+  - group: services
+    endpoint: model
+  - group: annotators
+    endpoint: model
+  - group: services
+    endpoint: model
+  build_args:
+    SERVICE_PORT: 8072
+    SERVICE_NAME: kbqa
+    CONFIG: kbqa_cq_mt_bert_lite.json
+    SRC_DIR: annotators/kbqa/
+    COMMIT: 283a25e322e8fedc6ff0c159e4ec76bb165ae405
+  date_created: '2023-03-16T09:45:32'

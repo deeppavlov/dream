@@ -1,0 +1,20 @@
+dff-program-y-wide-skill:
+  name: dff_program_y_wide_skill
+  display_name: Program Y Wide Skill
+  container_name: dff-program-y-wide-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
+    for Dream socialbot, which includes only very general templates (with lower confidence)
+  ram_usage: 110M
+  gpu_usage: null
+  port: 8064
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8064
+    SERVICE_NAME: dff_program_y_wide_skill
+  date_created: '2023-03-16T09:45:32'

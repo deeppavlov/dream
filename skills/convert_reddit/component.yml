@@ -1,0 +1,19 @@
+convert-reddit:
+  name: convert_reddit
+  display_name: Convert Reddit
+  container_name: convert-reddit
+  component_type: Retrieval
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: uses a ConveRT encoder to build efficient representations for sentences
+  ram_usage: 1.2G
+  gpu_usage: null
+  port: 8029
+  endpoints:
+  - group: skills
+    endpoint: convert_reddit
+  build_args:
+    SERVICE_PORT: '8029'
+    SERVICE_NAME: convert_reddit
+  date_created: '2023-03-16T09:45:32'

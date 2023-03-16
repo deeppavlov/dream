@@ -1,0 +1,10 @@
+faq-skill:
+- group: skills
+  connector:
+    protocol: http
+    url: http://faq-skill:3772/respond
+  dialog_formatter: state_formatters.dp_formatters:full_dialog
+  response_formatter: state_formatters.dp_formatters:base_skill_formatter
+  previous_services:
+  - annotators
+  state_manager_method: add_hypothesis

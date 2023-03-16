@@ -1,0 +1,41 @@
+dff-friendship-ru-skill:
+  name: dff_friendship_skill
+  display_name: Friendship Skill
+  container_name: dff-friendship-ru-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: DFF-based skill to greet the user in the beginning of the dialog, and
+    forward the user to some scripted skill
+  ram_usage: 70M
+  gpu_usage: null
+  port: 8086
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8086
+    SERVICE_NAME: dff_friendship_skill
+    LANGUAGE: RU
+  date_created: '2023-03-16T09:45:32'
+dff-friendship-skill:
+  name: dff_friendship_skill
+  display_name: Friendship Skill
+  container_name: dff-friendship-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: DFF-based skill to greet the user in the beginning of the dialog, and
+    forward the user to some scripted skill
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8086
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8086
+    SERVICE_NAME: dff_friendship_skill
+  date_created: '2023-03-16T09:45:32'
