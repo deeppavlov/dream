@@ -1,0 +1,208 @@
+dff-ai-faq-prompted-skill:
+  name: dff_ai_faq_prompted_skill
+  display_name: AI FAQ Skill
+  container_name: dff-ai-faq-prompted-skill
+  component_type: FAQ
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Everything you wanted to know about modern AI but was afraid to ask!
+    This FAQ Assistant chats with you while explaining the simplest topics from today's
+    technology world.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8143
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8143
+    SERVICE_NAME: dff_ai_faq_prompted_skill
+    PROMPT_FILE: common/prompts/ai_faq.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
+dff-da-costa-clothes-prompted-skill:
+  name: dff_da_costa_clothes_prompted_skill
+  display_name: da Costa Clothes Skill
+  container_name: dff-da-costa-clothes-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Stay protected in every season with da Costa Industries Clothes Assistant!
+    Experience the ultimate comfort and protection, no matter the weather. Stay warm
+    in winter a...
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8144
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8144
+    SERVICE_NAME: dff_da_costa_clothes_prompted_skill
+    PROMPT_FILE: common/prompts/da_costa_clothes.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
+dff-dream-persona-davinci3-prompted-skill:
+  name: dff_dream_persona_prompted_skill
+  display_name: Dream Persona Skill
+  container_name: dff-dream-persona-davinci3-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Prompt-based skill that utilizes given generative service to generate
+    responses based on the given prompt
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8137
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8137
+    SERVICE_NAME: dff_dream_persona_prompted_skill
+    PROMPT_FILE: common/prompts/dream_persona.json
+    GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+  date_created: '2023-03-16T09:45:32'
+dff-dream-persona-gpt-j-prompted-skill:
+  name: dff_dream_persona_prompted_skill
+  display_name: Dream Persona Skill
+  container_name: dff-dream-persona-gpt-j-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Prompt-based skill that utilizes given generative service to generate
+    responses based on the given prompt
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8134
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8134
+    SERVICE_NAME: dff_dream_persona_prompted_skill
+    PROMPT_FILE: common/prompts/dream_persona.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
+dff-empathetic-marketing-prompted-skill:
+  name: dff_empathetic_marketing_prompted_skill
+  display_name: Empathetic Marketing Skill
+  container_name: dff-empathetic-marketing-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Connect with your audience like never before with Empathetic Marketing
+    AI Assistant! Reach new heights of success by tapping into the power of empathy.
+    Say goodbye..
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8138
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8138
+    SERVICE_NAME: dff_empathetic_marketing_prompted_skill
+    PROMPT_FILE: common/prompts/empathetic_marketing.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
+dff-fairytale-prompted-skill:
+  name: dff_fairytale_prompted_skill
+  display_name: Fairytale Skill
+  container_name: dff-fairytale-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: DFF-based skill that provides answers generated by language model based
+    on specified prompts and the dialog context. The model to be used is specified
+    in GENERATIVE_SERVICE_URL. For example, you may use Transformer LM GPTJ service.
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8139
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8139
+    SERVICE_NAME: dff_fairytale_prompted_skill
+    PROMPT_FILE: common/prompts/fairytale.json
+    GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+    GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+  date_created: '2023-03-16T09:45:32'
+dff-nutrition-prompted-skill:
+  name: dff_nutrition_prompted_skill
+  display_name: Nutrition Skill
+  container_name: dff-nutrition-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: DFF-based skill that provides answers generated by language model based
+    on specified prompts and the dialog context. The model to be used is specified
+    in GENERATIVE_SERVICE_URL. For example, you may use Transformer LM GPTJ service.
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8141
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8141
+    SERVICE_NAME: dff_nutrition_prompted_skill
+    PROMPT_FILE: common/prompts/nutrition.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
+dff-rhodes-coaching-prompted-skill:
+  name: dff_rhodes_coaching_prompted_skill
+  display_name: Rhodes Coaching Skill
+  container_name: dff-rhodes-coaching-prompted-skill
+  component_type: Script-based with NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Unlock your full potential with Rhodes & Co's patented AI assistant!
+    Reach peak performance at work and at home. Get into top form effortlessly and
+    inspire others with.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8142
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8142
+    SERVICE_NAME: dff_rhodes_coaching_prompted_skill
+    PROMPT_FILE: common/prompts/rhodes_coaching.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
