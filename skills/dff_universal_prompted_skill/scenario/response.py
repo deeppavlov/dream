@@ -81,8 +81,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"lm_service: {lm_service}")
 
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
-        sending_variables = {f"{var}_list": [getenv(var, None)]
-                             for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]}
+        sending_variables = {
+            f"{var}_list": [getenv(var, None)] for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
+        }
         # check if at least one of the env variables is not None
         if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
             raise NotImplementedError(
