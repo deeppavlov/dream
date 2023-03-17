@@ -1071,6 +1071,7 @@ def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
         dialog,
         skill_name,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
