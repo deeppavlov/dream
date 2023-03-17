@@ -75,11 +75,10 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    logger.info(f"attributes: {last_uttr.get('attributes')}")
     prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
-    lm_service = last_uttr.get("attributes", {}).get("LM_display_name", "GPT-J 6B")
+    lm_service = last_uttr.get("attributes", {}).get("lm_service", "GPT-J 6B")
     logger.info(f"prompt: {prompt}")
-    logger.info(f"LM_display_name: {lm_service}")
+    logger.info(f"lm_service: {lm_service}")
 
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
         sending_variables = {f"{var}_list": [getenv(var, None)]
