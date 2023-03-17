@@ -12,3 +12,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  transformers-lm-bloomz7b:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
