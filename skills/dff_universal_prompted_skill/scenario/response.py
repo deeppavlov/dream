@@ -79,8 +79,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service = last_uttr.get("attributes", {}).get("LM_display_name", "")
     logger.info(f"prompt: {prompt}")
     logger.info(f"LM_display_name: {lm_service}")
-    assert lm_service in CONSIDERED_LM_SERVICES.keys(), \
-        logger.info(f"ERROR! Given LM service `{lm_service}` is not considered")
 
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
         sending_variables = {f"{var}_list": [getenv(var, None)]
