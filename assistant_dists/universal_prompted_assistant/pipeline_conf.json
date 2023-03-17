@@ -148,25 +148,6 @@
                     "container": "badlisted-words",
                     "endpoint": "badlisted_words"
                 }
-            },
-            "prompt_selector": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://prompt-selector:8135/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "directory": "annotators/prompt_selector",
-                    "container": "prompt-selector",
-                    "endpoint": "respond"
-                }
             }
         },
         "skill_selectors": {
