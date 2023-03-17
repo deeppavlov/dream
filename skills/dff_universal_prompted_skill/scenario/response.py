@@ -25,20 +25,20 @@ LOW_CONFIDENCE = 0.5
 CONSIDERED_LM_SERVICES = {
     "GPT-J 6B": {
         "url": "http://transformers-lm-gptj:8130/respond",
-        "config": json.load(open("default_generative_config.json", "r")),
+        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
     },
     "BLOOMZ 7B": {
         "url": "http://transformers-lm-bloomz7b:8146/respond",
-        "config": json.load(open("default_generative_config.json", "r")),
+        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
     },
     "ChatGPT": {
         "url": "http://openai-api-chatgpt:8145/respond",
-        "config": json.load(open("openai-chatgpt.json", "r")),
+        "config": json.load(open("generative_configs/openai-chatgpt.json", "r")),
         "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     },
     "GPT-3.5": {
         "url": "http://openai-api-davinci3:8131/respond",
-        "config": json.load(open("openai-text-davinci-003.json", "r")),
+        "config": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
         "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     },
 }
