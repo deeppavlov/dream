@@ -71,13 +71,13 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_bot_attrs += [bot_attr]
             curr_attrs += [attr]
 
-    dialog_contexts = compose_data_for_model(ctx, actor)
-    logger.info(f"dialog_contexts: {dialog_contexts}")
-    if len(dialog_contexts) > 0:
+    dialog_context = compose_data_for_model(ctx, actor)
+    logger.info(f"dialog_context: {dialog_context}")
+    if len(dialog_context) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
             json={
-                "dialog_contexts": [dialog_contexts],
+                "dialog_contexts": [dialog_context],
                 "prompts": [PROMPT],
                 "configs": [GENERATIVE_SERVICE_CONFIG],
                 **sending_variables,

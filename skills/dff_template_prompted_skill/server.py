@@ -61,6 +61,7 @@ def handler(requested_data, random_seed=None):
 while True:
     result = containers.is_container_running(GENERATIVE_SERVICE_URL)
     if result:
+        logger.info(f"GENERATIVE_SERVICE_URL: {GENERATIVE_SERVICE_URL} is ready")
         break
     else:
         time.sleep(5)
