@@ -75,7 +75,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    logger.info(f"attributes: {last_uttr['attributes']}")
+    logger.info(f"attributes: {last_uttr.get('attributes')}")
     prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
     lm_service = last_uttr.get("attributes", {}).get("LM_display_name", "GPT-J 6B")
     logger.info(f"prompt: {prompt}")
