@@ -16,31 +16,32 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
-GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
-with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
-    GENERATIVE_SERVICE_CONFIG = json.load(f)
-
-PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
-# check if at least one of the env variables is not None
-if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-    raise NotImplementedError(
-        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
-    )
-
-assert GENERATIVE_SERVICE_URL
-assert PROMPT_FILE
-
-with open(PROMPT_FILE, "r") as f:
-    PROMPT = json.load(f)["prompt"]
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.5
+
+CONSIDERED_LM_SERVICES = {
+    "GPT-J 6B": {
+        "url": "http://transformers-lm-gptj:8130/respond",
+        "config": json.load(open("default_generative_config.json", "r")),
+    },
+    "BLOOMZ 7B": {
+        "url": "http://transformers-lm-bloomz7b:8146/respond",
+        "config": json.load(open("default_generative_config.json", "r")),
+    },
+    "ChatGPT": {
+        "url": "http://openai-api-chatgpt:8145/respond",
+        "config": json.load(open("openai-chatgpt.json", "r")),
+        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    },
+    "GPT-3.5": {
+        "url": "http://openai-api-davinci3:8131/respond",
+        "config": json.load(open("openai-text-davinci-003.json", "r")),
+        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    },
+}
 
 
 def compose_data_for_model(ctx, actor):
@@ -71,15 +72,34 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_bot_attrs += [bot_attr]
             curr_attrs += [attr]
 
-    dialog_contexts = compose_data_for_model(ctx, actor)
-    logger.info(f"dialog_contexts: {dialog_contexts}")
-    if len(dialog_contexts) > 0:
+    dialog_context = compose_data_for_model(ctx, actor)
+    logger.info(f"dialog_context: {dialog_context}")
+    last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
+    prompt = last_uttr.get("attributes", {}).get("prompt", "")
+    lm_service = last_uttr.get("attributes", {}).get("LM_display_name", "")
+    logger.info(f"prompt: {prompt}")
+    logger.info(f"LM_display_name: {lm_service}")
+    assert lm_service in CONSIDERED_LM_SERVICES.keys(), \
+        logger.info(f"ERROR! Given LM service `{lm_service}` is not considered")
+
+    if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
+        sending_variables = {f"{var}_list": [getenv(var, None)]
+                             for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]}
+        # check if at least one of the env variables is not None
+        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+            raise NotImplementedError(
+                "ERROR: All environmental variables have None values. At least one of them must have not None value"
+            )
+    else:
+        sending_variables = {}
+
+    if len(dialog_context) > 0:
         response = requests.post(
-            GENERATIVE_SERVICE_URL,
+            CONSIDERED_LM_SERVICES[lm_service]["url"],
             json={
-                "dialog_contexts": [dialog_contexts],
-                "prompts": [PROMPT],
-                "configs": [GENERATIVE_SERVICE_CONFIG],
+                "dialog_contexts": [dialog_context],
+                "prompts": [prompt],
+                "configs": [CONSIDERED_LM_SERVICES[lm_service]["config"]],
                 **sending_variables,
             },
             timeout=GENERATIVE_TIMEOUT,

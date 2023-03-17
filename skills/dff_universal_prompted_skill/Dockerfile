@@ -26,11 +26,11 @@ ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
 ARG ENVVARS_TO_SEND
 ENV ENVVARS_TO_SEND ${ENVVARS_TO_SEND}
 
-COPY skills/dff_template_prompted_skill/requirements.txt .
+COPY skills/dff_universal_prompted_skill/requirements.txt .
 RUN pip install -r requirements.txt
 RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
-COPY skills/dff_template_prompted_skill/ ./
+COPY skills/dff_universal_prompted_skill/ ./
 COPY ./common/ ./common/
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
