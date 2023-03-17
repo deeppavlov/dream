@@ -3,7 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_prompted_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-no-scripts-selector:8009, badlisted-words:8018, combined-classification:8087, 
-        spelling-preprocessing:8074, sentence-ranker:8128, transformers-lm-gptj:8130, 
+        spelling-preprocessing:8074, sentence-ranker:8128, 
+        transformers-lm-gptj:8130, transformers-lm-bloomz7b:8146, openai-api-chatgpt:8145, openai-api-davinci3:8131,
         dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -145,6 +146,67 @@ services:
           memory: 50G
         reservations:
           memory: 50G
+
+  transformers-lm-bloomz7b:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8146
+        SERVICE_NAME: transformers_lm_bloomz7b
+        PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
+        HALF_PRECISION: 0
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8146
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50G
+        reservations:
+          memory: 50G
+
+  openai-api-chatgpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8145
+        SERVICE_NAME: openai_api_chatgpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8145
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  openai-api-davinci3:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8131
+        SERVICE_NAME: openai_api_davinci3
+        PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8131
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   dff-universal-prompted-skill:
     env_file: [ .env ]
