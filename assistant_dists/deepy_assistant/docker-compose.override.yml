@@ -3,8 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/deepy_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087, 
-        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-bloomz7b:8146, 
-        dff-deepy-prompted-skill:8148"
+                   spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, openai-api-davinci3:8131,
+                   dff-deepy-prompted-skill:8148"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -145,26 +145,25 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-bloomz7b:
+  openai-api-davinci3:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8146
-        SERVICE_NAME: transformers_lm_bloomz7b
-        PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
-        HALF_PRECISION: 0
+        SERVICE_PORT: 8131
+        SERVICE_NAME: openai_api_davinci3
+        PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
       context: .
-      dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8146
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8131
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 50G
+          memory: 100M
         reservations:
-          memory: 50G
+          memory: 100M
 
   dff-deepy-prompted-skill:
     env_file: [ .env ]
