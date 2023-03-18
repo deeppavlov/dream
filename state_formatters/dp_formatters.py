@@ -1071,6 +1071,15 @@ def dff_prompted_skill_formatter(dialog, skill_name=None):
     )
 
 
+def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
+    return utils.dff_formatter(
+        dialog,
+        skill_name,
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
+    )
+
+
 def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
     # Used by: dialog_breakdown
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
