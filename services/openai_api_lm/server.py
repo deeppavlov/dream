@@ -64,7 +64,10 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
         )
 
     if isinstance(response, dict) and "choices" in response:
-        outputs = [resp.get("text", "").strip() for resp in response["choices"]]
+        outputs = [
+            resp["message"]["content"].strip() if "message" in resp else resp.get("text", "").strip()
+            for resp in response["choices"]
+        ]
     elif isinstance(response, str):
         outputs = [response.strip()]
 
