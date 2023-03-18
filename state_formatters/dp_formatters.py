@@ -1064,9 +1064,6 @@ def dff_prompted_skill_formatter(dialog, skill_name=None):
 
 
 def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
-    logger.info("\n\n\nATTRIBUTES:")
-    logger.info(dialog["human_utterances"][-1]["attributes"])
-    logger.info(dialog["utterances"][-1]["attributes"])
     return utils.dff_formatter(
         dialog,
         skill_name,
