@@ -6,7 +6,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=gpu8.ipavlov.mipt.ru:8087
+      - PROXY_PASS=dream.deeppavlov.ai:8087
       - PORT=8087
 
   sentence-ranker:
@@ -15,7 +15,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=gpu8.ipavlov.mipt.ru:8128
+      - PROXY_PASS=dream.deeppavlov.ai:8128
       - PORT=8128
 
   transformers-lm-gptj:
@@ -24,7 +24,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=gpu8.ipavlov.mipt.ru:8130
+      - PROXY_PASS=dream.deeppavlov.ai:8130
       - PORT=8130
 
   transformers-lm-bloomz7b:
@@ -33,7 +33,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=gpu8.ipavlov.mipt.ru:8146
+      - PROXY_PASS=dream.deeppavlov.ai:8146
       - PORT=8146
 
 version: '3.7'
