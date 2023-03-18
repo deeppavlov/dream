@@ -292,7 +292,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://convers-evaluation-no-scripts-selector:8009/respond"
+                    "url": "http://no-restrictions-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -303,7 +303,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "response_selectors/convers_evaluation_based_selector",
-                    "container": "convers-evaluation-no-scripts-selector",
+                    "container": "no-restrictions-selector",
                     "endpoint": "respond"
                 }
             }

@@ -42,3 +42,14 @@ convers-evaluation-selector-ru:
   previous_services:
   - candidate_annotators
   state_manager_method: add_bot_utterance
+no-restrictions-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://no-restrictions-selector:8009/respond
+  dialog_formatter: state_formatters.dp_formatters:full_history_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - candidate_annotators
+  state_manager_method: add_bot_utterance
