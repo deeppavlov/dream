@@ -1055,6 +1055,14 @@ def dff_rhodes_coaching_prompted_skill_formatter(dialog):
     )
 
 
+def dff_deepy_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_deepy_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
 def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
