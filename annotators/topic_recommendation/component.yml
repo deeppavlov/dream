@@ -1,0 +1,21 @@
+topic-recommendation:
+  name: topic_recommendation
+  display_name: Topic Recommendation
+  container_name: topic-recommendation
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: offers a topic for further conversation using the information about
+    the discussed topics and user's preferences. Current version is based on Reddit
+    personalities (see Dream Report for Alexa Prize 4).
+  ram_usage: 40M
+  gpu_usage: null
+  port: 8113
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8113
+    SERVICE_NAME: topic_recommendation
+  date_created: '2023-03-16T09:45:32'

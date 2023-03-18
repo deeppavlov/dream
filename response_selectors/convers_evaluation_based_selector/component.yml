@@ -1,0 +1,191 @@
+convers-evaluation-no-scripts-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: convers-evaluation-no-scripts-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects a final responses among the given list of candidate
+    responses
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8009
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    TAG_BASED_SELECTION: 1
+    CALL_BY_NAME_PROBABILITY: 0.5
+    PROMPT_PROBA: 0.1
+    ACKNOWLEDGEMENT_PROBA: 0.3
+    PRIORITIZE_WITH_REQUIRED_ACT: 0
+    PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+    PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+    IGNORE_DISLIKED_SKILLS: 0
+    GREETING_FIRST: 1
+    RESTRICTION_FOR_SENSITIVE_CASE: 1
+    PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
+    MAX_TURNS_WITHOUT_SCRIPTS: 7
+    ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+    PRIORITIZE_SCRIPTED_SKILLS: 0
+    CONFIDENCE_STRENGTH: 0.8
+    CONV_EVAL_STRENGTH: 0.4
+    PRIORITIZE_HUMAN_INITIATIVE: 1
+    QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-16T09:45:32'
+convers-evaluation-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: convers-evaluation-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects a final responses among the given list of candidate
+    responses
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8009
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    TAG_BASED_SELECTION: 1
+    CALL_BY_NAME_PROBABILITY: 0.5
+    PROMPT_PROBA: 0.1
+    ACKNOWLEDGEMENT_PROBA: 0.3
+    PRIORITIZE_WITH_REQUIRED_ACT: 0
+    PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+    PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+    IGNORE_DISLIKED_SKILLS: 0
+    GREETING_FIRST: 1
+    RESTRICTION_FOR_SENSITIVE_CASE: 1
+    PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+    MAX_TURNS_WITHOUT_SCRIPTS: 7
+    ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+    PRIORITIZE_SCRIPTED_SKILLS: 0
+    CONFIDENCE_STRENGTH: 0.8
+    CONV_EVAL_STRENGTH: 0.4
+    PRIORITIZE_HUMAN_INITIATIVE: 1
+    QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-16T09:45:32'
+convers-evaluation-selector-ru:
+  name: response_selector
+  display_name: Response Selector
+  container_name: convers-evaluation-selector-ru
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects a final responses among the given list of candidate
+    responses
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8009
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    TAG_BASED_SELECTION: 1
+    CALL_BY_NAME_PROBABILITY: 0.5
+    PROMPT_PROBA: 0.1
+    ACKNOWLEDGEMENT_PROBA: 0.3
+    PRIORITIZE_WITH_REQUIRED_ACT: 0
+    PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+    PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+    IGNORE_DISLIKED_SKILLS: 0
+    GREETING_FIRST: 1
+    RESTRICTION_FOR_SENSITIVE_CASE: 1
+    PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+    MAX_TURNS_WITHOUT_SCRIPTS: 7
+    ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+    PRIORITIZE_SCRIPTED_SKILLS: 0
+    CONFIDENCE_STRENGTH: 0.8
+    CONV_EVAL_STRENGTH: 0.4
+    PRIORITIZE_HUMAN_INITIATIVE: 1
+    QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+    LANGUAGE: RU
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-16T09:45:32'
+scripts-priority-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: scripts-priority-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects a final responses among the given list of candidate
+    responses
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8009
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    TAG_BASED_SELECTION: 1
+    CALL_BY_NAME_PROBABILITY: 0.5
+    PROMPT_PROBA: 0.3
+    ACKNOWLEDGEMENT_PROBA: 0.3
+    PRIORITIZE_WITH_REQUIRED_ACT: 1
+    PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+    PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 1
+    IGNORE_DISLIKED_SKILLS: 1
+    GREETING_FIRST: 1
+    RESTRICTION_FOR_SENSITIVE_CASE: 1
+    PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+    MAX_TURNS_WITHOUT_SCRIPTS: 7
+    ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+    PRIORITIZE_SCRIPTED_SKILLS: 1
+    CONFIDENCE_STRENGTH: 2.0
+    CONV_EVAL_STRENGTH: 0.4
+    PRIORITIZE_HUMAN_INITIATIVE: 0
+    QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-16T09:45:32'
+no-restrictions-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: no-restrictions-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects a final responses among the given list of candidate
+    responses
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8009
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    TAG_BASED_SELECTION: 1
+    CALL_BY_NAME_PROBABILITY: 0.5
+    PROMPT_PROBA: 0
+    ACKNOWLEDGEMENT_PROBA: 0.3
+    PRIORITIZE_WITH_REQUIRED_ACT: 0
+    PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+    PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+    IGNORE_DISLIKED_SKILLS: 0
+    GREETING_FIRST: 0
+    RESTRICTION_FOR_SENSITIVE_CASE: 0
+    PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
+    MAX_TURNS_WITHOUT_SCRIPTS: 100
+    ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 0
+    PRIORITIZE_SCRIPTED_SKILLS: 0
+    CONFIDENCE_STRENGTH: 0.8
+    CONV_EVAL_STRENGTH: 0.4
+    PRIORITIZE_HUMAN_INITIATIVE: 1
+    QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+    SERVICE_PORT: '8009'
+    SERVICE_NAME: response_selector
+  date_created: '2023-03-16T09:45:32'

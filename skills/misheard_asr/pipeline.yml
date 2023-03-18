@@ -1,0 +1,11 @@
+misheard-asr:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://misheard-asr:8033/misheard_respond
+  dialog_formatter: state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog
+  response_formatter: state_formatters.dp_formatters:misheard_asr_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

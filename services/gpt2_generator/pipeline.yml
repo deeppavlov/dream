@@ -1,0 +1,11 @@
+gpt2-multilingual:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://gpt2-multilingual:8132/respond
+  dialog_formatter: state_formatters.dp_formatters:last_utt_and_history_dialog
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

@@ -1,0 +1,22 @@
+dff-generative-ru-skill:
+  name: dff_generative_skill
+  display_name: Generative Skill
+  container_name: dff-generative-ru-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generative skill which uses DialoGPT service to generate 3 different
+    hypotheses
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8092
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8092
+    SERVICE_NAME: dff_generative_skill
+    LANGUAGE: RU
+    GENERATIVE_SERVICE_URL: http://dialogpt-ru:8125/respond
+  date_created: '2023-03-16T09:45:32'

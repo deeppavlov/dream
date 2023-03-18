@@ -1,0 +1,21 @@
+meta-script-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://meta-script-skill:8054/meta_script
+  dialog_formatter: state_formatters.dp_formatters:utt_sentseg_punct_dialog
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://meta-script-skill:8054/comet_dialog
+  dialog_formatter: state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

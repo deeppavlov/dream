@@ -1,0 +1,14 @@
+agent:
+  name: last_chance_service
+  display_name: Last Chance Service
+  container_name: agent
+  is_customizable: false
+  author: DeepPavlov
+  description: Last Chance Service
+  ram_usage: 100M
+  gpu_usage: null
+  port: 4242
+  endpoints:
+  - group: last_chance_service
+    endpoint: respond
+  date_created: '2023-03-04T19:27:44'

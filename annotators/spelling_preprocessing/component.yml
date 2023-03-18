@@ -1,0 +1,20 @@
+spelling-preprocessing:
+  name: spelling_preprocessing
+  display_name: Spell Checking
+  container_name: spelling-preprocessing
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: pattern-based component to rewrite different colloquial expressions
+    to a more formal style of conversation
+  ram_usage: 50M
+  gpu_usage: null
+  port: 8074
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8074
+    SERVICE_NAME: spelling_preprocessing
+  date_created: '2023-03-16T09:45:32'

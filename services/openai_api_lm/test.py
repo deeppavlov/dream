@@ -7,10 +7,11 @@ OPENAI_API_KEY = getenv("OPENAI_API_KEY", None)
 OPENAI_ORGANIZATION = getenv("OPENAI_ORGANIZATION", None)
 assert OPENAI_API_KEY, print("No OpenAI API key is given in env vars")
 DEFAULT_CONFIG = {"max_tokens": 64, "temperature": 0.4, "top_p": 1.0, "frequency_penalty": 0, "presence_penalty": 0}
+SERVICE_PORT = int(getenv("SERVICE_PORT"))
 
 
 def test_respond():
-    url = "http://0.0.0.0:8131/respond"
+    url = f"http://0.0.0.0:{SERVICE_PORT}/respond"
     contexts = [
         [
             "Hi! I am Marcus. How are you today?",

@@ -1,0 +1,23 @@
+toxic-classification-ru:
+  name: toxic_classification
+  display_name: Toxic Classification
+  container_name: toxic-classification-ru
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Toxic classification model from Transformers specified as PRETRAINED_MODEL_NAME_OR_PATH
+  ram_usage: 3.5G
+  gpu_usage: 3G
+  port: 8126
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  - group: candidate_annotators
+    endpoint: respond_batch
+  build_args:
+    SERVICE_PORT: 8126
+    PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
+    LANGUAGE: RU
+    SERVICE_NAME: toxic_classification
+  date_created: '2023-03-16T09:45:32'

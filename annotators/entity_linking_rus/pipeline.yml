@@ -1,0 +1,12 @@
+entity-linking-ru:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://entity-linking-ru:8075/model
+  dialog_formatter: state_formatters.dp_formatters:el_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.ner
+  - annotators.entity_detection
+  state_manager_method: add_annotation

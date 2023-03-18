@@ -1,0 +1,13 @@
+fact-random:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://fact-random:8119/respond
+  dialog_formatter: state_formatters.dp_formatters:fact_random_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.entity_linking
+  - annotators.spacy_nounphrases
+  - annotators.entity_detection
+  state_manager_method: add_annotation

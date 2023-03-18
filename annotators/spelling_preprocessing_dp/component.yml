@@ -1,0 +1,23 @@
+spelling-preprocessing-ru:
+  name: spelling_preprocessing
+  display_name: Spell Checking
+  container_name: spelling-preprocessing-ru
+  component_type: null
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Russian Levenshtein correction model
+  ram_usage: 8G
+  gpu_usage: null
+  port: 8074
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  build_args:
+    CONFIG: levenshtein_corrector_ru.json
+    SERVICE_PORT: 8074
+    SRC_DIR: annotators/spelling_preprocessing_dp
+    COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+    LANGUAGE: RU
+    SERVICE_NAME: spelling_preprocessing
+  date_created: '2023-03-16T09:45:32'

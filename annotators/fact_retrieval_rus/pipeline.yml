@@ -1,0 +1,11 @@
+fact-retrieval-ru:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://fact-retrieval-ru:8130/respond
+  dialog_formatter: state_formatters.dp_formatters:fact_retrieval_rus_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.entity_linking
+  state_manager_method: add_annotation

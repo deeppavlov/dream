@@ -1,0 +1,42 @@
+dff-program-y-ru-skill:
+  name: dff_program_y_skill
+  display_name: Program Y Skill
+  container_name: dff-program-y-ru-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
+    for Dream socialbot
+  ram_usage: 80M
+  gpu_usage: null
+  port: 8008
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8008
+    SERVICE_NAME: dff_program_y_skill
+    LANGUAGE: RU
+  date_created: '2023-03-16T09:45:32'
+dff-program-y-skill:
+  name: dff_program_y_skill
+  display_name: Program Y Skill
+  container_name: dff-program-y-skill
+  component_type: Script-based w/o NNs
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
+    for Dream socialbot
+  ram_usage: 800M
+  gpu_usage: null
+  port: 8008
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8008
+    SERVICE_NAME: dff_program_y_skill
+    LANGUAGE: EN
+  date_created: '2023-03-16T09:45:32'

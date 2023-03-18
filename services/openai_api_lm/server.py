@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
+CHATGPT_ROLES = ["assistant", "user"]
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -25,24 +26,48 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
     outputs = []
-    dialog_context = ""
-    if prompt:
-        dialog_context += prompt + "\n"
-    s = len(context) % 2
-    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
-    if continue_last_uttr:
-        dialog_context += "\n".join(context)
-    else:
-        dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
 
-    logger.info(f"context inside generate_responses seen as: {dialog_context}")
     assert openai_api_key, logger.error("Error: OpenAI API key is not specified in env")
     openai.api_key = openai_api_key
     openai.organization = openai_org if openai_org else None
 
-    response = openai.Completion.create(model=PRETRAINED_MODEL_NAME_OR_PATH, prompt=context, **generation_params)
+    if PRETRAINED_MODEL_NAME_OR_PATH == "gpt-3.5-turbo":
+        logger.info("model=gpt-3.5-turbo, use special chat completion endpoint")
+        s = len(context) % 2
+        messages = [
+            {"role": "system", "content": prompt},
+        ]
+        messages += [
+            {
+                "role": f"{CHATGPT_ROLES[(s + uttr_id) % 2]}",
+                "content": uttr,
+            }
+            for uttr_id, uttr in enumerate(context)
+        ]
+        logger.info(f"context inside generate_responses seen as: {messages}")
+        response = openai.ChatCompletion.create(model=PRETRAINED_MODEL_NAME_OR_PATH, messages=messages)
+    else:
+        dialog_context = ""
+        if prompt:
+            dialog_context += prompt + "\n"
+        s = len(context) % 2
+        context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+        if continue_last_uttr:
+            dialog_context += "\n".join(context)
+        else:
+            dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
+        logger.info(f"context inside generate_responses seen as: {dialog_context}")
+        response = openai.Completion.create(
+            model=PRETRAINED_MODEL_NAME_OR_PATH,
+            prompt=dialog_context,
+            **generation_params,
+        )
+
     if isinstance(response, dict) and "choices" in response:
-        outputs = [resp.get("text", "").strip() for resp in response["choices"]]
+        outputs = [
+            resp["message"]["content"].strip() if "message" in resp else resp.get("text", "").strip()
+            for resp in response["choices"]
+        ]
     elif isinstance(response, str):
         outputs = [response.strip()]
 

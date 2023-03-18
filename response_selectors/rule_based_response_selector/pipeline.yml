@@ -1,0 +1,10 @@
+rule-based-response-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://rule-based-response-selector:8005/respond
+  dialog_formatter: state_formatters.dp_formatters:full_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance

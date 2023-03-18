@@ -10,7 +10,7 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-no-scripts-selector:
+  no-restrictions-selector:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
       - "./common:/src/common"
@@ -45,13 +45,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm-gptj:
+  transformers-lm-bloomz7b:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8130:8130
+      - 8146:8146
   dff-da-costa-clothes-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"

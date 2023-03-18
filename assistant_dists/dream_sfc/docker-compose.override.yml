@@ -360,6 +360,8 @@ services:
     env_file: [ .env ]
     build:
       args:
+        SERVICE_NAME: dummy_skill_dialog
+        SERVICE_PORT: 8052
         DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
       context: ./skills/dummy_skill_dialog/
     command: flask run -h 0.0.0.0 -p 8052 --without-threads
@@ -904,25 +906,6 @@ services:
           memory: 256M
         reservations:
           memory: 256M
-
-  midas-classification:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8090
-        SERVICE_NAME: midas_classification
-        CONFIG: midas_conv_bert.json
-      context: ./annotators/midas_classification
-    command: flask run -h 0.0.0.0 -p 8090
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
 
   fact-random:
     env_file: [ .env ]

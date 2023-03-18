@@ -2,8 +2,8 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/nutrition_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, convers-evaluation-no-scripts-selector:8009, badlisted-words:8018, combined-classification:8087, 
-        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
+      WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087, 
+        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-bloomz7b:8146, 
         dff-nutrition-prompted-skill:8141"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -38,23 +38,23 @@ services:
         reservations:
           memory: 2G
 
-  convers-evaluation-no-scripts-selector:
+  no-restrictions-selector:
     env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
         CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.1
+        PROMPT_PROBA: 0
         ACKNOWLEDGEMENT_PROBA: 0.3
         PRIORITIZE_WITH_REQUIRED_ACT: 0
         PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
         PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
         IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 1
-        RESTRICTION_FOR_SENSITIVE_CASE: 1
+        GREETING_FIRST: 0
+        RESTRICTION_FOR_SENSITIVE_CASE: 0
         PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
-        MAX_TURNS_WITHOUT_SCRIPTS: 7
-        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+        MAX_TURNS_WITHOUT_SCRIPTS: 100
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 0
         PRIORITIZE_SCRIPTED_SKILLS: 0
         CONFIDENCE_STRENGTH: 0.8
         CONV_EVAL_STRENGTH: 0.4
@@ -145,17 +145,17 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-gptj:
+  transformers-lm-bloomz7b:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8130
-        SERVICE_NAME: transformers_lm_gptj
-        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+        SERVICE_PORT: 8146
+        SERVICE_NAME: transformers_lm_bloomz7b
+        PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
         HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
+    command: flask run -h 0.0.0.0 -p 8146
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -173,7 +173,7 @@ services:
         SERVICE_PORT: 8141
         SERVICE_NAME: dff_nutrition_prompted_skill
         PROMPT_FILE: common/prompts/nutrition.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
         GENERATIVE_SERVICE_CONFIG: default_generative_config.json
         GENERATIVE_TIMEOUT: 5
         N_UTTERANCES_CONTEXT: 3

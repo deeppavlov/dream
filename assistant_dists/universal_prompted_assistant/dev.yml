@@ -1,0 +1,75 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  no-restrictions-selector:
+    volumes:
+      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8009:8009
+  badlisted-words:
+    volumes:
+      - "./annotators/BadlistedWordsDetector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8018:8018
+  spelling-preprocessing:
+    volumes:
+      - "./annotators/spelling_preprocessing:/src"
+    ports:
+      - 8074:8074
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    ports:
+      - 8087:8087
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
+  transformers-lm-gptj:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8130:8130
+  transformers-lm-bloomz7b:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8146:8146
+  openai-api-chatgpt:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8145:8145
+  openai-api-davinci3:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8131:8131
+  dff-universal-prompted-skill:
+    volumes:
+      - "./skills/dff_universal_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8147:8147
+
+version: "3.7"
