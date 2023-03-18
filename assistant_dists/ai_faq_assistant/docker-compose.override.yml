@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/ai_faq_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, convers-evaluation-no-scripts-selector:8009, badlisted-words:8018, combined-classification:8087, 
-        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
+        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-bloomz7b:8146, 
         dff-ai-faq-prompted-skill:8143"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -145,17 +145,17 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-gptj:
+  transformers-lm-bloomz7b:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8130
-        SERVICE_NAME: transformers_lm_gptj
-        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+        SERVICE_PORT: 8146
+        SERVICE_NAME: transformers_lm_bloomz7b
+        PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
         HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
+    command: flask run -h 0.0.0.0 -p 8146
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -173,7 +173,7 @@ services:
         SERVICE_PORT: 8143
         SERVICE_NAME: dff_ai_faq_prompted_skill
         PROMPT_FILE: common/prompts/ai_faq.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
         GENERATIVE_SERVICE_CONFIG: default_generative_config.json
         GENERATIVE_TIMEOUT: 5
         N_UTTERANCES_CONTEXT: 3
