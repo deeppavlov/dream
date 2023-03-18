@@ -206,3 +206,27 @@ dff-rhodes-coaching-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
+dff-deepy-prompted-skill:
+  name: dff_deepy_prompted_skill
+  display_name: Deepy Assistant Skill
+  container_name: dff-deepy-prompted-skill
+  component_type: Script-based with NNs
+  model_type: NN-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Deepy Assistant can help a user to create a customized dialogue system.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8148
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8148
+    SERVICE_NAME: dff_deepy_prompted_skill
+    PROMPT_FILE: common/prompts/deepy.json
+    GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
