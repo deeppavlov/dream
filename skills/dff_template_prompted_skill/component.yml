@@ -2,7 +2,7 @@ dff-ai-faq-prompted-skill:
   name: dff_ai_faq_prompted_skill
   display_name: AI FAQ Skill
   container_name: dff-ai-faq-prompted-skill
-  component_type: FAQ
+  component_type: Generative
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
