@@ -194,7 +194,7 @@
             "dff_rhodes_coaching_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5.0,
+                    "timeout": 7.0,
                     "url": "http://dff-rhodes-coaching-prompted-skill:8142/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter",
