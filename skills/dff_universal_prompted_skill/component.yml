@@ -2,7 +2,7 @@ dff-universal-prompted-skill:
   name: dff_universal_prompted_skill
   display_name: Universal Prompted Skill
   container_name: dff-universal-prompted-skill
-  component_type: Script-based with NNs
+  component_type: Generative
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
