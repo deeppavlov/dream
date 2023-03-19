@@ -13,7 +13,7 @@ dff-fairytale-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 7.0
     url: http://dff-fairytale-prompted-skill:8139/respond
   dialog_formatter: state_formatters.dp_formatters:dff_fairytale_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -68,7 +68,7 @@ dff-rhodes-coaching-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 7.0
     url: http://dff-rhodes-coaching-prompted-skill:8142/respond
   dialog_formatter: state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -79,7 +79,7 @@ dff-dream-persona-davinci3-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 7.0
     url: http://dff-dream-persona-davinci3-prompted-skill:8137/respond
   dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -90,7 +90,7 @@ dff-deepy-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 7.0
     url: http://dff-deepy-prompted-skill:8148/respond
   dialog_formatter: state_formatters.dp_formatters:dff_deepy_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
