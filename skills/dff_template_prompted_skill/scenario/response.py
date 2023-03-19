@@ -40,7 +40,7 @@ with open(PROMPT_FILE, "r") as f:
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
-LOW_CONFIDENCE = 0.5
+LOW_CONFIDENCE = 0.7
 
 
 def compose_data_for_model(ctx, actor):
