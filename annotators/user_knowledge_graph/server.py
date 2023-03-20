@@ -1,10 +1,8 @@
 import logging
 import uuid
 import os
-import re
 
 import inflect
-import requests
 from flask import Flask, jsonify, request
 from pathlib import Path
 from deeppavlov_kg import TerminusdbKnowledgeGraph
@@ -50,14 +48,14 @@ rel_kinds_dict = {
     "like_sports": "type_of_sport"
 }
 
+TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 DB = "test_italy_skill"
-TEAM = "yashkens|c77b"
+TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD") or "root"
 
 graph = TerminusdbKnowledgeGraph(
-    team=TEAM,
     db_name=DB,
-    server="https://7063.deeppavlov.ai/",
-    password="G5KMuz9dF1K2mD5cPz726oazSJJtkFLw",
+    server=TERMINUSDB_SERVER_URL,
+    password=TERMINUSDB_SERVER_PASSWORD,
     index_load_path=INDEX_LOAD_PATH
 )
 
