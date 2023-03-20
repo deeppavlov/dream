@@ -17,6 +17,7 @@ RUN apt update
 RUN apt install libsndfile1 -y
 RUN apt install ffmpeg -y
 RUN python -m pip install -U pip
+RUN apt install gdown
 
 RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
 
