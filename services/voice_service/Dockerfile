@@ -21,12 +21,15 @@ RUN pip install gdown
 
 RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
 
-RUN wget -O /src/aux_files/AudioCaption/experiments.zip https://docs.google.com/uc?export=download&confirm=t&id=1xXbn5nlgc1F8fuhj5bAZbu86OCmX2Uks
-RUN unzip /src/aux_files/AudioCaption/experiments.zip /src/aux_files/AudioCaption/
+RUN gdown https://drive.google.com/uc?id=1xXbn5nlgc1F8fuhj5bAZbu86OCmX2Uks -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
+RUN ls /src/aux_files/AudioCaption
+RUN ls /src/aux_files
+RUN unzip /src/aux_files/AudioCaption/experiments.zip -d /src/aux_files/AudioCaption
 RUN rm /src/aux_files/AudioCaption/experiments.zip
 RUN sed -i "s|/home/ilia/projects/audio-captioning|/src/aux_files|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 # PATH
-RUN wget -O /src/aux_files/pretrained_weights/model.pth https://docs.google.com/uc?export=download&confirm=t&id=1v0vzLzNQTzA-0LsrSA7QRX_mu8BvM07S
+RUN mkdir /src/aux_files/pretrained_weights
+RUN gdown https://drive.google.com/uc?id=1v0vzLzNQTzA-0LsrSA7QRX_mu8BvM07S -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
 
 # SWA
 RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
