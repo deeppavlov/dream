@@ -8,7 +8,7 @@ openai-api-chatgpt:
   author: DeepPavlov
   description: generative service based on OpenAI API service, the model is set in
     docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this
-    service, `gpt-3.5-turbo` is used.
+    service, `gpt-3.5-turbo` is used).
   ram_usage: 100M
   gpu_usage: null
   port: 8145
@@ -30,7 +30,7 @@ openai-api-davinci3:
   author: DeepPavlov
   description: generative service based on OpenAI API service, the model is set in
     docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this
-    service, `text-davinci-003` is used.
+    service, `text-davinci-003` is used).
   ram_usage: 100M
   gpu_usage: null
   port: 8131
