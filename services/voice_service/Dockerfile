@@ -20,6 +20,11 @@ RUN python -m pip install -U pip
 RUN pip install gdown
 
 RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
+WORKDIR /src/aux_files
+RUN git pull
+WORKDIR /src
+
+RUN pip install -e /src/aux_files/AudioCaption
 
 RUN gdown https://drive.google.com/uc?id=1xXbn5nlgc1F8fuhj5bAZbu86OCmX2Uks -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
 RUN ls /src/aux_files/AudioCaption
@@ -49,4 +54,3 @@ RUN echo $SERVICE_PORT
 # RUN flask --app server run -h 0.0.0.0 -p ${SERVICE_PORT}
 
 #CMD tail -f /dev/null
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200

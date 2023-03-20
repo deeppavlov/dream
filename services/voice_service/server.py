@@ -1,9 +1,7 @@
 import logging
 import os
-import shutil
+import sys
 import time
-import requests
-import soundfile as sf
 
 import sentry_sdk
 from aux_files.inference import infer
