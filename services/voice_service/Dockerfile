@@ -20,6 +20,9 @@ RUN python -m pip install -U pip
 
 RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
 
+RUN gdown https://drive.google.com/file/d/1xXbn5nlgc1F8fuhj5bAZbu86OCmX2Uks/view?usp=share_link -O /src/aux_files/AudioCaption/experiments.zip
+RUN unzip /src/aux_files/AudioCaption/experiments.zip /src/aux_files/AudioCaption/
+RUN rm /src/aux_files/AudioCaption/experiments.zip
 RUN sed -i "s|/home/ilia/projects/audio-captioning|/src/aux_files|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 # PATH
 RUN gdown https://drive.google.com/file/d/1v0vzLzNQTzA-0LsrSA7QRX_mu8BvM07S/view?usp=share_link -O /src/aux_files/pretrained_weights/model.pth
