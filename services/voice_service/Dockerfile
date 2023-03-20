@@ -16,22 +16,22 @@ ENV FLASK_APP ${FLASK_APP}
 RUN apt update
 RUN apt install libsndfile1 -y
 RUN apt install ffmpeg -y
+RUN python -m pip install -U pip
 
 RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
 
-RUN mkdir /src/aux_files/data/
-RUN mkdir /src/aux_files/data/clotho_dataset/
+RUN sed -i "s|/home/ilia/projects/audio-captioning|/src/aux_files|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
+# PATH
+RUN gdown https://drive.google.com/file/d/1v0vzLzNQTzA-0LsrSA7QRX_mu8BvM07S/view?usp=share_link -O /src/aux_files/pretrained_weights/model.pth
 
-RUN cp -r /src/aux_files/clotho-dataset/data/* /src/aux_files/data
-RUN rm -f /src/aux_files/data/data_splits_features/.dummy
-RUN mv /src/aux_files/wavetransformer/data/WT_pickles/* /src/aux_files/data/WT_pickles
+# SWA
+RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
 
 COPY ./requirements.txt /src/requirements.txt
-RUN cp /src/aux_files/wavetransformer/requirement_pip.txt /src/requirement_pip.txt
 COPY ./ /src/
 
 RUN pip install -r /src/requirements.txt
-RUN pip install -r /src/requirement_pip.txt
+RUN pip install -r /src/aux_files/reqs.txt
 
 RUN pwd
 RUN ls -la

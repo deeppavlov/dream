@@ -12,13 +12,8 @@ from urllib.request import urlopen, URLopener
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 CAP_ERR_MSG = "The audiofile format is not supported"
-INFERENCE_DIR = "/src/aux_files/data/clotho_audio_files/"
-INFERENCE_PARAMS = {
-    'dataset_rootdir': '/src/aux_files/data',
-    'features_output_dir': '/src/aux_files/data/clotho_dataset',
-    'pretrained_pickle_files_dir': '/src/aux_files/wavetransformer/outputs',
-    'pretrained_models_dir': '/src/aux_files/wavetransformer/outputs',
-}
+AUDIO_DIR = "/src/aux_files/data/clotho_audio_files/"
+MODEL_PATH = "/src/aux_files/pretrained_weights/model.pth"
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -41,27 +36,24 @@ def respond():
     logger.info(f"path: {path}")
 
     filename_extract = path[0]
-    logger.info(filename_extract)
     filename_els = filename_extract.split("=")
-    logger.info(filename_els)
     filename = filename_els[-1]
 
-    logger.info(f"dot split -1: {filename.split('.')[-1]}, filename: {filename}")
-    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3']:
+    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'flac']:
         file = URLopener()
-        file.retrieve(path[0], os.path.join(INFERENCE_DIR, filename))
+        file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
 
         import subprocess
-        process = subprocess.run(['ffmpeg', '-i', os.path.join(INFERENCE_DIR, filename), os.path.join(INFERENCE_DIR, filename[:-4] + ".wav")])
+        process = subprocess.run(['ffmpeg', '-i', os.path.join(AUDIO_DIR, filename), os.path.join(AUDIO_DIR, filename[:-4] + ".wav")])
         if process.returncode != 0:
             raise Exception("Something went wrong")
     try:
-        for i in os.listdir(INFERENCE_DIR):
+        for i in os.listdir(AUDIO_DIR):
             if i.split(".")[-1] == 'wav':
                 break
         else:
-            raise Exception("No files for inference found")
-        captions = infer(INFERENCE_PARAMS)
+            raise Exception("No files for inference found in AUDIO_DIR")
+        captions = infer(AUDIO_DIR, MODEL_PATH)
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
     except:
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
