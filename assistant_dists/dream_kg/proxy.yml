@@ -665,4 +665,14 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8137
       - PORT=8137
+
+  terminusdb-server:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy2/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=7063.deeppavlov.ai
+      - PORT=6363
+
 version: '3.7'
