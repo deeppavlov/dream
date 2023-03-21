@@ -25,6 +25,7 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 @app.route("/respond", methods=["POST"])
 def respond():
+    global CAP_ERR_MSG
     st_time = time.time()
 
     path = request.json.get("sound_path")
@@ -40,7 +41,7 @@ def respond():
     if not os.path.exists(AUDIO_DIR):
         os.makedirs(AUDIO_DIR)
 
-    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'flac']:
+    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3']:
         file = URLopener()
         file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
 
@@ -53,6 +54,7 @@ def respond():
             if i.split(".")[-1] == 'wav':
                 break
         else:
+            CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
             raise Exception("No files for inference found in AUDIO_DIR")
         captions = infer(AUDIO_DIR, MODEL_PATH)
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
