@@ -1,0 +1,52 @@
+[
+    [
+        "Do you like drawing?",
+        1.0,
+        {
+            "dff_art_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "art",
+                        "drawing_q"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "fc152029-8b47-4fe4-9a60-348939d4a2ef",
+                    "labels": {
+                        "0": [
+                            "art",
+                            "drawing_q"
+                        ]
+                    },
+                    "requests": {
+                        "0": "let's talk about art."
+                    },
+                    "responses": {
+                        "0": "Do you like drawing?"
+                    },
+                    "misc": {
+                        "flags": {
+                            "art_skill_active": true
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
+    ]
+]

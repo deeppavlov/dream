@@ -25,6 +25,18 @@ from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
 
 SKILL_TRIGGERS = {
+    "dff_travel_italy_skill": {
+        "compiled_patterns": [re.compile(r"(\bpet|pets|hobby|hobbies|travel|italy|trip|tourism)")],
+        "previous_bot_patterns": [],
+        "detected_topics": [],
+        "intents": [],
+    },
+    "dff_user_kg_skill": {
+        "compiled_patterns": [re.compile(r"(\bpet|pets|hobby|hobbies)")],
+        "previous_bot_patterns": [],
+        "detected_topics": [],
+        "intents": [],
+    },
     "dff_art_skill": {
         "compiled_patterns": [ART_PATTERN],
         "previous_bot_patterns": [],

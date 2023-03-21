@@ -618,6 +618,33 @@ def check_nounphr(annotations, nounphr_to_find):
     return ""
 
 
+def find_entity_custom_kg(annotations, kg_type):
+    custom_el_info = annotations.get("custom_entity_linking", [])
+    for entity_info in custom_el_info:
+        substr = entity_info.get("entity_substr", "")
+        e_types = entity_info.get("entity_id_tags", [])
+        if any([e_type.lower() == kg_type.lower() for e_type in e_types]):
+            return substr
+    return ""
+
+
+def find_entity_prex(annotations, prop):
+    prop = prop.replace("_", " ")
+    prex_info = annotations.get("property_extraction", [])
+    if isinstance(prex_info, list) and prex_info:
+        prex_info = prex_info[0]
+    if prex_info:
+        triplet = prex_info["triplet"]
+        if "relation" in triplet:
+            rel = triplet["relation"]
+        elif "property" in triplet:
+            rel = triplet["property"]
+        obj = triplet["object"]
+        if rel.lower() == prop.lower():
+            return obj
+    return ""
+
+
 def extract_entity(ctx, entity_type):
     user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
     annotations = user_uttr.get("annotations", {})
@@ -641,7 +668,7 @@ def extract_entity(ctx, entity_type):
         if entities:
             return entities[0]
     else:
-        res = re.findall(entity_type, user_uttr["text"])
+        res = re.findall(entity_type, user_uttr.get("text", ""))
         if res:
             return res[0]
     return ""

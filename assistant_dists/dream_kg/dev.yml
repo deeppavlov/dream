@@ -471,4 +471,16 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8138:8138
+  dff-user-kg-skill:
+    volumes:
+      - "./skills/dff_user_kg_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8132:8132
+  dff-travel-italy-skill:
+    volumes:
+      - "./skills/dff_travel_italy_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8139:8139
 version: "3.7"

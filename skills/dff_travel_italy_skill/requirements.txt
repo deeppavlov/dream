@@ -1,0 +1,5 @@
+wheel 
+setuptools
+git+https://github.com/deeppavlov/custom_kg_svc.git@feat/support_index
+click #==7.1.2  exact version is commented out because it's incompetible with deeppavlov_kg
+nltk==3.5

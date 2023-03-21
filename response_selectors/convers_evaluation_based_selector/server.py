@@ -52,7 +52,6 @@ MOST_DUMMY_RESPONSES = [
     "I didn't get it. Sorry",
 ]
 LANGUAGE = getenv("LANGUAGE", "EN")
-GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
 
 
 @app.route("/respond", methods=["POST"])
@@ -365,7 +364,11 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     # flatten 2d list to 1d list of all appeared sentences of bot replies
     bot_utterances = sum(bot_utterances, [])
     bot_utterances = [substitute_nonwords(utt) for utt in bot_utterances]
-
+    
+    for i in range(len(candidates)):
+        if candidates[i]["skill_name"] == "dff_user_kg_skill":
+            scores[i] = max(scores)
+    
     if TAG_BASED_SELECTION:
         logger.info("Tag based selection")
         best_candidate, best_id, curr_single_scores = tag_based_response_selection(
@@ -384,7 +387,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     best_human_attributes = best_candidate.get("human_attributes", {})
     best_bot_attributes = best_candidate.get("bot_attributes", {})
 
-    if len(dialog["bot_utterances"]) == 0 and greeting_spec[LANGUAGE] not in best_text and GREETING_FIRST:
+    if len(dialog["bot_utterances"]) == 0 and greeting_spec[LANGUAGE] not in best_text:
         # add greeting to the first bot uttr, if it's not already included
         best_text = f"{HI_THIS_IS_DREAM[LANGUAGE]} {best_text}"
 
