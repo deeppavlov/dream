@@ -34,13 +34,15 @@ RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerMo
 RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm
 RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1
 RUN rm /src/aux_files/AudioCaption/experiments.zip
+RUN sed -i "s|sed/audioset_tagging_cnn/pretrained_weights/Cnn14_mAP=0.431.pth|/src/aux_files/pretrained_weights/model.pth|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 RUN sed -i "s|/home/ilia/projects/audio-captioning/pretrained_weights/Cnn14_mAP=0.431.pth|/src/aux_files/pretrained_weights/model.pth|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
+RUN cat /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 # PATH
 RUN mkdir /src/aux_files/pretrained_weights
 RUN gdown https://drive.google.com/uc?id=1v0vzLzNQTzA-0LsrSA7QRX_mu8BvM07S -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
 
 # SWA
-RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
+# RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
 
 COPY ./requirements.txt /src/requirements.txt
 COPY ./ /src/
