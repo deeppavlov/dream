@@ -30,6 +30,8 @@ RUN gdown https://drive.google.com/uc?id=1xXbn5nlgc1F8fuhj5bAZbu86OCmX2Uks -O /s
 RUN ls /src/aux_files/AudioCaption
 RUN ls /src/aux_files
 RUN unzip /src/aux_files/AudioCaption/experiments.zip -d /src/aux_files/AudioCaption
+RUN ls /src/aux_files/AudioCaption
+RUN ls /src/aux_files/AudioCaption/experiments
 RUN rm /src/aux_files/AudioCaption/experiments.zip
 RUN sed -i "s|/home/ilia/projects/audio-captioning/pretrained_weights/Cnn14_mAP=0.431.pth|/src/aux_files/pretrained_weights/model.pth|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 # PATH
