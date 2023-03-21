@@ -20,7 +20,8 @@ services:
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, seq2seq-persona-based:8140, sentence-ranker:8128,
-          property-extraction:8136, dff-template-skill:8120, custom-entity-linking:8137, terminusdb-server:6363"
+          property-extraction:8136, dff-template-skill:8120, custom-entity-linking:8137, terminusdb-server:6363,
+          user-knowledge-graph:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -1358,5 +1359,25 @@ services:
     image: terminusdb/terminusdb-server:latest
     ports:
       - 6363:6363
+
+  user-knowledge-graph:
+    env_file: [ .env ]
+    build:
+      args:
+        PORT: 8138
+        SRC_DIR: annotators/user_knowledge_graph/
+      context: ./
+      dockerfile: annotators/user_knowledge_graph/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8138
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=3
+      - INDEX_LOAD_PATH=/root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 
 version: '3.7'

@@ -464,4 +464,11 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 6363:6363
+  user-knowledge-graph:
+    volumes:
+      - "./annotators/user_knowledge_graph:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8138:8138
 version: "3.7"

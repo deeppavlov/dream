@@ -1154,3 +1154,15 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
+
+
+def user_knowledge_graph_formatter_dialog(dialog: Dict) -> List[Dict]:
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    return [
+        {
+            "utterances": [dialog["human_utterances"][-1]],
+            "entities_with_labels": [entities_with_labels],
+            "entity_info": [entity_info_list],
+        }
+    ]

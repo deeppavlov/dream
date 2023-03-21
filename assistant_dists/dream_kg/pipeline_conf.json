@@ -482,6 +482,19 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ]
+            },
+            "user_knowledge_graph": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://user-knowledge-graph:8138/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [
+                    "annotators.property_extraction",
+                    "annotators.custom_entity_linking"
+                ]
             }
         },
         "skill_selectors": {
