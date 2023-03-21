@@ -37,6 +37,9 @@ def respond():
     filename_els = filename_extract.split("=")
     filename = filename_els[-1]
 
+    if not os.path.exists(os.path.join(AUDIO_DIR, filename)):
+        os.mkdir(os.path.join(AUDIO_DIR, filename))
+
     if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'flac']:
         file = URLopener()
         file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))

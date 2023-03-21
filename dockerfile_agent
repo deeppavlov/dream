@@ -32,7 +32,7 @@ RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pya
 RUN pip install jinja2==3.0.3 Werkzeug==2.0.3
 
 ARG AGENT_COMMIT=020b4ca9b6d5c6b13098e1f9dee5fcecaf236ae5
-RUN pip install https://codeload.github.com/moon-strider/dp-agent/tar.gz/1e065939cd492b25e84abdf1529b9f81a121cb6d
+RUN pip install https://codeload.github.com/moon-strider/dp-agent/tar.gz/d9eeaf4f41ee9105590aadd1ffd29f8a2bae464f
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -42,5 +42,3 @@ ENV DPA_LAUNCHING_ENV "docker"
 COPY . /dp-agent/.
 # COPY agent_settings.py /usr/local/lib/python3.7/site-packages/deeppavlov_agent/settings.py
 #RUN printf 'debug = False\nresponse_logger = False' > /dp-agent/dp_agent_settings.py
-
-
