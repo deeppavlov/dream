@@ -11,7 +11,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 CAP_ERR_MSG = "The audiofile format is not supported"
 AUDIO_DIR = "/src/aux_files/data/clotho_audio_files/"
-MODEL_PATH = "/src/aux_files/pretrained_weights/model.pth"
+MODEL_PATH = "/src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/"
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
