@@ -459,4 +459,9 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8137:8137
+  terminusdb-server:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 6363:6363
 version: "3.7"
