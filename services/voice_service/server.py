@@ -50,13 +50,16 @@ def respond():
         if process.returncode != 0:
             raise Exception("Something went wrong")
     try:
+        logger.info(f"Scanning AUDIO_DIR ({AUDIO_DIR}) for wav files...")
         for i in os.listdir(AUDIO_DIR):
             if i.split(".")[-1] == 'wav':
                 break
         else:
             CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
             raise Exception("No files for inference found in AUDIO_DIR")
+        logger.info("Scanning finished successfully, files found, starting inference...")
         captions = infer(AUDIO_DIR, MODEL_PATH)
+        logger.info("Inference finished successfully")
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
     except:
         responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
