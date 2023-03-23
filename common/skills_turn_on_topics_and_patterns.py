@@ -23,10 +23,11 @@ from common.sport import (
 from common.travel import TRAVELLING_TEMPLATE, HAVE_YOU_BEEN_TEMPLATE, I_HAVE_BEEN_TEMPLATE
 from common.weather import WEATHER_COMPILED_PATTERN
 from common.bot_persona import YOUR_FAVORITE_COMPILED_PATTERN
+from common.travel_italy import ITALY_PATTERN
 
 SKILL_TRIGGERS = {
     "dff_travel_italy_skill": {
-        "compiled_patterns": [re.compile(r"(\bpet|pets|hobby|hobbies|travel|italy|trip|tourism)")],
+        "compiled_patterns": [ITALY_PATTERN],
         "previous_bot_patterns": [],
         "detected_topics": [],
         "intents": [],
