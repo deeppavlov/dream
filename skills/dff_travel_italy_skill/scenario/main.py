@@ -88,8 +88,8 @@ flows = {
         "like_italy": {
             RESPONSE: "I like Italy for its nature. What do you like it for?",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
                 "set_flag": loc_prs.set_flag("italy_travel_skill_active", True),
             },
             TRANSITIONS: {
@@ -114,8 +114,8 @@ flows = {
                 ],
             ),
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
             },
             TRANSITIONS: {
                 ("concrete_place_flow", "when_visited"): cnd.true(),
@@ -124,7 +124,7 @@ flows = {
         "neg_to_italy": {
             RESPONSE: 'What a pity! This country and its culture are truly inspiring. What about italian cuisine? Do you like it?',
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
@@ -141,7 +141,7 @@ flows = {
                     users_fav_place=["prop:favorite_place", "default:this place"]
                 ),
                 "slot_filling": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(1.0),
+                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
@@ -155,7 +155,7 @@ flows = {
                 phrases=[loc_rsp.WHAT_DID_DAY],
             ),
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {
@@ -176,7 +176,7 @@ flows = {
                     user_liked_activity=["prop:like_activity", "default:This"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
             },
             TRANSITIONS: {("concrete_place_flow", "bot_activ_opinion"): cnd.true()},
@@ -194,8 +194,8 @@ flows = {
                 ],
             ),
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
             },
             TRANSITIONS: {("concrete_place_flow", "when_visited"): cnd.true()},
             MISC: {"dialog_act": ["opinion"]},
@@ -206,8 +206,8 @@ flows = {
                 phrases=[loc_rsp.WHEN_TRAVEL],
             ),
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
             },
             TRANSITIONS: {
                 ("concrete_place_flow", "told_when", 2): cnd.any(
@@ -227,8 +227,8 @@ flows = {
                     user_fav_season=["prop:favorite_season", "default:this time"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
             },
             TRANSITIONS: {("italian_food_flow", "food_start"): cnd.true()},
         },
@@ -259,7 +259,7 @@ flows = {
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
             },
             TRANSITIONS: {
                 ("italian_food_flow", "fav_drink"): cnd.any(
@@ -279,7 +279,7 @@ flows = {
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
             },
             TRANSITIONS: {
                 ("italy_disappointments", "neg_experience"): cnd.true(),
@@ -291,7 +291,7 @@ flows = {
             RESPONSE: "Aha, so was it {FAVORITE_FOOD}? If so, where and how did you first try it?",
             PROCESSING: {
                 "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
             },
             TRANSITIONS: {
                 ("italy_disappointments", "neg_experience"): cnd.true(),
@@ -303,8 +303,8 @@ flows = {
             RESPONSE: "You know what disappointed me the most in Florence? The parking! "
             "I had to leave the car on the outskirts of the city. Was there anything you disliked in Italy?",
             PROCESSING: {
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
-                "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
+                "set_confidence": int_prs.set_confidence(BIT_LOWER_CONFIDENCE),
+                "set_can_continue": int_prs.set_can_continue(CAN_CONTINUE_SCENARIO),
             },
             TRANSITIONS: {
                 ("italy_disappointments", "sympathy"): int_cnd.has_entities("prop:dislike"),
@@ -318,7 +318,7 @@ flows = {
                     user_dislike=["prop:dislike", "default:such situation"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(SUPER_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
             },
             TRANSITIONS: {
                 ("global_flow", "fallback"): cnd.true(),

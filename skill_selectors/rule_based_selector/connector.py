@@ -182,6 +182,7 @@ class RuleBasedSkillSelectorConnector:
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("gpt2_generator")
+                skills_for_uttr.append("dff_travel_italy_skill")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -286,8 +287,8 @@ class RuleBasedSkillSelectorConnector:
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
-            # asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_travel_italy_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+            # asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_travel_italy_skill"]))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
