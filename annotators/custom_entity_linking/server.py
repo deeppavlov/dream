@@ -63,9 +63,11 @@ def respond():
     opt_context_batch = []
     for hist_utt in context_batch:
         hist_utt = [utt for utt in hist_utt if len(utt) > 1]
-        last_utt = hist_utt[-1]
-        if last_utt[-1] not in {".", "!", "?"}:
-            last_utt = f"{last_utt}."
+        last_utt = ""
+        if hist_utt:
+            last_utt = hist_utt[-1]
+            if last_utt and last_utt[-1] not in {".", "!", "?"}:
+                last_utt = f"{last_utt}."
         if len(hist_utt) > 1:
             prev_utt = hist_utt[-2]
             if prev_utt[-1] not in {".", "!", "?"}:
