@@ -1083,6 +1083,21 @@
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
+            },
+            "dff_bakery_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-bakery-skill:8141/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_bakery_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors",
+                    "annotators.property_extraction",
+                    "annotators.custom_entity_linking"
+                ],
+                "state_manager_method": "add_hypothesis"
             }
         },
         "candidate_annotators": {

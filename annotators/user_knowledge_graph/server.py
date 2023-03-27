@@ -35,7 +35,7 @@ rel_kinds_dict = {
 }
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
-DB = "test_italy_skill"
+DB = "bakery_kg"
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD") or "root"
 
 graph = TerminusdbKnowledgeGraph(

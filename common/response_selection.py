@@ -29,6 +29,7 @@ ACTIVE_SKILLS = [
     "dff_gossip_skill",
     "dff_user_kg_skill",
     "dff_travel_italy_skill",
+    "dff_bakery_skill"
     "small_talk_skill",
     "dff_wiki_skill",
     "dff_art_skill",

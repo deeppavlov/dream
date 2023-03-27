@@ -136,6 +136,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("small_talk_skill")
+                skills_for_uttr.append("dff_bakery_skill")
 
                 if if_lets_chat_about_particular_topic_detected:
                     skills_for_uttr.append("news_api_skill")
@@ -288,7 +289,7 @@ class RuleBasedSkillSelectorConnector:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")
             # asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
-            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_travel_italy_skill"]))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=["dff_bakery_skill"]))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"rule_based_selector exec time = {total_time:.3f}s")

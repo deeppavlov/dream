@@ -483,4 +483,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8139:8139
+  dff-bakery-skill:
+    volumes:
+      - "./skills/dff_bakery_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8141:8141
 version: "3.7"

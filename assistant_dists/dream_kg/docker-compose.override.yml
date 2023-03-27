@@ -21,7 +21,7 @@ services:
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, storygpt:8126, prompt-storygpt:8127, seq2seq-persona-based:8140, sentence-ranker:8128,
           property-extraction:8136, dff-template-skill:8120, custom-entity-linking:8137, terminusdb-server:6363,
-          user-knowledge-graph:8138,dff-user-kg-skill:8132, dff-travel-italy-skill:8139"
+          user-knowledge-graph:8138,dff-user-kg-skill:8132, dff-travel-italy-skill:8139, dff-bakery-skill:8141"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -1405,6 +1405,22 @@ services:
       context: .
       dockerfile: ./skills/dff_travel_italy_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8139 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dff-bakery-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8141
+        SERVICE_NAME: dff_bakery_skill
+      context: .
+      dockerfile: ./skills/dff_bakery_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8141 --reload
     deploy:
       resources:
         limits:
