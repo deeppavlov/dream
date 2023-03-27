@@ -104,6 +104,12 @@ FAVORITE_FOOD_WORDS = (
     r" food|meal|breakfast|lunch|dinner|branch|snack)"
 )
 
+BAKERY_PATTERN = re.compile(
+    r"(bakery|confectionary|pastry|(bake|pastry) shop|bread|bagel(s)?|loaf|loaves|bun(s)?|baguette|"
+    r"pita|chapati|ciabatta|cornbread)", 
+    re.IGNORECASE,
+)
+
 def skill_trigger_phrases():
     return TRIGGER_PHRASES
 

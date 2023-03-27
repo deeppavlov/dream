@@ -1,58 +1,575 @@
 {
     "human_utter_index_batch": [
-        0
+        1
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "hi.",
+                    "text": "let's talk about ciabatta.",
                     "annotations": {
+                        "spelling_preprocessing": "let's talk about ciabatta",
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "hi",
+                        "rake_keywords": [
+                            "let",
+                            "talk",
+                            "ciabatta"
+                        ],
                         "badlisted_words": {
-                            "inappropriate": false,
-                            "profanity": false,
-                            "restricted_topics": false
+                            "bad_words": false
                         },
-                        "spacy_nounphrases": [],
-                        "factoid_classification": {
-                            "factoid": 0.009537393227219582,
-                            "conversational": 0.990462601184845
-                        },
-                        "comet_conceptnet": {},
+                        "spacy_nounphrases": [
+                            "ciabatta"
+                        ],
                         "combined_classification": {
                             "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9982210397720337
+                                "ClarificationIntent": 0.0,
+                                "General_ChatIntent": 0.0,
+                                "Information_DeliveryIntent": 0.0,
+                                "Information_RequestIntent": 0.96,
+                                "InteractiveIntent": 0.0,
+                                "Multiple_GoalsIntent": 0.0,
+                                "Opinion_ExpressionIntent": 0.0,
+                                "Opinion_RequestIntent": 0.0,
+                                "OtherIntent": 0.03,
+                                "Topic_SwitchIntent": 0.0,
+                                "User_InstructionIntent": 0.0
                             },
                             "cobot_dialogact_topics": {
-                                "Other": 0.9222673773765564
+                                "Entertainment_Books": 0.01,
+                                "Entertainment_General": 0.75,
+                                "Entertainment_Movies": 0.19,
+                                "Entertainment_Music": 0.03,
+                                "Inappropriate_Content": 0.0,
+                                "Interactive": 0.0,
+                                "Other": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 0.01,
+                                "Science_and_Technology": 0.0,
+                                "Sports": 0.01
                             },
                             "cobot_topics": {
-                                "Phatic": 0.9989814758300781
+                                "Art_Event": 0.0,
+                                "Celebrities": 0.0,
+                                "Entertainment": 0.0,
+                                "Fashion": 0.0,
+                                "Food_Drink": 0.01,
+                                "Games": 0.0,
+                                "Literature": 0.01,
+                                "Math": 0.0,
+                                "Movies_TV": 0.0,
+                                "Music": 0.07,
+                                "News": 0.0,
+                                "Other": 0.86,
+                                "Pets_Animals": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 0.0,
+                                "Psychology": 0.0,
+                                "Religion": 0.03,
+                                "SciTech": 0.0,
+                                "Sex_Profanity": 0.0,
+                                "Sports": 0.0,
+                                "Travel_Geo": 0.0,
+                                "Weather_Time": 0.0
+                            },
+                            "deeppavlov_topics": {
+                                "Animals&Pets": 0.0,
+                                "Art&Hobbies": 0.0,
+                                "ArtificialIntelligence": 0.04,
+                                "Beauty": 0.01,
+                                "Books&Literature": 0.02,
+                                "Celebrities&Events": 0.08,
+                                "Clothes": 0.06,
+                                "Depression": 0.01,
+                                "Disasters": 0.05,
+                                "Education": 0.01,
+                                "Family&Relationships": 0.01,
+                                "Finance": 0.0,
+                                "Food": 0.01,
+                                "Gadgets": 0.0,
+                                "Garden": 0.0,
+                                "Health&Medicine": 0.01,
+                                "Home&Design": 0.01,
+                                "Job": 0.06,
+                                "Leisure": 0.04,
+                                "MassTransit": 0.02,
+                                "Movies&Tv": 0.03,
+                                "Music": 0.2,
+                                "News": 0.01,
+                                "PersonalTransport": 0.0,
+                                "Politics": 0.02,
+                                "Psychology": 0.02,
+                                "Religion": 0.11,
+                                "Science&Technology": 0.02,
+                                "Space": 0.01,
+                                "Sports": 0.01,
+                                "Toys&Games": 0.01,
+                                "Travel": 0.02,
+                                "Videogames": 0.1
                             },
                             "emotion_classification": {
-                                "neutral": 0.9996328353881836
+                                "anger": 0.02,
+                                "disgust": 0.04,
+                                "fear": 0.04,
+                                "joy": 0.56,
+                                "neutral": 0.19,
+                                "sadness": 0.02,
+                                "surprise": 0.12
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.41,
+                                "is_factoid": 0.59
+                            },
+                            "midas_classification": {
+                                "appreciation": 0.0,
+                                "clarifying_question": 0.0,
+                                "command": 0.97,
+                                "comment": 0.0,
+                                "complaint": 0.0,
+                                "dev_command": 0.0,
+                                "neg_answer": 0.0,
+                                "open_question_factual": 0.0,
+                                "open_question_opinion": 0.01,
+                                "open_question_personal": 0.0,
+                                "opinion": 0.0,
+                                "other_answers": 0.0,
+                                "pos_answer": 0.0,
+                                "statement": 0.0,
+                                "yes_no_question": 0.01
                             },
                             "sentiment_classification": {
-                                "positive": 0.737922191619873
+                                "negative": 0.2,
+                                "neutral": 0.33,
+                                "positive": 0.48
                             },
                             "toxic_classification": {
-                                "toxic": 0.0014452040195465088
+                                "identity_hate": 0.01,
+                                "insult": 0.01,
+                                "not_toxic": 0.96,
+                                "obscene": 0.0,
+                                "severe_toxic": 0.0,
+                                "sexual_explicit": 0.01,
+                                "threat": 0.0,
+                                "toxic": 0.01
                             }
                         },
+                        "midas_predictor": {
+                            "command": 0.06747467438494935,
+                            "opinion": 0.22919681620839363,
+                            "pos_answer": 0.1676917510853835,
+                            "statement": 0.47503617945007237,
+                            "yes_no_question": 0.060600578871201155
+                        },
+                        "relative_persona_extractor": {
+                            "max_similarity": 0.5731953382492065,
+                            "persona": [
+                                "My name is Dream.",
+                                "I am a chatbot.",
+                                "My work is to talk to people about everything."
+                            ]
+                        },
                         "sentseg": {
-                            "punct_sent": "hi.",
+                            "punct_sent": "let's talk about ciabatta.",
                             "segments": [
-                                "hi."
+                                "let's talk about ciabatta."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "topic_recommendation": [
+                            "dff_movie_skill",
+                            "dff_travel_skill",
+                            "dff_music_skill"
+                        ],
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 4,
+                                    "start_pos": 3,
+                                    "text": "ciabatta",
+                                    "type": "ORG"
+                                }
+                            ]
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about ciabatta."
+                            ]
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "ciabatta"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "finegrained_label": [
+                                        [
+                                            "org",
+                                            0.6551
+                                        ]
+                                    ],
+                                    "label": "organization",
+                                    "offsets": [
+                                        17,
+                                        25
+                                    ],
+                                    "text": "ciabatta"
+                                }
+                            ]
+                        },
+                        "comet_conceptnet": {
+                            "ciabatta": {
+                                "SymbolOf": [
+                                    "islam",
+                                    "love",
+                                    "christianity"
+                                ],
+                                "HasProperty": [
+                                    "south of sahara",
+                                    "very expensive",
+                                    "beautiful"
+                                ],
+                                "Causes": [
+                                    "death",
+                                    "cancer",
+                                    "sickness"
+                                ],
+                                "CausesDesire": [
+                                    "swim",
+                                    "surf net",
+                                    "surf web"
+                                ]
+                            }
+                        },
+                        "news_api_annotator": [
+                            {
+                                "entity": "all",
+                                "news": {
+                                    "content": "Actor Jeremy Renner is continuing his road to recovery step by step.\nThe \u201cAvengers\u201d star, who was crushed by his own snowplow in a terrible January accident, shared a video of himself walking on an anti-gravity treadmill Sunday.\nAs he strolls, he tel... [1416 chars]",
+                                    "description": "Actor Jeremy Renner is continuing his road to recovery step by step. The \u201cAvengers\u201d star, who was crushed by his own snowplow in a terrible January accident, shared a video of himself walking on an anti-gravity treadmill Sunday.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2023/03/NYPICHPDPICT000008827608.jpg?quality=75&strip=all&w=1024",
+                                    "publishedAt": "2023-03-27T00:39:00Z",
+                                    "source": {
+                                        "name": "New York Post ",
+                                        "url": "https://nypost.com"
+                                    },
+                                    "title": "Jeremy Renner posts video of him walking on anti-gravity treadmill",
+                                    "url": "https://nypost.com/2023/03/26/jeremy-renner-posts-video-of-him-walking-on-anti-gravity-treadmill/"
+                                },
+                                "which": "all"
+                            },
+                            {
+                                "entity": "ciabatta",
+                                "news": {},
+                                "which": "human"
+                            }
+                        ],
+                        "property_extraction": [
+                            {
+                                "triplet": {}
+                            }
+                        ],
+                        "custom_entity_linking": [],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "let's talk about ciabatta."
+                        },
+                        "fact_retrieval": {
+                            "facts": [
+                                "saw the true colors of his boss, and after racing against him, he defected from the Foot Clan and became friends with the Turtles. Ray Fillet (originally known as Man Ray) was once a marine biologist named Jack Finney who worked at the Burroughs Aquarium in New Jersey. He originated in the Archie Comics version of Teenage Mutant Ninja Turtles. Jack met the TMNT at the aquarium where he explained his origin. Jack was exposed to Mutagen after he climbed into a pipe on Bayview Beach that was polluting the water. Jack needed proof of the illegal dumping and after",
+                                "look for his son. An early version of the script had Tuvok involved in the fighting, but it was decided that it would be more dramatic if there was a character involved who was not as adept at fighting. Instead, it was decided to have the character of Seven of Nine featured in this way which Tim Russ later described as a \"clever marketing ploy\" as UPN promoted that character heavily at the time. The episode was originally entitled \"Arena\", but was subsequently renamed to \"Tsunkatse\". WWE wrestler and actor Dwayne \"The Rock\" Johnson appeared as the Pendari Champion in",
+                                "laws. He dedicated his silver medal to his gay and lesbian friends. Symmonds published an article in the November 2013 issue of Runner's World Magazine advocating that Congress should \"[b]an assault rifles and handguns for everyone except police and military personnel.\" Off the track, Symmonds has dated Paris Hilton. Symmonds has been called the \"Brad Pitt\" of track. Symmonds has a pet rabbit named Mortimer, with whom he posed for a PETA ad campaign against animal testing. Symmonds is also an avid fisherman. In 2017, Symmonds hired by the newly formed Track Town Summer Series Professional Track & Field league"
+                            ],
+                            "topic_facts": []
+                        }
+                    },
+                    "user": {
+                        "id": "d9a39012fda54dcd95f93b80b57f4382",
+                        "user_external_id": "jniouho",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "what ingredients are in an apple pie?",
+                    "annotations": {
+                        "spelling_preprocessing": "what ingredients are in an apple pie",
+                        "asr": {
+                            "asr_confidence": "undefined"
+                        },
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "spacy_nounphrases": [
+                            "an apple pie",
+                            "ingredients"
+                        ],
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "ClarificationIntent": 0.0,
+                                "General_ChatIntent": 0.0,
+                                "Information_DeliveryIntent": 0.05,
+                                "Information_RequestIntent": 0.94,
+                                "InteractiveIntent": 0.0,
+                                "Multiple_GoalsIntent": 0.0,
+                                "Opinion_ExpressionIntent": 0.0,
+                                "Opinion_RequestIntent": 0.0,
+                                "OtherIntent": 0.0,
+                                "Topic_SwitchIntent": 0.0,
+                                "User_InstructionIntent": 0.0
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.0,
+                                "Entertainment_General": 0.01,
+                                "Entertainment_Movies": 0.01,
+                                "Entertainment_Music": 0.0,
+                                "Inappropriate_Content": 0.0,
+                                "Interactive": 0.0,
+                                "Other": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 0.0,
+                                "Science_and_Technology": 0.98,
+                                "Sports": 0.01
+                            },
+                            "cobot_topics": {
+                                "Art_Event": 0.0,
+                                "Celebrities": 0.0,
+                                "Entertainment": 0.0,
+                                "Fashion": 0.0,
+                                "Food_Drink": 0.0,
+                                "Games": 0.0,
+                                "Literature": 0.0,
+                                "Math": 0.0,
+                                "Movies_TV": 0.0,
+                                "Music": 0.0,
+                                "News": 0.0,
+                                "Other": 0.0,
+                                "Pets_Animals": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 0.0,
+                                "Psychology": 0.0,
+                                "Religion": 0.0,
+                                "SciTech": 1.0,
+                                "Sex_Profanity": 0.0,
+                                "Sports": 0.0,
+                                "Travel_Geo": 0.0,
+                                "Weather_Time": 0.0
+                            },
+                            "deeppavlov_topics": {
+                                "Animals&Pets": 0.04,
+                                "Art&Hobbies": 0.0,
+                                "ArtificialIntelligence": 0.1,
+                                "Beauty": 0.0,
+                                "Books&Literature": 0.01,
+                                "Celebrities&Events": 0.0,
+                                "Clothes": 0.0,
+                                "Depression": 0.0,
+                                "Disasters": 0.01,
+                                "Education": 0.01,
+                                "Family&Relationships": 0.0,
+                                "Finance": 0.01,
+                                "Food": 0.01,
+                                "Gadgets": 0.03,
+                                "Garden": 0.01,
+                                "Health&Medicine": 0.0,
+                                "Home&Design": 0.01,
+                                "Job": 0.01,
+                                "Leisure": 0.0,
+                                "MassTransit": 0.0,
+                                "Movies&Tv": 0.0,
+                                "Music": 0.0,
+                                "News": 0.0,
+                                "PersonalTransport": 0.01,
+                                "Politics": 0.0,
+                                "Psychology": 0.0,
+                                "Religion": 0.0,
+                                "Science&Technology": 0.64,
+                                "Space": 0.05,
+                                "Sports": 0.0,
+                                "Toys&Games": 0.01,
+                                "Travel": 0.0,
+                                "Videogames": 0.0
+                            },
+                            "emotion_classification": {
+                                "anger": 0.06,
+                                "disgust": 0.02,
+                                "fear": 0.01,
+                                "joy": 0.04,
+                                "neutral": 0.51,
+                                "sadness": 0.02,
+                                "surprise": 0.35
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.02,
+                                "is_factoid": 0.98
+                            },
+                            "midas_classification": {
+                                "appreciation": 0.0,
+                                "clarifying_question": 0.0,
+                                "command": 0.03,
+                                "comment": 0.0,
+                                "complaint": 0.0,
+                                "dev_command": 0.01,
+                                "neg_answer": 0.0,
+                                "open_question_factual": 0.62,
+                                "open_question_opinion": 0.07,
+                                "open_question_personal": 0.0,
+                                "opinion": 0.02,
+                                "other_answers": 0.01,
+                                "pos_answer": 0.0,
+                                "statement": 0.02,
+                                "yes_no_question": 0.21
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.13,
+                                "neutral": 0.82,
+                                "positive": 0.05
+                            },
+                            "toxic_classification": {
+                                "identity_hate": 0.02,
+                                "insult": 0.01,
+                                "not_toxic": 0.88,
+                                "obscene": 0.01,
+                                "severe_toxic": 0.01,
+                                "sexual_explicit": 0.02,
+                                "threat": 0.03,
+                                "toxic": 0.03
+                            }
+                        },
+                        "rake_keywords": [
+                            "ingredients"
+                        ],
+                        "midas_predictor": {
+                            "command": 0.017087001940008954,
+                            "comment": 0.03611401283390539,
+                            "opinion": 0.18750932696612446,
+                            "other_answers": 0.032159379197134755,
+                            "statement": 0.7271302790628265
+                        },
+                        "relative_persona_extractor": {
+                            "max_similarity": 0.6518650054931641,
+                            "persona": [
+                                "My favorite food is ice-cream.",
+                                "I like Italian food especially pasta and pizza.",
+                                "I love to walk on Paris streets with Google Maps."
+                            ]
+                        },
+                        "sentseg": {
+                            "punct_sent": "what ingredients are in an apple pie?",
+                            "segments": [
+                                "what ingredients are in an apple pie?"
                             ]
                         },
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",
                             "dff_music_skill"
+                        ],
+                        "ner": [
+                            []
                         ],
                         "intent_catcher": {
                             "cant_do": {
@@ -144,86 +661,972 @@
                                 "detected": 0
                             }
                         },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.0037371967919170856,
-                                "command": 0.014534023590385914,
-                                "comment": 0.007815568707883358,
-                                "complaint": 0.013871942646801472,
-                                "dev_command": 0.011961258016526699,
-                                "neg_answer": 0.0012791282497346401,
-                                "open_question_factual": 0.00706735672429204,
-                                "open_question_opinion": 0.0020942040719091892,
-                                "opinion": 0.028205107897520065,
-                                "other_answers": 0.0029170422349125147,
-                                "pos_answer": 0.003618006594479084,
-                                "statement": 0.8965855836868286,
-                                "yes_no_question": 0.006313641089946032
-                            }
-                        ],
-                        "ner": [
-                            []
-                        ],
-                        "entity_linking": [],
+                        "entity_detection": {
+                            "entities": [
+                                "bakery",
+                                "ingredients",
+                                "apple pie"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "finegrained_label": [
+                                        [
+                                            "misc",
+                                            0.981
+                                        ]
+                                    ],
+                                    "label": "misc",
+                                    "offsets": [
+                                        35,
+                                        41
+                                    ],
+                                    "text": "bakery"
+                                },
+                                {
+                                    "finegrained_label": [
+                                        [
+                                            "misc",
+                                            0.9154
+                                        ]
+                                    ],
+                                    "label": "misc",
+                                    "offsets": [
+                                        94,
+                                        105
+                                    ],
+                                    "text": "ingredients"
+                                },
+                                {
+                                    "finegrained_label": [
+                                        [
+                                            "misc",
+                                            0.9804
+                                        ]
+                                    ],
+                                    "label": "misc",
+                                    "offsets": [
+                                        116,
+                                        125
+                                    ],
+                                    "text": "apple pie"
+                                }
+                            ]
+                        },
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "hi."
+                                "let's talk about ciabatta.",
+                                "Hi, this is a Dream Socialbot! Our bakery is happy to help! What would you like to know?",
+                                "what ingredients are in an apple pie?"
                             ]
                         },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "entity_detection": {},
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 1,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "fact_random": [],
                         "news_api_annotator": [
                             {
                                 "entity": "all",
                                 "news": {
-                                    "content": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours. The companies also will not be allowed to provide services to users who haven't logged in with real-n... [3065 chars]",
-                                    "description": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours.",
-                                    "image": "https://image.cnbcfm.com/api/v1/image/106924433-GettyImages-1234392254.jpg?v=1630329277",
-                                    "publishedAt": "2021-08-30T13:52:58Z",
+                                    "content": "Actor Jeremy Renner is continuing his road to recovery step by step.\nThe \u201cAvengers\u201d star, who was crushed by his own snowplow in a terrible January accident, shared a video of himself walking on an anti-gravity treadmill Sunday.\nAs he strolls, he tel... [1416 chars]",
+                                    "description": "Actor Jeremy Renner is continuing his road to recovery step by step. The \u201cAvengers\u201d star, who was crushed by his own snowplow in a terrible January accident, shared a video of himself walking on an anti-gravity treadmill Sunday.",
+                                    "image": "https://nypost.com/wp-content/uploads/sites/2/2023/03/NYPICHPDPICT000008827608.jpg?quality=75&strip=all&w=1024",
+                                    "publishedAt": "2023-03-27T00:39:00Z",
                                     "source": {
-                                        "name": "CNBC",
-                                        "url": "https://www.cnbc.com"
+                                        "name": "New York Post ",
+                                        "url": "https://nypost.com"
                                     },
-                                    "title": "China to ban kids from playing online games for more than three hours per week",
-                                    "url": "https://www.cnbc.com/2021/08/30/china-to-ban-kids-from-playing-online-games-for-more-than-three-hours-per-week.html"
+                                    "title": "Jeremy Renner posts video of him walking on anti-gravity treadmill",
+                                    "url": "https://nypost.com/2023/03/26/jeremy-renner-posts-video-of-him-walking-on-anti-gravity-treadmill/"
                                 },
                                 "which": "all"
+                            },
+                            {
+                                "entity": "bakery",
+                                "news": {
+                                    "content": "This story first appeared on Food52 , an online community that gives you everything you need for a happier kitchen and home \u2013 that means tested recipes, a shop full of beautiful products, a cooking hotline, and everything in between!\nIt's a good thin... [1907 chars]",
+                                    "description": "This story first appeared on Food52 , an online community that gives you everything you need for a happier kitchen and home \u2013 that means tested recipes, a shop full of beautiful products, a cooking hotline, and everything in between!",
+                                    "image": "https://mediaproxy.salon.com/width/1200/https://media.salon.com/2023/03/magnolia_bakery_504670974.jpg",
+                                    "publishedAt": "2023-03-23T23:01:01Z",
+                                    "source": {
+                                        "name": "Salon",
+                                        "url": "https://www.salon.com"
+                                    },
+                                    "title": "Magnolia Bakery turned their world-famous banana pudding into a cookie",
+                                    "url": "https://www.salon.com/2023/03/23/magnolia-bakery-turned-their-world-famous-banana-pudding-into-a-cookie_partner/"
+                                },
+                                "which": "human"
+                            },
+                            {
+                                "entity": "ingredients",
+                                "news": {},
+                                "which": "human"
+                            },
+                            {
+                                "entity": "apple pie",
+                                "news": {},
+                                "which": "human"
+                            },
+                            {
+                                "entity": " dream socialbot",
+                                "news": {},
+                                "which": "bot"
                             }
-                        ]
+                        ],
+                        "property_extraction": [
+                            {
+                                "triplet": {
+                                    "object": "apple pie",
+                                    "relation": "like food",
+                                    "subject": "user"
+                                }
+                            }
+                        ],
+                        "custom_entity_linking": [],
+                        "comet_conceptnet": {
+                            "bakery": {
+                                "SymbolOf": [
+                                    "food",
+                                    "pizza",
+                                    "dessert"
+                                ],
+                                "HasProperty": [
+                                    "delicious",
+                                    "good",
+                                    "popular"
+                                ],
+                                "Causes": [
+                                    "bread",
+                                    "bake cake",
+                                    "food"
+                                ],
+                                "CausesDesire": [
+                                    "bake cake",
+                                    "bake bread",
+                                    "eat"
+                                ]
+                            },
+                            "ingredients": {
+                                "SymbolOf": [
+                                    "food",
+                                    "medicine",
+                                    "chemistry"
+                                ],
+                                "HasProperty": [
+                                    "good to eat",
+                                    "good for you",
+                                    "complex"
+                                ],
+                                "Causes": [
+                                    "food to be cook",
+                                    "food to be eat",
+                                    "make food"
+                                ],
+                                "CausesDesire": [
+                                    "cook food",
+                                    "make bread",
+                                    "cook"
+                                ]
+                            },
+                            "apple pie": {
+                                "SymbolOf": [
+                                    "life",
+                                    "good life",
+                                    "christmas"
+                                ],
+                                "HasProperty": [
+                                    "delicious",
+                                    "tasty",
+                                    "good"
+                                ],
+                                "Causes": [
+                                    "heartburn",
+                                    "eat it",
+                                    "indigestion"
+                                ],
+                                "CausesDesire": [
+                                    "eat apple",
+                                    "bake cake",
+                                    "eat dessert"
+                                ]
+                            }
+                        },
+                        "entity_linking": [
+                            {
+                                "confidences": [
+                                    8.0,
+                                    12.0,
+                                    16.0,
+                                    9.0,
+                                    18.0
+                                ],
+                                "dbpedia_types": [
+                                    [
+                                        "http://dbpedia.org/ontology/Band",
+                                        "http://dbpedia.org/ontology/Group",
+                                        "http://dbpedia.org/ontology/Organisation"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/MusicGenre",
+                                        "http://dbpedia.org/ontology/Organisation"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/Film",
+                                        "http://dbpedia.org/ontology/Work"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/Company",
+                                        "http://dbpedia.org/ontology/Organisation"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/resource/Manga",
+                                        "http://dbpedia.org/ontology/Manga",
+                                        "http://dbpedia.org/ontology/Comic",
+                                        "http://dbpedia.org/ontology/Work",
+                                        "http://dbpedia.org/ontology/WrittenWork"
+                                    ]
+                                ],
+                                "entity_ids": [
+                                    "Q4849329",
+                                    "Q274393",
+                                    "Q7715368",
+                                    "Q5709486",
+                                    "Q485480"
+                                ],
+                                "entity_substr": "bakery",
+                                "first_paragraphs": [
+                                    "Bakery were an Australian progressive hard rock band formed in 1970 in Perth. The original line-up was Hank Davis on drums (ex-Avengers, a New Zealand band), Mal Logan on keyboards (ex-Rebels), Eddie McDonald on bass guitar (Avengers), Peter Walker on guitar (Jelly Roll Bakers) and John Worrall on vocals and flute. They released two albums on Astor Records, Rock Mass for Love (August 1971) and Momento (August 1972) and had a Perth hit with \"No Dying in the Dark\". Bakery appeared at the Sunbury Pop Festival in January 1973 and disbanded in early 1975.",
+                                    "A bakery is an establishment that produces and sells flour-based food baked in an oven such as bread, cookies, cakes, donuts, pastries, and pies. Some retail bakeries are also categorized as caf\u00e9s, serving coffee and tea to customers who wish to consume the baked goods on the premises. Confectionery items are also made in most bakeries throughout the world.",
+                                    "The Bakery is a 1921 American short comedy film featuring Oliver Hardy that was directed by Larry Semon and Norman Taurog.",
+                                    "The Helms Bakery on the border of Los Angeles and Culver City, California, was a notable industrial bakery of Southern California that operated from 1931 to 1969. The buildings have now been adapted for reuse as retail shops, restaurants and the interior design trade showrooms and the complex is part of what is now called the Helms Bakery District.",
+                                    " is a Japanese manga series written and illustrated by Fumi Yoshinaga. The slice of life series follows the lives of four men who work in a p\u00e2tisserie. It was originally serialized in the manga magazine Wings from 1999 to 2001, and collected into four tank\u014dbon volumes published by Shinshokan; a spin-off d\u014djinshi (self-published manga) series has also been produced."
+                                ],
+                                "pages_titles": [
+                                    "Bakery (band)",
+                                    "Bakery",
+                                    "The Bakery",
+                                    "Helms Bakery",
+                                    "Antique Bakery"
+                                ],
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    0.5,
+                                    0.5
+                                ]
+                            },
+                            {
+                                "confidences": [
+                                    10.0,
+                                    9.0,
+                                    13.0,
+                                    12.0,
+                                    7.0
+                                ],
+                                "dbpedia_types": [
+                                    [
+                                        "http://dbpedia.org/ontology/Film",
+                                        "http://dbpedia.org/ontology/Work"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/ChemicalCompound"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/ChemicalCompound"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/Album",
+                                        "http://dbpedia.org/ontology/MusicalWork",
+                                        "http://dbpedia.org/ontology/Work"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/Band",
+                                        "http://dbpedia.org/ontology/Group",
+                                        "http://dbpedia.org/ontology/Organisation"
+                                    ]
+                                ],
+                                "entity_ids": [
+                                    "Q6033076",
+                                    "Q10675206",
+                                    "Q192355",
+                                    "Q6980540",
+                                    "Q7847431"
+                                ],
+                                "entity_substr": "ingredients",
+                                "first_paragraphs": [
+                                    "Ingredients: The Local Food Movement Takes Root is a 2009 documentary film about the shortcomings of Americas industrialized food system against a rising local food movement, whose proponents are shrinking the gap between farmland and dinner table. The film is directed by Robert Bates, produced by Brian Kimmel (The Kitchen Sessions with Charlie Trotter) and narrated by actress Bebe Neuwirth.",
+                                    "An ingredient is a substance that forms part of a mixture (in a general sense). For example, in cooking, recipes specify which ingredients are used to prepare a specific dish. Many commercial products contain secret ingredients that are purported to make them better than competing products. In the pharmaceutical industry, an active ingredient is that part of a formulation that yields the effect expected by the customer.",
+                                    "A raw material, also known as a feedstock, unprocessed material, or primary commodity, is a basic material that is used to produce goods, finished products, energy, or intermediate materials that are feedstock for future finished products. As feedstock, the term connotes these materials are bottleneck assets and are required to produce other products.",
+                                    "Natural Ingredients is the debut studio album by American alternative rock band Luscious Jackson. It was released on August 23, 1994 by Grand Royal and Capitol Records.",
+                                    "True Ingredients are a British Hip Hop band based in London, UK. The group is composed of Vocalists - Mr. Milk, Aina, Mireilla Sings, Angela, Keyboards - Fenna, Guitar/Bass - Millzy & Drums - Steve OGallagher. Their records also feature guest vocals from BluRum13, Natty, and Mr. Basista who occasionally perform with the band at their live shows. The band has played gigs all over the UK as well as in many other European countries alongside a number of high-profile artists such as DJ Vadim, Finley Quaye, Kele Le Roc, Jungle Brothers, Aquasky, Foreign Beggars, High Contrast, Bugz in the Attic, and The Gap Band who feature as the brass section on True Ingredients single Whos Next?. The band released their debut album Prepare & Assemble in the form of album sunglasses. They are the first artist to ever release an album in this format."
+                                ],
+                                "pages_titles": [
+                                    "Ingredients (film)",
+                                    "Ingredient",
+                                    "Raw material",
+                                    "Natural Ingredients",
+                                    "True Ingredients"
+                                ],
+                                "tokens_match_conf": [
+                                    1.0,
+                                    0.95,
+                                    0.95,
+                                    0.5,
+                                    0.5
+                                ]
+                            },
+                            {
+                                "confidences": [
+                                    9.0,
+                                    14.0,
+                                    9.0,
+                                    7.0,
+                                    8.0
+                                ],
+                                "dbpedia_types": [
+                                    [
+                                        "http://dbpedia.org/ontology/Food"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/TelevisionShow",
+                                        "http://dbpedia.org/ontology/Work"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/Album",
+                                        "http://dbpedia.org/ontology/MusicalWork",
+                                        "http://dbpedia.org/ontology/Work"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/Band",
+                                        "http://dbpedia.org/ontology/Group",
+                                        "http://dbpedia.org/ontology/Organisation"
+                                    ],
+                                    [
+                                        "http://dbpedia.org/ontology/Band",
+                                        "http://dbpedia.org/ontology/Group",
+                                        "http://dbpedia.org/ontology/Organisation"
+                                    ]
+                                ],
+                                "entity_ids": [
+                                    "Q1068034",
+                                    "Q4781212",
+                                    "Q4781211",
+                                    "Q4781213",
+                                    "Q5909749"
+                                ],
+                                "entity_substr": "apple pie",
+                                "first_paragraphs": [
+                                    "An apple pie is a pie in which the principal filling ingredient is apples. The earliest printed recipe is from England. Apple pie is often served with whipped cream, ice cream (\"apple pie \u00e0 la mode\"), or cheddar cheese. It is generally double-crusted, with pastry both above and below the filling; the upper crust may be solid or latticed (woven of crosswise strips). The bottom crust may be baked separately (\"blind\") to prevent it from getting soggy. Deep-dish apple pie often has a top crust only. Tarte Tatin is baked with the crust on top, but served with it on the bottom.",
+                                    "Apple Pie is an American sitcom that aired for only two episodes on ABC on September 23 and September 30, 1978.",
+                                    "Apple Pie is a 1993 album by the Australian indie rock band Nice.",
+                                    "Apple Pie are a Russian progressive rock band founded by Vartan Mkhitaryan in 2000. Their debut album, Crossroad, was released in 2007 by Russian rock label MALS.",
+                                    "Hot Apple Pie was an American country music band founded in 2002 by Brady Seals (lead vocals), Keith Horne (bass guitar), Trey Landry (drums), and Mark \"Sparky\" Matejka (guitar). Matjeka was replaced in 2006 by Kevin Ray. Seals was initially co-lead vocalist and keyboardist in the band Little Texas until 1994. Between then and 2002, he recorded three studio albums, including two for Warner Bros. Records. Signed to DreamWorks Records Nashville in 2005, Hot Apple Pie released its self-titled debut album that year. This album produced three chart singles on the Billboard Hot Country Songs charts, including the No. 26-peaking \"Hillbillies.\""
+                                ],
+                                "pages_titles": [
+                                    "Apple pie",
+                                    "Apple Pie (TV series)",
+                                    "Apple Pie (album)",
+                                    "Apple Pie (band)",
+                                    "Hot Apple Pie"
+                                ],
+                                "tokens_match_conf": [
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    1.0,
+                                    0.67
+                                ]
+                            }
+                        ],
+                        "fact_random": {
+                            "facts": [],
+                            "response": "what ingredients are in an apple pie?"
+                        },
+                        "wiki_parser": {
+                            "animals_skill_entities_info": {},
+                            "entities_info": {
+                                "Bakery": {
+                                    "conf": 8.0,
+                                    "entity_label": "Bakery",
+                                    "genre": [
+                                        [
+                                            "Q49451",
+                                            "progressive rock"
+                                        ]
+                                    ],
+                                    "inception": [
+                                        [
+                                            "\"+1970-01-01^^T\"",
+                                            "01 January 1970"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q4849329",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q2088357",
+                                            "musical ensemble"
+                                        ],
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ]
+                                },
+                                "Ingredients": {
+                                    "conf": 10.0,
+                                    "entity_label": "Ingredients",
+                                    "genre": [
+                                        [
+                                            "Q93204",
+                                            "documentary film"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q6033076",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+2009-01-01^^T\"",
+                                            "01 January 2009"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ]
+                                    ]
+                                },
+                                "apple pie": {
+                                    "conf": 9.0,
+                                    "entity_label": "apple pie",
+                                    "plain_entity": "Q1068034",
+                                    "pos": 0,
+                                    "subclass of": [
+                                        [
+                                            "Q182940",
+                                            "dessert"
+                                        ],
+                                        [
+                                            "Q26791887",
+                                            "sweet pie"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": []
+                                }
+                            },
+                            "topic_skill_entities_info": {
+                                "Apple Pie": {
+                                    "conf": 9.0,
+                                    "entity_label": "Apple Pie",
+                                    "genre": [
+                                        [
+                                            "Q183504",
+                                            "indie rock"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q482994",
+                                            "album"
+                                        ]
+                                    ],
+                                    "performer": [
+                                        [
+                                            "Q10600423",
+                                            "Nice"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q4781211",
+                                    "pos": 2,
+                                    "publication date": [
+                                        [
+                                            "\"+1993-01-01^^T\"",
+                                            "01 January 1993"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q106043376",
+                                            "music release type"
+                                        ],
+                                        [
+                                            "Q108346082",
+                                            "release group"
+                                        ],
+                                        [
+                                            "Q482994",
+                                            "album"
+                                        ]
+                                    ]
+                                },
+                                "Ingredients": {
+                                    "conf": 10.0,
+                                    "entity_label": "Ingredients",
+                                    "genre": [
+                                        [
+                                            "Q93204",
+                                            "documentary film"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q6033076",
+                                    "pos": 0,
+                                    "publication date": [
+                                        [
+                                            "\"+2009-01-01^^T\"",
+                                            "01 January 2009"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q10301427",
+                                            "moving image"
+                                        ],
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q20937557",
+                                            "series"
+                                        ],
+                                        [
+                                            "Q2431196",
+                                            "audiovisual work"
+                                        ],
+                                        [
+                                            "Q4502142",
+                                            "visual artwork"
+                                        ]
+                                    ]
+                                },
+                                "Natural Ingredients": {
+                                    "conf": 12.0,
+                                    "entity_label": "Natural Ingredients",
+                                    "genre": [
+                                        [
+                                            "Q438503",
+                                            "alternative hip hop"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q482994",
+                                            "album"
+                                        ]
+                                    ],
+                                    "performer": [
+                                        [
+                                            "Q1476516",
+                                            "Luscious Jackson"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q6980540",
+                                    "pos": 3,
+                                    "publication date": [
+                                        [
+                                            "\"+1994-01-01^^T\"",
+                                            "01 January 1994"
+                                        ]
+                                    ],
+                                    "token_conf": 0.5,
+                                    "types_2hop": [
+                                        [
+                                            "Q106043376",
+                                            "music release type"
+                                        ],
+                                        [
+                                            "Q108346082",
+                                            "release group"
+                                        ],
+                                        [
+                                            "Q482994",
+                                            "album"
+                                        ]
+                                    ]
+                                },
+                                "The Bakery": {
+                                    "conf": 16.0,
+                                    "entity_label": "The Bakery",
+                                    "genre": [
+                                        [
+                                            "Q226730",
+                                            "silent film"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q24862",
+                                            "short film"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q7715368",
+                                    "pos": 2,
+                                    "publication date": [
+                                        [
+                                            "\"+1921-01-01^^T\"",
+                                            "01 January 1921"
+                                        ]
+                                    ],
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q11424",
+                                            "film"
+                                        ],
+                                        [
+                                            "Q1437361",
+                                            "form of art"
+                                        ],
+                                        [
+                                            "Q24862",
+                                            "short film"
+                                        ],
+                                        [
+                                            "Q759853",
+                                            "film format"
+                                        ]
+                                    ]
+                                }
+                            },
+                            "utt_num": 2,
+                            "wiki_skill_entities_info": {
+                                "Apple Pie": {
+                                    "conf": 7.0,
+                                    "entity_label": "Apple Pie",
+                                    "genre": [
+                                        [
+                                            "Q217467",
+                                            "art rock"
+                                        ],
+                                        [
+                                            "Q49451",
+                                            "progressive rock"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q4781213",
+                                    "pos": 3,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q2088357",
+                                            "musical ensemble"
+                                        ],
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ]
+                                },
+                                "Bakery": {
+                                    "conf": 8.0,
+                                    "entity_label": "Bakery",
+                                    "genre": [
+                                        [
+                                            "Q49451",
+                                            "progressive rock"
+                                        ]
+                                    ],
+                                    "inception": [
+                                        [
+                                            "\"+1970-01-01^^T\"",
+                                            "01 January 1970"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q4849329",
+                                    "pos": 0,
+                                    "token_conf": 1.0,
+                                    "types_2hop": [
+                                        [
+                                            "Q2088357",
+                                            "musical ensemble"
+                                        ],
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ]
+                                },
+                                "True Ingredients": {
+                                    "conf": 7.0,
+                                    "entity_label": "True Ingredients",
+                                    "genre": [
+                                        [
+                                            "Q11401",
+                                            "hip hop music"
+                                        ]
+                                    ],
+                                    "instance of": [
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ],
+                                    "plain_entity": "Q7847431",
+                                    "pos": 4,
+                                    "token_conf": 0.5,
+                                    "types_2hop": [
+                                        [
+                                            "Q2088357",
+                                            "musical ensemble"
+                                        ],
+                                        [
+                                            "Q215380",
+                                            "musical group"
+                                        ]
+                                    ]
+                                }
+                            }
+                        },
+                        "kbqa": {
+                            "answer": "Not Found",
+                            "confidence": 0.0,
+                            "qa_system": "kbqa"
+                        },
+                        "fact_retrieval": {
+                            "facts": [
+                                "operations in areas of high apple production, in the form of unclarified apple cider. Apple juice is one of the most common fruit juices in the world, with world production led by China, Poland, the United States, and Germany. Apples used for apple juice are usually harvested between September and mid-November in the Northern Hemisphere and between February to mid April in the Southern Hemisphere. A common cultivar used for apple juice is the McIntosh. Approximately two medium McIntosh apples produce around of juice. After the apples are picked, they are washed and transported to the processing facility. The apples",
+                                "New England Colonies of the northeastern United States. From 1900 to the 1950s, recipes for applesauce cake frequently appeared in American cookbooks. In the United States, National Applesauce Cake Day occurs annually on June 6. Applesauce cake is a dessert cake prepared using apple sauce, flour and sugar as main ingredients. Store-bought or homemade applesauce may be used in its preparation. Additional ingredients include eggs, butter, margarine or oil, raisins and plumped raisins, dates, chopped apple, chopped nuts (such as walnuts and pecans), cocoa powder, and spices such as cinnamon, cloves, nutmeg and allspice. Some versions include dried or fresh,",
+                                "Candy apple Toffee apples, also known as candy apples in North America, are whole apples covered in a hard toffee or sugar candy coating, with a stick inserted as a handle. These are a common treat at autumn festivals in Western culture in the Northern Hemisphere, such as Halloween and Guy Fawkes Night because these festivals fall in the wake of the annual apple harvest. Although toffee apples and caramel apples may seem similar, they are made using distinctly different processes. According to one source, American William W. Kolb invented the red candy apple. Kolb, a veteran Newark candy-maker, produced"
+                            ],
+                            "topic_facts": []
+                        }
+                    },
+                    "user": {
+                        "id": "64219db26b00f614a28457aa",
+                        "user_external_id": "jniouho",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "unknown",
+                            "entities": {
+                                "ciabatta": {
+                                    "bot_attitude": null,
+                                    "bot_encounters": [],
+                                    "human_attitude": "like",
+                                    "human_encounters": [
+                                        {
+                                            "full_name": "ciabatta",
+                                            "human_utterance_index": 0,
+                                            "next_skill_name": "dff_bakery_skill",
+                                            "previous_skill_name": "pre_start"
+                                        }
+                                    ],
+                                    "mentioned_by_bot": false,
+                                    "name": "ciabatta"
+                                }
+                            },
+                            "dff_bakery_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "10081e6a-0e7e-4e41-beeb-03e315ade924",
+                                    "labels": {
+                                        "0": [
+                                            "bakery_general",
+                                            "bakery_start"
+                                        ]
+                                    },
+                                    "misc": {
+                                        "slots": {
+                                            "topic": "science",
+                                            "user_name": "Gordon Freeman"
+                                        }
+                                    },
+                                    "requests": {
+                                        "0": "let's talk about ciabatta."
+                                    },
+                                    "responses": {
+                                        "0": "Our bakery is happy to help! What would you like to know?"
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "bakery_general",
+                                        "bakery_start"
+                                    ]
+                                },
+                                "previous_human_utter_index": 0,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
                     }
                 }
             ],
-            "bot_utterances": []
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a Dream Socialbot! Our bakery is happy to help! What would you like to know?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Hi, this is a Dream Socialbot! Our bakery is happy to help! What would you like to know?",
+                            "segments": [
+                                "Hi, this is a Dream Socialbot!",
+                                "Our bakery is happy to help!",
+                                "What would you like to know?"
+                            ]
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 4,
+                                    "text": "a Dream Socialbot",
+                                    "type": "ORG"
+                                }
+                            ],
+                            [],
+                            []
+                        ],
+                        "sentrewrite": {
+                            "clusters": [],
+                            "modified_sents": [
+                                "let's talk about ciabatta.",
+                                "Hi, this is a Dream Socialbot! Our bakery is happy to help! What would you like to know?"
+                            ]
+                        },
+                        "property_extraction": [
+                            {
+                                "triplet": {}
+                            }
+                        ]
+                    },
+                    "active_skill": "dff_bakery_skill",
+                    "user": {
+                        "id": "64bf1bd0987a4fbfbd7375ad4d17189e",
+                        "persona": {},
+                        "attributes": {},
+                        "user_type": "bot"
+                    }
+                }
+            ]
         }
     ],
     "dff_bakery_skill_state_batch": [
-        {}
+        {
+            "context": {
+                "actor_state": {},
+                "id": "10081e6a-0e7e-4e41-beeb-03e315ade924",
+                "labels": {
+                    "0": [
+                        "bakery_general",
+                        "bakery_start"
+                    ]
+                },
+                "misc": {
+                    "slots": {
+                        "topic": "science",
+                        "user_name": "Gordon Freeman"
+                    }
+                },
+                "requests": {
+                    "0": "let's talk about ciabatta."
+                },
+                "responses": {
+                    "0": "Our bakery is happy to help! What would you like to know?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "bakery_general",
+                    "bakery_start"
+                ]
+            },
+            "previous_human_utter_index": 0,
+            "shared_memory": {}
+        }
     ],
     "dff_shared_state_batch": [
         {
-            "cross_states": {},
-            "cross_links": {}
+            "cross_links": {},
+            "cross_states": {}
         }
     ],
     "entities_batch": [
-        {}
+        {
+            "ciabatta": {
+                "bot_attitude": null,
+                "bot_encounters": [],
+                "human_attitude": "like",
+                "human_encounters": [
+                    {
+                        "full_name": "ciabatta",
+                        "human_utterance_index": 0,
+                        "next_skill_name": "dff_bakery_skill",
+                        "previous_skill_name": "pre_start"
+                    }
+                ],
+                "mentioned_by_bot": false,
+                "name": "ciabatta"
+            }
+        }
     ],
     "used_links_batch": [
         {}
@@ -236,6 +1639,5 @@
     ],
     "clarification_request_flag_batch": [
         false
-    ],
-    "random_seed": 2718
+    ]
 }

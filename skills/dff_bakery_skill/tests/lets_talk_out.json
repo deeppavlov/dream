@@ -1,142 +1,63 @@
 [
     [
-        [
-            "Hi, how are you?",
-            "Hi, what's up?"
-        ],
-        [
-            1.0,
-            1.0
-        ],
-        [
-            {
-                "dff_bakery_skill_state": {
-                    "shared_memory": {},
-                    "previous_human_utter_index": 0,
-                    "history": {
+        "Anyway, let's talk about something else!",
+        0.85,
+        {
+            "dff_bakery_skill_state": {
+                "shared_memory": {},
+                "previous_human_utter_index": 1,
+                "history": {
+                    "0": [
+                        "bakery_general",
+                        "bakery_start"
+                    ],
+                    "1": [
+                        "global_flow",
+                        "fallback"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "10081e6a-0e7e-4e41-beeb-03e315ade924",
+                    "labels": {
                         "0": [
-                            "greeting",
-                            "node1"
+                            "bakery_general",
+                            "bakery_start"
+                        ],
+                        "1": [
+                            "global_flow",
+                            "fallback"
                         ]
                     },
-                    "current_turn_dff_suspended": false,
-                    "context": {
-                        "id": "15b477a2-562a-416f-b1ea-057e5722bb4f",
-                        "labels": {
-                            "0": [
-                                "greeting",
-                                "node1"
-                            ]
-                        },
-                        "requests": {
-                            "0": "hi."
-                        },
-                        "responses": {
-                            "0": [
-                                [
-                                    "Hi, how are you?",
-                                    0.0,
-                                    {},
-                                    {},
-                                    {}
-                                ],
-                                [
-                                    "Hi, what's up?",
-                                    0.0,
-                                    {},
-                                    {},
-                                    {}
-                                ]
-                            ]
-                        },
-                        "misc": {
-                            "slots": {
-                                "topic": "science",
-                                "user_name": "Gordon Freeman"
-                            }
-                        },
-                        "validation": false,
-                        "actor_state": {}
-                    }
-                },
-                "dff_shared_state": {
-                    "cross_states": {},
-                    "cross_links": {}
-                },
-                "used_links": {},
-                "age_group": "unknown",
-                "disliked_skills": []
-            },
-            {
-                "dff_bakery_skill_state": {
-                    "shared_memory": {},
-                    "previous_human_utter_index": 0,
-                    "history": {
-                        "0": [
-                            "greeting",
-                            "node1"
-                        ]
+                    "requests": {
+                        "0": "let's talk about ciabatta.",
+                        "1": "what ingredients are in an apple pie?"
                     },
-                    "current_turn_dff_suspended": false,
-                    "context": {
-                        "id": "15b477a2-562a-416f-b1ea-057e5722bb4f",
-                        "labels": {
-                            "0": [
-                                "greeting",
-                                "node1"
-                            ]
-                        },
-                        "requests": {
-                            "0": "hi."
-                        },
-                        "responses": {
-                            "0": [
-                                [
-                                    "Hi, how are you?",
-                                    0.0,
-                                    {},
-                                    {},
-                                    {}
-                                ],
-                                [
-                                    "Hi, what's up?",
-                                    0.0,
-                                    {},
-                                    {},
-                                    {}
-                                ]
-                            ]
-                        },
-                        "misc": {
-                            "slots": {
-                                "topic": "science",
-                                "user_name": "Gordon Freeman"
-                            }
-                        },
-                        "validation": false,
-                        "actor_state": {}
-                    }
-                },
-                "dff_shared_state": {
-                    "cross_states": {},
-                    "cross_links": {}
-                },
-                "used_links": {},
-                "age_group": "unknown",
-                "disliked_skills": []
-            }
-        ],
-        [
-            {},
-            {}
-        ],
-        [
-            {
-                "can_continue": "can"
+                    "responses": {
+                        "0": "Our bakery is happy to help! What would you like to know?",
+                        "1": "Anyway, let's talk about something else!"
+                    },
+                    "misc": {
+                        "slots": {
+                            "topic": "science",
+                            "user_name": "Gordon Freeman"
+                        }
+                    },
+                    "validation": false,
+                    "actor_state": {}
+                }
             },
-            {
-                "can_continue": "can"
-            }
-        ]
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "unknown",
+            "disliked_skills": []
+        },
+        {},
+        {
+            "can_continue": "can"
+        }
     ]
 ]
