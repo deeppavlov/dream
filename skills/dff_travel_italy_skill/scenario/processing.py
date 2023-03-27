@@ -2,11 +2,9 @@ import functools
 import logging
 import random
 from typing import Any, Callable, Optional, Iterator
-from deeppavlov_kg import TerminusdbKnowledgeGraph
-from scenario.config import KG_DB_NAME, KG_TEAM_NAME, KG_PASSWORD, KG_SERVER
 
 from common.dff.integration.processing import save_slots_to_ctx
-from scenario.condition import get_current_user_id
+from scenario.condition import get_current_user_id, graph
 from df_engine.core import Context, Actor
 
 logger = logging.getLogger(__name__)
@@ -46,7 +44,6 @@ def fill_responses_by_slots_from_graph():
         processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
         user_id = get_current_user_id(ctx, actor)
         current_user_id = "User/" + user_id
-        graph = TerminusdbKnowledgeGraph(team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD)
         user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
         entity = 'FAVORITE_FOOD'
         entity_type = entity + '/AbstractFood'
