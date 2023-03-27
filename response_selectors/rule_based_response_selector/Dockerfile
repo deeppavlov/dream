@@ -7,6 +7,8 @@ RUN pip install -r /src/requirements.txt
 
 ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
+ARG BADLIST_URL
+ENV BADLIST_URL ${BADLIST_URL}
 
 COPY . /src/
 WORKDIR /src

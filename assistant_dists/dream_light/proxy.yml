@@ -1,13 +1,4 @@
 services:
-  convers-evaluator-annotator:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8004
-      - PORT=8004
-
   dff-program-y-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -17,33 +8,15 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8008
       - PORT=8008
 
-  sentseg:
+  spelling-preprocessing:
     command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8011
-      - PORT=8011
-
-  sentrewrite:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8017
-      - PORT=8017
-
-  intent-catcher:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8014
-      - PORT=8014
-
+      - PROXY_PASS=dream.deeppavlov.ai:8074
+      - PORT=8074
+    
   badlisted-words:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -53,114 +26,14 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8018
       - PORT=8018
 
-  ner:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8021
-      - PORT=8021
-
-  asr:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8031
-      - PORT=8031
-
-  misheard-asr:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8033
-      - PORT=8033
-
-  comet-atomic:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8053
-      - PORT=8053
-
-  comet-conceptnet:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8065
-      - PORT=8065
-
-  news-api-annotator:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8112
-      - PORT=8112
-
-  text-qa:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8078
-      - PORT=8078
-
-  kbqa:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8072
-      - PORT=8072
-
-  spelling-preprocessing:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8074
-      - PORT=8074
-
-  entity-linking:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8075
-      - PORT=8075
-
-  wiki-parser:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8077
-      - PORT=8077
-
-
-  knowledge-grounding:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8083
-      - PORT=8083
+  # spelling-preprocessing:
+  #   command: ["nginx", "-g", "daemon off;"]
+  #   build:
+  #     context: dp/proxy/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PROXY_PASS=dream.deeppavlov.ai:8074
+  #     - PORT=8074
 
   dff-friendship-skill:
     command: ["nginx", "-g", "daemon off;"]
@@ -171,132 +44,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8086
       - PORT=8086
 
-  entity-storer:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8089
-      - PORT=8089
-
-  midas-classification:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8090
-      - PORT=8090
-
-  combined-classification:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8087
-      - PORT=8087
-
-  fact-retrieval:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8100
-      - PORT=8100
-
-  topic-recommendation:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8113
-      - PORT=8113
-
-  user-persona-extractor:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8114
-      - PORT=8114
-
-  wiki-facts:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8116
-      - PORT=8116
-
-  entity-detection:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8103
-      - PORT=8103
-
-  fact-random:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8119
-      - PORT=8119
-
-  spacy-nounphrases:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8006
-      - PORT=8006
-
-  convers-evaluation-selector:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8009
-      - PORT=8009
-
-  midas-predictor:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8121
-      - PORT=8121
-
-  sentence-ranker:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8128
-      - PORT=8128
-
-  relative-persona-extractor:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8133
-      - PORT=8133
-
   dff-template-skill:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -305,14 +52,5 @@ services:
     environment:
       - PROXY_PASS=dream.deeppavlov.ai:8120
       - PORT=8120
-
-  rake-keywords:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8007
-      - PORT=8007
 
 version: '3.7'
