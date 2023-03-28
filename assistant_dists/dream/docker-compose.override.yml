@@ -1305,15 +1305,15 @@ services:
     env_file: [.env]
     build:
       context: ./annotators/ConveRTBasedNLI/
-    command: flask run -h 0.0.0.0 -p 8137
+    command: flask run -h 0.0.0.0 -p 8150
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 1.5G
         reservations:
-          memory: 1G
+          memory: 1.5G
 
   dff-template-skill:
     env_file: [ .env ]
