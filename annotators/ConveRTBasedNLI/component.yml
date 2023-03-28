@@ -1,0 +1,16 @@
+convert-based-nli:
+  name: convert-based-nli
+  display_name: ConveRT based NLI
+  container_name: convert-based-nli
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: defines wheather 2 sentences are correlated as entailment, neutral or contradiction
+  ram_usage: 1.5G
+  gpu_usage: null
+  port: 8150
+  endpoints:
+  - group: candidate_annotators
+    endpoint: batch_model
+  date_created: '2023-03-28T14:22:32'
