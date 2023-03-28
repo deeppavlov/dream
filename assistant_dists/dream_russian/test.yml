@@ -10,44 +10,54 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  dff-program-y-skill:
-  convers-evaluation-selector:
-  dff-intent-responder-skill:
-  dff-generative-skill:
-  intent-catcher:
+  dff-program-y-ru-skill:
+  convers-evaluation-selector-ru:
+  dff-intent-responder-ru-skill:
+  dff-generative-ru-skill:
+  intent-catcher-ru:
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  badlisted-words:
-  toxic-classification:
+  badlisted-words-ru:
+  toxic-classification-ru:
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  ner:
+  ner-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  personal-info-skill:
-  entity-linking:
+  personal-info-ru-skill:
+  entity-linking-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-  wiki-parser:
+  wiki-parser-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-  spelling-preprocessing:
-  dff-friendship-skill:
-  entity-detection:
+  spelling-preprocessing-ru:
+  dff-friendship-ru-skill:
+  entity-detection-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-  sentseg:
+  sentseg-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  dialogpt:
+  dialogpt-ru:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  dialogrpt:
+  dialogrpt-ru:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   dff-template-skill:
+  fact-retrieval-ru:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  text-qa-ru:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
 version: '3.7'

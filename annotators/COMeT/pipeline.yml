@@ -1,0 +1,13 @@
+comet-conceptnet:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://comet-conceptnet:8065/comet_annotator
+  dialog_formatter: state_formatters.dp_formatters:last_human_utt_nounphrases
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.spelling_preprocessing
+  - annotators.entity_detection
+  - annotators.spacy_nounphrases
+  state_manager_method: add_annotation

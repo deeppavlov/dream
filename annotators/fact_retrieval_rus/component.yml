@@ -1,0 +1,28 @@
+fact-retrieval-ru:
+  name: fact_retrieval
+  display_name: Fact Retrieval
+  container_name: fact-retrieval-ru
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: "\u0410\u043D\u043D\u043E\u0442\u0430\u0442\u043E\u0440 \u0438\u0437\
+    \u0432\u043B\u0435\u0447\u0435\u043D\u0438\u044F \u043F\u0430\u0440\u0430\u0433\
+    \u0440\u0430\u0444\u043E\u0432 \u0412\u0438\u043A\u0438\u043F\u0435\u0434\u0438\
+    \u0438, \u0440\u0435\u043B\u0435\u0432\u0430\u043D\u0442\u043D\u044B\u0445 \u0438\
+    \u0441\u0442\u043E\u0440\u0438\u0438 \u0434\u0438\u0430\u043B\u043E\u0433\u0430\
+    ."
+  ram_usage: 6.5G
+  gpu_usage: 1G
+  port: 8130
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  build_args:
+    CONFIG: fact_retrieval_rus.json
+    COMMIT: c8264bf82eaa3ed138395ab68f71d47a4175f2fc
+    TOP_N: 20
+    SERVICE_PORT: 8130
+    SRC_DIR: annotators/fact_retrieval_rus
+    SERVICE_NAME: fact_retrieval
+  date_created: '2023-03-16T09:45:32'

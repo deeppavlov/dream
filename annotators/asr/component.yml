@@ -1,0 +1,20 @@
+asr:
+  name: asr
+  display_name: ASR
+  container_name: asr
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: calculates overall ASR confidence for a given utterance and grades
+    it as either _very low_, _low_, _medium_, or _high_ (for Amazon markup)
+  ram_usage: 40M
+  gpu_usage: null
+  port: 8031
+  endpoints:
+  - group: annotators
+    endpoint: asr_check
+  build_args:
+    SERVICE_PORT: '8031'
+    SERVICE_NAME: asr
+  date_created: '2023-03-16T09:45:32'

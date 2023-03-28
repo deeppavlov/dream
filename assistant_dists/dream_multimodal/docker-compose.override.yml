@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
@@ -120,6 +120,9 @@ services:
   badlisted-words:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8018
+        SERVICE_NAME: badlisted_words
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
@@ -134,6 +137,9 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
@@ -141,9 +147,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   dialogpt:
     env_file: [ .env ]
@@ -173,6 +179,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
         PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128

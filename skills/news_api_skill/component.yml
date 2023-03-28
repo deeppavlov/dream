@@ -1,0 +1,20 @@
+news-api-skill:
+  name: news_api_skill
+  display_name: News API Skill
+  container_name: news-api-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: presents the top-rated latest news about entities or topics using the
+    GNews API
+  ram_usage: 60M
+  gpu_usage: null
+  port: 8066
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8066
+    SERVICE_NAME: news_api_skill
+  date_created: '2023-03-16T09:45:32'

@@ -5,67 +5,68 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  dff-program-y-skill:
+  dff-program-y-ru-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
       - "./common:/src/common"
     ports:
       - 8008:8008
-  convers-evaluation-selector:
+  convers-evaluation-selector-ru:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
       - "./common:/src/common"
     ports:
       - 8009:8009
-  dff-intent-responder-skill:
+  dff-intent-responder-ru-skill:
     volumes:
       - "./skills/dff_intent_responder_skill:/src"
       - "./common:/src/common"
     ports:
       - 8012:8012
-  sentseg:
+  sentseg-ru:
     volumes:
       - "./annotators/sentseg_ru:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8011:8011
-  intent-catcher:
+  intent-catcher-ru:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8014:8014
-  badlisted-words:
+  badlisted-words-ru:
     volumes:
       - "./annotators/BadlistedWordsDetector_ru:/src"
       - "./common:/src/common"
     ports:
       - 8018:8018
-  toxic-classification:
+  toxic-classification-ru:
     volumes:
       - "./annotators/toxic_classification_ru:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8126:8126
-  ner:
+  ner-ru:
     volumes:
       - './annotators/NER_deeppavlov:/src'
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
-  personal-info-skill:
+  personal-info-ru-skill:
     volumes:
       - "./skills/personal_info_skill:/src"
       - "./common:/src/common"
     ports:
       - 8030:8030
-  entity-linking:
+  entity-linking-ru:
     volumes:
       - "./annotators/entity_linking_rus:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8075:8075
-  wiki-parser:
+  wiki-parser-ru:
     volumes:
       - "./annotators/wiki_parser:/src"
       - "./common:/src/common"
@@ -77,42 +78,42 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  spelling-preprocessing:
+  spelling-preprocessing-ru:
     volumes:
       - "./annotators/spelling_preprocessing_dp:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8074:8074
-  spacy-annotator:
+  spacy-annotator-ru:
     volumes:
       - "./annotators/spacy_annotator:/src"
     ports:
-      - 8125:8125
-  dff-friendship-skill:
+      - 8129:8129
+  dff-friendship-ru-skill:
     volumes:
       - "./skills/dff_friendship_skill:/src"
       - "./common:/src/common"
     ports:
       - 8086:8086
-  entity-detection:
+  entity-detection-ru:
     volumes:
       - "./annotators/entity_detection_rus:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8103:8103
-  dialogpt:
+  dialogpt-ru:
     volumes:
       - "./services/dialogpt_RU:/src"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8091:8091
-  dff-generative-skill:
+      - 8125:8125
+  dff-generative-ru-skill:
     volumes:
       - "./skills/dff_generative_skill:/src"
       - "./common:/src/common"
     ports:
       - 8092:8092
-  dialogrpt:
+  dialogrpt-ru:
     volumes:
       - "./services/dialogrpt_ru:/src"
       - "~/.deeppavlov/cache:/root/.cache"
@@ -124,4 +125,16 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  fact-retrieval-ru:
+    volumes:
+      - "./annotators/fact_retrieval_rus:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8130:8130
+  text-qa-ru:
+    volumes:
+      - "./services/text_qa:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8078:8078
 version: "3.7"

@@ -120,21 +120,24 @@ def get_result(request):
             for sent in utterance_sents:
                 samples.append(sent)
                 dialog_ids.append(i)
+        if len(samples):
+            tokens_batch, tags_batch = ner_model(samples)
+            logger.info(f"NER model predictions: tokens: {tokens_batch}, tags: {tags_batch}")
+            good_preds = convert_prediction(tokens_batch, tags_batch)
+            dialog_ids = np.array(dialog_ids)
 
-        tokens_batch, tags_batch = ner_model(samples)
-        logger.info(f"NER model predictions: tokens: {tokens_batch}, tags: {tags_batch}")
-        good_preds = convert_prediction(tokens_batch, tags_batch)
-        dialog_ids = np.array(dialog_ids)
-
-        ret = []
-        for i, utterance_sents in enumerate(last_utterances):
-            curr_ids = np.where(dialog_ids == i)[0]
-            curr_preds = [good_preds[curr_id] for curr_id in curr_ids]
-            ret.append(curr_preds)
+            ret = []
+            for i, utterance_sents in enumerate(last_utterances):
+                curr_ids = np.where(dialog_ids == i)[0]
+                curr_preds = [good_preds[curr_id] for curr_id in curr_ids]
+                ret.append(curr_preds)
+        else:
+            logger.info("NER empty input")
+            ret = [[[]]] * len(last_utterances)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        ret = [[]] * len(last_utterances)
+        ret = [[[]]] * len(last_utterances)
 
     logger.info(f"NER output: {ret}")
     total_time = time.time() - st_time

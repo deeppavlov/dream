@@ -1,0 +1,55 @@
+convers-evaluation-no-scripts-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://convers-evaluation-no-scripts-selector:8009/respond
+  dialog_formatter: state_formatters.dp_formatters:full_history_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - candidate_annotators
+  state_manager_method: add_bot_utterance
+scripts-priority-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://scripts-priority-selector:8009/respond
+  dialog_formatter: state_formatters.dp_formatters:full_history_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - candidate_annotators
+  state_manager_method: add_bot_utterance
+convers-evaluation-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://convers-evaluation-selector:8009/respond
+  dialog_formatter: state_formatters.dp_formatters:full_history_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - candidate_annotators
+  state_manager_method: add_bot_utterance
+convers-evaluation-selector-ru:
+- group: response_selectors
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://convers-evaluation-selector-ru:8009/respond
+  dialog_formatter: state_formatters.dp_formatters:full_history_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - candidate_annotators
+  state_manager_method: add_bot_utterance
+no-restrictions-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://no-restrictions-selector:8009/respond
+  dialog_formatter: state_formatters.dp_formatters:full_history_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - candidate_annotators
+  state_manager_method: add_bot_utterance

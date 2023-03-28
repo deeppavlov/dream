@@ -137,10 +137,11 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in dff-program-y-skill intent-catcher convers-evaluation-selector personal-info-skill \
-                     entity-linking wiki-parser badlisted-words spelling-preprocessing sentseg \
-                     dff-friendship-skill dff-intent-responder-skill entity-detection dialogpt dff-generative-skill \
-                     dialogrpt spacy-annotator; do
+    for container in dff-program-y-ru-skill intent-catcher-ru convers-evaluation-selector-ru personal-info-ru-skill \
+                     entity-linking-ru wiki-parser-ru badlisted-words-ru spelling-preprocessing-ru sentseg-ru \
+                     dff-friendship-ru-skill dff-intent-responder-ru-skill entity-detection-ru dialogpt-ru \
+                     dff-generative-ru-skill dialogrpt-ru spacy-annotator-ru toxic-classification-ru \
+                     text-qa-ru fact-retrieval-ru; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh

@@ -21,7 +21,7 @@
       ],
       "pipe": [
         {
-          "class_name": "torch_transformers_preprocessor:TorchSquadTransformersPreprocessor",
+          "class_name": "torch_squad_transformers_preprocessor",
           "vocab_file": "{TRANSFORMER}",
           "do_lower_case": "{LOWERCASE}",
           "max_seq_length": 350,
@@ -37,7 +37,7 @@
           ]
         },
         {
-          "class_name": "squad_preprocessor:SquadBertMappingPreprocessor",
+          "class_name": "squad_bert_mapping",
           "do_lower_case": "{LOWERCASE}",
           "in": [
             "split_context",
@@ -50,7 +50,7 @@
           ]
         },
         {
-          "class_name": "squad_preprocessor:SquadBertAnsPreprocessor",
+          "class_name": "squad_bert_ans_preprocessor",
           "do_lower_case": "{LOWERCASE}",
           "in": [
             "ans_raw",
@@ -98,7 +98,7 @@
           ]
         },
         {
-          "class_name": "squad_preprocessor:SquadBertAnsPostprocessor",
+          "class_name": "squad_bert_ans_postprocessor",
           "in": [
             "ans_start_predicted",
             "ans_end_predicted",

@@ -30,12 +30,7 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
     last_utterance = dialog["human_utterances"][-1]["annotations"].get(
         "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
     )
-    return [
-        {
-            "last_utterance_batch": [last_utterance],
-            "human_utterance_history_batch": [history],
-        }
-    ]
+    return [{"last_utterance_batch": [last_utterance], "human_utterance_history_batch": [history]}]
 
 
 def cobot_qa_formatter_service(payload: List):
@@ -240,6 +235,35 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
     return [{"sentences": context}]
+
+
+def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [uttr["text"] for uttr in dialog["utterances"][-2:]]
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    named_entities = dialog["human_utterances"][-1]["annotations"].get("ner", [{}])
+    return [
+        {
+            "utterances": [dialog_history],
+            "entities_with_labels": [entities_with_labels],
+            "named_entities": [named_entities],
+            "entity_info": [entity_info_list],
+        }
+    ]
+
+
+def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    if dialog["bot_utterances"]:
+        dialog_history = [dialog["bot_utterances"][-1]["text"]]
+    else:
+        dialog_history = [""]
+    return [
+        {
+            "utterances": [dialog_history],
+        }
+    ]
 
 
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
@@ -505,6 +529,10 @@ def persona_bot_formatter(dialog: Dict):
     ]
 
 
+def full_dialog(dialog: Dict):
+    return [{"dialogs": [dialog]}]
+
+
 def full_history_dialog(dialog: Dict):
     """
     Used ONLY by: response selector
@@ -531,6 +559,10 @@ def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="modified_sents")
     return [{"dialogs": [dialog]}]
+
+
+def base_skill_formatter(payload: Dict):
+    return [{"text": payload[0], "confidence": payload[1]}]
 
 
 def skill_with_attributes_formatter_service(payload: List):
@@ -662,6 +694,12 @@ def el_formatter_dialog(dialog: Dict):
                 entity_tags_list.append([[entity["label"].lower(), 1.0]])
             else:
                 entity_tags_list.append([["misc", 1.0]])
+    triplets = dialog["human_utterances"][-1]["annotations"].get("property_extraction", [{}])
+    for triplet in triplets:
+        object_entity_substr = triplet.get("object", "")
+        if object_entity_substr and object_entity_substr not in entity_substr_list:
+            entity_substr_list.append(object_entity_substr)
+            entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
@@ -752,6 +790,30 @@ def fact_retrieval_formatter_dialog(dialog: Dict):
             "entity_pages": [entity_pages_list],
             "entity_ids": [entity_ids_list],
             "entity_pages_titles": [entity_pages_titles_list],
+        }
+    ]
+
+
+def fact_retrieval_rus_formatter_dialog(dialog: Dict):
+    # Used by: odqa annotator
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-2:]])]
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list, entity_tags_list, entity_pages_list = [], [], []
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+            entity_tags_list.append(entity_info["entity_tags"])
+            entity_pages_list.append(entity_info["entity_pages"])
+    return [
+        {
+            "dialog_history": [dialog_history],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "entity_pages": [entity_pages_list],
         }
     ]
 
@@ -945,6 +1007,22 @@ def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
 
 
+def dff_ai_faq_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_ai_faq_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_da_costa_clothes_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_da_costa_clothes_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
 def dff_dream_persona_prompted_skill_formatter(dialog):
     return utils.dff_formatter(
         dialog,
@@ -953,9 +1031,60 @@ def dff_dream_persona_prompted_skill_formatter(dialog):
     )
 
 
+def dff_empathetic_marketing_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_empathetic_marketing_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_fairytale_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_fairytale_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_nutrition_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_nutrition_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_rhodes_coaching_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_rhodes_coaching_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_deepy_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_deepy_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
 def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
-        dialog, skill_name, types_utterances=["human_utterances", "bot_utterances", "utterances"]
+        dialog,
+        skill_name,
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
+    return utils.dff_formatter(
+        dialog,
+        skill_name,
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 

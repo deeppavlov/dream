@@ -1,0 +1,11 @@
+emotion-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://emotion-skill:8049/respond
+  dialog_formatter: state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog_emotion_skill
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

@@ -3,12 +3,12 @@
         "sentseg": {
             "protocol": "http",
             "timeout": 1.5,
-            "url": "http://sentseg:8011/sentseg"
+            "url": "http://sentseg-ru:8011/sentseg"
         },
         "ner": {
             "protocol": "http",
             "timeout": 1.5,
-            "url": "http://ner:8021/ner"
+            "url": "http://ner-ru:8021/ner"
         }
     },
     "services": {
@@ -16,13 +16,13 @@
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                "response_text": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                        "punct_sent": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
                         "segments": [
-                            "Извини, что-то пошло не так в моем мозгу.",
-                            "Пожалуйста, повтори предыдущую реплику."
+                            "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443.",
+                            "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443."
                         ]
                     },
                     "ner": [
@@ -33,19 +33,24 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "last_chance"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/last_chance_service",
+                "container": "agent"
+            }
         },
         "timeout_service": {
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                "response_text": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                        "punct_sent": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
                         "segments": [
-                            "Извини, что-то пошло не так в моем мозгу.",
-                            "Пожалуйста, повтори предыдущую реплику."
+                            "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443.",
+                            "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443."
                         ]
                     },
                     "ner": [
@@ -56,7 +61,263 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "timeout"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/timeout_service",
+                "container": "agent"
+            }
+        },
+        "annotators": {
+            "spelling_preprocessing": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://spelling-preprocessing-ru:8074/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/spelling_preprocessing_dp",
+                    "container": "spelling-preprocessing-ru",
+                    "endpoint": "respond"
+                }
+            },
+            "spacy_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://spacy-annotator-ru:8129/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/spacy_annotator",
+                    "container": "spacy-annotator-ru",
+                    "endpoint": "respond"
+                }
+            },
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg-ru:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/sentseg_ru",
+                    "container": "sentseg-ru",
+                    "endpoint": "sentseg"
+                }
+            },
+            "badlisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://badlisted-words-ru:8018/badlisted_words"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_and_tokenized_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.spacy_annotator"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/BadlistedWordsDetector_ru",
+                    "container": "badlisted-words-ru",
+                    "endpoint": "badlisted_words"
+                }
+            },
+            "toxic_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://toxic-classification-ru:8126/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/toxic_classification_ru",
+                    "container": "toxic-classification-ru",
+                    "endpoint": "respond"
+                }
+            },
+            "intent_catcher": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://intent-catcher-ru:8014/detect"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/IntentCatcherTransformers",
+                    "container": "intent-catcher-ru",
+                    "endpoint": "detect"
+                }
+            },
+            "ner": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://ner-ru:8021/ner"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/NER_deeppavlov",
+                    "container": "ner-ru",
+                    "endpoint": "ner"
+                }
+            },
+            "entity_detection": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-detection-ru:8103/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/entity_detection_rus",
+                    "container": "entity-detection-ru",
+                    "endpoint": "respond"
+                }
+            },
+            "entity_linking": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-linking-ru:8075/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.ner",
+                    "annotators.entity_detection"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/entity_linking_rus",
+                    "container": "entity-linking-ru",
+                    "endpoint": "model"
+                }
+            },
+            "fact_retrieval": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://fact-retrieval-ru:8130/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_rus_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.entity_linking"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/fact_retrieval_rus",
+                    "container": "fact-retrieval-ru",
+                    "endpoint": "respond"
+                }
+            },
+            "wiki_parser": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://wiki-parser-ru:8077/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": [
+                    "annotators.entity_linking"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/wiki_parser",
+                    "container": "wiki-parser-ru",
+                    "endpoint": "model"
+                }
+            }
+        },
+        "response_annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg-ru:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/sentseg_ru",
+                    "container": "sentseg-ru",
+                    "endpoint": "sentseg"
+                }
+            },
+            "ner": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://ner-ru:8021/ner"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors",
+                    "response_annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/NER_deeppavlov",
+                    "container": "ner-ru",
+                    "endpoint": "ner"
+                }
+            }
         },
         "response_annotator_selectors": {
             "connector": {
@@ -70,150 +331,108 @@
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
             "tags": [
                 "selector"
-            ]
-        },
-        "response_annotators": {
-            "sentseg": {
-                "connector": "connectors.sentseg",
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_annotator_selectors"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt"
-            },
-            "ner": {
-                "connector": "connectors.ner",
-                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_annotator_selectors",
-                    "response_annotators.sentseg"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt"
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/response_annotator_selectors",
+                "container": "agent"
             }
         },
-        "annotators": {
-            "spelling_preprocessing": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://spelling-preprocessing:8074/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
-            },
+        "candidate_annotators": {
             "spacy_annotator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://spacy-annotator:8125/respond"
+                    "timeout": 1.0,
+                    "url": "http://spacy-annotator-ru:8129/respond_batch"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
-            },
-            "sentseg": {
-                "connector": "connectors.sentseg",
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "skills"
                 ],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/spacy_annotator",
+                    "container": "spacy-annotator-ru",
+                    "endpoint": "respond_batch"
+                }
             },
             "badlisted_words": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://badlisted-words:8018/badlisted_words"
+                    "timeout": 1.0,
+                    "url": "http://badlisted-words:8018/badlisted_words_batch"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_and_tokenized_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.spacy_annotator"
+                    "candidate_annotators.spacy_annotator"
                 ],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/BadlistedWordsDetector",
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words_batch"
+                }
             },
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://toxic-classification:8126/respond"
+                    "timeout": 1.0,
+                    "url": "http://toxic-classification-ru:8126/respond_batch"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "skills"
                 ],
-                "state_manager_method": "add_annotation"
-            },
-            "intent_catcher": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://intent-catcher:8014/detect"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ]
-            },
-            "ner": {
-                "connector": "connectors.ner",
-                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ]
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/toxic_classification_ru",
+                    "container": "toxic-classification-ru",
+                    "endpoint": "respond_batch"
+                }
             },
             "entity_detection": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://entity-detection:8103/respond"
+                    "timeout": 1.0,
+                    "url": "http://entity-detection:8103/respond_batch"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ]
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/entity_detection",
+                    "container": "entity-detection",
+                    "endpoint": "respond_batch"
+                }
             },
-            "entity_linking": {
+            "dialogrpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://entity-linking:8075/model"
+                    "timeout": 1.0,
+                    "url": "http://dialogrpt-ru:8122/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_with_context_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.ner",
-                    "annotators.entity_detection"
-                ]
-            },
-            "wiki_parser": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://wiki-parser:8077/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
-                    "annotators.entity_linking"
-                ]
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "services/dialogrpt_ru",
+                    "container": "dialogrpt-ru",
+                    "endpoint": "respond"
+                }
             }
         },
         "skill_selectors": {
@@ -229,35 +448,52 @@
                 ],
                 "tags": [
                     "selector"
-                ]
+                ],
+                "is_enabled": true,
+                "source": {
+                    "directory": "skill_selectors/rule_based_selector",
+                    "container": "agent"
+                }
             }
         },
         "skills": {
             "dff_program_y_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-program-y-skill:8008/respond"
+                    "timeout": 2.0,
+                    "url": "http://dff-program-y-ru-skill:8008/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_program_y_skill",
+                    "container": "dff-program-y-ru-skill",
+                    "endpoint": "respond"
+                }
             },
             "dff_intent_responder_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-intent-responder-skill:8012/respond"
+                    "timeout": 2.0,
+                    "url": "http://dff-intent-responder-ru-skill:8012/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_intent_responder_skill",
+                    "container": "dff-intent-responder-ru-skill",
+                    "endpoint": "respond"
+                }
             },
             "dummy_skill": {
                 "connector": {
@@ -269,51 +505,74 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dummy_skill",
+                    "container": "agent"
+                }
             },
             "personal_info_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://personal-info-skill:8030/respond"
+                    "timeout": 2.0,
+                    "url": "http://personal-info-ru-skill:8030/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/personal_info_skill",
+                    "container": "personal-info-ru-skill",
+                    "endpoint": "respond"
+                }
             },
             "dff_friendship_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-friendship-skill:8086/respond"
+                    "timeout": 2.0,
+                    "url": "http://dff-friendship-ru-skill:8086/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_friendship_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_friendship_skill",
+                    "container": "dff-friendship-ru-skill",
+                    "endpoint": "respond"
+                }
             },
             "dff_generative_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 4,
-                    "url": "http://dff-generative-skill:8092/respond"
+                    "timeout": 4.0,
+                    "url": "http://dff-generative-ru-skill:8092/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_generative_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_generative_skill",
+                    "container": "dff-generative-ru-skill",
+                    "endpoint": "respond"
+                }
             },
             "dff_template_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 2.0,
                     "url": "http://dff-template-skill:8120/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
@@ -321,89 +580,53 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
-            }
-        },
-        "candidate_annotators": {
-            "spacy_annotator": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://spacy-annotator:8125/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_template_skill",
+                    "container": "dff-template-skill",
+                    "endpoint": "respond"
+                }
             },
-            "badlisted_words": {
+            "text_qa": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://badlisted-words:8018/badlisted_words_batch"
+                    "timeout": 2.0,
+                    "url": "http://text-qa-ru:8078/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
-                    "candidate_annotators.spacy_annotator"
+                    "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "toxic_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://toxic-classification:8126/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "entity_detection": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://entity-detection:8103/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "dialogrpt": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://dialogrpt:8122/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_with_context_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "services/text_qa",
+                    "container": "text-qa-ru",
+                    "endpoint": "model"
+                }
             }
         },
         "response_selectors": {
-            "convers_evaluation_selector": {
+            "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "timeout": 1.0,
+                    "url": "http://convers-evaluation-selector-ru:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
                 ],
-                "state_manager_method": "add_bot_utterance"
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "directory": "response_selectors/convers_evaluation_based_selector",
+                    "container": "convers-evaluation-selector-ru",
+                    "endpoint": "respond"
+                }
             }
         }
     },

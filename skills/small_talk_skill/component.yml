@@ -1,0 +1,20 @@
+small-talk-skill:
+  name: small_talk_skill
+  display_name: Small Talk Skill
+  container_name: small-talk-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: asks questions using the hand-written scripts for 25 topics, including
+    but not limited to love, sports, work, pets, etc.
+  ram_usage: 35M
+  gpu_usage: null
+  port: 8062
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: '8062'
+    SERVICE_NAME: small_talk_skill
+  date_created: '2023-03-16T09:45:32'

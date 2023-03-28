@@ -1,0 +1,22 @@
+sentiment-classification-multilingual:
+  name: sentiment_classification
+  display_name: Sentiment Classification
+  container_name: sentiment-classification-multilingual
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: classifies sentiment to positive, negative and neutral classes
+  ram_usage: 2G
+  gpu_usage: 2G
+  port: 8024
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  - group: candidate_annotators
+    endpoint: respond_batch
+  build_args:
+    SERVICE_PORT: 8024
+    SERVICE_NAME: sentiment_classification
+    PRETRAINED_MODEL_NAME_OR_PATH: cardiffnlp/twitter-xlm-roberta-base-sentiment
+  date_created: '2023-03-16T09:45:32'

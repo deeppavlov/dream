@@ -1,0 +1,22 @@
+dummy-skill-dialog:
+  name: dummy_skill_dialog
+  display_name: Dummy Skill Dialog
+  container_name: dummy-skill-dialog
+  component_type: Script-based w/o NNs
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: returns the next turn from the Topical Chat dataset if the response
+    of the user to the Dummy Skill is similar to the corresponding response in the
+    source data
+  ram_usage: 600M
+  gpu_usage: null
+  port: 8052
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
+    SERVICE_PORT: '8052'
+    SERVICE_NAME: dummy_skill_dialog
+  date_created: '2023-03-16T09:45:32'

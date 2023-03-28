@@ -1,0 +1,22 @@
+dff-gaming-skill:
+  name: dff_gaming_skill
+  display_name: Gaming Skill
+  container_name: dff-gaming-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: provides a video games discussion. Gaming Skill is for more general
+    talk about video games
+  ram_usage: 80M
+  gpu_usage: null
+  port: 8115
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8115
+    SERVICE_NAME: dff_gaming_skill
+    GAMES_IGDB_SEARCH_RESULTS_URL: http://files.deeppavlov.ai/alexaprize_data/games_igdb_search_results_v2.json
+    GAMES_IGDB_IDS_URL: http://files.deeppavlov.ai/alexaprize_data/game_igdb_ids_v2.json
+  date_created: '2023-03-16T09:45:32'

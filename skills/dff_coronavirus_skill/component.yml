@@ -1,0 +1,21 @@
+dff-coronavirus-skill:
+  name: dff_coronavirus_skill
+  display_name: Coronavirus Skill
+  container_name: dff-coronavirus-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: retrieves data about the number of coronavirus cases and deaths in
+    different locations sourced from the John Hopkins University Center for System
+    Science and Engineering
+  ram_usage: 110M
+  gpu_usage: null
+  port: 8061
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8061
+    SERVICE_NAME: dff_coronavirus_skill
+  date_created: '2023-03-16T09:45:32'

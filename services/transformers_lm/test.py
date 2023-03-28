@@ -2,22 +2,43 @@ import os
 import requests
 
 
-N_HYPOTHESES_TO_GENERATE = int(os.environ.get("N_HYPOTHESES_TO_GENERATE", 1))
+DEFAULT_CONFIG = {
+    "max_length": 60,
+    "min_length": 8,
+    "top_p": 0.9,
+    "temperature": 0.9,
+    "do_sample": True,
+    "num_return_sequences": 2,
+}
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
 
 def test_respond():
-    url = "http://0.0.0.0:8130/respond"
+    url = f"http://0.0.0.0:{SERVICE_PORT}/respond"
     contexts = [
         [
-            "Respond like a friendly chatbot",
-            "Human: Hi! I am Marcus. How are you today?",
-        ]
+            "Hi! I am Marcus. How are you today?",
+            "Hi Marcus! I am fine. How are you?",
+            "I am great. What are your plans for today?",
+        ],
+        ["Hi Marcus! I am fine. How are you?", "I am great. What are your plans for today?"],
     ]
-    result = requests.post(url, json={"dialog_contexts": contexts}).json()
+    prompts = [
+        "Respond like a friendly chatbot.",
+        "Respond like a friendly chatbot.",
+    ]
+    result = requests.post(
+        url,
+        json={
+            "dialog_contexts": contexts,
+            "prompts": prompts,
+            "configs": [DEFAULT_CONFIG] * len(contexts),
+        },
+    ).json()
     print(result)
-    assert [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
-    print("Success")
-    print(result)
+
+    assert len(result) and [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
+    print("Success!")
 
 
 if __name__ == "__main__":

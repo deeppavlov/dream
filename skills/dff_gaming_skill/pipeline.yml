@@ -1,0 +1,11 @@
+dff-gaming-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://dff-gaming-skill:8115/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_gaming_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
