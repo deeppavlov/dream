@@ -445,7 +445,7 @@ services:
     volumes:
       - "./annotators/ConveRTBasedNLI:/src"
     ports:
-      - 8137:8137
+      - 8150:8150
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

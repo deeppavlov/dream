@@ -1074,7 +1074,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://convert-based-nli:8137/batch_model"
+                    "url": "http://convert-based-nli:8150/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:convert_nli_hypotheses_annotator_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
