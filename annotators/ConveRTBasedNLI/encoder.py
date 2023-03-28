@@ -11,6 +11,12 @@ tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 CONVERT_MODEL_PATH = os.environ.get("CONVERT_MODEL_PATH", None)
 
 
+def normalize_vectors(vectors):
+    vectors = np.vstack(vectors)
+    norm = np.linalg.norm(vectors, ord=2, axis=-1, keepdims=True)
+    return vectors/norm
+
+
 class Encoder:
     def __init__(self):
         self.sess = tf.compat.v1.Session()
@@ -26,17 +32,12 @@ class Encoder:
 
     def encode_sentences(self, sentences):
         vectors = self.sess.run(self.encoding_tensor, feed_dict={self.text_placeholder: sentences})
-        return self.__normalize_vectors(vectors)
+        return normalize_vectors(vectors)
 
     def encode_contexts(self, sentences):
         vectors = self.sess.run(self.context_encoding_tensor, feed_dict={self.text_placeholder: sentences})
-        return self.__normalize_vectors(vectors)
+        return normalize_vectors(vectors)
 
     def encode_responses(self, sentences):
         vectors = self.sess.run(self.response_encoding_tensor, feed_dict={self.text_placeholder: sentences})
-        return self.__normalize_vectors(vectors)
-
-    def __normalize_vectors(self, vectors):
-        vectors = np.vstack(vectors)
-        norm = np.linalg.norm(vectors, ord=2, axis=-1, keepdims=True)
-        return vectors/norm
+        return normalize_vectors(vectors)

@@ -1,12 +1,18 @@
 import os
 import logging
 import numpy as np
-import itertools
+import random
 
 from encoder import Encoder
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
+
+seed = 1
+os.environ['PYTHONHASHSEED'] = str(seed)
+random.seed(seed)
+tf.random.set_seed(seed)
+np.random.seed(seed)
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,10 +21,19 @@ TRAINED_MODEL_PATH = os.environ.get("TRAINED_MODEL_PATH", None)
 CACHE_DIR = os.environ.get("CACHE_DIR", None)
 
 
+def data_generation(file_path):
+    premise = np.load(file_path)['arr_0'][0]
+    hypothesis = np.load(file_path)['arr_0'][1]
+    label = np.load(file_path)['arr_1']
+    label = label.reshape((len(label), 1))
+    return premise, hypothesis, label
+
+
 class DataGenerator(tf.compat.v2.keras.utils.Sequence):
     def __init__(self, list_examples, shuffle=True):
         self.list_examples = list_examples
         self.shuffle = shuffle
+        self.indexes = None
         self.on_epoch_end()
 
     def __len__(self):
@@ -26,21 +41,14 @@ class DataGenerator(tf.compat.v2.keras.utils.Sequence):
 
     def __getitem__(self, index):
         pos = self.indexes[index]
-        premise, hypothesis, label = self.__data_generation(self.list_examples[pos])
+        premise, hypothesis, label = data_generation(self.list_examples[pos])
 
         return [premise, hypothesis], label
 
     def on_epoch_end(self):
         self.indexes = np.arange(len(self.list_examples))
-        if self.shuffle == True:
+        if self.shuffle:
             np.random.shuffle(self.indexes)
-
-    def __data_generation(self, file_path):
-        premise = np.load(file_path)['arr_0'][0]
-        hypothesis = np.load(file_path)['arr_0'][1]
-        label = np.load(file_path)['arr_1']
-        label = label.reshape((len(label), 1))
-        return premise, hypothesis, label
 
 
 class ConveRTAnnotator:
@@ -76,9 +84,9 @@ class ConveRTAnnotator:
         if not os.path.exists(train_path):
             os.makedirs(train_path)
 
-        self.__vectorize_data(val_path+'/val_', val_dataset)
-        self.__vectorize_data(test_path+'/test_', test_dataset)
-        self.__vectorize_data(train_path+'/train_', train_dataset)
+        self.__vectorize_data(val_path + '/val_', val_dataset)
+        self.__vectorize_data(test_path + '/test_', test_dataset)
+        self.__vectorize_data(train_path + '/train_', train_dataset)
 
         train_examples = os.listdir(train_path)
         train_examples = [train_path + f_name for f_name in train_examples]
@@ -107,15 +115,15 @@ class ConveRTAnnotator:
 
             premise_encoded = self.encoder.encode_sentences(premise)
             hypothesis_encoded = self.encoder.encode_sentences(hypothesis)
-            np.savez(data_path+str(counter), [premise_encoded, hypothesis_encoded], label)
+            np.savez(data_path + str(counter), [premise_encoded, hypothesis_encoded], label)
 
-            if counter % self.log_freq == 0:
+            if counter % 10 == 0:
                 logger.info(f"Prepared {counter} files.")
         logger.info(f"Prepared all files.")
 
     def __create_model(self):
-        inp_p = tf.keras.layers.Input(shape=(1024))
-        inp_h = tf.keras.layers.Input(shape=(1024))
+        inp_p = tf.keras.layers.Input(shape=1024)
+        inp_h = tf.keras.layers.Input(shape=1024)
         combined = tf.keras.layers.concatenate([inp_p, inp_h])
         linear_1 = tf.keras.layers.Dense(1024, activation='relu')(combined)
         dropout_1 = tf.keras.layers.Dropout(0.45)(linear_1)
@@ -125,30 +133,30 @@ class ConveRTAnnotator:
 
         self.model = tf.keras.models.Model(inputs=[inp_p, inp_h], outputs=output)
         self.model.compile(
-                    loss=tf.keras.losses.SparseCategoricalCrossentropy(),
-                    optimizer='adam',
-                    metrics=['accuracy'])
-        
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+            optimizer='adam',
+            metrics=['accuracy'])
+
     def __train_model(self):
         log_dir = CACHE_DIR + '/logs/'
         ch_path = CACHE_DIR + '/checkpoints/cp-{epoch:04d}.ckpt'
         csv_logger = tf.keras.callbacks.CSVLogger(log_dir + 'log.csv')
         model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
-                            filepath=ch_path,
-                            save_weights_only=True)
+            filepath=ch_path,
+            save_weights_only=True)
         early_stopping = tf.keras.callbacks.EarlyStopping(
-                            monitor='val_loss',
-                            patience=10)
+            monitor='val_loss',
+            patience=10)
 
-        history = self.model.fit(x=self.train_generator, 
-                                 validation_data=self.val_generator,
-                                 use_multiprocessing=True,
-                                 workers=6, epochs=100,
-                                 callbacks=[model_checkpoint, csv_logger, early_stopping])
-        
+        _ = self.model.fit(x=self.train_generator,
+                           validation_data=self.val_generator,
+                           use_multiprocessing=True,
+                           workers=6, epochs=100,
+                           callbacks=[model_checkpoint, csv_logger, early_stopping])
+
         self.model.save(CACHE_DIR + '/model.h5')
         self.model_path = CACHE_DIR + '/model.h5'
-    
+
     def candidate_selection(self, candidates, bot_uttr_history, threshold=0.8):
         self.model = tf.keras.models.load_model(self.model_path)
         labels = {0: 'entailment', 1: 'neutral', 2: 'contradiction'}
