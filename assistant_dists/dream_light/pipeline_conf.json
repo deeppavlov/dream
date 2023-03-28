@@ -155,7 +155,7 @@
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule-based-response-selector:8005/respond"
+                    "url": "http://confidence-based-response-selector:8005/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",

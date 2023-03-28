@@ -18,8 +18,8 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-BADLIST_URL = getenv("BADLIST_URL")
-assert BADLIST_URL
+BADLIST_URL = getenv("BADLIST_URL", "http://badlisted-words:8018/badlisted_words")
+FILTER_BADLISTED_WORDS = getenv("FILTER_BADLISTED_WORDS", 0)
 
 @app.route("/respond", methods=["POST"])
 def respond():
@@ -40,9 +40,14 @@ def respond():
             if skill_data["text"] and skill_data["confidence"]:
                 logger.info(f"Skill {skill_data['skill_name']} returned non-empty hypothesis with non-zero confidence.")
 
-            badlist_result = requests.post(BADLIST_URL, json={"sentences": skill_data["text"]}).json()[0]
-            logger.info(f"badlist_result: {badlist_result}")
-            if badlist_result["bad_words"] == False:
+
+            if FILTER_BADLISTED_WORDS == 1:
+                badlist_result = requests.post(BADLIST_URL, json={"sentences": skill_data["text"]}).json()[0]
+                if badlist_result["bad_words"] == False:
+                    confidences += [skill_data["confidence"]]
+                    responses += [skill_data["text"]]
+                    skill_names += [skill_data["skill_name"]]      
+            else:
                 confidences += [skill_data["confidence"]]
                 responses += [skill_data["text"]]
                 skill_names += [skill_data["skill_name"]]
@@ -54,7 +59,7 @@ def respond():
         selected_confidences.append(confidences[best_id])
 
     total_time = time.time() - st_time
-    logger.info(f"rule_based_response_selector exec time = {total_time:.3f}s")
+    logger.info(f"confidence_based_response_selector exec time = {total_time:.3f}s")
     return jsonify(list(zip(selected_skill_names, selected_responses, selected_confidences)))
 
 
