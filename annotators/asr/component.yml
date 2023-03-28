@@ -8,7 +8,7 @@ asr:
   author: DeepPavlov
   description: calculates overall ASR confidence for a given utterance and grades
     it as either _very low_, _low_, _medium_, or _high_ (for Amazon markup)
-  ram_usage: 40M
+  ram_usage : 100M
   gpu_usage: null
   port: 8031
   endpoints:

@@ -8,7 +8,7 @@ small-talk-skill:
   author: DeepPavlov
   description: asks questions using the hand-written scripts for 25 topics, including
     but not limited to love, sports, work, pets, etc.
-  ram_usage: 35M
+  ram_usage : 100M
   gpu_usage: null
   port: 8062
   endpoints:

@@ -7,7 +7,7 @@ rake-keywords:
   is_customizable: false
   author: DeepPavlov
   description: extracts keywords from utterances with the help of RAKE algorithm
-  ram_usage: 40M
+  ram_usage : 100M
   gpu_usage: null
   port: 8007
   endpoints:

@@ -7,7 +7,7 @@ fact-random:
   is_customizable: false
   author: DeepPavlov
   description: returns random facts for the given entity (for entities from user utterance)
-  ram_usage: 50M
+  ram_usage : 100M
   gpu_usage: null
   port: 8119
   endpoints:
