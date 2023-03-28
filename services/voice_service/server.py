@@ -41,12 +41,12 @@ def respond():
     if not os.path.exists(AUDIO_DIR):
         os.makedirs(AUDIO_DIR)
 
-    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3']:
+    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'ogg', 'flac']:
         file = URLopener()
         file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
 
         import subprocess
-        process = subprocess.run(['ffmpeg', '-i', os.path.join(AUDIO_DIR, filename), os.path.join(AUDIO_DIR, filename[:-4] + ".wav")])
+        process = subprocess.run(['ffmpeg', '-i', os.path.join(AUDIO_DIR, filename), os.path.join(AUDIO_DIR, filename[:-len(filename.split('.')[-1])] + "wav")])
         if process.returncode != 0:
             raise Exception("Something went wrong")
     # try:
@@ -56,7 +56,7 @@ def respond():
             break
     else:
         CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
-        raise Exception("No files for inference found in AUDIO_DIR")
+        raise Exception(CAP_ERR_MSG)
     logger.info("Scanning finished successfully, files found, starting inference...")
     captions = infer(AUDIO_DIR, MODEL_PATH)
     logger.info("Inference finished successfully")
