@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "dff-program-y-skill:8008, badlisted-words:8018, dff-friendship-skill:8086, faq-skill:3772,
+      WAIT_HOSTS: "dff-program-y-skill:8008, badlisted-words:8018, dff-friendship-skill:8086,
       dff-template-skill:8120, spelling-preprocessing:8074"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
@@ -65,20 +65,6 @@ services:
         reservations:
           memory: 256M
 
-  # spelling-preprocessing:
-  #   env_file: [ .env ]
-  #   build:
-  #     context: ./annotators/spelling_preprocessing/
-  #   command: flask run -h 0.0.0.0 -p 8074
-  #   environment:
-  #     - FLASK_APP=server
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 50M
-  #       reservations:
-  #         memory: 50M
-
   dff-friendship-skill:
     env_file: [ .env ]
     build:
@@ -97,13 +83,6 @@ services:
           memory: 256M
         reservations:
           memory: 256M
-
-  faq-skill:
-    build:
-      context: skills/faq_skill_deepy
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:3772 --timeout=1000
-    ports:
-      - 3710:3710
 
   dff-template-skill:
     env_file: [ .env ]

@@ -122,16 +122,6 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "faq_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://faq-skill:3772/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
-                "response_formatter": "state_formatters.dp_formatters:base_skill_formatter",
-                "state_manager_method": "add_hypothesis",
-                "previous_services": ["annotators"]
-            },
             "dff_template_skill": {
                 "connector": {
                     "protocol": "http",
