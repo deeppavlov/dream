@@ -39,14 +39,16 @@ flows = {
         },
         "bakery_start": {
             RESPONSE: "Our bakery is happy to help! What would you like to know?", 
-            PROCESSING: {
-                "save_slots_to_ctx": int_prs.save_slots_to_ctx({"topic": "science", "user_name": "Gordon Freeman"})
+            TRANSITIONS: {
+                ("bakery_general","dessert_ingredients"): loc_cnd.has_entity_in_graph(),
+                ("global_flow", "fallback"): cnd.true(),
             },
-            TRANSITIONS: {"node2": cnd.regexp(r"how are you", re.IGNORECASE)},
         },
-        "node2": {
-            RESPONSE: loc_rsp.example_response("Good. What do you want to talk about?"),
-            # loc_rsp.example_response is just for an example, you can use just str without example_response func
+        "dessert_ingredients": {
+            RESPONSE: "Excellent choice! {dessert_name} consists of {ingredients}.",  # dessert (Q182940)
+            # PROCESSING: {
+            #     "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
+            # },
             TRANSITIONS: {("global_flow", "fallback"): loc_cnd.example_lets_talk_about()},
         },    
     },
