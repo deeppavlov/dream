@@ -1372,7 +1372,6 @@ services:
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=3
-      - INDEX_LOAD_PATH=/root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
     deploy:
       resources:
         limits:

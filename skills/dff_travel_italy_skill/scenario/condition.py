@@ -6,7 +6,8 @@ from os import getenv
 import functools
 import json
 from deeppavlov_kg import TerminusdbKnowledgeGraph
-from scenario.config import KG_DB_NAME, KG_PASSWORD, KG_SERVER
+from scenario.config import TERMINUSDB_SERVER_URL, TERMINUSDB_SERVER_PASSWORD, TERMINUSDB_SERVER_DB, TERMINUSDB_SERVER_TEAM
+
 
 from df_engine.core import Context, Actor
 import df_engine.conditions as cnd
@@ -54,6 +55,14 @@ SIDE_INTENTS = {
     "where_are_you_from",
     "who_made_you",
 }
+
+graph = TerminusdbKnowledgeGraph(
+    db_name=TERMINUSDB_SERVER_DB,
+    team=TERMINUSDB_SERVER_TEAM,
+    server=TERMINUSDB_SERVER_URL,
+    password=TERMINUSDB_SERVER_PASSWORD,
+)
+
 
 def check_flag(prop: str) -> Callable:
     def check_flag_handler(ctx: Context, actor: Actor) -> bool:
@@ -131,10 +140,11 @@ def has_entity_in_graph(property):
         user_id = get_current_user_id(ctx, actor)
         if user_id:
             current_user_id = "User/" + user_id
-
-            graph = TerminusdbKnowledgeGraph(db_name=KG_DB_NAME, server=KG_SERVER, password=KG_PASSWORD)
-            user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
-            if property in user_existing_entities:
+            logger.info(f"current user id -- {current_user_id}")
+            user_existing_properties = graph.get_properties_of_entity(entity_id=current_user_id)
+            logger.info(f"user_existing_properties -- {user_existing_properties}")
+            logger.info(f"property to search for -- {property}")
+            if property in user_existing_properties:
                 return True
         
         return False

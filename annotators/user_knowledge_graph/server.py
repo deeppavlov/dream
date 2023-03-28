@@ -17,7 +17,6 @@ app = Flask(__name__)
 inflect = inflect.engine()
 
 USE_ABSTRACT_KINDS = True
-INDEX_LOAD_PATH=Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
 
 rel_kinds_dict = {
     "favorite_animal": "animal",
@@ -35,16 +34,18 @@ rel_kinds_dict = {
 }
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
-DB = "bakery_kg"
-TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD") or "root"
+TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
+TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
+TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
+INDEX_LOAD_PATH=Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
 
 graph = TerminusdbKnowledgeGraph(
-    db_name=DB,
+    db_name=TERMINUSDB_SERVER_DB,
+    team=TERMINUSDB_SERVER_TEAM,
     server=TERMINUSDB_SERVER_URL,
     password=TERMINUSDB_SERVER_PASSWORD,
     index_load_path=INDEX_LOAD_PATH
 )
-
 logger.info('Graph Loaded!')
 
 # graph.ontology.drop_database(drop_index=True)
