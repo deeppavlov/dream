@@ -8,7 +8,7 @@ convers-evaluation-no-scripts-selector:
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
-  ram_usage: 50M
+  ram_usage : 100M
   gpu_usage: null
   port: 8009
   endpoints:
@@ -46,7 +46,7 @@ convers-evaluation-selector:
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
-  ram_usage: 50M
+  ram_usage : 100M
   gpu_usage: null
   port: 8009
   endpoints:
@@ -84,7 +84,7 @@ convers-evaluation-selector-ru:
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
-  ram_usage: 50M
+  ram_usage : 100M
   gpu_usage: null
   port: 8009
   endpoints:
@@ -123,7 +123,7 @@ scripts-priority-selector:
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
-  ram_usage: 50M
+  ram_usage : 100M
   gpu_usage: null
   port: 8009
   endpoints:

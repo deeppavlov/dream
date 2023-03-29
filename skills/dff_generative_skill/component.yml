@@ -8,7 +8,7 @@ dff-generative-ru-skill:
   author: DeepPavlov
   description: generative skill which uses DialoGPT service to generate 3 different
     hypotheses
-  ram_usage: 50M
+  ram_usage : 100M
   gpu_usage: null
   port: 8092
   endpoints:

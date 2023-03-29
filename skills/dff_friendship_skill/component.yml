@@ -8,7 +8,7 @@ dff-friendship-ru-skill:
   author: DeepPavlov
   description: DFF-based skill to greet the user in the beginning of the dialog, and
     forward the user to some scripted skill
-  ram_usage: 70M
+  ram_usage : 100M
   gpu_usage: null
   port: 8086
   endpoints:

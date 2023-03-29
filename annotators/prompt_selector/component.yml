@@ -8,7 +8,7 @@ prompt-selector:
   author: DeepPavlov
   description: Annotator utilizing Sentence Ranker to rank prompts and selecting `N_SENTENCES_TO_RETURN`
     most relevant prompts (based on questions provided in prompts)
-  ram_usage: 50M
+  ram_usage : 100M
   gpu_usage: null
   port: 8135
   endpoints:

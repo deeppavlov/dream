@@ -7,7 +7,7 @@ agent:
   is_customizable: false
   author: DeepPavlov
   description: handler for several specific Alexa commands
-  ram_usage: 30M
+  ram_usage : 100M
   gpu_usage: null
   port: 4242
   endpoints:

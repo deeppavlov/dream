@@ -8,7 +8,7 @@ news-api-annotator:
   author: DeepPavlov
   description: extracts the latest news about entities or topics using the GNews API.
     DeepPavlov Dream deployments utilize our own API key.
-  ram_usage: 80M
+  ram_usage : 100M
   gpu_usage: null
   port: 8112
   endpoints:

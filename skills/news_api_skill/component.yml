@@ -8,7 +8,7 @@ news-api-skill:
   author: DeepPavlov
   description: presents the top-rated latest news about entities or topics using the
     GNews API
-  ram_usage: 60M
+  ram_usage : 100M
   gpu_usage: null
   port: 8066
   endpoints:

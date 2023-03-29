@@ -8,7 +8,7 @@ emotion-skill:
   author: DeepPavlov
   description: returns template responses to emotions detected by Emotion Classification
     from Combined Classification annotator
-  ram_usage: 40M
+  ram_usage : 100M
   gpu_usage: null
   port: 8049
   endpoints:
