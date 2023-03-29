@@ -102,9 +102,9 @@ def respond():
                     with sentry_sdk.push_scope() as scope:
                         scope.set_extra("utterance", skill_data["text"])
                         scope.set_extra("selected_skills", skill_data)
-                        sentry_sdk.capture_message("response selector got candidate with badlisted phrases and detected contradiction")
+                        sentry_sdk.capture_message("response selector got candidate with badlisted phrases or detected contradiction")
                         msg = (
-                            "response selector got candidate with badlisted phrases and detected contradiction:\n"
+                            "response selector got candidate with badlisted phrases or detected contradiction:\n"
                             f"utterance: {skill_data['text']}\n"
                             f"skill name: {skill_data['skill_name']}"
                         )
