@@ -42,7 +42,7 @@ def respond():
         os.makedirs(AUDIO_DIR)
 
     for i in os.listdir(AUDIO_DIR):
-        os.remove(i)
+        os.remove(os.path.join(AUDIO_DIR, i))
 
     if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'ogg', 'flac']:
         file = URLopener()
