@@ -25,6 +25,12 @@ from common.universal_templates import (
 logger = logging.getLogger(__name__)
 # ....
 
+graph = TerminusdbKnowledgeGraph(
+    db_name=KG_DB_NAME,
+    team=KG_TEAM_NAME,
+    server=KG_SERVER,
+    password=KG_PASSWORD,
+)
 
 def start_condition(ctx: Context, actor: Actor) -> bool:
     # with open("pr_ex.json", "w") as ctx_file:               # to get contents of ctx.misc["agent"]
@@ -87,12 +93,7 @@ def has_entity_in_graph():
         if dessert_id:
             dessert_id = dessert_id.replace(" ", "_")
             current_dessert_id = dessert_id.capitalize()
-
-            graph = TerminusdbKnowledgeGraph(
-                team=KG_TEAM_NAME, db_name=KG_DB_NAME, server=KG_SERVER, 
-                password=KG_PASSWORD
-            )
-            if graph.ontology.get_entity_kind(current_dessert_id):
+            if len(graph.ontology.get_entity_kind(current_dessert_id)) > 1:
                 return True
         
         return False

@@ -41,15 +41,21 @@ flows = {
             RESPONSE: "Our bakery is happy to help! What would you like to know?", 
             TRANSITIONS: {
                 ("bakery_general","dessert_ingredients"): loc_cnd.has_entity_in_graph(),
-                ("global_flow", "fallback"): cnd.true(),
+                ("bakery_general", "unknown_dessert"): cnd.true(),
             },
         },
         "dessert_ingredients": {
-            RESPONSE: "Excellent choice! {dessert_name} consists of {ingredients}.",  # dessert (Q182940)
-            # PROCESSING: {
-            #     "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
-            # },
+            RESPONSE: "Excellent choice! This dessert consists of {ingredients}.",  # dessert (Q182940)
+            PROCESSING: {
+                "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph("ingredients"),
+            },
             TRANSITIONS: {("global_flow", "fallback"): loc_cnd.example_lets_talk_about()},
+        },
+        "unknown_dessert": {
+            RESPONSE: "I'm sorry, I don't know such dessert.",
+            TRANSITIONS: {
+                ("global_flow", "fallback"): cnd.true(),
+            },
         },    
     },
      "global_flow": {
