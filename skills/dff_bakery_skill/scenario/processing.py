@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 # ....
 
 
-def fill_responses_by_slots_from_graph(entity):
+def fill_responses_by_slots_from_graph(entity1, entity2):
     def fill_responses_by_slots_processing(
         ctx: Context,
         actor: Actor,
@@ -23,14 +23,15 @@ def fill_responses_by_slots_from_graph(entity):
         slot_value = []
         dessert_id = get_current_dessert_name(ctx, actor)
         if dessert_id:
-            dessert_id = dessert_id.replace(" ", "_")
-            current_dessert_id = dessert_id.capitalize()
+            current_dessert_id = dessert_id.replace(" ", "_")
+            current_dessert_id = current_dessert_id.capitalize()
         ingredients = graph.ontology.get_entity_kind(current_dessert_id)
         for k, v in ingredients.items():
             if isinstance(v, dict):
                 slot_value.append(v["@class"])
         slot_value = ", ".join(slot_value)
-        processed_node.response = processed_node.response.replace("{" f"{entity}" "}", slot_value)
+        processed_node.response = processed_node.response.replace("{" f"{entity1}" "}", dessert_id.capitalize())
+        processed_node.response = processed_node.response.replace("{" f"{entity2}" "}", slot_value)
         ctx.a_s["processed_node"] = processed_node
         return ctx
 

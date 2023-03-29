@@ -45,9 +45,9 @@ flows = {
             },
         },
         "dessert_ingredients": {
-            RESPONSE: "Excellent choice! This dessert consists of {ingredients}.",  # dessert (Q182940)
+            RESPONSE: "Excellent choice! {dessert_name} consists of {ingredients}.",  # dessert (Q182940)
             PROCESSING: {
-                "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph("ingredients"),
+                "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph("dessert_name","ingredients"),
             },
             TRANSITIONS: {("global_flow", "fallback"): loc_cnd.example_lets_talk_about()},
         },
