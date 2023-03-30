@@ -50,15 +50,13 @@ def fill_responses_no_inters_from_graph(entity):
         sugar_ingredients = get_sugar_ingredients()
         desserts = get_desserts()
         sugar_free_desserts = []
-        for des in desserts:
-            des_ingred = []
-            ingredients = graph.ontology.get_entity_kind(des)
-            for k, v in ingredients.items():
-                if isinstance(v, dict):
-                    des_ingred.append(v["@class"])
-            sugar_ingredient_intersection = list(set(des_ingred) & set(sugar_ingredients))
-            if len(sugar_ingredient_intersection) < 1:
-                sugar_free_desserts.append(des)
+        for dessert, dessert_properties in desserts.items():
+            for prop_value in dessert_properties.values():
+                if isinstance(prop_value, dict) and prop_value.get("@class") in sugar_ingredients:
+                    break
+            else: # if there were no break at all
+                sugar_free_desserts.append(dessert)
+
         slot_value = ", ".join(sugar_free_desserts)
         processed_node.response = processed_node.response.replace("{" f"{entity}" "}", slot_value)
         ctx.a_s["processed_node"] = processed_node

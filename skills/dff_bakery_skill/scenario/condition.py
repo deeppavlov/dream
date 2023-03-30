@@ -63,8 +63,8 @@ def get_sugar_ingredients():
 
 def get_desserts():
     all_entities = graph.ontology.get_all_entity_kinds()
-    desserts = []
-    desserts += [k for k,v in all_entities.items() if v.get("@inherits")=="Dessert"]
+    desserts = {}
+    desserts.update({k:v for k,v in all_entities.items() if v.get("@inherits")=="Dessert"})
 
     return desserts
 
