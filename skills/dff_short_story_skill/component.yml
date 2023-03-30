@@ -8,7 +8,7 @@ dff-short-story-skill:
   author: DeepPavlov
   description: 'tells user short stories from 3 categories: (1) bedtime stories, such
     as fables and moral stories, (2) horror stories, and (3) funny ones'
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 8057
   endpoints:

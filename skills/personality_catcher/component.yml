@@ -7,7 +7,7 @@ personality-catcher:
   is_customizable: false
   author: DeepPavlov
   description: ''
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 8010
   endpoints:

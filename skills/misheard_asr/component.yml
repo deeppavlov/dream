@@ -8,7 +8,7 @@ misheard-asr:
   author: DeepPavlov
   description: uses the ASR Processor annotations to give feedback to the user when
     ASR confidence is too low
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 8033
   endpoints:

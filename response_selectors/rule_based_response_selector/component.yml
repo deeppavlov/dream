@@ -8,7 +8,7 @@ rule-based-response-selector:
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
     responses
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 8005
   endpoints:

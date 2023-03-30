@@ -7,7 +7,7 @@ harvesters-maintenance-gobot-skill:
   is_customizable: false
   author: DeepPavlov
   description: Harvesters maintenance Goal-oriented skill
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 3882
   endpoints:

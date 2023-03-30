@@ -9,7 +9,7 @@ topic-recommendation:
   description: offers a topic for further conversation using the information about
     the discussed topics and user's preferences. Current version is based on Reddit
     personalities (see Dream Report for Alexa Prize 4).
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 8113
   endpoints:

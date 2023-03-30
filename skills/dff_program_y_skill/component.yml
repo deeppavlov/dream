@@ -8,7 +8,7 @@ dff-program-y-ru-skill:
   author: DeepPavlov
   description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
     for Dream socialbot
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 8008
   endpoints:
