@@ -44,7 +44,7 @@ def respond():
     for i in os.listdir(AUDIO_DIR):
         os.remove(os.path.join(AUDIO_DIR, i))
 
-    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'ogg', 'flac']:
+    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'ogg', 'flac', 'mp4']:
         file = URLopener()
         file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
 
