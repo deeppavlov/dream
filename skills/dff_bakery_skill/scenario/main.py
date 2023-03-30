@@ -41,6 +41,7 @@ flows = {
             RESPONSE: "Our bakery is happy to help! What would you like to know?", 
             TRANSITIONS: {
                 ("bakery_general","dessert_ingredients"): loc_cnd.has_entity_in_graph(),
+                ("bakery_general", "no_ingredient"): cnd.regexp(r"sugar", re.IGNORECASE),
                 ("bakery_general", "unknown_dessert"): cnd.true(),
             },
         },
@@ -50,6 +51,12 @@ flows = {
                 "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph("dessert_name","ingredients"),
             },
             TRANSITIONS: {("global_flow", "fallback"): loc_cnd.example_lets_talk_about()},
+        },
+        "no_ingredient": {
+            RESPONSE: "These desserts don't contain sugar: {list_of_desserts}.",
+            PROCESSING: {
+                "fill_responses_by_slots": loc_prs.fill_responses_no_inters_from_graph("list_of_desserts"),
+            },
         },
         "unknown_dessert": {
             RESPONSE: "I'm sorry, I don't know such dessert.",

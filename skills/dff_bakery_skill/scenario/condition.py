@@ -49,43 +49,24 @@ def get_current_dessert_name(ctx: Context, actor: Actor) -> bool:
     
     return None
 
-# def extract_entity(ctx, entity_type):
-#     user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
-#     annotations = user_uttr.get("annotations", {})
-#     logger.info(f"annotations {annotations}")
-#     if entity_type.startswith("tags"):
-#         tag = entity_type.split("tags:")[1]
-#         nounphrases = annotations.get("entity_detection", {}).get("labelled_entities", [])
-#         for nounphr in nounphrases:
-#             nounphr_text = nounphr.get("text", "")
-#             nounphr_label = nounphr.get("label", "")
-#             if nounphr_label == tag:
-#                 found_entity = nounphr_text
-#                 return found_entity
-    # elif entity_type.startswith("wiki"):
-    #     wp_type = entity_type.split("wiki:")[1]
-    #     found_entity, *_ = find_entity_by_types(annotations, [wp_type])
-    #     if found_entity:
-    #         return found_entity
-    # elif entity_type == "any_entity":
-    #     entities = annotations.get("entity_detection", {}).get("entities", [])
-    #     if entities:
-    #         return entities[0]
-    # else:
-    #     res = re.findall(entity_type, user_uttr.get("text", ""))
-    #     if res:
-    #         return res[0]
-    # return ""
+def get_sugar_ingredients():
+    PARENT = "Sugar"
+    NUMBER_OF_GENERATIONS=2
 
+    all_entities = graph.ontology.get_all_entity_kinds()
+    children = []
+    children += [k for k,v in all_entities.items() if v.get("@inherits")==PARENT]
+    for _ in range(NUMBER_OF_GENERATIONS):
+        children += [k for k,v in all_entities.items() if v.get("@inherits") in children]
 
-# def has_entities(*args):
-#     def has_entities_func(ctx: Context, actor: Actor) -> Context:
-#         for f_type in args:
-#             extracted_entity = extract_entity(ctx, f_type)
-#             if extracted_entity:
-#                 return True
-#         return False
-#     return has_entities_func
+    return children
+
+def get_desserts():
+    all_entities = graph.ontology.get_all_entity_kinds()
+    desserts = []
+    desserts += [k for k,v in all_entities.items() if v.get("@inherits")=="Dessert"]
+
+    return desserts
 
 def has_entity_in_graph():
     def has_entity_in_graph_handler(ctx: Context, actor: Actor) -> Context:
