@@ -7,7 +7,7 @@ midas-predictor:
   is_customizable: false
   author: DeepPavlov
   description: BERT-based model trained on a semantic classes subset of MIDAS dataset
-  ram_usage : 100M
+  ram_usage: 100M
   gpu_usage: null
   port: 8121
   endpoints:
