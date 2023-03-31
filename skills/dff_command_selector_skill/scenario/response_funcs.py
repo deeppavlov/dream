@@ -162,7 +162,7 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
         if LANGUAGE == "RU":
             response = "Не могу извлечь объект для цели. Повторите команду."
         else:
-            response = "I did not get target object. Please repeat the command."
+            response = "I did not get a target point. Please repeat the command."
 
     if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}

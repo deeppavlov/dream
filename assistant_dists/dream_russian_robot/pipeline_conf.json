@@ -587,7 +587,7 @@
     "metadata": {
         "display_name": "Dream Russian Robot",
         "author": "DeepPavlov",
-        "description": "Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses Russian DialoGPT by DeepPavlov to generate most of the responses. It also contains intent catcher and responder components to cover special user requests.",
+        "description": "Russian Robot version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses Russian DialoGPT by DeepPavlov to generate most of the responses. It also contains intent catcher and responder components to cover special user requests.",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
         "ram_usage": "50 GB",

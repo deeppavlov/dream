@@ -37,13 +37,5 @@ def run_test(handler):
         print("Success")
 
 
-# def run_test(handler):
-#     print("Success")
-
-
-# def run_test(handler):
-#     print("Success")
-
-
 if __name__ == "__main__":
     run_test(handler)
