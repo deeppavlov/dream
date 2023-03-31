@@ -347,7 +347,6 @@ def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
     ]
 
 
-
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
     entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
