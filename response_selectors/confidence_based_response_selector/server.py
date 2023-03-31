@@ -4,7 +4,6 @@ import logging
 import numpy as np
 import time
 import requests
-import json
 
 from flask import Flask, request, jsonify
 from os import getenv
@@ -43,7 +42,7 @@ def respond():
 
             if FILTER_BADLISTED_WORDS == 1:
                 badlist_result = requests.post(BADLIST_URL, json={"sentences": skill_data["text"]}).json()[0]
-                if badlist_result["bad_words"] == False:
+                if not badlist_result["bad_words"]
                     confidences += [skill_data["confidence"]]
                     responses += [skill_data["text"]]
                     skill_names += [skill_data["skill_name"]]
