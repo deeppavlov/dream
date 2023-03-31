@@ -329,29 +329,23 @@ def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
 
 
 def last_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
-    if len(dialog["bot_utterances"]):
-        return [{"bot_utterances": [dialog["bot_utterances"][-1]], "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
-    else:
-        return [{"bot_utterances": [{}], "dialog_ids": [dialog.get("dialog_id", "unknown")]}]
+    return [
+        {
+            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
+            "dialog_ids": [dialog.get("dialog_id", "unknown")],
+        }
+    ]
 
 
 def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
-    if len(dialog["bot_utterances"]):
-        return [
-            {
-                "last_human_utterances": [dialog["human_utterances"][-1]],
-                "bot_utterances": [dialog["bot_utterances"][-1]],
-                "dialog_ids": [dialog.get("dialog_id", "unknown")],
-            }
-        ]
-    else:
-        return [
-            {
-                "last_human_utterances": [dialog["human_utterances"][-1]],
-                "bot_utterances": [{}],
-                "dialog_ids": [dialog.get("dialog_id", "unknown")],
-            }
-        ]
+    return [
+        {
+            "last_human_utterances": [dialog["human_utterances"][-1]],
+            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
+            "dialog_ids": [dialog.get("dialog_id", "unknown")],
+        }
+    ]
+
 
 
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
