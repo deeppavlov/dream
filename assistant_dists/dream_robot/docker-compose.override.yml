@@ -191,9 +191,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   dialogpt:
     env_file: [ .env ]
@@ -277,9 +277,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   robot-notifications:
     env_file: [ .env ]
@@ -295,9 +295,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   robot-fake-server:
     env_file: [ .env ]
@@ -312,8 +312,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
 version: '3.7'
