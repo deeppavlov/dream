@@ -2,7 +2,7 @@
     "dataset_reader": {
       "class_name": "intents_dataset_reader:IntentsJsonReader",
       "data_path": "./",
-      "train": "robot_intent_phrases.json",
+      "train": "intent_phrases_commands.json",
       "generated_data_path": "./generated_data"
     },
     "dataset_iterator": {
