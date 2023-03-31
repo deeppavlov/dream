@@ -1,0 +1,49 @@
+{
+  "chainer": {
+    "in": ["question"],
+    "pipe": [
+      {
+        "class_name": "src.torch_transformers_preprocessor:T5GenerativeIEPreprocessor",
+        "vocab_file": "{TRANSFORMER}",
+        "add_special_tokens": ["<subj>", "<rel>", "<obj>"],
+        "max_seq_length": 512,
+        "in": ["question"],
+        "out": ["input_ids", "attention_mask"]
+      },
+      {
+        "class_name": "src.t5_generative_ie:T5GenerativeIE",
+        "pretrained_transformer": "{TRANSFORMER}",
+        "add_special_tokens": ["<subj>", "<rel>", "<obj>"],
+        "save_path": "{MODEL_PATH}/model",
+        "load_path": "{MODEL_PATH}/model",
+        "optimizer": "AdamW",
+        "optimizer_parameters": {
+          "lr": 3e-05,
+          "weight_decay": 0.01,
+          "betas": [0.9, 0.999],
+          "eps": 1e-06
+        },
+        "learning_rate_drop_patience": 6,
+        "learning_rate_drop_div": 1.5,
+        "in": ["input_ids", "attention_mask"],
+        "out": ["answer", "score"]
+      }
+    ],
+    "out": ["answer", "score"]
+  },
+  "metadata": {
+    "variables": {
+      "TRANSFORMER": "t5-small",
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+      "MODELS_PATH": "{ROOT_PATH}/models",
+      "MODEL_PATH": "{MODELS_PATH}/t5_small_generative_ie"
+    },
+    "download": [
+      {
+        "url": "http://files.deeppavlov.ai/tmp/t5_small_generative_ie.tar.gz",
+        "subdir": "{MODEL_PATH}"
+      }
+    ]
+  }
+}

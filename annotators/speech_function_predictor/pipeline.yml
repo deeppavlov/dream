@@ -1,0 +1,21 @@
+speech-function-predictor:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://speech-function-predictor:8107/model
+  dialog_formatter: state_formatters.dp_formatters:speech_function_predictor_formatter
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.speech_function_classifier
+  state_manager_method: add_annotation
+- group: candidate_annotators
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://speech-function-predictor:8107/annotation
+  dialog_formatter: state_formatters.dp_formatters:speech_function_hypotheses_predictor_formatter
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - candidate_annotators.speech_function_classifier
+  state_manager_method: add_hypothesis_annotation_batch

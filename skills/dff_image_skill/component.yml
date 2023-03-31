@@ -1,0 +1,22 @@
+dff-image-skill:
+  name: dff_image_skill
+  display_name: Image Skill
+  container_name: dff-image-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Scripted skill that based on the sent image captioning (from annotations)
+    responses with specified responses in case of food, animals or people detected,
+    and default responses otherwise
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8188
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8188
+    SERVICE_NAME: dff_image_skill
+    LANGUAGE: EN
+  date_created: '2023-03-16T09:45:32'

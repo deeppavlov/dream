@@ -1,0 +1,22 @@
+midas-classification:
+- group: candidate_annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://midas-classification:8090/batch_model
+  dialog_formatter: state_formatters.dp_formatters:hypotheses_list_last_uttr
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - skills
+  state_manager_method: add_hypothesis_annotation_batch
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://midas-classification:8090/model
+  dialog_formatter: state_formatters.dp_formatters:utt_sentseg_punct_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.spelling_preprocessing
+  - annotators.sentseg
+  state_manager_method: add_annotation

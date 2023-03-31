@@ -1,0 +1,99 @@
+dff-ai-faq-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://dff-ai-faq-prompted-skill:8143/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_ai_faq_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-fairytale-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 7.0
+    url: http://dff-fairytale-prompted-skill:8139/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_fairytale_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-empathetic-marketing-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://dff-empathetic-marketing-prompted-skill:8138/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_empathetic_marketing_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-da-costa-clothes-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://dff-da-costa-clothes-prompted-skill:8144/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_da_costa_clothes_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-dream-persona-gpt-j-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://dff-dream-persona-gpt-j-prompted-skill:8134/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-nutrition-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 5.0
+    url: http://dff-nutrition-prompted-skill:8141/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_nutrition_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-rhodes-coaching-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 7.0
+    url: http://dff-rhodes-coaching-prompted-skill:8142/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-dream-persona-davinci3-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 7.0
+    url: http://dff-dream-persona-davinci3-prompted-skill:8137/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-deepy-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 7.0
+    url: http://dff-deepy-prompted-skill:8148/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_deepy_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

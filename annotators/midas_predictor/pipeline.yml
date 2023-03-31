@@ -1,0 +1,11 @@
+midas-predictor:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://midas-predictor:8121/respond
+  dialog_formatter: state_formatters.dp_formatters:midas_predictor_formatter
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.combined_classification
+  state_manager_method: add_annotation

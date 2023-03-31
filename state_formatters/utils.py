@@ -220,9 +220,16 @@ def count_ongoing_skill_utterances(bot_utterances: List[Dict], skill: str) -> in
 
 
 def dff_formatter(
-    dialog: Dict, service_name: str, bot_last_turns=1, human_last_turns=1, used_annotations=None, types_utterances=None
+    dialog: Dict,
+    service_name: str,
+    bot_last_turns=1,
+    human_last_turns=1,
+    used_annotations=None,
+    types_utterances=None,
+    wanted_keys=None,
 ) -> List[Dict]:
     types_utterances = ["human_utterances", "bot_utterances"] if types_utterances is None else types_utterances
+    wanted_keys = ["text", "annotations", "active_skill", "user"] if wanted_keys is None else wanted_keys
     # DialoFlow Framework formatter
     state_name = f"{service_name}_state"
     human_utter_index = len(dialog["human_utterances"]) - 1
@@ -261,7 +268,7 @@ def dff_formatter(
     # rm all execpt human_utterances, bot_utterances
     # we need only: text, annotations, active_skill
     new_dialog = clean_up_utterances_to_avoid_unwanted_keys(
-        dialog, types_utterances=types_utterances, used_annotations=used_annotations
+        dialog, wanted_keys=wanted_keys, types_utterances=types_utterances, used_annotations=used_annotations
     )
 
     return [

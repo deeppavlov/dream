@@ -1,31 +1,25 @@
-FROM tensorflow/tensorflow:1.15.2-gpu
+FROM deeppavlov/base-gpu:0.17.6
 
-RUN apt-key del 7fa2af80  && \
-    rm -f /etc/apt/sources.list.d/cuda*.list && \
-    curl https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb \
-    -o cuda-keyring_1.0-1_all.deb && \
-    dpkg -i cuda-keyring_1.0-1_all.deb
+RUN apt-get update && apt-get install git -y
 
 ARG CONFIG
-ARG COMMIT=0.13.0
-ARG PORT
+ARG SERVICE_PORT
 ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
-ENV COMMIT=$COMMIT
+ENV SERVICE_PORT=$SERVICE_PORT
+
+RUN pip freeze | grep deeppavlov
 
 COPY ./requirements.txt /src/requirements.txt
-RUN pip install --upgrade pip && pip install -r /src/requirements.txt
-
-RUN rm -r /etc/apt/sources.list.d && apt-get update && apt-get install git -y
-RUN pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
+RUN pip install -r /src/requirements.txt
 
 COPY . /src
 
 WORKDIR /src
 
 RUN python -m deeppavlov install $CONFIG
+RUN python -m spacy download en_core_web_sm
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 

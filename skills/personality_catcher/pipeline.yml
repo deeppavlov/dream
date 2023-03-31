@@ -1,0 +1,11 @@
+personality-catcher:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://personality-catcher:8010/personality_catcher
+  dialog_formatter: state_formatters.dp_formatters:personality_catcher_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:personality_catcher_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

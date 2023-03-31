@@ -1,0 +1,20 @@
+knowledge-grounding-skill:
+  name: knowledge_grounding_skill
+  display_name: Knowledge Grounding Skill
+  container_name: knowledge-grounding-skill
+  component_type: Script-based with NNs
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generates a response based on the dialogue history and provided knowledge
+    related to the current conversation topic
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8085
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8085
+    SERVICE_NAME: knowledge_grounding_skill
+  date_created: '2023-03-16T09:45:32'

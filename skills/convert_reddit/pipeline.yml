@@ -1,0 +1,11 @@
+convert-reddit:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://convert-reddit:8029/convert_reddit
+  dialog_formatter: state_formatters.dp_formatters:convert_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

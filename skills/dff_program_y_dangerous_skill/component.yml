@@ -1,0 +1,20 @@
+dff-program-y-dangerous-skill:
+  name: dff_program_y_dangerous_skill
+  display_name: Program Y Dangerous Skill
+  container_name: dff-program-y-dangerous-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
+    for Dream socialbot, containing responses to dangerous situations in a dialog
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8022
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8022
+    SERVICE_NAME: dff_program_y_dangerous_skill
+  date_created: '2023-03-16T09:45:32'

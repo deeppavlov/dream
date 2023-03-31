@@ -1,0 +1,25 @@
+fact-retrieval:
+  name: fact_retrieval
+  display_name: Fact Retrieval
+  container_name: fact-retrieval
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: extracts facts from Wikipedia and wikiHow
+  ram_usage: 7.4G
+  gpu_usage: 1.2G
+  port: 8100
+  endpoints:
+  - group: annotators
+    endpoint: model
+  build_args:
+    SERVICE_PORT: 8100
+    SERVICE_NAME: fact_retrieval
+    CONFIG: configs/fact_retrieval_page.json
+    CONFIG_WIKI: configs/page_extractor.json
+    CONFIG_WHOW: configs/whow_page_extractor.json
+    SRC_DIR: annotators/fact_retrieval/
+    COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
+    N_FACTS: 3
+  date_created: '2023-03-16T09:45:32'

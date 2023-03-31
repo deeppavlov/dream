@@ -1,0 +1,22 @@
+dialogrpt-ru:
+  name: dialogrpt
+  display_name: DialogRPT
+  container_name: dialogrpt-ru
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: DialogRPT model which is based on [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2)
+    and fine-tuned on Russian Pikabu Comment sequences
+  ram_usage: 3.8G
+  gpu_usage: 2G
+  port: 8122
+  endpoints:
+  - group: candidate_annotators
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8122
+    PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+    TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
+    SERVICE_NAME: dialogrpt
+  date_created: '2023-03-16T09:45:32'

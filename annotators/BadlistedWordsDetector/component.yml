@@ -1,0 +1,23 @@
+badlisted-words:
+  name: badlisted_words
+  display_name: Bad Words Detection
+  container_name: badlisted-words
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: detects words and phrases from the badlist
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8018
+  endpoints:
+  - group: annotators
+    endpoint: badlisted_words
+  - group: candidate_annotators
+    endpoint: badlisted_words_batch
+  - group: services
+    endpoint: badlisted_words_batch
+  build_args:
+    SERVICE_PORT: 8018
+    SERVICE_NAME: badlisted_words
+  date_created: '2023-03-16T09:45:32'

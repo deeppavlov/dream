@@ -1,0 +1,23 @@
+dff-universal-prompted-skill:
+  name: dff_universal_prompted_skill
+  display_name: Universal Prompted Skill
+  container_name: dff-universal-prompted-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Universal prompt-based skill which accepts a prompt,
+    a language modelling service (among the considered) to generate a response.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8147
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8147
+    SERVICE_NAME: dff_universal_prompted_skill
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: '2023-03-16T09:45:32'
+

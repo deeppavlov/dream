@@ -52,7 +52,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8130:8130
-  dff-dream-persona-prompted-skill:
+  dff-dream-persona-gpt-j-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

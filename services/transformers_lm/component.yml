@@ -1,0 +1,49 @@
+transformers-lm-gptj:
+  name: transformers_lm_gptj
+  display_name: GPT-J 6B
+  container_name: transformers-lm-gptj
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on Transformers generative model, the model
+    is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular,
+    in this service, [GPT-J model](https://huggingface.co/EleutherAI/gpt-j-6B) is
+    used.
+  ram_usage: 1.5G
+  gpu_usage: 24.2G
+  port: 8130
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8130
+    SERVICE_NAME: transformers_lm_gptj
+    PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+    HALF_PRECISION: 0
+  date_created: '2023-03-16T09:45:32'
+transformers-lm-bloomz7b:
+  name: transformers_lm_bloomz7b
+  display_name: BLOOMZ 7B
+  container_name: transformers-lm-bloomz7b
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on Transformers generative model, the model
+    is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular,
+    in this service, [BLOOMZ-7b1 model](https://huggingface.co/bigscience/bloomz-7b1) is
+    used.
+  ram_usage: 2.5G
+  gpu_usage: 29G
+  port: 8146
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8146
+    SERVICE_NAME: transformers_lm_bloomz7b
+    PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
+    HALF_PRECISION: 0
+  date_created: '2023-03-16T09:45:32'
+
