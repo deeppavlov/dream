@@ -43,7 +43,7 @@
         },
         "move_forward": {
             "phrases": [
-                "(please ){0,1}move forvard ((2)|(two)|(17)|(seventeen)){0,1}( meters){0,1}",
+                "(please ){0,1}move forward ((2)|(two)|(17)|(seventeen)){0,1}( meters){0,1}",
                 "go ahead ((10)|(ten)){0,1}( meters){0,1}( if you can){0,1}",
                 "(you must ){0,1}step forward ((6)|(six)){0,1}( meters){0,1}",
                 "(husky ){0,1}just move on five meters",

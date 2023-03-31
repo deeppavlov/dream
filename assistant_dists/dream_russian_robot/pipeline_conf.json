@@ -450,7 +450,7 @@
             "dff_command_selector_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 2.0,
                     "url": "http://dff-command-selector-ru-skill:8015/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_command_selector_skill_formatter",
