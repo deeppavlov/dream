@@ -224,14 +224,15 @@ def is_do_not_know_vars(ctx: Context, actor: Actor) -> bool:
     return bool(flag)
 
 
-def is_passive_user(ctx: Context, actor: Actor, history_len=2) -> bool:
+def is_passive_user(ctx: Context, actor: Actor, passive_threshold=3, history_len=2) -> bool:
     """Check history_len last human utterances on the number of tokens.
-    If number of tokens in ALL history_len uterances is <= 3 tokens, then consider user passive - return True.
+    If number of tokens in ALL history_len uterances is less or equal than the given threshold,
+    then consider user passive - return True.
     """
     user_utterances = int_ctx.get_human_utterances(ctx, actor)[-history_len:]
     user_utterances = [utt["text"] for utt in user_utterances]
 
-    uttrs_lens = [len(uttr.split()) <= 5 for uttr in user_utterances]
+    uttrs_lens = [len(uttr.split()) <= passive_threshold for uttr in user_utterances]
     if all(uttrs_lens):
         return True
     return False
