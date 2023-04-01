@@ -1,48 +1,69 @@
 [
     [
-        "move_forward #+#move_forward",
-        1.0,
-        {
-            "dff_command_selector_skill_state": {
-                "shared_memory": {},
-                "previous_human_utter_index": 0,
-                "history": {
-                    "0": [
-                        "context_driven_response",
-                        "intent_catcher"
-                    ]
-                },
-                "current_turn_dff_suspended": false,
-                "context": {
-                    "id": "184cded6-2e26-4dd6-a849-5960550ee1e5",
-                    "labels": {
-                        "0": [
+        [
+            "Moving forward by 10 meters. #+#move_forward"
+        ],
+        [
+            1.0
+        ],
+        [
+            {
+                "dff_command_selector_skill_state": {
+                    "shared_memory": {},
+                    "previous_human_utter_index": 1,
+                    "history": {
+                        "1": [
                             "context_driven_response",
-                            "intent_catcher"
+                            "command_selector"
                         ]
                     },
-                    "requests": {
-                        "0": "can you please move forward"
-                    },
-                    "responses": {
-                        "0": "move_forward #+#move_forward"
-                    },
-                    "misc": {},
-                    "validation": false,
-                    "actor_state": {}
-                }
-            },
-            "dff_shared_state": {
-                "cross_links": {},
-                "cross_states": {}
-            },
-            "used_links": {},
-            "age_group": "unknown",
-            "disliked_skills": []
-        },
-        {},
-        {
-            "can_continue": "can"
-        }
+                    "current_turn_dff_suspended": false,
+                    "context": {
+                        "id": "29b53c71-8e7c-4891-8ebc-da3fafe059a1",
+                        "labels": {
+                            "0": [
+                                "context_driven_response",
+                                "command_selector"
+                            ]
+                        },
+                        "requests": {
+                            "0": "move forward for 10 meters."
+                        },
+                        "responses": {
+                            "0": [
+                                [
+                                    "Moving forward by 10 meters. #+#move_forward",
+                                    1.0,
+                                    {},
+                                    {},
+                                    {
+                                        "command_to_perform": "move_forward_10"
+                                    }
+                                ]
+                            ]
+                        },
+                        "misc": {},
+                        "validation": false,
+                        "actor_state": {}
+                    }
+                },
+                "dff_shared_state": {
+                    "cross_links": {},
+                    "cross_states": {}
+                },
+                "used_links": {},
+                "age_group": "",
+                "disliked_skills": []
+            }
+        ],
+        [
+            {}
+        ],
+        [
+            {
+                "can_continue": "can",
+                "command_to_perform": "move_forward_10"
+            }
+        ]
     ]
 ]
