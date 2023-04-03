@@ -16,8 +16,6 @@ combined-classification:
     endpoint: model
   - group: candidate_annotators
     endpoint: batch_model
-  - group: candidate_annotators
-    endpoint: batch_model
   build_args:
     CONFIG: combined_classifier.json
     SERVICE_PORT: 8087
