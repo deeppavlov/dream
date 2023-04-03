@@ -1,7 +1,6 @@
 import logging
 
 from dff.script import Context, Actor
-from dff.script.core.context import get_last_index
 import common.constants as common_constants
 from common.wiki_skill import extract_entity
 from .facts_utils import provide_facts_response
@@ -64,24 +63,6 @@ def fact_provider(page_source, wiki_page):
         return provide_facts_response(ctx, actor, page_source, wiki_page)
 
     return response
-
-
-def fill_responses_by_slots():
-    def fill_responses_by_slots_processing(
-        ctx: Context,
-        actor: Actor,
-        *args,
-        **kwargs,
-    ) -> Context:
-        last_response = ctx.last_response
-        if not last_response or last_response.text is None:
-            return ctx
-        for slot_name, slot_value in ctx.misc.get(DREAM_SLOTS_KEY, {}).items():
-            last_response.text = last_response.text.replace("{" f"{slot_name}" "}", slot_value)
-        ctx.responses[get_last_index(ctx.responses)] = last_response
-        return ctx
-
-    return fill_responses_by_slots_processing
 
 
 def set_confidence(confidence: float = 1.0):

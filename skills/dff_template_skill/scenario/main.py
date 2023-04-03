@@ -17,6 +17,7 @@ from dff.pipeline import Pipeline
 
 import common.dff_api_v1.integration.condition as int_cnd
 import common.dff_api_v1.integration.processing as int_prs
+import common.dff_api_v1.integration.response as int_rsp
 from common.dff_api_v1.integration.message import DreamMessage
 
 
@@ -28,18 +29,18 @@ from . import response as loc_rsp
 logger = logging.getLogger(__name__)
 
 # First of all, to create a dialog agent, we need to create a dialog script.
-# Below, `script` is the dialog script.
-# A dialog script is a flow dictionary that can contain multiple flows .
-# Flows are needed in order to divide a dialog into sub-dialogs and process them separately.
+# Below, we lay out our script and assign it to the `script` variable.
+# A dialog script is a dictionary with each item corresponding to a different namespace, aka flow.
+# Flows allow you to divide a dialog into sub-dialogs and process them separately.
 # For example, the separation can be tied to the topic of the dialog.
 # In our example, there is one flow called greeting.
 
 # A flow describes a sub-dialog using linked nodes, each node has the keywords `RESPONSE` and `TRANSITIONS`.
 
-# `RESPONSE` - contains the response that the dialog agent will return when transitioning to this node.
+# `RESPONSE` - contains the response that the dialog agent will return when visiting this node.
 # `TRANSITIONS` - describes transitions from the current node to other nodes.
 # `TRANSITIONS` are described in pairs:
-#      - the node to which the agent will perform the transition
+#      - the node to visit
 #      - the condition under which to make the transition
 
 script = {
@@ -71,9 +72,6 @@ script = {
             PRE_RESPONSE_PROCESSING: {
                 "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue(),
-                "fill_responses_by_slots": int_prs.fill_responses_by_slots()
-                # Attempt to fill slots on each turn inside the flow.
-                # Use inside the LOCAL node to avoid repetition.
             },
         },
         "node1": {
@@ -83,29 +81,32 @@ script = {
             TRANSITIONS: {"node2": cnd.regexp(r"how are you", re.IGNORECASE)},
         },
         "node2": {
+            # The response section can contain any function that returns a DreamMessage.
             RESPONSE: loc_rsp.example_response(DreamMessage(text="Good. What do you want to talk about?")),
-            # loc_rsp.example_response is just for an example, you can use just str without example_response func
             TRANSITIONS: {"node3": loc_cnd.example_lets_talk_about()},
         },
         "node3": {
-            RESPONSE: DreamMessage(text="Sorry, I can not talk about that now. Maybe later. Do you like {topic}?"),
+            RESPONSE: int_rsp.fill_by_slots(
+                DreamMessage(text="Sorry, I can not talk about that now. Maybe later. Do you like {topic}?")
+            ),
             TRANSITIONS: {
                 "node4": int_cnd.is_yes_vars,
                 "node5": int_cnd.is_no_vars,
                 "node6": int_cnd.is_do_not_know_vars,
-                "node7": cnd.true(),  # it will be chosen if other conditions are False
+                "node7": cnd.true(),  # this option will be chosen if no other condition is met.
             },
         },
         "node4": {
-            RESPONSE: DreamMessage(text="I like {topic} too, {user_name}"),
+            # Invoke a special function to insert slots to the response.
+            RESPONSE: int_rsp.fill_by_slots(DreamMessage(text="I like {topic} too, {user_name}")),
             TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node5": {
-            RESPONSE: DreamMessage(text="I do not like {topic} too, {user_name}"),
+            RESPONSE: int_rsp.fill_by_slots(DreamMessage(text="I do not like {topic} too, {user_name}")),
             TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node6": {
-            RESPONSE: DreamMessage(text="I have no opinion about {topic} too, {user_name}"),
+            RESPONSE: int_rsp.fill_by_slots(DreamMessage(text="I have no opinion about {topic} too, {user_name}")),
             TRANSITIONS: {("node7", 0.1): cnd.true()},
         },
         "node7": {
