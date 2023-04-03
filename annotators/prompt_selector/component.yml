@@ -14,18 +14,6 @@ prompt-selector:
   endpoints:
   - group: annotators
     endpoint: respond
-  - group: annotators
-    endpoint: respond
-  - group: annotators
-    endpoint: respond
-  - group: annotators
-    endpoint: respond
-  - group: annotators
-    endpoint: respond
-  - group: annotators
-    endpoint: respond
-  - group: annotators
-    endpoint: respond
   build_args:
     SERVICE_PORT: 8135
     SERVICE_NAME: prompt_selector
