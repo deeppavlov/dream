@@ -1,4 +1,4 @@
-from dff.script import Context, Actor
+from dff.script import Context
 from .processing import DREAM_SLOTS_KEY
 from .message import DreamMessage
 
@@ -6,7 +6,7 @@ from .message import DreamMessage
 def fill_by_slots(response: DreamMessage):
     def fill_responses_by_slots_inner(
         ctx: Context,
-        actor: Actor,
+        _,
         *args,
         **kwargs,
     ) -> Context:

@@ -6,7 +6,7 @@ from typing import List, Any
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
-from dff.script import Context, Actor, MultiMessage
+from dff.script import Context, MultiMessage
 from dff.pipeline import Pipeline
 from pydantic import BaseModel, Field, Extra, root_validator
 
@@ -143,7 +143,7 @@ def load_ctxs(requested_data) -> List[Context]:
     return ctxs
 
 
-def get_response(ctx: Context, actor: Actor):
+def get_response(ctx: Context, _):
     agent = ctx.misc["agent"]
     response_parts = agent.get("response_parts", [])
     confidence = agent["response"].get("confidence", 0.85)

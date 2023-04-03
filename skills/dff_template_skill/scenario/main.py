@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 # First of all, to create a dialog agent, we need to create a dialog script.
 # Below, we lay out our script and assign it to the `script` variable.
-# A dialog script is a dictionary with each item corresponding to a different namespace, aka flow.
+# A dialog script is a dictionary each item of which corresponds to a different namespace, aka flow.
 # Flows allow you to divide a dialog into sub-dialogs and process them separately.
 # For example, the separation can be tied to the topic of the dialog.
 # In our example, there is one flow called greeting.

@@ -2,7 +2,8 @@ import logging
 import os
 import random
 
-from dff.script import Context, Actor
+from dff.script import Context
+from dff.pipeline import Pipeline
 
 import common.constants as common_constants
 import common.link as common_link
@@ -16,17 +17,19 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 NEWS_API_ANNOTATOR_URL = os.getenv("NEWS_API_ANNOTATOR_URL")
 
 
-def get_new_human_labeled_noun_phrase(ctx: Context, actor: Actor) -> list:
+def get_new_human_labeled_noun_phrase(ctx: Context, pipeline: Pipeline) -> list:
     return (
         []
         if ctx.validation
-        else (get_last_human_utterance(ctx, actor).get("annotations", {}).get("cobot_entities", {}).get("entities", []))
+        else (
+            get_last_human_utterance(ctx, pipeline).get("annotations", {}).get("cobot_entities", {}).get("entities", [])
+        )
     )
 
 
-def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, positive_threshold=0.333) -> str:
+def get_human_sentiment(ctx: Context, pipeline: Pipeline, negative_threshold=0.5, positive_threshold=0.333) -> str:
     sentiment_probs = (
-        None if ctx.validation else common_utils.get_sentiment(get_last_human_utterance(ctx, actor), probs=True)
+        None if ctx.validation else common_utils.get_sentiment(get_last_human_utterance(ctx, pipeline), probs=True)
     )
     if sentiment_probs and isinstance(sentiment_probs, dict):
         max_sentiment_prob = max(sentiment_probs.values())
@@ -42,18 +45,18 @@ def get_human_sentiment(ctx: Context, actor: Actor, negative_threshold=0.5, posi
     return "neutral"
 
 
-def get_cross_state(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")) -> dict:
+def get_cross_state(ctx: Context, _, service_name=SERVICE_NAME.replace("-", "_")) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dff_shared_state"]["cross_states"].get(service_name, {})
 
 
-def save_cross_state(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_"), new_state={}):
+def save_cross_state(ctx: Context, _, service_name=SERVICE_NAME.replace("-", "_"), new_state={}):
     if not ctx.validation:
         ctx.misc["agent"]["dff_shared_state"]["cross_states"][service_name] = new_state
 
 
-def get_cross_link(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace("-", "_")) -> dict:
+def get_cross_link(ctx: Context, pipeline: Pipeline, service_name=SERVICE_NAME.replace("-", "_")) -> dict:
     links = {} if ctx.validation else ctx.misc["agent"]["dff_shared_state"]["cross_links"].get(service_name, {})
-    cur_human_index = get_human_utter_index(ctx, actor)
+    cur_human_index = get_human_utter_index(ctx, pipeline)
     cross_link = [cross_link for human_index, cross_link in links.items() if (cur_human_index - int(human_index)) == 1]
     cross_link = cross_link[0] if cross_link else {}
     return cross_link
@@ -61,12 +64,12 @@ def get_cross_link(ctx: Context, actor: Actor, service_name=SERVICE_NAME.replace
 
 def set_cross_link(
     ctx: Context,
-    actor: Actor,
+    pipeline: Pipeline,
     to_service_name,
     cross_link_additional_data={},
     from_service_name=SERVICE_NAME.replace("-", "_"),
 ):
-    cur_human_index = get_human_utter_index(ctx, actor)
+    cur_human_index = get_human_utter_index(ctx, pipeline)
     if not ctx.validation:
         ctx.misc["agent"]["dff_shared_state"]["cross_links"][to_service_name] = {
             cur_human_index: {
@@ -76,175 +79,175 @@ def set_cross_link(
         }
 
 
-def reset_response_parts(ctx: Context, actor: Actor):
+def reset_response_parts(ctx: Context, _):
     if not ctx.validation and "response_parts" in ctx.misc["agent"]:
         del ctx.misc["agent"]["response_parts"]
 
 
-def add_parts_to_response_parts(ctx: Context, actor: Actor, parts=[]):
+def add_parts_to_response_parts(ctx: Context, _, parts=[]):
     response_parts = set([] if ctx.validation else ctx.misc["agent"].get("response_parts", []))
     response_parts.update(parts)
     if not ctx.validation:
         ctx.misc["agent"]["response_parts"] = sorted(list(response_parts))
 
 
-def set_acknowledgement_to_response_parts(ctx: Context, actor: Actor):
-    reset_response_parts(ctx, actor)
-    add_parts_to_response_parts(ctx, actor, parts=["acknowledgement"])
+def set_acknowledgement_to_response_parts(ctx: Context, pipeline: Pipeline):
+    reset_response_parts(ctx, pipeline)
+    add_parts_to_response_parts(ctx, pipeline, parts=["acknowledgement"])
 
 
-def add_acknowledgement_to_response_parts(ctx: Context, actor: Actor):
+def add_acknowledgement_to_response_parts(ctx: Context, pipeline: Pipeline):
     if not ctx.validation and ctx.misc["agent"].get("response_parts") is None:
-        add_parts_to_response_parts(ctx, actor, parts=["body"])
-    add_parts_to_response_parts(ctx, actor, parts=["acknowledgement"])
+        add_parts_to_response_parts(ctx, pipeline, parts=["body"])
+    add_parts_to_response_parts(ctx, pipeline, parts=["acknowledgement"])
 
 
-def set_body_to_response_parts(ctx: Context, actor: Actor):
-    reset_response_parts(ctx, actor)
-    add_parts_to_response_parts(ctx, actor, parts=["body"])
+def set_body_to_response_parts(ctx: Context, pipeline: Pipeline):
+    reset_response_parts(ctx, pipeline)
+    add_parts_to_response_parts(ctx, pipeline, parts=["body"])
 
 
-def add_body_to_response_parts(ctx: Context, actor: Actor):
-    add_parts_to_response_parts(ctx, actor, parts=["body"])
+def add_body_to_response_parts(ctx: Context, pipeline: Pipeline):
+    add_parts_to_response_parts(ctx, pipeline, parts=["body"])
 
 
-def set_prompt_to_response_parts(ctx: Context, actor: Actor):
-    reset_response_parts(ctx, actor)
-    add_parts_to_response_parts(ctx, actor, parts=["prompt"])
+def set_prompt_to_response_parts(ctx: Context, pipeline: Pipeline):
+    reset_response_parts(ctx, pipeline)
+    add_parts_to_response_parts(ctx, pipeline, parts=["prompt"])
 
 
-def add_prompt_to_response_parts(ctx: Context, actor: Actor):
-    add_parts_to_response_parts(ctx, actor, parts=["prompt"])
+def add_prompt_to_response_parts(ctx: Context, pipeline: Pipeline):
+    add_parts_to_response_parts(ctx, pipeline, parts=["prompt"])
 
 
-def get_shared_memory(ctx: Context, actor: Actor) -> dict:
+def get_shared_memory(ctx: Context, _) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["shared_memory"]
 
 
-def get_used_links(ctx: Context, actor: Actor) -> dict:
+def get_used_links(ctx: Context, _) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["used_links"]
 
 
-def get_age_group(ctx: Context, actor: Actor) -> dict:
+def get_age_group(ctx: Context, _) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["age_group"]
 
 
-def set_age_group(ctx: Context, actor: Actor, set_age_group):
+def set_age_group(ctx: Context, _, set_age_group):
     if not ctx.validation:
         ctx.misc["agent"]["age_group"] = set_age_group
 
 
-def get_disliked_skills(ctx: Context, actor: Actor) -> list:
+def get_disliked_skills(ctx: Context, _) -> list:
     return [] if ctx.validation else ctx.misc["agent"]["disliked_skills"]
 
 
-def get_human_utter_index(ctx: Context, actor: Actor) -> int:
+def get_human_utter_index(ctx: Context, _) -> int:
     return 0 if ctx.validation else ctx.misc["agent"]["human_utter_index"]
 
 
-def get_previous_human_utter_index(ctx: Context, actor: Actor) -> int:
+def get_previous_human_utter_index(ctx: Context, _) -> int:
     return 0 if ctx.validation else ctx.misc["agent"]["previous_human_utter_index"]
 
 
-def get_dialog(ctx: Context, actor: Actor) -> dict:
+def get_dialog(ctx: Context, _) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["dialog"]
 
 
-def get_utterances(ctx: Context, actor: Actor) -> dict:
+def get_utterances(ctx: Context, _) -> dict:
     return [] if ctx.validation else ctx.misc["agent"]["dialog"]["utterances"]
 
 
-def get_human_utterances(ctx: Context, actor: Actor) -> dict:
+def get_human_utterances(ctx: Context, _) -> dict:
     return [] if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"]
 
 
-def get_last_human_utterance(ctx: Context, actor: Actor) -> dict:
+def get_last_human_utterance(ctx: Context, _) -> dict:
     return {"text": "", "annotations": {}} if ctx.validation else ctx.misc["agent"]["dialog"]["human_utterances"][-1]
 
 
-def get_bot_utterances(ctx: Context, actor: Actor) -> list:
+def get_bot_utterances(ctx: Context, _) -> list:
     return [] if ctx.validation else ctx.misc["agent"]["dialog"]["bot_utterances"]
 
 
-def get_last_bot_utterance(ctx: Context, actor: Actor) -> dict:
+def get_last_bot_utterance(ctx: Context, _) -> dict:
     if not ctx.validation and ctx.misc["agent"]["dialog"]["bot_utterances"]:
         return ctx.misc["agent"]["dialog"]["bot_utterances"][-1]
     else:
         return {"text": "", "annotations": {}}
 
 
-def save_to_shared_memory(ctx: Context, actor: Actor, **kwargs):
+def save_to_shared_memory(ctx: Context, _, **kwargs):
     if not ctx.validation:
         ctx.misc["agent"]["shared_memory"].update(kwargs)
 
 
-def update_used_links(ctx: Context, actor: Actor, linked_skill_name, linking_phrase):
+def update_used_links(ctx: Context, _, linked_skill_name, linking_phrase):
     if not ctx.validation:
         agent = ctx.misc["agent"]
         agent["used_links"][linked_skill_name] = agent["used_links"].get(linked_skill_name, []) + [linking_phrase]
 
 
-def get_new_link_to(ctx: Context, actor: Actor, skill_names):
-    used_links = get_used_links(ctx, actor)
-    disliked_skills = get_disliked_skills(ctx, actor)
+def get_new_link_to(ctx: Context, pipeline: Pipeline, skill_names):
+    used_links = get_used_links(ctx, pipeline)
+    disliked_skills = get_disliked_skills(ctx, pipeline)
 
     link = common_link.link_to(
         skill_names, human_attributes={"used_links": used_links, "disliked_skills": disliked_skills}
     )
-    update_used_links(ctx, actor, link["skill"], link["phrase"])
+    update_used_links(ctx, pipeline, link["skill"], link["phrase"])
     return link
 
 
-def set_dff_suspension(ctx: Context, actor: Actor):
+def set_dff_suspension(ctx: Context, _):
     if not ctx.validation:
         ctx.misc["agent"]["current_turn_dff_suspended"] = True
 
 
-def reset_dff_suspension(ctx: Context, actor: Actor):
+def reset_dff_suspension(ctx: Context, _):
     if not ctx.validation:
         ctx.misc["agent"]["current_turn_dff_suspended"] = False
 
 
-def set_confidence(ctx: Context, actor: Actor, confidence=1.0):
+def set_confidence(ctx: Context, pipeline: Pipeline, confidence=1.0):
     if not ctx.validation:
         ctx.misc["agent"]["response"].update({"confidence": confidence})
     if confidence == 0.0:
-        reset_can_continue(ctx, actor)
+        reset_can_continue(ctx, pipeline)
 
 
-def set_can_continue(ctx: Context, actor: Actor, continue_flag=common_constants.CAN_CONTINUE_SCENARIO):
+def set_can_continue(ctx: Context, _, continue_flag=common_constants.CAN_CONTINUE_SCENARIO):
     if not ctx.validation:
         ctx.misc["agent"]["response"].update({"can_continue": continue_flag})
 
 
-def reset_can_continue(ctx: Context, actor: Actor):
+def reset_can_continue(ctx: Context, _):
     if not ctx.validation and "can_continue" in ctx.misc["agent"]["response"]:
         del ctx.misc["agent"]["response"]["can_continue"]
 
 
-def get_named_entities_from_human_utterance(ctx: Context, actor: Actor):
+def get_named_entities_from_human_utterance(ctx: Context, pipeline: Pipeline):
     # ent is a dict! ent = {"text": "London":, "type": "LOC"}
     entities = common_utils.get_entities(
-        get_last_human_utterance(ctx, actor),
+        get_last_human_utterance(ctx, pipeline),
         only_named=True,
         with_labels=True,
     )
     return entities
 
 
-def get_nounphrases_from_human_utterance(ctx: Context, actor: Actor):
+def get_nounphrases_from_human_utterance(ctx: Context, pipeline: Pipeline):
     nps = common_utils.get_entities(
-        get_last_human_utterance(ctx, actor),
+        get_last_human_utterance(ctx, pipeline),
         only_named=False,
         with_labels=False,
     )
     return nps
 
 
-def get_fact_random_annotations_from_human_utterance(ctx: Context, actor: Actor) -> dict:
+def get_fact_random_annotations_from_human_utterance(ctx: Context, pipeline: Pipeline) -> dict:
     if not ctx.validation:
         return (
-            get_last_human_utterance(ctx, actor)
+            get_last_human_utterance(ctx, pipeline)
             .get("annotations", {})
             .get("fact_random", {"facts": [], "response": ""})
         )
@@ -252,8 +255,8 @@ def get_fact_random_annotations_from_human_utterance(ctx: Context, actor: Actor)
         return {"facts": [], "response": ""}
 
 
-def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity) -> list:
-    fact_random_results = get_fact_random_annotations_from_human_utterance(ctx, actor)
+def get_fact_for_particular_entity_from_human_utterance(ctx: Context, pipeline: Pipeline, entity) -> list:
+    fact_random_results = get_fact_random_annotations_from_human_utterance(ctx, pipeline)
     facts_for_entity = []
     for fact in fact_random_results.get("facts", []):
         is_same_entity = fact.get("entity_substr", "").lower() == entity.lower()
@@ -264,8 +267,8 @@ def get_fact_for_particular_entity_from_human_utterance(ctx: Context, actor: Act
     return facts_for_entity
 
 
-def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: Actor, entity) -> dict:
-    last_uttr = get_last_human_utterance(ctx, actor)
+def get_news_about_particular_entity_from_human_utterance(ctx: Context, pipeline: Pipeline, entity) -> dict:
+    last_uttr = get_last_human_utterance(ctx, pipeline)
     last_uttr_entities_news = last_uttr.get("annotations", {}).get("news_api_annotator", [])
     curr_news = {}
     for news_entity in last_uttr_entities_news:
@@ -278,8 +281,8 @@ def get_news_about_particular_entity_from_human_utterance(ctx: Context, actor: A
     return curr_news
 
 
-def get_facts_from_fact_retrieval(ctx: Context, actor: Actor) -> list:
-    annotations = get_last_human_utterance(ctx, actor).get("annotations", {})
+def get_facts_from_fact_retrieval(ctx: Context, pipeline: Pipeline) -> list:
+    annotations = get_last_human_utterance(ctx, pipeline).get("annotations", {})
     if "fact_retrieval" in annotations:
         if isinstance(annotations["fact_retrieval"], dict):
             return annotations["fact_retrieval"].get("facts", [])
@@ -289,14 +292,14 @@ def get_facts_from_fact_retrieval(ctx: Context, actor: Actor) -> list:
 
 
 def get_unrepeatable_index_from_rand_seq(
-    ctx: Context, actor: Actor, seq_name, seq_max, renew_seq_if_empty=False
+    ctx: Context, pipeline: Pipeline, seq_name, seq_max, renew_seq_if_empty=False
 ) -> int:
     """Return a unrepeatable index from RANDOM_SEQUENCE.
     RANDOM_SEQUENCE is stored in shared merory by name `seq_name`.
     RANDOM_SEQUENCE is shuffled [0..`seq_max`].
     RANDOM_SEQUENCE will be updated after index will get out of RANDOM_SEQUENCE if `renew_seq_if_empty` is True
     """
-    shared_memory = get_shared_memory(ctx, actor)
+    shared_memory = get_shared_memory(ctx, pipeline)
     seq = shared_memory.get(seq_name, random.sample(list(range(seq_max)), seq_max))
     if renew_seq_if_empty or seq:
         seq = seq if seq else random.sample(list(range(seq_max)), seq_max)
@@ -305,15 +308,15 @@ def get_unrepeatable_index_from_rand_seq(
         return next_index
 
 
-def get_history(ctx: Context, actor: Actor):
+def get_history(ctx: Context, _):
     if not ctx.validation:
         return ctx.misc["agent"]["history"]
     return {}
 
 
-def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
+def get_n_last_state(ctx: Context, pipeline: Pipeline, n) -> str:
     last_state = ""
-    history = list(get_history(ctx, actor).items())
+    history = list(get_history(ctx, pipeline).items())
     if history:
         history_sorted = sorted(history, key=lambda x: x[0])
         if len(history_sorted) >= n:
@@ -321,9 +324,9 @@ def get_n_last_state(ctx: Context, actor: Actor, n) -> str:
     return last_state
 
 
-def get_last_state(ctx: Context, actor: Actor) -> str:
+def get_last_state(ctx: Context, pipeline: Pipeline) -> str:
     last_state = ""
-    history = list(get_history(ctx, actor).items())
+    history = list(get_history(ctx, pipeline).items())
     if history:
         history_sorted = sorted(history, key=lambda x: x[0])
         last_state = history_sorted[-1][1]

@@ -8,7 +8,8 @@ import requests
 import sentry_sdk
 import common.constants as common_constants
 import common.dff_api_v1.integration.context as context
-from dff.script import Context, Actor
+from dff.script import Context
+from dff.pipeline import Pipeline
 
 from common.wiki_skill import (
     find_page_title,
@@ -243,7 +244,7 @@ def preprocess_wikipedia_page(found_entity_substr, found_entity_types, article_c
     return page_content_list
 
 
-def provide_facts_request(ctx: Context, actor: Actor):
+def provide_facts_request(ctx: Context, _):
     flag = False
     wiki = ctx.misc.get("wiki", {})
     user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
@@ -259,7 +260,7 @@ def provide_facts_request(ctx: Context, actor: Actor):
     return flag
 
 
-def provide_facts_response(ctx: Context, actor: Actor, page_source, wiki_page):
+def provide_facts_response(ctx: Context, pipeline: Pipeline, page_source, wiki_page):
     wiki = ctx.misc.get("wiki", {})
     user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
     isyes = is_yes(user_uttr) or re.findall(CONTINUE_PATTERN, user_uttr["text"])
@@ -301,20 +302,15 @@ def provide_facts_response(ctx: Context, actor: Actor, page_source, wiki_page):
     logger.info(f"response, final {response}")
     if response:
         if isyes:
-            context.set_confidence(ctx, actor, 1.0)
-            context.set_can_continue(ctx, actor, common_constants.MUST_CONTINUE)
+            context.set_confidence(ctx, pipeline, 1.0)
+            context.set_can_continue(ctx, pipeline, common_constants.MUST_CONTINUE)
         else:
-            context.set_confidence(ctx, actor, 0.99)
-            context.set_can_continue(ctx, actor, common_constants.CAN_CONTINUE_SCENARIO)
+            context.set_confidence(ctx, pipeline, 0.99)
+            context.set_can_continue(ctx, pipeline, common_constants.CAN_CONTINUE_SCENARIO)
     else:
-        context.set_confidence(ctx, actor, 0.0)
-        context.set_can_continue(ctx, actor, common_constants.CAN_NOT_CONTINUE)
-    if hasattr(ctx, "a_s"):
-        processed_node = ctx.a_s.get("processed_node", ctx.a_s["next_node"])
-        processed_node.response = response
-        ctx.a_s["processed_node"] = processed_node
-    else:
-        processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
-        processed_node.response = response
-        ctx.framework_states["actor"]["processed_node"] = processed_node
+        context.set_confidence(ctx, pipeline, 0.0)
+        context.set_can_continue(ctx, pipeline, common_constants.CAN_NOT_CONTINUE)
+    processed_node = ctx.framework_states["actor"].get("processed_node", ctx.framework_states["actor"]["next_node"])
+    processed_node.response = response
+    ctx.framework_states["actor"]["processed_node"] = processed_node
     return ctx
