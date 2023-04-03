@@ -1,6 +1,8 @@
 agent:
   name: timeout_service
   display_name: Timeout Service
+  component_type: null
+  model_type: null
   container_name: agent
   is_customizable: false
   author: DeepPavlov
@@ -11,4 +13,5 @@ agent:
   endpoints:
   - group: timeout_service
     endpoint: respond
+  build_args: null
   date_created: '2023-03-04T19:27:44'

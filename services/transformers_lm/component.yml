@@ -32,8 +32,8 @@ transformers-lm-bloomz7b:
   author: DeepPavlov
   description: generative service based on Transformers generative model, the model
     is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular,
-    in this service, [BLOOMZ-7b1 model](https://huggingface.co/bigscience/bloomz-7b1) is
-    used.
+    in this service, [BLOOMZ-7b1 model](https://huggingface.co/bigscience/bloomz-7b1)
+    is used.
   ram_usage: 2.5G
   gpu_usage: 29G
   port: 8146
@@ -46,4 +46,3 @@ transformers-lm-bloomz7b:
     PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
     HALF_PRECISION: 0
   date_created: '2023-03-16T09:45:32'
-

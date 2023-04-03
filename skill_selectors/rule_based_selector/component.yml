@@ -15,8 +15,6 @@ agent:
   endpoints:
   - group: skill_selectors
     endpoint: respond
-  - group: skill_selectors
-    endpoint: respond
   build_args:
     HIGH_PRIORITY_INTENTS: 1
     RESTRICTION_FOR_SENSITIVE_CASE: 1

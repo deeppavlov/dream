@@ -13,8 +13,6 @@ agent:
   endpoints:
   - group: skills
     endpoint: respond
-  - group: skills
-    endpoint: respond
   build_args:
     LANGUAGE: EN
   date_created: '2023-03-16T09:45:32'
