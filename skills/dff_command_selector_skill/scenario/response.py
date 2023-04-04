@@ -44,7 +44,8 @@ def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
         logger.debug("Intent is not defined")
 
     if response == "":
-        logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
+        intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
+        logger.error(f"response is empty for intents: {intents}")
     elif conf == 0.0:
         return response
     return [[response, conf, human_attr, bot_attr, attr]]
@@ -52,7 +53,9 @@ def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
 
 def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
-    logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
+    
+    intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
+    logger.error(f"response is empty for intents: {intents}")
     return ""
 
 
