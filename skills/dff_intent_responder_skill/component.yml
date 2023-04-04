@@ -8,7 +8,7 @@ dff-intent-responder-ru-skill:
   author: DeepPavlov
   description: provides template-based replies for some of the intents detected by
     Intent Catcher annotator
-  ram_usage: 50M
+  ram_usage: 100M
   gpu_usage: null
   port: 8012
   endpoints:

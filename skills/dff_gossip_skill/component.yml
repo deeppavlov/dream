@@ -7,7 +7,7 @@ dff-gossip-skill:
   is_customizable: false
   author: DeepPavlov
   description: DFF-based skill to discuss other people with news about them
-  ram_usage: 95M
+  ram_usage: 100M
   gpu_usage: null
   port: 8109
   endpoints:

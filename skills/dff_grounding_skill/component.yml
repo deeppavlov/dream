@@ -9,7 +9,7 @@ dff-grounding-skill:
   description: DFF-based skill to answer what is the topic of the conversation, to
     generate acknowledgement, to generate universal responses on some dialog acts
     by MIDAS
-  ram_usage: 90M
+  ram_usage: 100M
   gpu_usage: null
   port: 8080
   endpoints:

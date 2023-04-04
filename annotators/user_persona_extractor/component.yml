@@ -8,7 +8,7 @@ user-persona-extractor:
   author: DeepPavlov
   description: determines which age category the user belongs to based on some key
     words
-  ram_usage: 40M
+  ram_usage: 100M
   gpu_usage: null
   port: 8114
   endpoints:

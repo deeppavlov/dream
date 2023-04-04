@@ -7,7 +7,7 @@ dff-template-skill:
   is_customizable: false
   author: DeepPavlov
   description: DFF-based skill that provides an example of DFF usage
-  ram_usage: 50M
+  ram_usage: 100M
   gpu_usage: null
   port: 8120
   endpoints:

@@ -8,7 +8,7 @@ relative-persona-extractor:
   author: DeepPavlov
   description: Annotator utilizing Sentence Ranker to rank persona sentences and selecting
     `N_SENTENCES_TO_RETURN` the most relevant sentences
-  ram_usage: 50M
+  ram_usage: 100M
   gpu_usage: null
   port: 8133
   endpoints:

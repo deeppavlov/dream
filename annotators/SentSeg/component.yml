@@ -14,8 +14,6 @@ sentseg:
   endpoints:
   - group: annotators
     endpoint: sentseg
-  - group: annotators
-    endpoint: sentseg
   - group: response_annotators
     endpoint: sentseg
   build_args:

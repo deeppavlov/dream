@@ -8,7 +8,7 @@ dff-gaming-skill:
   author: DeepPavlov
   description: provides a video games discussion. Gaming Skill is for more general
     talk about video games
-  ram_usage: 80M
+  ram_usage: 100M
   gpu_usage: null
   port: 8115
   endpoints:
