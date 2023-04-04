@@ -10,8 +10,12 @@ SERVICE_PORT = getenv("SERVICE_PORT")
 
 def main_test():
     url = f"http://0.0.0.0:{SERVICE_PORT}/detect"
-    if "RU" in INTENT_PHRASES_PATH:
+    if "RU" in INTENT_PHRASES_PATH and "commands" in INTENT_PHRASES_PATH:
+        tests = json.load(open("tests_commands_RU.json"))
+    elif "RU" in INTENT_PHRASES_PATH:
         tests = json.load(open("tests_RU.json"))
+    elif "commands" in INTENT_PHRASES_PATH:
+        tests = json.load(open("tests_commands.json"))
     else:
         tests = json.load(open("tests.json"))
 

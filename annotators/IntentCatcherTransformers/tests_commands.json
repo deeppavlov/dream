@@ -550,5 +550,29 @@
     {
         "sentence": "play music",
         "intent": "cant_do"
+    },
+    {
+        "sentence": "can you track people please",
+        "intent": "track_object"
+    },
+    {
+        "sentence": "turn left on 20 degrees",
+        "intent": "turn_around"
+    },
+    {
+        "sentence": "please move forward for 20 metres",
+        "intent": "move_forward"
+    },
+    {
+        "sentence": "move backward for 3 meters",
+        "intent": "move_backward"
+    },
+    {
+        "sentence": "open this fucking door",
+        "intent": "open_door"
+    },
+    {
+        "sentence": "please go to the table",
+        "intent": "move_to_point"
     }
 ]
