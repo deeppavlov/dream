@@ -21,8 +21,8 @@ def get_result(sentences, sentences_with_history, postannotations=False):
     logger.debug((sentences, sentences_with_history, postannotations))
     ans = [{} for _ in sentences]
     if not sentences:
-        logger.exception("Input sentences not received")
-        sentences = [" "]
+        logger.exception("Input sentences not received: return empty result")
+        return ans
     if not sentences_with_history:
         logger.exception("Input sentences with history not received")
         sentences_with_history = sentences
