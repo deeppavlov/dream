@@ -1,11 +1,4 @@
 {
-    "connectors": {
-        "sentseg": {
-            "protocol": "http",
-            "timeout": 1.5,
-            "url": "http://sentseg:8011/sentseg"
-        }
-    },
     "services": {
         "last_chance_service": {
             "connector": {
@@ -47,30 +40,6 @@
                 "timeout"
             ]
         },
-        "response_annotator_selectors": {
-            "connector": {
-                "protocol": "python",
-                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
-                "annotator_names": [
-                    "sentseg"
-                ]
-            },
-            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-            "tags": [
-                "selector"
-            ]
-        },
-        "response_annotators": {
-            "sentseg": {
-                "connector": "connectors.sentseg",
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_annotator_selectors"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt"
-            }
-        },
         "annotators": {
             "spelling_preprocessing": {
                 "connector": {
@@ -81,15 +50,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
-            },
-            "sentseg": {
-                "connector": "connectors.sentseg",
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation"
             },
             "badlisted_words": {
                 "connector": {
@@ -114,9 +74,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
-                ]
+                    "annotators.spelling_preprocessing"                ]
             },
             "combined_classification": {
                 "connector": {
