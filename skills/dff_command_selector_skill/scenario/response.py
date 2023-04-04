@@ -76,6 +76,6 @@ def get_detected_intents(annotated_utterance):
         if intent_conf > 0 and intent_name in response_funcs.get_respond_funcs():
             confidence_current = intent_conf
             if confidence_current > confidence:
-                intent, confidence = intent_name, confidence_current
+                intent, confidence = intent_name, float(confidence_current)
 
     return intent, confidence
