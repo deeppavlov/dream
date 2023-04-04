@@ -11,11 +11,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8008:8008
-  sentseg:
-    volumes:
-      - "./annotators/SentSeg:/src"
-    ports:
-      - 8011:8011
   convers-evaluation-selector:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
