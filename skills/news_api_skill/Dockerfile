@@ -3,9 +3,9 @@ FROM python:3.7.4
 WORKDIR /src
 
 COPY ./skills/news_api_skill/requirements.txt requirements.txt
-RUN pip install -r /src/requirements.txt
-RUN python -c "import nltk; nltk.download('punkt')"
-RUN python -m nltk.downloader vader_lexicon
+RUN pip install -r /src/requirements.txt && \
+    python -c "import nltk; nltk.download('punkt')" && \
+    python -m nltk.downloader vader_lexicon
 
 COPY ./skills/news_api_skill/ ./
 COPY ./common/ ./common/

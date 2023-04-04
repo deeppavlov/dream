@@ -4,11 +4,10 @@ FROM python:3.9.1
 WORKDIR /src
 
 COPY common/dialogflow_framework/requirements.txt .
-RUN pip install -r requirements.txt
-
 COPY common/dialogflow_framework/scripts /scripts
 
-RUN bash /scripts/programy_logger_off.sh
+RUN pip install -r requirements.txt && \
+    bash /scripts/programy_logger_off.sh
 
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
@@ -17,9 +16,8 @@ ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-
-RUN python -m spacy download en_core_web_sm
+RUN pip install -r requirements.txt && \
+    python -m spacy download en_core_web_sm
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/

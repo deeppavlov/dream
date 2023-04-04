@@ -17,7 +17,6 @@ ENV DIR=$skilldir
 
 VOLUME /tmp/tfhub
 
-RUN mkdir dp-agent
 WORKDIR /dp-agent
 ENV PYTHONPATH "${PYTONPATH}:/dp-agent"
 
@@ -31,8 +30,8 @@ COPY $DIR /dp-agent/$DIR
 # RUN python -m deeppavlov install $CONFIG
 
 COPY dp/ /dp-agent/dp
-RUN python dp/dp_server_config.py
-RUN pip install --upgrade pip
+RUN python dp/dp_server_config.py && \
+    pip install --upgrade pip
 RUN sed -i "/uvicorn.run/s/app,/app, timeout_keep_alive=20,/g" "/base/DeepPavlov/deeppavlov/utils/server/server.py"
 
 RUN pip install sentry-sdk==0.13.0 # TODO: Move it to separate requirements

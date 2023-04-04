@@ -16,8 +16,8 @@ ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -m nltk.downloader wordnet
+RUN pip install -r requirements.txt && \
+    python -m nltk.downloader wordnet
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/

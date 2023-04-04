@@ -6,32 +6,32 @@ FROM python:3.9.1
 WORKDIR /src
 
 COPY common/dialogflow_framework/requirements.txt .
-RUN pip install -r requirements.txt
-
 COPY common/dialogflow_framework/scripts /scripts
 
-RUN bash /scripts/programy_logger_off.sh
+RUN pip install -r requirements.txt && \
+    bash /scripts/programy_logger_off.sh
 
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
-RUN apt-get update && apt-get install -y --allow-unauthenticated wget && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y --allow-unauthenticated wget && \
+    rm -rf /var/lib/apt/lists/*
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-
-RUN python -c "import nltk; nltk.download('punkt')"
+RUN pip install -r requirements.txt && \
+    python -c "import nltk; nltk.download('punkt')"
 
 ARG DATABASE_URL
 ARG MOVIE_PLOTS_URL
 
 WORKDIR /data
-RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json
-RUN wget  $MOVIE_PLOTS_URL -q -P /data/
-RUN tar -xvzf /data/*.tar.gz -C /data/
+RUN wget ${DATABASE_URL} -q -O /data/database_most_popular_main_info.json && \
+    wget  $MOVIE_PLOTS_URL -q -P /data/ && \
+    tar -xvzf /data/*.tar.gz -C /data/
 WORKDIR /src
 
 COPY skills/${SERVICE_NAME}/ ./
