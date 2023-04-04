@@ -54,7 +54,7 @@ def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
 
 def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
-    
+
     intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
     logger.error(f"response is empty for intents: {intents}")
     return ""
