@@ -5,10 +5,11 @@ import json
 from os import getenv
 
 INTENT_PHRASES_PATH = getenv("INTENT_PHRASES_PATH")
+SERVICE_PORT = getenv("SERVICE_PORT")
 
 
 def main_test():
-    url = "http://0.0.0.0:8014/detect"
+    url = "http://0.0.0.0:{SERVICE_PORT}/detect"
     if "RU" in INTENT_PHRASES_PATH:
         tests = json.load(open("tests_RU.json"))
     else:

@@ -143,7 +143,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/IntentCatcherTransformers",
-                    "container": "intent-catcher",
+                    "container": "intent-catcher-commands",
                     "endpoint": "detect"
                 }
             },
