@@ -9,15 +9,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8008
       - PORT=8008
 
-  sentseg:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8011
-      - PORT=8011
-
   dff-intent-responder-skill:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -81,7 +72,7 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8128
       - PORT=8128
 
-  combined-classification:
+  combined-classification-lightweight:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/
