@@ -24,8 +24,8 @@ COPY ./common/ ./common/
 COPY annotators/IntentCatcherTransformers/ /src
 WORKDIR /src
 
-RUN python -m deeppavlov download ${CONFIG_NAME}
-RUN python train_model_if_not_exist.py
+RUN python -m deeppavlov download ${CONFIG_NAME} && \
+    python train_model_if_not_exist.py
 
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
