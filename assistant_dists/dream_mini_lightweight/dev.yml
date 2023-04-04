@@ -57,7 +57,7 @@ services:
   combined-classification:
     volumes:
       - "./common:/src/common"
-      - "./annotators/combined_classification:/src"
+      - "./annotators/combined_classification_lightweight:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
