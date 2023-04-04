@@ -1,10 +1,10 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini_lightweight/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, combined-classification:8150"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, combined-classification-lightweight:8150"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -175,7 +175,7 @@ services:
         reservations:
           memory: 3G
 
-  combined-classification:
+  combined-classification-lightweight:
     env_file: [ .env ]
     build:
       args:
