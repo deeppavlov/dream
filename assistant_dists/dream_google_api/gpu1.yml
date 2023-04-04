@@ -1,0 +1,25 @@
+services:
+  agent:
+    restart: unless-stopped
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+      - ".:/dp-agent"
+    ports:
+      - ${AGENT_PORT}:4242
+  combined-classification:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+  mongo:
+    restart: unless-stopped
+    command: mongod
+    image: mongo:4.0.0
+  sentence-ranker:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+  transformers-lm-gptj:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+version: '3.7'
