@@ -10,7 +10,7 @@ def main():
     ]
     gold_results = [
         {"result": True},
-        {"result": False},
+        {"result": True},
         {"result": True},
         {"result": False},
         {"result": True},
