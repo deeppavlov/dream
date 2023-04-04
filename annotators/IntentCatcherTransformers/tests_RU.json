@@ -62,5 +62,29 @@
     {
         "sentence": "что из этого собака?",
         "intent": null
+    },
+    {
+        "sentence": "можешь отслеживать людей",
+        "intent": "track_object"
+    },
+    {
+        "sentence": "поверни на лево на 20 градусов",
+        "intent": "turn_around"
+    },
+    {
+        "sentence": "пожалуйста, проедь вперед на 20 метров",
+        "intent": "move_forward"
+    },
+    {
+        "sentence": "эй робот, отъедь назад на 3 метра",
+        "intent": "move_backward"
+    },
+    {
+        "sentence": "открой уже эту дверь",
+        "intent": "open_door"
+    },
+    {
+        "sentence": "подъезжай к столу, пожалуйста",
+        "intent": "move_to_point"
     }
 ]
