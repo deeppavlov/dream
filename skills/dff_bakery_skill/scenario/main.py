@@ -41,7 +41,12 @@ flows = {
             RESPONSE: "Our bakery is happy to help! What would you like to know?", 
             TRANSITIONS: {
                 ("bakery_general","dessert_ingredients"): loc_cnd.has_entity_in_graph(),
-                ("bakery_general", "no_ingredient"): cnd.regexp(r"sugar", re.IGNORECASE),
+                ("bakery_general", "no_ingredient"): cnd.all(
+                    [
+                        int_cnd.is_no_vars,
+                        cnd.regexp(r"sugar", re.IGNORECASE),
+                    ]
+                ),
                 ("bakery_general", "unknown_dessert"): cnd.true(),
             },
         },
