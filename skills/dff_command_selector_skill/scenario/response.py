@@ -3,6 +3,7 @@ from copy import deepcopy
 
 import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
+
 from common.utils import command_intents, get_intents
 from df_engine.core import Actor, Context
 

@@ -1,9 +1,10 @@
 import logging
+
 import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
 
-from df_engine.core import Actor, Context
 from common.utils import high_priority_intents, get_intents
+from df_engine.core import Actor, Context
 
 
 logger = logging.getLogger(__name__)
@@ -36,14 +37,16 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.debug("Intent is not defined")
 
     if response == "":
-        logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
-
+        intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
+        logger.error(f"response is empty for intents: {intents}")
     return response
 
 
 def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
-    logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
+
+    intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
+    logger.error(f"response is empty for intents: {intents}")
     return ""
 
 
