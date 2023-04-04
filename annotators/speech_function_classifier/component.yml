@@ -1,0 +1,24 @@
+speech-function-classifier:
+  name: speech_function_classifier
+  display_name: Speech Function Classifier
+  container_name: speech-function-classifier
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: a hierarchical algorithm based on several linear models and a rule-based
+    approach for the prediction of speech functions described by Eggins and Slade
+  ram_usage: 1.1G
+  gpu_usage: 4.5G
+  port: 8108
+  endpoints:
+  - group: annotators
+    endpoint: model
+  - group: response_annotators
+    endpoint: model
+  - group: candidate_annotators
+    endpoint: annotation
+  build_args:
+    SERVICE_PORT: 8108
+    SERVICE_NAME: speech_function_classifier
+  date_created: '2023-03-16T09:45:32'

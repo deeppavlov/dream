@@ -137,8 +137,9 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in convers-evaluation-selector gpt2-generator toxic-classification sentiment-classification \
-                     sentence-ranker; do
+    for container in convers-evaluation-selector gpt2-multilingual toxic-classification-multilingual
+                     sentiment-classification-multilingual \
+                     sentence-ranker-multilingual; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh

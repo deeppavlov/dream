@@ -1,0 +1,24 @@
+entity-linking-ru:
+  name: entity_linking
+  display_name: Entity Linking
+  container_name: entity-linking-ru
+  component_type: null
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: finds Wikidata entity ids for the entities detected with Entity Detection
+  ram_usage: 400M
+  gpu_usage: null
+  port: 8075
+  endpoints:
+  - group: annotators
+    endpoint: model
+  - group: services
+    endpoint: model
+  build_args:
+    SERVICE_PORT: 8075
+    SERVICE_NAME: entity_linking
+    CONFIG: entity_linking_rus.json
+    SRC_DIR: annotators/entity_linking_rus
+    LANGUAGE: RU
+  date_created: '2023-03-16T09:45:32'

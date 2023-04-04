@@ -21,9 +21,6 @@ services:
   knowledge-grounding:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  midas-classification:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   combined-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""

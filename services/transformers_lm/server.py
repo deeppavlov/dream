@@ -1,10 +1,10 @@
 import logging
-import json
 import os
 import time
 
 import sentry_sdk
 import torch
+from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -16,21 +16,16 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-CONFIG_NAME = os.environ.get("CONFIG_NAME")
-HALF_PRECISION = bool(os.environ.get("HALF_PRECISION", 0))
-logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
+HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
+logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
-
-with open(CONFIG_NAME, "r") as f:
-    generation_params = json.load(f)
-max_length = generation_params.get("max_length", 50)
-del generation_params["max_length"]
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
+def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
     outputs = []
     dialog_context = ""
     if prompt:
@@ -41,6 +36,9 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
         dialog_context += "\n".join(context)
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
+
+    max_length = generation_params.get("max_length", 50)
+    generation_params.pop("max_length", None)
 
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
@@ -57,9 +55,12 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
-        result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
+        result_cut = output.replace(dialog_context + " ", "")
+        result_cut = GENERATIVE_ROBOT_TEMPLATE.sub("\n", result_cut).strip()
+        result_cut = result_cut.split("\n")[0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
+
     return outputs
 
 
@@ -72,8 +73,16 @@ try:
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
+    default_config = {
+        "max_length": 60,
+        "min_length": 8,
+        "top_p": 0.9,
+        "temperature": 0.9,
+        "do_sample": True,
+        "num_return_sequences": 1,
+    }
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant."
+        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -83,19 +92,25 @@ except Exception as e:
     raise e
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
+    configs = request.json.get("configs", [])
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
     try:
         responses = []
-        for context, prompt in zip(contexts, prompts):
+        for context, prompt, config in zip(contexts, prompts, configs):
             curr_responses = []
-            outputs = generate_responses(context, model, tokenizer, prompt)
+            outputs = generate_responses(context, model, tokenizer, prompt, config)
             for response in outputs:
                 if len(response) >= 2:
                     curr_responses += [response]

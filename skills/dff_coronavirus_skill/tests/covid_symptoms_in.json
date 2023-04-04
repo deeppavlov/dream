@@ -49,7 +49,7 @@
                                 "yes."
                             ]
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",
@@ -273,7 +273,7 @@
                             "factoid": 0.007124739699065685,
                             "conversational": 0.9928752183914185
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "topic_recommendation": [
                             "dff_movie_skill",
                             "dff_travel_skill",

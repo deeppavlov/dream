@@ -1,0 +1,9 @@
+asr:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://asr:8031/asr_check
+  dialog_formatter: state_formatters.dp_formatters:asr_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  state_manager_method: add_annotation

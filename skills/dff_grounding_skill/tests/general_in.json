@@ -57,7 +57,7 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "talking": {
                                 "Causes": [
                                     "conversation",
@@ -282,7 +282,7 @@
                             "conversational": 0.9750574231147766
                         },
                         "spacy_nounphrases": [],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "sentseg": {
                             "punct_sent": "May be.",
                             "segments": [

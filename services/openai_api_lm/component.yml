@@ -1,0 +1,44 @@
+openai-api-chatgpt:
+  name: openai_api_chatgpt
+  display_name: ChatGPT
+  container_name: openai-api-chatgpt
+  component_type: null
+  model_type: External API
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on OpenAI API service, the model is set in
+    docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this
+    service, `gpt-3.5-turbo` is used).
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8145
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8145
+    SERVICE_NAME: openai_api_chatgpt
+    PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+  date_created: '2023-03-16T09:45:32'
+openai-api-davinci3:
+  name: openai_api_davinci3
+  display_name: GPT-3.5
+  container_name: openai-api-davinci3
+  component_type: null
+  model_type: External API
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on OpenAI API service, the model is set in
+    docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this
+    service, `text-davinci-003` is used).
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8131
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8131
+    SERVICE_NAME: openai_api_davinci3
+    PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
+  date_created: '2023-03-16T09:45:32'

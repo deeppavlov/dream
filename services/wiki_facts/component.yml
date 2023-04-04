@@ -1,0 +1,22 @@
+wiki-facts:
+  name: wiki_facts
+  display_name: Wiki Facts
+  container_name: wiki-facts
+  component_type: null
+  model_type: ML-based
+  is_customizable: false
+  author: DeepPavlov
+  description: model that extracts related facts from Wikipedia and WikiHow pages
+  ram_usage: 1.7G
+  gpu_usage: null
+  port: 8116
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8116
+    SERVICE_NAME: wiki_facts
+    CONFIG: page_extractor.json
+    SRC_DIR: services/wiki_facts
+    COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
+  date_created: '2023-03-16T09:45:32'

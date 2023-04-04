@@ -7,7 +7,6 @@ import random
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
 from sentry_sdk.integrations.logging import ignore_logger
 
 from common.dff.integration.actor import load_ctxs, get_response
@@ -33,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
@@ -61,10 +59,9 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = containers.is_container_running(
-        GENERATIVE_SERVICE_URL, {"dialog_contexts": [["hi!"]], "prompts": ["Respond like a friendly chatbot."]}
-    )
+    result = containers.is_container_running(GENERATIVE_SERVICE_URL)
     if result:
+        logger.info(f"GENERATIVE_SERVICE_URL: {GENERATIVE_SERVICE_URL} is ready")
         break
     else:
         time.sleep(5)

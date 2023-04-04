@@ -1,18 +1,18 @@
 version: '3.7'
 services:
-  gpt2-generator:
+  gpt2-multilingual:
     environment:
       DEVICE: cuda
       CUDA_VISIBLE_DEVICES: ""
-  toxic-classification:
+  toxic-classification-multilingual:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  sentiment-classification:
+  sentiment-classification-multilingual:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  sentence-ranker:
+  sentence-ranker-multilingual:
     environment:
       DEVICE: cuda
       CUDA_VISIBLE_DEVICES: ""

@@ -1,0 +1,11 @@
+dialogrpt-ru:
+- group: candidate_annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://dialogrpt-ru:8122/respond
+  dialog_formatter: state_formatters.dp_formatters:hypotheses_with_context_list
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - skills
+  state_manager_method: add_hypothesis_annotation_batch

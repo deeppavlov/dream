@@ -19,12 +19,11 @@ def main():
         },
     ]
 
-    gold_results = [["Q134773"], ["Q151269", "Q215925"]]
+    gold_results = [["Q134773", "Q552213"], ["Q151269", "Q215925"]]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
-        print(result)
         entity_ids = result[0][0]["entity_ids"]
         if entity_ids == gold_result:
             count += 1

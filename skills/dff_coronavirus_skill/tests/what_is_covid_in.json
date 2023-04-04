@@ -53,7 +53,7 @@
                             "dff_travel_skill",
                             "dff_music_skill"
                         ],
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
