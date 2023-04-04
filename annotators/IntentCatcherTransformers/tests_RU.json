@@ -84,7 +84,7 @@
         "intent": "open_door"
     },
     {
-        "sentence": "подъезжай к столу, пожалуйста",
+        "sentence": "доедь до стола, пожалуйста",
         "intent": "move_to_point"
     }
 ]

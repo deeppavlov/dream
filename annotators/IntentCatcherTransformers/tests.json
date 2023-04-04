@@ -564,7 +564,7 @@
         "intent": "move_forward"
     },
     {
-        "sentence": "robot move backward for 3 meters",
+        "sentence": "move backward for 3 meters",
         "intent": "move_backward"
     },
     {
@@ -572,7 +572,7 @@
         "intent": "open_door"
     },
     {
-        "sentence": "please robot got to the table",
+        "sentence": "please go to the table",
         "intent": "move_to_point"
     }
 ]
