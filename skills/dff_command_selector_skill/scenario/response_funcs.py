@@ -61,7 +61,7 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
             else:
                 response = f"Turning around counterclockwise by {degree[0]} degrees."
         else:
-            command = f"turn_counterclockwise"
+            command = "turn_counterclockwise"
             if LANGUAGE == "RU":
                 response = "Поворачиваюсь против часовой стрелки."
             else:
@@ -74,7 +74,7 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
             else:
                 response = f"Turning around clockwise by {degree[0]} degrees."
         else:
-            command = f"turn_clockwise"
+            command = "turn_clockwise"
             if LANGUAGE == "RU":
                 response = "Поворачиваюсь по часовой стрелке."
             else:
