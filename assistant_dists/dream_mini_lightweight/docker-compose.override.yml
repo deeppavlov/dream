@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, combined-classification:8150"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
