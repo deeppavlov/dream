@@ -23,9 +23,9 @@ ENV CONFIG=$CONFIG
 ENV SERVICE_PORT=$SERVICE_PORT
 
 COPY ./annotators/spelling_preprocessing_dp/requirements.txt /src/requirements.txt
-RUN pip install --upgrade pip && pip install -r /src/requirements.txt
-
-RUN pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
+RUN pip install --upgrade pip && \
+    pip install -r /src/requirements.txt && \
+    pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
 
 COPY $SRC_DIR /src
 

@@ -18,8 +18,8 @@ COPY . /src
 
 WORKDIR /src
 
-RUN python -m deeppavlov install $CONFIG
-RUN python -m spacy download en_core_web_sm
+RUN python -m deeppavlov install $CONFIG && \
+    python -m spacy download en_core_web_sm
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 

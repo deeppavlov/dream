@@ -1,18 +1,18 @@
 FROM python:3.7.4
 
- RUN mkdir /src
+WORKDIR /src
 
- COPY ./requirements.txt /src/requirements.txt
- RUN pip install -r /src/requirements.txt
+COPY ./requirements.txt /src/requirements.txt
 
- COPY . /src/
- WORKDIR /src
+RUN pip install -r /src/requirements.txt
 
- ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/reddit_embeddings.pickle
+COPY . /src/
 
- RUN mkdir /data
- RUN curl -L $DATA_URL --output /data/reddit_embeddings.pickle
+ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/reddit_embeddings.pickle
 
- ENV DATABASE_PATH /data/reddit_embeddings.pickle
+RUN mkdir /data
+RUN curl -L $DATA_URL --output /data/reddit_embeddings.pickle
 
- CMD gunicorn --workers=2 server:app
+ENV DATABASE_PATH /data/reddit_embeddings.pickle
+
+CMD gunicorn --workers=2 server:app
