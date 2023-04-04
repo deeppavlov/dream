@@ -27,8 +27,8 @@ COPY $SRC_DIR /src
 WORKDIR /src
 COPY ./common/ ./common/
 
-RUN sed -i "s|$SED_ARG|g" "$CONFIG"
-RUN sed -i "s|$SED_ARG|g" "$CONFIG_WIKI"
-RUN sed -i "s|$SED_ARG|g" "$CONFIG_WHOW"
+RUN sed -i "s|$SED_ARG|g" "$CONFIG" && \
+    sed -i "s|$SED_ARG|g" "$CONFIG_WIKI" && \
+    sed -i "s|$SED_ARG|g" "$CONFIG_WHOW"
 
 CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8100

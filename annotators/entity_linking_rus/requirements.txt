@@ -1,3 +1,5 @@
+pybind11==2.2.4
+hdt==2.3
 Flask==1.1.1
 nltk==3.2.5
 gunicorn==19.9.0

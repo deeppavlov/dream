@@ -1,3 +1,4 @@
+git+https://github.com/deeppavlov/DeepPavlov.git@1f0bda76c7c3fd6ccd4a1c0c880c0fffb73522d1
 gunicorn==19.9.0
 sentry-sdk[flask]==0.14.1
 flask==1.1.1
