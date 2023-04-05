@@ -1,14 +1,7 @@
-import json
 import logging
-import re
-import requests
 import sentry_sdk
 from os import getenv
-from typing import Any
 
-import common.dff.integration.context as int_ctx
-import common.dff.integration.response as int_rsp
-from common.constants import CAN_NOT_CONTINUE
 from df_engine.core import Context, Actor
 
 from langchain.agents import Tool
@@ -40,7 +33,7 @@ tools = [
     Tool(
         name="Current Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events or the current state of the world",
+        description="useful when you need to answer questions about current events or the current state of the world",
     ),
 ]
 memory = ConversationBufferMemory(memory_key="chat_history")
