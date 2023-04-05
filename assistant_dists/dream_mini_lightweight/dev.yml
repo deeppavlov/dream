@@ -54,7 +54,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  combined-classification:
+  combined-classification-lightweight:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification_lightweight:/src"
