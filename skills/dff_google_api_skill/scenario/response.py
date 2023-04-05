@@ -38,14 +38,15 @@ assert sending_variables["GOOGLE_API_KEY"]
 search = GoogleSearchAPIWrapper()
 tools = [
     Tool(
-        name = "Current Search",
+        name="Current Search",
         func=search.run,
-        description="useful for when you need to answer questions about current events or the current state of the world"
+        description="useful for when you need to answer questions about current events or the current state of the world",
     ),
 ]
 memory = ConversationBufferMemory(memory_key="chat_history")
-llm=OpenAI(temperature=0)
-agent_chain = initialize_agent(tools, llm, agent='zero-shot-react-description', verbose=True, memory=memory)
+llm = OpenAI(temperature=0)
+agent_chain = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, memory=memory)
+
 
 def google_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:

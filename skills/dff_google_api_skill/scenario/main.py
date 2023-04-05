@@ -28,5 +28,7 @@ flows = {
 }
 
 actor = Actor(
-    flows, start_label=("generative_google_api", "start_node"), fallback_node_label=("generative_google_api", "google_api_response_node")
+    flows,
+    start_label=("generative_google_api", "start_node"),
+    fallback_node_label=("generative_google_api", "google_api_response_node"),
 )
