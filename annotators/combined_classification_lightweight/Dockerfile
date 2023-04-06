@@ -2,13 +2,11 @@ FROM deeppavlov/base-gpu:0.17.5
 
 RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@1.1.1
 
-WORKDIR /base/DeepPavlov
-
 ARG CONFIG
 
 ARG PORT
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV PORT=$SERVICE_PORT
 
 WORKDIR /src
 RUN mkdir common
