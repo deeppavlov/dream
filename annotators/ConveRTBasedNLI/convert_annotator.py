@@ -18,7 +18,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 TRAINED_MODEL_PATH = os.environ.get("TRAINED_MODEL_PATH", None)
-CACHE_DIR = os.environ.get("CACHE_DIR", None)
 
 
 def data_generation(file_path):
@@ -30,7 +29,7 @@ def data_generation(file_path):
 
 
 class DataGenerator(tf.compat.v2.keras.utils.Sequence):
-    def __init__(self, list_examples, shuffle=True):
+    def __init__(self, list_examples, shuffle=False):
         self.list_examples = list_examples
         self.shuffle = shuffle
         self.indexes = None
@@ -57,15 +56,17 @@ class ConveRTAnnotator:
         self.model = None
 
         if TRAINED_MODEL_PATH:
-            self.model_path = TRAINED_MODEL_PATH
+            self.model_path = TRAINED_MODEL_PATH + '/model.h5'
         else:
+            self.batch_size = 1024
             self.__prepare_data()
             self.__create_model()
             self.__train_model()
 
     def __prepare_data(self):
+        logger.info(f"The download of SNLI dataset has begun.")
         snli_dataset = tfds.text.Snli()
-        snli_dataset.download_and_prepare(download_dir=CACHE_DIR)
+        snli_dataset.download_and_prepare(download_dir='/cache')
 
         datasets = snli_dataset.as_dataset()
         train_dataset, test_dataset, val_dataset = datasets['train'], datasets['test'], datasets['validation']
@@ -73,10 +74,12 @@ class ConveRTAnnotator:
         test_dataset = test_dataset.batch(self.batch_size).prefetch(tf.data.experimental.AUTOTUNE)
         train_dataset = train_dataset.batch(self.batch_size).prefetch(tf.data.experimental.AUTOTUNE)
 
-        common_path = CACHE_DIR + '/data'
-        val_path = common_path + '/validation'
-        test_path = common_path + '/test'
-        train_path = common_path + '/train'
+        logger.info(f"Dataset downloaded.")
+
+        common_path = '/cache/data'
+        val_path = common_path + '/validation/'
+        test_path = common_path + '/test/'
+        train_path = common_path + '/train/'
         if not os.path.exists(val_path):
             os.makedirs(val_path)
         if not os.path.exists(test_path):
@@ -84,9 +87,12 @@ class ConveRTAnnotator:
         if not os.path.exists(train_path):
             os.makedirs(train_path)
 
-        self.__vectorize_data(val_path + '/val_', val_dataset)
-        self.__vectorize_data(test_path + '/test_', test_dataset)
-        self.__vectorize_data(train_path + '/train_', train_dataset)
+        logger.info(f"Started making validation dataset.")
+        self.__vectorize_data(val_path + 'val_', val_dataset)
+        logger.info(f"Started making test dataset.")
+        self.__vectorize_data(test_path + 'test_', test_dataset)
+        logger.info(f"Started making train dataset.")
+        self.__vectorize_data(train_path + 'train_', train_dataset)
 
         train_examples = os.listdir(train_path)
         train_examples = [train_path + f_name for f_name in train_examples]
@@ -99,11 +105,10 @@ class ConveRTAnnotator:
         self.test_generator = DataGenerator(test_examples)
         self.val_generator = DataGenerator(val_examples)
 
-        logger.info(f"All datasets are made.")
+        logger.info(f"All datasets have been created.")
 
     def __vectorize_data(self, data_path, dataset):
         counter = 0
-        logger.info(f"Started making {data_path[-4:-1]} dataset.")
         for example in tfds.as_numpy(dataset):
             counter += 1
             premise, hypothesis, label = example['premise'], example['hypothesis'], example['label']
@@ -122,8 +127,8 @@ class ConveRTAnnotator:
         logger.info(f"Prepared all files.")
 
     def __create_model(self):
-        inp_p = tf.keras.layers.Input(shape=1024)
-        inp_h = tf.keras.layers.Input(shape=1024)
+        inp_p = tf.keras.layers.Input(shape=self.batch_size)
+        inp_h = tf.keras.layers.Input(shape=self.batch_size)
         combined = tf.keras.layers.concatenate([inp_p, inp_h])
         linear_1 = tf.keras.layers.Dense(1024, activation='relu')(combined)
         dropout_1 = tf.keras.layers.Dropout(0.45)(linear_1)
@@ -138,12 +143,19 @@ class ConveRTAnnotator:
             metrics=['accuracy'])
 
     def __train_model(self):
-        log_dir = CACHE_DIR + '/logs/'
-        ch_path = CACHE_DIR + '/checkpoints/cp-{epoch:04d}.ckpt'
+        log_dir = '/cache/logs/'
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
         csv_logger = tf.keras.callbacks.CSVLogger(log_dir + 'log.csv')
+
+        ch_path = '/cache/checkpoints'
+        if not os.path.exists(ch_path):
+            os.makedirs(ch_path)
+        ch_path += '/cp-{epoch:04d}.ckpt'
         model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
             filepath=ch_path,
             save_weights_only=True)
+
         early_stopping = tf.keras.callbacks.EarlyStopping(
             monitor='val_loss',
             patience=10)
@@ -154,8 +166,10 @@ class ConveRTAnnotator:
                            workers=6, epochs=100,
                            callbacks=[model_checkpoint, csv_logger, early_stopping])
 
-        self.model.save(CACHE_DIR + '/model.h5')
-        self.model_path = CACHE_DIR + '/model.h5'
+        self.model_path = '/cache/model.h5'
+        self.model.save(self.model_path)
+        os.environ["TRAINED_MODEL_PATH"] = self.model_path
+        logger.info(f"Model is trained.")
 
     def candidate_selection(self, candidates, bot_uttr_history, threshold=0.8):
         self.model = tf.keras.models.load_model(self.model_path)
