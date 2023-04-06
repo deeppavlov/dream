@@ -18,9 +18,9 @@ ENV SERVICE_PORT=$SERVICE_PORT
 ENV N_FACTS=$N_FACTS
 
 COPY ./annotators/fact_retrieval/requirements.txt /src/requirements.txt
-RUN pip install --upgrade pip && pip install -r /src/requirements.txt
-
-RUN pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
+RUN pip install --upgrade pip && \
+    pip install -r /src/requirements.txt && \
+    pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
 
 COPY $SRC_DIR /src
 

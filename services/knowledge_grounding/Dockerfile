@@ -8,16 +8,15 @@ ARG DATA_ARG
 ARG MODEL1_ARG
 ARG MODEL2_ARG
 
-RUN apt-get update && apt-get install -y --allow-unauthenticated git wget && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /src
 COPY . /src
 
-RUN pip install -r /src/requirements.txt &&\
-    python -c "import nltk; nltk.download('punkt')"
-
-# create dirs for data and models and load them
-RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models &&\
+RUN apt-get update && \
+    apt-get install -y --allow-unauthenticated git wget && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install -r /src/requirements.txt &&\
+    python -c "import nltk; nltk.download('punkt')" && \
+    mkdir -p /opt/conda/lib/python3.7/site-packages/data/models &&\
     wget $DATA_ARG -q -P /opt/conda/lib/python3.7/site-packages/data &&\
     tar -xvzf /opt/conda/lib/python3.7/site-packages/data/*.tar.gz -C /opt/conda/lib/python3.7/site-packages/data &&\
     rm /opt/conda/lib/python3.7/site-packages/data/*.tar.gz &&\
@@ -27,8 +26,5 @@ RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models &&\
     wget $MODEL2_ARG -q -P /opt/conda/lib/python3.7/site-packages/data/models &&\
     tar -xvzf /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz -C /opt/conda/lib/python3.7/site-packages/data/models &&\
     rm /opt/conda/lib/python3.7/site-packages/data/models/*.tar.gz
-WORKDIR /src
-
-COPY . /src
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:8083
