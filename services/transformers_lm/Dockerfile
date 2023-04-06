@@ -8,7 +8,7 @@ ARG HALF_PRECISION
 ENV HALF_PRECISION ${HALF_PRECISION}
 
 COPY ./services/transformers_lm/requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
 COPY . /src
 
