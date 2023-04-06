@@ -1,6 +1,4 @@
-# syntax=docker/dockerfile:experimental
-
-FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
+FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-runtime
 
 WORKDIR /src
 
