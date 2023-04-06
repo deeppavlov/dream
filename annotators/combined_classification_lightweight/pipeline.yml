@@ -1,4 +1,4 @@
-combined-classification:
+combined-classification-lightweight:
 - group: candidate_annotators
   connector:
     protocol: http
