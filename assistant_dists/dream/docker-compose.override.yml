@@ -1389,6 +1389,8 @@ services:
   convert-based-nli:
     env_file: [.env]
     build:
+      args:
+        TRAINED_MODEL_PATH: /data/nli_model
       context: ./annotators/ConveRTBasedNLI/
     command: flask run -h 0.0.0.0 -p 8150
     environment:

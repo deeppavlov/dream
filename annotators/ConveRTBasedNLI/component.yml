@@ -13,4 +13,6 @@ convert-based-nli:
   endpoints:
   - group: candidate_annotators
     endpoint: batch_model
+  build_args:
+    TRAINED_MODEL_PATH: /data/nli_model
   date_created: '2023-03-28T14:22:32'

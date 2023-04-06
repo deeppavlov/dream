@@ -1,4 +1,3 @@
-import os
 import numpy as np
 
 import tensorflow as tf
@@ -8,7 +7,6 @@ import tensorflow_hub as tfhub
 
 tf.compat.v1.disable_eager_execution()
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-CONVERT_MODEL_PATH = os.environ.get("CONVERT_MODEL_PATH", None)
 
 
 def normalize_vectors(vectors):
@@ -22,7 +20,7 @@ class Encoder:
         self.sess = tf.compat.v1.Session()
         self.text_placeholder = tf.compat.v1.placeholder(dtype=tf.string, shape=[None])
 
-        self.module = tfhub.Module(CONVERT_MODEL_PATH)
+        self.module = tfhub.Module('/data/convert_model')
         self.context_encoding_tensor = self.module(self.text_placeholder, signature="encode_context")
         self.encoding_tensor = self.module(self.text_placeholder)
         self.response_encoding_tensor = self.module(self.text_placeholder, signature="encode_response")
