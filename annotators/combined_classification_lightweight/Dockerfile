@@ -4,9 +4,9 @@ RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@1.1.1
 
 ARG CONFIG
 
-ARG PORT
+ARG SERVICE_PORT
 ENV CONFIG=$CONFIG
-ENV PORT=$SERVICE_PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 WORKDIR /src
 RUN mkdir common
