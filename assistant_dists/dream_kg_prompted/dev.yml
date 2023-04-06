@@ -472,6 +472,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8131:8131
+
+  terminusdb:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 6363:6363
+      
   dff-template-custom-kg-prompted-skill:
     volumes:
       - "./skills/dff_template_custom_kg_prompted_skill:/src"

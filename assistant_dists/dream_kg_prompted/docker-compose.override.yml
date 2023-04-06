@@ -20,8 +20,8 @@ services:
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, terminusdb:6363, storygpt:8126,
-          prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8130, custom-entity-linking:8135,
-          dff-user-kg-skill:8132, dff-template-custom-kg-prompted-skill:8137, transformers-lm-gptj:8131,
+          prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8131, custom-entity-linking:8135,
+          dff-user-kg-skill:8132, dff-template-custom-kg-prompted-skill:8137, transformers-lm-gptj:8130,
           convers-evaluation-no-scripts-selector:8139, sentence-ranker:8128, prompt-selector:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
@@ -1270,7 +1270,7 @@ services:
           memory: 128M
   
   terminusdb:
-    image: terminusdb/terminusdb-server:latest
+    image: terminusdb/terminusdb-server:dev-7022f970fe5605ec8048c258ea0219ac9039315e
     ports:
       - 6363:6363
 
@@ -1295,11 +1295,11 @@ services:
     build:
       args:
         CONFIG: t5_generative_ie_infer.json
-        PORT: 8130
+        PORT: 8131
         SRC_DIR: annotators/property_extraction/
       context: ./
       dockerfile: annotators/property_extraction/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
+    command: flask run -h 0.0.0.0 -p 8131
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=6
@@ -1422,13 +1422,13 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8131
+        SERVICE_PORT: 8130
         SERVICE_NAME: transformers_lm_gptj
         PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
         HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8131
+    command: flask run -h 0.0.0.0 -p 8130
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -1446,7 +1446,7 @@ services:
         SERVICE_PORT: 8137
         SERVICE_NAME: dff_template_custom_kg_prompted_skill
         PROMPT_FILE: common/prompts/dream_persona.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8131/respond
+        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
         GENERATIVE_SERVICE_CONFIG: default_generative_config.json
         GENERATIVE_TIMEOUT: 5
         N_UTTERANCES_CONTEXT: 3
