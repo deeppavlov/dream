@@ -13,7 +13,7 @@ combined-classification-lightweight:
   connector:
     protocol: http
     timeout: 2.0
-    url: http://combined-classification:8150/model
+    url: http://combined-classification-lightweight:8150/model
   dialog_formatter: state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist
   response_formatter: state_formatters.dp_formatters:simple_formatter_service
   previous_services:
