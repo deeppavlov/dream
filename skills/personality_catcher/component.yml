@@ -6,7 +6,9 @@ personality-catcher:
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
-  description: ''
+  description: the skill is to change the system's personality description 
+    via chatting interface, it works as a system command, 
+    the response is system-like message
   ram_usage: 100M
   gpu_usage: null
   port: 8010
