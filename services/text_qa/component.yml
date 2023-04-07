@@ -2,11 +2,11 @@ text-qa:
   name: text_qa
   display_name: Text QA
   container_name: text-qa
-  component_type: null
+  component_type: Retrieval
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
-  description: ''
+  description: The service finds the answer of a factoid question in text.
   ram_usage: 1.8G
   gpu_usage: 2.8G
   port: 8078
@@ -22,7 +22,7 @@ text-qa-ru:
   name: text_qa
   display_name: Text QA
   container_name: text-qa-ru
-  component_type: null
+  component_type: Retrieval
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
