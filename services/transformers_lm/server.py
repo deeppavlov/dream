@@ -66,10 +66,23 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    if HALF_PRECISION:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
+    if "IlyaGusev" in PRETRAINED_MODEL_NAME_OR_PATH:
+        from peft import PeftModel, PeftConfig
+
+        config = PeftConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+        model = AutoModelForCausalLM.from_pretrained(
+            config.base_model_name_or_path,
+            load_in_8bit=True,
+            device_map="auto"
+        )
+        model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH)
+
     else:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+        if HALF_PRECISION:
+            model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
+        else:
+            model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
