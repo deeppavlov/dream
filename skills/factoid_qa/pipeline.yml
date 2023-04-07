@@ -1,0 +1,11 @@
+factoid-qa:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://factoid-qa:8071/respond
+  dialog_formatter: state_formatters.dp_formatters:utt_sentseg_punct_dialog
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

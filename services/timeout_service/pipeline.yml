@@ -1,0 +1,9 @@
+agent:
+- group: timeout_service
+  connector:
+    protocol: python
+    class_name: PredefinedTextConnector
+    response_text: Sorry, I need to think more on that. Let's talk about something else.
+  state_manager_method: add_bot_utterance_last_chance
+  tags:
+    - timeout

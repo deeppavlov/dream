@@ -1,0 +1,11 @@
+rake-keywords:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://rake-keywords:8007/respond
+  dialog_formatter: state_formatters.dp_formatters:preproc_last_human_utt_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.spelling_preprocessing
+  state_manager_method: add_annotation

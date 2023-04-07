@@ -2,7 +2,7 @@ FROM deeppavlov/base-gpu:0.12.1
 RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 ARG CONFIG
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 ARG SED_ARG=" | "
 
@@ -10,7 +10,7 @@ ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 COPY ./annotators/entity_detection_rus/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

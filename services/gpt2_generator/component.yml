@@ -1,0 +1,24 @@
+gpt2-multilingual:
+  name: gpt2_generator
+  display_name: GPT-2 Multilingual
+  container_name: gpt2-multilingual
+  component_type: Script-based with NNs
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: GPT2-based generative model. For Multilingual distribution we propose
+    mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT)
+  ram_usage: 5G
+  gpu_usage: 6.5G
+  port: 8132
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8132
+    SERVICE_NAME: gpt2_generator
+    CONFIG_NAME: mgpt.json
+    PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
+    N_HYPOTHESES_TO_GENERATE: 3
+    MAX_HISTORY_DEPTH: 3
+  date_created: '2023-03-16T09:45:32'

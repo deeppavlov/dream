@@ -54,6 +54,7 @@ class EntityLinker(Component, Serializable):
         lang: str = "ru",
         use_descriptions: bool = True,
         use_tags: bool = False,
+        use_related_tags: bool = False,
         lemmatize: bool = False,
         full_paragraph: bool = False,
         use_connections: bool = False,
@@ -91,22 +92,19 @@ class EntityLinker(Component, Serializable):
         self.use_descriptions = use_descriptions
         self.use_connections = use_connections
         self.use_tags = use_tags
+        self.use_related_tags = use_related_tags
         self.full_paragraph = full_paragraph
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
         self.not_found_str = "not in wiki"
         self.related_tags = {
-            "loc": ["gpe", "country", "city", "us_state", "river"],
-            "gpe": ["loc", "country", "city", "us_state"],
-            "work_of_art": ["product", "law"],
+            "loc": ["gpe", "country", "city", "us_state", "river", "county"],
             "product": ["work_of_art"],
-            "law": ["work_of_art"],
-            "org": ["fac", "business"],
-            "business": ["org"],
-            "actor": ["per"],
-            "athlete": ["per"],
-            "musician": ["per"],
-            "politician": ["per"],
-            "writer": ["per"],
+            "org": ["fac", "business", "norp"],
+            "per": ["actor", "athlete", "musician", "politician", "writer"],
+            "event": ["championship", "sports_season", "sports_event"],
+            "film": ["work_of_art", "road"],
+            "misc": ["animal", "language", "law", "food", "nation"],
+            "sport_team": ["association_football_club", "sports_league", "national_sports_team"],
         }
         self.word_searcher = None
         if self.words_dict_filename:
@@ -260,7 +258,7 @@ class EntityLinker(Component, Serializable):
                                     corr_tags.append([corr_tag, conf])
                                     corr_clean_tags.append(corr_tag)
 
-                    if (not cand_ent_init or all_low_conf) and corr_tags:
+                    if (not cand_ent_init or all_low_conf or self.use_related_tags) and corr_tags:
                         corr_cand_ent_init = self.find_exact_match(entity_substr, corr_tags)
                         cand_ent_init = {**cand_ent_init, **corr_cand_ent_init}
                     entity_substr_split = [

@@ -1,0 +1,21 @@
+badlisted-words:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://badlisted-words:8018/badlisted_words
+  dialog_formatter: state_formatters.dp_formatters:preproc_last_human_utt_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - annotators.spelling_preprocessing
+  state_manager_method: add_annotation
+- group: candidate_annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://badlisted-words:8018/badlisted_words_batch
+  dialog_formatter: state_formatters.dp_formatters:hypotheses_list
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  previous_services:
+  - skills
+  state_manager_method: add_hypothesis_annotation_batch

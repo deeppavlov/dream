@@ -1,4 +1,5 @@
 {
+    "connectors": {},
     "services": {
         "last_chance_service": {
             "connector": {
@@ -7,7 +8,14 @@
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say."
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["last_chance"]
+            "tags": [
+                "last_chance"
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/last_chance_service",
+                "container": "agent"
+            }
         },
         "timeout_service": {
             "connector": {
@@ -16,18 +24,52 @@
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else."
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["timeout"]
+            "tags": [
+                "timeout"
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/timeout_service",
+                "container": "agent"
+            }
         },
         "annotators": {
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 1.0,
                     "url": "http://spelling-preprocessing:8074/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/spelling_preprocessing",
+                    "container": "spelling-preprocessing",
+                    "endpoint": "respond"
+                }
+            }
+        },
+        "response_annotators": {
+            "emotion_classification": {
+                "connector": {
+                    "protocol": "python",
+                    "url": "http://emotion-classification-deepy:8015/model",
+                    "class_name": "connectors:BatchConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/emotion_classification_deepy",
+                    "container": "emotion-classification-deepy",
+                    "endpoint": "model"
+                }
             }
         },
         "skills": {
@@ -38,13 +80,21 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_skill_formatter",
+                "previous_services": [
+                    "annotators"
+                ],
                 "state_manager_method": "add_hypothesis",
-                "previous_services": ["annotators"]
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/harvesters_maintenance_skill_deepy",
+                    "container": "harvesters-maintenance-skill",
+                    "endpoint": "respond"
+                }
             },
             "dff_program_y_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 2.0,
                     "url": "http://dff-program-y-skill:8008/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
@@ -52,20 +102,13 @@
                 "previous_services": [
                     "annotators"
                 ],
-                "state_manager_method": "add_hypothesis"
-            }
-        },
-        "response_annotators": {
-            "emotion_classification": {
-                "connector": {
-                    "protocol": "python",
-                    "class_name": "assistant_dists.deepy_base.connectors:BatchConnector",
-                    "url": "http://emotion-classification-deepy:8015/model"
-                },
-              "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-              "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-              "previous_services": ["skills"],
-              "state_manager_method": "add_hypothesis_annotation_batch"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_program_y_skill",
+                    "container": "dff-program-y-skill",
+                    "endpoint": "respond"
+                }
             }
         },
         "response_selectors": {
@@ -76,12 +119,19 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
-                "previous_services": ["response_annotators"],
-                "state_manager_method": "add_bot_utterance"
+                "previous_services": [
+                    "response_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "directory": "response_selectors/rule_based_response_selector",
+                    "container": "rule-based-response-selector",
+                    "endpoint": "respond"
+                }
             }
         }
     },
-    "connectors": {},
     "metadata": {
         "display_name": "Deepy Base",
         "author": "DeepPavlov",

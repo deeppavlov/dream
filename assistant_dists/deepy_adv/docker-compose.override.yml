@@ -12,10 +12,19 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
     ports:
       - 8074:8074
 
@@ -57,8 +66,9 @@ services:
   entity-linking-deepy:
     build:
       args:
+        SERVICE_PORT: 8075
+        SERVICE_NAME: entity_linking
         CONFIG: entity_linking_deepy.json
-        PORT: 8075
         SRC_DIR: annotators/entity_linking_deepy
       context: ./
       dockerfile: annotators/entity_linking_deepy/Dockerfile

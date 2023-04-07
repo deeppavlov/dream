@@ -117,6 +117,9 @@ services:
   badlisted-words:
     env_file: [.env]
     build:
+      args:
+        SERVICE_PORT: 8018
+        SERVICE_NAME: badlisted_words
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
@@ -131,6 +134,9 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
@@ -138,9 +144,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   dialogpt:
     env_file: [ .env ]
@@ -170,6 +176,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
         PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128

@@ -1,0 +1,50 @@
+ner:
+  name: ner
+  display_name: NER
+  container_name: ner
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: extracts person names, names of locations, organizations from uncased
+    text
+  ram_usage: 2.2G
+  gpu_usage: 5G
+  port: 8021
+  endpoints:
+  - group: annotators
+    endpoint: ner
+  - group: response_annotators
+    endpoint: ner
+  build_args:
+    CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+    SERVICE_PORT: 8021
+    SRC_DIR: annotators/NER_deeppavlov
+    COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+    SERVICE_NAME: ner
+  date_created: '2023-03-16T09:45:32'
+ner-ru:
+  name: ner
+  display_name: NER
+  container_name: ner-ru
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: extracts person names, names of locations, organizations from uncased
+    text using ruBert-based (pyTorch) model
+  ram_usage: 1.7G
+  gpu_usage: 4.9G
+  port: 8021
+  endpoints:
+  - group: annotators
+    endpoint: ner
+  - group: response_annotators
+    endpoint: ner
+  build_args:
+    CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+    SERVICE_PORT: 8021
+    SRC_DIR: annotators/NER_deeppavlov
+    COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+    SERVICE_NAME: ner
+  date_created: '2023-03-16T09:45:32'

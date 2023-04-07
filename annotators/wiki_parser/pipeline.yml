@@ -1,0 +1,22 @@
+wiki-parser:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://wiki-parser:8077/model
+  dialog_formatter: state_formatters.dp_formatters:wp_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  required_previous_services:
+  - annotators.entity_linking
+  state_manager_method: add_annotation
+wiki-parser-ru:
+- group: annotators
+  connector:
+    protocol: http
+    timeout: 1.0
+    url: http://wiki-parser-ru:8077/model
+  dialog_formatter: state_formatters.dp_formatters:wp_formatter_dialog
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  required_previous_services:
+  - annotators.entity_linking
+  state_manager_method: add_annotation

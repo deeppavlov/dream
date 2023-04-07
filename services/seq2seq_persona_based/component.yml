@@ -1,0 +1,26 @@
+seq2seq-persona-based:
+  name: seq2seq_persona_based
+  display_name: Seq2seq Persona-based
+  container_name: seq2seq-persona-based
+  component_type: Script-based with NNs
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on Transformers seq2seq model, the model was
+    pre-trained on the PersonaChat dataset to generate a response conditioned on a
+    several sentences of the socialbot's persona
+  ram_usage: 1.5G
+  gpu_usage: 1.5G
+  port: 8140
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8140
+    SERVICE_NAME: seq2seq_persona_based
+    PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bart-base-en-persona-chat
+    PAIR_DIALOG_HISTORY_LENGTH: 2
+    CHAT_EVERY_SENT_MAX_LENGTH: 25
+    PERSONA_EVERY_SENT_MAX_LENGTH: 19
+    GENERATION_PARAMS_CONFIG: bart-base-en-persona-chat_v1.json
+  date_created: '2023-03-16T09:45:32'
