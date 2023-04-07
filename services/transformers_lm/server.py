@@ -76,7 +76,7 @@ try:
             device_map="auto"
         )
         model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH)
-
+        model.eval()
     else:
         if HALF_PRECISION:
             model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
