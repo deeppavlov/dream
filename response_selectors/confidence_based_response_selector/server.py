@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-BADLIST_URL = getenv("BADLIST_URL", "http://badlisted-words:8018/badlisted_words")
+BADLIST_URL = getenv("BADLIST_ANNOTATOR_URL", "http://badlisted-words:8018/badlisted_words_batch")
 FILTER_BADLISTED_WORDS = getenv("FILTER_BADLISTED_WORDS", 0)
 
 
@@ -40,8 +40,13 @@ def respond():
             if skill_data["text"] and skill_data["confidence"]:
                 logger.info(f"Skill {skill_data['skill_name']} returned non-empty hypothesis with non-zero confidence.")
 
-            if FILTER_BADLISTED_WORDS == 1:
-                badlist_result = requests.post(BADLIST_URL, json={"sentences": skill_data["text"]}).json()[0]
+            if FILTER_BADLISTED_WORDS:
+                try:
+                    badlist_result = requests.post(
+                        BADLIST_URL, json={"sentences": skill_data["text"]}, timeout=1.5
+                    ).json()[0]["batch"][0]
+                except Exception as exc:
+                    badlist_result = {"bad_words": False}
                 if not badlist_result["bad_words"]:
                     confidences += [skill_data["confidence"]]
                     responses += [skill_data["text"]]

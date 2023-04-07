@@ -39,4 +39,17 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+
+  confidence-based-response-selector:
+    volumes:
+      - "./response_selectors/confidence_based_response_selector:/src"
+    ports:
+      - 8005:8005
+
+  mongo:
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
 version: "3.7"
