@@ -167,13 +167,13 @@
         }
     },
     "metadata": {
-        "display_name": "Dream",
+        "display_name": "Dream Light",
         "author": "DeepPavlov",
-        "description": "Full version of DeepPavlov Dream Socialbot",
+        "description": "Version of DeepPavlov Dream Socialbot that requires only CPU.",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
-        "ram_usage": "50 GB",
-        "gpu_usage": "50 GB",
+        "ram_usage": "1.5 GB",
+        "gpu_usage": "0 GB",
         "disk_usage": "50 GB"
     }
 }

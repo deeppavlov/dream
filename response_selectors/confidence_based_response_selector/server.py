@@ -46,6 +46,8 @@ def respond():
                         BADLIST_URL, json={"sentences": skill_data["text"]}, timeout=1.5
                     ).json()[0]["batch"][0]
                 except Exception as exc:
+                    logger.exception(exc)
+                    sentry_sdk.capture_exception(exc)
                     badlist_result = {"bad_words": False}
                 if not badlist_result["bad_words"]:
                     confidences += [skill_data["confidence"]]
