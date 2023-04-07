@@ -24,9 +24,9 @@ if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in
         "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
     )
 
-assert sending_variables["OPENAI_API_KEY"]
-assert sending_variables["GOOGLE_CSE_ID"]
-assert sending_variables["GOOGLE_API_KEY"]
+assert sending_variables["OPENAI_API_KEY"], logger.info("Type in OpenAI API key to `.env_scret`")
+assert sending_variables["GOOGLE_CSE_ID"], logger.info("Type in GOOGLE CSE ID to `.env_scret`")
+assert sending_variables["GOOGLE_API_KEY"], logger.info("Type in GOOGLE API key to `.env_scret`")
 
 search = GoogleSearchAPIWrapper()
 tools = [

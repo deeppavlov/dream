@@ -1084,7 +1084,7 @@ def dff_google_api_skill_formatter(dialog):
     return utils.dff_formatter(
         dialog,
         "dff_google_api_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        types_utterances=["human_utterances", "utterances"],
     )
 
 

@@ -18,8 +18,4 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=1
-  transformers-lm-gptj:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
 version: '3.7'

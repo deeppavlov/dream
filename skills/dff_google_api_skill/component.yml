@@ -1,10 +1,10 @@
 dff-google-api-skill:
   name: dff_google_api_skill
-  display_name: Google Api Skill
+  display_name: Google Search API Skill
   container_name: dff-google-api-skill
   component_type: Generative
   model_type: NN-based
-  is_customizable: true
+  is_customizable: false
   author: DeepPavlov
   description: This skill utilizes LangChain's GoogleSearchAPIWrapper
   to use Google search and OpenAI llm for question answering.
