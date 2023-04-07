@@ -432,7 +432,7 @@ services:
       - "./annotators/property_extraction:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8130:8130
+      - 8131:8131
   user-knowledge-graph:
     volumes:
       - "./annotators/user_knowledge_graph:/src"
@@ -471,7 +471,7 @@ services:
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8131:8131
+      - 8130:8130
 
   terminusdb:
     volumes:
