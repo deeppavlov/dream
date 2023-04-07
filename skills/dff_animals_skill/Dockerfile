@@ -23,7 +23,7 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 COPY skills/${SERVICE_NAME}/requirements.txt .
 
 RUN pip install -r requirements.txt && \
-    python -m spacy download en_core_web_sm && \
+    python -m spacy download en_core_web_sm
 
 RUN mkdir -p /root/.deeppavlov/downloads/wikidata && \
     wget -q -P /root/.deeppavlov/downloads/wikidata ${BREED_FACTS_DB}

@@ -1,5 +1,4 @@
 FROM deeppavlov/base-gpu:0.12.0
-RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.0
 
 ARG CONFIG
 ARG SERVICE_PORT
@@ -9,7 +8,8 @@ ENV SERVICE_PORT=$SERVICE_PORT
 WORKDIR /src
 
 COPY annotators/ConversationEvaluator/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 COPY annotators/ConversationEvaluator/ ./
 COPY common/ ./common
