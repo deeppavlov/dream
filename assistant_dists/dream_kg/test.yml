@@ -121,12 +121,6 @@ services:
   dialogpt:
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  storygpt:
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
-  prompt-storygpt:
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   seq2seq-persona-based:
     environment:
       - CUDA_VISIBLE_DEVICES=9

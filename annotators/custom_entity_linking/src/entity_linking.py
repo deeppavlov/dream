@@ -28,7 +28,6 @@ from deeppavlov.core.models.component import Component
 from deeppavlov.core.models.serializable import Serializable
 
 log = getLogger(__name__)
-nltk.download("stopwords")
 
 
 @register("entity_linker")
@@ -93,14 +92,7 @@ class EntityLinker(Component, Serializable):
 
     def add_custom_entities(self, user_id, entity_substr_list, entity_ids_list, tags_list):
         if self.conn is None:
-            if not os.path.exists(self.load_path):
-                os.makedirs(self.load_path)
-            self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
-            self.cur = self.conn.cursor()
-            self.cur.execute(
-                "CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
-                "UNINDEXED, tag, user_id, tokenize = 'porter ascii');"
-            )
+            self.load()
 
         for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
             entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")

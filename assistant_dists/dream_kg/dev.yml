@@ -403,18 +403,6 @@ services:
       - "./annotators/midas_predictor:/src"
     ports:
       - 8121:8121
-  storygpt:
-    volumes:
-      - "./services/storygpt:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8126:8126
-  prompt-storygpt:
-    volumes:
-      - "./services/prompt_storygpt:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8127:8127
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
@@ -458,5 +446,5 @@ services:
       - "./annotators/custom_entity_linking:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8137:8137
+      - 8153:8153
 version: "3.7"

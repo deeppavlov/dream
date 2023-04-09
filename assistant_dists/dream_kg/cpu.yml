@@ -40,12 +40,6 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  storygpt:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
-  prompt-storygpt:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   dialogpt:
     environment:
       CUDA_VISIBLE_DEVICES: ""

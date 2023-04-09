@@ -630,24 +630,6 @@ services:
       - PROXY_PASS=dream.deeppavlov.ai:8007
       - PORT=8007
 
-  storygpt:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8126
-      - PORT=8126
-
-  prompt-storygpt:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8127
-      - PORT=8127
-
   property-extraction:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -663,6 +645,6 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8137
-      - PORT=8137
+      - PROXY_PASS=dream.deeppavlov.ai:8153
+      - PORT=8153
 version: '3.7'
