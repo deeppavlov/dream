@@ -1,0 +1,22 @@
+dff-friendship-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://dff-friendship-skill:8086/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_friendship_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-friendship-ru-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://dff-friendship-ru-skill:8086/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_friendship_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis

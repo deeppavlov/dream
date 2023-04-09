@@ -1,0 +1,20 @@
+dff-weather-skill:
+  name: dff_weather_skill
+  display_name: Weather Skill
+  container_name: dff-weather-skill
+  component_type: Script-based w/o NNs
+  model_type: External API
+  is_customizable: false
+  author: DeepPavlov
+  description: uses the OpenWeatherMap service to get the forecast for the user's
+    location
+  ram_usage: 1.4G
+  gpu_usage: null
+  port: 8037
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8037
+    SERVICE_NAME: dff_weather_skill
+  date_created: '2023-03-16T09:45:32'

@@ -4,22 +4,93 @@
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 2.0,
                     "url": "http://toxic-classification-multilingual:8013/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/MultilingualToxicClassification",
+                    "container": "toxic-classification-multilingual",
+                    "endpoint": "respond"
+                }
             },
             "sentiment_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2,
+                    "timeout": 2.0,
                     "url": "http://sentiment-classification-multilingual:8024/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/MultilingualSentimentClassification",
+                    "container": "sentiment-classification-multilingual",
+                    "endpoint": "respond"
+                }
+            }
+        },
+        "candidate_annotators": {
+            "sentence_ranker": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://sentence-ranker-multilingual:8128/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "services/sentence_ranker",
+                    "container": "sentence-ranker-multilingual",
+                    "endpoint": "respond"
+                }
+            },
+            "toxic_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://toxic-classification-multilingual:8013/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/MultilingualToxicClassification",
+                    "container": "toxic-classification-multilingual",
+                    "endpoint": "respond_batch"
+                }
+            },
+            "sentiment_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://sentiment-classification-multilingual:8024/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/MultilingualSentimentClassification",
+                    "container": "sentiment-classification-multilingual",
+                    "endpoint": "respond_batch"
+                }
             }
         },
         "skill_selectors": {
@@ -35,14 +106,19 @@
                 ],
                 "tags": [
                     "selector"
-                ]
+                ],
+                "is_enabled": true,
+                "source": {
+                    "directory": "skill_selectors/rule_based_selector",
+                    "container": "agent"
+                }
             }
         },
         "skills": {
             "gpt2_generator": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 5.0,
                     "url": "http://gpt2-multilingual:8132/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
@@ -50,51 +126,20 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
-            }
-        },
-        "candidate_annotators": {
-            "sentence_ranker": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://sentence-ranker-multilingual:8128/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "toxic_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://toxic-classification-multilingual:8013/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": ["skills"],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "sentiment_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://sentiment-classification-multilingual:8024/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "services/gpt2_generator",
+                    "container": "gpt2-multilingual",
+                    "endpoint": "respond"
+                }
             }
         },
         "response_selectors": {
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 1.0,
                     "url": "http://convers-evaluation-selector:8009/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
@@ -102,7 +147,13 @@
                 "previous_services": [
                     "candidate_annotators"
                 ],
-                "state_manager_method": "add_bot_utterance"
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "directory": "response_selectors/convers_evaluation_based_selector",
+                    "container": "convers-evaluation-selector",
+                    "endpoint": "respond"
+                }
             }
         }
     },

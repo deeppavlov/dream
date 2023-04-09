@@ -1,0 +1,22 @@
+storygpt:
+  name: storygpt
+  display_name: StoryGPT
+  container_name: storygpt
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on fine-tuned GPT-2, for the given set of
+    keywords returns a short story using the keywords
+  ram_usage: 2.6G
+  gpu_usage: 2.15G
+  port: 8126
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8126
+    SERVICE_NAME: storygpt
+    PRETRAINED_MODEL_NAME_OR_PATH: gpt2-medium
+    FINETUNED_GPT_URL: http://files.deeppavlov.ai/dream_data/story_skill/filtered_ROCStories_gpt_medium.pt
+  date_created: '2023-03-16T09:45:32'

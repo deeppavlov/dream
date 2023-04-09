@@ -17,9 +17,9 @@ Dream Architecture is presented in the following image:
 | Sentence Ranker          | 2.5 GB RAM, 1.8 GB GPU   | for a pair of sentences predicts a floating point value. For multilingual version, return cosine similarity between embeddings from multilingual sentence BERT |
 
 ## Skills & Services
-| Name                | Requirements          | Description                                                                                                                                       |
-|---------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| GPT-2 Multilingual  | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
+| Name               | Requirements          | Description                                                                                                                                       |
+|--------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| GPT-2 Multilingual | 5 GB RAM, 6.5 GB GPU  | GPT2-based generative model. For Multilingual distribution we propose mgpt by Sberbank [from HugginFace](https://huggingface.co/sberbank-ai/mGPT) |
 
 # Papers
 

@@ -1,0 +1,22 @@
+dff-book-sfc-skill:
+  name: dff_book_skill
+  display_name: Book Skill
+  container_name: dff-book-sfc-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: detects book titles and authors mentioned in the user's utterance with
+    the help of Wiki parser and Entity linking and recommends books by leveraging
+    information from the GoodReads database
+  ram_usage: 400M
+  gpu_usage: null
+  port: 8034
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8034
+    SERVICE_NAME: dff_book_skill
+    QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
+  date_created: '2023-03-16T09:45:32'

@@ -1,0 +1,23 @@
+convers-evaluator-annotator:
+  name: convers_evaluator_annotator
+  display_name: Conversation Evaluator
+  container_name: convers-evaluator-annotator
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: is trained on the Alexa Prize data from the previous competitions and
+    predicts whether the candidate response is interesting, comprehensible, on-topic,
+    engaging, or erroneous
+  ram_usage: 1G
+  gpu_usage: 4.5G
+  port: 8004
+  endpoints:
+  - group: candidate_annotators
+    endpoint: batch_model
+  build_args:
+    CONFIG: conveval.json
+    SERVICE_PORT: 8004
+    DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
+    SERVICE_NAME: convers_evaluator_annotator
+  date_created: '2023-03-16T09:45:32'

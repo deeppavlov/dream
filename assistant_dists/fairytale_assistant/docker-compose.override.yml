@@ -1,0 +1,190 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/fairytale_assistant/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087,
+        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145,
+        dff-fairytale-prompted-skill:8139"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+
+  sentseg:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+  combined-classification:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: combined_classifier.json
+        SERVICE_PORT: 8087
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  no-restrictions-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        TAG_BASED_SELECTION: 1
+        CALL_BY_NAME_PROBABILITY: 0.5
+        PROMPT_PROBA: 0
+        ACKNOWLEDGEMENT_PROBA: 0.3
+        PRIORITIZE_WITH_REQUIRED_ACT: 0
+        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+        IGNORE_DISLIKED_SKILLS: 0
+        GREETING_FIRST: 0
+        RESTRICTION_FOR_SENSITIVE_CASE: 0
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
+        MAX_TURNS_WITHOUT_SCRIPTS: 100
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 0
+        PRIORITIZE_SCRIPTED_SKILLS: 0
+        CONFIDENCE_STRENGTH: 0.8
+        CONV_EVAL_STRENGTH: 0.4
+        PRIORITIZE_HUMAN_INITIATIVE: 1
+        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+      context: .
+      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8009
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  badlisted-words:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8018
+        SERVICE_NAME: badlisted_words
+      context: annotators/BadlistedWordsDetector/
+    command: flask run -h 0.0.0.0 -p 8018
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  spelling-preprocessing:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
+      context: ./annotators/spelling_preprocessing/
+    command: flask run -h 0.0.0.0 -p 8074
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  prompt-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8135
+        SERVICE_NAME: prompt_selector
+        N_SENTENCES_TO_RETURN: 3
+        PROMPTS_TO_CONSIDER: fairytale
+      context: .
+      dockerfile: ./annotators/prompt_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8135
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
+  openai-api-chatgpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8145
+        SERVICE_NAME: openai_api_chatgpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8145
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  dff-fairytale-prompted-skill:
+    env_file: [ .env,.env_secret ]
+    build:
+      args:
+        SERVICE_PORT: 8139
+        SERVICE_NAME: dff_fairytale_prompted_skill
+        PROMPT_FILE: common/prompts/fairytale.json
+        GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+        GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+        GENERATIVE_TIMEOUT: 7
+        N_UTTERANCES_CONTEXT: 3
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8139 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+version: '3.7'

@@ -1008,6 +1008,22 @@ def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
 
 
+def dff_ai_faq_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_ai_faq_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_da_costa_clothes_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_da_costa_clothes_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
 def dff_dream_persona_prompted_skill_formatter(dialog):
     return utils.dff_formatter(
         dialog,
@@ -1016,9 +1032,60 @@ def dff_dream_persona_prompted_skill_formatter(dialog):
     )
 
 
+def dff_empathetic_marketing_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_empathetic_marketing_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_fairytale_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_fairytale_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_nutrition_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_nutrition_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_rhodes_coaching_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_rhodes_coaching_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_deepy_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_deepy_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
 def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
-        dialog, skill_name, types_utterances=["human_utterances", "bot_utterances", "utterances"]
+        dialog,
+        skill_name,
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+    )
+
+
+def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
+    return utils.dff_formatter(
+        dialog,
+        "dff_universal_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 

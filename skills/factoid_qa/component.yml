@@ -1,0 +1,19 @@
+factoid-qa:
+  name: factoid_qa
+  display_name: Factoid QA
+  container_name: factoid-qa
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: answers factoid questions
+  ram_usage: 170M
+  gpu_usage: null
+  port: 8071
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8071
+    SERVICE_NAME: factoid_qa
+  date_created: '2023-03-16T09:45:32'

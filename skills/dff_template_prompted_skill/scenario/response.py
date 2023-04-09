@@ -23,6 +23,15 @@ with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
+ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
+# check if at least one of the env variables is not None
+if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+    raise NotImplementedError(
+        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
+    )
+
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
 
@@ -31,7 +40,7 @@ with open(PROMPT_FILE, "r") as f:
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
-LOW_CONFIDENCE = 0.5
+LOW_CONFIDENCE = 0.7
 
 
 def compose_data_for_model(ctx, actor):
@@ -62,12 +71,17 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_bot_attrs += [bot_attr]
             curr_attrs += [attr]
 
-    dialog_contexts = compose_data_for_model(ctx, actor)
-    logger.info(f"dialog_contexts: {dialog_contexts}")
-    if len(dialog_contexts) > 0:
+    dialog_context = compose_data_for_model(ctx, actor)
+    logger.info(f"dialog_context: {dialog_context}")
+    if len(dialog_context) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
-            json={"dialog_contexts": [dialog_contexts], "prompts": [PROMPT], "configs": [GENERATIVE_SERVICE_CONFIG]},
+            json={
+                "dialog_contexts": [dialog_context],
+                "prompts": [PROMPT],
+                "configs": [GENERATIVE_SERVICE_CONFIG],
+                **sending_variables,
+            },
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()[0]

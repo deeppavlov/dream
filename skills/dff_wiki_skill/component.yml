@@ -1,0 +1,21 @@
+dff-wiki-skill:
+  name: dff_wiki_skill
+  display_name: Wiki Skill
+  container_name: dff-wiki-skill
+  component_type: Script-based w/o NNs
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: used for making scenarios with the extraction of entities, slot filling,
+    facts insertion, and acknowledgements
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8111
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8111
+    SERVICE_NAME: dff_wiki_skill
+    COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
+  date_created: '2023-03-16T09:45:32'

@@ -5,13 +5,13 @@ RUN apt-get update && apt-get install git -y
 ARG SEQ_TAG_CONFIG
 ARG CONFIG
 ARG FINEGRAINED
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 
 ENV SEQ_TAG_CONFIG=$SEQ_TAG_CONFIG
 ENV CONFIG=$CONFIG
 ENV FINEGRAINED=$FINEGRAINED
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 COPY ./annotators/entity_detection/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
@@ -23,4 +23,4 @@ COPY $SRC_DIR /src
 WORKDIR /src
 RUN python -m deeppavlov install $SEQ_TAG_CONFIG
 
-CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:$PORT
+CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:$SERVICE_PORT
