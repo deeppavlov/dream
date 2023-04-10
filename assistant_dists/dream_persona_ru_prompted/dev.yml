@@ -5,7 +5,7 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  convers-evaluation-selector-ru:
+  no-restrictions-selector-ru:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
       - "./common:/src/common"

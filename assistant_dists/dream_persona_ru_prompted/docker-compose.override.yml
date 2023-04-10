@@ -2,28 +2,28 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_ru_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluation-selector-ru:8009, badlisted-words-ru:8018,
+      WAIT_HOSTS: "no-restrictions-selector-ru:8009, badlisted-words-ru:8018,
           dialogrpt-ru:8122, toxic-classification-ru:8126, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
           dff-dream-persona-llama7bru-prompted-skill:8151"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
-  convers-evaluation-selector-ru:
-    env_file: [ .env_ru ]
+  no-restrictions-selector-ru:
+    env_file: [ .env ]
     build:
       args:
         TAG_BASED_SELECTION: 1
         CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.1
+        PROMPT_PROBA: 0
         ACKNOWLEDGEMENT_PROBA: 0.3
         PRIORITIZE_WITH_REQUIRED_ACT: 0
         PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
         PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
         IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 1
-        RESTRICTION_FOR_SENSITIVE_CASE: 1
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
-        MAX_TURNS_WITHOUT_SCRIPTS: 7
-        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+        GREETING_FIRST: 0
+        RESTRICTION_FOR_SENSITIVE_CASE: 0
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
+        MAX_TURNS_WITHOUT_SCRIPTS: 100
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 0
         PRIORITIZE_SCRIPTED_SKILLS: 0
         CONFIDENCE_STRENGTH: 0.8
         CONV_EVAL_STRENGTH: 0.4
@@ -38,9 +38,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   badlisted-words-ru:
     env_file: [ .env_ru ]
