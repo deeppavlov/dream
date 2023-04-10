@@ -151,11 +151,11 @@ services:
     build:
       args:
         SERVICE_PORT: 8149
-        SERVICE_NAME: transformers_lm_llama7bru
+        SERVICE_NAME: transformers_peft_lm_llama7bru
         PRETRAINED_MODEL_NAME_OR_PATH: IlyaGusev/llama_7b_ru_turbo_alpaca_lora
         HALF_PRECISION: 0
       context: .
-      dockerfile: ./services/transformers_lm/Dockerfile
+      dockerfile: ./services/transformers_peft_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8149
     environment:
       - CUDA_VISIBLE_DEVICES=0
