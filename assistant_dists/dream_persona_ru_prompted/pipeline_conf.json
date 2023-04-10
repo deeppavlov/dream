@@ -115,7 +115,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words_batch"
+                    "url": "http://badlisted-words-ru:8018/badlisted_words_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -126,7 +126,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words",
+                    "container": "badlisted-words-ru",
                     "endpoint": "badlisted_words_batch"
                 }
             },
