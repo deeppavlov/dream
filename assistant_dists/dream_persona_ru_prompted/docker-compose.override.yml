@@ -2,41 +2,10 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_ru_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector-ru:8009, badlisted-words:8018, combined-classification:8087, 
-        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-llama7bru:8149, 
-        dff-dream-persona-llama7bru-prompted-skill:8151"
+      WAIT_HOSTS: "convers-evaluation-selector-ru:8009, badlisted-words-ru:8018,
+          dialogrpt-ru:8122, toxic-classification-ru:8126, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
+          dff-dream-persona-llama7bru-prompted-skill:8151"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
-
-  sentseg:
-    env_file: [ .env ]
-    build:
-      context: ./annotators/SentSeg/
-    command: flask run -h 0.0.0.0 -p 8011
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1.5G
-        reservations:
-          memory: 1.5G
-
-  combined-classification:
-    env_file: [ .env ]
-    build:
-      args:
-        CONFIG: combined_classifier.json
-        SERVICE_PORT: 8087
-      context: .
-      dockerfile: ./annotators/combined_classification/Dockerfile
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
 
   convers-evaluation-selector-ru:
     env_file: [ .env_ru ]
@@ -73,41 +42,62 @@ services:
         reservations:
           memory: 256M
 
-  badlisted-words:
-    env_file: [ .env ]
+  badlisted-words-ru:
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8018
         SERVICE_NAME: badlisted_words
-      context: annotators/BadlistedWordsDetector/
+      context: annotators/BadlistedWordsDetector_ru/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 128M
         reservations:
-          memory: 256M
+          memory: 128M
 
-  spelling-preprocessing:
-    env_file: [ .env ]
+  toxic-classification-ru:
+    env_file: [ .env_ru ]
     build:
+      context: ./annotators/toxic_classification_ru/
       args:
-        SERVICE_PORT: 8074
-        SERVICE_NAME: spelling_preprocessing
-      context: ./annotators/spelling_preprocessing/
-    command: flask run -h 0.0.0.0 -p 8074
+        SERVICE_PORT: 8126
+        PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
+        LANGUAGE: RU
+    command: flask run -h 0.0.0.0 -p 8126
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 100M
+          memory: 3G
         reservations:
-          memory: 100M
+          memory: 3G
 
-  prompt-selector:
+  dialogrpt-ru:
+    env_file: [ .env_ru ]
+    build:
+      context: ./services/dialogrpt_ru/
+      args:
+        SERVICE_PORT: 8122
+        PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+        TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
+    command: flask run -h 0.0.0.0 -p 8122
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
+
+  prompt-selector-ru:
     env_file: [ .env ]
     build:
       args:
@@ -115,6 +105,7 @@ services:
         SERVICE_NAME: prompt_selector
         N_SENTENCES_TO_RETURN: 3
         PROMPTS_TO_CONSIDER: dream_persona_ru
+        RANKER_URL: http://dialogrpt-ru:8122/respond
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
@@ -126,25 +117,6 @@ services:
           memory: 100M
         reservations:
           memory: 100M
-
-  sentence-ranker:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8128
-        SERVICE_NAME: sentence_ranker
-        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
-      context: ./services/sentence_ranker/
-    command: flask run -h 0.0.0.0 -p 8128
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
 
   transformers-lm-llama7bru:
     env_file: [ .env ]
