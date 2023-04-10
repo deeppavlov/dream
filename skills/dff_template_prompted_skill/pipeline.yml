@@ -112,7 +112,7 @@ dff-dream-persona-llama7bru-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-dream-persona-llama7bru-prompted-skill:8151/respond
   dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_ru_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
