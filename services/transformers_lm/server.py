@@ -19,7 +19,11 @@ PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
-NAMING = ["AI", "Human"]
+LANGUAGE = os.getenv("LANGUAGE", "EN")
+NAMING = {
+    "EN": ["AI", "Human"],
+    "RU": ["Чат-бот", "Человек"],
+}
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -31,11 +35,11 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+    context = [f"{NAMING[LANGUAGE][(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
     if continue_last_uttr:
         dialog_context += "\n".join(context)
     else:
-        dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
+        dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
     max_length = generation_params.get("max_length", 50)
     generation_params.pop("max_length", None)

@@ -19,7 +19,11 @@ logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
-NAMING = ["AI", "Human"]
+LANGUAGE = os.getenv("LANGUAGE", "EN")
+NAMING = {
+    "EN": ["AI", "Human"],
+    "RU": ["Чат-бот", "Человек"],
+}
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -31,11 +35,11 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+    context = [f"{NAMING[LANGUAGE][(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
     if continue_last_uttr:
         dialog_context += "\n".join(context)
     else:
-        dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
+        dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     data = tokenizer([dialog_context], return_tensors="pt")
