@@ -85,7 +85,7 @@ def respond():
 
 
 @app.route("/rank_sentences", methods=["POST"])
-def respond():
+def rank_sentences():
     st_time = time.time()
 
     sentence_pairs = request.json.get("sentence_pairs", [])
