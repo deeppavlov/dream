@@ -18,8 +18,9 @@ logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
-with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
-    GENERATIVE_SERVICE_CONFIG = json.load(f)
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
