@@ -105,7 +105,7 @@ services:
         SERVICE_NAME: prompt_selector
         N_SENTENCES_TO_RETURN: 3
         PROMPTS_TO_CONSIDER: dream_persona_ru
-        RANKER_URL: http://dialogrpt-ru:8122/respond
+        SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
