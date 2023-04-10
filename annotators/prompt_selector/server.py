@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
+logger.info(f"prompt-selector considered ranker: {SENTENCE_RANKER_SERVICE_URL}")
 N_SENTENCES_TO_RETURN = int(getenv("N_SENTENCES_TO_RETURN"))
 # list of string names of prompts from common/prompts
 PROMPTS_TO_CONSIDER = getenv("PROMPTS_TO_CONSIDER", "").split(",")
