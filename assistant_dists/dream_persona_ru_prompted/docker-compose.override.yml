@@ -98,7 +98,7 @@ services:
           memory: 4G
 
   prompt-selector-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8135
@@ -118,7 +118,7 @@ services:
           memory: 100M
 
   transformers-lm-llama7bru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8149
@@ -139,7 +139,7 @@ services:
           memory: 50G
 
   dff-dream-persona-llama7bru-prompted-skill:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8151
