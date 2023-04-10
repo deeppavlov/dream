@@ -71,8 +71,9 @@ try:
     config = PeftConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model = AutoModelForCausalLM.from_pretrained(
         config.base_model_name_or_path,
-        load_in_8bit=True,
-        device_map="auto"
+        torch_dtype=torch.float16,
+        # load_in_8bit=True,
+        # device_map="auto"
     )
     model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH)
     model.eval()
