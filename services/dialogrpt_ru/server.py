@@ -59,6 +59,11 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
