@@ -18,8 +18,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
-HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
-HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["AI", "Human"]
 

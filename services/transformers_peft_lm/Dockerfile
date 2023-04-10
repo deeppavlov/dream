@@ -4,8 +4,6 @@ WORKDIR /src
 
 ARG PRETRAINED_MODEL_NAME_OR_PATH
 ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
-ARG HALF_PRECISION
-ENV HALF_PRECISION ${HALF_PRECISION}
 
 COPY ./services/transformers_peft_lm/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt
