@@ -4,13 +4,15 @@ import time
 
 import sentry_sdk
 import torch
-from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
+from peft import PeftModel, PeftConfig
 from sentry_sdk.integrations.flask import FlaskIntegration
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+
+from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
+
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -25,7 +27,7 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
+def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
     outputs = []
     dialog_context = ""
     if prompt:
@@ -37,19 +39,14 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
 
-    max_length = generation_params.get("max_length", 50)
-    generation_params.pop("max_length", None)
-
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
-    bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
+    data = tokenizer([dialog_context], return_tensors="pt")
+    data = {k: v.to(model.device) for k, v in data.items() if k in ("input_ids", "attention_mask")}
+
     with torch.no_grad():
-        if torch.cuda.is_available():
-            bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
-            bot_input_ids,
-            max_length=len(tokenizer(dialog_context)["input_ids"]) + max_length,
-            pad_token_id=tokenizer.eos_token_id,
-            **generation_params,
+            **data,
+            generation_config=default_config,
         )
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
@@ -66,42 +63,27 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    if "IlyaGusev" in PRETRAINED_MODEL_NAME_OR_PATH:
-        from peft import PeftModel, PeftConfig
-        from transformers import GenerationConfig
 
-        generation_config = GenerationConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    default_config = GenerationConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
 
-        config = PeftConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-        model = AutoModelForCausalLM.from_pretrained(
-            config.base_model_name_or_path,
-            # load_in_8bit=True,
-            # device_map="auto"
-        )
-        model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH)
-        model.eval()
-    else:
-        if HALF_PRECISION:
-            model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
-        else:
-            model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    config = PeftConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    model = AutoModelForCausalLM.from_pretrained(
+        config.base_model_name_or_path,
+        # load_in_8bit=True,
+        # device_map="auto"
+    )
+    model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH)
+    model.eval()
 
     if torch.cuda.is_available():
         model.to("cuda")
-        logger.info("transformers_lm is set to run on cuda")
-    default_config = {
-        "max_length": 60,
-        "min_length": 8,
-        "top_p": 0.9,
-        "temperature": 0.9,
-        "do_sample": True,
-        "num_return_sequences": 1,
-    }
+        logger.info("transformers_peft_lm is set to run on cuda")
+
     example_response = generate_responses(
         ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
     )
     logger.info(f"example response: {example_response}")
-    logger.info("transformers_lm is ready")
+    logger.info("transformers_peft_lm is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
@@ -118,15 +100,14 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    configs = request.json.get("configs", [])
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
     try:
         responses = []
-        for context, prompt, config in zip(contexts, prompts, configs):
+        for context, prompt in zip(contexts, prompts):
             curr_responses = []
-            outputs = generate_responses(context, model, tokenizer, prompt, config)
+            outputs = generate_responses(context, model, tokenizer, prompt)
             for response in outputs:
                 if len(response) >= 2:
                     curr_responses += [response]
@@ -139,7 +120,7 @@ def respond():
         sentry_sdk.capture_exception(exc)
         responses = [[""]] * len(contexts)
 
-    logger.info(f"transformers_lm output: {responses}")
+    logger.info(f"transformers_peft_lm output: {responses}")
     total_time = time.time() - st_time
-    logger.info(f"transformers_lm exec time: {total_time:.3f}s")
+    logger.info(f"transformers_peft_lm exec time: {total_time:.3f}s")
     return jsonify(responses)
