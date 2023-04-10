@@ -94,7 +94,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://prompt-selector:8135/respond"
+                    "url": "http://prompt-selector-ru:8135/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -105,7 +105,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/prompt_selector",
-                    "container": "prompt-selector",
+                    "container": "prompt-selector-ru",
                     "endpoint": "respond"
                 }
             }
