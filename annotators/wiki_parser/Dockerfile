@@ -17,7 +17,7 @@ ENV LANGUAGE=$LANGUAGE
 COPY ./annotators/wiki_parser/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && \
     pip install -r /src/requirements.txt && \
-    echo export PYTHONPATH=$(PYTHONPATH):/home/3.9.1/pybind11 && \
+    echo export PYTHONPATH=$(PYTHONPATH):/home/3.9/pybind11 && \
     pip install hdt==2.3
 
 ARG WIKI_LITE_DB

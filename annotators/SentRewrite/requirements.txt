@@ -1,9 +1,9 @@
 Flask==1.1.1
 itsdangerous==2.0.1
-sentry_sdk==0.12.2
-neuralcoref==4.0
-spacy==2.1.0
-gunicorn==19.9.0
-nltk==3.2.5
+sentry_sdk==1.19.1
+spacy==2.3.5
+gunicorn==20.1.0
+nltk==3.8.1
 jinja2<=3.0.3
 Werkzeug<=2.0.3
+neuralcoref==4.0

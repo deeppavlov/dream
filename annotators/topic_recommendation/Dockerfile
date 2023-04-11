@@ -11,7 +11,9 @@ COPY . /src/
 ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/reddit_embeddings.pickle
 
 RUN mkdir /data
-RUN curl -L $DATA_URL --output /data/reddit_embeddings.pickle
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -L $DATA_URL --output /data/reddit_embeddings.pickle
 
 ENV DATABASE_PATH /data/reddit_embeddings.pickle
 

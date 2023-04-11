@@ -1,4 +1,4 @@
-FROM python:3.9.16-slim
+FROM python:3.7-slim
 
 ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/elmo2.tar.gz
 ARG MODEL_META_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.meta
@@ -7,7 +7,9 @@ ARG MODEL_DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.data-00000-
 WORKDIR /src
 RUN mkdir /data /elmo2 tfhub_cache_dir
 
-RUN curl -L $DATA_URL --output /tmp/elmo2.tar.gz && \
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -L $DATA_URL --output /tmp/elmo2.tar.gz && \
     tar -xf /tmp/elmo2.tar.gz -C /elmo2 && \
     rm /tmp/elmo2.tar.gz && \
     curl -L $MODEL_META_URL --output /data/model.meta && \

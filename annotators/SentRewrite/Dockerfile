@@ -1,13 +1,13 @@
-FROM python:3.9.16-slim
+FROM python:3.7.16-slim
 
 WORKDIR /src
 
 COPY ./requirements.txt /src/requirements.txt
 
-RUN pip install -r /src/requirements.txt && \
-    python -c "import neuralcoref;" && \
+RUN pip install --upgrade pip && \
+    pip install -r /src/requirements.txt && \
     python -m spacy download en && \
-    python -c "import nltk; nltk.download('punkt')"
+    python -c "import neuralcoref; import nltk; nltk.download('punkt')"
 
 COPY . /src/
 
