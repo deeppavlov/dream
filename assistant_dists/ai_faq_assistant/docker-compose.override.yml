@@ -153,7 +153,7 @@ services:
         SERVICE_PORT: 8158
         SERVICE_NAME: transformers_lm_oasst12b
         PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/oasst-sft-1-pythia-12b
-        HALF_PRECISION: 0
+        HALF_PRECISION: 1
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8158
@@ -163,9 +163,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 100G
+          memory: 60G
         reservations:
-          memory: 100G
+          memory: 60G
 
   dff-ai-faq-prompted-skill:
     env_file: [ .env ]
