@@ -4,13 +4,13 @@
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                         "segments": [
-                            "Sorry, something went wrong inside.",
-                            "Please tell me, what did you say."
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
                         ]
                     }
                 }
@@ -29,13 +29,13 @@
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                         "segments": [
-                            "Sorry, I need to think more on that.",
-                            "Let's talk about something else."
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
                         ]
                     }
                 }
