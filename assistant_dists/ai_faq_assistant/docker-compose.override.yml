@@ -163,9 +163,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50G
+          memory: 100G
         reservations:
-          memory: 50G
+          memory: 100G
 
   dff-ai-faq-prompted-skill:
     env_file: [ .env ]
