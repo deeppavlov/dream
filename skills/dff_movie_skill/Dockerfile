@@ -1,6 +1,4 @@
-FROM python:3.9.1
-
-
+FROM python:3.9.16-slim
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src

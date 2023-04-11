@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.9.16-slim
 
 ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/elmo2.tar.gz
 ARG MODEL_META_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.meta

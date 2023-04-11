@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.9.16-slim
 
 RUN apt-key del 7fa2af80  && \
     rm -f /etc/apt/sources.list.d/cuda*.list && \

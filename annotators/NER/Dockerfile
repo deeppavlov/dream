@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.9.16-slim
 
 ARG DATA_URL=http://files.deeppavlov.ai/alexaprize_data/elmo2.tar.gz
 ARG NER_URL=http://files.deeppavlov.ai/alexaprize_data/ner.tar.xz

@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.9.16-slim
 
 ARG WORK_DIR
 
