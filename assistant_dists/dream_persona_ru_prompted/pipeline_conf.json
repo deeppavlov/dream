@@ -71,25 +71,6 @@
                     "endpoint": "badlisted_words"
                 }
             },
-            "toxic_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://toxic-classification-ru:8126/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "directory": "annotators/toxic_classification_ru",
-                    "container": "toxic-classification-ru",
-                    "endpoint": "respond"
-                }
-            },
             "prompt_selector": {
                 "connector": {
                     "protocol": "http",
@@ -128,25 +109,6 @@
                     "directory": "annotators/BadlistedWordsDetector",
                     "container": "badlisted-words-ru",
                     "endpoint": "badlisted_words_batch"
-                }
-            },
-            "toxic_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://toxic-classification-ru:8126/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "directory": "annotators/toxic_classification_ru",
-                    "container": "toxic-classification-ru",
-                    "endpoint": "respond_batch"
                 }
             },
             "dialogrpt": {

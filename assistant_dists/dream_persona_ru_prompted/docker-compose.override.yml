@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_ru_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "no-restrictions-selector-ru:8009, badlisted-words-ru:8018,
-          dialogrpt-ru:8122, toxic-classification-ru:8126, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
+          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
           dff-dream-persona-llama7bru-prompted-skill:8151"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
@@ -62,25 +62,6 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
-  toxic-classification-ru:
-    env_file: [ .env_ru ]
-    build:
-      context: ./annotators/toxic_classification_ru/
-      args:
-        SERVICE_PORT: 8126
-        PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
-        LANGUAGE: RU
-    command: flask run -h 0.0.0.0 -p 8126
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
 
   dialogrpt-ru:
     env_file: [ .env_ru ]

@@ -17,15 +17,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  toxic-classification-ru:
-    volumes:
-      - "./annotators/toxic_classification_ru:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8126:8126
-  mongo:
-    ports:
-      - 27017:27017
   dialogrpt-ru:
     volumes:
       - "./services/dialogrpt_ru:/src"
