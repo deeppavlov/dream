@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "no-restrictions-selector-ru:8009, badlisted-words-ru:8018,
           dialogrpt-ru:8122, toxic-classification-ru:8126, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
           dff-dream-persona-llama7bru-prompted-skill:8151"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
       ALWAYS_TURN_ON_ALL_SKILLS: 0
