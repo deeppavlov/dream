@@ -17,3 +17,11 @@ emotion-classification-deepy:
     SERVICE_PORT: '8015'
     SERVICE_NAME: emotion_classification
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    build:
+      context: annotators/emotion_classification_deepy
+    command: python -m deeppavlov riseapi emo_bert.json -p 8015
+    ports:
+    - 8015:8015
+  compose_dev: {}
+  compose_proxy: {}

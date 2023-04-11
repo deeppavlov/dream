@@ -17,3 +17,36 @@ dff-travel-skill:
     SERVICE_PORT: 8096
     SERVICE_NAME: dff_travel_skill
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8096
+        SERVICE_NAME: dff_travel_skill
+      context: .
+      dockerfile: skills/dff_travel_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8096
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+        reservations:
+          memory: 768M
+  compose_dev:
+    volumes:
+    - ./skills/dff_travel_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8096:8096
+  compose_proxy:
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=dream.deeppavlov.ai:8096
+    - PORT=8096

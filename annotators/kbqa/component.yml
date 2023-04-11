@@ -22,3 +22,43 @@ kbqa:
     SRC_DIR: annotators/kbqa/
     COMMIT: 283a25e322e8fedc6ff0c159e4ec76bb165ae405
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8072
+        SERVICE_NAME: kbqa
+        CONFIG: kbqa_cq_mt_bert_lite.json
+        SRC_DIR: annotators/kbqa/
+        COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
+      context: ./
+      dockerfile: annotators/kbqa/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8072
+    environment:
+    - CUDA_VISIBLE_DEVICES=0
+    - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+        reservations:
+          memory: 5G
+  compose_dev:
+    volumes:
+    - ./annotators/kbqa:/src
+    - ~/.deeppavlov:/root/.deeppavlov
+    - ~/.deeppavlov/cache:/root/.cache
+    ports:
+    - 8072:8072
+  compose_proxy:
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=dream.deeppavlov.ai:8072
+    - PORT=8072

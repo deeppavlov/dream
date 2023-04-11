@@ -17,3 +17,38 @@ factoid-qa:
     SERVICE_PORT: 8071
     SERVICE_NAME: factoid_qa
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8071
+        SERVICE_NAME: factoid_qa
+      context: .
+      dockerfile: ./skills/factoid_qa/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8071
+    environment:
+    - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+  compose_dev:
+    volumes:
+    - ./skills/factoid_qa:/src
+    - ./common:/src/common
+    ports:
+    - 8071:8071
+  compose_proxy:
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=dream.deeppavlov.ai:8071
+    - PORT=8071

@@ -22,3 +22,39 @@ midas-classification:
     SERVICE_NAME: midas_classification
     CONFIG: midas_conv_bert.json
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8090
+        SERVICE_NAME: midas_classification
+        CONFIG: midas_conv_bert.json
+      context: ./annotators/midas_classification
+    command: flask run -h 0.0.0.0 -p 8090
+    environment:
+    - CUDA_VISIBLE_DEVICES=0
+    - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+  compose_dev:
+    volumes:
+    - ./annotators/midas_classification:/src
+    - ~/.deeppavlov:/root/.deeppavlov
+    ports:
+    - 8090:8090
+  compose_proxy:
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=dream.deeppavlov.ai:8090
+    - PORT=8090

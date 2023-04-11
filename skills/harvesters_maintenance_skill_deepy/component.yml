@@ -17,3 +17,12 @@ harvesters-maintenance-skill:
     SERVICE_PORT: '3662'
     SERVICE_NAME: harvesters_maintenance_skill
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    build:
+      context: skills/harvesters_maintenance_skill_deepy
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:3662
+    volumes: []
+    ports:
+    - 3662:3662
+  compose_dev: {}
+  compose_proxy: {}

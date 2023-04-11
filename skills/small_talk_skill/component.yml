@@ -18,3 +18,35 @@ small-talk-skill:
     SERVICE_PORT: '8062'
     SERVICE_NAME: small_talk_skill
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      context: .
+      dockerfile: ./skills/small_talk_skill/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8062
+    environment:
+    - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+  compose_dev:
+    volumes:
+    - ./skills/small_talk_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8062:8062
+  compose_proxy:
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=dream.deeppavlov.ai:8062
+    - PORT=8062

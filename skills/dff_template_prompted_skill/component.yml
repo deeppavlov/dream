@@ -22,6 +22,9 @@ dff-my-template-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: template_date
+  compose_override: {}
+  compose_dev: {}
+  compose_proxy: {}
 dff-ai-faq-prompted-skill:
   name: dff_ai_faq_prompted_skill
   display_name: AI FAQ Skill
@@ -49,6 +52,34 @@ dff-ai-faq-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8143
+        SERVICE_NAME: dff_ai_faq_prompted_skill
+        PROMPT_FILE: common/prompts/ai_faq.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 5
+        N_UTTERANCES_CONTEXT: 3
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8143 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8143:8143
+  compose_proxy: {}
 dff-da-costa-clothes-prompted-skill:
   name: dff_da_costa_clothes_prompted_skill
   display_name: da Costa Clothes Skill
@@ -76,6 +107,34 @@ dff-da-costa-clothes-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8144
+        SERVICE_NAME: dff_da_costa_clothes_prompted_skill
+        PROMPT_FILE: common/prompts/da_costa_clothes.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 5
+        N_UTTERANCES_CONTEXT: 3
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8144 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8144:8144
+  compose_proxy: {}
 dff-dream-persona-davinci3-prompted-skill:
   name: dff_dream_persona_prompted_skill
   display_name: Dream Persona Skill
@@ -102,6 +161,36 @@ dff-dream-persona-davinci3-prompted-skill:
     N_UTTERANCES_CONTEXT: 3
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    - .env_secret
+    build:
+      args:
+        SERVICE_PORT: 8137
+        SERVICE_NAME: dff_dream_persona_prompted_skill
+        PROMPT_FILE: common/prompts/dream_persona.json
+        GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+        GENERATIVE_TIMEOUT: 7
+        N_UTTERANCES_CONTEXT: 3
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8137 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8137:8137
+  compose_proxy: {}
 dff-dream-persona-gpt-j-prompted-skill:
   name: dff_dream_persona_prompted_skill
   display_name: Dream Persona Skill
@@ -127,6 +216,34 @@ dff-dream-persona-gpt-j-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8134
+        SERVICE_NAME: dff_dream_persona_prompted_skill
+        PROMPT_FILE: common/prompts/dream_persona.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 5
+        N_UTTERANCES_CONTEXT: 3
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8134 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8134:8134
+  compose_proxy: {}
 dff-empathetic-marketing-prompted-skill:
   name: dff_empathetic_marketing_prompted_skill
   display_name: Empathetic Marketing Skill
@@ -154,6 +271,34 @@ dff-empathetic-marketing-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8138
+        SERVICE_NAME: dff_empathetic_marketing_prompted_skill
+        PROMPT_FILE: common/prompts/empathetic_marketing.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 5
+        N_UTTERANCES_CONTEXT: 3
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8138 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8138:8138
+  compose_proxy: {}
 dff-fairytale-prompted-skill:
   name: dff_fairytale_prompted_skill
   display_name: Fairytale Skill
@@ -181,6 +326,36 @@ dff-fairytale-prompted-skill:
     N_UTTERANCES_CONTEXT: 3
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    - .env_secret
+    build:
+      args:
+        SERVICE_PORT: 8139
+        SERVICE_NAME: dff_fairytale_prompted_skill
+        PROMPT_FILE: common/prompts/fairytale.json
+        GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+        GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+        GENERATIVE_TIMEOUT: 7
+        N_UTTERANCES_CONTEXT: 3
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8139 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8139:8139
+  compose_proxy: {}
 dff-nutrition-prompted-skill:
   name: dff_nutrition_prompted_skill
   display_name: Nutrition Skill
@@ -207,6 +382,34 @@ dff-nutrition-prompted-skill:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8141
+        SERVICE_NAME: dff_nutrition_prompted_skill
+        PROMPT_FILE: common/prompts/nutrition.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 5
+        N_UTTERANCES_CONTEXT: 3
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8141 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8141:8141
+  compose_proxy: {}
 dff-rhodes-coaching-prompted-skill:
   name: dff_rhodes_coaching_prompted_skill
   display_name: Rhodes Coaching Skill
@@ -234,6 +437,36 @@ dff-rhodes-coaching-prompted-skill:
     GENERATIVE_TIMEOUT: 7
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    - .env_secret
+    build:
+      args:
+        SERVICE_PORT: 8142
+        SERVICE_NAME: dff_rhodes_coaching_prompted_skill
+        PROMPT_FILE: common/prompts/rhodes_coaching.json
+        GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+        GENERATIVE_TIMEOUT: 7
+        N_UTTERANCES_CONTEXT: 3
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8142 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8142:8142
+  compose_proxy: {}
 dff-deepy-prompted-skill:
   name: dff_deepy_prompted_skill
   display_name: Deepy Assistant Skill
@@ -259,3 +492,33 @@ dff-deepy-prompted-skill:
     N_UTTERANCES_CONTEXT: 3
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    - .env_secret
+    build:
+      args:
+        SERVICE_PORT: 8148
+        SERVICE_NAME: dff_deepy_prompted_skill
+        PROMPT_FILE: common/prompts/deepy.json
+        GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_TIMEOUT: 7
+        N_UTTERANCES_CONTEXT: 3
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8148 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  compose_dev:
+    volumes:
+    - ./skills/dff_template_prompted_skill:/src
+    - ./common:/src/common
+    ports:
+    - 8148:8148
+  compose_proxy: {}

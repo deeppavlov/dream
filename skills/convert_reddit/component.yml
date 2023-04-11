@@ -17,3 +17,34 @@ convert-reddit:
     SERVICE_PORT: '8029'
     SERVICE_NAME: convert_reddit
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      context: ./skills/convert_reddit/
+    command: flask run -h 0.0.0.0 -p 8029
+    environment:
+    - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1536M
+        reservations:
+          memory: 1536M
+  compose_dev:
+    volumes:
+    - ./skills/convert_reddit:/app
+    - ./common:/src/common
+    ports:
+    - 8029:8029
+  compose_proxy:
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=dream.deeppavlov.ai:8029
+    - PORT=8029

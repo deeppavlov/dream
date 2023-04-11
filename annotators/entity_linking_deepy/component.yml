@@ -19,3 +19,20 @@ entity-linking-deepy:
     CONFIG: entity_linking_deepy.json
     SRC_DIR: annotators/entity_linking_deepy
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    build:
+      args:
+        SERVICE_PORT: 8075
+        SERVICE_NAME: entity_linking
+        CONFIG: entity_linking_deepy.json
+        SRC_DIR: annotators/entity_linking_deepy
+      context: ./
+      dockerfile: annotators/entity_linking_deepy/Dockerfile
+    volumes:
+    - ~/.deeppavlov:/root/.deeppavlov
+    ports:
+    - 8075:8075
+    environment:
+    - CUDA_VISIBLE_DEVICES=''
+  compose_dev: {}
+  compose_proxy: {}

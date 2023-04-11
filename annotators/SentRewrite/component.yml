@@ -20,3 +20,33 @@ sentrewrite:
     SERVICE_PORT: '8017'
     SERVICE_NAME: sentrewrite
   date_created: '2023-03-16T09:45:32'
+  compose_override:
+    env_file:
+    - .env
+    build:
+      context: ./annotators/SentRewrite/
+    command: flask run -h 0.0.0.0 -p 8017
+    environment:
+    - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 512M
+  compose_dev:
+    volumes:
+    - ./annotators/SentRewrite:/src
+    ports:
+    - 8017:8017
+  compose_proxy:
+    command:
+    - nginx
+    - -g
+    - daemon off;
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=dream.deeppavlov.ai:8017
+    - PORT=8017
