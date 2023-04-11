@@ -303,7 +303,7 @@
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://property-extraction:8130/respond"
+                    "url": "http://property-extraction:8131/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
