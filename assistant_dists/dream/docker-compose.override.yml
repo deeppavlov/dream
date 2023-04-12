@@ -1386,6 +1386,20 @@ services:
         reservations:
           memory: 4G
 
+  brio-summarizer:
+    env_file: [ .env ]
+    build:
+      context: ./skills/brio_summarizer/
+    command: flask run -h 0.0.0.0 -p 8153
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+
   dff-template-skill:
     env_file: [ .env ]
     build:

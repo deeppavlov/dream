@@ -1,0 +1,9 @@
+brio-summarizer:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://brio-summarizer:8153/respond
+  dialog_formatter: state_formatters.dp_formatters:hypotheses_list
+  response_formatter: state_formatters.dp_formatters:simple_formatter_service
+  state_manager_method: add_hypothesis

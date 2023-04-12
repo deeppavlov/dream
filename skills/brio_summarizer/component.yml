@@ -1,0 +1,16 @@
+dff-travel-skill:
+  name: brio_summarizer
+  display_name: Abstractive Summarization English
+  container_name: brio-summarizer
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Abstractive summarization model for english texts, based on BRIO model
+  ram_usage: 1G
+  gpu_usage: null
+  port: 8153
+  endpoints:
+  - group: skills
+    endpoint: respond
+  date_created: '2023-04-12T09:34:32'
