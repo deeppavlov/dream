@@ -1396,9 +1396,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 4G
         reservations:
-          memory: 1G
+          memory: 4G
 
   dff-template-skill:
     env_file: [ .env ]
