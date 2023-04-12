@@ -1,3 +1,27 @@
+dff-my-template-prompted-skill:
+  name: dff_my_template_prompted_skill
+  display_name: My Template Skill
+  container_name: dff-my-template-prompted-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: true
+  author: template_author
+  description: template_description
+  ram_usage: 150M
+  gpu_usage: null
+  port: template_port
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: template_port
+    SERVICE_NAME: dff_my_template_prompted_skill
+    PROMPT_FILE: common/prompts/my_template.json
+    GENERATIVE_SERVICE_URL: template_service_url
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 3
+  date_created: template_date
 dff-ai-faq-prompted-skill:
   name: dff_ai_faq_prompted_skill
   display_name: AI FAQ Skill
@@ -20,7 +44,7 @@ dff-ai-faq-prompted-skill:
     SERVICE_PORT: 8143
     SERVICE_NAME: dff_ai_faq_prompted_skill
     PROMPT_FILE: common/prompts/ai_faq.json
-    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
@@ -47,7 +71,7 @@ dff-da-costa-clothes-prompted-skill:
     SERVICE_PORT: 8144
     SERVICE_NAME: dff_da_costa_clothes_prompted_skill
     PROMPT_FILE: common/prompts/da_costa_clothes.json
-    GENERATIVE_SERVICE_URL: http://transformers-lm-bloomz7b:8146/respond
+    GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3
@@ -178,7 +202,7 @@ dff-nutrition-prompted-skill:
     SERVICE_PORT: 8141
     SERVICE_NAME: dff_nutrition_prompted_skill
     PROMPT_FILE: common/prompts/nutrition.json
-    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 3

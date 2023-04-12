@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087, 
         spelling-preprocessing:8074, sentence-ranker:8128, 
-        transformers-lm-gptj:8130, transformers-lm-bloomz7b:8146, openai-api-chatgpt:8145, openai-api-davinci3:8131,
+        transformers-lm-gptj:8130, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
         dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -61,6 +61,7 @@ services:
         CONV_EVAL_STRENGTH: 0.4
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: EN
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -147,26 +148,26 @@ services:
         reservations:
           memory: 50G
 
-  transformers-lm-bloomz7b:
+  transformers-lm-oasst12b:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8146
-        SERVICE_NAME: transformers_lm_bloomz7b
-        PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
-        HALF_PRECISION: 0
+        SERVICE_PORT: 8158
+        SERVICE_NAME: transformers_lm_oasst12b
+        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/oasst-sft-1-pythia-12b
+        HALF_PRECISION: 1
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8146
+    command: flask run -h 0.0.0.0 -p 8158
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 50G
+          memory: 60G
         reservations:
-          memory: 50G
+          memory: 60G
 
   openai-api-chatgpt:
     env_file: [ .env ]
