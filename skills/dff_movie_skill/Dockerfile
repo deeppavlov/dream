@@ -1,4 +1,4 @@
-FROM python:3.9.16-slim
+FROM python:3.9.16
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -10,17 +10,15 @@ RUN pip install -r requirements.txt && \
     bash /scripts/programy_logger_off.sh
 
 # ###################### CUSTOM SECTION ######################################
-# Here you can make changes 
-
-RUN apt-get update && \
-    apt-get install -y --allow-unauthenticated wget && \
-    rm -rf /var/lib/apt/lists/*
+# Here you can make changes
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt && \
+
+RUN rm -rf /var/lib/apt/lists/* && \
+    pip install -r requirements.txt && \
     python -c "import nltk; nltk.download('punkt')"
 
 ARG DATABASE_URL

@@ -1,4 +1,4 @@
-FROM python:3.9.16-slim
+FROM python:3.9.16
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -13,7 +13,7 @@ ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
