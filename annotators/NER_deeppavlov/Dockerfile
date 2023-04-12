@@ -15,7 +15,6 @@ COPY $SRC_DIR /src
 WORKDIR /src
 
 RUN pip install --upgrade pip && \
-    pip install -r /src/requirements.txt && \
-    python -m deeppavlov download $CONFIG
+    pip install -r /src/requirements.txt
 
 CMD gunicorn  --workers=1 --timeout 800 server:app -b 0.0.0.0:8021
