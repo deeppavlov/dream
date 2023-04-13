@@ -1392,6 +1392,7 @@ services:
       context: ./services/brio_summarizer/
     command: flask run -h 0.0.0.0 -p 8153
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:

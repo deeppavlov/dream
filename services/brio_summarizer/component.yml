@@ -1,4 +1,4 @@
-dff-travel-skill:
+brio-summarizer:
   name: brio_summarizer
   display_name: Abstractive Summarization English
   container_name: brio-summarizer
