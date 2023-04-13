@@ -24,6 +24,7 @@ if GENERATIVE_SERVICE_CONFIG:
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+FIND_PROMPT_IN_USER_UTTERANCE = bool(getenv("FIND_PROMPT_IN_USER_UTTERANCE", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
@@ -73,6 +74,11 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
+    if FIND_PROMPT_IN_USER_UTTERANCE:
+        current_prompt = dialog_context[-1].split(r"")
+        for uttr in dialog_context:
+            uttr
+
     logger.info(f"dialog_context: {dialog_context}")
     if len(dialog_context) > 0:
         response = requests.post(
