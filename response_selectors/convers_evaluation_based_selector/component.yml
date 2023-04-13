@@ -267,7 +267,7 @@ no-restrictions-selector-ru:
     CONV_EVAL_STRENGTH: 0.4
     PRIORITIZE_HUMAN_INITIATIVE: 1
     QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-    LANGUAGE: EN
+    LANGUAGE: RU
     SERVICE_PORT: '8009'
     SERVICE_NAME: response_selector
   date_created: '2023-03-16T09:45:32'
