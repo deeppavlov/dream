@@ -1401,6 +1401,21 @@ services:
         reservations:
           memory: 4G
 
+  rut5-summarizer:
+    env_file: [ .env ]
+    build:
+      context: ./services/ruT5_summarizer/
+    command: flask run -h 0.0.0.0 -p 8154
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
+
   dff-template-skill:
     env_file: [ .env ]
     build:
