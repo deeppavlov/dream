@@ -456,7 +456,7 @@ services:
       - 8141:8141
   brio-summarizer:
     volumes:
-      - "./skills/brio_summarizer:/src"
+      - "./services/brio_summarizer:/src"
       - "./common:/src/common"
     ports:
       - 8153:8153

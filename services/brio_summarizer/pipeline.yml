@@ -1,5 +1,5 @@
 brio-summarizer:
-- group: skills
+- group: services
   connector:
     protocol: http
     timeout: 2.0

@@ -11,6 +11,6 @@ dff-travel-skill:
   gpu_usage: null
   port: 8153
   endpoints:
-  - group: skills
+  - group: services
     endpoint: respond
   date_created: '2023-04-12T09:34:32'
