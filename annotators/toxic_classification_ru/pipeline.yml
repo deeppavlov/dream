@@ -2,7 +2,7 @@ toxic-classification-ru:
 - group: annotators
   connector:
     protocol: http
-    timeout: 2.0
+    timeout: 1.0
     url: http://toxic-classification-ru:8126/respond
   dialog_formatter: state_formatters.dp_formatters:preproc_last_human_utt_dialog
   response_formatter: state_formatters.dp_formatters:simple_formatter_service
@@ -12,7 +12,7 @@ toxic-classification-ru:
 - group: candidate_annotators
   connector:
     protocol: http
-    timeout: 2.0
+    timeout: 1.0
     url: http://toxic-classification-ru:8126/respond_batch
   dialog_formatter: state_formatters.dp_formatters:hypotheses_list
   response_formatter: state_formatters.dp_formatters:simple_formatter_service

@@ -143,7 +143,7 @@
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
+                    "timeout": 1.0,
                     "url": "http://toxic-classification-ru:8126/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
@@ -380,7 +380,7 @@
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
+                    "timeout": 1.0,
                     "url": "http://toxic-classification-ru:8126/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
