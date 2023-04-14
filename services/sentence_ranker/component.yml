@@ -8,8 +8,8 @@ sentence-ranker:
   author: DeepPavlov
   description: ranking model given as `PRETRAINED_MODEL_NAME_OR_PATH` which for a
     pair os sentences returns a float score of correspondence
-  ram_usage: 1.2G
-  gpu_usage: 2.1G
+  ram_usage: 1.5G
+  gpu_usage: 800M
   port: 8128
   endpoints:
   - group: candidate_annotators
@@ -19,7 +19,7 @@ sentence-ranker:
   build_args:
     SERVICE_PORT: 8128
     SERVICE_NAME: sentence_ranker
-    PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+    PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
   date_created: '2023-03-16T09:45:32'
 sentence-ranker-multilingual:
   name: sentence_ranker
