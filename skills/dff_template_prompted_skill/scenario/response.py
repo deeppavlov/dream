@@ -52,6 +52,7 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
+        context = [x for x in context if "/prompt" not in x]
     return context
 
 
