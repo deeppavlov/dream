@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def if_updating_prompt(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
-    human_uttr = int_ctx.get_human_utterances(ctx, actor).get("text", "")
+    human_uttr = int_ctx.get_last_human_utterance(ctx, actor).get("text", "")
     if "/prompt" in human_uttr:
         return True
     return False

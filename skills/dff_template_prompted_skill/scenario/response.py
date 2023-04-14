@@ -115,7 +115,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
 
 def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    human_uttr = int_ctx.get_human_utterances(ctx, actor).get("text", "")
+    human_uttr = int_ctx.get_last_human_utterance(ctx, actor).get("text", "")
     prompt = human_uttr.replace("/prompt", "").strip()
     int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
 
