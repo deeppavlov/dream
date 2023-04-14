@@ -40,6 +40,7 @@ with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
+PROMPT_REPLACEMENT_COMMAND = re.compile("^/prompt")
 DEFAULT_CONFIDENCE = 0.9
 SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
@@ -52,7 +53,7 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
-        context = [x for x in context if "/prompt" not in x]
+        context = [x for x in context if not PROMPT_REPLACEMENT_COMMAND.search(x)]
     return context
 
 
@@ -117,7 +118,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
 def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     human_uttr = int_ctx.get_last_human_utterance(ctx, actor).get("text", "")
-    prompt = human_uttr.replace("/prompt", "").strip()
+    prompt = PROMPT_REPLACEMENT_COMMAND.sub("", human_uttr).strip()
     int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
 
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
