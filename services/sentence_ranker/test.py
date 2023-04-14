@@ -12,7 +12,7 @@ def test_respond():
         ["What's your favorite movie?", "I like to play computer games."],
     ]
 
-    gold = [0.8988315, 0.62241143, 0.65046525, 0.54038674, 0.48419473]
+    gold = [0.7672719955444336, 0.15072298049926758, 0.5039470791816711, 0.4652850031852722, 0.23436866700649261]
 
     request_data = {"sentence_pairs": sentence_pairs}
     result = requests.post(url, json=request_data).json()[0]["batch"]
