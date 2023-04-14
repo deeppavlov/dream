@@ -24,7 +24,6 @@ if GENERATIVE_SERVICE_CONFIG:
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
-FIND_PROMPT_IN_USER_UTTERANCE = bool(getenv("FIND_PROMPT_IN_USER_UTTERANCE", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
@@ -42,6 +41,7 @@ with open(PROMPT_FILE, "r") as f:
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
+SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
 
 
@@ -74,10 +74,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
-    if FIND_PROMPT_IN_USER_UTTERANCE:
-        current_prompt = dialog_context[-1].split(r"")
-        for uttr in dialog_context:
-            uttr
+
+    shared_memory = int_ctx.get_shared_memory(ctx, actor)
+    prompt = shared_memory.get("prompt", "")
 
     logger.info(f"dialog_context: {dialog_context}")
     if len(dialog_context) > 0:
@@ -85,7 +84,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             GENERATIVE_SERVICE_URL,
             json={
                 "dialog_contexts": [dialog_context],
-                "prompts": [PROMPT],
+                "prompts": [prompt if len(prompt) > 0 else PROMPT],
                 "configs": [GENERATIVE_SERVICE_CONFIG],
                 **sending_variables,
             },
@@ -113,3 +112,14 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         bot_attr=curr_bot_attrs,
         hype_attr=curr_attrs,
     )(ctx, actor, *args, **kwargs)
+
+
+def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    human_uttr = int_ctx.get_human_utterances(ctx, actor).get("text", "")
+    prompt = human_uttr.replace("/prompt", "").strip()
+    int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
+
+    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
+    return "Saved a new prompt for you. " \
+           "To update a prompt, type in `/prompt prompttext` again. " \
+           "To reset a prompt to a default one, finish this dialog and start a new one."

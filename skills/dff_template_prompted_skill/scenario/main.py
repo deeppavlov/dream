@@ -6,6 +6,7 @@ import df_engine.conditions as cnd
 import df_engine.labels as lbl
 
 from . import response as loc_rsp
+from . import condition as loc_cnd
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
@@ -15,11 +16,22 @@ flows = {
     "generation": {
         "start_node": {
             RESPONSE: "",
-            TRANSITIONS: {"generative_response_node": cnd.true()},
+            TRANSITIONS: {
+                "generative_response_node": cnd.true(),
+            },
         },
         "generative_response_node": {
             RESPONSE: loc_rsp.generative_response,
-            TRANSITIONS: {lbl.repeat(): cnd.true()},
+            TRANSITIONS: {
+                "updating_prompt_node": loc_cnd.if_updating_prompt,
+                lbl.repeat(): cnd.true(),
+            },
+        },
+        "updating_prompt_node": {
+            RESPONSE: loc_rsp.updating_prompt_response,
+            TRANSITIONS: {
+                "generative_response_node": cnd.true(),
+            },
         },
     },
 }
