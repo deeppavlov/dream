@@ -56,7 +56,7 @@ def compose_data_for_model(ctx, actor):
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
 
-    # drop the dialog history (except of the last utterance) if prompt has changed
+    # drop the dialog history (except for the last utterance) if prompt has changed
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
     given_prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
