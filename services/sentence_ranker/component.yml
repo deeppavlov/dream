@@ -8,8 +8,8 @@ sentence-ranker:
   author: DeepPavlov
   description: ranking model given as `PRETRAINED_MODEL_NAME_OR_PATH` which for a
     pair os sentences returns a float score of correspondence
-  ram_usage: 1.2G
-  gpu_usage: 2.1G
+  ram_usage: 1.5G
+  gpu_usage: 800M
   port: 8128
   endpoints:
   - group: candidate_annotators
