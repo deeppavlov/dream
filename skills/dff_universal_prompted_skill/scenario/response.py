@@ -55,6 +55,14 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
+
+    # drop the dialog history (except of the last utterance) if prompt has changed
+    last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
+    given_prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
+    shared_memory = int_ctx.get_shared_memory(ctx, actor)
+    previous_prompt = shared_memory.get("prompt", "")
+    if given_prompt != previous_prompt:
+        context = context[-1:]
     return context
 
 
@@ -108,6 +116,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()[0]
+        int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
