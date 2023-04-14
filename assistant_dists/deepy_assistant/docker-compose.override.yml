@@ -133,7 +133,7 @@ services:
       args:
         SERVICE_PORT: 8128
         SERVICE_NAME: sentence_ranker
-        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
