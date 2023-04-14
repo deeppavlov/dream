@@ -121,6 +121,8 @@ def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str
     int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
 
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
-    return "Saved a new prompt for you. " \
-           "To update a prompt, type in `/prompt prompttext` again. " \
-           "To reset a prompt to a default one, finish this dialog and start a new one."
+    return (
+        "Saved a new prompt for you. "
+        "To update a prompt, type in `/prompt prompttext` again. "
+        "To reset a prompt to a default one, finish this dialog and start a new one."
+    )
