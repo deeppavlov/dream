@@ -460,6 +460,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8153:8153
+  rut5-summarizer:
+    volumes:
+      - "./services/ruT5_summarizer:/src"
+      - "./common:/src/common"
+    ports:
+      - 8154:8154
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
