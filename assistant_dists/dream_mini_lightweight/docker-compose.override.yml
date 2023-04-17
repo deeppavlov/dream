@@ -185,7 +185,7 @@ services:
       context: .
       dockerfile: ./annotators/combined_classification_lightweight/Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      CUDA_VISIBLE_DEVICES: ""  
     deploy:
       resources:
         limits:
