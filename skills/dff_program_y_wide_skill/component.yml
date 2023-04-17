@@ -5,7 +5,7 @@ dff-program-y-wide-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
     for Dream socialbot, which includes only very general templates (with lower confidence)
   ram_usage: 110M

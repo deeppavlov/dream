@@ -5,7 +5,7 @@ sentiment-classification-multilingual:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: classifies sentiment to positive, negative and neutral classes
   ram_usage: 2G
   gpu_usage: 2G

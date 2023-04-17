@@ -5,7 +5,7 @@ entity-linking:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: finds Wikidata entity ids for the entities detected with Entity Detection
   ram_usage: 2.5G
   gpu_usage: 1.3G

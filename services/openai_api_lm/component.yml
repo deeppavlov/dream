@@ -5,7 +5,7 @@ openai-api-chatgpt:
   component_type: null
   model_type: External API
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: generative service based on OpenAI API service, the model is set in
     docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this
     service, `gpt-3.5-turbo` is used).
@@ -54,7 +54,7 @@ openai-api-davinci3:
   component_type: null
   model_type: External API
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: generative service based on OpenAI API service, the model is set in
     docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this
     service, `text-davinci-003` is used).

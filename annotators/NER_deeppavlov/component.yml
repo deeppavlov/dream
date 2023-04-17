@@ -5,7 +5,7 @@ ner:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: extracts person names, names of locations, organizations from uncased
     text
   ram_usage: 2.2G
@@ -69,7 +69,7 @@ ner-ru:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: extracts person names, names of locations, organizations from uncased
     text using ruBert-based (pyTorch) model
   ram_usage: 1.7G

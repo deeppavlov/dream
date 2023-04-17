@@ -5,7 +5,7 @@ toxic-classification-ru:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Toxic classification model from Transformers specified as PRETRAINED_MODEL_NAME_OR_PATH
   ram_usage: 3.5G
   gpu_usage: 3G

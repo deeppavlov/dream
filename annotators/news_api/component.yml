@@ -5,7 +5,7 @@ news-api-annotator:
   component_type: null
   model_type: External API
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: extracts the latest news about entities or topics using the GNews API.
     DeepPavlov Dream deployments utilize our own API key.
   ram_usage: 100M

@@ -5,7 +5,7 @@ user-persona-extractor:
   component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: determines which age category the user belongs to based on some key
     words
   ram_usage: 100M

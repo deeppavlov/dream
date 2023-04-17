@@ -5,7 +5,7 @@ intent-catcher:
   component_type: null
   model_type: NN-based
   is_customizable: true
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: classifies user utterances into a number of predefined intents which
     are trained on a set of phrases and regexps
   ram_usage: 1.7G
@@ -66,7 +66,7 @@ intent-catcher-ru:
   component_type: null
   model_type: NN-based
   is_customizable: true
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: classifies user utterances into a number of predefined intents which
     are trained on a set of phrases and regexps
   ram_usage: 900M

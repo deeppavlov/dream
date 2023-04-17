@@ -5,7 +5,7 @@ personality-catcher:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: the skill is to change the system's personality description via chatting
     interface, it works as a system command, the response is system-like message
   ram_usage: 100M

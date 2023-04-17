@@ -5,7 +5,7 @@ dff-image-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Scripted skill that based on the sent image captioning (from annotations)
     responses with specified responses in case of food, animals or people detected,
     and default responses otherwise

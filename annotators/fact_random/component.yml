@@ -5,7 +5,7 @@ fact-random:
   component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: returns random facts for the given entity (for entities from user utterance)
   ram_usage: 100M
   gpu_usage: null

@@ -5,7 +5,7 @@ agent:
   model_type: null
   container_name: agent
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Response Annotator Selectors
   ram_usage: 100M
   gpu_usage: null

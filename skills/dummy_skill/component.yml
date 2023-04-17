@@ -5,7 +5,7 @@ agent:
   component_type: Fallback
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: a fallback skill with multiple non-toxic candidate responses
   ram_usage: 100M
   gpu_usage: null

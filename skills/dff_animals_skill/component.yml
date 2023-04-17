@@ -5,7 +5,7 @@ dff-animals-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: 'is created using DFF and has three branches of conversation about
     animals: user''s pets, pets of the socialbot, and wild animals'
   ram_usage: 200M

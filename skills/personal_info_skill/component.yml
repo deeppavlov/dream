@@ -5,7 +5,7 @@ personal-info-ru-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: queries and stores user's name, birthplace, and location
   ram_usage: 100M
   gpu_usage: null
@@ -49,7 +49,7 @@ personal-info-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: queries and stores user's name, birthplace, and location
   ram_usage: 100M
   gpu_usage: null

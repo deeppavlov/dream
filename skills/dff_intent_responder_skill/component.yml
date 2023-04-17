@@ -5,7 +5,7 @@ dff-intent-responder-ru-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: true
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: provides template-based replies for some of the intents detected by
     Intent Catcher annotator
   ram_usage: 100M
@@ -52,7 +52,7 @@ dff-intent-responder-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: true
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: provides template-based replies for some of the intents detected by
     Intent Catcher annotator
   ram_usage: 100M

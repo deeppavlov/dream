@@ -5,7 +5,7 @@ transformers-lm-gptj:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: generative service based on Transformers generative model, the model
     is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular,
     in this service, [GPT-J model](https://huggingface.co/EleutherAI/gpt-j-6B) is
@@ -68,7 +68,7 @@ transformers-lm-bloomz7b:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: generative service based on Transformers generative model, the model
     is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular,
     in this service, [BLOOMZ-7b1 model](https://huggingface.co/bigscience/bloomz-7b1)

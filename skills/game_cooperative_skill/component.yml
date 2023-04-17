@@ -5,7 +5,7 @@ game-cooperative-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: 'provides user with a conversation about computer games: the charts
     of the best games for the past year, past month, and last week'
   ram_usage: 100M

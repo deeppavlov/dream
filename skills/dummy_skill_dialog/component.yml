@@ -5,7 +5,7 @@ dummy-skill-dialog:
   component_type: Script-based w/o NNs
   model_type: ML-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: returns the next turn from the Topical Chat dataset if the response
     of the user to the Dummy Skill is similar to the corresponding response in the
     source data

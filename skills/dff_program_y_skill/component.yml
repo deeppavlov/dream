@@ -5,7 +5,7 @@ dff-program-y-ru-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
     for Dream socialbot
   ram_usage: 100M
@@ -50,7 +50,7 @@ dff-program-y-skill:
   component_type: Script-based w/o NNs
   model_type: ML-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Chatbot Program Y (https://github.com/keiffster/program-y) adapted
     for Dream socialbot
   ram_usage: 800M

@@ -5,7 +5,7 @@ midas-predictor:
   component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: BERT-based model trained on a semantic classes subset of MIDAS dataset
   ram_usage: 100M
   gpu_usage: null

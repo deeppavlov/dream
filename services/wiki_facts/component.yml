@@ -5,7 +5,7 @@ wiki-facts:
   component_type: null
   model_type: ML-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: model that extracts related facts from Wikipedia and WikiHow pages
   ram_usage: 1.7G
   gpu_usage: null

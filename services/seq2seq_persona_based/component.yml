@@ -5,7 +5,7 @@ seq2seq-persona-based:
   component_type: Script-based with NNs
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: generative service based on Transformers seq2seq model, the model was
     pre-trained on the PersonaChat dataset to generate a response conditioned on a
     several sentences of the socialbot's persona

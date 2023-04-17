@@ -5,7 +5,7 @@ dff-universal-prompted-skill:
   component_type: Generative
   model_type: NN-based
   is_customizable: true
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Universal prompt-based skill which accepts a prompt, a language modelling
     service (among the considered) to generate a response.
   ram_usage: 150M

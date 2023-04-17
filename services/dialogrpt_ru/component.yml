@@ -5,7 +5,7 @@ dialogrpt-ru:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: DialogRPT model which is based on [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2)
     and fine-tuned on Russian Pikabu Comment sequences
   ram_usage: 3.8G

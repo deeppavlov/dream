@@ -5,7 +5,7 @@ dff-wiki-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: used for making scenarios with the extraction of entities, slot filling,
     facts insertion, and acknowledgements
   ram_usage: 150M

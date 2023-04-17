@@ -5,7 +5,7 @@ eliza:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Chatbot (https://github.com/wadetb/eliza)
   ram_usage: 100M
   gpu_usage: null

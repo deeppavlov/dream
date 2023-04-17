@@ -5,7 +5,7 @@ comet-atomic:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Commonsense prediction models COMeT Atomic
   ram_usage: 2G
   gpu_usage: 1.1G
@@ -68,7 +68,7 @@ comet-conceptnet:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: Commonsense prediction models COMeT  ConceptNet
   ram_usage: 2G
   gpu_usage: 1.1G

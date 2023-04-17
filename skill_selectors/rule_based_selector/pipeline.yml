@@ -9,3 +9,4 @@ agent:
   - annotators
   tags:
   - selector
+  endpoint: respond

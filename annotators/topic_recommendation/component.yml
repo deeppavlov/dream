@@ -5,7 +5,7 @@ topic-recommendation:
   component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: offers a topic for further conversation using the information about
     the discussed topics and user's preferences. Current version is based on Reddit
     personalities (see Dream Report for Alexa Prize 4).

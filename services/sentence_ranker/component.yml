@@ -5,7 +5,7 @@ sentence-ranker:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: ranking model given as `PRETRAINED_MODEL_NAME_OR_PATH` which for a
     pair os sentences returns a float score of correspondence
   ram_usage: 1.2G
@@ -64,7 +64,7 @@ sentence-ranker-multilingual:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: for a pair of sentences predicts a floating point value. For multilingual
     version, return cosine similarity between embeddings from multilingual sentence
     BERT

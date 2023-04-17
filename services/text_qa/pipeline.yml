@@ -1,5 +1,32 @@
+text-qa:
+- group: services
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://text-qa:8078/model
+  dialog_formatter: state_formatters.dp_formatters:utt_sentseg_punct_dialog
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+  host: text-qa
+  port: 8078
+  endpoint: model
 text-qa-ru:
 - group: skills
+  connector:
+    protocol: http
+    timeout: 2.0
+    url: http://text-qa-ru:8078/model
+  dialog_formatter: state_formatters.dp_formatters:utt_sentseg_punct_dialog
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+  host: text-qa-ru
+  port: 8078
+  endpoint: model
+- group: services
   connector:
     protocol: http
     timeout: 2.0

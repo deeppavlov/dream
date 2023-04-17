@@ -5,7 +5,7 @@ small-talk-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: asks questions using the hand-written scripts for 25 topics, including
     but not limited to love, sports, work, pets, etc.
   ram_usage: 100M

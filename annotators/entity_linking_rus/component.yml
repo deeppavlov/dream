@@ -5,7 +5,7 @@ entity-linking-ru:
   component_type: null
   model_type: ML-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: finds Wikidata entity ids for the entities detected with Entity Detection
   ram_usage: 400M
   gpu_usage: null

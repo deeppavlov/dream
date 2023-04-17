@@ -5,7 +5,7 @@ dff-weather-skill:
   component_type: Script-based w/o NNs
   model_type: External API
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: uses the OpenWeatherMap service to get the forecast for the user's
     location
   ram_usage: 1.4G

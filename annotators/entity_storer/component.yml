@@ -5,7 +5,7 @@ entity-storer:
   component_type: null
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: a rule-based component, which stores entities from the user's and socialbot's
     utterances if opinion expression is detected with patterns or MIDAS Classifier
     and saves them along with the detected attitude to dialogue state

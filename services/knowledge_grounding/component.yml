@@ -5,7 +5,7 @@ knowledge-grounding:
   component_type: null
   model_type: NN-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: generative service based on BlenderBot architecture providing a response
     to the context taking into account an additional text paragraph
   ram_usage: 2G

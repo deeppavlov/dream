@@ -5,7 +5,7 @@ dff-food-skill:
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
-  author: DeepPavlov
+  author: publisher@deeppavlov.ai
   description: constructed with DFF to encourage food-related conversation
   ram_usage: 150M
   gpu_usage: null
