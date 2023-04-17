@@ -21,6 +21,7 @@ N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
+DEFAULT_PROMPT = "Respond like a friendly chatbot."
 
 CONSIDERED_LM_SERVICES = {
     "GPT-J 6B": {
@@ -56,13 +57,18 @@ def compose_data_for_model(ctx, actor):
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
 
-    # drop the dialog history (except for the last utterance) if prompt has changed
+    # drop the dialog history when prompt changes
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    given_prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
-    shared_memory = int_ctx.get_shared_memory(ctx, actor)
-    previous_prompt = shared_memory.get("prompt", "")
-    if given_prompt != previous_prompt:
-        context = context[-1:]
+    # get prompt from the current utterance attributes
+    given_prompt = last_uttr.get("attributes", {}).get("prompt", DEFAULT_PROMPT)
+
+    history = int_ctx.get_utterances(ctx, actor)
+    for i in range(1, len(history)):
+        if history[-i].get("attributes", {}).get("prompt", DEFAULT_PROMPT) != given_prompt:
+            # cut context on the last user utterance utilizing the current prompt
+            context = context[-i + 2:]
+            break
+
     return context
 
 
@@ -87,7 +93,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
+    prompt = last_uttr.get("attributes", {}).get("prompt", DEFAULT_PROMPT)
     logger.info(f"prompt: {prompt}")
     lm_service = last_uttr.get("attributes", {}).get("lm_service", "GPT-J 6B")
     logger.info(f"lm_service: {lm_service}")
@@ -116,7 +122,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()[0]
-        int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
