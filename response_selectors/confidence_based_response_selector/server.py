@@ -43,7 +43,7 @@ def respond():
             if FILTER_BADLISTED_WORDS:
                 try:
                     badlist_result = requests.post(
-                        BADLIST_URL, json={"sentences": skill_data["text"]}, timeout=1.5
+                        BADLIST_URL, json={"sentences": [skill_data["text"]]}, timeout=1.5
                     ).json()[0]["batch"][0]
                 except Exception as exc:
                     logger.exception(exc)
