@@ -9,3 +9,6 @@ dff-generative-ru-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-generative-ru-skill
+  port: 8092
+  endpoint: respond

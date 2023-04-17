@@ -9,6 +9,9 @@ dff-friendship-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-friendship-skill
+  port: 8086
+  endpoint: respond
 dff-friendship-ru-skill:
 - group: skills
   connector:
@@ -20,3 +23,6 @@ dff-friendship-ru-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-friendship-ru-skill
+  port: 8086
+  endpoint: respond

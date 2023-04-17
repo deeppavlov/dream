@@ -9,3 +9,6 @@ dff-weather-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-weather-skill
+  port: 8037
+  endpoint: respond

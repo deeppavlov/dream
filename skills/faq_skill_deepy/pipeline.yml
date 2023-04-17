@@ -8,3 +8,6 @@ faq-skill:
   previous_services:
   - annotators
   state_manager_method: add_hypothesis
+  host: faq-skill
+  port: 3772
+  endpoint: respond

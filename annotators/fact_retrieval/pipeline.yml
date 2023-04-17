@@ -11,3 +11,6 @@ fact-retrieval:
   - annotators.sentseg
   - annotators.entity_linking
   state_manager_method: add_annotation
+  host: fact-retrieval
+  port: 8100
+  endpoint: model

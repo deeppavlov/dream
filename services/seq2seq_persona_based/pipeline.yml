@@ -9,3 +9,6 @@ seq2seq-persona-based:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: seq2seq-persona-based
+  port: 8140
+  endpoint: respond

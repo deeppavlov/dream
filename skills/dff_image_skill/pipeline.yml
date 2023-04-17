@@ -9,3 +9,6 @@ dff-image-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-image-skill
+  port: 8188
+  endpoint: respond

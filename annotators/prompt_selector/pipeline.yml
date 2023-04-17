@@ -9,3 +9,6 @@ prompt-selector:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: add_annotation
+  host: prompt-selector
+  port: 8135
+  endpoint: respond

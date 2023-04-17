@@ -8,3 +8,6 @@ harvesters-maintenance-skill:
   previous_services:
   - annotators
   state_manager_method: add_hypothesis
+  host: harvesters-maintenance-skill
+  port: 3662
+  endpoint: respond

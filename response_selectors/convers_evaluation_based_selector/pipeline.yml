@@ -9,6 +9,9 @@ convers-evaluation-no-scripts-selector:
   previous_services:
   - candidate_annotators
   state_manager_method: add_bot_utterance
+  host: convers-evaluation-no-scripts-selector
+  port: 8009
+  endpoint: respond
 scripts-priority-selector:
 - group: response_selectors
   connector:
@@ -20,6 +23,9 @@ scripts-priority-selector:
   previous_services:
   - candidate_annotators
   state_manager_method: add_bot_utterance
+  host: scripts-priority-selector
+  port: 8009
+  endpoint: respond
 convers-evaluation-selector:
 - group: response_selectors
   connector:
@@ -31,6 +37,9 @@ convers-evaluation-selector:
   previous_services:
   - candidate_annotators
   state_manager_method: add_bot_utterance
+  host: convers-evaluation-selector
+  port: 8009
+  endpoint: respond
 convers-evaluation-selector-ru:
 - group: response_selectors
   connector:
@@ -42,6 +51,9 @@ convers-evaluation-selector-ru:
   previous_services:
   - candidate_annotators
   state_manager_method: add_bot_utterance
+  host: convers-evaluation-selector-ru
+  port: 8009
+  endpoint: respond
 no-restrictions-selector:
 - group: response_selectors
   connector:
@@ -53,3 +65,6 @@ no-restrictions-selector:
   previous_services:
   - candidate_annotators
   state_manager_method: add_bot_utterance
+  host: no-restrictions-selector
+  port: 8009
+  endpoint: respond

@@ -9,3 +9,6 @@ dialogrpt-ru:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: dialogrpt-ru
+  port: 8122
+  endpoint: respond

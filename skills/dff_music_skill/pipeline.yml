@@ -9,3 +9,6 @@ dff-music-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-music-skill
+  port: 8099
+  endpoint: respond

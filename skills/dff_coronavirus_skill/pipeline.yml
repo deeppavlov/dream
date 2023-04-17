@@ -9,3 +9,6 @@ dff-coronavirus-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-coronavirus-skill
+  port: 8061
+  endpoint: respond

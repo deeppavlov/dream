@@ -9,6 +9,9 @@ dff-intent-responder-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-intent-responder-skill
+  port: 8012
+  endpoint: respond
 dff-intent-responder-ru-skill:
 - group: skills
   connector:
@@ -20,3 +23,6 @@ dff-intent-responder-ru-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-intent-responder-ru-skill
+  port: 8012
+  endpoint: respond

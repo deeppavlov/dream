@@ -9,4 +9,6 @@ dff-universal-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-
+  host: dff-universal-prompted-skill
+  port: 8147
+  endpoint: respond

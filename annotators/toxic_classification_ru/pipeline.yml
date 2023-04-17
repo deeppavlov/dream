@@ -9,6 +9,9 @@ toxic-classification-ru:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: add_annotation
+  host: toxic-classification-ru
+  port: 8126
+  endpoint: respond
 - group: candidate_annotators
   connector:
     protocol: http
@@ -19,3 +22,6 @@ toxic-classification-ru:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: toxic-classification-ru
+  port: 8126
+  endpoint: respond_batch

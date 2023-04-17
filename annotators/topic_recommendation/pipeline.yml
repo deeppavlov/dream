@@ -11,3 +11,6 @@ topic-recommendation:
   - annotators.sentseg
   - annotators.combined_classification
   state_manager_method: add_annotation
+  host: topic-recommendation
+  port: 8113
+  endpoint: respond

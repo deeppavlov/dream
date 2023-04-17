@@ -9,3 +9,6 @@ dff-program-y-dangerous-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-program-y-dangerous-skill
+  port: 8022
+  endpoint: respond

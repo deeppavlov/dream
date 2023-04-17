@@ -9,3 +9,6 @@ dff-short-story-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-short-story-skill
+  port: 8057
+  endpoint: respond

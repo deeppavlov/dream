@@ -9,3 +9,6 @@ dff-gaming-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-gaming-skill
+  port: 8115
+  endpoint: respond

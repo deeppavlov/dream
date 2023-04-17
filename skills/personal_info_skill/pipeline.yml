@@ -9,6 +9,9 @@ personal-info-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: personal-info-skill
+  port: 8030
+  endpoint: respond
 personal-info-ru-skill:
 - group: skills
   connector:
@@ -20,3 +23,6 @@ personal-info-ru-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: personal-info-ru-skill
+  port: 8030
+  endpoint: respond

@@ -9,6 +9,9 @@ sentseg-ru:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: add_annotation
+  host: sentseg-ru
+  port: 8011
+  endpoint: sentseg
 - group: response_annotators
   connector:
     protocol: http
@@ -19,3 +22,6 @@ sentseg-ru:
   previous_services:
   - response_annotator_selectors
   state_manager_method: add_annotation_prev_bot_utt
+  host: sentseg-ru
+  port: 8011
+  endpoint: sentseg

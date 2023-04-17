@@ -9,6 +9,9 @@ combined-classification:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: combined-classification
+  port: 8087
+  endpoint: batch_model
 - group: annotators
   connector:
     protocol: http
@@ -19,3 +22,6 @@ combined-classification:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: add_annotation
+  host: combined-classification
+  port: 8087
+  endpoint: model

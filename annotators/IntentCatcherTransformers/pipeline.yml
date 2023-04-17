@@ -10,6 +10,9 @@ intent-catcher:
   - annotators.spelling_preprocessing
   - annotators.sentseg
   state_manager_method: add_annotation
+  host: intent-catcher
+  port: 8014
+  endpoint: detect
 intent-catcher-ru:
 - group: annotators
   connector:
@@ -22,3 +25,6 @@ intent-catcher-ru:
   - annotators.spelling_preprocessing
   - annotators.sentseg
   state_manager_method: add_annotation
+  host: intent-catcher-ru
+  port: 8014
+  endpoint: detect

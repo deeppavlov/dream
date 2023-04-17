@@ -9,3 +9,6 @@ midas-predictor:
   previous_services:
   - annotators.combined_classification
   state_manager_method: add_annotation
+  host: midas-predictor
+  port: 8121
+  endpoint: respond

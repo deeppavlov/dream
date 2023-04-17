@@ -9,3 +9,6 @@ factoid-qa:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: factoid-qa
+  port: 8071
+  endpoint: respond

@@ -10,6 +10,9 @@ ner:
   - annotators.spelling_preprocessing
   - annotators.sentseg
   state_manager_method: add_annotation
+  host: ner
+  port: 8021
+  endpoint: ner
 - group: response_annotators
   connector:
     protocol: http
@@ -21,6 +24,9 @@ ner:
   - response_annotator_selectors
   - response_annotators.sentseg
   state_manager_method: add_annotation_prev_bot_utt
+  host: ner
+  port: 8021
+  endpoint: ner
 ner-ru:
 - group: annotators
   connector:
@@ -33,6 +39,9 @@ ner-ru:
   - annotators.spelling_preprocessing
   - annotators.sentseg
   state_manager_method: add_annotation
+  host: ner-ru
+  port: 8021
+  endpoint: ner
 - group: response_annotators
   connector:
     protocol: http
@@ -44,3 +53,6 @@ ner-ru:
   - response_annotator_selectors
   - response_annotators.sentseg
   state_manager_method: add_annotation_prev_bot_utt
+  host: ner-ru
+  port: 8021
+  endpoint: ner

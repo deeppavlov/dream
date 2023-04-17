@@ -11,3 +11,6 @@ entity-linking:
   - annotators.entity_detection
   - annotators.spacy_nounphrases
   state_manager_method: add_annotation
+  host: entity-linking
+  port: 8075
+  endpoint: model

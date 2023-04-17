@@ -8,3 +8,6 @@ rule-based-response-selector:
   previous_services:
   - response_annotators
   state_manager_method: add_bot_utterance
+  host: rule-based-response-selector
+  port: 8005
+  endpoint: respond

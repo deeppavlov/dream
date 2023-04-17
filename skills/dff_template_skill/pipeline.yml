@@ -9,3 +9,6 @@ dff-template-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-template-skill
+  port: 8120
+  endpoint: respond

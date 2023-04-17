@@ -9,3 +9,6 @@ fact-retrieval-ru:
   previous_services:
   - annotators.entity_linking
   state_manager_method: add_annotation
+  host: fact-retrieval-ru
+  port: 8130
+  endpoint: respond

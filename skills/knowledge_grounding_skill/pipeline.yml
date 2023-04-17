@@ -9,3 +9,6 @@ knowledge-grounding-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: knowledge-grounding-skill
+  port: 8085
+  endpoint: respond

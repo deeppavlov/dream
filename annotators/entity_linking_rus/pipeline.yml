@@ -10,3 +10,6 @@ entity-linking-ru:
   - annotators.ner
   - annotators.entity_detection
   state_manager_method: add_annotation
+  host: entity-linking-ru
+  port: 8075
+  endpoint: model

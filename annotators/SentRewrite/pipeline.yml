@@ -12,6 +12,9 @@ sentrewrite:
   - annotators.ner
   - response_annotators.ner
   state_manager_method: add_annotation
+  host: sentrewrite
+  port: 8017
+  endpoint: sentrewrite
 - group: response_annotators
   connector:
     protocol: http
@@ -24,3 +27,6 @@ sentrewrite:
   - response_annotators.sentseg
   - response_annotators.ner
   state_manager_method: add_annotation_prev_bot_utt
+  host: sentrewrite
+  port: 8017
+  endpoint: sentrewrite

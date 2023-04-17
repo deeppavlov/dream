@@ -9,3 +9,6 @@ dff-book-sfc-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-book-sfc-skill
+  port: 8034
+  endpoint: respond

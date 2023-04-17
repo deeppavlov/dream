@@ -9,6 +9,9 @@ spacy-nounphrases:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: add_annotation
+  host: spacy-nounphrases
+  port: 8006
+  endpoint: respond
 - group: response_annotators
   connector:
     protocol: http
@@ -19,6 +22,9 @@ spacy-nounphrases:
   previous_services:
   - skills
   state_manager_method: add_annotation_prev_bot_utt
+  host: spacy-nounphrases
+  port: 8006
+  endpoint: respond
 - group: candidate_annotators
   connector:
     protocol: http
@@ -29,3 +35,6 @@ spacy-nounphrases:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: spacy-nounphrases
+  port: 8006
+  endpoint: respond_batch

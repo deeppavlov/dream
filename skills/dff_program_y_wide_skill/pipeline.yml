@@ -9,3 +9,6 @@ dff-program-y-wide-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-program-y-wide-skill
+  port: 8064
+  endpoint: respond

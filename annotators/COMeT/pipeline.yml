@@ -11,3 +11,6 @@ comet-conceptnet:
   - annotators.entity_detection
   - annotators.spacy_nounphrases
   state_manager_method: add_annotation
+  host: comet-conceptnet
+  port: 8065
+  endpoint: comet_annotator

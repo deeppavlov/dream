@@ -10,6 +10,9 @@ entity-detection:
   - annotators.spelling_preprocessing
   - annotators.sentseg
   state_manager_method: add_annotation
+  host: entity-detection
+  port: 8103
+  endpoint: respond
 - group: candidate_annotators
   connector:
     protocol: http
@@ -20,3 +23,6 @@ entity-detection:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: entity-detection
+  port: 8103
+  endpoint: respond_batch

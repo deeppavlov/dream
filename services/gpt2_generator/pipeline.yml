@@ -9,3 +9,6 @@ gpt2-multilingual:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: gpt2-multilingual
+  port: 8132
+  endpoint: respond

@@ -9,3 +9,6 @@ eliza:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: eliza
+  port: 8047
+  endpoint: respond

@@ -9,3 +9,6 @@ dff-book-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-book-skill
+  port: 8032
+  endpoint: respond

@@ -9,6 +9,9 @@ wiki-parser:
   required_previous_services:
   - annotators.entity_linking
   state_manager_method: add_annotation
+  host: wiki-parser
+  port: 8077
+  endpoint: model
 wiki-parser-ru:
 - group: annotators
   connector:
@@ -20,3 +23,6 @@ wiki-parser-ru:
   required_previous_services:
   - annotators.entity_linking
   state_manager_method: add_annotation
+  host: wiki-parser-ru
+  port: 8077
+  endpoint: model

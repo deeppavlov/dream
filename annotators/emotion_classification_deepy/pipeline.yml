@@ -9,3 +9,6 @@ emotion-classification-deepy:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: emotion-classification-deepy
+  port: 8015
+  endpoint: model

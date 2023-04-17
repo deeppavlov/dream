@@ -9,3 +9,6 @@ dff-funfact-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-funfact-skill
+  port: 8104
+  endpoint: respond

@@ -9,6 +9,9 @@ sentence-ranker:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: sentence-ranker
+  port: 8128
+  endpoint: respond
 sentence-ranker-multilingual:
 - group: candidate_annotators
   connector:
@@ -20,3 +23,6 @@ sentence-ranker-multilingual:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: sentence-ranker-multilingual
+  port: 8128
+  endpoint: respond

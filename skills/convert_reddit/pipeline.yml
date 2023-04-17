@@ -9,3 +9,6 @@ convert-reddit:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: convert-reddit
+  port: 8029
+  endpoint: convert_reddit

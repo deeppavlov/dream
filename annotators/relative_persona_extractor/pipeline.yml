@@ -9,3 +9,6 @@ relative-persona-extractor:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: add_annotation
+  host: relative-persona-extractor
+  port: 8133
+  endpoint: respond

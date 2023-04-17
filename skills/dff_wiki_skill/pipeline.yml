@@ -9,3 +9,6 @@ dff-wiki-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-wiki-skill
+  port: 8111
+  endpoint: respond

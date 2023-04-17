@@ -11,3 +11,6 @@ dff-gossip-skill:
   - annotators.entity_linking
   - annotators.wiki_parser
   state_manager_method: add_hypothesis
+  host: dff-gossip-skill
+  port: 8109
+  endpoint: respond

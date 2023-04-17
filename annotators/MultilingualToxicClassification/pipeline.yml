@@ -7,6 +7,9 @@ toxic-classification-multilingual:
   dialog_formatter: state_formatters.dp_formatters:preproc_last_human_utt_dialog
   response_formatter: state_formatters.dp_formatters:simple_formatter_service
   state_manager_method: add_annotation
+  host: toxic-classification-multilingual
+  port: 8013
+  endpoint: respond
 - group: candidate_annotators
   connector:
     protocol: http
@@ -17,3 +20,6 @@ toxic-classification-multilingual:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: toxic-classification-multilingual
+  port: 8013
+  endpoint: respond_batch

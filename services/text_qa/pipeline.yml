@@ -9,3 +9,6 @@ text-qa-ru:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: text-qa-ru
+  port: 8078
+  endpoint: model

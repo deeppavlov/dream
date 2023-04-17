@@ -9,3 +9,6 @@ dff-movie-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-movie-skill
+  port: 8023
+  endpoint: respond

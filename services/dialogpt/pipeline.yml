@@ -9,3 +9,6 @@ dialogpt:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dialogpt
+  port: 8125
+  endpoint: respond

@@ -9,3 +9,6 @@ rake-keywords:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: add_annotation
+  host: rake-keywords
+  port: 8007
+  endpoint: respond

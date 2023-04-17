@@ -11,3 +11,6 @@ fact-random:
   - annotators.spacy_nounphrases
   - annotators.entity_detection
   state_manager_method: add_annotation
+  host: fact-random
+  port: 8119
+  endpoint: respond

@@ -9,3 +9,6 @@ small-talk-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: small-talk-skill
+  port: 8062
+  endpoint: respond

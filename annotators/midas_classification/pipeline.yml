@@ -9,6 +9,9 @@ midas-classification:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: midas-classification
+  port: 8090
+  endpoint: batch_model
 - group: annotators
   connector:
     protocol: http
@@ -20,3 +23,6 @@ midas-classification:
   - annotators.spelling_preprocessing
   - annotators.sentseg
   state_manager_method: add_annotation
+  host: midas-classification
+  port: 8090
+  endpoint: model

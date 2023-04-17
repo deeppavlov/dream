@@ -9,6 +9,9 @@ dff-program-y-skill:
   previous_services:
   - annotators
   state_manager_method: add_hypothesis
+  host: dff-program-y-skill
+  port: 8008
+  endpoint: respond
 dff-program-y-ru-skill:
 - group: skills
   connector:
@@ -20,3 +23,6 @@ dff-program-y-ru-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-program-y-ru-skill
+  port: 8008
+  endpoint: respond

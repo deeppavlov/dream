@@ -10,3 +10,6 @@ badlisted-words-ru:
   - annotators.spelling_preprocessing
   - annotators.spacy_annotator
   state_manager_method: add_annotation
+  host: badlisted-words-ru
+  port: 8018
+  endpoint: badlisted_words

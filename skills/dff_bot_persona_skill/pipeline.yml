@@ -9,3 +9,6 @@ dff-bot-persona-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-bot-persona-skill
+  port: 8105
+  endpoint: respond

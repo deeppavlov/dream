@@ -9,3 +9,6 @@ user-persona-extractor:
   previous_services:
   - annotators.spelling_preprocessing
   state_manager_method: update_attributes
+  host: user-persona-extractor
+  port: 8114
+  endpoint: respond

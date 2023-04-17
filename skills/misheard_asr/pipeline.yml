@@ -9,3 +9,6 @@ misheard-asr:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: misheard-asr
+  port: 8033
+  endpoint: misheard_respond

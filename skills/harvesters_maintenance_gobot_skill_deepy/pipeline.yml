@@ -8,3 +8,6 @@ harvesters-maintenance-gobot-skill:
   previous_services:
   - annotators
   state_manager_method: add_hypothesis
+  host: harvesters-maintenance-gobot-skill
+  port: 3882
+  endpoint: respond

@@ -9,6 +9,9 @@ meta-script-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: meta-script-skill
+  port: 8054
+  endpoint: meta_script
 - group: skills
   connector:
     protocol: http
@@ -19,3 +22,6 @@ meta-script-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: meta-script-skill
+  port: 8054
+  endpoint: comet_dialog

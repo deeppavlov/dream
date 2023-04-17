@@ -13,3 +13,6 @@ news-api-annotator:
   - annotators.entity_detection
   - annotators.spacy_nounphrases
   state_manager_method: add_annotation
+  host: news-api-annotator
+  port: 8112
+  endpoint: respond

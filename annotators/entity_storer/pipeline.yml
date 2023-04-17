@@ -10,3 +10,6 @@ entity-storer:
   - annotators.combined_classification
   - annotators.intent_catcher
   state_manager_method: update_attributes
+  host: entity-storer
+  port: 8089
+  endpoint: respond

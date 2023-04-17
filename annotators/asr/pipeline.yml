@@ -7,3 +7,6 @@ asr:
   dialog_formatter: state_formatters.dp_formatters:asr_formatter_dialog
   response_formatter: state_formatters.dp_formatters:simple_formatter_service
   state_manager_method: add_annotation
+  host: asr
+  port: 8031
+  endpoint: asr_check

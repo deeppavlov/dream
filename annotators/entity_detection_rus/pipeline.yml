@@ -10,3 +10,6 @@ entity-detection-ru:
   - annotators.spelling_preprocessing
   - annotators.sentseg
   state_manager_method: add_annotation
+  host: entity-detection-ru
+  port: 8103
+  endpoint: respond

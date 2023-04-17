@@ -7,4 +7,4 @@ agent:
       say.
   state_manager_method: add_bot_utterance_last_chance
   tags:
-    - last_chance
+  - last_chance

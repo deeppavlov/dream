@@ -9,3 +9,6 @@ dff-travel-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-travel-skill
+  port: 8096
+  endpoint: respond

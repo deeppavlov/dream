@@ -9,3 +9,6 @@ dummy-skill-dialog:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dummy-skill-dialog
+  port: 8052
+  endpoint: respond

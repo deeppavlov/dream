@@ -1,14 +1,3 @@
-dff-my-template-prompted-skill:
-- group: skills
-  connector:
-    protocol: http
-    timeout: 5.0
-    url: http://dff-my-template-prompted-skill:template_port/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_prompted_skill_formatter
-  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
-  previous_services:
-  - skill_selectors
-  state_manager_method: add_hypothesis
 dff-ai-faq-prompted-skill:
 - group: skills
   connector:
@@ -20,6 +9,9 @@ dff-ai-faq-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-ai-faq-prompted-skill
+  port: 8143
+  endpoint: respond
 dff-fairytale-prompted-skill:
 - group: skills
   connector:
@@ -31,6 +23,9 @@ dff-fairytale-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-fairytale-prompted-skill
+  port: 8139
+  endpoint: respond
 dff-empathetic-marketing-prompted-skill:
 - group: skills
   connector:
@@ -42,6 +37,9 @@ dff-empathetic-marketing-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-empathetic-marketing-prompted-skill
+  port: 8138
+  endpoint: respond
 dff-da-costa-clothes-prompted-skill:
 - group: skills
   connector:
@@ -53,6 +51,9 @@ dff-da-costa-clothes-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-da-costa-clothes-prompted-skill
+  port: 8144
+  endpoint: respond
 dff-dream-persona-gpt-j-prompted-skill:
 - group: skills
   connector:
@@ -64,6 +65,9 @@ dff-dream-persona-gpt-j-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-dream-persona-gpt-j-prompted-skill
+  port: 8134
+  endpoint: respond
 dff-nutrition-prompted-skill:
 - group: skills
   connector:
@@ -75,6 +79,9 @@ dff-nutrition-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-nutrition-prompted-skill
+  port: 8141
+  endpoint: respond
 dff-rhodes-coaching-prompted-skill:
 - group: skills
   connector:
@@ -86,6 +93,9 @@ dff-rhodes-coaching-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-rhodes-coaching-prompted-skill
+  port: 8142
+  endpoint: respond
 dff-dream-persona-davinci3-prompted-skill:
 - group: skills
   connector:
@@ -97,6 +107,9 @@ dff-dream-persona-davinci3-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-dream-persona-davinci3-prompted-skill
+  port: 8137
+  endpoint: respond
 dff-deepy-prompted-skill:
 - group: skills
   connector:
@@ -108,3 +121,6 @@ dff-deepy-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+  host: dff-deepy-prompted-skill
+  port: 8148
+  endpoint: respond

@@ -10,6 +10,9 @@ speech-function-classifier:
   - annotators.sentseg
   - response_annotators.speech_function_classifier
   state_manager_method: add_annotation
+  host: speech-function-classifier
+  port: 8108
+  endpoint: model
 - group: response_annotators
   connector:
     protocol: http
@@ -21,6 +24,9 @@ speech-function-classifier:
   - response_annotator_selectors
   - response_annotators.sentseg
   state_manager_method: add_annotation_prev_bot_utt
+  host: speech-function-classifier
+  port: 8108
+  endpoint: model
 - group: candidate_annotators
   connector:
     protocol: http
@@ -31,3 +37,6 @@ speech-function-classifier:
   previous_services:
   - skills
   state_manager_method: add_hypothesis_annotation_batch
+  host: speech-function-classifier
+  port: 8108
+  endpoint: annotation
