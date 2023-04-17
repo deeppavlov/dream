@@ -485,5 +485,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8137:8137
+  
+  dff-generative-kg-prompted-skill:
+    volumes:
+      - "./skills/dff_generative_kg_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8133:8133
 
 version: "3.7"
