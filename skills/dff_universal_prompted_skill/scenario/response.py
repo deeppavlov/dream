@@ -61,12 +61,12 @@ def compose_data_for_model(ctx, actor):
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
     # get prompt from the current utterance attributes
     given_prompt = last_uttr.get("attributes", {}).get("prompt", DEFAULT_PROMPT)
-
     history = int_ctx.get_utterances(ctx, actor)
-    for i in range(1, len(history)):
+
+    for i in range(1, len(history) + 1, 2):
         curr_prompt = history[-i].get("attributes", {}).get("prompt", DEFAULT_PROMPT)
         # checking only user utterances
-        if "hypotheses" in history[-i] and curr_prompt != given_prompt:
+        if curr_prompt != given_prompt:
             # cut context on the last user utterance utilizing the current prompt
             context = context[-i + 2:]
             break
