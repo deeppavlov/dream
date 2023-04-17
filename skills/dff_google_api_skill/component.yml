@@ -6,8 +6,8 @@ dff-google-api-skill:
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
-  description: This skill utilizes LangChain's GoogleSearchAPIWrapper
-  to use Google search and OpenAI llm for question answering.
+  description: This skill utilizes LangChain's GoogleSearchAPIWrapper 
+    to use Google search and OpenAI llm for question answering.
   ram_usage: 150M
   gpu_usage: null
   port: 8156
