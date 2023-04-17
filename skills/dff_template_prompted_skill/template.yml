@@ -17,11 +17,8 @@
 - name: unused_template_prompted_skill
   display_name: Unused Prompted Skill Template
   author: publisher@deeppavlov.ai
-  template_name: dff_prompted_skill
-  template_display_name: Template Prompted Skill
-  template_is_customizable: true
-  template_author: template_author
-  template_description: Template for creating Prompted Skills
+#  is_customizable: true
+  description: Unused template for creating Prompted Skills
   endpoints:
   - group: skills
     endpoint: respond
