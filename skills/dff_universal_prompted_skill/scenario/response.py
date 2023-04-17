@@ -68,7 +68,7 @@ def compose_data_for_model(ctx, actor):
         # checking only user utterances
         if curr_prompt != given_prompt:
             # cut context on the last user utterance utilizing the current prompt
-            context = context[-i + 2:]
+            context = context[-i + 2 :]
             break
 
     return context
