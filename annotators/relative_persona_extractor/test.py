@@ -19,7 +19,7 @@ def main():
     }
     gold = [
         {
-            "max_similarity": 0.5508536696434021,
+            "max_similarity": 0.551,
             "persona": [
                 "I like Italian food especially pasta and pizza.",
                 "I like visiting interesting places virtually.",
@@ -27,7 +27,7 @@ def main():
             ],
         },
         {
-            "max_similarity": 0.4737730622291565,
+            "max_similarity": 0.474,
             "persona": [
                 "I like visiting interesting places virtually.",
                 "I like watching travel video blogs.",
