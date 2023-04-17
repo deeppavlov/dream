@@ -11,7 +11,12 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "last_chance"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/last_chance_service",
+                "container": "agent"
+            }
         },
         "timeout_service": {
             "connector": {
@@ -23,7 +28,12 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "timeout"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/timeout_service",
+                "container": "agent"
+            }
         },
         "response_annotator_selectors": {
             "connector": {
@@ -39,7 +49,12 @@
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
             "tags": [
                 "selector"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "directory": "services/response_annotator_selectors",
+                "container": "agent"
+            }
         },
         "response_annotators": {},
         "annotators": {
@@ -51,7 +66,13 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/spelling_preprocessing",
+                    "container": "spelling-preprocessing",
+                    "endpoint": "respond"
+                }
             },
             "badlisted_words": {
                 "connector": {
@@ -64,7 +85,13 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/BadlistedWordsDetector",
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words"
+                }
             }
         },
         "skill_selectors": {
@@ -80,7 +107,12 @@
                 ],
                 "tags": [
                     "selector"
-                ]
+                ],
+                "is_enabled": true,
+                "source": {
+                    "directory": "skill_selectors/rule_based_selector",
+                    "container": "agent"
+                }
             }
         },
         "skills": {
@@ -95,7 +127,13 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_program_y_skill",
+                    "container": "dff-program-y-skill",
+                    "endpoint": "respond"
+                }
             },
             "dummy_skill": {
                 "connector": {
@@ -107,7 +145,12 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dummy_skill",
+                    "container": "agent"
+                }
             },
             "dff_friendship_skill": {
                 "connector": {
@@ -120,7 +163,13 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_friendship_skill",
+                    "container": "dff-friendship-skill",
+                    "endpoint": "respond"
+                }
             },
             "dff_template_skill": {
                 "connector": {
@@ -133,7 +182,13 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "directory": "skills/dff_template_skill",
+                    "container": "dff-template-skill",
+                    "endpoint": "respond"
+                }
             }
         },
         "candidate_annotators": {
@@ -148,7 +203,13 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/BadlistedWordsDetector",
+                    "container": "badlisted-words",
+                    "endpoint": "badlisted_words"
+                }
             }
         },
         "response_selectors": {
@@ -162,7 +223,13 @@
                 "previous_services": [
                     "skills"
                 ],
-                "state_manager_method": "add_bot_utterance"
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "directory": "response_selectors/confidence_based_response_selector",
+                    "container": "confidence-based-response-selector",
+                    "endpoint": "respond"
+                }
             }
         }
     },
