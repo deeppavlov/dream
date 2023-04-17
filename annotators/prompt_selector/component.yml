@@ -1,5 +1,6 @@
 prompt-selector:
   name: prompt_selector
+  template: prompt_selector_template
   display_name: Prompt Selector
   container_name: prompt-selector
   component_type: null

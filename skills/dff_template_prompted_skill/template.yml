@@ -1,4 +1,4 @@
-- name: dff_template_prompted_skill
+- name: dff_prompted_skill_template
   display_name: Prompted Skill Template
   author: publisher@deeppavlov.ai
 #  is_customizable: true
@@ -6,7 +6,7 @@
   endpoints:
   - group: skills
     endpoint: respond
-  template_config_keys:
+  config_keys:
 #    SERVICE_PORT: int
     SERVICE_NAME: str
     PROMPT_FILE: str
@@ -25,7 +25,7 @@
   endpoints:
   - group: skills
     endpoint: respond
-  template_config_keys:
+  config_keys:
 #    SERVICE_PORT: int
     SERVICE_NAME: str
     PROMPT_FILE: str

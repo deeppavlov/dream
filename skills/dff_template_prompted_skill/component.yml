@@ -1,5 +1,6 @@
 #dff-my-template-prompted-skill:
 #  name: dff_my_template_prompted_skill
+#  template: dff_prompted_skill_template
 #  display_name: My Template Skill
 #  container_name: dff-my-template-prompted-skill
 #  component_type: Generative
@@ -27,6 +28,7 @@
 #  compose_proxy: {}
 dff-ai-faq-prompted-skill:
   name: dff_ai_faq_prompted_skill
+  template: dff_prompted_skill_template
   display_name: AI FAQ Skill
   container_name: dff-ai-faq-prompted-skill
   component_type: Generative
@@ -82,6 +84,7 @@ dff-ai-faq-prompted-skill:
   compose_proxy: {}
 dff-da-costa-clothes-prompted-skill:
   name: dff_da_costa_clothes_prompted_skill
+  template: dff_prompted_skill_template
   display_name: da Costa Clothes Skill
   container_name: dff-da-costa-clothes-prompted-skill
   component_type: Generative
@@ -137,6 +140,7 @@ dff-da-costa-clothes-prompted-skill:
   compose_proxy: {}
 dff-dream-persona-davinci3-prompted-skill:
   name: dff_dream_persona_prompted_skill
+  template: dff_prompted_skill_template
   display_name: Dream Persona Skill
   container_name: dff-dream-persona-davinci3-prompted-skill
   component_type: Generative
@@ -193,6 +197,7 @@ dff-dream-persona-davinci3-prompted-skill:
   compose_proxy: {}
 dff-dream-persona-gpt-j-prompted-skill:
   name: dff_dream_persona_prompted_skill
+  template: dff_prompted_skill_template
   display_name: Dream Persona Skill
   container_name: dff-dream-persona-gpt-j-prompted-skill
   component_type: Generative
@@ -246,6 +251,7 @@ dff-dream-persona-gpt-j-prompted-skill:
   compose_proxy: {}
 dff-empathetic-marketing-prompted-skill:
   name: dff_empathetic_marketing_prompted_skill
+  template: dff_prompted_skill_template
   display_name: Empathetic Marketing Skill
   container_name: dff-empathetic-marketing-prompted-skill
   component_type: Generative
@@ -301,6 +307,7 @@ dff-empathetic-marketing-prompted-skill:
   compose_proxy: {}
 dff-fairytale-prompted-skill:
   name: dff_fairytale_prompted_skill
+  template: dff_prompted_skill_template
   display_name: Fairytale Skill
   container_name: dff-fairytale-prompted-skill
   component_type: Generative
@@ -358,6 +365,7 @@ dff-fairytale-prompted-skill:
   compose_proxy: {}
 dff-nutrition-prompted-skill:
   name: dff_nutrition_prompted_skill
+  template: dff_prompted_skill_template
   display_name: Nutrition Skill
   container_name: dff-nutrition-prompted-skill
   component_type: Generative
@@ -412,6 +420,7 @@ dff-nutrition-prompted-skill:
   compose_proxy: {}
 dff-rhodes-coaching-prompted-skill:
   name: dff_rhodes_coaching_prompted_skill
+  template: dff_prompted_skill_template
   display_name: Rhodes Coaching Skill
   container_name: dff-rhodes-coaching-prompted-skill
   component_type: Generative
@@ -469,6 +478,7 @@ dff-rhodes-coaching-prompted-skill:
   compose_proxy: {}
 dff-deepy-prompted-skill:
   name: dff_deepy_prompted_skill
+  template: dff_prompted_skill_template
   display_name: Deepy Assistant Skill
   container_name: dff-deepy-prompted-skill
   component_type: Generative
