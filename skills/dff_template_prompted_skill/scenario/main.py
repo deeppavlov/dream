@@ -24,11 +24,18 @@ flows = {
             RESPONSE: loc_rsp.generative_response,
             TRANSITIONS: {
                 "updating_prompt_node": loc_cnd.if_updating_prompt,
+                "reseting_prompt_node": loc_cnd.if_reseting_prompt,
                 lbl.repeat(): cnd.true(),
             },
         },
         "updating_prompt_node": {
             RESPONSE: loc_rsp.updating_prompt_response,
+            TRANSITIONS: {
+                "generative_response_node": cnd.true(),
+            },
+        },
+        "reseting_prompt_node": {
+            RESPONSE: loc_rsp.reseting_prompt_response,
             TRANSITIONS: {
                 "generative_response_node": cnd.true(),
             },

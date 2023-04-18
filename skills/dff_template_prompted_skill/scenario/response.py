@@ -41,6 +41,7 @@ with open(PROMPT_FILE, "r") as f:
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 PROMPT_REPLACEMENT_COMMAND = re.compile("^/prompt")
+PROMPT_RESET_COMMAND = re.compile("^/resetprompt")
 DEFAULT_CONFIDENCE = 0.9
 SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
@@ -53,7 +54,17 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
-        context = [x for x in context if not PROMPT_REPLACEMENT_COMMAND.search(x)]
+
+    # drop the dialog history when prompt changes
+    last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
+    for i in range(1, len(int_ctx.get_utterances(ctx, actor)) + 1, 2):
+        is_new_prompt = PROMPT_REPLACEMENT_COMMAND.search(last_uttr["text"])
+        is_reset_prompt = PROMPT_RESET_COMMAND.search(last_uttr["text"])
+        if is_new_prompt or is_reset_prompt:
+            # cut context on the last user utterance utilizing the current prompt
+            context = context[-i + 2:]
+            break
+
     return context
 
 
@@ -125,5 +136,11 @@ def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str
     return (
         "Saved the new prompt for you. "
         "To update the prompt, type in `/prompt prompttext` again. "
-        "To reset the prompt to the default one, finish this dialog and start a new one."
+        "To reset the prompt to the default one, use /resetprompt command."
     )
+
+
+def reseting_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    int_ctx.save_to_shared_memory(ctx, actor, prompt=PROMPT)
+    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
+    return f"Reset the prompt to the default one for you:\n{PROMPT}"
