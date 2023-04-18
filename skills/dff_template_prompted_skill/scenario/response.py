@@ -40,8 +40,8 @@ with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
-PROMPT_REPLACEMENT_COMMAND = re.compile("^/prompt")
-PROMPT_RESET_COMMAND = re.compile("^/resetprompt")
+PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
+PROMPT_RESET_COMMAND = re.compile(r"^/resetprompt")
 DEFAULT_CONFIDENCE = 0.9
 SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
@@ -55,11 +55,10 @@ def compose_data_for_model(ctx, actor):
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
 
-    # drop the dialog history when prompt changes
-    last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    for i in range(1, len(int_ctx.get_utterances(ctx, actor)) + 1, 2):
-        is_new_prompt = PROMPT_REPLACEMENT_COMMAND.search(last_uttr["text"])
-        is_reset_prompt = PROMPT_RESET_COMMAND.search(last_uttr["text"])
+    history = int_ctx.get_utterances(ctx, actor)
+    for i in range(1, len(history) + 1, 2):
+        is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i])
+        is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i])
         if is_new_prompt or is_reset_prompt:
             # cut context on the last user utterance utilizing the current prompt
             context = context[-i + 2:]
