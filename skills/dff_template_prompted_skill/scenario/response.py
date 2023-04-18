@@ -24,7 +24,7 @@ if GENERATIVE_SERVICE_CONFIG:
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
-ALLOW_PROMPT_RESET = getenv("ALLOW_PROMPT_RESET", 0)
+ALLOW_PROMPT_RESET = int(getenv("ALLOW_PROMPT_RESET", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
@@ -136,7 +136,7 @@ def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str
     return (
         "Saved the new prompt for you. "
         "To update the prompt, type in `/prompt prompttext` again. "
-        "To reset the prompt to the default one, use /resetprompt command."
+        "To reset the prompt to the default one, use `/resetprompt` command."
     )
 
 
