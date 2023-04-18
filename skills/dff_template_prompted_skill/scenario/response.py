@@ -57,8 +57,8 @@ def compose_data_for_model(ctx, actor):
 
     history = int_ctx.get_utterances(ctx, actor)
     for i in range(1, len(history) + 1, 2):
-        is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i])
-        is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i])
+        is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i].get("text", ""))
+        is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i].get("text", ""))
         if is_new_prompt or is_reset_prompt:
             # cut context on the last user utterance utilizing the current prompt
             context = context[-i + 2:]
