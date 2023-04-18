@@ -100,7 +100,7 @@
             "dff_deeppavlov_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 7.0,
+                    "timeout": 15.0,
                     "url": "http://dff-deeppavlov-prompted-skill:8139/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_deeppavlov_prompted_skill_formatter",
