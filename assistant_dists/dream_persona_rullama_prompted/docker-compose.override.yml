@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_ru_prompted/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_rullama_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "no-restrictions-selector-ru:8009, badlisted-words-ru:8018,
           dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
