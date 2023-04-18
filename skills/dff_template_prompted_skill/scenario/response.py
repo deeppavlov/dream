@@ -123,7 +123,7 @@ def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str
 
     int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
     return (
-        "Saved a new prompt for you. "
-        "To update a prompt, type in `/prompt prompttext` again. "
-        "To reset a prompt to a default one, finish this dialog and start a new one."
+        "Saved the new prompt for you. "
+        "To update the prompt, type in `/prompt prompttext` again. "
+        "To reset the prompt to the default one, finish this dialog and start a new one."
     )
