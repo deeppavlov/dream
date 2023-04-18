@@ -24,6 +24,7 @@ if GENERATIVE_SERVICE_CONFIG:
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+ALLOW_PROMPT_RESET = getenv("ALLOW_PROMPT_RESET", 0)
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
@@ -59,7 +60,7 @@ def compose_data_for_model(ctx, actor):
     for i in range(1, len(history) + 1, 2):
         is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i].get("text", ""))
         is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i].get("text", ""))
-        if is_new_prompt or is_reset_prompt:
+        if ALLOW_PROMPT_RESET and (is_new_prompt or is_reset_prompt):
             # cut context on the last user utterance utilizing the current prompt
             context = context[-i + 2 :]
             break
@@ -96,7 +97,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             GENERATIVE_SERVICE_URL,
             json={
                 "dialog_contexts": [dialog_context],
-                "prompts": [prompt if len(prompt) > 0 else PROMPT],
+                "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
                 "configs": [GENERATIVE_SERVICE_CONFIG],
                 **sending_variables,
             },
