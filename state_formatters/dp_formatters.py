@@ -1043,10 +1043,10 @@ def dff_template_custom_kg_prompted_skill_formatter(dialog):
     )
 
 
-def dff_generative_kg_prompted_skill_formatter(dialog):
+def dff_template_prompted_skill_formatter(dialog):
     return utils.dff_formatter(
         dialog,
-        "dff_generative_kg_prompted_skill",
+        "dff_template_prompted_skill",
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
     )
 

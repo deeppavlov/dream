@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+USE_KG_DATA = getenv("USE_KG_DATA", False)
+USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
 with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
     GENERATIVE_SERVICE_CONFIG = json.load(f)
 
@@ -25,6 +27,7 @@ PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
+assert USER_KG_SERVICE_URL
 
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
@@ -64,6 +67,19 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     dialog_contexts = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_contexts: {dialog_contexts}")
+    logger.info(f"use_kg_data: {USE_KG_DATA}")
+
+    user_kg = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("user_knowledge_graph")
+    logger.info(f"user_kg: {user_kg}")
+
+    if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["prompt"]) and kg_prompt[1]:
+        final_prompt = PROMPT + kg_prompt[1]
+        # final_prompt = "".join([kg_prompt[0], f"{kg_prompt[1]}"])
+    else:
+        final_prompt = PROMPT
+    logger.info(f"final_prompt: {final_prompt}")
+
+
     if len(dialog_contexts) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
