@@ -12,7 +12,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ tokenizer = BartTokenizer.from_pretrained('Yale-LILY/brio-cnndm-uncased')
 logger.info("Model is loaded.")
 
 
-@app.route("/respond", methods=["POST"])
+@app.route("/respond_batch", methods=["POST"])
 def respond_batch():
     start_time = time.time()
     sentences = request.json.get("sentences", [])

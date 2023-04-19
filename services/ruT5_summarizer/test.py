@@ -2,14 +2,14 @@ import requests
 
 
 def test_skill():
-    url = "http://0.0.0.0:8154/respond"
+    url = "http://0.0.0.0:8154/respond_batch"
 
     input_data = {"sentences": [""]}
     desired_output = [""]
 
-    result = requests.post(url, json=input_data).json()
+    result = requests.post(url, json=input_data).json()[0]['batch']
 
-    assert result[0]['batch'] == desired_output
+    assert result == desired_output
     print("SUCCESS!")
 
 

@@ -2,7 +2,7 @@ import requests
 
 
 def test_skill():
-    url = "http://0.0.0.0:8153/respond"
+    url = "http://0.0.0.0:8153/respond_batch"
 
     input_data = {"sentences": ["Generative pre-trained transformers (GPT) are a family of large language models (LLMs)"
                                 ", which was introduced in 2018 by the American artificial intelligence organization "
@@ -22,9 +22,9 @@ def test_skill():
                       " It is built on top of the GPT-3.5 and G PT-4 families of large language models and fine-tuned "
                       "using supervised and reinforcement learning."]
 
-    result = requests.post(url, json=input_data).json()
+    result = requests.post(url, json=input_data).json()[0]['batch']
 
-    assert result[0]['batch'] == desired_output
+    assert result == desired_output
     print("SUCCESS!")
 
 

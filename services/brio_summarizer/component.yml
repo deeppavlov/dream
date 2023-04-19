@@ -12,5 +12,5 @@ brio-summarizer:
   port: 8153
   endpoints:
   - group: services
-    endpoint: respond
+    endpoint: respond_batch
   date_created: '2023-04-12T09:34:32'
