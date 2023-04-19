@@ -446,6 +446,8 @@ services:
   rut5-summarizer:
     env_file: [ .env ]
     build:
+      args:
+        PRETRAINED_MODEL_NAME: "IlyaGusev/rut5_base_sum_gazeta"
       context: ./services/ruT5_summarizer/
     command: flask run -h 0.0.0.0 -p 8154
     environment:

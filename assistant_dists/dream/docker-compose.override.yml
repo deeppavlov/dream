@@ -1390,6 +1390,8 @@ services:
   brio-summarizer:
     env_file: [ .env ]
     build:
+      args:
+        PRETRAINED_MODEL_NAME: "Yale-LILY/brio-cnndm-uncased"
       context: ./services/brio_summarizer/
     command: flask run -h 0.0.0.0 -p 8153
     environment:
