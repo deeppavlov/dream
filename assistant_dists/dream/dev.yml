@@ -457,15 +457,13 @@ services:
   brio-summarizer:
     volumes:
       - "./services/brio_summarizer:/src"
-      - "./common:/src/common"
     ports:
       - 8153:8153
-  rut5-summarizer:
+  summarization-annotator:
     volumes:
-      - "./services/ruT5_summarizer:/src"
-      - "./common:/src/common"
+      - "./annotators/summarization_annotator:/src"
     ports:
-      - 8154:8154
+      - 8155:8155
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

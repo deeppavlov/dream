@@ -276,6 +276,25 @@
                     "container": "wiki-parser-ru",
                     "endpoint": "model"
                 }
+            },
+            "summarization_annotator": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 3.0,
+                    "url": "http://summarization-annotator:8155/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:summarization_annotator_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/summarization_annotator",
+                    "container": "summarization-annotator",
+                    "endpoint": "respond"
+                }
             }
         },
         "response_annotators": {

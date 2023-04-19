@@ -1402,20 +1402,19 @@ services:
         reservations:
           memory: 4G
 
-  rut5-summarizer:
+  summarization-annotator:
     env_file: [ .env ]
     build:
-      context: ./services/ruT5_summarizer/
-    command: flask run -h 0.0.0.0 -p 8154
+      context: ./annotators/summarization_annotator/
+    command: flask run -h 0.0.0.0 -p 8155
     environment:
-      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 4G
+          memory: 256M
         reservations:
-          memory: 4G
+          memory: 256M
 
   dff-template-skill:
     env_file: [ .env ]
