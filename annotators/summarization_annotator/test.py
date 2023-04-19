@@ -29,7 +29,21 @@ def test_skill():
         desired_output = ["a Dream Socialbot talks to users about cooking and baking cookies. The bot says cookies "
                           "are comforting, and baking them is a good way to feel good. The robot is called a "
                           "Dream Social bot. It is designed to talk to users in a friendly, conversational manner."]
+    else:
+        input_data = {"dialog": ["Привет! У тебя есть хобби?",
+                                 "Мое хобби — кулинария.",
+                                 "Здорово! А ты любишь готовить?",
+                                 "Ага, я могу отлично приготовить разные блюда.",
+                                 "Ты собираешь кулинарные рецепты?",
+                                 "Да, уже есть большая коллекция.",
+                                 "А какая национальная кухня тебе нравится?",
+                                 "Конечно, русская.",
+                                 "Русские блюда очень оригинальные, вкусные и полезные.",
+                                 "А что ты любишь готовить больше всего?",
+                                 "Я люблю готовить мясные блюда. Так что приглашаю в гости!"]}
 
+        desired_output = ["У тебя есть хобби — кулинария, а у тебя есть большая коллекция кулинарных рецептов. Bot: Я "
+                          "собираю кулинарные рецепты, собираю кулинарные рецепты, собираю кулинарные рецепты."]
     result = requests.post(url, json=input_data).json()[0]['batch']
     assert result == desired_output
     print("SUCCESS!")
