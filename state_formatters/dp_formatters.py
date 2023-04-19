@@ -410,8 +410,8 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
 def summarization_annotator_formatter(dialog: Dict):
     # Used by: summarization annotator
     dialog = [utt["text"] for utt in dialog["utterances"]]
-    pointer = len(dialog) % 11 if len(dialog) % 11 != 0 else 11
-    dialog = dialog[-pointer:]
+    pointer = (len(dialog) + 1) % 6 if (len(dialog) + 1) % 6 != 0 else 6
+    dialog = dialog[-(pointer + 5):]
     return [{"dialog": dialog}]
 
 
