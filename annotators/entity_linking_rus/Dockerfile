@@ -1,5 +1,7 @@
 FROM tensorflow/tensorflow:1.15.2-gpu
 
+ENV TZ=Europe/Moscow
+
 RUN apt-key del 7fa2af80  && \
     rm -f /etc/apt/sources.list.d/cuda*.list && \
     curl https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb \
@@ -8,25 +10,22 @@ RUN apt-key del 7fa2af80  && \
     apt-get -y update && \
     apt-get install -y \
     build-essential \
-    libssl-dev \
     zlib1g-dev \
     libbz2-dev \
     libreadline-dev \
     libsqlite3-dev \
     wget \
-    curl \
     llvm \
     libncurses5-dev \
-    libncursesw5-dev \
+    libncursesw5-dev  \
     xz-utils \
-    tk-dev \
     libffi-dev \
     liblzma-dev \
-    python-openssl \
+    software-properties-common \
     git \
     sqlite3
 
-ARG LANGUAGE=EN
+ARG LANGUAGE=RU
 ENV LANGUAGE ${LANGUAGE}
 
 ARG CONFIG
