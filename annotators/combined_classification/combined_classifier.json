@@ -4,7 +4,9 @@
       "BACKBONE": "distilbert-base-uncased",
       "MODELS_PATH": "~/.deeppavlov/models",
       "SINGLE_SENTENCE_LEN": 32,
-      "MULTI_SENTENCE_LEN": 128
+      "MULTI_SENTENCE_LEN": 128,
+      "NUM_TRAIN_EPOCHS": 5,
+      "GRADIENT_ACC_STEPS": 8
     },
     "download":[{
         "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/9in1_singlelabel_v2_no_history.tar.gz",
