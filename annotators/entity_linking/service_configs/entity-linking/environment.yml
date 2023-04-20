@@ -1,37 +1,5 @@
-compose_override:
-  env_file:
-  - .env
-  build:
-    args:
-      SERVICE_PORT: 8075
-      SERVICE_NAME: entity_linking
-      CONFIG: entity_linking_eng.json
-      SRC_DIR: annotators/entity_linking
-    context: ./
-    dockerfile: annotators/entity_linking/Dockerfile
-  environment:
-  - CUDA_VISIBLE_DEVICES=0
-  deploy:
-    resources:
-      limits:
-        memory: 23G
-      reservations:
-        memory: 23G
-compose_dev:
-  volumes:
-  - ./annotators/entity_linking:/src
-  - ~/.deeppavlov:/root/.deeppavlov
-  - ~/.deeppavlov/cache:/root/.cache
-  ports:
-  - 8075:8075
-compose_proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8075
-  - PORT=8075
+SERVICE_PORT: 8075
+SERVICE_NAME: entity_linking
+CONFIG: entity_linking_eng.json
+SRC_DIR: annotators/entity_linking
+CUDA_VISIBLE_DEVICES: '0'
