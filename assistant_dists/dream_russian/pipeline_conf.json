@@ -372,7 +372,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
+                    "directory": "annotators/BadlistedWordsDetector_ru",
                     "container": "badlisted-words-ru",
                     "endpoint": "badlisted_words_batch"
                 }
