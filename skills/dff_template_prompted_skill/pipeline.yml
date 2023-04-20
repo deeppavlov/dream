@@ -119,7 +119,6 @@ dff-dream-persona-llama7bru-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-
 dff-deeppavlov-prompted-skill:
 - group: skills
   connector:
