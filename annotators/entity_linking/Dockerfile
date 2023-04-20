@@ -38,7 +38,7 @@ COPY ./annotators/entity_linking/requirements.txt /src/requirements.txt
 COPY $SRC_DIR /src
 WORKDIR /src
 
-RUN pip install -r /src/requirements.txt && \
+RUN pip install --upgrade pip && pip install -r /src/requirements.txt && \
     python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
