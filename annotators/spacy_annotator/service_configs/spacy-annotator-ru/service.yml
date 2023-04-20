@@ -1,0 +1,4 @@
+name: spacy-annotator-ru
+endpoints:
+- respond
+- respond_batch

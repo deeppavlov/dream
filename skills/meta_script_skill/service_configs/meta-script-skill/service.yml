@@ -1,0 +1,4 @@
+name: meta-script-skill
+endpoints:
+- meta_script
+- comet_dialog

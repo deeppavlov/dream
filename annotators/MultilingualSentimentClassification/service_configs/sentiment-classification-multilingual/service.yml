@@ -1,0 +1,4 @@
+name: sentiment-classification-multilingual
+endpoints:
+- respond
+- respond_batch

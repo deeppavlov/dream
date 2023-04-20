@@ -1,0 +1,5 @@
+name: midas-classification
+endpoints:
+- model
+- respond
+- batch_model

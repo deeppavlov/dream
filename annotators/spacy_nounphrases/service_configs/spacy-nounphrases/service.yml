@@ -1,0 +1,4 @@
+name: spacy-nounphrases
+endpoints:
+- respond
+- respond_batch

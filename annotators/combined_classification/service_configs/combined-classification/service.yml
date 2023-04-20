@@ -1,0 +1,4 @@
+name: combined-classification
+endpoints:
+- model
+- batch_model

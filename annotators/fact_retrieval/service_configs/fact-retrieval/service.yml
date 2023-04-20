@@ -1,0 +1,3 @@
+name: fact-retrieval
+endpoints:
+- model

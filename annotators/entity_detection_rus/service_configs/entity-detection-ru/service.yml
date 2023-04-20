@@ -1,0 +1,4 @@
+name: entity-detection-ru
+endpoints:
+- respond
+- respond_batch

@@ -1,0 +1,24 @@
+compose_override:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      SERVICE_PORT: 8018
+      SERVICE_NAME: badlisted_words
+    context: annotators/BadlistedWordsDetector_ru/
+  command: flask run -h 0.0.0.0 -p 8018
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+compose_dev:
+  volumes:
+  - ./annotators/BadlistedWordsDetector_ru:/src
+  - ./common:/src/common
+  ports:
+  - 8018:8018
+compose_proxy: {}

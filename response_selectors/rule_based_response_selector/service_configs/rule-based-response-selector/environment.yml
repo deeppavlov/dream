@@ -1,0 +1,9 @@
+compose_override:
+  build:
+    context: response_selectors/rule_based_response_selector
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8005
+  volumes: []
+  ports:
+  - 8005:8005
+compose_dev: {}
+compose_proxy: {}

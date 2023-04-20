@@ -1,0 +1,4 @@
+name: toxic-classification-multilingual
+endpoints:
+- respond
+- respond_batch

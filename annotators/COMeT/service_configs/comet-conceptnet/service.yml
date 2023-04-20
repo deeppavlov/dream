@@ -1,0 +1,4 @@
+name: comet-conceptnet
+endpoints:
+- comet_annotator
+- comet

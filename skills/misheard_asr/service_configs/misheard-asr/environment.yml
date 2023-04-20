@@ -1,0 +1,32 @@
+compose_override:
+  env_file:
+  - .env
+  build:
+    context: .
+    dockerfile: ./skills/misheard_asr/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8033
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+compose_dev:
+  volumes:
+  - ./skills/misheard_asr:/src
+  - ./common:/src/common
+  ports:
+  - 8033:8033
+compose_proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8033
+  - PORT=8033

@@ -1,0 +1,4 @@
+name: badlisted-words
+endpoints:
+- badlisted_words
+- badlisted_words_batch

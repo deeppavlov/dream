@@ -1,0 +1,4 @@
+name: toxic-classification-ru
+endpoints:
+- respond
+- respond_batch

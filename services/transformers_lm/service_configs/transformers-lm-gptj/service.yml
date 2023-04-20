@@ -1,0 +1,3 @@
+name: transformers-lm-gptj
+endpoints:
+- respond

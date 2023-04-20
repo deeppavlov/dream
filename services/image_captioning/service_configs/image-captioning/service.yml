@@ -1,0 +1,3 @@
+name: image-captioning
+endpoints:
+- respond

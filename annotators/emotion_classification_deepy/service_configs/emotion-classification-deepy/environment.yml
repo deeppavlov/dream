@@ -1,0 +1,8 @@
+compose_override:
+  build:
+    context: annotators/emotion_classification_deepy
+  command: python -m deeppavlov riseapi emo_bert.json -p 8015
+  ports:
+  - 8015:8015
+compose_dev: {}
+compose_proxy: {}

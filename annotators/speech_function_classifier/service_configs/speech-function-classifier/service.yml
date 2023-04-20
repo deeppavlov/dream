@@ -1,0 +1,4 @@
+name: speech-function-classifier
+endpoints:
+- model
+- annotation

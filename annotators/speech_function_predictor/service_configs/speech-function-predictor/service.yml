@@ -1,0 +1,4 @@
+name: speech-function-predictor
+endpoints:
+- model
+- annotation
