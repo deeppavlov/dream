@@ -43,9 +43,8 @@ def get_summary(dialog):
 def respond():
     start_time = time.time()
     dialog = request.json.get('dialog', [])
-    logger.info(f"summarization-annotator input: {dialog}")
-
     result = get_summary(dialog)
+
     total_time = time.time() - start_time
     logger.info(f"summarization-annotator exec time: {round(total_time, 2)} sec")
     logger.info(result)

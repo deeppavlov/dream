@@ -44,7 +44,8 @@ def test_skill():
 
         desired_output = ["У тебя есть хобби — кулинария, а у тебя есть большая коллекция кулинарных рецептов. Bot: Я "
                           "собираю кулинарные рецепты, собираю кулинарные рецепты, собираю кулинарные рецепты."]
-    result = requests.post(url, json=input_data).json()[0]['batch']
+
+    result = requests.post(url, json=input_data).json()
     assert result == desired_output
     print("SUCCESS!")
 
