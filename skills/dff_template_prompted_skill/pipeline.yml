@@ -119,3 +119,14 @@ dff-dream-persona-llama7bru-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
+dff-deeppavlov-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 15.0
+    url: http://dff-deeppavlov-prompted-skill:8146/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_deeppavlov_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
