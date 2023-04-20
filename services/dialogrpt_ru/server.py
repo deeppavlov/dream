@@ -59,6 +59,11 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
@@ -77,6 +82,30 @@ def respond():
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         result_values = [0.0 for _ in hypotheses]
+
+    total_time = time.time() - st_time
+    logger.info(f"dialogrpt exec time: {total_time:.3f}s")
+
+    return jsonify([{"batch": result_values}])
+
+
+@app.route("/rank_sentences", methods=["POST"])
+def rank_sentences():
+    st_time = time.time()
+
+    sentence_pairs = request.json.get("sentence_pairs", [])
+
+    try:
+        _cxts, _hyps = [], []
+        for pair in sentence_pairs:
+            _cxts += [pair[0]]
+            _hyps += [pair[1]]
+        result_values = model.predict_on_batch(cxts=_cxts, hyps=_hyps).tolist()
+        # result_values is a list of float values
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        result_values = [0.0 for _ in sentence_pairs]
 
     total_time = time.time() - st_time
     logger.info(f"dialogrpt exec time: {total_time:.3f}s")
