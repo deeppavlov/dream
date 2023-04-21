@@ -24,6 +24,7 @@ if GENERATIVE_SERVICE_CONFIG:
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+ALLOW_PROMPT_RESET = int(getenv("ALLOW_PROMPT_RESET", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
@@ -40,7 +41,10 @@ with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
+PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
+PROMPT_RESET_COMMAND = re.compile(r"^/resetprompt")
 DEFAULT_CONFIDENCE = 0.9
+SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
 
 
@@ -51,6 +55,16 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
+
+    history = int_ctx.get_utterances(ctx, actor)
+    for i in range(1, len(history) + 1, 2):
+        is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i].get("text", ""))
+        is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i].get("text", ""))
+        if ALLOW_PROMPT_RESET and (is_new_prompt or is_reset_prompt):
+            # cut context on the last user utterance utilizing the current prompt
+            context = context[-i + 2 :]
+            break
+
     return context
 
 
@@ -73,13 +87,17 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
+
+    shared_memory = int_ctx.get_shared_memory(ctx, actor)
+    prompt = shared_memory.get("prompt", "")
+
     logger.info(f"dialog_context: {dialog_context}")
     if len(dialog_context) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
             json={
                 "dialog_contexts": [dialog_context],
-                "prompts": [PROMPT],
+                "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
                 "configs": [GENERATIVE_SERVICE_CONFIG],
                 **sending_variables,
             },
@@ -107,3 +125,22 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         bot_attr=curr_bot_attrs,
         hype_attr=curr_attrs,
     )(ctx, actor, *args, **kwargs)
+
+
+def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    human_uttr = int_ctx.get_last_human_utterance(ctx, actor).get("text", "")
+    prompt = PROMPT_REPLACEMENT_COMMAND.sub("", human_uttr).strip()
+    int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
+
+    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
+    return (
+        "Saved the new prompt for you. "
+        "To update the prompt, type in `/prompt prompttext` again. "
+        "To reset the prompt to the default one, use `/resetprompt` command."
+    )
+
+
+def reseting_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    int_ctx.save_to_shared_memory(ctx, actor, prompt=PROMPT)
+    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
+    return f"Reset the prompt to the default one for you:\n{PROMPT}"
