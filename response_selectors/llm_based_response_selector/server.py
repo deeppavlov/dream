@@ -2,6 +2,7 @@
 
 import logging
 import numpy as np
+import requests
 import time
 from os import getenv
 
@@ -19,6 +20,49 @@ app = Flask(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = getenv("GENERATIVE_TIMEOUT")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
+DEFAULT_CRITERION = "the most appropriate, relevant and non-toxic"
+CRITERION = getenv("CRITERION", DEFAULT_CRITERION)
+PROMPT = f"""Select {CRITERION} response among the hypotheses to the given dialog context. """ \
+         """Return only the selected response without extra explanations."""
+ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
+ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
+# check if at least one of the env variables is not None
+if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+    raise NotImplementedError(
+        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
+    )
+
+
+def select_response_by_confidence(hypotheses, confidences):
+    best_id = np.argmax(confidences)
+    result = hypotheses[best_id]
+    return result, best_id
+
+
+def select_response(dialog_context, hypotheses, confidences):
+    try:
+        response = requests.post(
+            GENERATIVE_SERVICE_URL,
+            json={
+                "dialog_contexts": [dialog_context],
+                "prompts": [PROMPT],
+                "configs": [GENERATIVE_SERVICE_CONFIG],
+                **sending_variables,
+            },
+            timeout=GENERATIVE_TIMEOUT,
+        )
+        # batch of a list of one string [["this is the response"]]
+        result = response.json()[0][0]
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        result = select_response_by_confidence(hypotheses, confidences)[0]
+        logger.info(f"Exception in LLM's invocation. Selected a response with the highest confidence.")
+    logger.info(f"llm-based-response-selector selected:\n`{result}`")
+
+    return result
 
 
 @app.route("/respond", methods=["POST"])
@@ -26,30 +70,31 @@ def respond():
     st_time = time.time()
 
     dialogs = request.json["dialogs"]
-    response_candidates = [dialog["utterances"][-1]["hypotheses"] for dialog in dialogs]
 
     selected_skill_names = []
     selected_responses = []
     selected_confidences = []
 
     for i, dialog in enumerate(dialogs):
-        confidences = []
-        responses = []
-        skill_names = []
-
-        for skill_data in response_candidates[i]:
-            if skill_data["text"] and skill_data["confidence"]:
-                logger.info(f"Skill {skill_data['skill_name']} returned non-empty hypothesis with non-zero confidence.")
-
-            confidences += [skill_data["confidence"]]
-            responses += [skill_data["text"]]
-            skill_names += [skill_data["skill_name"]]
-
-        best_id = np.argmax(confidences)
-
-        selected_skill_names.append(skill_names[best_id])
-        selected_responses.append(responses[best_id])
-        selected_confidences.append(confidences[best_id])
+        confidences = [hyp["confidence"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        skill_names = [hyp["skill_name"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        hypotheses = [hyp["text"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+        selected_resp = select_response(dialog_context, hypotheses, confidences)
+        try:
+            best_id = hypotheses.index(selected_resp)
+            selected_skill_names.append(skill_names[best_id])
+            selected_responses.append(selected_resp)
+            selected_confidences.append(confidences[best_id])
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            logger.info("Exception in finding selected by LLM response in hypotheses. "
+                        "Selected a response with the highest confidence.")
+            selected_resp, best_id = select_response_by_confidence(hypotheses, confidences)
+            selected_skill_names.append(skill_names[best_id])
+            selected_responses.append(selected_resp)
+            selected_confidences.append(confidences[best_id])
 
     total_time = time.time() - st_time
     logger.info(f"llm_based_response_selector exec time = {total_time:.3f}s")
