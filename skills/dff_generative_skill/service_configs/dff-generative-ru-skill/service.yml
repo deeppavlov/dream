@@ -24,4 +24,4 @@ compose:
   - ./common:/src/common
   ports:
   - 8092:8092
-proxy: {}
+proxy: null

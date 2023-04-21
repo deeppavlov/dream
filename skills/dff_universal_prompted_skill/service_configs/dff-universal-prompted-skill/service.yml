@@ -25,4 +25,4 @@ compose:
   - ./common:/src/common
   ports:
   - 8147:8147
-proxy: {}
+proxy: null

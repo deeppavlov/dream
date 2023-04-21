@@ -17,4 +17,4 @@ compose:
   - 8075:8075
   environment:
   - CUDA_VISIBLE_DEVICES=''
-proxy: {}
+proxy: null

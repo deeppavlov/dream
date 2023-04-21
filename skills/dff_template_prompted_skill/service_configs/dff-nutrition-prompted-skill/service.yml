@@ -27,4 +27,4 @@ compose:
   - ./common:/src/common
   ports:
   - 8141:8141
-proxy: {}
+proxy: null

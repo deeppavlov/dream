@@ -26,4 +26,4 @@ compose:
   - ~/.deeppavlov/file_server:/tmp
   ports:
   - 8123:8123
-proxy: {}
+proxy: null

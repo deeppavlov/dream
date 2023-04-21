@@ -28,4 +28,4 @@ compose:
   - ./annotators/spacy_annotator:/src
   ports:
   - 8129:8129
-proxy: {}
+proxy: null

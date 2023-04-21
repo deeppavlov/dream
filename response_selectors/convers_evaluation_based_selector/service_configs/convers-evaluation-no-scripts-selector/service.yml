@@ -41,4 +41,4 @@ compose:
   - ./common:/src/common
   ports:
   - 8009:8009
-proxy: {}
+proxy: null

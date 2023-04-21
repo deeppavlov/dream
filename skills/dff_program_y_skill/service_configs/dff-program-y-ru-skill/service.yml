@@ -23,4 +23,4 @@ compose:
   - ./common:/src/common
   ports:
   - 8008:8008
-proxy: {}
+proxy: null

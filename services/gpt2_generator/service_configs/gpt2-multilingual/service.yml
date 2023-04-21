@@ -30,4 +30,4 @@ compose:
   - ~/.deeppavlov/cache:/root/.cache
   ports:
   - 8132:8132
-proxy: {}
+proxy: null

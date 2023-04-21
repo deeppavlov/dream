@@ -25,4 +25,4 @@ compose:
   - ~/.deeppavlov:/root/.deeppavlov
   ports:
   - 8011:8011
-proxy: {}
+proxy: null

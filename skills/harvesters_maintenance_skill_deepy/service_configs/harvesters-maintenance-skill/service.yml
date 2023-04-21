@@ -8,4 +8,4 @@ compose:
   volumes: []
   ports:
   - 3662:3662
-proxy: {}
+proxy: null
