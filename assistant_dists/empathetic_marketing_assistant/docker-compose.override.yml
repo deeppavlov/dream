@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/empathetic_marketing_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087, 
-        spelling-preprocessing:8074, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
+        sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
         dff-empathetic-marketing-prompted-skill:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -89,23 +89,6 @@ services:
           memory: 256M
         reservations:
           memory: 256M
-
-  spelling-preprocessing:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8074
-        SERVICE_NAME: spelling_preprocessing
-      context: ./annotators/spelling_preprocessing/
-    command: flask run -h 0.0.0.0 -p 8074
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
 
   prompt-selector:
     env_file: [ .env ]
