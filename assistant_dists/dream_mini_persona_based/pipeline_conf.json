@@ -28,8 +28,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/H1bbLiJ4B8F_g77NPDgGjA.yml",
+                "service": "services/last_chance_service/service_configs/agent"
             }
         },
         "timeout_service": {
@@ -53,8 +53,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/nbR-gFzod7Qx6M7GL6oiPg.yml",
+                "service": "services/timeout_service/service_configs/agent"
             }
         },
         "annotators": {
@@ -69,9 +69,8 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing",
-                    "container": "spelling-preprocessing",
-                    "endpoint": "respond"
+                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
+                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
                 }
             },
             "sentseg": {
@@ -88,9 +87,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
             "badlisted_words": {
@@ -107,9 +105,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words",
-                    "endpoint": "badlisted_words"
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
                 }
             },
             "intent_catcher": {
@@ -127,9 +124,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers",
-                    "container": "intent-catcher",
-                    "endpoint": "detect"
+                    "component": "components/1IjC3r9b1VJ082ceINXzHQ.yml",
+                    "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher"
                 }
             },
             "relative_persona_extractor": {
@@ -146,9 +142,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/relative_persona_extractor",
-                    "container": "relative-persona-extractor",
-                    "endpoint": "respond"
+                    "component": "components/VkkvnRwjgB5GwrH98k5EKA.yml",
+                    "service": "annotators/relative_persona_extractor/service_configs/relative-persona-extractor"
                 }
             },
             "midas_classification": {
@@ -166,9 +161,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/midas_classification",
-                    "container": "midas-classification",
-                    "endpoint": "model"
+                    "component": "components/eAupU7hg2SeSkZV1OpaLkw.yml",
+                    "service": "annotators/midas_classification/service_configs/midas-classification"
                 }
             }
         },
@@ -187,9 +181,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             }
         },
@@ -207,8 +200,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/response_annotator_selectors",
-                "container": "agent"
+                "component": "components/LXrJ-DIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "candidate_annotators": {
@@ -226,9 +219,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words",
-                    "endpoint": "badlisted_words_batch"
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
                 }
             },
             "sentence_ranker": {
@@ -245,9 +237,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/sentence_ranker",
-                    "container": "sentence-ranker",
-                    "endpoint": "respond"
+                    "component": "components/XGwmAHtAOu0NDqqG3Q-CJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
                 }
             }
         },
@@ -267,8 +258,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "skill_selectors/rule_based_selector",
-                    "container": "agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
@@ -287,9 +278,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill",
-                    "container": "dff-intent-responder-skill",
-                    "endpoint": "respond"
+                    "component": "components/CmQGq1Xn5YOaMwNIb4bEpA.yml",
+                    "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-skill"
                 }
             },
             "dummy_skill": {
@@ -305,8 +295,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9ak-I1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
             "dialogpt": {
@@ -323,9 +313,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/dialogpt",
-                    "container": "dialogpt",
-                    "endpoint": "respond"
+                    "component": "components/7Dxjy1ZpQEAoPcEeABGBLg.yml",
+                    "service": "services/dialogpt/service_configs/dialogpt"
                 }
             },
             "seq2seq_persona_based": {
@@ -342,9 +331,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/seq2seq_persona_based",
-                    "container": "seq2seq-persona-based",
-                    "endpoint": "respond"
+                    "component": "components/Zs3hq7LIexcITcvlU39Cjw.yml",
+                    "service": "services/seq2seq_persona_based/service_configs/seq2seq-persona-based"
                 }
             }
         },
@@ -363,9 +351,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "container": "convers-evaluation-selector",
-                    "endpoint": "respond"
+                    "component": "components/ly2AVNtIcJpTWz1qJ1mvKQ.yml",
+                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector"
                 }
             }
         }
