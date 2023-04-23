@@ -4,10 +4,12 @@ import logging
 import numpy as np
 import requests
 import time
+from copy import deepcopy
 from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.utils import is_toxic_or_badlisted_utterance
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -20,6 +22,7 @@ app = Flask(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = getenv("GENERATIVE_TIMEOUT")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 DEFAULT_CRITERION = "the most appropriate, relevant and non-toxic"
 CRITERION = getenv("CRITERION", DEFAULT_CRITERION)
@@ -33,6 +36,15 @@ if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in
     raise NotImplementedError(
         "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
     )
+
+
+def filter_out_badlisted_or_toxic(hypotheses):
+    clean_hypotheses = []
+    for hyp in hypotheses:
+        is_toxic = is_toxic_or_badlisted_utterance(hyp)
+        if not is_toxic:
+            clean_hypotheses += [deepcopy(hyp)]
+    return clean_hypotheses
 
 
 def select_response_by_confidence(hypotheses, confidences):
@@ -76,9 +88,12 @@ def respond():
     selected_confidences = []
 
     for i, dialog in enumerate(dialogs):
-        confidences = [hyp["confidence"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
-        skill_names = [hyp["skill_name"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         hypotheses = [hyp["text"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        if FILTER_TOXIC_OR_BADLISTED:
+            hypotheses = filter_out_badlisted_or_toxic(hypotheses)
+
+        confidences = [hyp["confidence"] for hyp in hypotheses]
+        skill_names = [hyp["skill_name"] for hyp in hypotheses]
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(dialog_context, hypotheses, confidences)
         try:
