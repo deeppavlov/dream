@@ -18,24 +18,11 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-DEFAULT_CRITERION = "the most appropriate, relevant and non-toxic"
 
-GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
+SENTENCE_RANKER_TIMEOUT = int(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
-CRITERION = getenv("CRITERION", DEFAULT_CRITERION)
-PROMPT = f"""Select {CRITERION} response among the hypotheses to the given dialog context. """ \
-         """Return only the selected response without extra explanations."""
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
-# check if at least one of the env variables is not None
-if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-    raise NotImplementedError(
-        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
-    )
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
@@ -55,24 +42,21 @@ def select_response_by_confidence(hypotheses, confidences):
 
 def select_response(dialog_context, hypotheses, confidences):
     try:
-        response = requests.post(
-            GENERATIVE_SERVICE_URL,
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [PROMPT],
-                "configs": [GENERATIVE_SERVICE_CONFIG],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
-        )
-        # batch of a list of one string [["this is the response"]]
-        result = response.json()[0][0]
+        dialog_context = "\n".join(dialog_context)
+        pairs = [[dialog_context, hyp["text"]] for hyp in hypotheses]
+        scores = requests.post(
+            SENTENCE_RANKER_SERVICE_URL,
+            json={"sentence_pairs": pairs},
+            timeout=SENTENCE_RANKER_TIMEOUT,
+        ).json()
+        scores = np.array(scores[0]["batch"])
+        result = select_response_by_confidence(hypotheses, scores)[0]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         result = select_response_by_confidence(hypotheses, confidences)[0]
         logger.info(f"Exception in LLM's invocation. Selected a response with the highest confidence.")
-    logger.info(f"llm_based_response_selector selected:\n`{result}`")
+    logger.info(f"ranking_based_response_selector selected:\n`{result}`")
 
     return result
 
@@ -112,7 +96,7 @@ def respond():
             selected_confidences.append(confidences[best_id])
 
     total_time = time.time() - st_time
-    logger.info(f"llm_based_response_selector exec time = {total_time:.3f}s")
+    logger.info(f"ranking_based_response_selector exec time = {total_time:.3f}s")
     return jsonify(list(zip(selected_skill_names, selected_responses, selected_confidences)))
 
 
