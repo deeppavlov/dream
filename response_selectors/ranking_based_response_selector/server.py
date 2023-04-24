@@ -48,7 +48,7 @@ def select_response_by_scores(hypotheses, scores):
 
 def get_scores(dialog_context, hypotheses):
     if all([SENTENCE_RANKER_ANNOTATION_NAME in hyp.get("annotations", {}) for hyp in hypotheses]):
-        scores = [hyp.get("annotations", {}).get("SENTENCE_RANKER_ANNOTATION_NAME", 0.0) for hyp in hypotheses]
+        scores = [hyp.get("annotations", {}).get(SENTENCE_RANKER_ANNOTATION_NAME, 0.0) for hyp in hypotheses]
         logger.info(f"Selected a response via Sentence Ranker Annotator.")
     else:
         try:
