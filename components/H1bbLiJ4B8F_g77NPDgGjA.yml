@@ -13,6 +13,12 @@ connector:
   class_name: PredefinedTextConnector
   response_text: Sorry, something went wrong inside. Please tell me, what did you
     say.
+  annotations:
+    sentseg:
+      punct_sent: Sorry, something went wrong inside. Please tell me, what did you say.
+      segments:
+        - Sorry, something went wrong inside.
+        - Please tell me, what did you say.
 dialog_formatter: null
 response_formatter: null
 previous_services: null

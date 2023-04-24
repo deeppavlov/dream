@@ -12,6 +12,12 @@ connector:
   protocol: python
   class_name: PredefinedTextConnector
   response_text: Sorry, I need to think more on that. Let's talk about something else.
+  annotations:
+    sentseg:
+      punct_sent: Sorry, I need to think more on that. Let's talk about something else.
+      segments:
+        - Sorry, I need to think more on that.
+        - Let's talk about something else.
 dialog_formatter: null
 response_formatter: null
 previous_services: null
