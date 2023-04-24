@@ -4,17 +4,20 @@ llm-based-response-selector:
   container_name: llm-based-response-selector
   component_type: null
   model_type: Dictionary/Pattern-based
-  is_customizable: false
+  is_customizable: true
   author: DeepPavlov
   description: Algorithm that selects a final responses among the given list of candidate
-    responses
+    responses via asking the given LLM service the question `Select {CRITERION} response 
+    among the hypotheses to the given dialog context. Return only the selected response 
+    without extra explanations.` where default CRITERION is `the most appropriate, 
+    relevant and non-toxic` and could be customized
   ram_usage: 100M
   gpu_usage: null
-  port: 8005
+  port: 8003
   endpoints:
   - group: response_selectors
     endpoint: respond
   build_args:
-    SERVICE_PORT: '8005'
+    SERVICE_PORT: '8003'
     SERVICE_NAME: response_selector
-  date_created: '2023-03-16T09:45:32'
+  date_created: '2023-04-24T09:45:32'
