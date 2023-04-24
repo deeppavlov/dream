@@ -30,8 +30,10 @@ if GENERATIVE_SERVICE_CONFIG:
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 CRITERION = getenv("CRITERION", DEFAULT_CRITERION)
-PROMPT = f"""Select {CRITERION} response among the hypotheses to the given dialog context. """ \
-         """Return only the selected response without extra explanations."""
+PROMPT = (
+    f"""Select {CRITERION} response among the hypotheses to the given dialog context. """
+    """Return only the selected response without extra explanations."""
+)
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
@@ -106,8 +108,10 @@ def respond():
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            logger.info("Exception in finding selected response in hypotheses. "
-                        "Selected a response with the highest confidence.")
+            logger.info(
+                "Exception in finding selected response in hypotheses. "
+                "Selected a response with the highest confidence."
+            )
             selected_resp, best_id = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])
             selected_responses.append(selected_resp["text"])
             selected_skill_names.append(hypotheses[best_id]["skill_name"])
