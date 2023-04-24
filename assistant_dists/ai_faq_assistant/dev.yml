@@ -12,7 +12,7 @@ services:
       - 8011:8011
   oasst12b-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/llm_based_response_selector:/src"
       - "./common:/src/common"
     ports:
       - 8003:8003

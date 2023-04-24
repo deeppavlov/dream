@@ -283,7 +283,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
+                    "directory": "response_selectors/llm_based_response_selector",
                     "container": "oasst12b-based-response-selector",
                     "endpoint": "respond"
                 }
