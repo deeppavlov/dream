@@ -154,13 +154,13 @@
             }
         },
         "skills": {
-            "dff_universal_prompted_skill": {
+            "dff_qa_llm_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 7.0,
-                    "url": "http://dff-universal-prompted-skill:8147/respond"
+                    "timeout": 120.0,
+                    "url": "http://dff-qa-llm-skill:8201/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_universal_prompted_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_qa_llm_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -168,8 +168,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_universal_prompted_skill",
-                    "container": "dff-universal-prompted-skill",
+                    "directory": "skills/dff_qa_llm_skill",
+                    "container": "dff-qa-llm-skill",
                     "endpoint": "respond"
                 }
             },
@@ -214,7 +214,7 @@
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
+                    "timeout": 150.0,
                     "url": "http://combined-classification:8087/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
@@ -233,7 +233,7 @@
             "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
+                    "timeout": 100.0,
                     "url": "http://sentence-ranker:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",

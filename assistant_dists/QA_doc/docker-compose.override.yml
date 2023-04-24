@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_prompted_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087, 
-        sentence-ranker:8128, openai-api-chatgpt:8145, dff-universal-prompted-skill:8147"
+        sentence-ranker:8128, openai-api-chatgpt:8145, doc-ranker:8200, dff-qa-llm-skill:8201"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -129,48 +129,6 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-gptj:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8130
-        SERVICE_NAME: transformers_lm_gptj
-        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
-        HALF_PRECISION: 0
-      context: .
-      dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 50G
-        reservations:
-          memory: 50G
-
-  transformers-lm-oasst12b:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8158
-        SERVICE_NAME: transformers_lm_oasst12b
-        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/oasst-sft-1-pythia-12b
-        HALF_PRECISION: 1
-      context: .
-      dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8158
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 60G
-        reservations:
-          memory: 60G
-
   openai-api-chatgpt:
     env_file: [ .env ]
     build:
@@ -191,37 +149,17 @@ services:
         reservations:
           memory: 100M
 
-  openai-api-davinci3:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8131
-        SERVICE_NAME: openai_api_davinci3
-        PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
-      context: .
-      dockerfile: ./services/openai_api_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8131
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
-
-  dff-universal-prompted-skill:
+  dff-qa-llm-skill:
     env_file: [ .env,.env_secret ]
     build:
       args:
-        SERVICE_PORT: 8147
-        SERVICE_NAME: dff_universal_prompted_skill
-        GENERATIVE_TIMEOUT: 7
+        SERVICE_PORT: 8201
+        SERVICE_NAME: dff_qa_llm_skill
+        GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
       context: .
-      dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8147 --reload
+      dockerfile: ./skills/dff_qa_llm_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8201 --reload
     deploy:
       resources:
         limits:

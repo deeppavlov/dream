@@ -46,11 +46,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8200:8200
-  dff-universal-prompted-skill:
+  dff-qa-llm-skill:
     volumes:
-      - "./skills/dff_universal_prompted_skill:/src"
+      - "./skills/dff_qa_llm_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8147:8147
+      - 8201:8201
 
 version: "3.7"

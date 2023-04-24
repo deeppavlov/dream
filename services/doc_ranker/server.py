@@ -3,6 +3,7 @@ import logging
 import os
 from itertools import chain
 from typing import List
+import nltk.data
 
 # import numpy as np
 import sentry_sdk
@@ -20,6 +21,8 @@ logger = logging.getLogger(__name__)
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
+DATASET_PATH = os.environ.get("DATASET_PATH", None)
+ORIGINAL_FILE_PATH = os.environ.get("ORIGINAL_FILE_PATH", None)
 
 
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
@@ -37,6 +40,30 @@ except Exception as e:
     logger.exception(e)
     raise e
 
+
+def build_dataset():
+    if not os.path.exists(DATASET_PATH):
+        os.mkdir(DATASET_PATH)
+    tokenizer = nltk.data.load("tokenizers/punkt/english.pickle")
+    with open(ORIGINAL_FILE_PATH, "r") as f:
+        i = 0
+        buf = ""
+        data = f.read()
+        data = tokenizer.tokenize(data)
+
+        for item in data:
+            buf += item
+            words = buf.split(" ")
+            # сохраняем буфер в файл, если в буфере больше 100 слов
+            if len(words) > 100:
+                i += 1
+                new_f = DATASET_PATH + str(i) + ".txt"
+                with open(new_f, "w") as f_out:
+                    f_out.write(buf)
+                buf = ""
+                print(f"creating {DATASET_PATH + str(i) + '.txt'}")
+
+
 def get_answers(utterance, ranker):
     ranker_output = ranker(utterance)[0]
     candidates = []
@@ -48,7 +75,9 @@ def get_answers(utterance, ranker):
 
 @app.route("/rank", methods=["POST"])
 def detect():
+    build_dataset()
     utterances = request.json["sentences"][-1]
+    logger.info(os.getcwd())
     logger.info(f"Input: `{utterances}`.")
     results = get_answers(utterances, ranker_model)
     logger.info(f"Output: `{results}`.")
