@@ -100,7 +100,7 @@ def respond():
         selected_resp = select_response(dialog_context, hypotheses)
         try:
             best_id = hypotheses.index(selected_resp)
-            selected_responses.append(selected_resp)
+            selected_responses.append(selected_resp["text"])
             selected_skill_names.append(hypotheses[best_id]["skill_name"])
             selected_confidences.append(hypotheses[best_id]["confidence"])
         except Exception as e:
@@ -109,7 +109,7 @@ def respond():
             logger.info("Exception in finding selected response in hypotheses. "
                         "Selected a response with the highest confidence.")
             selected_resp, best_id = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])
-            selected_responses.append(selected_resp)
+            selected_responses.append(selected_resp["text"])
             selected_skill_names.append(hypotheses[best_id]["skill_name"])
             selected_confidences.append(hypotheses[best_id]["confidence"])
 
