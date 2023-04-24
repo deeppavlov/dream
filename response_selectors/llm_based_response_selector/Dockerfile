@@ -5,8 +5,6 @@ RUN mkdir /src
 COPY ./response_selectors/llm_based_response_selector/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-ARG LANGUAGE=EN
-ENV LANGUAGE ${LANGUAGE}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 ARG GENERATIVE_SERVICE_URL

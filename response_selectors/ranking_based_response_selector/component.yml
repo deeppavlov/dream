@@ -17,7 +17,6 @@ ranking-based-response-selector-service:
   build_args:
     SERVICE_PORT: 8002
     SERVICE_NAME: response_selector
-    LANGUAGE: EN
     SENTENCE_RANKER_ANNOTATION_NAME: null
     SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
     SENTENCE_RANKER_TIMEOUT: 3
@@ -43,7 +42,6 @@ ranking-based-response-selector-ru-service:
   build_args:
     SERVICE_PORT: 8002
     SERVICE_NAME: response_selector
-    LANGUAGE: RU
     SENTENCE_RANKER_ANNOTATION_NAME: null
     SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
     SENTENCE_RANKER_TIMEOUT: 3
@@ -69,8 +67,10 @@ ranking-based-response-selector-ru:
   build_args:
     SERVICE_PORT: 8002
     SERVICE_NAME: response_selector
-    LANGUAGE: RU
     SENTENCE_RANKER_ANNOTATION_NAME: dialogrpt
+    SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+    SENTENCE_RANKER_TIMEOUT: 3
+    N_UTTERANCES_CONTEXT: 5
     FILTER_TOXIC_OR_BADLISTED: 1
   date_created: '2023-04-24T09:45:32'
 ranking-based-response-selector:
@@ -92,7 +92,6 @@ ranking-based-response-selector:
   build_args:
     SERVICE_PORT: 8002
     SERVICE_NAME: response_selector
-    LANGUAGE: EN
     SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
     SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
     SENTENCE_RANKER_TIMEOUT: 3
