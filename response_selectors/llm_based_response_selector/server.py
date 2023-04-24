@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import json
 import logging
 import numpy as np
 import requests
@@ -23,6 +24,9 @@ DEFAULT_CRITERION = "the most appropriate, relevant and non-toxic"
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 CRITERION = getenv("CRITERION", DEFAULT_CRITERION)
