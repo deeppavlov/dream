@@ -18,7 +18,7 @@ davinci3-based-response-selector:
   - group: response_selectors
     endpoint: respond
   build_args:
-    SERVICE_PORT: '8003'
+    SERVICE_PORT: 8003
     SERVICE_NAME: response_selector
     LANGUAGE: EN
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
@@ -48,7 +48,7 @@ chatgpt-based-response-selector:
   - group: response_selectors
     endpoint: respond
   build_args:
-    SERVICE_PORT: '8003'
+    SERVICE_PORT: 8003
     SERVICE_NAME: response_selector
     LANGUAGE: EN
     GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
@@ -78,7 +78,7 @@ oasst12b-based-response-selector:
   - group: response_selectors
     endpoint: respond
   build_args:
-    SERVICE_PORT: '8003'
+    SERVICE_PORT: 8003
     SERVICE_NAME: response_selector
     LANGUAGE: EN
     GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
@@ -107,7 +107,7 @@ gptj-based-response-selector:
   - group: response_selectors
     endpoint: respond
   build_args:
-    SERVICE_PORT: '8003'
+    SERVICE_PORT: 8003
     SERVICE_NAME: response_selector
     LANGUAGE: EN
     GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
