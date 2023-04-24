@@ -35,6 +35,8 @@ def filter_out_badlisted_or_toxic(hypotheses):
         is_toxic = is_toxic_or_badlisted_utterance(hyp)
         if not is_toxic:
             clean_hypotheses += [deepcopy(hyp)]
+        else:
+            logger.info(f"Filter out toxic candidate: {hyp['text']}")
     return clean_hypotheses
 
 
@@ -71,6 +73,7 @@ def select_response(dialog_context, hypotheses):
 
     scores = get_scores(dialog_context, hypotheses)
     scores = [score if hyp["skill_name"] != "dummy_skill" else score / 100 for score, hyp in zip(scores, hypotheses)]
+    logger.info(f"Scores for selection:\n`{scores}`")
     result = select_response_by_scores(hypotheses, scores)[0]
     logger.info(f"ranking_based_response_selector selected:\n`{result}`")
 
