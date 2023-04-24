@@ -10,7 +10,7 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-no-scripts-selector:
+  ranking-based-response-selector:
     volumes:
       - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
