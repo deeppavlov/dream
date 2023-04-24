@@ -53,7 +53,7 @@ def select_response_by_scores(hypotheses, scores):
     return result, best_id
 
 
-def select_response(dialog_context, hypotheses, confidences):
+def select_response(dialog_context, hypotheses):
     try:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
@@ -70,7 +70,7 @@ def select_response(dialog_context, hypotheses, confidences):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = select_response_by_scores(hypotheses, confidences)[0]
+        result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]
         logger.info(f"Exception in LLM's invocation. Selected a response with the highest confidence.")
     logger.info(f"llm_based_response_selector selected:\n`{result}`")
 
@@ -88,28 +88,26 @@ def respond():
     selected_confidences = []
 
     for i, dialog in enumerate(dialogs):
-        hypotheses = [hyp["text"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
 
-        confidences = [hyp["confidence"] for hyp in hypotheses]
-        skill_names = [hyp["skill_name"] for hyp in hypotheses]
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
-        selected_resp = select_response(dialog_context, hypotheses, confidences)
+        selected_resp = select_response(dialog_context, hypotheses)
         try:
             best_id = hypotheses.index(selected_resp)
-            selected_skill_names.append(skill_names[best_id])
             selected_responses.append(selected_resp)
-            selected_confidences.append(confidences[best_id])
+            selected_skill_names.append(hypotheses[best_id]["skill_name"])
+            selected_confidences.append(hypotheses[best_id]["confidence"])
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
             logger.info("Exception in finding selected response in hypotheses. "
                         "Selected a response with the highest confidence.")
-            selected_resp, best_id = select_response_by_scores(hypotheses, confidences)
-            selected_skill_names.append(skill_names[best_id])
+            selected_resp, best_id = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])
             selected_responses.append(selected_resp)
-            selected_confidences.append(confidences[best_id])
+            selected_skill_names.append(hypotheses[best_id]["skill_name"])
+            selected_confidences.append(hypotheses[best_id]["confidence"])
 
     total_time = time.time() - st_time
     logger.info(f"llm_based_response_selector exec time = {total_time:.3f}s")

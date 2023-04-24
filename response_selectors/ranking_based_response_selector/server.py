@@ -87,7 +87,7 @@ def respond():
     selected_confidences = []
 
     for i, dialog in enumerate(dialogs):
-        hypotheses = [hyp["text"] for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
 
