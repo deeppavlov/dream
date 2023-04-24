@@ -255,7 +255,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://no-restrictions-selector:8009/respond"
+                    "url": "http://oasst12b-based-response-selector:8003/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -266,7 +266,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "response_selectors/convers_evaluation_based_selector",
-                    "container": "no-restrictions-selector",
+                    "container": "oasst12b-based-response-selector",
                     "endpoint": "respond"
                 }
             }
