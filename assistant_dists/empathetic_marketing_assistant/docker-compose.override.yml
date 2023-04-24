@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/empathetic_marketing_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087, 
+      WAIT_HOSTS: "sentseg:8011, gptj-based-response-selector:8003, badlisted-words:8018, combined-classification:8087, 
         sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
         dff-empathetic-marketing-prompted-skill:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -38,32 +38,21 @@ services:
         reservations:
           memory: 2G
 
-  no-restrictions-selector:
+  gptj-based-response-selector:
     env_file: [ .env ]
     build:
       args:
-        TAG_BASED_SELECTION: 1
-        CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0
-        ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 0
-        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
-        IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 0
-        RESTRICTION_FOR_SENSITIVE_CASE: 0
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
-        MAX_TURNS_WITHOUT_SCRIPTS: 100
-        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 0
-        PRIORITIZE_SCRIPTED_SKILLS: 0
-        CONFIDENCE_STRENGTH: 0.8
-        CONV_EVAL_STRENGTH: 0.4
-        PRIORITIZE_HUMAN_INITIATIVE: 1
-        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        SERVICE_PORT: 8003
+        SERVICE_NAME: response_selector
         LANGUAGE: EN
+        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 5
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
       context: .
-      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8009
+      dockerfile: ./response_selectors/llm_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8003
     environment:
       - FLASK_APP=server
     deploy:
