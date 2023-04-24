@@ -104,7 +104,7 @@ def respond():
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            logger.info("Exception in finding selected by LLM response in hypotheses. "
+            logger.info("Exception in finding selected response in hypotheses. "
                         "Selected a response with the highest confidence.")
             selected_resp, best_id = select_response_by_scores(hypotheses, confidences)
             selected_skill_names.append(skill_names[best_id])
