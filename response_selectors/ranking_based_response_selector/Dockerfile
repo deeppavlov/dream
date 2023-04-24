@@ -2,7 +2,7 @@ FROM python:3.7.4
 
 RUN mkdir /src
 
-COPY ./requirements.txt /src/requirements.txt
+COPY ./response_selectors/ranking_based_response_selector/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 ARG LANGUAGE=EN
@@ -20,7 +20,7 @@ ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
 ARG FILTER_TOXIC_OR_BADLISTED=1
 ENV FILTER_TOXIC_OR_BADLISTED ${FILTER_TOXIC_OR_BADLISTED}
 
-COPY . /src/
+COPY ./response_selectors/ranking_based_response_selector/ /src/
 WORKDIR /src
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
