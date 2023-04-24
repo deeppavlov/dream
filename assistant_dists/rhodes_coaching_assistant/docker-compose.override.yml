@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/rhodes_coaching_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8002, badlisted-words:8018, combined-classification:8087, 
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, badlisted-words:8018, combined-classification:8087, 
                    sentence-ranker:8128, prompt-selector:8135, openai-api-davinci3:8131,
                    dff-rhodes-coaching-prompted-skill:8142"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
