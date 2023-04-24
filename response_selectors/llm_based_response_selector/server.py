@@ -47,8 +47,8 @@ def filter_out_badlisted_or_toxic(hypotheses):
     return clean_hypotheses
 
 
-def select_response_by_confidence(hypotheses, confidences):
-    best_id = np.argmax(confidences)
+def select_response_by_scores(hypotheses, scores):
+    best_id = np.argmax(scores)
     result = hypotheses[best_id]
     return result, best_id
 
@@ -70,7 +70,7 @@ def select_response(dialog_context, hypotheses, confidences):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = select_response_by_confidence(hypotheses, confidences)[0]
+        result = select_response_by_scores(hypotheses, confidences)[0]
         logger.info(f"Exception in LLM's invocation. Selected a response with the highest confidence.")
     logger.info(f"llm_based_response_selector selected:\n`{result}`")
 
@@ -106,7 +106,7 @@ def respond():
             logger.exception(e)
             logger.info("Exception in finding selected by LLM response in hypotheses. "
                         "Selected a response with the highest confidence.")
-            selected_resp, best_id = select_response_by_confidence(hypotheses, confidences)
+            selected_resp, best_id = select_response_by_scores(hypotheses, confidences)
             selected_skill_names.append(skill_names[best_id])
             selected_responses.append(selected_resp)
             selected_confidences.append(confidences[best_id])
