@@ -2,7 +2,7 @@ dialogpt:
   name: dialogpt
   display_name: DialoGPT
   container_name: dialogpt
-  component_type: null
+  component_type: Generative
   model_type: NN-based
   is_customizable: false
   author: DeepPavlov
