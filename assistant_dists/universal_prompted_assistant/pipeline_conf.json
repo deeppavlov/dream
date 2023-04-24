@@ -255,7 +255,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://oasst12b-based-response-selector:8003/respond"
+                    "url": "http://ranking-based-response-selector:8002/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -265,8 +265,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "container": "oasst12b-based-response-selector",
+                    "directory": "response_selectors/ranking_based_response_selector",
+                    "container": "ranking-based-response-selector",
                     "endpoint": "respond"
                 }
             }

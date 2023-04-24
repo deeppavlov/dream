@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/ai_faq_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, oasst12b-based-response-selector:8003, badlisted-words:8018, combined-classification:8087, 
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, badlisted-words:8018, combined-classification:8087, 
         sentence-ranker:8128, prompt-selector:8135, transformers-lm-oasst12b:8158, 
         dff-ai-faq-prompted-skill:8143"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -38,21 +38,21 @@ services:
         reservations:
           memory: 2G
 
-  oasst12b-based-response-selector:
+  ranking-based-response-selector:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8003
+        SERVICE_PORT: 8002
         SERVICE_NAME: response_selector
         LANGUAGE: EN
-        GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
-        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
-        GENERATIVE_TIMEOUT: 5
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
         N_UTTERANCES_CONTEXT: 5
         FILTER_TOXIC_OR_BADLISTED: 1
       context: .
-      dockerfile: ./response_selectors/llm_based_response_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8003
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
     environment:
       - FLASK_APP=server
     deploy:
