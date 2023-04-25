@@ -218,7 +218,7 @@ def do_you_like_handler(previous_handler_state, skill_state, state, true_model_n
         if game_state.get("game_is_played"):
             text += [
                 f"So I suppose you liked {current_game.get('name_original')} right?",
-                f"How would you rate the desire to play it again, from 1 to 10?",
+                "How would you rate the desire to play it again, from 1 to 10?",
             ]
         else:
             text += [f"How would you rate the desire to play {current_game.get('name_original')} from 1 to 10? "]
@@ -247,10 +247,10 @@ def do_you_like_handler(previous_handler_state, skill_state, state, true_model_n
             text += random.choice(
                 [
                     [
-                        f"Hey sorry I've lost my computer games almanac and "
+                        "Hey sorry I've lost my computer games almanac and "
                         "I can't talk about the game details just yet.",
-                        f"But I promise to find it the next few days okay?",
-                        f"Wanna discuss the next game?",
+                        "But I promise to find it the next few days okay?",
+                        "Wanna discuss the next game?",
                     ],
                     [
                         "Look I haven't read other details about games just yet.",
@@ -281,7 +281,7 @@ def do_you_like_handler(previous_handler_state, skill_state, state, true_model_n
                 text += [f"I asked what rating would you give {current_game.get('name_original')}."]
                 text += ["For example, you can say: one or ten  or any number from 1 to 10."]
 
-            text += [f"do you want to continue? "]
+            text += ["do you want to continue? "]
             skill_state_update = {"next_step": "do_you_like"}
 
     handler_state = {}
