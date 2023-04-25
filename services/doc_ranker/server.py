@@ -1,13 +1,14 @@
 import logging
 import os
-from typing import List
 import sentry_sdk
 from deeppavlov import build_model
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 # logging here because it conflicts with tf
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
