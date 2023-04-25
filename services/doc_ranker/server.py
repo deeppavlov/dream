@@ -52,7 +52,3 @@ def detect():
     results = get_answers(utterances, ranker_model)
     logger.info(f"Output: `{results}`.")
     return jsonify(results)
-
-
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port={SERVICE_PORT})
