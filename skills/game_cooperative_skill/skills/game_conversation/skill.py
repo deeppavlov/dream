@@ -167,7 +167,6 @@ def have_you_played_handler(previous_handler_state, skill_state, state, true_mod
         skill_state_update.update({"current_game": current_game})
 
     if skill_name in [""]:
-
         text += ["Have you played it before? "]
         skill_state_update.update({"next_step": "have_you_played"})
 
@@ -295,7 +294,6 @@ def do_you_like_handler(previous_handler_state, skill_state, state, true_model_n
 
 
 def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
-
     model_results = run_models(models, state.human_utterances)
     true_model_names = cmd_postprocessing(model_results, model_name_only=True)
     true_cmds = cmd_postprocessing(model_results, cmd_only=True)
