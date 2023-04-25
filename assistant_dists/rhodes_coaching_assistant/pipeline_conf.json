@@ -172,13 +172,13 @@
             }
         },
         "skills": {
-            "dff_rhodes_coaching_prompted_skill": {
+            "dff_life_coaching_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 7.0,
-                    "url": "http://dff-rhodes-coaching-prompted-skill:8142/respond"
+                    "url": "http://dff-life-coaching-prompted-skill:8142/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_life_coaching_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -187,7 +187,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_template_prompted_skill",
-                    "container": "dff-rhodes-coaching-prompted-skill",
+                    "container": "dff-life-coaching-prompted-skill",
                     "endpoint": "respond"
                 }
             },
@@ -291,7 +291,7 @@
         }
     },
     "metadata": {
-        "display_name": "Rhodes Coaching Assistant",
+        "display_name": "Life Coaching Assistant",
         "author": "Rhodes & Co",
         "description": "Introducing the Coaching AI Assistant - your personal guide to achieving your life goals! With our cutting-edge artificial intelligence technology, you can now get personalized and actionable guidance on how to achieve your dreams. Our AI Assistant helps you set realistic and meaningful goals, and provides you with a step-by-step plan to achieve them. Try the Coaching AI Assistant today and start living your best life!",
         "version": "0.0.1",
