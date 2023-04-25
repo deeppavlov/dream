@@ -1,0 +1,73 @@
+Apple Inc. | 2021 Form 10-K | 30
+
+Apple Inc.
+CONSOLIDATED BALANCE SHEETS
+(In millions, except number of shares which are reflected in thousands and par value)
+
+September 25,
+2021		September 26,
+2020
+ASSETS:
+Current assets:
+Cash and cash equivalents
+$	34,940 			$	38,016 	
+Marketable securities
+27,699 			52,927 	
+Accounts receivable, net
+26,278 			16,120 	
+Inventories
+6,580 			4,061 	
+Vendor non-trade receivables
+25,228 			21,325 	
+Other current assets
+14,111 			11,264 	
+Total current assets
+134,836 			143,713 	
+Non-current assets:
+Marketable securities
+127,877 			100,887 	
+Property, plant and equipment, net
+39,440 			36,766 	
+Other non-current assets
+48,849 			42,522 	
+Total non-current assets
+216,166 			180,175 	
+Total assets
+$	351,002 			$	323,888 	
+LIABILITIES AND SHAREHOLDERS’ EQUITY:
+Current liabilities:
+Accounts payable
+$	54,763 			$	42,296 	
+Other current liabilities
+47,493 			42,684 	
+Deferred revenue
+7,612 			6,643 	
+Commercial paper
+6,000 			4,996 	
+Term debt
+9,613 			8,773 	
+Total current liabilities
+125,481 			105,392 	
+Non-current liabilities:
+Term debt
+109,106 			98,667 	
+Other non-current liabilities
+53,325 			54,490 	
+Total non-current liabilities
+162,431 			153,157 	
+Total liabilities
+287,912 			258,549 	
+Commitments and contingencies
+Shareholders’ equity:
+Common stock and additional paid-in capital, $0.00001 par value: 50,400,000 shares authorized; 16,426,786 and 16,976,763 shares issued and outstanding, respectively
+57,365 			50,779 	
+Retained earnings
+5,562 			14,966 	
+Accumulated other comprehensive income/(loss)
+163 			(406)	
+Total shareholders’ equity
+63,090 			65,339 	
+Total liabilities and shareholders’ equity
+$	351,002 			$	323,888 	
+ 
+See accompanying Notes to Consolidated Financial Statements.

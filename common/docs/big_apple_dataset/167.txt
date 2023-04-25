@@ -1,0 +1,13 @@
+Interest Rate Risk
+To protect the Company’s term debt or marketable securities from fluctuations in interest rates, the Company may enter into interest rate swaps, options or other instruments.The Company designates these instruments as either cash flow or fair value hedges.The notional amounts of the Company’s outstanding derivative instruments as of September 25, 2021 and September 26, 2020 were as follows (in millions):
+2021		2020
+Derivative instruments designated as accounting hedges:			
+Foreign exchange contracts
+$	76,475 			$	57,410 	
+Interest rate contracts
+$	16,875 			$	20,700 	
+Derivative instruments not designated as accounting hedges:			
+Foreign exchange contracts
+$	126,918 			$	88,636 	
+ 
+The gross fair values of the Company’s derivative assets and liabilities were not material as of September 25, 2021 and September 26, 2020.

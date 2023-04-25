@@ -1,0 +1,22 @@
+Further information regarding share-based compensation can be found in Note 9, “Benefit Plans.”
+Earnings Per Share
+The following table shows the computation of basic and diluted earnings per share for 2021, 2020 and 2019 (net income in millions and shares in thousands):
+2021		2020		2019
+Numerator:
+Net income
+$	94,680 			$	57,411 			$	55,256 	
+Denominator:
+Weighted-average basic shares outstanding
+16,701,272 			17,352,119 			18,471,336 	
+Effect of dilutive securities
+163,647 			176,095 			124,315 	
+Weighted-average diluted shares
+16,864,919 			17,528,214 			18,595,651 	
+Basic earnings per share
+$	5.67 			$	3.31 			$	2.99 	
+Diluted earnings per share
+$	5.61 			$	3.28 			$	2.97 	
+ 
+Apple Inc. | 2021 Form 10-K | 34
+
+The Company applies the treasury stock method to determine the dilutive effect of potentially dilutive securities.Potentially dilutive securities representing 62 million shares of common stock were excluded from the computation of diluted earnings per share for 2019 because their effect would have been antidilutive.

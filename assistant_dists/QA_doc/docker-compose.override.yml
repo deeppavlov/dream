@@ -29,7 +29,7 @@ services:
         SERVICE_PORT: 8200
         CONFIG_PATH: ./doc_ranker_config.json
         ORIGINAL_FILE_PATH: ./common/docs/big_apple.txt
-        DATASET_PATH: ./common/docs/big_apple_dataset/
+        DATASET_PATH: /data/big_apple_dataset/
     command: python -m flask run -h 0.0.0.0 -p 8200
     environment:
       - FLASK_APP=server

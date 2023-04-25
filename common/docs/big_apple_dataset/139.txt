@@ -1,0 +1,34 @@
+Apple Inc. | 2021 Form 10-K | 29
+
+Apple Inc.
+CONSOLIDATED STATEMENTS OF COMPREHENSIVE INCOME
+(In millions)
+
+Years ended
+September 25,
+2021		September 26,
+2020		September 28,
+2019
+Net income
+$	94,680 			$	57,411 			$	55,256 	
+Other comprehensive income/(loss):					
+Change in foreign currency translation, net of tax
+501 			88 			(408)	
+Change in unrealized gains/losses on derivative instruments, net of tax:					
+Change in fair value of derivative instruments	32 			79 			(661)	
+Adjustment for net (gains)/losses realized and included in net income
+1,003 			(1,264)			23 	
+Total change in unrealized gains/losses on derivative instruments	1,035 			(1,185)			(638)	
+Change in unrealized gains/losses on marketable debt securities, net of tax:
+Change in fair value of marketable debt securities
+(694)			1,202 			3,802 	
+Adjustment for net (gains)/losses realized and included in net income
+(273)			(63)			25 	
+Total change in unrealized gains/losses on marketable debt securities
+(967)			1,139 			3,827 	
+Total other comprehensive income/(loss)
+569 			42 			2,781 	
+Total comprehensive income
+$	95,249 			$	57,453 			$	58,037 	
+ 
+See accompanying Notes to Consolidated Financial Statements.

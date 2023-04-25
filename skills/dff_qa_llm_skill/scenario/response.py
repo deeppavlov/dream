@@ -19,12 +19,11 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
-
+RANKING_FOR_QA = getenv("RANKING_FOR_QA")
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 DEFAULT_PROMPT = "Answer questions based on parts of a financial report."
-
 CONSIDERED_LM_SERVICES = {
     "ChatGPT": {
         "url": "http://openai-api-chatgpt:8145/respond",
@@ -38,10 +37,8 @@ def compose_data_for_model(ctx, actor):
     # consider N_UTTERANCES_CONTEXT last utterances
     context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
     context = [uttr.get("text", "") for uttr in context]
-
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
-
     # drop the dialog history when prompt changes
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
     # get prompt from the current utterance attributes
@@ -56,15 +53,16 @@ def compose_data_for_model(ctx, actor):
             context = context[-i + 2 :]
             break
 
-    url = "http://doc-ranker:8200/rank"  #!!!!!!!!!!
     if context:
         request = context[-1]
-        candidates = requests.post(url=url, json={"sentences": [[request]]}).json()
+        candidates = requests.post(
+            url=RANKING_FOR_QA, json={"sentences": [[request]]}
+        ).json()
         context[
             -1
         ] = f"""{request} Answer to this question based on the text provided. 
-        If necessary, structure your answer as bullet points. 
-        You may also prsent information in tables. The text: ### {candidates} ###"""
+If necessary, structure your answer as bullet points. 
+You may also present information in tables. The text: ### {candidates} ###"""
     return context
 
 

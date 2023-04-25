@@ -93,7 +93,7 @@ def respond():
 Steps:
 1. Uncomment lines with json dump 
 1. Name your test by replacing `YOUR_TEST_NAME` in both line. They have to be same.
-1. Start a test dialog with agent.Every turn will be written in `tests/TEST_NAME*`. `*_in.json` - for input data, `*_in.json` - for response data.
+1. Start a test dialog with agent. Every turn will be written in `tests/TEST_NAME*`. `*_in.json` - for input data, `*_in.json` - for response data.
 
 If your want to write down all turns of test dialog you can use this code
 
@@ -135,7 +135,7 @@ If you use service based on random behavior you can send `random_seed` in your s
     rand_seed = requested_data.get("rand_seed")  # for tests
     ... # some code
     if rand_seed:
-        random.seed(int(rand_seed)
+        random.seed(int(rand_seed))
     ... # some code
 ```
 

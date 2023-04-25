@@ -1,0 +1,30 @@
+The Company made $1.4 billion and $1.5 billion of fixed cash payments related to operating leases in 2021 and 2020, respectively.Noncash activities involving right-of-use (“ROU”) assets obtained in exchange for lease liabilities were $3.3 billion for 2021 and $10.5 billion for 2020, including the impact of adopting FASB ASU No.2016-02, Leases (Topic 842) in the first quarter of 2020.The following table shows ROU assets and lease liabilities, and the associated financial statement line items, as of September 25, 2021 and September 26, 2020 (in millions):
+Lease-Related Assets and Liabilities		Financial Statement Line Items		2021		2020
+Right-of-use assets:
+Operating leases		Other non-current assets		$	10,087 			$	8,570 	
+Finance leases		Property, plant and equipment, net		861 			629 	
+Total right-of-use assets				$	10,948 			$	9,199 	
+Lease liabilities:
+Operating leases		Other current liabilities		$	1,449 			$	1,436 	
+Other non-current liabilities		9,506 			7,745 	
+Finance leases		Other current liabilities		79 			24 	
+Other non-current liabilities		769 			637 	
+Total lease liabilities				$	11,803 			$	9,842 	
+ 
+Apple Inc. | 2021 Form 10-K | 43
+
+Lease liability maturities as of September 25, 2021, are as follows (in millions):
+Operating
+Leases		Finance
+Leases		Total
+2022	$	1,629 			$	104 			$	1,733 	
+2023	1,560 			123 			1,683 	
+2024	1,499 			99 			1,598 	
+2025	1,251 			46 			1,297 	
+2026	1,061 			26 			1,087 	
+Thereafter	5,187 			868 			6,055 	
+Total undiscounted liabilities	12,187 			1,266 			13,453 	
+Less: Imputed interest	(1,232)			(418)			(1,650)	
+Total lease liabilities	$	10,955 			$	848 			$	11,803 	
+ 
+The weighted-average remaining lease term related to the Company’s lease liabilities as of September 25, 2021 and September 26, 2020 was 10.8 years and 10.3 years, respectively.

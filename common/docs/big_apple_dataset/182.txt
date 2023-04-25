@@ -1,0 +1,13 @@
+The Company uses net proceeds from the commercial paper program for general corporate purposes, including dividends and share repurchases.As of September 25, 2021 and September 26, 2020, the Company had $6.0 billion and $5.0 billion of Commercial Paper outstanding, respectively, with maturities generally less than nine months.The weighted-average interest rate of the Company’s Commercial Paper was 0.06% and 0.62% as of September 25, 2021 and September 26, 2020, respectively.The following table provides a summary of cash flows associated with the issuance and maturities of Commercial Paper for 2021, 2020 and 2019 (in millions):
+2021		2020		2019
+Maturities 90 days or less:
+Proceeds from/(Repayments of) commercial paper, net	$	(357)			$	100 			$	(3,248)	
+Maturities greater than 90 days:
+Proceeds from commercial paper
+7,946 			6,185 			13,874 	
+Repayments of commercial paper
+(6,567)			(7,248)			(16,603)	
+Proceeds from/(Repayments of) commercial paper, net	1,379 			(1,063)			(2,729)	
+Total proceeds from/(repayments of) commercial paper, net	$	1,022 			$	(963)			$	(5,977)	
+ 
+In 2020, the Company entered into agreements to sell certain of its marketable securities with a promise to repurchase the securities at a specified time and amount (“Repos”).

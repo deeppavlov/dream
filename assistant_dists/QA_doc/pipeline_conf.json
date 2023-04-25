@@ -214,7 +214,7 @@
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 150.0,
+                    "timeout": 2.0,
                     "url": "http://combined-classification:8087/batch_model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
@@ -233,7 +233,7 @@
             "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 100.0,
+                    "timeout": 1.0,
                     "url": "http://sentence-ranker:8128/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",

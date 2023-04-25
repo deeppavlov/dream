@@ -1,0 +1,42 @@
+The Company does not include intercompany transfers between segments for management reporting purposes.The following table shows information by reportable segment for 2021, 2020 and 2019 (in millions):
+2021		2020		2019
+Americas:
+Net sales
+$	153,306 			$	124,556 			$	116,914 	
+Operating income
+$	53,382 			$	37,722 			$	35,099 	
+Europe:
+Net sales
+$	89,307 			$	68,640 			$	60,288 	
+Operating income
+$	32,505 			$	22,170 			$	19,195 	
+Greater China:					
+Net sales
+$	68,366 			$	40,308 			$	43,678 	
+Operating income
+$	28,504 			$	15,261 			$	16,232 	
+Japan:
+Net sales
+$	28,482 			$	21,418 			$	21,506 	
+Operating income
+$	12,798 			$	9,279 			$	9,369 	
+Rest of Asia Pacific:
+Net sales
+$	26,356 			$	19,593 			$	17,788 	
+Operating income
+$	9,817 			$	6,808 			$	6,055 	
+ 
+A reconciliation of the Company’s segment operating income to the Consolidated Statements of Operations for 2021, 2020 and 2019 is as follows (in millions):
+2021		2020		2019
+Segment operating income
+$	137,006 			$	91,240 			$	85,950 	
+Research and development expense
+(21,914)			(18,752)			(16,217)	
+Other corporate expenses, net
+(6,143)			(6,200)			(5,803)	
+Total operating income
+$	108,949 			$	66,288 			$	63,930 	
+ 
+Apple Inc. | 2021 Form 10-K | 50
+
+The U.S. and China were the only countries that accounted for more than 10% of the Company’s net sales in 2021, 2020 and 2019.
