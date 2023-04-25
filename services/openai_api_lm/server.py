@@ -74,7 +74,6 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     if PRETRAINED_MODEL_NAME_OR_PATH != "gpt-3.5-turbo":
         # post-processing of the responses by all models except of ChatGPT
         outputs = [GENERATIVE_ROBOT_TEMPLATE.sub("\n", resp).strip() for resp in outputs]
-        outputs = [resp.split("\n")[0] for resp in outputs]
     return outputs
 
 
