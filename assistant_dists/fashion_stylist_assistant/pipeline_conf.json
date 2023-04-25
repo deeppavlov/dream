@@ -172,13 +172,13 @@
             }
         },
         "skills": {
-            "dff_da_costa_clothes_prompted_skill": {
+            "dff_fashion_stylist_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
-                    "url": "http://dff-da-costa-clothes-prompted-skill:8144/respond"
+                    "url": "http://dff-fashion-stylist-prompted-skill:8144/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_da_costa_clothes_prompted_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_fashion_stylist_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -187,7 +187,7 @@
                 "is_enabled": true,
                 "source": {
                     "directory": "skills/dff_template_prompted_skill",
-                    "container": "dff-da-costa-clothes-prompted-skill",
+                    "container": "dff-fashion-stylist-prompted-skill",
                     "endpoint": "respond"
                 }
             },
@@ -291,7 +291,7 @@
         }
     },
     "metadata": {
-        "display_name": "da Costa Clothes Assistant",
+        "display_name": "Fashion Stylist Assistant",
         "author": "da Costa Industries",
         "description": "Introducing the da Costa Clothing AI Assistant! Your ultimate shopping companion in the world of futuristic fashion. With its cutting-edge technology, our AI assistant can provide you with personalized advice on what to buy from our extensive selection of sci-fi style clothes. From quantum jackets to nanotech suits, the da Costa Clothing AI Assistant has got you covered. Shop with confidence and style, with the help of our advanced AI technology. Try it now!",
         "version": "0.0.1",

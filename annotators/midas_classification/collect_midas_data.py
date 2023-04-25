@@ -1,7 +1,6 @@
 import pandas as pd
 
 for data_type in ["train", "dev"]:
-
     with open(f"da_data/{data_type}.txt", "r") as f:
         data = f.read().splitlines()
 
