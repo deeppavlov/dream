@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 import requests
 import time
 from os import getenv, listdir
@@ -32,7 +31,7 @@ for filename in listdir("common/prompts"):
         PROMPTS_NAMES.append(prompt_name)
 
 
-def get_result(request, questions_only=False):
+def get_result(request):
     global PROMPTS, PROMPTS_NAMES
     st_time = time.time()
     contexts = request.json["contexts"]
@@ -41,14 +40,9 @@ def get_result(request, questions_only=False):
     context_ids = []
 
     for context_id, context in enumerate(contexts):
-        str_context = " ".join(context)
+        str_context = "\n".join(context)
         for prompt in PROMPTS:
-            if questions_only:
-                questions = re.findall(r"\nQuestion: (.*)\nAnswer:", prompt)
-                questions_list = " ".join(questions)
-                pairs += [[str_context, questions_list]]
-            else:
-                pairs += [[str_context, prompt]]
+            pairs += [[str_context, prompt]]
             context_ids += [context_id]
     context_ids = np.array(context_ids)
     try:
@@ -77,13 +71,13 @@ def get_result(request, questions_only=False):
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    result = get_result(request, questions_only=True)
+    result = get_result(request)
     return jsonify(result)
 
 
 @app.route("/respond_batch", methods=["POST"])
 def respond_batch():
-    result = get_result(request, questions_only=True)
+    result = get_result(request)
     return jsonify([{"batch": result}])
 
 

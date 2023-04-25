@@ -725,7 +725,6 @@ def combine_sub(year_from, year_to, feedback, overwrite=False, skip_same_pos=Tru
 
 
 def split_by_root(path, p_test=0.1):
-
     print("spliting by root " + path)
     lines = {
         "train": [],

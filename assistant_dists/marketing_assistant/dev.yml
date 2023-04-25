@@ -40,17 +40,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  openai-api-davinci3:
+  transformers-lm-gptj:
     volumes:
-      - "./services/openai_api_lm:/src"
+      - "./services/transformers_lm:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8131:8131
-  dff-rhodes-coaching-prompted-skill:
+      - 8130:8130
+  dff-marketing-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8142:8142
+      - 8138:8138
 
 version: "3.7"

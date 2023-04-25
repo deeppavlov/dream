@@ -31,24 +31,24 @@ dff-fairytale-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-dff-empathetic-marketing-prompted-skill:
+dff-marketing-prompted-skill:
 - group: skills
   connector:
     protocol: http
     timeout: 5.0
-    url: http://dff-empathetic-marketing-prompted-skill:8138/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_empathetic_marketing_prompted_skill_formatter
+    url: http://dff-marketing-prompted-skill:8138/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_marketing_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-dff-da-costa-clothes-prompted-skill:
+dff-fashion-stylist-prompted-skill:
 - group: skills
   connector:
     protocol: http
     timeout: 5.0
-    url: http://dff-da-costa-clothes-prompted-skill:8144/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_da_costa_clothes_prompted_skill_formatter
+    url: http://dff-fashion-stylist-prompted-skill:8144/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_fashion_stylist_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
@@ -75,13 +75,13 @@ dff-nutrition-prompted-skill:
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-dff-rhodes-coaching-prompted-skill:
+dff-life-coaching-prompted-skill:
 - group: skills
   connector:
     protocol: http
     timeout: 7.0
-    url: http://dff-rhodes-coaching-prompted-skill:8142/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter
+    url: http://dff-life-coaching-prompted-skill:8142/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_life_coaching_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
