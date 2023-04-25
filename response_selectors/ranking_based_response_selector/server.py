@@ -49,7 +49,7 @@ def select_response_by_scores(hypotheses, scores):
 def get_scores(dialog_context, hypotheses):
     if all([SENTENCE_RANKER_ANNOTATION_NAME in hyp.get("annotations", {}) for hyp in hypotheses]):
         scores = [hyp.get("annotations", {}).get(SENTENCE_RANKER_ANNOTATION_NAME, 0.0) for hyp in hypotheses]
-        logger.info(f"Selected a response via Sentence Ranker Annotator.")
+        logger.info("Selected a response via Sentence Ranker Annotator.")
     else:
         try:
             dialog_context = "\n".join(dialog_context)
@@ -60,17 +60,16 @@ def get_scores(dialog_context, hypotheses):
                 timeout=SENTENCE_RANKER_TIMEOUT,
             ).json()
             scores = np.array(scores[0]["batch"])
-            logger.info(f"Selected a response via Sentence Ranker Service.")
+            logger.info("Selected a response via Sentence Ranker Service.")
         except Exception as e:
             sentry_sdk.capture_exception(e)
             scores = [hyp["confidence"] for hyp in hypotheses]
             logger.exception(e)
-            logger.info(f"Selected a response via Confidence.")
+            logger.info("Selected a response via Confidence.")
     return scores
 
 
 def select_response(dialog_context, hypotheses):
-
     scores = get_scores(dialog_context, hypotheses)
     scores = [score if hyp["skill_name"] != "dummy_skill" else score / 100 for score, hyp in zip(scores, hypotheses)]
     logger.info(f"Scores for selection:\n`{scores}`")

@@ -77,7 +77,7 @@ def select_response(dialog_context, hypotheses):
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]
-        logger.info(f"Exception in LLM's invocation. Selected a response with the highest confidence.")
+        logger.info("Exception in LLM's invocation. Selected a response with the highest confidence.")
     logger.info(f"llm_based_response_selector selected:\n`{result}`")
 
     return result
