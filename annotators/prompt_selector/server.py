@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 import requests
 import time
 from os import getenv, listdir
