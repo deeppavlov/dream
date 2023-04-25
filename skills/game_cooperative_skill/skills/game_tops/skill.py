@@ -253,7 +253,6 @@ def intro_handler(state, skill_state, true_model_names, true_cmds):
 
 
 def run_skill(state: State, modes: List = [skill_attrs.modes.intro]):
-
     skill_state = state.get_skill_state(skill_attrs.skill_name)
     model_results = run_models(models, state.human_utterances)
     true_model_names = cmd_postprocessing(model_results, model_name_only=True)
