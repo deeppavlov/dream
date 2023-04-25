@@ -103,7 +103,6 @@ def append_unused(initial: str, phrases: List[str], exit_on_exhaust: bool = Fals
     """
 
     def unused_handler(ctx: Context, actor: Actor) -> str:
-
         used = ctx.misc.get("used_phrases", [])
         confidences = [1] * len(phrases)
 
@@ -113,7 +112,7 @@ def append_unused(initial: str, phrases: List[str], exit_on_exhaust: bool = Fals
                 used.append(id(phrase))
                 ctx.misc["used_phrases"] = used
                 return initial + phrase
-            confidences[idx] *= 0.4 ** times
+            confidences[idx] *= 0.4**times
 
         if exit_on_exhaust:
             label = ctx.last_label

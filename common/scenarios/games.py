@@ -29,7 +29,6 @@ def extract_from_wiki_parser(wiki_parser_annotations):
         for wp_ann in wiki_parser_annotations:
             logger.info("dff_games.was_game_mentioned: annotations:\n" + str(wp_ann))
             for entity_title, triplets in wp_ann.items():
-
                 logger.info("any items? " + str(triplets))
 
                 for triplet in triplets.get("instance of", []):
