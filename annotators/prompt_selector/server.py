@@ -41,7 +41,7 @@ def get_result(request):
     context_ids = []
 
     for context_id, context in enumerate(contexts):
-        str_context = " ".join(context)
+        str_context = "\n".join(context)
         for prompt in PROMPTS:
             pairs += [[str_context, prompt]]
             context_ids += [context_id]
