@@ -6,11 +6,11 @@ davinci3-based-response-selector:
   model_type: Dictionary/Pattern-based
   is_customizable: true
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
-    responses via asking the given LLM service the question `Select {CRITERION} response 
-    among the hypotheses to the given dialog context. Return only the selected response 
-    without extra explanations.` where default CRITERION is `the most appropriate, 
-    relevant and non-toxic` and could be customized
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
   ram_usage: 100M
   gpu_usage: null
   port: 8003
@@ -26,6 +26,7 @@ davinci3-based-response-selector:
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
     N_UTTERANCES_CONTEXT: 5
     FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
   date_created: '2023-04-24T09:45:32'
 chatgpt-based-response-selector:
   name: response_selector
@@ -35,11 +36,11 @@ chatgpt-based-response-selector:
   model_type: Dictionary/Pattern-based
   is_customizable: true
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
-    responses via asking the given LLM service the question `Select {CRITERION} response 
-    among the hypotheses to the given dialog context. Return only the selected response 
-    without extra explanations.` where default CRITERION is `the most appropriate, 
-    relevant and non-toxic` and could be customized
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
   ram_usage: 100M
   gpu_usage: null
   port: 8003
@@ -55,6 +56,7 @@ chatgpt-based-response-selector:
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
     N_UTTERANCES_CONTEXT: 5
     FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
   date_created: '2023-04-24T09:45:32'
 oasst12b-based-response-selector:
   name: response_selector
@@ -64,11 +66,11 @@ oasst12b-based-response-selector:
   model_type: Dictionary/Pattern-based
   is_customizable: true
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
-    responses via asking the given LLM service the question `Select {CRITERION} response 
-    among the hypotheses to the given dialog context. Return only the selected response 
-    without extra explanations.` where default CRITERION is `the most appropriate, 
-    relevant and non-toxic` and could be customized
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
   ram_usage: 100M
   gpu_usage: null
   port: 8003
@@ -83,6 +85,7 @@ oasst12b-based-response-selector:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 5
     FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
   date_created: '2023-04-24T09:45:32'
 gptj-based-response-selector:
   name: response_selector
@@ -92,11 +95,11 @@ gptj-based-response-selector:
   model_type: Dictionary/Pattern-based
   is_customizable: true
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
-    responses via asking the given LLM service the question `Select {CRITERION} response 
-    among the hypotheses to the given dialog context. Return only the selected response 
-    without extra explanations.` where default CRITERION is `the most appropriate, 
-    relevant and non-toxic` and could be customized
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
   ram_usage: 100M
   gpu_usage: null
   port: 8003
@@ -111,4 +114,5 @@ gptj-based-response-selector:
     GENERATIVE_TIMEOUT: 5
     N_UTTERANCES_CONTEXT: 5
     FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
   date_created: '2023-04-24T09:45:32'

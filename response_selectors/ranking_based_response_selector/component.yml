@@ -6,7 +6,7 @@ ranking-based-response-selector-service:
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
+  description: Algorithm that selects the final response among the given list of candidate
     responses via the given ranking service
   ram_usage: 100M
   gpu_usage: null
@@ -31,7 +31,7 @@ ranking-based-response-selector-ru-service:
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
+  description: Algorithm that selects the final response among the given list of candidate
     responses via the given ranking service
   ram_usage: 100M
   gpu_usage: null
@@ -56,7 +56,7 @@ ranking-based-response-selector-ru:
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
+  description: Algorithm that selects the final response among the given list of candidate
     responses via the given ranking service
   ram_usage: 100M
   gpu_usage: null
@@ -81,7 +81,7 @@ ranking-based-response-selector:
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
-  description: Algorithm that selects a final responses among the given list of candidate
+  description: Algorithm that selects the final response among the given list of candidate
     responses via the given ranking service
   ram_usage: 100M
   gpu_usage: null

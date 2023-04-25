@@ -20,7 +20,6 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-DEFAULT_CRITERION = "the most appropriate, relevant and non-toxic"
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
@@ -29,7 +28,7 @@ if GENERATIVE_SERVICE_CONFIG:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
-CRITERION = getenv("CRITERION", DEFAULT_CRITERION)
+CRITERION = getenv("CRITERION", "the most appropriate, relevant and non-toxic")
 PROMPT = (
     f"""Select {CRITERION} response among the hypotheses to the given dialog context. """
     """Return only the selected response without extra explanations."""
