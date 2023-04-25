@@ -56,7 +56,6 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
         result_cut = GENERATIVE_ROBOT_TEMPLATE.sub("\n", result_cut).strip()
-        result_cut = result_cut.split("\n")[0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
