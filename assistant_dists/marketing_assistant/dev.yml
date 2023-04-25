@@ -47,7 +47,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8130:8130
-  dff-empathetic-marketing-prompted-skill:
+  dff-marketing-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

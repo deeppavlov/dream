@@ -1,10 +1,10 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/empathetic_marketing_assistant/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/marketing_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, badlisted-words:8018, combined-classification:8087, 
         sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
-        dff-empathetic-marketing-prompted-skill:8138"
+        dff-marketing-prompted-skill:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -97,7 +97,7 @@ services:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
         N_SENTENCES_TO_RETURN: 3
-        PROMPTS_TO_CONSIDER: empathetic_marketing
+        PROMPTS_TO_CONSIDER: marketing
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
@@ -150,13 +150,13 @@ services:
         reservations:
           memory: 50G
 
-  dff-empathetic-marketing-prompted-skill:
+  dff-marketing-prompted-skill:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8138
-        SERVICE_NAME: dff_empathetic_marketing_prompted_skill
-        PROMPT_FILE: common/prompts/empathetic_marketing.json
+        SERVICE_NAME: dff_marketing_prompted_skill
+        PROMPT_FILE: common/prompts/marketing.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
         GENERATIVE_SERVICE_CONFIG: default_generative_config.json
         GENERATIVE_TIMEOUT: 5
