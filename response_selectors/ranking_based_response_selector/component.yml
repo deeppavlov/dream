@@ -1,0 +1,100 @@
+ranking-based-response-selector-service:
+  name: response_selector
+  display_name: Response Selector
+  container_name: ranking-based-response-selector-service
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via the given ranking service
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8002
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8002
+    SERVICE_NAME: response_selector
+    SENTENCE_RANKER_ANNOTATION_NAME: null
+    SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+    SENTENCE_RANKER_TIMEOUT: 3
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+  date_created: '2023-04-24T09:45:32'
+ranking-based-response-selector-ru-service:
+  name: response_selector
+  display_name: Response Selector
+  container_name: ranking-based-response-selector-ru-service
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via the given ranking service
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8002
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8002
+    SERVICE_NAME: response_selector
+    SENTENCE_RANKER_ANNOTATION_NAME: null
+    SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+    SENTENCE_RANKER_TIMEOUT: 3
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+  date_created: '2023-04-24T09:45:32'
+ranking-based-response-selector-ru:
+  name: response_selector
+  display_name: Response Selector
+  container_name: ranking-based-response-selector-ru
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via the given ranking service
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8002
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8002
+    SERVICE_NAME: response_selector
+    SENTENCE_RANKER_ANNOTATION_NAME: dialogrpt
+    SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+    SENTENCE_RANKER_TIMEOUT: 3
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+  date_created: '2023-04-24T09:45:32'
+ranking-based-response-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: ranking-based-response-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: false
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via the given ranking service
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8002
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8002
+    SERVICE_NAME: response_selector
+    SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+    SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+    SENTENCE_RANKER_TIMEOUT: 3
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+  date_created: '2023-04-24T09:45:32'

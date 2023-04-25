@@ -93,17 +93,22 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     logger.info(f"dialog_context: {dialog_context}")
     if len(dialog_context) > 0:
-        response = requests.post(
-            GENERATIVE_SERVICE_URL,
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
-                "configs": [GENERATIVE_SERVICE_CONFIG],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
-        )
-        hypotheses = response.json()[0]
+        try:
+            response = requests.post(
+                GENERATIVE_SERVICE_URL,
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
+                    "configs": [GENERATIVE_SERVICE_CONFIG],
+                    **sending_variables,
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            hypotheses = response.json()[0]
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            hypotheses = []
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")

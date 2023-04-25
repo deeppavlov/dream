@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_rullama_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "no-restrictions-selector-ru:8009, badlisted-words-ru:8018,
+      WAIT_HOSTS: "ranking-based-response-selector-ru:8002, badlisted-words-ru:8018,
           dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
           dff-dream-persona-llama7bru-prompted-skill:8151"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
@@ -11,32 +11,20 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: RU
 
-  no-restrictions-selector-ru:
-    env_file: [ .env ]
+  ranking-based-response-selector-ru:
+    env_file: [ .env_ru ]
     build:
       args:
-        TAG_BASED_SELECTION: 1
-        CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0
-        ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 0
-        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
-        IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 0
-        RESTRICTION_FOR_SENSITIVE_CASE: 0
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 0
-        MAX_TURNS_WITHOUT_SCRIPTS: 100
-        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 0
-        PRIORITIZE_SCRIPTED_SKILLS: 0
-        CONFIDENCE_STRENGTH: 0.8
-        CONV_EVAL_STRENGTH: 0.4
-        PRIORITIZE_HUMAN_INITIATIVE: 1
-        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-        LANGUAGE: RU
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        SENTENCE_RANKER_ANNOTATION_NAME: dialogrpt
+        SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
       context: .
-      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8009
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
     environment:
       - FLASK_APP=server
     deploy:

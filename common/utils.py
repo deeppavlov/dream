@@ -1278,15 +1278,22 @@ def find_first_complete_sentence(sentences):
     return None
 
 
-def is_toxic_or_badlisted_utterance(annotated_utterance):
+def is_toxic_utterance(annotated_utterance):
     toxic_result = get_toxic(annotated_utterance, probs=False)
     toxic_result = [] if "not_toxic" in toxic_result else toxic_result
     # now toxic_result is empty if not toxic utterance
-    toxic_result = True if len(toxic_result) > 0 else False
+    return True if len(toxic_result) > 0 else False
+
+
+def is_badlisted_utterance(annotated_utterance):
     default_badlist = {"bad_words": False}
     badlist_result = annotated_utterance.get("annotations", {}).get("badlisted_words", default_badlist)
 
-    return toxic_result or any([badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]])
+    return any([badlist_result.get(bad, False) for bad in ["bad_words", "inappropriate", "profanity"]])
+
+
+def is_toxic_or_badlisted_utterance(annotated_utterance):
+    return is_toxic_utterance(annotated_utterance) or is_badlisted_utterance(annotated_utterance)
 
 
 FACTOID_PATTERNS = re.compile(
