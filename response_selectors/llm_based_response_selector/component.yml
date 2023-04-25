@@ -1,0 +1,118 @@
+davinci3-based-response-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: davinci3-based-response-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8003
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8003
+    SERVICE_NAME: response_selector
+    GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+    GENERATIVE_TIMEOUT: 7
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
+  date_created: '2023-04-24T09:45:32'
+chatgpt-based-response-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: chatgpt-based-response-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8003
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8003
+    SERVICE_NAME: response_selector
+    GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+    GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+    GENERATIVE_TIMEOUT: 7
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
+  date_created: '2023-04-24T09:45:32'
+oasst12b-based-response-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: oasst12b-based-response-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8003
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8003
+    SERVICE_NAME: response_selector
+    GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
+  date_created: '2023-04-24T09:45:32'
+gptj-based-response-selector:
+  name: response_selector
+  display_name: Response Selector
+  container_name: gptj-based-response-selector
+  component_type: null
+  model_type: Dictionary/Pattern-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Algorithm that selects the final response among the given list of candidate
+    responses via asking the given LLM service to `Select {CRITERION} response
+    among the hypotheses to the given dialog context. Return only the selected response
+    without extra explanations.` where the default CRITERION is `the most appropriate,
+    relevant and non-toxic`. CRITERION can be customized.
+  ram_usage: 100M
+  gpu_usage: null
+  port: 8003
+  endpoints:
+  - group: response_selectors
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8003
+    SERVICE_NAME: response_selector
+    GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+    GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+    GENERATIVE_TIMEOUT: 5
+    N_UTTERANCES_CONTEXT: 5
+    FILTER_TOXIC_OR_BADLISTED: 1
+    CRITERION: the most appropriate, relevant and non-toxic
+  date_created: '2023-04-24T09:45:32'
