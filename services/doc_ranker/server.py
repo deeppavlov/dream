@@ -16,6 +16,7 @@ app = Flask(__name__)
 DATASET_PATH = os.environ.get("DATASET_PATH", None)
 ORIGINAL_FILE_PATH = os.environ.get("ORIGINAL_FILE_PATH", None)
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
+SERVICE_PORT = os.environ.get("SERVICE_PORT", None)
 if CONFIG_PATH is None:
     raise NotImplementedError("No config file name is given.")
 if DATASET_PATH is None:
@@ -54,4 +55,4 @@ def detect():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8200)
+    app.run(debug=False, host="0.0.0.0", port={SERVICE_PORT})

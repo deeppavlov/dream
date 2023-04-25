@@ -32,8 +32,6 @@ def build_dataset():
                 with open(new_f, "w") as f_out:
                     f_out.write(buf)
                 buf = ""
-                print(f"creating {DATASET_PATH + str(i) + '.txt'}")
-                print(os.path.abspath(DATASET_PATH + str(i) + ".txt"))
 
 
 if expand_path(model_config["metadata"]["variables"]["MODEL_PATH"]).exists():
