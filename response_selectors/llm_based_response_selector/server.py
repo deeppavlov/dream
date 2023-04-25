@@ -19,8 +19,8 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-DEFAULT_CRITERION = "the most appropriate, relevant and non-toxic"
 
+DEFAULT_CRITERION = "the most appropriate, relevant and non-toxic"
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
@@ -50,6 +50,8 @@ def filter_out_badlisted_or_toxic(hypotheses):
         is_toxic = is_toxic_or_badlisted_utterance(hyp)
         if not is_toxic:
             clean_hypotheses += [deepcopy(hyp)]
+        else:
+            logger.info(f"Filter out toxic candidate: {hyp['text']}")
     return clean_hypotheses
 
 
