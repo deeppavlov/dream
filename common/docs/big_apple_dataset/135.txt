@@ -1,3 +1,0 @@
-Apple Inc. | 2021 Form 10-K | 26
-
-To provide an assessment of the foreign currency risk associated with certain of the Company’s foreign currency derivative positions, the Company performed a sensitivity analysis using a value-at-risk (“VAR”) model to assess the potential impact of fluctuations in exchange rates.The VAR model consisted of using a Monte Carlo simulation to generate thousands of random market price paths assuming normal market conditions.The VAR is the maximum expected loss in fair value, for a given confidence interval, to the Company’s foreign currency derivative positions due to adverse movements in rates.The VAR model is not intended to represent actual losses but is used as a risk estimation and management tool.

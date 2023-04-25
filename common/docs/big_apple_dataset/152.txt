@@ -1,4 +1,0 @@
-Changes in the fair value of amounts excluded from the assessment of hedge effectiveness are recognized in OCI.Gains and losses arising from changes in the fair values of derivative instruments that are not designated as accounting hedges are recognized in the Consolidated Statements of Operations line items to which the derivative instruments relate.Apple Inc. | 2021 Form 10-K | 35
-
-The Company presents derivative assets and liabilities at their gross fair values in the Consolidated Balance Sheets.The Company classifies cash flows related to derivative instruments as operating activities in the Consolidated Statements of Cash Flows.Fair Value Measurements
-The fair values of the Company’s money market funds and certain marketable equity securities are based on quoted prices in active markets for identical assets.

@@ -1,5 +1,0 @@
-Apple Inc. | 2021 Form 10-K | 25
-
-Item 7A.Quantitative and Qualitative Disclosures About Market Risk
-Interest Rate and Foreign Currency Risk Management
-The Company regularly reviews its foreign exchange forward and option positions and interest rate swaps, both on a stand-alone basis and in conjunction with its underlying foreign currency and interest rate exposures.Given the effective horizons of the Company’s risk management activities and the anticipatory nature of the exposures, there can be no assurance these positions will offset more than a portion of the financial impact resulting from movements in either foreign exchange or interest rates.Further, the recognition of the gains and losses related to these instruments may not coincide with the timing of gains and losses related to the underlying economic exposures and, therefore, may adversely affect the Company’s financial condition and operating results.
