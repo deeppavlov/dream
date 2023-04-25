@@ -19,6 +19,8 @@ ARG FILTER_TOXIC_OR_BADLISTED=1
 ENV FILTER_TOXIC_OR_BADLISTED ${FILTER_TOXIC_OR_BADLISTED}
 
 COPY ./response_selectors/ranking_based_response_selector/ /src/
+COPY ./common/ ./common/
+
 WORKDIR /src
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
