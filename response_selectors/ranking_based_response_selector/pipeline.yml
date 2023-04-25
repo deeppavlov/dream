@@ -1,0 +1,40 @@
+ranking-based-response-selector-service:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://ranking-based-response-selector-service:8002/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance
+ranking-based-response-selector-ru-service:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://ranking-based-response-selector-ru-service:8002/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance
+ranking-based-response-selector-ru:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://ranking-based-response-selector-ru:8002/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance
+ranking-based-response-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://ranking-based-response-selector:8002/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance

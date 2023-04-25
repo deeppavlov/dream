@@ -46,3 +46,28 @@ transformers-lm-bloomz7b:
     PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
     HALF_PRECISION: 0
   date_created: '2023-03-16T09:45:32'
+transformers-lm-oasst12b:
+  name: transformers_lm_oasst12b
+  display_name: Open-Assistant SFT-1 12B
+  container_name: transformers-lm-oasst12b
+  component_type: null
+  model_type: NN-based
+  is_customizable: false
+  author: DeepPavlov
+  description: generative service based on Transformers generative model, the model
+    is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular,
+    in this service, 
+    [Open-Assistant SFT-1 12B model](https://huggingface.co/OpenAssistant/oasst-sft-1-pythia-12b)
+    is used.
+  ram_usage: 3G
+  gpu_usage: 26G
+  port: 8158
+  endpoints:
+  - group: services
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8158
+    SERVICE_NAME: transformers_lm_oasst12b
+    PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/oasst-sft-1-pythia-12b
+    HALF_PRECISION: 1
+  date_created: '2023-04-11T09:45:32'

@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  dialogrpt-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  transformers-lm-llama7bru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
