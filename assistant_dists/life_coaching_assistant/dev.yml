@@ -40,18 +40,17 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm-gptj:
+  openai-api-davinci3:
     volumes:
-      - "./services/transformers_lm:/src"
+      - "./services/openai_api_lm:/src"
       - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8130:8130
-  dff-empathetic-marketing-prompted-skill:
+      - 8131:8131
+  dff-life-coaching-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8138:8138
+      - 8142:8142
 
 version: "3.7"

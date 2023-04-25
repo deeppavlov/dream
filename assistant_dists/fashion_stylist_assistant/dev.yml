@@ -47,7 +47,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8158:8158
-  dff-da-costa-clothes-prompted-skill:
+  dff-fashion-stylist-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
