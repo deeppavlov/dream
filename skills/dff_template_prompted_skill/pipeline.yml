@@ -13,7 +13,7 @@ dff-ai-faq-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-ai-faq-prompted-skill:8143/respond
   dialog_formatter: state_formatters.dp_formatters:dff_ai_faq_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -35,7 +35,7 @@ dff-marketing-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-marketing-prompted-skill:8138/respond
   dialog_formatter: state_formatters.dp_formatters:dff_marketing_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -46,7 +46,7 @@ dff-fashion-stylist-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-fashion-stylist-prompted-skill:8144/respond
   dialog_formatter: state_formatters.dp_formatters:dff_fashion_stylist_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -57,7 +57,7 @@ dff-dream-persona-gpt-j-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-dream-persona-gpt-j-prompted-skill:8134/respond
   dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -68,7 +68,7 @@ dff-nutrition-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-nutrition-prompted-skill:8141/respond
   dialog_formatter: state_formatters.dp_formatters:dff_nutrition_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
