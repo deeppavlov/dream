@@ -1105,6 +1105,42 @@ def dff_deeppavlov_prompted_skill_formatter(dialog):
     )
 
 
+def dff_casual_email_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_casual_email_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
+    )
+
+
+def dff_meeting_notes_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_meeting_notes_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
+    )
+
+
+def dff_official_email_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_official_email_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
+    )
+
+
+def dff_plan_for_article_prompted_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_plan_for_article_prompted_skill",
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
+    )
+
+
 def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
