@@ -95,7 +95,7 @@ services:
           memory: 100M
 
   dff-casual-email-prompted-skill:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8154
@@ -117,7 +117,7 @@ services:
           memory: 128M
 
   dff-meeting-notes-prompted-skill:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8155
@@ -139,7 +139,7 @@ services:
           memory: 128M
 
   dff-official-email-prompted-skill:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8156
@@ -161,7 +161,7 @@ services:
           memory: 128M
 
   dff-plan-for-article-prompted-skill:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8157
