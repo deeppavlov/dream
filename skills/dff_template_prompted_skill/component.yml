@@ -84,8 +84,8 @@ dff-dream-persona-davinci3-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes GPT-3.5 to generate
+    responses based on the given Dream persona description.
   ram_usage: 150M
   gpu_usage: null
   port: 8137
@@ -110,8 +110,8 @@ dff-dream-persona-gpt-j-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes GPT-J 6B to generate
+    responses based on the given Dream persona description.
   ram_usage: 150M
   gpu_usage: null
   port: 8134
@@ -267,8 +267,8 @@ dff-dream-persona-llama7bru-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes Russian LLaMA to generate
+    responses based on the given Dream persona description.
   ram_usage: 150M
   gpu_usage: null
   port: 8151
@@ -291,8 +291,9 @@ dff-deeppavlov-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes ChatGPT to generate
+    responses from the digital assistant performing any task that a user
+    can ask for.
   ram_usage: 150M
   gpu_usage: null
   port: 8146
