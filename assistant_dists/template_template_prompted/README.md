@@ -1,4 +1,4 @@
-# Dream Prompted Distribution
+# Template Prompted Distribution
 
 **_One may consider this distribution as a TEMPLATE for a prompt-based distribution which may contain any number of 
 prompt-based skills each of which is conditioned on a single prompt during the whole conversation_**
@@ -7,25 +7,31 @@ prompt-based skills each of which is conditioned on a single prompt during the w
 
 # What is Dream Prompted Distribution
 
-Dream Prompted distribution is an example of the prompt-based dialogue system which contains one prompt-based skill, 
+Template Prompted distribution is an example of the prompt-based dialogue system which contains one prompt-based skill, 
 in particular, prompt is a persona description. 
 
-Dream Prompted distribution contains the following skills:
+Template Prompted distribution contains the following skills:
 * Dummy Skill (`dummy_skill`) is a fallback skill (also it is a part of agent container, so no separate container required)
-* DFF Dream Persona Prompted Skill (`dff_template_template_prompted_skill`) is a skill created via DFF (Dialog Flow Framework)
+* DFF Template Prompted Skill (`dff_template_template_prompted_skill`) is a skill created via DFF (Dialog Flow Framework)
 which generates a response to the current dialogue context taking into account the given prompt, i.g., bot's persona description.
 
-### DFF Dream Persona Prompted Skill
+### DFF Template Prompted Skill
 
-The **DFF Dream Persona Prompted Skill** is a light-weight container sending requests to the generative service 
+The **DFF Template Prompted Skill** is a light-weight container sending requests to the generative service 
 which utilizes a neural network for prompt-based generation.
-DFF Dream Persona Prompted Skill accepts two main environmental variables:
+DFF Template Prompted Skill accepts two main environmental variables:
   * `PROMPT_FILE`  contains a path to a JSON file containing dictionary with prompt, 
   * `GENERATIVE_SERVICE_URL` contains a URL of the generative service to be used.
   The service must utilize the same input-output format as Transformers-LM (`transformers_lm`). 
+  * `GENERATIVE_SERVICE_CONFIG` contains a name of config file containing the generative service's parameters to be used.
+  * `GENERATIVE_TIMEOUT` contains a timeout in seconds for the generative service.
   * `N_UTTERANCES_CONTEXT` contains lengths of the considered context in terms of number of dialogue utterances.
+  * `ENVVARS_TO_SEND` \[optional\] contains names of environmental variables to be sent to generative service (for example, API keys for OpenAI).
+  These environmental variables can be specified only in case of development mode (not in production).
+  In production mode, the API keys are a part of the request.
 
-**Note!** DFF Dream Persona Prompted Skill utilizes a special universal template `skills/dff_template_prompted_skill`
+
+**Note!** DFF Template Prompted Skill utilizes a special universal template `skills/dff_template_prompted_skill`
 which do not require creation of the new skill's directory. For your convenience, creating a new skill, 
 you should utilize the same template folder but specify another prompt file, service port, and specify another container name.
 
@@ -38,9 +44,9 @@ the most relevant prompts (precisely, it returns ordered list of prompt names) a
 The `,`-joint list of the prompt names to be considered is given as an environmental variable `PROMPTS_TO_CONSIDER`.
 Each considered prompt should be located as `dream/common/prompts/<prompt_name>.json`.
 
-**Note!** In the Dream Persona Prompted Distribution we give a list of prompts to the Prompt Selector: `template_template,pizza` 
-separated with semicolon just for the demonstration of the `PROMPTS_TO_CONSIDER`'s input format. Actually,
-Dream Persona Prompted Distribution contains only one prompted skill which utilizes Dream Persona prompt.
+**Note!** In the Template Prompted Distribution we give a single prompt to the Prompt Selector: `template_template`.
+You may specify several prompts separated with semicolon just for the demonstration of the `PROMPTS_TO_CONSIDER`'s input format. 
+Template Prompted Distribution contains only one prompted skill which utilizes Template prompt.
 
 ### Skill Selector
 
