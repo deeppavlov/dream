@@ -198,7 +198,7 @@ convers-evaluator-annotator:
     context: dp/proxy/
     dockerfile: Dockerfile
   environment:
-    - PROXY_PASS=dream.deeppavlov.ai:8004
+    - PROXY_PASS=proxy.deeppavlov.ai:8004
     - SERVICE_PORT=8004
 ```
 
