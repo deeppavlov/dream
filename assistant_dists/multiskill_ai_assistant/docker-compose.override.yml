@@ -3,7 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/deeppavlov_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, prompt-selector:8135, 
-        openai-api-davinci3:8131, dff-deeppavlov-prompted-skill:8146"
+        openai-api-davinci3:8131, dff-casual-email-prompted-skill:8154, dff-meeting-notes-prompted-skill:8155,
+        dff-official-email-prompted-skill:8156, dff-plan-for-article-prompted-skill:8157"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
