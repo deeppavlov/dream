@@ -105,7 +105,7 @@ If one wants to create a new prompted distribution (distribution containing prom
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.5,
-                    "url": "http://dff-template-template-gpt-j-prompted-skill:template_port/respond"
+                    "url": "http://dff-template-template-prompted-skill:template_port/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_template_template_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
