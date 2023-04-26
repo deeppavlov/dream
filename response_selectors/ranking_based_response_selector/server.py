@@ -71,7 +71,7 @@ def get_scores(dialog_context, hypotheses):
 
 def select_response(dialog_context, hypotheses):
     scores = get_scores(dialog_context, hypotheses)
-    scores = [score if hyp["skill_name"] != "dummy_skill" else score / 100 for score, hyp in zip(scores, hypotheses)]
+    scores = [score if hyp["skill_name"] != "dummy_skill" else score - 1 for score, hyp in zip(scores, hypotheses)]
     logger.info(f"Scores for selection:\n`{scores}`")
     result = select_response_by_scores(hypotheses, scores)[0]
     logger.info(f"ranking_based_response_selector selected:\n`{result}`")
