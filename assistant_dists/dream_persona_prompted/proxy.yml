@@ -1,5 +1,4 @@
 services:
-
   sentseg:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -28,7 +27,7 @@ services:
       - PORT=8087
 
   sentence-ranker:
-    command: [ "nginx", "-g", "daemon off;" ]
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
@@ -36,4 +35,13 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8128
       - PORT=8128
 
-version: '3.7'
+  transformers-lm-gptj:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8130
+      - PORT=8130
+
+version: "3.7"
