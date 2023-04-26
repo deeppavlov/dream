@@ -135,9 +135,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 40G
+          memory: 50G
         reservations:
-          memory: 40G
+          memory: 50G
 
   dff-dream-persona-gpt-j-prompted-skill:
     env_file: [ .env ]
