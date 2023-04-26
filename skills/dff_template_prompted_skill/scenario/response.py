@@ -3,6 +3,7 @@ import logging
 import re
 import requests
 import sentry_sdk
+import random
 from os import getenv
 from typing import Any
 
@@ -13,8 +14,15 @@ from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
+TELL_MORE_TEMPLATES = [
+    "Do you want me to tell you more?",
+    "Shall I continue?",
+    "Do you want to know more?",
+]
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
@@ -29,7 +37,9 @@ ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
 # check if at least one of the env variables is not None
-if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+if len(sending_variables.keys()) > 0 and all(
+    [var_value is None for var_value in sending_variables.values()]
+):
     raise NotImplementedError(
         "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
     )
@@ -58,7 +68,9 @@ def compose_data_for_model(ctx, actor):
 
     history = int_ctx.get_utterances(ctx, actor)
     for i in range(1, len(history) + 1, 2):
-        is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i].get("text", ""))
+        is_new_prompt = re.search(
+            PROMPT_REPLACEMENT_COMMAND, history[-i].get("text", "")
+        )
         is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i].get("text", ""))
         if ALLOW_PROMPT_RESET and (is_new_prompt or is_reset_prompt):
             # cut context on the last user utterance utilizing the current prompt
@@ -98,7 +110,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 GENERATIVE_SERVICE_URL,
                 json={
                     "dialog_contexts": [dialog_context],
-                    "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
+                    "prompts": [
+                        prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
+                    ],
                     "configs": [GENERATIVE_SERVICE_CONFIG],
                     **sending_variables,
                 },
@@ -119,9 +133,16 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             logger.info(f"cutting hypotheses for OpenAssistant, the result: {hyp}")
         hyp_text = " ".join(hyp.split())
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
+            hyp_text = (
+                ".".join(hyp_text.split(".")[:-1])
+                + " "
+                + random.choice(TELL_MORE_TEMPLATES)
+            )
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        gathering_responses(
+            hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+        )
 
     if len(curr_responses) == 0:
         return ""
