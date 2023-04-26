@@ -24,7 +24,7 @@ dff-fairytale-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 7.0
+    timeout: 30.0
     url: http://dff-fairytale-prompted-skill:8139/respond
   dialog_formatter: state_formatters.dp_formatters:dff_fairytale_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
