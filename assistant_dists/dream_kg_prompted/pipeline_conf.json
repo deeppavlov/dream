@@ -491,7 +491,7 @@
             "dff_template_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 10,
                     "url": "http://dff-template-prompted-skill:8133/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_template_prompted_skill_formatter",
