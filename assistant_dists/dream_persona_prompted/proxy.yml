@@ -1,4 +1,5 @@
 services:
+
   sentseg:
     command: ["nginx", "-g", "daemon off;"]
     build:
