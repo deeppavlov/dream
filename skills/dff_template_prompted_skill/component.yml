@@ -85,8 +85,8 @@ dff-dream-persona-davinci3-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes GPT-3.5 to generate
+    responses based on the given Dream persona description.
   ram_usage: 150M
   gpu_usage: null
   port: 8137
@@ -111,8 +111,8 @@ dff-dream-persona-gpt-j-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes GPT-J 6B to generate
+    responses based on the given Dream persona description.
   ram_usage: 150M
   gpu_usage: null
   port: 8134
@@ -268,8 +268,8 @@ dff-dream-persona-llama7bru-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes Russian LLaMA to generate
+    responses based on the given Dream persona description.
   ram_usage: 150M
   gpu_usage: null
   port: 8151
@@ -292,8 +292,9 @@ dff-deeppavlov-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Prompt-based skill that utilizes given generative service to generate
-    responses based on the given prompt.
+  description: Prompt-based skill that utilizes ChatGPT to generate
+    responses from the digital assistant performing any task that a user
+    can ask for.
   ram_usage: 150M
   gpu_usage: null
   port: 8146
@@ -311,3 +312,107 @@ dff-deeppavlov-prompted-skill:
       ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       ALLOW_PROMPT_RESET: 1
   date_created: '2023-03-16T09:45:32'
+dff-casual-email-prompted-skill:
+  name: dff_casual_email_prompted_skill
+  display_name: Causal Emails Skill
+  container_name: dff-casual-email-prompted-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Prompt-based skill that utilizes GPT-3.5 to generate
+    email of casual style based on the given by user email draft.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8154
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8154
+    SERVICE_NAME: dff_casual_email_prompted_skill
+    PROMPT_FILE: common/prompts/casual_email.json
+    GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_TIMEOUT: 7
+    N_UTTERANCES_CONTEXT: 7
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+  date_created: '2023-04-26T09:45:32'
+dff-meeting-notes-prompted-skill:
+  name: dff_meeting_notes_prompted_skill
+  display_name: Meeting Notes Skill
+  container_name: dff-meeting-notes-prompted-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Prompt-based skill that utilizes GPT-3.5 to generate
+    meeting notes based on the meeting script.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8155
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8155
+    SERVICE_NAME: dff_meeting_notes_prompted_skill
+    PROMPT_FILE: common/prompts/meeting_notes.json
+    GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_TIMEOUT: 7
+    N_UTTERANCES_CONTEXT: 7
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+  date_created: '2023-04-26T09:45:32'
+dff-official-email-prompted-skill:
+  name: dff_official_email_prompted_skill
+  display_name: Official Email Skill
+  container_name: dff-official-email-prompted-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Prompt-based skill that utilizes GPT-3.5 to generate
+    email of official style based on the given by user email draft.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8156
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8156
+    SERVICE_NAME: dff_official_email_prompted_skill
+    PROMPT_FILE: common/prompts/official_email.json
+    GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_TIMEOUT: 7
+    N_UTTERANCES_CONTEXT: 7
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+  date_created: '2023-04-26T09:45:32'
+dff-plan-for-article-prompted-skill:
+  name: dff_plan_for_article_prompted_skill
+  display_name: Plan for Article Skill
+  container_name: dff-plan-for-article-prompted-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Prompt-based skill that utilizes GPT-3.5 to generate
+    a plan for an article on the topic given by the user.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8157
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8157
+    SERVICE_NAME: dff_plan_for_article_prompted_skill
+    PROMPT_FILE: common/prompts/plan_for_article.json
+    GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_TIMEOUT: 7
+    N_UTTERANCES_CONTEXT: 7
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+  date_created: '2023-04-26T09:45:32'
