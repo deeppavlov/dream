@@ -27,12 +27,6 @@ N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 ALLOW_PROMPT_RESET = int(getenv("ALLOW_PROMPT_RESET", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
-# check if at least one of the env variables is not None
-if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-    raise NotImplementedError(
-        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
-    )
 
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
@@ -68,6 +62,13 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
+def if_none_var_values(sending_variables):
+    if len(sending_variables.keys()) > 0 and all([var_value[0] is None for var_value in sending_variables.values()]):
+        return True
+    else:
+        False
+
+
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
@@ -87,6 +88,18 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
+    # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
+    # from user_utterance attributes or from environment
+    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in ENVVARS_TO_SEND}
+    if if_none_var_values(sending_variables):
+        sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
+        if if_none_var_values(sending_variables):
+            logger.info(f"Did not get {ENVVARS_TO_SEND}'s values. Sending without them.")
+        else:
+            logger.info(f"Got {ENVVARS_TO_SEND}'s values from environment.")
+    else:
+        logger.info(f"Got {ENVVARS_TO_SEND}'s values from attributes.")
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")

@@ -1012,6 +1012,7 @@ def dff_ai_faq_prompted_skill_formatter(dialog):
         "dff_ai_faq_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1021,6 +1022,7 @@ def dff_fashion_stylist_prompted_skill_formatter(dialog):
         "dff_fashion_stylist_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1030,6 +1032,7 @@ def dff_dream_persona_prompted_skill_formatter(dialog):
         "dff_dream_persona_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1039,6 +1042,7 @@ def dff_dream_persona_ru_prompted_skill_formatter(dialog):
         "dff_dream_persona_ru_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1048,6 +1052,7 @@ def dff_marketing_prompted_skill_formatter(dialog):
         "dff_marketing_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1057,6 +1062,7 @@ def dff_fairytale_prompted_skill_formatter(dialog):
         "dff_fairytale_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1066,6 +1072,7 @@ def dff_nutrition_prompted_skill_formatter(dialog):
         "dff_nutrition_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1075,6 +1082,7 @@ def dff_life_coaching_prompted_skill_formatter(dialog):
         "dff_life_coaching_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1084,6 +1092,7 @@ def dff_deepy_prompted_skill_formatter(dialog):
         "dff_deepy_prompted_skill",
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1092,6 +1101,7 @@ def dff_deeppavlov_prompted_skill_formatter(dialog):
         dialog,
         "dff_deeppavlov_prompted_skill",
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1101,6 +1111,7 @@ def dff_prompted_skill_formatter(dialog, skill_name=None):
         skill_name,
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
