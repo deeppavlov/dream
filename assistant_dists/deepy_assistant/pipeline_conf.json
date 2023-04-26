@@ -179,7 +179,7 @@
     "metadata": {
         "display_name": "Deepy Assistant",
         "author": "DeepPavlov",
-        "description": "Deepy Assistant can help a user to create a customized dialogue system.",
+        "description": "Deepy Assistant can help you write a prompt for your customized dialogue system.",
         "version": "0.0.1",
         "date_created": "2023-01-10T02:00:00",
         "ram_usage": "50 GB",
