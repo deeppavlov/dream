@@ -139,7 +139,7 @@ services:
           memory: 100M
 
   dff-template-template-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: template_port
