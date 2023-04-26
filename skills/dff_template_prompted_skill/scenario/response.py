@@ -22,6 +22,7 @@ TELL_MORE_TEMPLATES = [
     "Do you want me to tell you more?",
     "Shall I continue?",
     "Do you want to know more?",
+    "Do you want me to go on?",
 ]
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
@@ -135,10 +136,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text = (
                 ".".join(hyp_text.split(".")[:-1])
-                + " "
+                + ". "
                 + random.choice(TELL_MORE_TEMPLATES)
             )
-            hyp_text += "."
             confidence = LOW_CONFIDENCE
         gathering_responses(
             hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
