@@ -88,15 +88,19 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
+    # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
+    # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
     sending_variables = {f"{var}_list": [human_uttr_attributes.get(var, None)] for var in ENVVARS_TO_SEND}
-    logger.info(f"Got {ENVVARS_TO_SEND}'s values from attributes.")
     if if_none_var_values(sending_variables):
         sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
         if if_none_var_values(sending_variables):
             logger.info(f"Did not get {ENVVARS_TO_SEND}'s values. Sending without them.")
         else:
             logger.info(f"Got {ENVVARS_TO_SEND}'s values from environment.")
+    else:
+        logger.info(f"Got {ENVVARS_TO_SEND}'s values from attributes.")
+
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
 
