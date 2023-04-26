@@ -1,0 +1,6 @@
+ai_faq_assistant
+fairytale_assistant
+fashion_stylist_assistant
+life_coaching_assistant
+marketing_assistant
+nutrition_assistant
