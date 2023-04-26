@@ -182,7 +182,7 @@ services:
           memory: 100M
 
   dff-universal-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8147
