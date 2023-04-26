@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_prompted_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, badlisted-words:8018, combined-classification:8087, 
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
         sentence-ranker:8128, 
         transformers-lm-gptj:8130, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
         dff-universal-prompted-skill:8147"
@@ -62,23 +62,6 @@ services:
           memory: 100M
         reservations:
           memory: 100M
-
-  badlisted-words:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8018
-        SERVICE_NAME: badlisted_words
-      context: annotators/BadlistedWordsDetector/
-    command: flask run -h 0.0.0.0 -p 8018
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   sentence-ranker:
     env_file: [ .env ]
@@ -187,7 +170,7 @@ services:
       args:
         SERVICE_PORT: 8147
         SERVICE_NAME: dff_universal_prompted_skill
-        GENERATIVE_TIMEOUT: 7
+        GENERATIVE_TIMEOUT: 10
         N_UTTERANCES_CONTEXT: 7
       context: .
       dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
