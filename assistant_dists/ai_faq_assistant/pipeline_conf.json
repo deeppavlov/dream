@@ -293,7 +293,7 @@
     "metadata": {
         "display_name": "AI FAQ Assistant",
         "author": "AI for General Public",
-        "description": "You can use this Assistant to ask simple questions about today's AI technology. It will provide answers based on the FAQ given in the prompt as well as the undelying model's internal knowledge.",
+        "description": "You can use this Assistant to ask simple questions about today's AI technology. It will provide answers based on the FAQ given in the prompt as well as the underlying model's internal knowledge.",
         "version": "0.0.1",
         "date_created": "2023-01-10T02:00:00",
         "ram_usage": "50 GB",
