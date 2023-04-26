@@ -13,11 +13,7 @@ dff-ai-faq-prompted-skill:
 - group: skills
   connector:
     protocol: http
-<<<<<<< HEAD
-    timeout: 7.0
-=======
     timeout: 10.0
->>>>>>> dev
     url: http://dff-ai-faq-prompted-skill:8143/respond
   dialog_formatter: state_formatters.dp_formatters:dff_ai_faq_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
