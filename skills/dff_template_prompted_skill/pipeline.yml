@@ -1,9 +1,9 @@
-dff-my-template-prompted-skill:
+dff-template-template-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
-    url: http://dff-my-template-prompted-skill:template_port/respond
+    timeout: 10.0
+    url: http://dff-template-template-prompted-skill:template_port/respond
   dialog_formatter: state_formatters.dp_formatters:dff_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
@@ -13,7 +13,7 @@ dff-ai-faq-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-ai-faq-prompted-skill:8143/respond
   dialog_formatter: state_formatters.dp_formatters:dff_ai_faq_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -24,31 +24,31 @@ dff-fairytale-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 7.0
+    timeout: 30.0
     url: http://dff-fairytale-prompted-skill:8139/respond
   dialog_formatter: state_formatters.dp_formatters:dff_fairytale_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-dff-empathetic-marketing-prompted-skill:
+dff-marketing-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
-    url: http://dff-empathetic-marketing-prompted-skill:8138/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_empathetic_marketing_prompted_skill_formatter
+    timeout: 10.0
+    url: http://dff-marketing-prompted-skill:8138/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_marketing_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-dff-da-costa-clothes-prompted-skill:
+dff-fashion-stylist-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
-    url: http://dff-da-costa-clothes-prompted-skill:8144/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_da_costa_clothes_prompted_skill_formatter
+    timeout: 10.0
+    url: http://dff-fashion-stylist-prompted-skill:8144/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_fashion_stylist_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
@@ -57,7 +57,7 @@ dff-dream-persona-gpt-j-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-dream-persona-gpt-j-prompted-skill:8134/respond
   dialog_formatter: state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
@@ -68,20 +68,20 @@ dff-nutrition-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
+    timeout: 10.0
     url: http://dff-nutrition-prompted-skill:8141/respond
   dialog_formatter: state_formatters.dp_formatters:dff_nutrition_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
   state_manager_method: add_hypothesis
-dff-rhodes-coaching-prompted-skill:
+dff-life-coaching-prompted-skill:
 - group: skills
   connector:
     protocol: http
     timeout: 7.0
-    url: http://dff-rhodes-coaching-prompted-skill:8142/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter
+    url: http://dff-life-coaching-prompted-skill:8142/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_life_coaching_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
@@ -126,6 +126,50 @@ dff-deeppavlov-prompted-skill:
     timeout: 15.0
     url: http://dff-deeppavlov-prompted-skill:8146/respond
   dialog_formatter: state_formatters.dp_formatters:dff_deeppavlov_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-casual-email-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 10.0
+    url: http://dff-casual-email-prompted-skill:8154/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_casual_email_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-meeting-notes-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 10.0
+    url: http://dff-meeting-notes-prompted-skill:8155/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_meeting_notes_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-official-email-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 10.0
+    url: http://dff-official-email-prompted-skill:8156/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_official_email_prompted_skill_formatter
+  response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+  previous_services:
+  - skill_selectors
+  state_manager_method: add_hypothesis
+dff-plan-for-article-prompted-skill:
+- group: skills
+  connector:
+    protocol: http
+    timeout: 10.0
+    url: http://dff-plan-for-article-prompted-skill:8157/respond
+  dialog_formatter: state_formatters.dp_formatters:dff_plan_for_article_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors

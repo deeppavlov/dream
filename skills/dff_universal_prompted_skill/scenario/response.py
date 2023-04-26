@@ -74,6 +74,13 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
+def if_none_var_values(sending_variables):
+    if len(sending_variables.keys()) > 0 and all([var_value[0] is None for var_value in sending_variables.values()]):
+        return True
+    else:
+        False
+
+
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
@@ -101,29 +108,39 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"lm_service: {lm_service}")
 
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
-        sending_variables = {
-            f"{var}_list": [getenv(var, None)] for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
-        }
-        # check if at least one of the env variables is not None
-        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-            raise NotImplementedError(
-                "ERROR: All environmental variables have None values. At least one of them must have not None value"
-            )
+        # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
+        # from user_utterance attributes or from environment
+        envvars_to_send = CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
+        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
+        if if_none_var_values(sending_variables):
+            sending_variables = {f"{var}_list": [getenv(var, None)] for var in envvars_to_send}
+            if if_none_var_values(sending_variables):
+                logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
+            else:
+                logger.info(f"Got {envvars_to_send}'s values from environment.")
+        else:
+            logger.info(f"Got {envvars_to_send}'s values from attributes.")
     else:
         sending_variables = {}
 
     if len(dialog_context) > 0:
-        response = requests.post(
-            CONSIDERED_LM_SERVICES[lm_service]["url"],
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [prompt],
-                "configs": [CONSIDERED_LM_SERVICES[lm_service]["config"]],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
-        )
-        hypotheses = response.json()[0]
+        try:
+            response = requests.post(
+                CONSIDERED_LM_SERVICES[lm_service]["url"],
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt],
+                    "configs": [CONSIDERED_LM_SERVICES[lm_service]["config"]],
+                    **sending_variables,
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            hypotheses = response.json()[0]
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            hypotheses = []
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")

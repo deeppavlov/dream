@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 
 class MovieSkillTemplates:
-
     FAVORITE_PATTERN = r"(favorite|loved|beloved|fondling|best|most interesting)"
 
     LESSFAVORITE_PATTERN = r"(less favorite|unloved|loveless|worst|less interesting)"

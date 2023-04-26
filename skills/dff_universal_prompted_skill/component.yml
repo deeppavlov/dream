@@ -17,6 +17,6 @@ dff-universal-prompted-skill:
   build_args:
     SERVICE_PORT: 8147
     SERVICE_NAME: dff_universal_prompted_skill
-    GENERATIVE_TIMEOUT: 5
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'

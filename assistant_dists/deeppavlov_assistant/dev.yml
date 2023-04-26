@@ -5,12 +5,12 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  no-restrictions-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
+      - 8002:8002
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
