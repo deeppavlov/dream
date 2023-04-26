@@ -113,6 +113,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
     for hyp in hypotheses:
+        hyp = hyp.replace(" ".join(PROMPT.split()), "")
         confidence = DEFAULT_CONFIDENCE
         hyp_text = " ".join(hyp.split())
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
