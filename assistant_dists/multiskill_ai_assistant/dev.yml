@@ -29,6 +29,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8131:8131
+  dff-dream-persona-davinci3-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8137:8137
   dff-casual-email-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
@@ -41,7 +47,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8155:8155
-
   dff-official-email-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
