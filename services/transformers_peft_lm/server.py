@@ -55,7 +55,7 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
-        result_cut = [x for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x][0].strip()
+        result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
