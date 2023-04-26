@@ -114,6 +114,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"generated hypotheses: {hypotheses}")
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
+        if "oasst" in GENERATIVE_SERVICE_URL:
+            hyp = hyp.split("\n\n")[0]
+            logger.info(f"cutting hypotheses for OpenAssistant, the result: {hyp}")
         hyp_text = " ".join(hyp.split())
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
