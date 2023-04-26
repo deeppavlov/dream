@@ -11,12 +11,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8002:8002
-  badlisted-words-ru:
-    volumes:
-      - "./annotators/BadlistedWordsDetector_ru:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
   dialogrpt-ru:
     volumes:
       - "./services/dialogrpt_ru:/src"
