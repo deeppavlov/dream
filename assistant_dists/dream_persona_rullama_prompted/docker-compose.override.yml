@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_rullama_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "ranking-based-response-selector-ru:8002, badlisted-words-ru:8018,
+      WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
           dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
           dff-dream-persona-llama7bru-prompted-skill:8151"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
@@ -33,23 +33,6 @@ services:
           memory: 100M
         reservations:
           memory: 100M
-
-  badlisted-words-ru:
-    env_file: [ .env_ru ]
-    build:
-      args:
-        SERVICE_PORT: 8018
-        SERVICE_NAME: badlisted_words
-      context: annotators/BadlistedWordsDetector_ru/
-    command: flask run -h 0.0.0.0 -p 8018
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
 
   dialogrpt-ru:
     env_file: [ .env_ru ]
