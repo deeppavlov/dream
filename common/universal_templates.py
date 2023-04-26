@@ -23,7 +23,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 
 GENERATIVE_ROBOT_TEMPLATE = re.compile(
-    r"(AI:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:|Чат-?бот:)\s?"
+    r"(?:AI:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:|Чат-?бот:)\s?"
 )
 DUMMY_DONTKNOW_RESPONSES = {
     "EN": [
@@ -86,7 +86,9 @@ def fact_about_replace():
 
 def nounphrases_questions(nounphrase=None):
     if nounphrase and len(nounphrase) > 0:
-        question = choice(NP_OPINION_REQUESTS + UNIVERSAL_OPINION_REQUESTS).replace("NP", nounphrase)
+        question = choice(NP_OPINION_REQUESTS + UNIVERSAL_OPINION_REQUESTS).replace(
+            "NP", nounphrase
+        )
     else:
         question = opinion_request_question()
     return question
@@ -138,7 +140,9 @@ TALK_LIKE = [
     "chin",
     "talk smack",
     r"(have|hold|carry on|change|make|take|give me|turn on|"
-    r"go into)" + ARTICLES + r"(conversation|talk|chat|discussion|converse|dialog|dialogue|"
+    r"go into)"
+    + ARTICLES
+    + r"(conversation|talk|chat|discussion|converse|dialog|dialogue|"
     r"speaking|chatter|chitchat|chit chat)",
     f"tell {ANY_WORDS}",
 ]
@@ -177,7 +181,16 @@ SOMETHING_LIKE = [
     "всякое",
     "другое",
 ]
-NOTHING_LIKE = ["nothing", "none", "neither", "ничего", "нечего", "ни о чем", "не о чем", r"ни то,? ни то"]
+NOTHING_LIKE = [
+    "nothing",
+    "none",
+    "neither",
+    "ничего",
+    "нечего",
+    "ни о чем",
+    "не о чем",
+    r"ни то,? ни то",
+]
 DONOTKNOW_LIKE = [
     r"(i )?(do not|don't) know",
     "you (choose|decide|pick up)",
@@ -192,13 +205,23 @@ LIKE_TEMPLATE = ["like", "love", "prefer"]
 ASK_TEMPLATE = ["ask", "request"]
 
 # talk to me, talk with me, talk, talk with me now, talk now.
-TALK_TO_ME = join_words_in_or_pattern(TALK_LIKE) + r"(\s" + join_words_in_or_pattern(TO_ME_LIKE) + r")?"
-ABOUT_SOMETHING = join_words_in_or_pattern(ABOUT_LIKE) + r"?\s" + join_words_in_or_pattern(SOMETHING_LIKE)
+TALK_TO_ME = (
+    join_words_in_or_pattern(TALK_LIKE)
+    + r"(\s"
+    + join_words_in_or_pattern(TO_ME_LIKE)
+    + r")?"
+)
+ABOUT_SOMETHING = (
+    join_words_in_or_pattern(ABOUT_LIKE)
+    + r"?\s"
+    + join_words_in_or_pattern(SOMETHING_LIKE)
+)
 SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\s?"
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
 SOMETHING_ELSE = re.compile(
-    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))", re.IGNORECASE
+    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))",
+    re.IGNORECASE,
 )
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
@@ -218,7 +241,10 @@ COMPILE_LETS_TALK = re.compile(
 COMPILE_NOT_WANT_TO_TALK_ABOUT_IT = re.compile(
     join_sentences_in_or_pattern(
         [
-            r"(not|n't|\bno\b) " + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + join_words_in_or_pattern(TALK_LIKE),
+            r"(not|n't|\bno\b) "
+            + join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + join_words_in_or_pattern(TALK_LIKE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(TALK_LIKE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(LIKE_TEMPLATE),
             r"(not|n't|\bno\b) " + join_words_in_or_pattern(ASK_TEMPLATE),
@@ -232,11 +258,36 @@ COMPILE_LETS_TALK_ABOUT_SOMETHING = re.compile(
     join_sentences_in_or_pattern(
         [
             TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
-            join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
-            join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
-            join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
-            r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s?" + ABOUT_SOMETHING + END,
-            r"why (do not|don't) (we|us|me|you|to) " + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + END,
+            join_words_in_or_pattern(QUESTION_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + END,
+            join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + END,
+            join_words_in_or_pattern(START_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + END,
+            r"\bi\s"
+            + join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + KNOW
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + END,
+            r"why (do not|don't) (we|us|me|you|to) "
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + END,
         ]
     ),
     re.IGNORECASE,
@@ -248,12 +299,37 @@ COMPILE_SWITCH_TOPIC = re.compile(
     join_sentences_in_or_pattern(
         [
             BEGIN_OF_SENT + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
-            join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
-            join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
-            join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + r"\s?" + ABOUT_SOMETHING + " else" + END,
+            join_words_in_or_pattern(QUESTION_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + " else"
+            + END,
+            join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + " else"
+            + END,
+            join_words_in_or_pattern(START_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_SOMETHING
+            + " else"
+            + END,
             r"(switch|change|next)" + ARTICLES + "topic" + END,
             r"^next" + END,
-            r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + r"\s" + ABOUT_SOMETHING + " else" + END,
+            r"\bi\s"
+            + join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + KNOW
+            + r"\s"
+            + ABOUT_SOMETHING
+            + " else"
+            + END,
         ]
     ),
     re.IGNORECASE,
@@ -264,16 +340,60 @@ COMPILE_LETS_TALK_ABOUT_TOPIC = re.compile(
     join_sentences_in_or_pattern(
         [
             TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
-            join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
-            join_words_in_or_pattern(WANT_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
-            join_words_in_or_pattern(START_LIKE) + r"\s?" + TALK_TO_ME + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
+            join_words_in_or_pattern(QUESTION_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + SOMETHING_WITH_SPACES
+            + ABOUT_TOPIC
+            + END,
+            join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + SOMETHING_WITH_SPACES
+            + ABOUT_TOPIC
+            + END,
+            join_words_in_or_pattern(START_LIKE)
+            + r"\s?"
+            + TALK_TO_ME
+            + SOMETHING_WITH_SPACES
+            + ABOUT_TOPIC
+            + END,
             BEGIN_OF_SENT + "discuss" + r"\s" + ANY_WORDS + END,
-            join_words_in_or_pattern(QUESTION_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
-            join_words_in_or_pattern(WANT_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
-            join_words_in_or_pattern(START_LIKE) + r"\s?" + "discuss" + r"\s" + ANY_WORDS + END,
-            r"\bi\s" + join_words_in_or_pattern(WANT_LIKE) + r"\s?" + KNOW + SOMETHING_WITH_SPACES + ABOUT_TOPIC + END,
-            r"why (do not|don't) (we|us|me|you|to) " + TALK_TO_ME + r"\s?" + ABOUT_TOPIC + END,
-            r"why (do not|don't) (we|us|me|you|to) " + "discuss" + r"\s" + ANY_WORDS + END,
+            join_words_in_or_pattern(QUESTION_LIKE)
+            + r"\s?"
+            + "discuss"
+            + r"\s"
+            + ANY_WORDS
+            + END,
+            join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + "discuss"
+            + r"\s"
+            + ANY_WORDS
+            + END,
+            join_words_in_or_pattern(START_LIKE)
+            + r"\s?"
+            + "discuss"
+            + r"\s"
+            + ANY_WORDS
+            + END,
+            r"\bi\s"
+            + join_words_in_or_pattern(WANT_LIKE)
+            + r"\s?"
+            + KNOW
+            + SOMETHING_WITH_SPACES
+            + ABOUT_TOPIC
+            + END,
+            r"why (do not|don't) (we|us|me|you|to) "
+            + TALK_TO_ME
+            + r"\s?"
+            + ABOUT_TOPIC
+            + END,
+            r"why (do not|don't) (we|us|me|you|to) "
+            + "discuss"
+            + r"\s"
+            + ANY_WORDS
+            + END,
         ]
     ),
     re.IGNORECASE,
@@ -289,12 +409,16 @@ WHAT_TO_TALK_ABOUT = (
     + END
 )
 PICK_UP_THE_TOPIC = r"(pick up|choose|select|give)( me)?" + ARTICLES + r"topic" + END
-ASK_ME_SOMETHING = r"(ask|tell|say)( me)?" + join_words_in_or_pattern(SOMETHING_LIKE) + END
+ASK_ME_SOMETHING = (
+    r"(ask|tell|say)( me)?" + join_words_in_or_pattern(SOMETHING_LIKE) + END
+)
 WHATS_ON_YOUR_MIND = r"what('s| is) on your mind"
 
 # ----- What do you want to talk about? / Pick up the topic. / Ask me something. ----
 COMPILE_WHAT_TO_TALK_ABOUT = re.compile(
-    join_sentences_in_or_pattern([WHAT_TO_TALK_ABOUT, PICK_UP_THE_TOPIC, ASK_ME_SOMETHING, WHATS_ON_YOUR_MIND]),
+    join_sentences_in_or_pattern(
+        [WHAT_TO_TALK_ABOUT, PICK_UP_THE_TOPIC, ASK_ME_SOMETHING, WHATS_ON_YOUR_MIND]
+    ),
     re.IGNORECASE,
 )
 
@@ -315,10 +439,13 @@ LIKE_WORDS = r"\b(prefer|adore|enjoy|love|like|stand|into\b|fond of|passionate o
 LIKE_PATTERN = re.compile(LIKE_WORDS, re.IGNORECASE)
 
 NOT_LIKE_PATTERN = re.compile(
-    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)", re.IGNORECASE
+    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)",
+    re.IGNORECASE,
 )
 
-STOP_PATTERN = re.compile(r"(stop|shut|something else|change|don't want)", re.IGNORECASE)
+STOP_PATTERN = re.compile(
+    r"(stop|shut|something else|change|don't want)", re.IGNORECASE
+)
 CONTINUE_PATTERN = re.compile(r"(continue|more|go ahead)", re.IGNORECASE)
 
 
@@ -369,7 +496,9 @@ def book_movie_music_found(annotated_uttr):
 
 
 def is_switch_topic(annotated_uttr):
-    topic_switch_detected = False  # "Topic_SwitchIntent" in get_intents(annotated_uttr, which="all")
+    topic_switch_detected = (
+        False  # "Topic_SwitchIntent" in get_intents(annotated_uttr, which="all")
+    )
 
     if topic_switch_detected or if_switch_topic(annotated_uttr["text"].lower()):
         return True
@@ -387,15 +516,21 @@ def if_choose_topic(annotated_uttr, prev_annotated_uttr=None):
     prev_annotated_uttr = {} if prev_annotated_uttr is None else prev_annotated_uttr
     uttr_ = annotated_uttr.get("text", "").lower()
     prev_uttr_ = prev_annotated_uttr.get("text", "--").lower()
-    chat_about_intent = "lets_chat_about" in get_intents(annotated_uttr, probs=False, which="intent_catcher")
+    chat_about_intent = "lets_chat_about" in get_intents(
+        annotated_uttr, probs=False, which="intent_catcher"
+    )
     user_asks_what_to_talk_about = re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr_)
     # user ask to "talk about something"
     smth1 = re.search(COMPILE_LETS_TALK_ABOUT_SOMETHING, uttr_) or (
         chat_about_intent and re.search(COMPILE_SOMETHING, uttr_)
     )
     # bot asks "what user wants to talk about", and user answers "something"
-    prev_chat_about_intent = "lets_chat_about" in get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
-    prev_uttr_asks_what_topic = prev_chat_about_intent or re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_)
+    prev_chat_about_intent = "lets_chat_about" in get_intents(
+        prev_annotated_uttr, probs=False, which="intent_catcher"
+    )
+    prev_uttr_asks_what_topic = prev_chat_about_intent or re.search(
+        COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_
+    )
     smth2 = prev_uttr_asks_what_topic and re.search(COMPILE_SOMETHING, uttr_)
 
     switch_topic = is_switch_topic(annotated_uttr)
@@ -410,8 +545,12 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
         return True
 
     # prev uttr is what do you want to talk about?
-    prev_chat_about_intent = "lets_chat_about" in get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
-    prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
+    prev_chat_about_intent = "lets_chat_about" in get_intents(
+        prev_annotated_uttr, probs=False, which="intent_catcher"
+    )
+    prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(
+        prev_annotated_uttr
+    )
     if prev_what_to_chat_about and is_no(annotated_uttr):
         # previously offered to chat about topic, user declines
         return True
@@ -423,7 +562,9 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
         return True
 
     # current uttr is lets talk about something else / other than
-    chat_about_intent = "lets_chat_about" in get_intents(annotated_uttr, probs=False, which="intent_catcher")
+    chat_about_intent = "lets_chat_about" in get_intents(
+        annotated_uttr, probs=False, which="intent_catcher"
+    )
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
     if chat_about and SOMETHING_ELSE.search(uttr_):
         return True
@@ -431,21 +572,31 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
 
 
 ANY_TOPIC_AMONG_OFFERED = re.compile(
-    r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know" r"|you (choose|pick up|tell me|want|wish|like)\.?$)"
+    r"(\bany\b|\ball\b|\beither\b|\bboth\b|don't know|not know"
+    r"|you (choose|pick up|tell me|want|wish|like)\.?$)"
 )
 
 
 def if_utterance_requests_topic(annotated_uttr):
     uttr_text_lower = annotated_uttr.get("text", "").lower()
-    prev_was_greeting = any([greeting_question in uttr_text_lower for greeting_question in GREETING_QUESTIONS_TEXTS])
+    prev_was_greeting = any(
+        [
+            greeting_question in uttr_text_lower
+            for greeting_question in GREETING_QUESTIONS_TEXTS
+        ]
+    )
 
-    prev_what_to_talk_about_regexp = re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr_text_lower)
+    prev_what_to_talk_about_regexp = re.search(
+        COMPILE_WHAT_TO_TALK_ABOUT, uttr_text_lower
+    )
     if prev_was_greeting or prev_what_to_talk_about_regexp:
         return True
     return False
 
 
-def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key_words=None, compiled_pattern=r""):
+def if_chat_about_particular_topic(
+    annotated_uttr, prev_annotated_uttr=None, key_words=None, compiled_pattern=r""
+):
     """Dialog context implies that the last utterances chooses particular conversational topic:
     - annotated_uttr asks "let's talk about PARTICULAR-TOPIC"
     - prev_annotated_uttr asks "what do you want to talk about?", and annotated_uttr says PARTICULAR-TOPIC.
@@ -457,36 +608,59 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     prev_uttr_ = prev_annotated_uttr.get("text", "").lower()
 
     # current uttr is lets talk about blabla
-    chat_about_intent = "lets_chat_about" in get_intents(annotated_uttr, probs=False, which="intent_catcher")
+    chat_about_intent = "lets_chat_about" in get_intents(
+        annotated_uttr, probs=False, which="intent_catcher"
+    )
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
 
     # prev uttr is what do you want to talk about?
-    prev_chat_about_intent = "lets_chat_about" in get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
-    prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
+    prev_chat_about_intent = "lets_chat_about" in get_intents(
+        prev_annotated_uttr, probs=False, which="intent_catcher"
+    )
+    prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(
+        prev_annotated_uttr
+    )
 
-    not_want = if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr)
+    not_want = if_not_want_to_chat_about_particular_topic(
+        annotated_uttr, prev_annotated_uttr
+    )
     if not_want:
         return False
     elif prev_what_to_chat_about or chat_about:
         if key_words:
             trigger_pattern = re.compile(
-                rf"{join_word_beginnings_in_or_pattern(key_words)}[a-zA-Z0-9,\-\' ]+\?", re.IGNORECASE
+                rf"{join_word_beginnings_in_or_pattern(key_words)}[a-zA-Z0-9,\-\' ]+\?",
+                re.IGNORECASE,
             )
             offered_this_topic = trigger_pattern.search(prev_uttr_)
-            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
-            if any([word in uttr_ for word in key_words]) or (offered_this_topic and user_agrees_or_any):
+            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(
+                annotated_uttr
+            )
+            if any([word in uttr_ for word in key_words]) or (
+                offered_this_topic and user_agrees_or_any
+            ):
                 return True
             else:
                 return False
         elif compiled_pattern:
             if isinstance(compiled_pattern, str):
-                offered_this_topic = re.search(rf"{compiled_pattern}[a-zA-Z0-9,\-\' ]+\?", prev_uttr_, re.IGNORECASE)
+                offered_this_topic = re.search(
+                    rf"{compiled_pattern}[a-zA-Z0-9,\-\' ]+\?",
+                    prev_uttr_,
+                    re.IGNORECASE,
+                )
             else:
                 offered_this_topic = re.search(
-                    rf"{compiled_pattern.pattern}[a-zA-Z0-9,\-\' ]+\?", prev_uttr_, re.IGNORECASE
+                    rf"{compiled_pattern.pattern}[a-zA-Z0-9,\-\' ]+\?",
+                    prev_uttr_,
+                    re.IGNORECASE,
                 )
-            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
-            if re.search(compiled_pattern, uttr_) or (offered_this_topic and user_agrees_or_any):
+            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(
+                annotated_uttr
+            )
+            if re.search(compiled_pattern, uttr_) or (
+                offered_this_topic and user_agrees_or_any
+            ):
                 return True
             else:
                 return False
@@ -546,13 +720,17 @@ QUESTION_BEGINNINGS = [
     "tell me",
 ]
 
-QUESTION_BEGINNINGS_PATTERN = re.compile(r"^(but )?" + join_words_in_or_pattern(QUESTION_BEGINNINGS), re.IGNORECASE)
+QUESTION_BEGINNINGS_PATTERN = re.compile(
+    r"^(but )?" + join_words_in_or_pattern(QUESTION_BEGINNINGS), re.IGNORECASE
+)
 
 
 def is_any_question_sentence_in_utterance(annotated_uttr):
     is_question_symbol = "?" in annotated_uttr["text"]
     sentences = re.split(r"[\.\?!]", annotated_uttr["text"])
-    is_question_any_sent = any([QUESTION_BEGINNINGS_PATTERN.search(sent.strip()) for sent in sentences])
+    is_question_any_sent = any(
+        [QUESTION_BEGINNINGS_PATTERN.search(sent.strip()) for sent in sentences]
+    )
     if is_question_any_sent or is_question_symbol:
         return True
     return False
@@ -560,20 +738,30 @@ def is_any_question_sentence_in_utterance(annotated_uttr):
 
 WORD_LOVE = r"(like|love|adore|fancy|fond of|fetch|care for|affect|desire|wish|want)"
 WORD_HATE = r"(dislike|hate|distaste|loathe|object|bar\b|abominate|disrelish)"
-DO_YOU_LOVE_PATTERN = re.compile(r"(do|whether|did|are) you " + WORD_LOVE, re.IGNORECASE)
-DO_YOU_HATE_PATTERN = re.compile(r"(do|whether|did|are) you " + WORD_HATE, re.IGNORECASE)
+DO_YOU_LOVE_PATTERN = re.compile(
+    r"(do|whether|did|are) you " + WORD_LOVE, re.IGNORECASE
+)
+DO_YOU_HATE_PATTERN = re.compile(
+    r"(do|whether|did|are) you " + WORD_HATE, re.IGNORECASE
+)
 MY_FAVORITE_PATTERN = re.compile(
     r"((is|are|was|were) my (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)|"
     r"my (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)[a-z0-9A-Z \-]* (is|are|was|were))",
     re.IGNORECASE,
 )
-I_LOVE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_LOVE, re.IGNORECASE)
-I_HATE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_HATE, re.IGNORECASE)
+I_LOVE_PATTERN = re.compile(
+    r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_LOVE, re.IGNORECASE
+)
+I_HATE_PATTERN = re.compile(
+    r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_HATE, re.IGNORECASE
+)
 WHAT_FAVORITE_PATTERN = re.compile(
-    r"(what|which)[a-z0-9A-Z \-]* your (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)", re.IGNORECASE
+    r"(what|which)[a-z0-9A-Z \-]* your (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)",
+    re.IGNORECASE,
 )
 WHAT_LESS_FAVORITE_PATTERN = re.compile(
-    r"(what|which)[a-z0-9A-Z \-]* your ((less|least)[- ]favou?rite|(the )?worst|unloved|unlovable)", re.IGNORECASE
+    r"(what|which)[a-z0-9A-Z \-]* your ((less|least)[- ]favou?rite|(the )?worst|unloved|unlovable)",
+    re.IGNORECASE,
 )
 WHAT_DO_YOU_THINK_PATTERN = re.compile(
     r"(what (do|did|are|were) you (think|believe|recognize|sure|understand|feel|appeal|suppose|imagine|guess|"
@@ -587,15 +775,23 @@ WHAT_DO_YOU_THINK_PATTERN = re.compile(
 def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict):
     entities_with_attitudes = {"like": [], "dislike": []}
     all_entities = get_entities(annotated_uttr, only_named=False, with_labels=False)
-    all_prev_entities = get_entities(prev_annotated_uttr, only_named=False, with_labels=False)
-    logger.info(f"Consider all curr entities: {all_entities}, and all previous entities: {all_prev_entities}")
+    all_prev_entities = get_entities(
+        prev_annotated_uttr, only_named=False, with_labels=False
+    )
+    logger.info(
+        f"Consider all curr entities: {all_entities}, and all previous entities: {all_prev_entities}"
+    )
     curr_entity = all_entities[0] if all_entities else ""
     prev_entity = all_prev_entities[-1] if all_prev_entities else ""
     curr_uttr_text = annotated_uttr.get("text", "")
     prev_uttr_text = prev_annotated_uttr.get("text", "")
-    curr_sentiment = get_sentiment(annotated_uttr, probs=False, default_labels=["neutral"])[0]
+    curr_sentiment = get_sentiment(
+        annotated_uttr, probs=False, default_labels=["neutral"]
+    )[0]
     current_first_sentence = (
-        annotated_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [curr_uttr_text])[0]
+        annotated_uttr.get("annotations", {})
+        .get("sentseg", {})
+        .get("segments", [curr_uttr_text])[0]
     )
 
     if "?" in current_first_sentence:
@@ -623,7 +819,9 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
     elif I_HATE_PATTERN.search(curr_uttr_text):
         # i hate .. animals -> `dislike animals`
         entities_with_attitudes["dislike"] += [curr_entity]
-    elif I_LOVE_PATTERN.search(curr_uttr_text) or MY_FAVORITE_PATTERN.search(curr_uttr_text):
+    elif I_LOVE_PATTERN.search(curr_uttr_text) or MY_FAVORITE_PATTERN.search(
+        curr_uttr_text
+    ):
         # i love .. animals -> `like animals`
         entities_with_attitudes["like"] += [curr_entity]
     elif if_chat_about_particular_topic(
@@ -631,7 +829,9 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
     ):
         # what do you want to chat about? - ANIMALS -> `like animals`
         entities_with_attitudes["like"] += [curr_entity]
-    elif if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=prev_annotated_uttr):
+    elif if_not_want_to_chat_about_particular_topic(
+        annotated_uttr, prev_annotated_uttr=prev_annotated_uttr
+    ):
         # i don't wanna talk about animals -> `dislike animals`
         entities_with_attitudes["dislike"] += [curr_entity]
     elif WHAT_DO_YOU_THINK_PATTERN.search(prev_uttr_text):
@@ -642,20 +842,29 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
             # what do you thank .. animals? - positive -> `like animals`
             entities_with_attitudes["like"] += [prev_entity]
 
-    entities_with_attitudes["like"] = [el for el in entities_with_attitudes["like"] if el]
-    entities_with_attitudes["dislike"] = [el for el in entities_with_attitudes["dislike"] if el]
+    entities_with_attitudes["like"] = [
+        el for el in entities_with_attitudes["like"] if el
+    ]
+    entities_with_attitudes["dislike"] = [
+        el for el in entities_with_attitudes["dislike"] if el
+    ]
     return entities_with_attitudes
 
 
 ANY_FRIEND_QUESTION = "Do you have any friends?"
-MY_FRIENDS_TEMPLATE = re.compile(r"my \b(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE)
+MY_FRIENDS_TEMPLATE = re.compile(
+    r"my \b(friend|buddy|buddies|homie|homey|mate\b)", re.IGNORECASE
+)
 NO_FRIENDS_TEMPLATE = re.compile(
-    r"(have )?(not|n't|no) (have )?(got )?(any )?(true |real |sincere )?" r"(friend|buddy|buddies|homie|homey|mate\b)",
+    r"(have )?(not|n't|no) (have )?(got )?(any )?(true |real |sincere )?"
+    r"(friend|buddy|buddies|homie|homey|mate\b)",
     re.IGNORECASE,
 )
 
 DFF_WIKI_TEMPLATES = {
-    "art": re.compile(r"\b(art(s|work)?|draw(s|ed|ing)?|paint(s|ed|ing)?|meme)(s)?\b", re.IGNORECASE),
+    "art": re.compile(
+        r"\b(art(s|work)?|draw(s|ed|ing)?|paint(s|ed|ing)?|meme)(s)?\b", re.IGNORECASE
+    ),
     "chill": re.compile(r"\b(chill|rest|relax)", re.IGNORECASE),
     "sleep": re.compile(r"\b(sleep|bedtime|go to bed)", re.IGNORECASE),
     "school": re.compile(r"(school|home work|homework|study)", re.IGNORECASE),
@@ -663,12 +872,18 @@ DFF_WIKI_TEMPLATES = {
     "family": r"(\bhusband|\bwife|\bspouse|\bfamily|\bkids?\b|\bchild\b|\bchildren"
     r"|\b(grand)?(ma|mom|mother|father|pa|dad|parent|daughters?|sons?|child)\b)",
     "space": re.compile(r"\b((space)(ship|flight)?(s?)|planet(s)?)\b", re.IGNORECASE),
-    "friends": re.compile(r"\b(friend|buddy|buddies|homie|homey|mate(s)?\b)", re.IGNORECASE),
-    "smartphones": re.compile(r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b", re.IGNORECASE),
+    "friends": re.compile(
+        r"\b(friend|buddy|buddies|homie|homey|mate(s)?\b)", re.IGNORECASE
+    ),
+    "smartphones": re.compile(
+        r"\b((smart)?phone(s)?|mobile|iphone|ipad|android)\b", re.IGNORECASE
+    ),
     "bitcoin": re.compile(r"\b(bitcoin|cryptocurrenc(y|ies))\b", re.IGNORECASE),
     "dinosaurs": re.compile(r"\b(dinosaur)", re.IGNORECASE),
     "robots": re.compile(r"\b(robot(s|ics)?|drone(s)?)\b", re.IGNORECASE),
-    "cars": re.compile(r"\b(car(s)?|automobile(s)?|driv(e|ed|es|ing)|auto(s)?)\b", re.IGNORECASE),
+    "cars": re.compile(
+        r"\b(car(s)?|automobile(s)?|driv(e|ed|es|ing)|auto(s)?)\b", re.IGNORECASE
+    ),
     "hiking": re.compile(r"\b(hiking|mountain(s)?)\b", re.IGNORECASE),
     "tiktok": re.compile(r"\btik[ ]?tok\b", re.IGNORECASE),
     "anime": re.compile(r"\banime\b|\bpokemon\b", re.IGNORECASE),
@@ -678,7 +893,8 @@ DFF_WIKI_TEMPLATES = {
     ),
     "hobbies": re.compile(r"\b(hobby|hobbies|interests)\b", re.IGNORECASE),
     "politics": re.compile(
-        r"\b(politic|democra|republi|liber|president|trump\b|byden\b" r"|authoritarianism|monarch|joe biden|biden\b)",
+        r"\b(politic|democra|republi|liber|president|trump\b|byden\b"
+        r"|authoritarianism|monarch|joe biden|biden\b)",
         re.IGNORECASE,
     ),
 }

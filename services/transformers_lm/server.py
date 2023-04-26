@@ -12,7 +12,9 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
@@ -29,13 +31,18 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
+def generate_responses(
+    context, model, tokenizer, prompt, generation_params, continue_last_uttr=False
+):
     outputs = []
     dialog_context = ""
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [f"{NAMING[LANGUAGE][(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+    context = [
+        f"{NAMING[LANGUAGE][(s + uttr_id) % 2]}: {uttr}"
+        for uttr_id, uttr in enumerate(context)
+    ]
     if continue_last_uttr:
         dialog_context += "\n".join(context)
     else:
@@ -60,7 +67,9 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
-        result_cut = GENERATIVE_ROBOT_TEMPLATE.split(result_cut)[0].strip()
+        result_cut = [x for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x][
+            0
+        ].strip()
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
@@ -70,7 +79,9 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if HALF_PRECISION:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
+        model = AutoModelForCausalLM.from_pretrained(
+            PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16
+        )
     else:
         model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
@@ -85,7 +96,11 @@ try:
         "num_return_sequences": 1,
     }
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
+        ["What is the goal of SpaceX?"],
+        model,
+        tokenizer,
+        "You are a SpaceX Assistant.",
+        default_config,
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
