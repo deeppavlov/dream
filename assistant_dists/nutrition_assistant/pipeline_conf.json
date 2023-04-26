@@ -175,7 +175,7 @@
             "dff_nutrition_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5.0,
+                    "timeout": 7.0,
                     "url": "http://dff-nutrition-prompted-skill:8141/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_nutrition_prompted_skill_formatter",

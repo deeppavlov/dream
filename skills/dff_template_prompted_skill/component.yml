@@ -46,7 +46,7 @@ dff-ai-faq-prompted-skill:
     PROMPT_FILE: common/prompts/ai_faq.json
     GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
-    GENERATIVE_TIMEOUT: 5
+    GENERATIVE_TIMEOUT: 7
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
 dff-fashion-stylist-prompted-skill:
@@ -204,7 +204,7 @@ dff-nutrition-prompted-skill:
     PROMPT_FILE: common/prompts/nutrition.json
     GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
-    GENERATIVE_TIMEOUT: 5
+    GENERATIVE_TIMEOUT: 7
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
 dff-life-coaching-prompted-skill:
