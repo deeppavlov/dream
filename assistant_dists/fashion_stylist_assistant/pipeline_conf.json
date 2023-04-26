@@ -157,7 +157,7 @@
             "dff_fashion_stylist_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 7.0,
+                    "timeout": 10.0,
                     "url": "http://dff-fashion-stylist-prompted-skill:8144/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_fashion_stylist_prompted_skill_formatter",

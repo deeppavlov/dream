@@ -157,7 +157,7 @@
             "dff_marketing_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5.0,
+                    "timeout": 10.0,
                     "url": "http://dff-marketing-prompted-skill:8138/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_marketing_prompted_skill_formatter",
