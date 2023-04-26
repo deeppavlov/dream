@@ -34,18 +34,17 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm-oasst12b:
+  openai-api-chatgpt:
     volumes:
-      - "./services/transformers_lm:/src"
+      - "./services/openai_api_lm:/src"
       - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8158:8158
-  dff-fashion-stylist-prompted-skill:
+      - 8145:8145
+  dff-template-template-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8144:8144
+      - template_port:template_port
 
 version: "3.7"

@@ -60,7 +60,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
-        result_cut = GENERATIVE_ROBOT_TEMPLATE.sub("\n", result_cut).strip()
+        result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
@@ -85,7 +85,11 @@ try:
         "num_return_sequences": 1,
     }
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
+        ["What is the goal of SpaceX?"],
+        model,
+        tokenizer,
+        "You are a SpaceX Assistant.",
+        default_config,
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
