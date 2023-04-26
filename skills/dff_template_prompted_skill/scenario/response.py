@@ -62,6 +62,13 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
+def if_none_var_values(sending_variables):
+    if len(sending_variables.keys()) > 0 and all([var_value[0] is None for var_value in sending_variables.values()]):
+        return True
+    else:
+        False
+
+
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
@@ -83,13 +90,13 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
     sending_variables = {f"{var}_list": [human_uttr_attributes.get(var, None)] for var in ENVVARS_TO_SEND}
-    if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+    logger.info(f"Got {ENVVARS_TO_SEND}'s values from attributes.")
+    if if_none_var_values(sending_variables):
         sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
-        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-            raise NotImplementedError(
-                "ERROR: All ENVVARS_TO_SEND (from attributes and environment) have None values. "
-                "At least one of the variables must have not None value"
-            )
+        if if_none_var_values(sending_variables):
+            logger.info(f"Did not get {ENVVARS_TO_SEND}'s values. Sending without them.")
+        else:
+            logger.info(f"Got {ENVVARS_TO_SEND}'s values from environment.")
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
 
