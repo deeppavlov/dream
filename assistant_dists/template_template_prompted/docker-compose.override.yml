@@ -2,8 +2,8 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/template_template_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, badlisted-words:8018, combined-classification:8087, 
-        sentence-ranker:8128, prompt-selector:8135,
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, badlisted-words:8018, combined-classification:8087,
+        sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145,
         dff-template-template-prompted-skill:template_port"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -117,6 +117,26 @@ services:
           memory: 3G
         reservations:
           memory: 3G
+
+  openai-api-chatgpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8145
+        SERVICE_NAME: openai_api_chatgpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8145
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   dff-template-template-prompted-skill:
     env_file: [ .env,.env_secret ]
