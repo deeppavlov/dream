@@ -128,14 +128,15 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
     for hyp in hypotheses:
+        hyp = hyp.replace(" ".join(PROMPT.split()), "")
         confidence = DEFAULT_CONFIDENCE
         hyp_text = " ".join(hyp.split())
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-            hyp_text = (
-                ".".join(hyp_text.split(".")[:-1])
-                + ". "
-                + random.choice(TELL_MORE_TEMPLATES)
-            )
+            # hyp_text = (
+            #     ".".join(hyp_text.split(".")[:-1])
+            #     + ". "
+            #     + random.choice(TELL_MORE_TEMPLATES)
+            # )
             confidence = LOW_CONFIDENCE
         gathering_responses(
             hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
