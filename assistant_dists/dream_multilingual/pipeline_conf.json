@@ -1,5 +1,53 @@
 {
     "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "segments": [
+                            "Sorry, something went wrong inside.",
+                            "Please tell me, what did you say."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ],
+            "source": {
+                "component": "components/H1bbLiJ4B8F_g77NPDgGjA.yml",
+                "service": "services/last_chance_service/service_configs/agent"
+            }
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                        "segments": [
+                            "Sorry, I need to think more on that.",
+                            "Let's talk about something else."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ],
+            "source": {
+                "component": "components/nbR-gFzod7Qx6M7GL6oiPg.yml",
+                "service": "services/timeout_service/service_configs/agent"
+            }
+        },
         "annotators": {
             "toxic_classification": {
                 "connector": {

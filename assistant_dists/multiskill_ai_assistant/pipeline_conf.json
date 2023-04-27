@@ -269,8 +269,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9ak-I1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             }
         },
