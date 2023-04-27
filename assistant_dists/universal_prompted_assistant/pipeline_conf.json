@@ -223,7 +223,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7Xg.yml!change",
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
                     "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
