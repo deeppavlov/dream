@@ -103,7 +103,7 @@
                 "connector": {
                     "protocol": "python",
                     "url": "http://emotion-classification-deepy:8015/model",
-                    "class_name": "connectors:BatchConnector"
+                    "class_name": "assistant_dists.deepy_adv.connectors:BatchConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

@@ -165,7 +165,7 @@ convers-evaluator-annotator:
     context: dp/proxy/
     dockerfile: Dockerfile
   environment:
-    - PROXY_PASS=dream.deeppavlov.ai:8004
+    - PROXY_PASS=proxy.deeppavlov.ai:8004
     - PORT=8004
 ```
 и включайте этот файл в команду запуска:

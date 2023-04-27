@@ -94,21 +94,6 @@
             }
         },
         "annotators": {
-            "spelling_preprocessing": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spelling-preprocessing:8074/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
-                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
-                }
-            },
             "sentseg": {
                 "connector": {
                     "protocol": "http",
@@ -118,31 +103,12 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
                     "service": "annotators/SentSeg/service_configs/sentseg"
-                }
-            },
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
-                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
                 }
             }
         },
@@ -171,7 +137,7 @@
             "dff_universal_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 7.0,
+                    "timeout": 10.0,
                     "url": "http://dff-universal-prompted-skill:8147/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_universal_prompted_skill_formatter",
@@ -205,24 +171,6 @@
             }
         },
         "candidate_annotators": {
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
-                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
-                }
-            },
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
@@ -265,9 +213,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://no-restrictions-selector:8009/respond"
+                    "url": "http://ranking-based-response-selector:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
@@ -275,8 +223,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7Xg.yml",
-                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/no-restrictions-selector"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7Xg.yml!change",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }

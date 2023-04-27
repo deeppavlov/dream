@@ -1,0 +1,40 @@
+davinci3-based-response-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://davinci3-based-response-selector:8003/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance
+chatgpt-based-response-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://chatgpt-based-response-selector:8003/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance
+oasst12b-based-response-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://oasst12b-based-response-selector:8003/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance
+gptj-based-response-selector:
+- group: response_selectors
+  connector:
+    protocol: http
+    url: http://gptj-based-response-selector:8003/respond
+  dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+  previous_services:
+  - response_annotators
+  state_manager_method: add_bot_utterance
