@@ -1,4 +1,4 @@
-name: dff_rhodes_coaching_prompted_skill
+name: dff_life_coaching_prompted_skill
 display_name: Rhodes Coaching Skill
 component_type: Generative
 model_type: NN-based
@@ -14,8 +14,8 @@ group: skills
 connector:
   protocol: http
   timeout: 7.0
-  url: http://dff-rhodes-coaching-prompted-skill:8142/respond
-dialog_formatter: state_formatters.dp_formatters:dff_rhodes_coaching_prompted_skill_formatter
+  url: http://dff-life-coaching-prompted-skill:8142/respond
+dialog_formatter: state_formatters.dp_formatters:dff_life_coaching_prompted_skill_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors
@@ -23,5 +23,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_template_prompted_skill/service_configs/dff-rhodes-coaching-prompted-skill
+service: skills/dff_template_prompted_skill/service_configs/dff-life-coaching-prompted-skill
 date_created: '2023-03-16T09:45:32'

@@ -1,4 +1,4 @@
-name: dff_da_costa_clothes_prompted_skill
+name: dff_fashion_stylist_prompted_skill
 display_name: da Costa Clothes Skill
 component_type: Generative
 model_type: NN-based
@@ -14,8 +14,8 @@ group: skills
 connector:
   protocol: http
   timeout: 5.0
-  url: http://dff-da-costa-clothes-prompted-skill:8144/respond
-dialog_formatter: state_formatters.dp_formatters:dff_da_costa_clothes_prompted_skill_formatter
+  url: http://dff-fashion-stylist-prompted-skill:8144/respond
+dialog_formatter: state_formatters.dp_formatters:dff_fashion_stylist_prompted_skill_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors
@@ -23,5 +23,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_template_prompted_skill/service_configs/dff-da-costa-clothes-prompted-skill
+service: skills/dff_template_prompted_skill/service_configs/dff-fashion-stylist-prompted-skill
 date_created: '2023-03-16T09:45:32'
