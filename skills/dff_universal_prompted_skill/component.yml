@@ -23,7 +23,6 @@ dff-universal-prompted-skill:
   compose_override:
     env_file:
     - .env
-    - .env_secret
     build:
       args:
         SERVICE_PORT: 8147
