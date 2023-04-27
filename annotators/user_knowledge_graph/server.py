@@ -2,6 +2,7 @@ import json
 import logging
 import uuid
 import os
+import openai
 import re
 
 import inflect
@@ -53,6 +54,7 @@ rel_kinds_dict = {
 
 DB = "test_italy_skill1"
 TEAM = "yashkens|c77b"
+openai.api_key = OPENAI_API_KEY
 
 graph = TerminusdbKnowledgeGraph(
     team=TEAM,
@@ -233,8 +235,6 @@ def get_result(request):
             found_kg_ids.append(entity_info["entity_ids"][0])
     logger.info(f"Entities_with_types: {entities_with_types}")
     logger.info(f"Text: {uttrs[0]['text']}")
-    property_extraction_result = annotations.get('property_extraction', [])
-    logger.info(f"Property Extraction: {property_extraction_result}")
 
     last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
@@ -247,23 +247,50 @@ def get_result(request):
     existing_ids = [entity["@id"] for entity in all_entities]
     logger.info(f"Existing ids: {existing_ids}")
 
-    prompts = []
-    for prop in property_extraction_result:
-        logger.debug(f"property: {prop}")
-        if "triplet" not in prop or "subject" not in prop["triplet"]:
-            pass
-        elif prop["triplet"]["subject"] == "user":
-            user_relationships = graph.search_for_relationships(id_a=user_id)
-            
-            for rel in user_relationships:
-                for entity in all_entities:
-                    if rel.get("id_b") == entity.get("@id") and entity.get("Name") == prop["triplet"]["object"]:
-                        prompts.append(f"I know that the user {rel['rel'].replace('_', ' ').lower()} {entity.get('Name')}.")
-                    else:
-                        logger.info(f"rel -- {rel}\n entity -- {entity}")
-    prompt = "\n".join(prompts)
-    prompt = ["Respond to a new friend as a kind friendly person. You MUST provide all information in the list of facts.\n\nThe list of facts:", prompt]
-    logger.info(f"prompt -- {prompt}")
+    triplets = []
+    for entity, entity_id in entities_with_types.items():
+        rels = graph.search_for_relationships(id_a=user_id, id_b=entity_id)
+        for rel in rels:
+            triplets.append(["User", entity[0], rel['rel'].split('_')[0].lower()]) #TODO: you can do better than this naive split
+        logger.info(f"rels from custom_el in KG --||-- {rels}")
+
+    logger.info(f"Found triplets in KG -- {triplets}")
+    if triplets:
+        prompt = ("Generate facts about user out of the following triplets. Don't remove objects!"
+                  "Separate the generated facts with '-'.")
+
+        # convert the triplets into a prompt
+        for triplet in triplets:
+            prompt = "\n".join([
+                prompt,
+                ", ".join(triplet)
+            ])
+
+        # define the parameters for the GPT-3 model
+        model_engine = "text-davinci-002"
+        max_tokens = 1024
+
+        # generate text from the prompt using the GPT-3 API
+        response = openai.Completion.create(
+            engine=model_engine,
+            prompt=prompt,
+            max_tokens=max_tokens,
+            n=1,
+            stop=None,
+            temperature=0.5,
+        )
+
+        # extract the generated text from the API response
+        generated_triplets = response.choices[0].text
+
+        # remove any extraneous whitespace from the generated text
+        generated_triplets = re.sub(r"\s+", " ", generated_triplets).strip()
+
+
+    else:
+        generated_triplets = ""
+    logger.info(f"Generated_triplets by gpt-3 -- {generated_triplets}")
+
     kg_parser_annotations = []
     ex_triplets = []
     if user_id in existing_ids:
@@ -316,7 +343,7 @@ def get_result(request):
         graph.index.add_entities(substr_list, ids_list, tags_list)
     logger.info(f"kg_parser_annotations: {kg_parser_annotations}")
 
-    return [{'added_to_graph': added, "triplets": kg_parser_annotations, "prompt": prompt}]
+    return [{'added_to_graph': added, "triplets": kg_parser_annotations, "NL_triplets": generated_triplets}]
 
 
 @app.route("/respond", methods=["POST"])

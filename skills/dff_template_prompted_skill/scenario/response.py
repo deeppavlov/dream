@@ -19,7 +19,6 @@ GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 USE_KG_DATA = getenv("USE_KG_DATA", False)
-USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
 with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
     GENERATIVE_SERVICE_CONFIG = json.load(f)
 
@@ -27,7 +26,6 @@ PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
-assert USER_KG_SERVICE_URL
 
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
@@ -74,9 +72,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"custom_el: {custom_el}")
     logger.info(f"user_kg: {user_kg}")
 
-    if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["prompt"]) and kg_prompt[1]:
-        final_prompt = PROMPT + "\n\n" + kg_prompt[0] + kg_prompt[1] + "\nCHAT HISTORY:\n" + "".join(dialog_contexts)
-       #"""I like italy.I am a bit confused. What would you like to chat about e?""" 
+    if USE_KG_DATA and user_kg and user_kg["NL_triplets"]:
+        kg_prompt = "\n".join([
+            "Reply to the user's utterance knowing the following facts. These facts are about the user himself. Facts:",
+            user_kg["NL_triplets"]
+        ])
+        final_prompt = "\n".join([PROMPT, kg_prompt, "\nCHAT HISTORY:\n", "".join(dialog_contexts)])
         # final_prompt = "".join([kg_prompt[0], f"{kg_prompt[1]}"])
     else:
         final_prompt = PROMPT
