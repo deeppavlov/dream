@@ -10,7 +10,7 @@ gpu_usage: null
 group: skills
 connector:
   protocol: http
-  timeout: 7.0
+  timeout: 10.0
   url: http://dff-deepy-prompted-skill:8148/respond
 dialog_formatter: state_formatters.dp_formatters:dff_deepy_prompted_skill_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service

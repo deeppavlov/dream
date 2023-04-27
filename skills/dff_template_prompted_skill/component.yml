@@ -99,7 +99,7 @@ dff-dream-persona-davinci3-prompted-skill:
     PROMPT_FILE: common/prompts/dream_persona.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-    GENERATIVE_TIMEOUT: 7
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 3
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
@@ -232,7 +232,7 @@ dff-life-coaching-prompted-skill:
     PROMPT_FILE: common/prompts/life_coaching.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-    GENERATIVE_TIMEOUT: 7
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
 dff-deepy-prompted-skill:
@@ -256,7 +256,7 @@ dff-deepy-prompted-skill:
     PROMPT_FILE: common/prompts/deepy.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
-    GENERATIVE_TIMEOUT: 7
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 3
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
@@ -334,7 +334,7 @@ dff-casual-email-prompted-skill:
     PROMPT_FILE: common/prompts/casual_email.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-    GENERATIVE_TIMEOUT: 7
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-04-26T09:45:32'
@@ -360,7 +360,7 @@ dff-meeting-notes-prompted-skill:
     PROMPT_FILE: common/prompts/meeting_notes.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-    GENERATIVE_TIMEOUT: 7
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-04-26T09:45:32'
@@ -386,7 +386,7 @@ dff-official-email-prompted-skill:
     PROMPT_FILE: common/prompts/official_email.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-    GENERATIVE_TIMEOUT: 7
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-04-26T09:45:32'
@@ -412,7 +412,7 @@ dff-plan-for-article-prompted-skill:
     PROMPT_FILE: common/prompts/plan_for_article.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-    GENERATIVE_TIMEOUT: 7
+    GENERATIVE_TIMEOUT: 10
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-04-26T09:45:32'

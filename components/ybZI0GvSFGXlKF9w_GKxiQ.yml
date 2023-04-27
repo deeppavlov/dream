@@ -13,7 +13,7 @@ gpu_usage: null
 group: skills
 connector:
   protocol: http
-  timeout: 7.0
+  timeout: 10.0
   url: http://dff-life-coaching-prompted-skill:8142/respond
 dialog_formatter: state_formatters.dp_formatters:dff_life_coaching_prompted_skill_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
