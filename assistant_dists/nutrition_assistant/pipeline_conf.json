@@ -107,7 +107,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
