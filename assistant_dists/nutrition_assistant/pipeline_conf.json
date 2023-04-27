@@ -157,7 +157,10 @@
                     "timeout": 10.0,
                     "url": "http://dff-nutrition-prompted-skill:8141/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_nutrition_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_nutrition_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

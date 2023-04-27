@@ -102,7 +102,10 @@
                     "timeout": 7.0,
                     "url": "http://dff-dream-persona-davinci3-prompted-skill:8137/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -121,7 +124,10 @@
                     "timeout": 10.0,
                     "url": "http://dff-casual-email-prompted-skill:8154/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_casual_email_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_casual_email_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -140,7 +146,10 @@
                     "timeout": 10.0,
                     "url": "http://dff-meeting-notes-prompted-skill:8155/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_meeting_notes_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_meeting_notes_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -159,7 +168,10 @@
                     "timeout": 10.0,
                     "url": "http://dff-official-email-prompted-skill:8156/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_official_email_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_official_email_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -178,7 +190,10 @@
                     "timeout": 10.0,
                     "url": "http://dff-plan-for-article-prompted-skill:8157/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_plan_for_article_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_plan_for_article_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
