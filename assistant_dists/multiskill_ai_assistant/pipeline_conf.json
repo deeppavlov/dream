@@ -189,7 +189,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
+                    "component": "components/mJFsrLmq1C2Q7bw7W6QnbT.yml",
                     "service": "skills/dff_template_prompted_skill/service_configs/dff-casual-email-prompted-skill"
                 }
             },
@@ -210,7 +210,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
+                    "component": "components/2bbCQcfY2YYjHtMCRFHImG.yml",
                     "service": "skills/dff_template_prompted_skill/service_configs/dff-meeting-notes-prompted-skill"
                 }
             },
@@ -231,7 +231,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
+                    "component": "components/8qwxH2SZE4EhXS5JqqZPkm.yml",
                     "service": "skills/dff_template_prompted_skill/service_configs/dff-official-email-prompted-skill"
                 }
             },
@@ -252,7 +252,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
+                    "component": "components/6vJmuO1GbwgIDIBc3hrwm0.yml",
                     "service": "skills/dff_template_prompted_skill/service_configs/dff-plan-for-article-prompted-skill"
                 }
             },
