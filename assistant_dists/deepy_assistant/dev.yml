@@ -29,11 +29,17 @@ services:
       - "./common:/src/common"
     ports:
       - 8131:8131
-  dff-deepy-prompted-skill:
+  dff-deepy-prompt-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8148:8148
+      - 8160:8160
+  dff-deepy-terminology-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8153:8153
 
 version: "3.7"
