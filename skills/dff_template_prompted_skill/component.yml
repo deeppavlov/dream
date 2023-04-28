@@ -48,7 +48,7 @@ dff-ai-faq-prompted-skill:
     GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
   date_created: '2023-03-16T09:45:32'
 dff-fashion-stylist-prompted-skill:
   name: dff_fashion_stylist_prompted_skill
@@ -75,7 +75,7 @@ dff-fashion-stylist-prompted-skill:
     GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
   date_created: '2023-03-16T09:45:32'
 dff-dream-persona-davinci3-prompted-skill:
   name: dff_dream_persona_prompted_skill
@@ -100,7 +100,7 @@ dff-dream-persona-davinci3-prompted-skill:
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
 dff-dream-persona-gpt-j-prompted-skill:
@@ -126,7 +126,7 @@ dff-dream-persona-gpt-j-prompted-skill:
     GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
   date_created: '2023-03-16T09:45:32'
 dff-marketing-prompted-skill:
   name: dff_marketing_prompted_skill
@@ -153,7 +153,7 @@ dff-marketing-prompted-skill:
     GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
   date_created: '2023-03-16T09:45:32'
 dff-fairytale-prompted-skill:
   name: dff_fairytale_prompted_skill
@@ -179,7 +179,7 @@ dff-fairytale-prompted-skill:
     GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
     GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
     GENERATIVE_TIMEOUT: 30
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
 dff-nutrition-prompted-skill:
@@ -206,7 +206,7 @@ dff-nutrition-prompted-skill:
     GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
     GENERATIVE_SERVICE_CONFIG: default_generative_config.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
   date_created: '2023-03-16T09:45:32'
 dff-life-coaching-prompted-skill:
   name: dff_life_coaching_prompted_skill
@@ -233,7 +233,7 @@ dff-life-coaching-prompted-skill:
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
   date_created: '2023-03-16T09:45:32'
 dff-deepy-prompted-skill:
   name: dff_deepy_prompted_skill
@@ -257,7 +257,7 @@ dff-deepy-prompted-skill:
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
   date_created: '2023-03-16T09:45:32'
 dff-dream-persona-llama7bru-prompted-skill:
@@ -282,7 +282,7 @@ dff-dream-persona-llama7bru-prompted-skill:
     PROMPT_FILE: common/prompts/dream_persona_ru.json
     GENERATIVE_SERVICE_URL: http://transformers-lm-llama7bru:8149/respond
     GENERATIVE_TIMEOUT: 10
-    N_UTTERANCES_CONTEXT: 3
+    N_UTTERANCES_CONTEXT: 7
   date_created: '2023-03-16T09:45:32'
 dff-deeppavlov-prompted-skill:
   name: dff_deeppavlov_prompted_skill
