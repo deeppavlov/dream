@@ -13,8 +13,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/H1bbLiJ4B8F_g77NPDgGjA.yml",
-                "service": "services/last_chance_service/service_configs/agent"
+                "component": "components/OpwVmWKiYYsK.yml",
+                "service": "services/agent_services/service_configs/deepy_faq"
             }
         },
         "timeout_service": {
@@ -29,8 +29,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/nbR-gFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/timeout_service/service_configs/agent"
+                "component": "components/LB9M2ATJRuRM.yml",
+                "service": "services/agent_services/service_configs/deepy_faq"
             }
         },
         "annotators": {

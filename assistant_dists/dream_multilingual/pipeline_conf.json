@@ -20,8 +20,8 @@
                 "last_chance"
             ],
             "source": {
-                "component": "components/H1bbLiJ4B8F_g77NPDgGjA.yml",
-                "service": "services/last_chance_service/service_configs/agent"
+                "component": "components/TvtHFEgVjuut.yml",
+                "service": "services/agent_services/service_configs/dream_multilingual"
             }
         },
         "timeout_service": {
@@ -44,8 +44,8 @@
                 "timeout"
             ],
             "source": {
-                "component": "components/nbR-gFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/timeout_service/service_configs/agent"
+                "component": "components/HvYsrVCd5c52.yml",
+                "service": "services/agent_services/service_configs/dream_multilingual"
             }
         },
         "annotators": {

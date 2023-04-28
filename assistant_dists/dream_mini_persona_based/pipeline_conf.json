@@ -28,8 +28,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/H1bbLiJ4B8F_g77NPDgGjA.yml",
-                "service": "services/last_chance_service/service_configs/agent"
+                "component": "components/ma8V138JayP8.yml",
+                "service": "services/agent_services/service_configs/dream_mini_persona_based"
             }
         },
         "timeout_service": {
@@ -53,8 +53,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/nbR-gFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/timeout_service/service_configs/agent"
+                "component": "components/Aq8BKfuOs07Q.yml",
+                "service": "services/agent_services/service_configs/dream_mini_persona_based"
             }
         },
         "annotators": {

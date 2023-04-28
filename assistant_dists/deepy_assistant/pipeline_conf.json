@@ -5,16 +5,15 @@
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
-                "annotations": {
-                }
+                "annotations": {}
             },
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "last_chance"
             ],
             "source": {
-                "component": "components/H1bbLiJ4B8F_g77NPDgGjA.yml",
-                "service": "services/last_chance_service/service_configs/agent"
+                "component": "components/5CCnaSNbKTaB.yml",
+                "service": "services/agent_services/service_configs/deepy_assistant"
             }
         },
         "timeout_service": {
@@ -22,16 +21,15 @@
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
-                "annotations": {
-                }
+                "annotations": {}
             },
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "timeout"
             ],
             "source": {
-                "component": "components/nbR-gFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/timeout_service/service_configs/agent"
+                "component": "components/szmBYf8nY11l.yml",
+                "service": "services/agent_services/service_configs/deepy_assistant"
             }
         },
         "response_annotator_selectors": {
@@ -52,8 +50,7 @@
                 "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
-        "response_annotators": {
-        },
+        "response_annotators": {},
         "annotators": {
             "prompt_selector": {
                 "connector": {
@@ -63,8 +60,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {

@@ -27,8 +27,8 @@
                 "last_chance"
             ],
             "source": {
-                "component": "components/H1bbLiJ4B8F_g77NPDgGjA.yml",
-                "service": "services/last_chance_service/service_configs/agent"
+                "component": "components/5J6lKI1JAjI9.yml",
+                "service": "services/agent_services/service_configs/universal_prompted_assistant"
             }
         },
         "timeout_service": {
@@ -51,8 +51,8 @@
                 "timeout"
             ],
             "source": {
-                "component": "components/nbR-gFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/timeout_service/service_configs/agent"
+                "component": "components/6UmSIUrka1Tl.yml",
+                "service": "services/agent_services/service_configs/universal_prompted_assistant"
             }
         },
         "response_annotator_selectors": {
@@ -102,8 +102,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
