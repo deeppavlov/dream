@@ -114,7 +114,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/4SJxJlf3E8TTM94Uiqt5Xg.yml",
+                    "component": "components/Nw2-SnrS4DGoALg6Cu58Zw.yml",
                     "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
                 }
             },
