@@ -274,15 +274,15 @@ DP_THRESHOLDS = {
 THRESHOLDS = {
     "deeppavlov_topics": {class_: DP_THRESHOLDS.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]},
     "toxic_classification": {
-    "identity_hate": 0.5,
-    "insult": 0.5,
-    "not_toxic": 0.5,
-    "obscene": 0.5,
-    "severe_toxic": 0.5,
-    "sexual_explicit": 0.6,
-    "threat": 0.5,
-    "toxic": 0.5,
-}
+        "identity_hate": 0.5,
+        "insult": 0.5,
+        "not_toxic": 0.5,
+        "obscene": 0.5,
+        "severe_toxic": 0.5,
+        "sexual_explicit": 0.6,
+        "threat": 0.5,
+        "toxic": 0.5,
+    },
 }
 
 midas_classes = {
