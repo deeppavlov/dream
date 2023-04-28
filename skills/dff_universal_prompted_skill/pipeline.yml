@@ -2,7 +2,7 @@ dff-universal-prompted-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 10.0
+    timeout: 14.0
     url: http://dff-universal-prompted-skill:8147/respond
   dialog_formatter: state_formatters.dp_formatters:dff_universal_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
