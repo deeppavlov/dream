@@ -40,7 +40,10 @@ def get_result(request):
     context_ids = []
 
     for context_id, context in enumerate(contexts):
-        str_context = "\n".join(context)
+        if len(context[-1].split()) < 5:
+            str_context = "\n".join(context[-3])
+        else:
+            str_context = context[-1]
         for prompt in PROMPTS:
             pairs += [[str_context, prompt]]
             context_ids += [context_id]
