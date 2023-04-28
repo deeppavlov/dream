@@ -155,6 +155,7 @@
                 }
             }
         },
+        "candidate_annotators": {},
         "response_selectors": {
             "response_selector": {
                 "connector": {

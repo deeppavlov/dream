@@ -89,6 +89,7 @@
                 }
             }
         },
+        "response_annotators": {},
         "skill_selectors": {
             "rule_based_selector": {
                 "connector": {
