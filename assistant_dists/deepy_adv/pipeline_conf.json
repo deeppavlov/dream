@@ -98,6 +98,24 @@
                 }
             }
         },
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJ-DIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
+            }
+        },
         "response_annotators": {
             "emotion_classification": {
                 "connector": {
