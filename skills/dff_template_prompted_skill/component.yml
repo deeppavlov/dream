@@ -235,10 +235,10 @@ dff-life-coaching-prompted-skill:
     GENERATIVE_TIMEOUT: 7
     N_UTTERANCES_CONTEXT: 3
   date_created: '2023-03-16T09:45:32'
-dff-deepy-prompted-skill:
-  name: dff_deepy_prompted_skill
+dff-deepy-terminology-prompted-skill:
+  name: dff_deepy_terminology_prompted_skill
   display_name: Deepy Assistant Skill
-  container_name: dff-deepy-prompted-skill
+  container_name: dff-deepy-terminology-prompted-skill
   component_type: Generative
   model_type: NN-based
   is_customizable: true
@@ -252,8 +252,33 @@ dff-deepy-prompted-skill:
     endpoint: respond
   build_args:
     SERVICE_PORT: 8148
-    SERVICE_NAME: dff_deepy_prompted_skill
-    PROMPT_FILE: common/prompts/deepy.json
+    SERVICE_NAME: dff_deepy_terminology_prompted_skill
+    PROMPT_FILE: common/prompts/deepy_terminology.json
+    GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+    GENERATIVE_TIMEOUT: 7
+    N_UTTERANCES_CONTEXT: 3
+    ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+  date_created: '2023-03-16T09:45:32'
+dff-deepy-prompt-prompted-skill:
+  name: dff_deepy_prompt_prompted_skill
+  display_name: Deepy Assistant Skill
+  container_name: dff-deepy-prompt-prompted-skill
+  component_type: Generative
+  model_type: NN-based
+  is_customizable: true
+  author: DeepPavlov
+  description: Deepy Assistant can help the user to create a customized dialogue system.
+  ram_usage: 150M
+  gpu_usage: null
+  port: 8148
+  endpoints:
+  - group: skills
+    endpoint: respond
+  build_args:
+    SERVICE_PORT: 8148
+    SERVICE_NAME: dff_deepy_prompt_prompted_skill
+    PROMPT_FILE: common/prompts/deepy_prompt.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
     GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
     GENERATIVE_TIMEOUT: 7
