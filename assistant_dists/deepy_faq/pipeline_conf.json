@@ -70,6 +70,7 @@
                 }
             }
         },
+        "skill_selectors": {},
         "skills": {
             "faq_skill": {
                 "connector": {

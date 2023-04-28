@@ -70,6 +70,7 @@
                 }
             }
         },
+        "skill_selectors": {},
         "skills": {
             "harvesters_maintenance_skill": {
                 "connector": {
