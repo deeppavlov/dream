@@ -243,15 +243,15 @@ dff-deepy-terminology-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Deepy Assistant can help the user to create a customized dialogue system.
+  description: This Deepy Skill answers questions related to Dream Builder platform.
   ram_usage: 150M
   gpu_usage: null
-  port: 8148
+  port: 8153
   endpoints:
   - group: skills
     endpoint: respond
   build_args:
-    SERVICE_PORT: 8148
+    SERVICE_PORT: 8153
     SERVICE_NAME: dff_deepy_terminology_prompted_skill
     PROMPT_FILE: common/prompts/deepy_terminology.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
@@ -268,15 +268,15 @@ dff-deepy-prompt-prompted-skill:
   model_type: NN-based
   is_customizable: true
   author: DeepPavlov
-  description: Deepy Assistant can help the user to create a customized dialogue system.
+  description: This Deepy Skill helps the user create their first simple prompt to build an AI assistant.
   ram_usage: 150M
   gpu_usage: null
-  port: 8148
+  port: 8152
   endpoints:
   - group: skills
     endpoint: respond
   build_args:
-    SERVICE_PORT: 8148
+    SERVICE_PORT: 8152
     SERVICE_NAME: dff_deepy_prompt_prompted_skill
     PROMPT_FILE: common/prompts/deepy_prompt.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
