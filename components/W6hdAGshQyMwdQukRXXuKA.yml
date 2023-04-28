@@ -4,8 +4,8 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: Prompt-based skill that utilizes given generative service to generate
-  responses based on the given prompt.
+description: Prompt-based skill that utilizes GPT-3.5 to generate
+  responses based on the given Dream persona description.
 ram_usage: 150M
 gpu_usage: null
 group: skills
