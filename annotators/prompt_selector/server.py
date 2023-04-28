@@ -41,7 +41,7 @@ def get_result(request):
 
     for context_id, context in enumerate(contexts):
         if len(context[-1].split()) < 5:
-            str_context = "\n".join(context[-3])
+            str_context = "\n".join(context[-3:])
         else:
             str_context = context[-1]
         for prompt in PROMPTS:
