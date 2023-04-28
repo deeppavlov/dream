@@ -34,7 +34,7 @@ services:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8160:8160
+      - 8152:8152
   dff-deepy-terminology-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
