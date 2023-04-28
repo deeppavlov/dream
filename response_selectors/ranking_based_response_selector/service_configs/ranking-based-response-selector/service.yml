@@ -13,6 +13,7 @@ compose:
       SENTENCE_RANKER_TIMEOUT: 3
       N_UTTERANCES_CONTEXT: 5
       FILTER_TOXIC_OR_BADLISTED: 1
+      FLASK_APP: server
     context: .
     dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
   command: flask run -h 0.0.0.0 -p 8002
