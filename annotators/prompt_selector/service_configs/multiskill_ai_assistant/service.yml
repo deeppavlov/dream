@@ -9,7 +9,7 @@ compose:
       SERVICE_PORT: 8135
       SERVICE_NAME: prompt_selector
       N_SENTENCES_TO_RETURN: 3
-      PROMPTS_TO_CONSIDER: a,b
+      PROMPTS_TO_CONSIDER: dream_persona,casual_email,meeting_notes,official_email,plan_for_article
       FLASK_APP: server
     context: .
     dockerfile: ./annotators/prompt_selector/Dockerfile
