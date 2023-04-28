@@ -64,8 +64,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/zQKIXyiV48LqnNJSR9exyA.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector"
+                    "component": "components/P6oHJQFf89qG.yml",
+                    "service": "annotators/prompt_selector/service_configs/deepy_assistant"
                 }
             }
         },

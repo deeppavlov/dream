@@ -86,8 +86,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/zQKIXyiV48LqnNJSR9exyA.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector"
+                    "component": "components/Wps5FHxkwj3Z.yml",
+                    "service": "annotators/prompt_selector/service_configs/dream_persona_prompted"
                 }
             }
         },

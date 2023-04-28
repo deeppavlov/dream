@@ -122,8 +122,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/zQKIXyiV48LqnNJSR9exyA.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector"
+                    "component": "components/5Sr7pFn5Vaiu.yml",
+                    "service": "annotators/prompt_selector/service_configs/fashion_stylist_assistant"
                 }
             }
         },
