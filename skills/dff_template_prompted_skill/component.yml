@@ -358,7 +358,7 @@ dff-casual-email-prompted-skill:
     SERVICE_NAME: dff_casual_email_prompted_skill
     PROMPT_FILE: common/prompts/casual_email.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
     GENERATIVE_TIMEOUT: 14
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
@@ -372,7 +372,7 @@ dff-meeting-notes-prompted-skill:
   is_customizable: true
   author: DeepPavlov
   description: Prompt-based skill that utilizes GPT-3.5 to generate
-    meeting notes based on the meeting script.
+    a short summary of a meeting based on meeting notes.
   ram_usage: 150M
   gpu_usage: null
   port: 8155
@@ -384,7 +384,7 @@ dff-meeting-notes-prompted-skill:
     SERVICE_NAME: dff_meeting_notes_prompted_skill
     PROMPT_FILE: common/prompts/meeting_notes.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
     GENERATIVE_TIMEOUT: 14
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
@@ -410,7 +410,7 @@ dff-official-email-prompted-skill:
     SERVICE_NAME: dff_official_email_prompted_skill
     PROMPT_FILE: common/prompts/official_email.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
     GENERATIVE_TIMEOUT: 14
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
@@ -436,7 +436,7 @@ dff-plan-for-article-prompted-skill:
     SERVICE_NAME: dff_plan_for_article_prompted_skill
     PROMPT_FILE: common/prompts/plan_for_article.json
     GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
+    GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
     GENERATIVE_TIMEOUT: 14
     N_UTTERANCES_CONTEXT: 7
     ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
