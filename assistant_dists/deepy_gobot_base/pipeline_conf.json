@@ -65,7 +65,7 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/LXrJ-DIf43gwNmPMNXG5Eg.yml",
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
                 "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
@@ -122,7 +122,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ckUclxqUpl-yzwmnYyixEw.yml",
+                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
                     "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
                 }
             }

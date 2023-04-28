@@ -16,13 +16,13 @@
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                         "segments": [
-                            "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443.",
-                            "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443."
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
                         ]
                     },
                     "ner": [
@@ -44,13 +44,13 @@
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                         "segments": [
-                            "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443.",
-                            "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443."
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
                         ]
                     },
                     "ner": [
@@ -114,7 +114,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/Nw2-SnrS4DGoALg6Cu58Zw.yml",
+                    "component": "components/Nw2SnrS4DGoALg6Cu58Zw.yml",
                     "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
                 }
             },
@@ -133,7 +133,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/WzIX0HJ0Xyo4V8ItwL--ew.yml",
+                    "component": "components/WzIX0HJ0Xyo4V8ItwLew.yml",
                     "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
                 }
             },
@@ -151,7 +151,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/3DTP1sVd_mFIBYrC8OjRYA.yml",
+                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
                     "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
@@ -189,7 +189,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/J-lk28u7nVCSNqrT1YpLAQ.yml",
+                    "component": "components/Jlk28u7nVCSNqrT1YpLAQ.yml",
                     "service": "annotators/NER_deeppavlov/service_configs/ner-ru"
                 }
             },
@@ -227,7 +227,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/m30AHfu4V-gC51bUU6Jo7A.yml",
+                    "component": "components/m30AHfu4VgC51bUU6Jo7A.yml",
                     "service": "annotators/entity_linking_rus/service_configs/entity-linking-ru"
                 }
             },
@@ -245,7 +245,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/vE3pRKimWyP_c5qaeW8Q1Q.yml",
+                    "component": "components/vE3pRKimWyPc5qaeW8Q1Q.yml",
                     "service": "annotators/fact_retrieval_rus/service_configs/fact-retrieval-ru"
                 }
             },
@@ -263,7 +263,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/feDgq_HKLibnMNM3HSbnmA.yml",
+                    "component": "components/feDgqHKLibnMNM3HSbnmA.yml",
                     "service": "annotators/wiki_parser/service_configs/wiki-parser-ru"
                 }
             }
@@ -302,7 +302,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/J-lk28u7nVCSNqrT1YpLAQ.yml",
+                    "component": "components/Jlk28u7nVCSNqrT1YpLAQ.yml",
                     "service": "annotators/NER_deeppavlov/service_configs/ner-ru"
                 }
             }
@@ -322,7 +322,7 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/LXrJ-DIf43gwNmPMNXG5Eg.yml",
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
                 "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
@@ -377,7 +377,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/3DTP1sVd_mFIBYrC8OjRYA.yml",
+                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
                     "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
@@ -395,7 +395,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/05PqJXVd-7gV7DqslN5z3A.yml",
+                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
                     "service": "annotators/entity_detection/service_configs/entity-detection"
                 }
             },
@@ -413,7 +413,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/DUW2u7Fw_PMyhBOWrK1HTg.yml",
+                    "component": "components/DUW2u7FwPMyhBOWrK1HTg.yml",
                     "service": "services/dialogrpt_ru/service_configs/dialogrpt-ru"
                 }
             }
@@ -454,7 +454,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/rJL2LobMLcELiot0Fy-9-w.yml",
+                    "component": "components/rJL2LobMLcELiot0Fy9w.yml",
                     "service": "skills/dff_program_y_skill/service_configs/dff-program-y-ru-skill"
                 }
             },
@@ -472,7 +472,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/-qJPPqfjKviU_yvDTCn2Xw.yml",
+                    "component": "components/qJPPqfjKviUyvDTCn2Xw.yml",
                     "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-ru-skill"
                 }
             },
@@ -489,7 +489,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/uYkoK0vRp4bbIg9ak-I1yw.yml",
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
                     "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
@@ -507,7 +507,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/RJuoKZw7krAuB-4LrP5-fQ.yml",
+                    "component": "components/RJuoKZw7krAuB4LrP5fQ.yml",
                     "service": "skills/personal_info_skill/service_configs/personal-info-ru-skill"
                 }
             },
@@ -525,7 +525,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/cyCwlcQF9m-AtDNcxOS6CA.yml",
+                    "component": "components/cyCwlcQF9mAtDNcxOS6CA.yml",
                     "service": "skills/dff_friendship_skill/service_configs/dff-friendship-ru-skill"
                 }
             },
@@ -543,7 +543,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/FJ-pakzPR4IC8F1sos7FSg.yml",
+                    "component": "components/FJpakzPR4IC8F1sos7FSg.yml",
                     "service": "skills/dff_generative_skill/service_configs/dff-generative-ru-skill"
                 }
             },
@@ -561,7 +561,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/pC34_2KBWtheQNnXjIni6A.yml",
+                    "component": "components/pC342KBWtheQNnXjIni6A.yml",
                     "service": "skills/dff_template_skill/service_configs/dff-template-skill"
                 }
             },

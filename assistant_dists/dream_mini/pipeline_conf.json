@@ -164,7 +164,7 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/LXrJ-DIf43gwNmPMNXG5Eg.yml",
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
                 "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
@@ -201,7 +201,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/XGwmAHtAOu0NDqqG3Q-CJw.yml",
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
                     "service": "services/sentence_ranker/service_configs/sentence-ranker"
                 }
             }
@@ -242,7 +242,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ckUclxqUpl-yzwmnYyixEw.yml",
+                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
                     "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
                 }
             },
@@ -277,7 +277,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/uYkoK0vRp4bbIg9ak-I1yw.yml",
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
                     "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
