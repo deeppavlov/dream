@@ -272,7 +272,17 @@ DP_THRESHOLDS = {
 }
 
 THRESHOLDS = {
-    "deeppavlov_topics": {class_: DP_THRESHOLDS.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]}
+    "deeppavlov_topics": {class_: DP_THRESHOLDS.get(class_, 0.9) for class_ in combined_classes["deeppavlov_topics"]},
+    "toxic_classification": {
+    "identity_hate": 0.5,
+    "insult": 0.5,
+    "not_toxic": 0.5,
+    "obscene": 0.5,
+    "severe_toxic": 0.5,
+    "sexual_explicit": 0.6,
+    "threat": 0.5,
+    "toxic": 0.5,
+}
 }
 
 midas_classes = {
@@ -635,6 +645,8 @@ def _get_combined_annotations(annotated_utterance, model_name, threshold=0.5):
             answer_labels = ["is_conversational"]
         elif model_name == "deeppavlov_topics":
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=THRESHOLDS["deeppavlov_topics"])
+        elif model_name == "toxic_classification":
+            answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=THRESHOLDS["toxic_classification"])
         else:
             answer_labels = _probs_to_labels(answer_probs, max_proba=True, threshold=threshold)
     except Exception as e:
