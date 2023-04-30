@@ -95,7 +95,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
-                    "url": "http://dff-deepy-prompted-skill:8148/respond"
+                    "url": "http://dff-deepy-prompted-skill:8152/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
@@ -130,7 +130,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/IiXGzRszejsDfy8VcgI9A.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-deepy-prompted-skill"
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-deepy-terminology-prompted-skill"
                 }
             },
             "dummy_skill": {
