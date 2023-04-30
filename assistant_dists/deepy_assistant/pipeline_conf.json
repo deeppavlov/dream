@@ -5,16 +5,15 @@
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
-                "annotations": {
-                }
+                "annotations": {}
             },
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "last_chance"
             ],
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/5CCnaSNbKTaB.yml",
+                "service": "services/agent_services/service_configs/deepy_assistant"
             }
         },
         "timeout_service": {
@@ -22,16 +21,15 @@
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
-                "annotations": {
-                }
+                "annotations": {}
             },
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "timeout"
             ],
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/szmBYf8nY11l.yml",
+                "service": "services/agent_services/service_configs/deepy_assistant"
             }
         },
         "response_annotator_selectors": {
@@ -48,12 +46,11 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/response_annotator_selectors",
-                "container": "agent"
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
-        "response_annotators": {
-        },
+        "response_annotators": {},
         "annotators": {
             "prompt_selector": {
                 "connector": {
@@ -63,14 +60,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/prompt_selector",
-                    "container": "prompt-selector",
-                    "endpoint": "respond"
+                    "component": "components/P6oHJQFf89qG.yml",
+                    "service": "annotators/prompt_selector/service_configs/deepy_assistant"
                 }
             }
         },
@@ -90,19 +85,22 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "skill_selectors/rule_based_selector",
-                    "container": "agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
         "skills": {
-            "dff_deepy_prompt_prompted_skill": {
+            "dff_deepy_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 14.0,
-                    "url": "http://dff-deepy-prompt-prompted-skill:8152/respond"
+                    "timeout": 10.0,
+                    "url": "http://dff-deepy-prompted-skill:8148/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_deepy_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_deepy_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -110,28 +108,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_prompted_skill",
-                    "container": "dff-deepy-prompt-prompted-skill",
-                    "endpoint": "respond"
-                }
-            },
-            "dff_deepy_terminology_prompted_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 14.0,
-                    "url": "http://dff-deepy-terminology-prompted-skill:8153/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_deepy_prompted_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "directory": "skills/dff_template_prompted_skill",
-                    "container": "dff-deepy-terminology-prompted-skill",
-                    "endpoint": "respond"
+                    "component": "components/IiXGzRszejsDfy8VcgI9A.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-deepy-prompted-skill"
                 }
             },
             "dummy_skill": {
@@ -147,8 +125,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             }
         },
@@ -167,9 +145,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/sentence_ranker",
-                    "container": "sentence-ranker",
-                    "endpoint": "respond"
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
                 }
             }
         },
@@ -188,9 +165,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/ranking_based_response_selector",
-                    "container": "ranking-based-response-selector",
-                    "endpoint": "respond"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }

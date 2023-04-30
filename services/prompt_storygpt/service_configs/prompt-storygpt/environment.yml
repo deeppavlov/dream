@@ -1,0 +1,7 @@
+SERVICE_PORT: 8127
+SERVICE_NAME: prompt_storygpt
+MODELS_URL: http://files.deeppavlov.ai/dream_data/story_skill/finetuned2.tar.gz
+BART_MODEL_NAME: facebook/bart-large
+FINETUNED_MODEL_NAME: /data/finetuned2
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

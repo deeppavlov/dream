@@ -1,0 +1,31 @@
+name: sentiment-classification-multilingual
+endpoints:
+- respond
+- respond_batch
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8024
+      SERVICE_NAME: sentiment_classification
+      PRETRAINED_MODEL_NAME_OR_PATH: cardiffnlp/twitter-xlm-roberta-base-sentiment
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./annotators/MultilingualSentimentClassification/
+  command: flask run -h 0.0.0.0 -p 8024
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 3.5G
+      reservations:
+        memory: 3.5G
+  volumes:
+  - ./annotators/MultilingualSentimentClassification:/src
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8024:8024
+proxy: null

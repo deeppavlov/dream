@@ -1,0 +1,35 @@
+name: dff-music-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8099
+      SERVICE_NAME: dff_music_skill
+    context: .
+    dockerfile: ./skills/dff_music_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8099
+  deploy:
+    resources:
+      limits:
+        memory: 512M
+      reservations:
+        memory: 512M
+  volumes:
+  - ./skills/dff_music_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8099:8099
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8099
+  - PORT=8099

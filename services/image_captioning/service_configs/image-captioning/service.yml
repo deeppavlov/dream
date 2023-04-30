@@ -1,0 +1,29 @@
+name: image-captioning
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8123
+      SERVICE_NAME: image_captioning
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./services/image_captioning/
+  command: flask run -h 0.0.0.0 -p 8123
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 5G
+      reservations:
+        memory: 5G
+  volumes:
+  - ./services/image_captioning:/src
+  - ~/.deeppavlov/file_server:/tmp
+  ports:
+  - 8123:8123
+proxy: null

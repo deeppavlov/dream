@@ -1,0 +1,29 @@
+name: infilling
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    context: ./services/infilling/
+    args:
+      SERVICE_PORT: 8139
+      SERVICE_NAME: infilling
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+  command: flask run -h 0.0.0.0 -p 8139
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 2.5G
+      reservations:
+        memory: 2.5G
+  volumes:
+  - ./services/infilling:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8139:8139
+proxy: null

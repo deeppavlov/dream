@@ -1,0 +1,39 @@
+name: news-api-annotator
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8112
+      SERVICE_NAME: news_api_annotator
+      ASYNC_SIZE: 3
+      FLASK_APP: server
+    context: .
+    dockerfile: ./annotators/news_api/Dockerfile
+  environment:
+  - FLASK_APP=server
+  command: flask run -h 0.0.0.0 -p 8112
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./annotators/news_api:/src
+  - ./common:/src/common
+  ports:
+  - 8112:8112
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8112
+  - PORT=8112
