@@ -47,8 +47,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/iNIe7QE1KUf0.yml",
+                "service": "services/agent_services/service_configs/dream_sfc"
             }
         },
         "timeout_service": {
@@ -81,8 +81,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/RZzyxv06mT3Y.yml",
+                "service": "services/agent_services/service_configs/dream_sfc"
             }
         },
         "annotators": {
@@ -94,12 +94,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing",
-                    "container": "spelling-preprocessing",
-                    "endpoint": "respond"
+                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
+                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
                 }
             },
             "sentseg": {
@@ -116,9 +116,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
+                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
             "spacy_nounphrases": {
@@ -135,9 +134,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases",
-                    "container": "spacy-nounphrases",
-                    "endpoint": "respond"
+                    "component": "components/dswI5sRZbFPmgcNQKH5iPg.yml",
+                    "service": "annotators/spacy_nounphrases/service_configs/spacy-nounphrases"
                 }
             },
             "comet_conceptnet": {
@@ -156,9 +154,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/COMeT",
-                    "container": "comet-conceptnet",
-                    "endpoint": "comet_annotator"
+                    "component": "components/eOCFQOgp1Un10NyBC8MPow.yml",
+                    "service": "annotators/COMeT/service_configs/comet-conceptnet"
                 }
             },
             "badlisted_words": {
@@ -175,9 +172,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words",
-                    "endpoint": "badlisted_words"
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
                 }
             },
             "asr": {
@@ -191,9 +187,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/asr",
-                    "container": "asr",
-                    "endpoint": "asr_check"
+                    "component": "components/2Fck28uscKzZBviQ8WZTg.yml",
+                    "service": "annotators/asr/service_configs/asr"
                 }
             },
             "intent_catcher": {
@@ -211,9 +206,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers",
-                    "container": "intent-catcher",
-                    "endpoint": "detect"
+                    "component": "components/1IjC3r9b1VJ082ceINXzHQ.yml",
+                    "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher"
                 }
             },
             "fact_random": {
@@ -232,9 +226,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fact_random",
-                    "container": "fact-random",
-                    "endpoint": "respond"
+                    "component": "components/QqTMvljZNeJGkLykBRUAw.yml",
+                    "service": "annotators/fact_random/service_configs/fact-random"
                 }
             },
             "fact_retrieval": {
@@ -253,9 +246,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fact_retrieval",
-                    "container": "fact-retrieval",
-                    "endpoint": "model"
+                    "component": "components/sVjXygxsPhjLEWd2acwcEA.yml",
+                    "service": "annotators/fact_retrieval/service_configs/fact-retrieval"
                 }
             },
             "ner": {
@@ -273,9 +265,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/NER_deeppavlov",
-                    "container": "ner",
-                    "endpoint": "ner"
+                    "component": "components/3RDNPBdybjBlSQZqcc7nGQ.yml",
+                    "service": "annotators/NER_deeppavlov/service_configs/ner"
                 }
             },
             "entity_detection": {
@@ -293,9 +284,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
-                    "container": "entity-detection",
-                    "endpoint": "respond"
+                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
+                    "service": "annotators/entity_detection/service_configs/entity-detection"
                 }
             },
             "kbqa": {
@@ -312,9 +302,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/kbqa",
-                    "container": "kbqa",
-                    "endpoint": "model"
+                    "component": "components/3clxaNOTpI3oHR0fHRaCnQ.yml",
+                    "service": "annotators/kbqa/service_configs/kbqa"
                 }
             },
             "entity_linking": {
@@ -333,9 +322,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_linking",
-                    "container": "entity-linking",
-                    "endpoint": "model"
+                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "service": "annotators/entity_linking/service_configs/entity-linking"
                 }
             },
             "wiki_parser": {
@@ -352,9 +340,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/wiki_parser",
-                    "container": "wiki-parser",
-                    "endpoint": "model"
+                    "component": "components/O4FVnkAwjay1mL1FbuRGWw.yml",
+                    "service": "annotators/wiki_parser/service_configs/wiki-parser"
                 }
             },
             "sentrewrite": {
@@ -374,9 +361,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentRewrite",
-                    "container": "sentrewrite",
-                    "endpoint": "sentrewrite"
+                    "component": "components/2qgyiVeuSZnotxkaBe3cw.yml",
+                    "service": "annotators/SentRewrite/service_configs/sentrewrite"
                 }
             },
             "combined_classification": {
@@ -393,9 +379,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification",
-                    "container": "combined-classification",
-                    "endpoint": "model"
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             },
             "entity_storer": {
@@ -413,9 +398,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_storer",
-                    "container": "entity-storer",
-                    "endpoint": "respond"
+                    "component": "components/KSNMJJOS15MN2lsyS8fjBg.yml",
+                    "service": "annotators/entity_storer/service_configs/entity-storer"
                 }
             },
             "news_api_annotator": {
@@ -436,9 +420,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/news_api",
-                    "container": "news-api-annotator",
-                    "endpoint": "respond"
+                    "component": "components/DKpAPqrBbakAcoSbx6hibg.yml",
+                    "service": "annotators/news_api/service_configs/news-api-annotator"
                 }
             },
             "topic_recommendation": {
@@ -457,9 +440,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/topic_recommendation",
-                    "container": "topic-recommendation",
-                    "endpoint": "respond"
+                    "component": "components/iZluV29Xg8AwaHPGijaeLg.yml",
+                    "service": "annotators/topic_recommendation/service_configs/topic-recommendation"
                 }
             },
             "user_persona_extractor": {
@@ -476,9 +458,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/user_persona_extractor",
-                    "container": "user-persona-extractor",
-                    "endpoint": "respond"
+                    "component": "components/g4GQdGsud4N4VUB8NideA.yml",
+                    "service": "annotators/user_persona_extractor/service_configs/user-persona-extractor"
                 }
             },
             "speech_function_classifier": {
@@ -496,9 +477,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_classifier",
-                    "container": "speech-function-classifier",
-                    "endpoint": "model"
+                    "component": "components/IvTBJz0AoCD98qMOkbXEkg.yml",
+                    "service": "annotators/speech_function_classifier/service_configs/speech-function-classifier"
                 }
             },
             "speech_function_predictor": {
@@ -515,9 +495,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_predictor",
-                    "container": "speech-function-predictor",
-                    "endpoint": "model"
+                    "component": "components/FNmTZbz8EA6Y80b5pXZzQ.yml",
+                    "service": "annotators/speech_function_predictor/service_configs/speech-function-predictor"
                 }
             }
         },
@@ -536,9 +515,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
             "ner": {
@@ -556,9 +534,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/NER_deeppavlov",
-                    "container": "ner",
-                    "endpoint": "ner"
+                    "component": "components/3RDNPBdybjBlSQZqcc7nGQ.yml",
+                    "service": "annotators/NER_deeppavlov/service_configs/ner"
                 }
             },
             "sentrewrite": {
@@ -577,9 +554,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentRewrite",
-                    "container": "sentrewrite",
-                    "endpoint": "sentrewrite"
+                    "component": "components/2qgyiVeuSZnotxkaBe3cw.yml",
+                    "service": "annotators/SentRewrite/service_configs/sentrewrite"
                 }
             },
             "spacy_nounphrases": {
@@ -596,9 +572,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases",
-                    "container": "spacy-nounphrases",
-                    "endpoint": "respond"
+                    "component": "components/dswI5sRZbFPmgcNQKH5iPg.yml",
+                    "service": "annotators/spacy_nounphrases/service_configs/spacy-nounphrases"
                 }
             },
             "speech_function_classifier": {
@@ -616,9 +591,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_classifier",
-                    "container": "speech-function-classifier",
-                    "endpoint": "model"
+                    "component": "components/IvTBJz0AoCD98qMOkbXEkg.yml",
+                    "service": "annotators/speech_function_classifier/service_configs/speech-function-classifier"
                 }
             }
         },
@@ -640,8 +614,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/response_annotator_selectors",
-                "container": "agent"
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "candidate_annotators": {
@@ -659,9 +633,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_classifier",
-                    "container": "speech-function-classifier",
-                    "endpoint": "annotation"
+                    "component": "components/IvTBJz0AoCD98qMOkbXEkg.yml",
+                    "service": "annotators/speech_function_classifier/service_configs/speech-function-classifier"
                 }
             },
             "speech_function_predictor": {
@@ -678,9 +651,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/speech_function_predictor",
-                    "container": "speech-function-predictor",
-                    "endpoint": "annotation"
+                    "component": "components/FNmTZbz8EA6Y80b5pXZzQ.yml",
+                    "service": "annotators/speech_function_predictor/service_configs/speech-function-predictor"
                 }
             },
             "badlisted_words": {
@@ -697,9 +669,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words",
-                    "endpoint": "badlisted_words_batch"
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
                 }
             },
             "convers_evaluator_annotator": {
@@ -716,9 +687,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/ConversationEvaluator",
-                    "container": "convers-evaluator-annotator",
-                    "endpoint": "batch_model"
+                    "component": "components/n1HuqlV7EoNrWXcv8WaIQ.yml",
+                    "service": "annotators/ConversationEvaluator/service_configs/convers-evaluator-annotator"
                 }
             },
             "spacy_nounphrases": {
@@ -735,9 +705,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_nounphrases",
-                    "container": "spacy-nounphrases",
-                    "endpoint": "respond_batch"
+                    "component": "components/dswI5sRZbFPmgcNQKH5iPg.yml",
+                    "service": "annotators/spacy_nounphrases/service_configs/spacy-nounphrases"
                 }
             },
             "entity_detection": {
@@ -754,9 +723,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
-                    "container": "entity-detection",
-                    "endpoint": "respond_batch"
+                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
+                    "service": "annotators/entity_detection/service_configs/entity-detection"
                 }
             },
             "midas_classification": {
@@ -773,9 +741,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/midas_classification",
-                    "container": "midas-classification",
-                    "endpoint": "batch_model"
+                    "component": "components/eAupU7hg2SeSkZV1OpaLkw.yml",
+                    "service": "annotators/midas_classification/service_configs/midas-classification"
                 }
             },
             "combined_classification": {
@@ -792,9 +759,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification",
-                    "container": "combined-classification",
-                    "endpoint": "batch_model"
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             }
         },
@@ -814,8 +780,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "skill_selectors/rule_based_selector",
-                    "container": "agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
@@ -834,9 +800,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_sport_skill",
-                    "container": "dff-sport-skill",
-                    "endpoint": "respond"
+                    "component": "components/pjNkr5Kenxb0NMODp9u2Dw.yml",
+                    "service": "skills/dff_sport_skill/service_configs/dff-sport-skill"
                 }
             },
             "eliza": {
@@ -853,9 +818,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/eliza",
-                    "container": "eliza",
-                    "endpoint": "respond"
+                    "component": "components/hc1VGhVPyuOIDiMYUp0Q.yml",
+                    "service": "skills/eliza/service_configs/eliza"
                 }
             },
             "dff_program_y_skill": {
@@ -872,9 +836,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill",
-                    "container": "dff-program-y-skill",
-                    "endpoint": "respond"
+                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
+                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
                 }
             },
             "personality_catcher": {
@@ -891,9 +854,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personality_catcher",
-                    "container": "personality-catcher",
-                    "endpoint": "personality_catcher"
+                    "component": "components/AkgtzbAdOaly7bBjaOQvg.yml",
+                    "service": "skills/personality_catcher/service_configs/personality-catcher"
                 }
             },
             "dff_intent_responder_skill": {
@@ -910,9 +872,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill",
-                    "container": "dff-intent-responder-skill",
-                    "endpoint": "respond"
+                    "component": "components/CmQGq1Xn5YOaMwNIb4bEpA.yml",
+                    "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-skill"
                 }
             },
             "dummy_skill": {
@@ -928,8 +889,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
             "alexa_handler": {
@@ -945,8 +906,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/alexa_handler",
-                    "container": "agent"
+                    "component": "components/CGfUfSJOGK2diPRLlsXYFA.yml",
+                    "service": "skills/alexa_handler/service_configs/agent"
                 }
             },
             "dummy_skill_dialog": {
@@ -963,9 +924,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill_dialog",
-                    "container": "dummy-skill-dialog",
-                    "endpoint": "respond"
+                    "component": "components/vC2zMO3Jf1evuVj6KqEK6A.yml",
+                    "service": "skills/dummy_skill_dialog/service_configs/dummy-skill-dialog"
                 }
             },
             "misheard_asr": {
@@ -982,9 +942,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/misheard_asr",
-                    "container": "misheard-asr",
-                    "endpoint": "misheard_respond"
+                    "component": "components/uBfG9guHvNVxErmJ3QZxw.yml",
+                    "service": "skills/misheard_asr/service_configs/misheard-asr"
                 }
             },
             "dff_program_y_dangerous_skill": {
@@ -1001,9 +960,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_dangerous_skill",
-                    "container": "dff-program-y-dangerous-skill",
-                    "endpoint": "respond"
+                    "component": "components/VFltJVPpaCZ7Mquk2N7qg.yml",
+                    "service": "skills/dff_program_y_dangerous_skill/service_configs/dff-program-y-dangerous-skill"
                 }
             },
             "dff_movie_skill": {
@@ -1020,9 +978,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_movie_skill",
-                    "container": "dff-movie-skill",
-                    "endpoint": "respond"
+                    "component": "components/4yA8wZWOEnafRfz6Po9nvA.yml",
+                    "service": "skills/dff_movie_skill/service_configs/dff-movie-skill"
                 }
             },
             "emotion_skill": {
@@ -1039,9 +996,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/emotion_skill",
-                    "container": "emotion-skill",
-                    "endpoint": "respond"
+                    "component": "components/GUBU1VTsOaAmXsPId4c9tg.yml",
+                    "service": "skills/emotion_skill/service_configs/emotion-skill"
                 }
             },
             "convert_reddit": {
@@ -1058,9 +1014,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/convert_reddit",
-                    "container": "convert-reddit",
-                    "endpoint": "convert_reddit"
+                    "component": "components/HxZwtabTqPYokTZ9yJ3MQ.yml",
+                    "service": "skills/convert_reddit/service_configs/convert-reddit"
                 }
             },
             "personal_info_skill": {
@@ -1077,9 +1032,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personal_info_skill",
-                    "container": "personal-info-skill",
-                    "endpoint": "respond"
+                    "component": "components/jduT06J4H7FsxAfQRFcjIQ.yml",
+                    "service": "skills/personal_info_skill/service_configs/personal-info-skill"
                 }
             },
             "dff_coronavirus_skill": {
@@ -1096,9 +1050,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_coronavirus_skill",
-                    "container": "dff-coronavirus-skill",
-                    "endpoint": "respond"
+                    "component": "components/ytOAJhcgTY7jGhIuqShU7w.yml",
+                    "service": "skills/dff_coronavirus_skill/service_configs/dff-coronavirus-skill"
                 }
             },
             "dff_weather_skill": {
@@ -1115,9 +1068,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_weather_skill",
-                    "container": "dff-weather-skill",
-                    "endpoint": "respond"
+                    "component": "components/USXkrUZRNdXbwACjKhO6KQ.yml",
+                    "service": "skills/dff_weather_skill/service_configs/dff-weather-skill"
                 }
             },
             "dff_short_story_skill": {
@@ -1134,9 +1086,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_short_story_skill",
-                    "container": "dff-short-story-skill",
-                    "endpoint": "respond"
+                    "component": "components/U7OP1e0KcceldKplIDMvg.yml",
+                    "service": "skills/dff_short_story_skill/service_configs/dff-short-story-skill"
                 }
             },
             "meta_script_skill": {
@@ -1153,9 +1104,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/meta_script_skill",
-                    "container": "meta-script-skill",
-                    "endpoint": "meta_script"
+                    "component": "components/XnOc0ygtsgoaEdDdzSJQ.yml",
+                    "service": "skills/meta_script_skill/service_configs/meta-script-skill"
                 }
             },
             "small_talk_skill": {
@@ -1172,9 +1122,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/small_talk_skill",
-                    "container": "small-talk-skill",
-                    "endpoint": "respond"
+                    "component": "components/EvuPQO29N28izuWLBtxew.yml",
+                    "service": "skills/small_talk_skill/service_configs/small-talk-skill"
                 }
             },
             "game_cooperative_skill": {
@@ -1191,9 +1140,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/game_cooperative_skill",
-                    "container": "game-cooperative-skill",
-                    "endpoint": "respond"
+                    "component": "components/zR8WrA2O9QEzhdMnsVMPg.yml",
+                    "service": "skills/game_cooperative_skill/service_configs/game-cooperative-skill"
                 }
             },
             "dff_program_y_wide_skill": {
@@ -1210,9 +1158,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_wide_skill",
-                    "container": "dff-program-y-wide-skill",
-                    "endpoint": "respond"
+                    "component": "components/1HucxpdVamyoS0GEl3l7A.yml",
+                    "service": "skills/dff_program_y_wide_skill/service_configs/dff-program-y-wide-skill"
                 }
             },
             "news_api_skill": {
@@ -1229,9 +1176,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/news_api_skill",
-                    "container": "news-api-skill",
-                    "endpoint": "respond"
+                    "component": "components/kQnGkibrJH20J8sYTbF5rg.yml",
+                    "service": "skills/news_api_skill/service_configs/news-api-skill"
                 }
             },
             "comet_dialog_skill": {
@@ -1248,9 +1194,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/meta_script_skill",
-                    "container": "meta-script-skill",
-                    "endpoint": "comet_dialog"
+                    "component": "components/XnOc0ygtsgoaEdDdzSJQ.yml",
+                    "service": "skills/meta_script_skill/service_configs/meta-script-skill"
                 }
             },
             "dff_grounding_skill": {
@@ -1267,9 +1212,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_grounding_skill",
-                    "container": "dff-grounding-skill",
-                    "endpoint": "respond"
+                    "component": "components/mUjJLckDDozfREkbYOjk5g.yml",
+                    "service": "skills/dff_grounding_skill/service_configs/dff-grounding-skill"
                 }
             },
             "factoid_qa": {
@@ -1286,9 +1230,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/factoid_qa",
-                    "container": "factoid-qa",
-                    "endpoint": "respond"
+                    "component": "components/qx0j5QHAzog0b39nRnuA.yml",
+                    "service": "skills/factoid_qa/service_configs/factoid-qa"
                 }
             },
             "dff_animals_skill": {
@@ -1305,9 +1248,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_animals_skill",
-                    "container": "dff-animals-skill",
-                    "endpoint": "respond"
+                    "component": "components/w3uS7t7cW72QFYo0Ugf29w.yml",
+                    "service": "skills/dff_animals_skill/service_configs/dff-animals-skill"
                 }
             },
             "dff_gaming_skill": {
@@ -1324,9 +1266,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_gaming_skill",
-                    "container": "dff-gaming-skill",
-                    "endpoint": "respond"
+                    "component": "components/V21kCVvTaCv8J0c4rDV4RA.yml",
+                    "service": "skills/dff_gaming_skill/service_configs/dff-gaming-skill"
                 }
             },
             "dff_friendship_skill": {
@@ -1343,9 +1284,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_friendship_skill",
-                    "container": "dff-friendship-skill",
-                    "endpoint": "respond"
+                    "component": "components/haBUc1rsCitGmBzndrKl5w.yml",
+                    "service": "skills/dff_friendship_skill/service_configs/dff-friendship-skill"
                 }
             },
             "knowledge_grounding_skill": {
@@ -1362,9 +1302,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/knowledge_grounding_skill",
-                    "container": "knowledge-grounding-skill",
-                    "endpoint": "respond"
+                    "component": "components/ciuEzuXBNAXpidbSBXTyw.yml",
+                    "service": "skills/knowledge_grounding_skill/service_configs/knowledge-grounding-skill"
                 }
             },
             "dff_travel_skill": {
@@ -1381,9 +1320,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_travel_skill",
-                    "container": "dff-travel-skill",
-                    "endpoint": "respond"
+                    "component": "components/DbHXjhwWHORIms84Z3WJbA.yml",
+                    "service": "skills/dff_travel_skill/service_configs/dff-travel-skill"
                 }
             },
             "dff_food_skill": {
@@ -1400,9 +1338,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_food_skill",
-                    "container": "dff-food-skill",
-                    "endpoint": "respond"
+                    "component": "components/ED4eLNB6JK3U8sUGHsQ.yml",
+                    "service": "skills/dff_food_skill/service_configs/dff-food-skill"
                 }
             },
             "dff_science_skill": {
@@ -1419,9 +1356,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_science_skill",
-                    "container": "dff-science-skill",
-                    "endpoint": "respond"
+                    "component": "components/0sXrpFc5dMQSbhydkrrq7A.yml",
+                    "service": "skills/dff_science_skill/service_configs/dff-science-skill"
                 }
             },
             "dff_music_skill": {
@@ -1438,9 +1374,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_music_skill",
-                    "container": "dff-music-skill",
-                    "endpoint": "respond"
+                    "component": "components/TUMYgqCicowHdORbycHBow.yml",
+                    "service": "skills/dff_music_skill/service_configs/dff-music-skill"
                 }
             },
             "dff_funfact_skill": {
@@ -1457,9 +1392,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_funfact_skill",
-                    "container": "dff-funfact-skill",
-                    "endpoint": "respond"
+                    "component": "components/pciAVHGPCYBn8m14ZZsLg.yml",
+                    "service": "skills/dff_funfact_skill/service_configs/dff-funfact-skill"
                 }
             },
             "dff_gossip_skill": {
@@ -1478,9 +1412,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_gossip_skill",
-                    "container": "dff-gossip-skill",
-                    "endpoint": "respond"
+                    "component": "components/NxFeriz1ymjSuvPITEJOQ.yml",
+                    "service": "skills/dff_gossip_skill/service_configs/dff-gossip-skill"
                 }
             },
             "dff_bot_persona_skill": {
@@ -1497,9 +1430,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_bot_persona_skill",
-                    "container": "dff-bot-persona-skill",
-                    "endpoint": "respond"
+                    "component": "components/GYa5X3Q4snGIgQzAFc7Gg.yml",
+                    "service": "skills/dff_bot_persona_skill/service_configs/dff-bot-persona-skill"
                 }
             },
             "dff_wiki_skill": {
@@ -1516,9 +1448,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_wiki_skill",
-                    "container": "dff-wiki-skill",
-                    "endpoint": "respond"
+                    "component": "components/pD4b43nPu73ev5T4Bf3RKw.yml",
+                    "service": "skills/dff_wiki_skill/service_configs/dff-wiki-skill"
                 }
             },
             "dff_book_skill": {
@@ -1535,9 +1466,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_book_sfc_skill",
-                    "container": "dff-book-sfc-skill",
-                    "endpoint": "respond"
+                    "component": "components/9XSWCH46buTl2isGsdefA.yml",
+                    "service": "skills/dff_book_sfc_skill/service_configs/dff-book-sfc-skill"
                 }
             },
             "dff_art_skill": {
@@ -1554,9 +1484,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_art_skill",
-                    "container": "dff-art-skill",
-                    "endpoint": "respond"
+                    "component": "components/VVQgKT69i36HzEqbJKoWqQ.yml",
+                    "service": "skills/dff_art_skill/service_configs/dff-art-skill"
                 }
             },
             "dff_template_skill": {
@@ -1573,9 +1502,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_skill",
-                    "container": "dff-template-skill",
-                    "endpoint": "respond"
+                    "component": "components/pC342KBWtheQNnXjIni6A.yml",
+                    "service": "skills/dff_template_skill/service_configs/dff-template-skill"
                 }
             }
         },
@@ -1594,9 +1522,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "container": "scripts-priority-selector",
-                    "endpoint": "respond"
+                    "component": "components/3vsfbB89yVpQm5OVW0YcvQ.yml",
+                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/scripts-priority-selector"
                 }
             }
         }

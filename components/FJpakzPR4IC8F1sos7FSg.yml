@@ -1,0 +1,25 @@
+name: dff_generative_skill
+display_name: Generative Skill
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: generative skill which uses DialoGPT service to generate 3 different
+  hypotheses
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 4.0
+  url: http://dff-generative-ru-skill:8092/respond
+dialog_formatter: state_formatters.dp_formatters:dff_generative_skill_formatter
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_generative_skill/service_configs/dff-generative-ru-skill
+date_created: '2023-03-16T09:45:32'
