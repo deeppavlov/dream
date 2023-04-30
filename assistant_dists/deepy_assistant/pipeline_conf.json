@@ -129,7 +129,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/IiXGzRszejsDfy8VcgI9A.yml",
+                    "component": "components/IiXGzRszejsDfy8VcgI9D.yml",
                     "service": "skills/dff_template_prompted_skill/service_configs/dff-deepy-terminology-prompted-skill"
                 }
             },
