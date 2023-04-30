@@ -1,0 +1,5 @@
+CONFIG: t5_generative_ie_lite_infer.json
+SERVICE_PORT: 8136
+SRC_DIR: annotators/property_extraction/
+SERVICE_NAME: property_extraction
+FLASK_APP: server

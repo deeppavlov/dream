@@ -1,0 +1,24 @@
+name: user_persona_extractor
+display_name: User Persona Extractor
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: determines which age category the user belongs to based on some key words
+ram_usage: 100M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://user-persona-extractor:8114/respond
+dialog_formatter: state_formatters.dp_formatters:utt_non_punct_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.spelling_preprocessing
+required_previous_services: null
+state_manager_method: update_attributes
+tags: null
+endpoint: respond
+service: annotators/user_persona_extractor/service_configs/user-persona-extractor
+date_created: '2023-03-16T09:45:32'

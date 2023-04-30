@@ -1,0 +1,28 @@
+name: sentseg-ru
+endpoints:
+- sentseg
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      CONFIG: sentseg_ru_bert_torch.json
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./annotators/sentseg_ru
+  command: flask run -h 0.0.0.0 -p 8011
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 3G
+      reservations:
+        memory: 3G
+  volumes:
+  - ./annotators/sentseg_ru:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8011:8011
+proxy: null

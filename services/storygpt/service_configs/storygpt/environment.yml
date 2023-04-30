@@ -1,0 +1,6 @@
+SERVICE_PORT: 8126
+SERVICE_NAME: storygpt
+PRETRAINED_MODEL_NAME_OR_PATH: gpt2-medium
+FINETUNED_GPT_URL: http://files.deeppavlov.ai/dream_data/story_skill/filtered_ROCStories_gpt_medium.pt
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

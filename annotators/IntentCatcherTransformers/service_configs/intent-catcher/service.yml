@@ -1,0 +1,43 @@
+name: intent-catcher
+endpoints:
+- detect
+compose:
+  env_file:
+  - .env
+  build:
+    context: .
+    dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
+    args:
+      SERVICE_PORT: 8014
+      CONFIG_NAME: intents_model_dp_config.json
+      INTENT_PHRASES_PATH: intent_phrases.json
+      FLASK_APP: server
+      CUDA_VISIBLE_DEVICES: '0'
+  command: python -m flask run -h 0.0.0.0 -p 8014
+  environment:
+  - FLASK_APP=server
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    resources:
+      limits:
+        memory: 3.5G
+      reservations:
+        memory: 3.5G
+  volumes:
+  - ./annotators/IntentCatcherTransformers:/src
+  - ./common:/src/common
+  - ~/.deeppavlov:/root/.deeppavlov
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8014:8014
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8014
+  - PORT=8014

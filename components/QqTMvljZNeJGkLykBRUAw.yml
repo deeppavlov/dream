@@ -1,0 +1,26 @@
+name: fact_random
+display_name: Fact Random
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: returns random facts for the given entity (for entities from user utterance)
+ram_usage: 100M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://fact-random:8119/respond
+dialog_formatter: state_formatters.dp_formatters:fact_random_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.entity_linking
+- annotators.spacy_nounphrases
+- annotators.entity_detection
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: respond
+service: annotators/fact_random/service_configs/fact-random
+date_created: '2023-03-16T09:45:32'
