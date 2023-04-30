@@ -1,0 +1,23 @@
+name: spacy_annotator
+display_name: Spacy Annotator
+component_type: null
+model_type: ML-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: token-wise annotations by Spacy
+ram_usage: 250M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://spacy-annotator-ru:8129/respond
+dialog_formatter: state_formatters.dp_formatters:last_utt_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: add_annotation_and_reset_human_attributes_for_first_turn
+tags: null
+endpoint: respond
+service: annotators/spacy_annotator/service_configs/spacy-annotator-ru
+date_created: '2023-03-16T09:45:32'

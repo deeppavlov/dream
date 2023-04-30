@@ -1,0 +1,33 @@
+name: fact-retrieval-ru
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      CONFIG: fact_retrieval_rus.json
+      COMMIT: c8264bf82eaa3ed138395ab68f71d47a4175f2fc
+      TOP_N: 20
+      SERVICE_PORT: 8130
+      SRC_DIR: annotators/fact_retrieval_rus
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./
+    dockerfile: annotators/fact_retrieval_rus/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8130
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 10G
+      reservations:
+        memory: 10G
+  volumes:
+  - ./annotators/fact_retrieval_rus:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8130:8130
+proxy: null

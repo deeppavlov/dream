@@ -1,0 +1,3 @@
+SERVICE_PORT: 8114
+SERVICE_NAME: user_persona_extractor
+FLASK_APP: server

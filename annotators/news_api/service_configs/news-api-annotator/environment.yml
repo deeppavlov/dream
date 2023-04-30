@@ -1,0 +1,4 @@
+SERVICE_PORT: 8112
+SERVICE_NAME: news_api_annotator
+ASYNC_SIZE: 3
+FLASK_APP: server

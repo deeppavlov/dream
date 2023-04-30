@@ -1,0 +1,6 @@
+CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+SERVICE_PORT: 8021
+SRC_DIR: annotators/NER_deeppavlov
+COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+FLASK_APP: server
+CUDA_VISIBLE_DEVICES: '0'

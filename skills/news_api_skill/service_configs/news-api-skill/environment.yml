@@ -1,0 +1,3 @@
+SERVICE_PORT: 8066
+SERVICE_NAME: news_api_skill
+FLASK_APP: server

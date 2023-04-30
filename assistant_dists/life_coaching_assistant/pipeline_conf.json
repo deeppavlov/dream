@@ -27,8 +27,8 @@
                 "last_chance"
             ],
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/gOKV41iXh0Hu.yml",
+                "service": "services/agent_services/service_configs/life_coaching_assistant"
             }
         },
         "timeout_service": {
@@ -51,8 +51,8 @@
                 "timeout"
             ],
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/S0Nt2SuDQD1v.yml",
+                "service": "services/agent_services/service_configs/life_coaching_assistant"
             }
         },
         "response_annotator_selectors": {
@@ -69,8 +69,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/response_annotator_selectors",
-                "container": "agent"
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "response_annotators": {
@@ -88,9 +88,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             }
         },
@@ -103,14 +102,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
+                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
             "prompt_selector": {
@@ -121,14 +118,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/prompt_selector",
-                    "container": "prompt-selector",
-                    "endpoint": "respond"
+                    "component": "components/pjAMrP5HEQnm.yml",
+                    "service": "annotators/prompt_selector/service_configs/life_coaching_assistant"
                 }
             }
         },
@@ -148,8 +143,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "skill_selectors/rule_based_selector",
-                    "container": "agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
@@ -157,10 +152,13 @@
             "dff_life_coaching_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 7.0,
+                    "timeout": 10.0,
                     "url": "http://dff-life-coaching-prompted-skill:8142/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_life_coaching_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_life_coaching_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -168,9 +166,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_prompted_skill",
-                    "container": "dff-life-coaching-prompted-skill",
-                    "endpoint": "respond"
+                    "component": "components/ybZI0GvSFGXlKF9wGKxiQ.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-life-coaching-prompted-skill"
                 }
             },
             "dummy_skill": {
@@ -186,8 +183,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             }
         },
@@ -206,9 +203,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification",
-                    "container": "combined-classification",
-                    "endpoint": "batch_model"
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             },
             "sentence_ranker": {
@@ -225,9 +221,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/sentence_ranker",
-                    "container": "sentence-ranker",
-                    "endpoint": "respond"
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
                 }
             }
         },
@@ -246,9 +241,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/ranking_based_response_selector",
-                    "container": "ranking-based-response-selector",
-                    "endpoint": "respond"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }

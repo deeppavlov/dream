@@ -1,0 +1,5 @@
+SERVICE_PORT: 8128
+SERVICE_NAME: sentence_ranker
+PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

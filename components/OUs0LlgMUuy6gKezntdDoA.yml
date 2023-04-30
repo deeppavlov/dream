@@ -1,0 +1,26 @@
+name: ner
+display_name: NER
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: extracts person names, names of locations, organizations from uncased
+  text using ruBert-based (pyTorch) model
+ram_usage: 1.7G
+gpu_usage: 4.9G
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.5
+  url: http://ner-ru:8021/ner
+dialog_formatter: state_formatters.dp_formatters:ner_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.spelling_preprocessing
+- annotators.sentseg
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: ner
+service: annotators/NER_deeppavlov/service_configs/ner-ru
+date_created: '2023-03-16T09:45:32'
