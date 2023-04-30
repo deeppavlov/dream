@@ -1,0 +1,24 @@
+name: wiki_parser
+display_name: Wiki Parser
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: extracts Wikidata triplets for the entities detected with Entity Linking
+ram_usage: 100M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://wiki-parser:8077/model
+dialog_formatter: state_formatters.dp_formatters:wp_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services:
+- annotators.entity_linking
+state_manager_method: add_annotation
+tags: null
+endpoint: model
+service: annotators/wiki_parser/service_configs/wiki-parser
+date_created: '2023-03-16T09:45:32'

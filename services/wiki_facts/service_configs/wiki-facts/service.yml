@@ -1,0 +1,42 @@
+name: wiki-facts
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8116
+      SERVICE_NAME: wiki_facts
+      CONFIG: page_extractor.json
+      SRC_DIR: services/wiki_facts
+      COMMIT: 5b99ac3392e8e178e2bb4f9b218d4ddb2ec2e242
+      FLASK_APP: server
+    context: ./
+    dockerfile: ./services/wiki_facts/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8116
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 3.5G
+      reservations:
+        memory: 3.5G
+  volumes:
+  - ./services/wiki_facts:/src
+  - ./common:/src/common
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8116:8116
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8116
+  - PORT=8116

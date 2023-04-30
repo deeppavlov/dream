@@ -1,0 +1,27 @@
+name: sentrewrite
+display_name: CorefResolution & SentRewriting
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: rewrites user's utterances by replacing pronouns with specific names
+  that provide more useful information to downstream components
+ram_usage: 200M
+gpu_usage: null
+group: response_annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://sentrewrite:8017/sentrewrite
+dialog_formatter: state_formatters.dp_formatters:sent_rewrite_formatter_w_o_last_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- response_annotator_selectors
+- response_annotators.sentseg
+- response_annotators.ner
+required_previous_services: null
+state_manager_method: add_annotation_prev_bot_utt
+tags: null
+endpoint: sentrewrite
+service: annotators/SentRewrite/service_configs/sentrewrite
+date_created: '2023-03-16T09:45:32'
