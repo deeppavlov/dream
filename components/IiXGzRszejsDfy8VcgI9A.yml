@@ -11,7 +11,7 @@ group: skills
 connector:
   protocol: http
   timeout: 20.0
-  url: http://dff-deepy-prompted-skill:8148/respond
+  url: http://dff-deepy-prompted-skill:8152/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
   skill_name: dff_deepy_prompted_skill
