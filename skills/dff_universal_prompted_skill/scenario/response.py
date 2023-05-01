@@ -42,7 +42,7 @@ CONSIDERED_LM_SERVICES = {
         "config": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
         "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     },
-    "Open-Assistant SFT-1 12B": {
+    "Open-Assistant SFT-4 12B": {
         "url": "http://transformers-lm-oasst12b:8158/respond",
         "config": json.load(open("generative_configs/default_generative_config.json", "r")),
     },
