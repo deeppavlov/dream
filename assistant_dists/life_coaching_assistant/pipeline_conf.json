@@ -152,7 +152,7 @@
             "dff_life_coaching_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10.0,
+                    "timeout": 20.0,
                     "url": "http://dff-life-coaching-prompted-skill:8142/respond"
                 },
                 "dialog_formatter": {

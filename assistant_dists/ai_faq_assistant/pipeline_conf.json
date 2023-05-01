@@ -152,7 +152,7 @@
             "dff_ai_faq_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10.0,
+                    "timeout": 20.0,
                     "url": "http://dff-ai-faq-prompted-skill:8143/respond"
                 },
                 "dialog_formatter": {
