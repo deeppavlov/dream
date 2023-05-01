@@ -3,11 +3,17 @@ FROM python:3.9.1
 # Do not change anything in this section 
 WORKDIR /src
 
-COPY common/dff/requirements.txt .
-RUN pip install -r requirements.txt
+COPY common/dff/requirements.txt common-reqs.txt
+COPY skills/dff_template_prompted_skill/requirements.txt .
+RUN pip install --no-cache -r common-reqs.txt -r requirements.txt
+
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
+
+COPY skills/dff_template_prompted_skill/ ./
+COPY ./common/ ./common/
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
@@ -27,12 +33,5 @@ ARG ENVVARS_TO_SEND
 ENV ENVVARS_TO_SEND ${ENVVARS_TO_SEND}
 ARG ALLOW_PROMPT_RESET=0
 ENV ALLOW_PROMPT_RESET ${ALLOW_PROMPT_RESET}
-
-COPY skills/dff_template_prompted_skill/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
-
-COPY skills/dff_template_prompted_skill/ ./
-COPY ./common/ ./common/
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
