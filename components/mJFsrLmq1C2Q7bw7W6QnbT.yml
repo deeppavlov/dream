@@ -11,7 +11,7 @@ gpu_usage: null
 group: skills
 connector:
   protocol: http
-  timeout: 10.0
+  timeout: 20.0
   url: http://dff-casual-email-prompted-skill:8154/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
