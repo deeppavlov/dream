@@ -136,7 +136,7 @@
             "dff_universal_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10.0,
+                    "timeout": 20.0,
                     "url": "http://dff-universal-prompted-skill:8147/respond"
                 },
                 "dialog_formatter": {

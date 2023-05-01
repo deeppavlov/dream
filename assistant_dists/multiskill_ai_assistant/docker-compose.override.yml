@@ -2,7 +2,8 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/multiskill_ai_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, prompt-selector:8135, 
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087,
+        sentence-ranker:8128, prompt-selector:8135, 
         openai-api-davinci3:8131, dff-dream-persona-davinci3-prompted-skill:8137,
         dff-casual-email-prompted-skill:8154, dff-meeting-notes-prompted-skill:8155,
         dff-official-email-prompted-skill:8156, dff-plan-for-article-prompted-skill:8157"
@@ -11,6 +12,37 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
+
+  sentseg:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+  combined-classification:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: combined_classifier.json
+        SERVICE_PORT: 8087
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
 
   ranking-based-response-selector:
     env_file: [ .env ]
@@ -42,7 +74,7 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
-        N_SENTENCES_TO_RETURN: 2
+        N_SENTENCES_TO_RETURN: 3
         PROMPTS_TO_CONSIDER: dream_persona,casual_email,meeting_notes,official_email,plan_for_article
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
@@ -103,8 +135,8 @@ services:
         SERVICE_NAME: dff_dream_persona_prompted_skill
         PROMPT_FILE: common/prompts/dream_persona.json
         GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-        GENERATIVE_TIMEOUT: 7
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 7
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
@@ -125,8 +157,8 @@ services:
         SERVICE_NAME: dff_casual_email_prompted_skill
         PROMPT_FILE: common/prompts/casual_email.json
         GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-        GENERATIVE_TIMEOUT: 7
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 7
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
@@ -147,8 +179,8 @@ services:
         SERVICE_NAME: dff_meeting_notes_prompted_skill
         PROMPT_FILE: common/prompts/meeting_notes.json
         GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-        GENERATIVE_TIMEOUT: 7
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 7
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
@@ -169,8 +201,8 @@ services:
         SERVICE_NAME: dff_official_email_prompted_skill
         PROMPT_FILE: common/prompts/official_email.json
         GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-        GENERATIVE_TIMEOUT: 7
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 7
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
@@ -191,8 +223,8 @@ services:
         SERVICE_NAME: dff_plan_for_article_prompted_skill
         PROMPT_FILE: common/prompts/plan_for_article.json
         GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
-        GENERATIVE_TIMEOUT: 7
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 7
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
