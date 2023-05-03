@@ -75,11 +75,13 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"user_kg: {user_kg}")
 
     if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["prompt"]) and kg_prompt[1]:
-        final_prompt = PROMPT + "\n\n" + kg_prompt[0] + kg_prompt[1] + "\nCHAT HISTORY:\n" + "".join(dialog_contexts)
-       #"""I like italy.I am a bit confused. What would you like to chat about e?""" 
-        # final_prompt = "".join([kg_prompt[0], f"{kg_prompt[1]}"])
+        # dialogue = " ".join(dialog_contexts)
+        final_prompt = PROMPT + f"\nUse the following facts about the user for your answer: ```{kg_prompt[1]}```" #+ \
+            #   f"\nContinue conversation with the user: ```{dialogue}``` " 
+
+
     else:
-        final_prompt = PROMPT
+        final_prompt = PROMPT 
     logger.info(f"final_prompt: {final_prompt}")
 
 
