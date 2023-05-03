@@ -192,7 +192,6 @@ class Scorer(ScorerBase):
             return torch.sigmoid(logits)
 
     def load(self, path):
-
         print("loading from " + path)
         weights = torch.load(path, map_location=torch.device("cpu"))
         if path.endswith(".pkl"):

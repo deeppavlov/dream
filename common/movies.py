@@ -181,7 +181,6 @@ ACKNOWLEDGEMENT_LIKES_MOVIE = [
 
 
 def get_movie_template(category, subcategory=None, movie_type="movie"):
-
     if subcategory is not None:
         return (
             choice(DIFFERENT_SCRIPT_TEMPLATES[category].get(subcategory, ""))

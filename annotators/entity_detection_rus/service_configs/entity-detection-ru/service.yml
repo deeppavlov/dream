@@ -1,0 +1,32 @@
+name: entity-detection-ru
+endpoints:
+- respond
+- respond_batch
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      CONFIG: entity_detection_rus.json
+      SERVICE_PORT: 8103
+      SRC_DIR: annotators/entity_detection_rus
+      LANGUAGE: RU
+      FLASK_APP: server
+    context: ./
+    dockerfile: annotators/entity_detection_rus/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8103
+  environment:
+  - FLASK_APP=server
+  tty: true
+  deploy:
+    resources:
+      limits:
+        memory: 3.5G
+      reservations:
+        memory: 3.5G
+  volumes:
+  - ./annotators/entity_detection_rus:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8103:8103
+proxy: null

@@ -4,6 +4,7 @@ import time
 
 import sentry_sdk
 import torch
+from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -17,8 +18,12 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
-logging.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
-NAMING = ["AI", "Human"]
+logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+LANGUAGE = os.getenv("LANGUAGE", "EN")
+NAMING = {
+    "EN": ["AI", "Human"],
+    "RU": ["Чат-бот", "Человек"],
+}
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -30,11 +35,11 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [f"{NAMING[(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+    context = [f"{NAMING[LANGUAGE][(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
     if continue_last_uttr:
         dialog_context += "\n".join(context)
     else:
-        dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
+        dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
     max_length = generation_params.get("max_length", 50)
     generation_params.pop("max_length", None)
@@ -54,9 +59,11 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
-        result_cut = output.replace(dialog_context + " ", "").split("\n")[0]
+        result_cut = output.replace(dialog_context + " ", "")
+        result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
+
     return outputs
 
 
@@ -78,7 +85,11 @@ try:
         "num_return_sequences": 1,
     }
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
+        ["What is the goal of SpaceX?"],
+        model,
+        tokenizer,
+        "You are a SpaceX Assistant.",
+        default_config,
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")

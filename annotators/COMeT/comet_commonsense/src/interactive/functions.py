@@ -101,14 +101,12 @@ def get_atomic_sequence(input_event, model, sampler, data_loader, text_encoder, 
             outputs.update(new_outputs)
         return outputs
     else:
-
         sequence_all = {}
 
         sequence_all["event"] = input_event
         sequence_all["effect_type"] = category
 
         with torch.no_grad():
-
             batch = set_atomic_inputs(input_event, category, data_loader, text_encoder)
             max_event = data_loader.max_event + data.atomic_data.num_delimiter_tokens["category"]
             max_effect = data_loader.max_effect - data.atomic_data.num_delimiter_tokens["category"]
@@ -149,7 +147,6 @@ def get_conceptnet_sequence(e1, model, sampler, data_loader, text_encoder, relat
             outputs.update(new_outputs)
         return outputs
     else:
-
         sequence_all = {}
 
         sequence_all["e1"] = e1

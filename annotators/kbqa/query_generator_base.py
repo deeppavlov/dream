@@ -127,7 +127,6 @@ class QueryGeneratorBase(Component, Serializable):
         types_from_ner: List[str],
         q_type_flag: str,
     ) -> Union[List[Tuple[str, Any]], List[str]]:
-
         candidate_outputs = []
         self.template_nums = template_types
 

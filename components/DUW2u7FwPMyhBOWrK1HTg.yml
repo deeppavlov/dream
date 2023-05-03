@@ -1,0 +1,25 @@
+name: dialogrpt
+display_name: DialogRPT
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: DialogRPT model which is based on [Russian DialoGPT by DeepPavlov](https://huggingface.co/DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2)
+  and fine-tuned on Russian Pikabu Comment sequences
+ram_usage: 3.8G
+gpu_usage: 2G
+group: candidate_annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://dialogrpt-ru:8122/respond
+dialog_formatter: state_formatters.dp_formatters:hypotheses_with_context_list
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- skills
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: respond
+service: services/dialogrpt_ru/service_configs/dialogrpt-ru
+date_created: '2023-03-16T09:45:32'

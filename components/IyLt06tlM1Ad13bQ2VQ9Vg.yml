@@ -1,0 +1,26 @@
+name: dff_book_skill
+display_name: Book Skill
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: detects book titles and authors mentioned in the user's utterance with
+  the help of Wiki parser and Entity linking and recommends books by leveraging information
+  from the GoodReads database
+ram_usage: 400M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://dff-book-skill:8032/respond
+dialog_formatter: state_formatters.dp_formatters:dff_book_skill_formatter
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_book_skill/service_configs/dff-book-skill
+date_created: '2023-03-16T09:45:32'

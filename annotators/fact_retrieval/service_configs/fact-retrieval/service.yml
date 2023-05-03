@@ -1,0 +1,48 @@
+name: fact-retrieval
+endpoints:
+- model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8100
+      SERVICE_NAME: fact_retrieval
+      CONFIG: configs/fact_retrieval_page.json
+      CONFIG_WIKI: configs/page_extractor.json
+      CONFIG_WHOW: configs/whow_page_extractor.json
+      SRC_DIR: annotators/fact_retrieval/
+      COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
+      N_FACTS: 3
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./
+    dockerfile: annotators/fact_retrieval/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8100
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 4G
+      reservations:
+        memory: 4G
+  volumes:
+  - ./annotators/fact_retrieval:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8100:8100
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8100
+  - PORT=8100

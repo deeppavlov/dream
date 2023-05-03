@@ -1,0 +1,35 @@
+name: dff-sport-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8098
+      SERVICE_NAME: dff_sport_skill
+    context: .
+    dockerfile: skills/dff_sport_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8098
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./skills/dff_sport_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8098:8098
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8098
+  - PORT=8098

@@ -3,13 +3,13 @@ RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
 
 ARG CONFIG
 ARG COMMIT
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 
 ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 ENV COMMIT=$COMMIT
 
 COPY ./annotators/kbqa/requirements.txt /src/requirements.txt

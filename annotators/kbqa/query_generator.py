@@ -95,7 +95,6 @@ class QueryGenerator(QueryGeneratorBase):
         types_from_ner_batch: List[List[str]],
         q_type_flags_batch: List[str] = None,
     ) -> List[Union[List[Tuple[str, Any]], List[str]]]:
-
         candidate_outputs_batch = []
         template_answers_batch = []
         qg_tm1 = time.time()
