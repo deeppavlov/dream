@@ -1,0 +1,24 @@
+name: midas_classification
+display_name: MIDAS Classification
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: BERT-based model trained on a semantic classes subset of MIDAS dataset
+ram_usage: 1.1G
+gpu_usage: 4.5G
+group: candidate_annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://midas-classification:8090/batch_model
+dialog_formatter: state_formatters.dp_formatters:hypotheses_list_last_uttr
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- skills
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: batch_model
+service: annotators/midas_classification/service_configs/midas-classification
+date_created: '2023-03-16T09:45:32'

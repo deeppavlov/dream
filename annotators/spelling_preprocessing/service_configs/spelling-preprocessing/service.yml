@@ -1,0 +1,36 @@
+name: spelling-preprocessing
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8074
+      SERVICE_NAME: spelling_preprocessing
+      FLASK_APP: server
+    context: ./annotators/spelling_preprocessing/
+  command: flask run -h 0.0.0.0 -p 8074
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./annotators/spelling_preprocessing:/src
+  ports:
+  - 8074:8074
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8074
+  - PORT=8074

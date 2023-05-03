@@ -1,0 +1,47 @@
+name: entity-detection
+endpoints:
+- respond
+- respond_batch
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_NAME: entity_detection
+      SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
+      CONFIG: entity_detection_eng.json
+      LOWERCASE: 1
+      SERVICE_PORT: 8103
+      SRC_DIR: annotators/entity_detection/
+      FINEGRAINED: 0
+      FLASK_APP: server
+      CUDA_VISIBLE_DEVICES: '0'
+    context: ./
+    dockerfile: annotators/entity_detection/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8103
+  environment:
+  - FLASK_APP=server
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    resources:
+      limits:
+        memory: 2.5G
+      reservations:
+        memory: 2.5G
+  volumes:
+  - ./annotators/entity_detection:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8103:8103
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8103
+  - PORT=8103

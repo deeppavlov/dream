@@ -1,0 +1,43 @@
+name: comet-conceptnet
+endpoints:
+- comet_annotator
+- comet
+compose:
+  env_file:
+  - .env
+  build:
+    context: .
+    dockerfile: ./annotators/COMeT/Dockerfile
+    args:
+      GRAPH: conceptnet
+      SERVICE_HOME: ./annotators/COMeT/
+      SERVICE_NAME: comet_conceptnet
+      SERVICE_PORT: 8065
+      PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
+      PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
+      DECODING_ALGO: beam-3
+      CUDA_VISIBLE_DEVICES: '0'
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    resources:
+      limits:
+        memory: 3.5G
+      reservations:
+        memory: 3.5G
+  volumes:
+  - ./annotators/COMeT:/src
+  - ./common:/src/common
+  ports:
+  - 8065:8065
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8065
+  - PORT=8065

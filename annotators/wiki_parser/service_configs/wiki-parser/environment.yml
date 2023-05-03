@@ -1,0 +1,11 @@
+SERVICE_PORT: 8077
+SERVICE_NAME: wiki_parser
+WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt
+WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
+WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
+CONFIG: wiki_parser.json
+SRC_DIR: annotators/wiki_parser
+COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
+FAST: 1
+CUDA_VISIBLE_DEVICES: ''''''
+FLASK_APP: server
