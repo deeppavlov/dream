@@ -24,6 +24,7 @@ CUSTOM_EL_ADD = os.getenv("CUSTOM_EL_ADD")
 logger.info(f"URL of custom EL: {CUSTOM_EL_ADD}")
 USE_ABSTRACT_KINDS = True
 INDEX_LOAD_PATH=Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
+OPENAI_API_KEY=os.getenv("INDEX_LOAD_PATH")
 
 # read all relations & properties to add them into ontology
 rel_type_dict = {}
