@@ -1,0 +1,43 @@
+name: transformers-lm-llama7bru
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8149
+      SERVICE_NAME: transformers_lm_llama7bru
+      PRETRAINED_MODEL_NAME_OR_PATH: IlyaGusev/llama_7b_ru_turbo_alpaca_lora
+      LANGUAGE: RU
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_peft_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8149
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 50G
+      reservations:
+        memory: 50G
+  volumes:
+  - ./services/transformers_peft_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8149:8149
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8149
+  - PORT=8149
