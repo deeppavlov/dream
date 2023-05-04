@@ -3,6 +3,7 @@ import logging
 import re
 import requests
 import sentry_sdk
+from copy import deepcopy
 from os import getenv
 from typing import Any
 
@@ -22,31 +23,8 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 DEFAULT_PROMPT = "Respond like a friendly chatbot."
-
-CONSIDERED_LM_SERVICES = {
-    "GPT-J 6B": {
-        "url": "http://transformers-lm-gptj:8130/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
-    "BLOOMZ 7B": {
-        "url": "http://transformers-lm-bloomz7b:8146/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
-    "ChatGPT": {
-        "url": "http://openai-api-chatgpt:8145/respond",
-        "config": json.load(open("generative_configs/openai-chatgpt.json", "r")),
-        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    },
-    "GPT-3.5": {
-        "url": "http://openai-api-davinci3:8131/respond",
-        "config": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
-        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    },
-    "Open-Assistant SFT-1 12B": {
-        "url": "http://transformers-lm-oasst12b:8158/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
-}
+DEFAULT_LM_SERVICE_URL = "http://transformers-lm-oasst12b:8158/respond"
+DEFAULT_LM_SERVICE_CONFIG = json.load(open("generative_configs/default_generative_config.json", "r"))
 
 
 def compose_data_for_model(ctx, actor):
@@ -104,13 +82,19 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
     prompt = last_uttr.get("attributes", {}).get("prompt", DEFAULT_PROMPT)
     logger.info(f"prompt: {prompt}")
-    lm_service = last_uttr.get("attributes", {}).get("lm_service", "GPT-J 6B")
-    logger.info(f"lm_service: {lm_service}")
+    lm_service_url = last_uttr.get("attributes", {}).get("lm_service_url", DEFAULT_LM_SERVICE_URL)
+    logger.info(f"lm_service_url: {lm_service_url}")
+    # this is a dictionary! not a file!
+    lm_service_config = last_uttr.get("attributes", {}).get("lm_service_config", DEFAULT_LM_SERVICE_CONFIG)
+    logger.info(f"lm_service_config: {lm_service_config}")
+    lm_service_kwargs = last_uttr.get("attributes", {}).get("lm_service_kwargs", None)
+    logger.info(f"lm_service_config: {lm_service_kwargs}")
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
 
-    if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
+    if "envvars_to_send" in lm_service_kwargs:
         # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
         # from user_utterance attributes or from environment
-        envvars_to_send = CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
+        envvars_to_send = lm_service_kwargs.pop("envvars_to_send")
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
@@ -124,14 +108,17 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     else:
         sending_variables = {}
 
+    for _key, _value in lm_service_kwargs:
+        sending_variables[_key] = deepcopy(_value)
+
     if len(dialog_context) > 0:
         try:
             response = requests.post(
-                CONSIDERED_LM_SERVICES[lm_service]["url"],
+                lm_service_url,
                 json={
                     "dialog_contexts": [dialog_context],
                     "prompts": [prompt],
-                    "configs": [CONSIDERED_LM_SERVICES[lm_service]["config"]],
+                    "configs": [lm_service_config],
                     **sending_variables,
                 },
                 timeout=GENERATIVE_TIMEOUT,
