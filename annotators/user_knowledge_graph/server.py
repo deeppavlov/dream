@@ -157,23 +157,22 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
     if isinstance(attributes, dict):
         attributes = [attributes]
     for attribute in attributes:
-        if attribute and attribute['triplet']:
-            triplet = attribute['triplet']
-            if triplet['subject'] != 'user':
-                logger.info(no_rel_message)
-                return {}
-            if 'relation' in triplet:
-                entity_kind = get_entity_type(attribute)
-                entity_name = triplet['object']
-                relation = '_'.join(triplet['relation'].split(' '))
-                if relation in rel_kinds_dict:
-                    entity_kind = rel_kinds_dict[relation]
-                add_any_relationship(utt, graph, entity_kind, entity_name, relation.upper(), user_id,
-                                     entities_with_types, ex_triplets, existing_ids)
-                return triplet
-            else:
-                add_any_property(graph, user_id, triplet['property'], triplet['object'])
-                return triplet
+        if attribute and attribute['triplets']:
+            triplets = attribute['triplets']
+            for triplet in triplets:
+                if triplet['subject'] != 'user':
+                    logger.info(no_rel_message)
+                if 'relation' in triplet:
+                    entity_kind = get_entity_type(attribute)
+                    entity_name = triplet['object']
+                    relation = '_'.join(triplet['relation'].split(' '))
+                    if relation in rel_kinds_dict:
+                        entity_kind = rel_kinds_dict[relation]
+                    add_any_relationship(utt, graph, entity_kind, entity_name, relation.upper(), user_id,
+                                        entities_with_types, ex_triplets, existing_ids)
+                else:
+                    add_any_property(graph, user_id, triplet['property'], triplet['object'])
+            return triplets
     logger.info(no_rel_message)
     return {}
 
