@@ -92,10 +92,10 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"lm_service_kwargs: {lm_service_kwargs}")
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
 
-    if "envvars_to_send" in lm_service_kwargs:
+    if "envvars_to_send" in last_uttr.get("attributes", {}):
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
         # from the last human utterance's attributes
-        envvars_to_send = lm_service_kwargs.pop("envvars_to_send")
+        envvars_to_send = last_uttr.get("attributes", {})["envvars_to_send"]
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):

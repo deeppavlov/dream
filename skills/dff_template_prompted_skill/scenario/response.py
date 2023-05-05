@@ -93,18 +93,19 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
 
-    # try to get considered ENVVARS_TO_SEND from the last human utterance's attributes
-    sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in ENVVARS_TO_SEND}
+    # try to get considered envvars_to_send from the last human utterance's attributes
+    sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
     if if_none_var_values(sending_variables):
-        # try to get considered ENVVARS_TO_SEND from env variables
-        sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
+        # try to get considered envvars_to_send from env variables
+        sending_variables = {f"{var}_list": [getenv(var, None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
-            logger.info(f"Did not get {ENVVARS_TO_SEND}'s values. Sending without them.")
+            logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
         else:
-            logger.info(f"Got {ENVVARS_TO_SEND}'s values from environment.")
+            logger.info(f"Got {envvars_to_send}'s values from environment.")
     else:
-        logger.info(f"Got {ENVVARS_TO_SEND}'s values from attributes.")
+        logger.info(f"Got {envvars_to_send}'s values from attributes.")
 
     # adding any other kwargs to request from the last human utterance's attributes
     lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
