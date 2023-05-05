@@ -1,0 +1,28 @@
+name: openai_api_davinci3
+display_name: GPT-3.5
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: A multulingual instruction-based large language model which is 
+  capable of code generation. Unlike ChatGPT, not optimised for chat. 
+  For more details, refer to 
+  [OpenAI website](https://platform.openai.com/docs/models/gpt-3-5). 
+  Paid. You must provide your OpenAI API key to use the model. 
+  Your OpenAI account will be charged according to your usage.
+ram_usage: 100M
+gpu_usage: null
+group: services
+connector:
+  protocol: http
+  timeout: 20.0
+  url: http://openai-api-davinci3:8131/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/openai_api_lm/service_configs/openai-api-davinci3
+date_created: '2023-04-16T09:45:32'
