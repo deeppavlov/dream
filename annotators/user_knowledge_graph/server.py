@@ -247,20 +247,17 @@ def get_result(request):
     existing_ids = [entity["@id"] for entity in all_entities]
     logger.info(f"Existing ids: {existing_ids}")
 
+
+    triplets = []
+    for entity, entity_id in entities_with_types.items():
+        rels = graph.search_for_relationships(id_a=user_id, id_b=entity_id)
+        logger.info(f"rels from custom_el in KG --||-- {rels}")
+        for rel in rels:
+            triplets.append(["User", rel['rel'].split('_')[0].lower(), entity[0]]) #TODO: you can do better than this naive split
     prompts = []
-    for prop in property_extraction_result:
-        logger.debug(f"property: {prop}")
-        if "triplet" not in prop or "subject" not in prop["triplet"]:
-            pass
-        elif prop["triplet"]["subject"] == "user":
-            user_relationships = graph.search_for_relationships(id_a=user_id)
-            
-            for rel in user_relationships:
-                for entity in all_entities:
-                    if rel.get("id_b") == entity.get("@id") and entity.get("Name") == prop["triplet"]["object"]:
-                        prompts.append(f"I know that the user {rel['rel'].replace('_', ' ').lower()} {entity.get('Name')}.")
-                    else:
-                        logger.info(f"rel -- {rel}\n entity -- {entity}")
+    for triplet in triplets:
+        prompts.append(f"I know that the user {triplet[1].replace('_', ' ').lower()} {triplet[2]}")     
+
     prompt = "\n".join(prompts)
     prompt = ["Respond to a new friend as a kind friendly person. You MUST provide all information in the list of facts.\n\nThe list of facts:", prompt]
     logger.info(f"prompt -- {prompt}")

@@ -139,7 +139,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 GENERATIVE_SERVICE_URL,
                 json={
                     "dialog_contexts": [dialog_context],
-                    "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
+                    "prompts": [final_prompt if len(final_prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
                     "configs": [GENERATIVE_SERVICE_CONFIG],
                     **sending_variables,
                 },
