@@ -64,7 +64,7 @@ def compose_data_for_model(ctx, actor):
 
 def if_none_var_values(sending_variables):
     if len(sending_variables.keys()) > 0 and all(
-            [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
+        [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
     ):
         return True
     else:
