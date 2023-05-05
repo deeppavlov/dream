@@ -1,4 +1,4 @@
-SERVICE_PORT: 8159
+SERVICE_PORT: 8153
 SERVICE_NAME: dff_deepy_faq_prompted_skill
 PROMPT_FILE: common/prompts/deepy_faq.json
 GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond

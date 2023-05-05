@@ -116,7 +116,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
-                    "url": "http://dff-deepy-faq-prompted-skill:8159/respond"
+                    "url": "http://dff-deepy-faq-prompted-skill:8153/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",

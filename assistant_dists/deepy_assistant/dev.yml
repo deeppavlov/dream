@@ -40,6 +40,6 @@ services:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8159:8159
+      - 8153:8153
 
 version: "3.7"

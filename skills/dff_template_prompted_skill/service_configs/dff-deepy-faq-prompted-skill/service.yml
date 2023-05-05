@@ -7,7 +7,7 @@ compose:
   - .env_secret
   build:
     args:
-      SERVICE_PORT: 8159
+      SERVICE_PORT: 8153
       SERVICE_NAME: dff_deepy_faq_prompted_skill
       PROMPT_FILE: common/prompts/deepy_faq.json
       GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
@@ -17,7 +17,7 @@ compose:
       ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
     context: .
     dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:8159 --reload
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8153 --reload
   deploy:
     resources:
       limits:
@@ -28,5 +28,5 @@ compose:
   - ./skills/dff_template_prompted_skill:/src
   - ./common:/src/common
   ports:
-  - 8159:8159
+  - 8153:8153
 proxy: null
