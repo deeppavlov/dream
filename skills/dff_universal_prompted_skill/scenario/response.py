@@ -89,16 +89,18 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service_config = last_uttr.get("attributes", {}).get("lm_service_config", DEFAULT_LM_SERVICE_CONFIG)
     logger.info(f"lm_service_config: {lm_service_config}")
     lm_service_kwargs = last_uttr.get("attributes", {}).get("lm_service_kwargs", None)
-    logger.info(f"lm_service_config: {lm_service_kwargs}")
+    logger.info(f"lm_service_kwargs: {lm_service_kwargs}")
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
 
     if "envvars_to_send" in lm_service_kwargs:
-        # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
-        # from user_utterance attributes or from environment
+        # get variables which names are in `envvars_to_send` (splitted by comma if many)
+        # from the last human utterance's attributes
         envvars_to_send = lm_service_kwargs.pop("envvars_to_send")
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
+            # get variables which names are in `envvars_to_send` (splitted by comma if many)
+            # from env variables
             sending_variables = {f"{var}_list": [getenv(var, None)] for var in envvars_to_send}
             if if_none_var_values(sending_variables):
                 logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
@@ -109,6 +111,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     else:
         sending_variables = {}
 
+    # adding any other kwargs to request from the last human utterance's attributes
     for _key, _value in lm_service_kwargs:
         sending_variables[_key] = deepcopy(_value)
 

@@ -3,6 +3,7 @@ import logging
 import re
 import requests
 import sentry_sdk
+from copy import deepcopy
 from os import getenv
 from typing import Any
 
@@ -92,8 +93,11 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+
+    # try to get considered ENVVARS_TO_SEND from the last human utterance's attributes
     sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in ENVVARS_TO_SEND}
     if if_none_var_values(sending_variables):
+        # try to get considered ENVVARS_TO_SEND from env variables
         sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
         if if_none_var_values(sending_variables):
             logger.info(f"Did not get {ENVVARS_TO_SEND}'s values. Sending without them.")
@@ -101,6 +105,13 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             logger.info(f"Got {ENVVARS_TO_SEND}'s values from environment.")
     else:
         logger.info(f"Got {ENVVARS_TO_SEND}'s values from attributes.")
+
+    # adding any other kwargs to request from the last human utterance's attributes
+    lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
+    logger.info(f"lm_service_kwargs: {lm_service_kwargs}")
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    for _key, _value in lm_service_kwargs:
+        sending_variables[_key] = deepcopy(_value)
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
