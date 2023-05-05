@@ -10,6 +10,6 @@ Werkzeug<=2.0.3
 transformers==4.6.0
 torch==1.13.1
 torchvision==0.14.1
-torchcrf==1.1.0
+pytorch-crf==0.7.*
 cryptography==2.8
 pymorphy2==0.9.1
