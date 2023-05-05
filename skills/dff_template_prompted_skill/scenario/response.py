@@ -65,8 +65,7 @@ def compose_data_for_model(ctx, actor):
 def if_none_var_values(sending_variables):
     if len(sending_variables.keys()) > 0 and all([var_value[0] is None for var_value in sending_variables.values()]):
         return True
-    else:
-        False
+    return False
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
