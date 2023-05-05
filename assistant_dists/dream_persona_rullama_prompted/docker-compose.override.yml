@@ -78,7 +78,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8149
-        SERVICE_NAME: transformers_peft_lm_llama7bru
+        SERVICE_NAME: transformers_lm_llama7bru
         PRETRAINED_MODEL_NAME_OR_PATH: IlyaGusev/llama_7b_ru_turbo_alpaca_lora
         LANGUAGE: RU
       context: .
