@@ -35,11 +35,5 @@ services:
       - "./common:/src/common"
     ports:
       - 8152:8152
-  dff-deepy-faq-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8153:8153
 
 version: "3.7"

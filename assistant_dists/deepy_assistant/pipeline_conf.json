@@ -112,27 +112,6 @@
                     "service": "skills/dff_template_prompted_skill/service_configs/dff-deepy-prompted-skill"
                 }
             },
-            "dff_deepy_faq_prompted_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 20.0,
-                    "url": "http://dff-deepy-faq-prompted-skill:8153/respond"
-                },
-                "dialog_formatter": {
-                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_deepy_faq_prompted_skill"
-                },
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/akldjhgakjeirbgjnrejkg.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-deepy-faq-prompted-skill"
-                }
-            },
             "dummy_skill": {
                 "connector": {
                     "protocol": "python",
