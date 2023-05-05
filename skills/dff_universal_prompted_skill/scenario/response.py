@@ -80,23 +80,22 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
-    last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    prompt = last_uttr.get("attributes", {}).get("prompt", DEFAULT_PROMPT)
+    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    prompt = human_uttr_attributes.get("prompt", DEFAULT_PROMPT)
     logger.info(f"prompt: {prompt}")
-    lm_service_url = last_uttr.get("attributes", {}).get("lm_service_url", DEFAULT_LM_SERVICE_URL)
+    lm_service_url = human_uttr_attributes.get("lm_service_url", DEFAULT_LM_SERVICE_URL)
     logger.info(f"lm_service_url: {lm_service_url}")
     # this is a dictionary! not a file!
-    lm_service_config = last_uttr.get("attributes", {}).get("lm_service_config", DEFAULT_LM_SERVICE_CONFIG)
+    lm_service_config = human_uttr_attributes.get("lm_service_config", DEFAULT_LM_SERVICE_CONFIG)
     logger.info(f"lm_service_config: {lm_service_config}")
-    lm_service_kwargs = last_uttr.get("attributes", {}).get("lm_service_kwargs", None)
+    lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
     logger.info(f"lm_service_kwargs: {lm_service_kwargs}")
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
 
-    if "envvars_to_send" in last_uttr.get("attributes", {}):
+    if "envvars_to_send" in human_uttr_attributes:
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
         # from the last human utterance's attributes
-        envvars_to_send = last_uttr.get("attributes", {})["envvars_to_send"]
-        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        envvars_to_send = human_uttr_attributes["envvars_to_send"]
         sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
             # get variables which names are in `envvars_to_send` (splitted by comma if many)
