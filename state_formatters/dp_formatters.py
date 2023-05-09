@@ -1080,10 +1080,10 @@ def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
     )
 
 
-def dff_google_api_skill_formatter(dialog):
+def dff_api_skill_formatter(dialog):
     return utils.dff_formatter(
         dialog,
-        "dff_google_api_skill",
+        "dff_api_skill",
     )
 
 
