@@ -17,6 +17,8 @@ flows = {
         "start_node": {
             RESPONSE: "",
             TRANSITIONS: {
+                "updating_prompt_node": loc_cnd.if_updating_prompt,
+                "reseting_prompt_node": loc_cnd.if_reseting_prompt,
                 "generative_response_node": cnd.true(),
             },
         },
