@@ -37,6 +37,4 @@ flows = {
     },
 }
 
-actor = Actor(
-    flows, start_label=("generation", "generative_response_node")
-)
+actor = Actor(flows, start_label=("generation", "generative_response_node"))
