@@ -93,6 +93,9 @@ def respond():
     selected_skill_names = []
     selected_responses = []
     selected_confidences = []
+    selected_human_attributes = []
+    selected_bot_attributes = []
+    selected_attributes = []
 
     for i, dialog in enumerate(dialogs):
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
@@ -103,9 +106,14 @@ def respond():
         selected_resp = select_response(dialog_context, hypotheses)
         try:
             best_id = hypotheses.index(selected_resp)
-            selected_responses.append(selected_resp["text"])
-            selected_skill_names.append(hypotheses[best_id]["skill_name"])
-            selected_confidences.append(hypotheses[best_id]["confidence"])
+
+            selected_responses.append(hypotheses[best_id].pop("text"))
+            selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
+            selected_confidences.append(hypotheses[best_id].pop("confidence"))
+            selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
+            selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
+            hypotheses[best_id].pop("annotations", {})
+            selected_attributes.append(hypotheses[best_id])
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
@@ -114,9 +122,13 @@ def respond():
                 "Selected a response with the highest confidence."
             )
             selected_resp, best_id = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])
-            selected_responses.append(selected_resp["text"])
-            selected_skill_names.append(hypotheses[best_id]["skill_name"])
-            selected_confidences.append(hypotheses[best_id]["confidence"])
+            selected_responses.append(hypotheses[best_id].pop("text"))
+            selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
+            selected_confidences.append(hypotheses[best_id].pop("confidence"))
+            selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
+            selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
+            hypotheses[best_id].pop("annotations", {})
+            selected_attributes.append(hypotheses[best_id])
 
     total_time = time.time() - st_time
     logger.info(f"llm_based_response_selector exec time = {total_time:.3f}s")
