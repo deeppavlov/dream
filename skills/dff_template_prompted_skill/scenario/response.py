@@ -67,8 +67,7 @@ def if_none_var_values(sending_variables):
         [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
     ):
         return True
-    else:
-        False
+    return False
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
@@ -105,8 +104,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
-
+    logger.info(f"prompt from shared memory: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
+
     if len(dialog_context) > 0:
         try:
             response = requests.post(
