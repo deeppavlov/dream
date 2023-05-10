@@ -93,7 +93,7 @@ def respond():
             else:
                 context = ""
             entity_info_list = []
-            triplet = {}
+            triplets = {}
             if isinstance(prex_info, list) and prex_info:
                 prex_info = prex_info[0]
             if prex_info:
