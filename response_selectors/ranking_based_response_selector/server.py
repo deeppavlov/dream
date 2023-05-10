@@ -129,14 +129,18 @@ def respond():
 
     total_time = time.time() - st_time
     logger.info(f"ranking_based_response_selector exec time = {total_time:.3f}s")
-    return jsonify(list(zip(
-        selected_skill_names,
-        selected_responses,
-        selected_confidences,
-        selected_human_attributes,
-        selected_bot_attributes,
-        selected_attributes
-    )))
+    return jsonify(
+        list(
+            zip(
+                selected_skill_names,
+                selected_responses,
+                selected_confidences,
+                selected_human_attributes,
+                selected_bot_attributes,
+                selected_attributes,
+            )
+        )
+    )
 
 
 if __name__ == "__main__":
