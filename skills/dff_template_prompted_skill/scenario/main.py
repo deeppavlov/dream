@@ -14,14 +14,6 @@ logger = logging.getLogger(__name__)
 
 flows = {
     "generation": {
-        "start_node": {
-            RESPONSE: "",
-            TRANSITIONS: {
-                "updating_prompt_node": loc_cnd.if_updating_prompt,
-                "reseting_prompt_node": loc_cnd.if_reseting_prompt,
-                "generative_response_node": cnd.true(),
-            },
-        },
         "generative_response_node": {
             RESPONSE: loc_rsp.generative_response,
             TRANSITIONS: {
@@ -46,5 +38,5 @@ flows = {
 }
 
 actor = Actor(
-    flows, start_label=("generation", "start_node"), fallback_node_label=("generation", "generative_response_node")
+    flows, start_label=("generation", "generative_response_node")
 )
