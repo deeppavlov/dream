@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -28,8 +29,8 @@ NAMING = {
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "EleutherAI/gpt-j-6B": "generative_configs/default_generative_config.json",
-    "OpenAssistant/oasst-sft-1-pythia-12b": "generative_configs/default_generative_config.json",
+    "EleutherAI/gpt-j-6B": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "OpenAssistant/oasst-sft-1-pythia-12b": json.load(open("generative_configs/default_generative_config.json", "r")),
 }
 
 
