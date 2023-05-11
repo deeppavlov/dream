@@ -51,7 +51,7 @@ rel_kinds_dict = {
     "like_sports": "type_of_sport"
 }
 
-DB = "test_italy_skill1"
+DB = "test_prompted_skill1"
 TEAM = "yashkens|c77b"
 
 graph = TerminusdbKnowledgeGraph(

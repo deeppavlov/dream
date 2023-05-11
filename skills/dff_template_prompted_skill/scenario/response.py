@@ -108,7 +108,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     prompt = shared_memory.get("prompt", "")
 
     logger.info(f"dialog_context: {dialog_context}")
-    # logger.info(f"dialog_contexts: {dialog_contexts}")
     logger.info(f"use_kg_data: {USE_KG_DATA}")
 
     custom_el = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("custom_entity_linking")
@@ -118,21 +117,14 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["prompt"]) and kg_prompt[1]:
         # dialogue = " ".join(dialog_contexts)
-        final_prompt = PROMPT + f"\nUse the following facts about the user for your answer: ```{kg_prompt[1]}```" #+ \
-            #   f"\nContinue conversation with the user: ```{dialogue}``` " 
+        final_prompt = PROMPT + f" Use the following facts about the user for your answer: {kg_prompt[1]}"
+        # final_prompt = PROMPT + f"\nUse the following facts about the user for your answer: ```The user likes Italy```"
 
     else:
         final_prompt = PROMPT 
     logger.info(f"final_prompt: {final_prompt}")
 
 
-    # if len(dialog_contexts) > 0:
-    #     response = requests.post(
-    #         GENERATIVE_SERVICE_URL,
-    #         json={"dialog_contexts": [dialog_contexts], "prompts": [final_prompt], "configs": [GENERATIVE_SERVICE_CONFIG]},
-    #         timeout=GENERATIVE_TIMEOUT,
-    #     )
-    #     hypotheses = response.json()[0]
     if len(dialog_context) > 0:
         try:
             response = requests.post(
