@@ -111,7 +111,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
     logger.info(f"lm_service_kwargs: {lm_service_kwargs}")
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    for _key, _value in lm_service_kwargs:
+    for _key, _value in lm_service_kwargs.items():
         sending_variables[_key] = deepcopy(_value)
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
