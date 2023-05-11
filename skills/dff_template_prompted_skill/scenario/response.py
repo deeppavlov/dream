@@ -94,7 +94,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
     envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
-
+    envvars_to_send = [el.lower() for el in envvars_to_send]
     # try to get considered envvars_to_send from the last human utterance's attributes
     sending_variables = {f"{var}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
     if if_none_var_values(sending_variables):
