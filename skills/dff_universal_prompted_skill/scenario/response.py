@@ -86,7 +86,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service_url = human_uttr_attributes.get("lm_service_url", DEFAULT_LM_SERVICE_URL)
     logger.info(f"lm_service_url: {lm_service_url}")
     # this is a dictionary! not a file!
-    lm_service_config = human_uttr_attributes.get("lm_service_config", DEFAULT_LM_SERVICE_CONFIG)
+    lm_service_config = human_uttr_attributes.get("lm_service_config", None)
     logger.info(f"lm_service_config: {lm_service_config}")
     lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
     logger.info(f"lm_service_kwargs: {lm_service_kwargs}")

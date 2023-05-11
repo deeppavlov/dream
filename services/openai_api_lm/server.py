@@ -22,6 +22,10 @@ CHATGPT_ROLES = ["assistant", "user"]
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+DEFAULT_CONFIGS = {
+    "text-davinci-003": "generative_configs/openai-text-davinci-003-long.json",
+    "gpt-3.5-turbo": "generative_configs/openai-chatgpt.json",
+}
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
@@ -88,6 +92,7 @@ def respond():
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", [])
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
     openai_api_keys = request.json.get("openai_api_keys", [])
