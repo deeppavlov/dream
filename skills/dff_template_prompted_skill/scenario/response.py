@@ -96,10 +96,10 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
 
     # try to get considered envvars_to_send from the last human utterance's attributes
-    sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
+    sending_variables = {f"{var}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
     if if_none_var_values(sending_variables):
         # try to get considered envvars_to_send from env variables
-        sending_variables = {f"{var}_list": [getenv(var, None)] for var in envvars_to_send}
+        sending_variables = {f"{var}s": [getenv(var, None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
             logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
         else:

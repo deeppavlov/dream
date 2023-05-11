@@ -96,11 +96,11 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
         # from the last human utterance's attributes
         envvars_to_send = human_uttr_attributes["envvars_to_send"]
-        sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
+        sending_variables = {f"{var}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
             # get variables which names are in `envvars_to_send` (splitted by comma if many)
             # from env variables
-            sending_variables = {f"{var}_list": [getenv(var, None)] for var in envvars_to_send}
+            sending_variables = {f"{var}s": [getenv(var, None)] for var in envvars_to_send}
             if if_none_var_values(sending_variables):
                 logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
             else:
@@ -113,6 +113,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # adding any other kwargs to request from the last human utterance's attributes
     for _key, _value in lm_service_kwargs.items():
         sending_variables[_key] = deepcopy(_value)
+    logger.info(f"sending_variables: {sending_variables}")
 
     if len(dialog_context) > 0:
         try:
