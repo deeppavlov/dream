@@ -24,7 +24,7 @@ CHATGPT_ROLES = ["assistant", "user"]
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "text-davinci-003": json.load(open("generative_configs/openai-text-davinci-003-long.json", "r")),
+    "text-davinci-003": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
     "gpt-3.5-turbo": json.load(open("generative_configs/openai-chatgpt.json", "r")),
 }
 
