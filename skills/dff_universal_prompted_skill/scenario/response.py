@@ -111,7 +111,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         sending_variables = {}
 
     # adding any other kwargs to request from the last human utterance's attributes
-    for _key, _value in lm_service_kwargs:
+    for _key, _value in lm_service_kwargs.items():
         sending_variables[_key] = deepcopy(_value)
 
     if len(dialog_context) > 0:
