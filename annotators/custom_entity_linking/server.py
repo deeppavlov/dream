@@ -92,16 +92,20 @@ def respond():
             else:
                 context = ""
             entity_info_list = []
-            triplet = {}
+            triplets = {}
             if isinstance(prex_info, list) and prex_info:
                 prex_info = prex_info[0]
             if prex_info:
-                triplet = prex_info.get("triplet", {})
-            rel = ""
-            if "relation" in triplet:
-                rel = triplet["relation"]
-            elif "property" in triplet:
-                rel = triplet["property"]
+                triplets = prex_info.get("triplets", {})
+            obj2rel_dict = {}
+            for triplet in triplets:
+                rel = ""
+                obj = triplet['object']
+                if "relation" in triplet:
+                    rel = triplet["relation"]
+                elif "property" in triplet:
+                    rel = triplet["property"]
+                obj2rel_dict[obj.lower()] = rel
             for entity_substr, entity_ids, confs, entity_id_tags in zip(
                 entity_substr_list,
                 entity_ids_list,
@@ -109,8 +113,10 @@ def respond():
                 entity_id_tags_list,
             ):
                 entity_info = {}
-                is_abstract = rel.lower().replace("_", " ") in abstract_rels \
-                    and not any([f" {word} {entity_substr}" in context for word in ["the", "my", "his", "her"]])
+                curr_rel = obj2rel_dict.get(entity_substr.lower(), "")
+                is_abstract = curr_rel.lower().replace("_", " ") in abstract_rels and not any(
+                    [f" {word} {entity_substr}" in context for word in ["the", "my", "his", "her"]]
+                )
 
                 f_entity_ids, f_confs, f_entity_id_tags = [], [], []
                 for entity_id, conf, entity_id_tag in zip(entity_ids, confs, entity_id_tags):

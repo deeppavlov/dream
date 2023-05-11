@@ -1252,8 +1252,29 @@ services:
         reservations:
           memory: 10G
 
-  dff-template-skill:
+  property-extraction:
     env_file: [.env]
+    build:
+      args:
+        CONFIG_T5: t5_generative_ie_lite_infer.json
+        CONFIG_REL_RANKER: rel_ranking_roberta.json
+        SERVICE_PORT: 8130
+        SRC_DIR: annotators/property_extraction/
+      context: ./
+      dockerfile: annotators/property_extraction/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8130
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=4
+    deploy:
+      resources:
+        limits:
+          memory: 7G
+        reservations:
+          memory: 7G
+
+  dff-template-skill:
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8120
@@ -1289,25 +1310,10 @@ services:
         reservations:
           memory: 128M
 
-  property-extraction:
-    env_file: [.env]
-    build:
-      args:
-        CONFIG: t5_generative_ie_infer.json
-        PORT: 8130
-        SRC_DIR: annotators/property_extraction/
-      context: ./
-      dockerfile: annotators/property_extraction/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
-    environment:
-      - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=6
-    deploy:
-      resources:
-        limits:
-          memory: 8.0G
-        reservations:
-          memory: 4.0G
+  terminusdb-server:
+    image: terminusdb/terminusdb-server:latest
+    ports:
+      - 6363:6363
 
   user-knowledge-graph:
     env_file: [ .env ]

@@ -1,13 +1,13 @@
 {
   "chainer": {
-    "in": ["question"],
+    "in": ["question", "relation"],
     "pipe": [
       {
         "class_name": "src.torch_transformers_preprocessor:T5GenerativeIEPreprocessor",
         "vocab_file": "{TRANSFORMER}",
         "add_special_tokens": ["<subj>", "<rel>", "<obj>"],
         "max_seq_length": 512,
-        "in": ["question"],
+        "in": ["question", "relation"],
         "out": ["input_ids", "attention_mask"]
       },
       {
@@ -41,7 +41,7 @@
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/tmp/t5_small_generative_ie.tar.gz",
+        "url": "http://files.deeppavlov.ai/tmp/raushan/t5_lite_generative_ie_new.tar.gz",
         "subdir": "{MODEL_PATH}"
       }
     ]
