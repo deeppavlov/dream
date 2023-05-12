@@ -54,6 +54,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8131:8131
+  openai-api-gpt4:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8159:8159
+  openai-api-gpt4-32k:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8160:8160
   dff-universal-prompted-skill:
     volumes:
       - "./skills/dff_universal_prompted_skill:/src"
