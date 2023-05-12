@@ -26,6 +26,8 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
     "text-davinci-003": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
     "gpt-3.5-turbo": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+    "gpt-4": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+    "gpt-4-32k": json.load(open("generative_configs/openai-chatgpt.json", "r")),
 }
 
 
