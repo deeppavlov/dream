@@ -95,12 +95,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"lm_service_url: {lm_service_url}")
     # this is a dictionary! not a file!
     lm_service_config = human_uttr_attributes.get("lm_service_config", None)
-    logger.info(f"lm_service_config: {lm_service_config}")
     lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
-    logger.info(f"lm_service_kwargs: {lm_service_kwargs}")
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
     envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
-    logger.info(f"envvars_to_send: {envvars_to_send}")
 
     if len(envvars_to_send):
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
@@ -123,6 +120,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     # adding kwargs to request from the last human utterance's attributes
     for _key, _value in lm_service_kwargs.items():
+        logger.info(f"Got/Re-writing {_key}s values from kwargs.")
         sending_variables[f"{_key}s"] = [deepcopy(_value)]
 
     if len(dialog_context) > 0:
