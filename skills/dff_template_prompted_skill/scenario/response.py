@@ -3,6 +3,7 @@ import logging
 import re
 import requests
 import sentry_sdk
+from copy import deepcopy
 from os import getenv
 from typing import Any
 
@@ -92,15 +93,33 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    sending_variables = {f"{var}_list": [human_uttr_attributes.get(var.lower(), None)] for var in ENVVARS_TO_SEND}
-    if if_none_var_values(sending_variables):
-        sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+
+    if len(envvars_to_send):
+        # get variables which names are in `envvars_to_send` (splitted by comma if many)
+        # from the last human utterance's attributes
+        sending_variables = {
+            f"{var.lower()}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send
+        }
         if if_none_var_values(sending_variables):
-            logger.info(f"Did not get {ENVVARS_TO_SEND}'s values. Sending without them.")
+            # get variables which names are in `envvars_to_send` (splitted by comma if many)
+            # from env variables
+            sending_variables = {f"{var.lower()}s": [getenv(var, None)] for var in envvars_to_send}
+            if if_none_var_values(sending_variables):
+                logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
+            else:
+                logger.info(f"Got {envvars_to_send}'s values from environment.")
         else:
-            logger.info(f"Got {ENVVARS_TO_SEND}'s values from environment.")
+            logger.info(f"Got {envvars_to_send}'s values from attributes.")
     else:
-        logger.info(f"Got {ENVVARS_TO_SEND}'s values from attributes.")
+        sending_variables = {}
+
+    # adding kwargs to request from the last human utterance's attributes
+    lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    for _key, _value in lm_service_kwargs.items():
+        logger.info(f"Got/Re-writing {_key}s values from kwargs.")
+        sending_variables[f"{_key}s"] = [deepcopy(_value)]
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")

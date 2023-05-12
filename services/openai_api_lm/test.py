@@ -30,8 +30,8 @@ def test_respond():
             "dialog_contexts": contexts,
             "prompts": prompts,
             "configs": [DEFAULT_CONFIG] * len(contexts),
-            "OPENAI_API_KEY_list": [OPENAI_API_KEY] * len(contexts),
-            "OPENAI_ORGANIZATION_list": [OPENAI_ORGANIZATION] * len(contexts),
+            "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
+            "openai_api_organizations": [OPENAI_ORGANIZATION] * len(contexts),
         },
     ).json()
     print(result)
