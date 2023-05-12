@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import time
+import pickle
 import itertools
 
 import nltk
@@ -41,6 +42,9 @@ with open("rel_list.txt", "r") as fl:
             rel_type = "property"
         rel_type_dict[rel.replace("_", " ")] = rel_type
 
+with open("rel_groups.pickle", "rb") as fl:
+    rel_groups_list = pickle.load(fl)
+
 try:
     generative_ie = build_model(t5_config, download=True)
     rel_ranker = build_model(rel_ranker_config, download=True)
@@ -55,11 +59,24 @@ def get_relations(uttr_batch, thres=0.6):
     relations_pred_batch = []
     input_batch = list(zip(*itertools.product(uttr_batch, relations_all)))
     rels_scores = rel_ranker(*input_batch)
-    rels_scores = [int(scores[1] > thres) for scores in rels_scores]
-    rels_scores = np.array(rels_scores).reshape((len(uttr_batch), -1))
+    # rels_scores = [int(scores[1] > thres) for scores in rels_scores]
+    rels_scores = np.array(rels_scores).reshape((len(uttr_batch), len(relations_all), 2))
+    
     for curr_scores in rels_scores:
-        pred_rels = [curr_rel for curr_score, curr_rel in zip(curr_scores, relations_all) if curr_score == 1]
-        pred_rels = [rel for rel in pred_rels if rel] or [""]
+        # pred_rels = [curr_rel for curr_score, curr_rel in zip(curr_scores, relations_all) if curr_score == 1]
+        # pred_rels = [rel for rel in pred_rels if rel] or [""]
+        pred_rels = []
+        rels_with_scores = [(curr_score[1], curr_rel) for curr_score, curr_rel in zip(curr_scores, relations_all) if curr_score[1] > thres]
+        logger.debug(f"rels_with_scores {rels_with_scores}")
+        for rel_group in rel_groups_list:
+            pred_rel_group = [(curr_score, curr_rel) for curr_score, curr_rel in rels_with_scores if curr_rel in rel_group]
+            logger.debug(f"pred_rel_group {pred_rel_group}")
+            if len(pred_rel_group) == 1:
+                pred_rel = pred_rel_group[0][1]
+                pred_rels.append(pred_rel)
+            elif len(pred_rel_group) >= 2:
+                pred_rel = max(pred_rel_group)[1]
+                pred_rels.append(pred_rel)
         relations_pred_batch.append(pred_rels)
     logger.debug(f"rel clf raw output: {relations_pred_batch}")
     return relations_pred_batch
@@ -79,7 +96,6 @@ def generate_triplets(uttr_batch, relations_pred_batch):
         for i in range(len(pred_rels)):
             triplet_init = t5_pred_triplets[curr_idx]
             if triplet_init:
-                #triplet_correct = [triplet_init[0], pred_rels[i], triplet_init[2]]
                 curr_triplets.append(triplet_init)
                 curr_scores.append(t5_pred_scores[curr_idx])
                 curr_idx += 1
@@ -108,13 +124,36 @@ def sentrewrite(sentence, init_answer):
     return sentence
 
 
+def postprocess_triplets(outputs_batch, uttrs):
+    triplets_batch = []
+    for (outputs, scores), uttr in zip(outputs_batch, uttrs):
+        triplets = []
+        for output in outputs:
+            triplet = ""
+            fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", output)
+            if fnd:
+                triplet = list(fnd[0])
+                if triplet[1] not in rel_type_dict:
+                    continue
+                if triplet[0] == "i":
+                    triplet[0] = "user"
+                obj = triplet[2]
+                if obj.islower() and obj.capitalize() in uttr:
+                    triplet[2] = obj.capitalize()
+            triplets.append(triplet)
+        triplets_batch.append(triplets)
+    return triplets_batch
+
+
 def get_result(request):
     st_time = time.time()
     init_uttrs = request.json.get("utterances", [])
     named_entities_batch = request.json.get("named_entities", [[] for _ in init_uttrs])
     entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in init_uttrs])
     entity_info_batch = request.json.get("entity_info", [[] for _ in init_uttrs])
-    logger.info(f"init_uttrs {init_uttrs}, entities_with_labels_batch: {entities_with_labels_batch} entity_info_batch: {entity_info_batch}")
+    logger.info(
+        f"init_uttrs {init_uttrs}, entities_with_labels_batch: {entities_with_labels_batch} entity_info_batch: {entity_info_batch}"
+    )
     uttrs = []
     for uttr_list in init_uttrs:
         if len(uttr_list) == 1:
@@ -147,25 +186,9 @@ def get_result(request):
                 uttrs.append(utt_cur)
 
     logger.info(f"input utterances: {uttrs}")
-    triplets_batch = []
     relations_pred = get_relations(uttrs)
     outputs_batch = generate_triplets(uttrs, relations_pred)
-    for (outputs, scores), uttr in zip(outputs_batch, uttrs):
-        triplets = []
-        for output in outputs:
-            triplet = ""
-            fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", output)
-            if fnd:
-                triplet = list(fnd[0])
-                if triplet[1] not in rel_type_dict:
-                    continue
-                if triplet[0] == "i":
-                    triplet[0] = "user"
-                obj = triplet[2]
-                if obj.islower() and obj.capitalize() in uttr:
-                    triplet[2] = obj.capitalize()
-            triplets.append(triplet)
-        triplets_batch.append(triplets)
+    triplets_batch = postprocess_triplets(outputs_batch, uttrs)
     logger.info(f"triplets_batch {triplets_batch}")
 
     triplets_info_batch = []
@@ -241,4 +264,4 @@ def respond():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(debug=True, host="0.0.0.0", port=port)
