@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -27,6 +28,10 @@ NAMING = {
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+DEFAULT_CONFIGS = {
+    "EleutherAI/gpt-j-6B": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "OpenAssistant/oasst-sft-1-pythia-12b": json.load(open("generative_configs/default_generative_config.json", "r")),
+}
 
 
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
@@ -110,6 +115,7 @@ def respond():
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", [])
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
