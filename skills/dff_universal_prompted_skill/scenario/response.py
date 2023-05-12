@@ -23,8 +23,16 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 DEFAULT_PROMPT = "Respond like a friendly chatbot."
-DEFAULT_LM_SERVICE_URL = "http://transformers-lm-oasst12b:8158/respond"
-DEFAULT_LM_SERVICE_CONFIG = json.load(open("generative_configs/default_generative_config.json", "r"))
+DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-oasst12b:8158/respond")
+DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
+DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
+ENVVARS_TO_SEND = {
+    "http://transformers-lm-gptj:8130/respond": [],
+    "http://transformers-lm-bloomz7b:8146/respond": [],
+    "http://transformers-lm-oasst12b:8158/respond": [],
+    "http://openai-api-chatgpt:8145/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-davinci3:8131/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+}
 
 
 def compose_data_for_model(ctx, actor):
@@ -91,11 +99,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
     logger.info(f"lm_service_kwargs: {lm_service_kwargs}")
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
+    logger.info(f"envvars_to_send: {envvars_to_send}")
 
-    if "envvars_to_send" in human_uttr_attributes:
+    if len(envvars_to_send):
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
         # from the last human utterance's attributes
-        envvars_to_send = human_uttr_attributes["envvars_to_send"]
         sending_variables = {
             f"{var.lower()}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send
         }
@@ -112,7 +121,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     else:
         sending_variables = {}
 
-    # adding any other kwargs to request from the last human utterance's attributes
+    # adding kwargs to request from the last human utterance's attributes
     for _key, _value in lm_service_kwargs.items():
         sending_variables[f"{_key}s"] = [deepcopy(_value)]
 
