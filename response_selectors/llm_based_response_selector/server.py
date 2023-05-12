@@ -35,7 +35,7 @@ PROMPT = (
 )
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
+sending_variables = {f"{var}s": [getenv(var, None)] for var in ENVVARS_TO_SEND}
 # check if at least one of the env variables is not None
 if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
     raise NotImplementedError(
