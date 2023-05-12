@@ -687,7 +687,7 @@ def prepare_el_input(dialog: Dict):
                 entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
 
     return entity_substr_list, entity_tags_list, context
 
