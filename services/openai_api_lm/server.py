@@ -29,6 +29,7 @@ DEFAULT_CONFIGS = {
     "gpt-4": json.load(open("generative_configs/openai-chatgpt.json", "r")),
     "gpt-4-32k": json.load(open("generative_configs/openai-chatgpt.json", "r")),
 }
+CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
@@ -38,8 +39,8 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     openai.api_key = openai_api_key
     openai.organization = openai_org if openai_org else None
 
-    if PRETRAINED_MODEL_NAME_OR_PATH == "gpt-3.5-turbo":
-        logger.info("model=gpt-3.5-turbo, use special chat completion endpoint")
+    if PRETRAINED_MODEL_NAME_OR_PATH in CHAT_COMPLETION_MODELS:
+        logger.info("Use special chat completion endpoint")
         s = len(context) % 2
         messages = [
             {"role": "system", "content": prompt},
@@ -78,7 +79,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     elif isinstance(response, str):
         outputs = [response.strip()]
 
-    if PRETRAINED_MODEL_NAME_OR_PATH != "gpt-3.5-turbo":
+    if PRETRAINED_MODEL_NAME_OR_PATH not in CHAT_COMPLETION_MODELS:
         # post-processing of the responses by all models except of ChatGPT
         outputs = [GENERATIVE_ROBOT_TEMPLATE.sub("\n", resp).strip() for resp in outputs]
     return outputs
