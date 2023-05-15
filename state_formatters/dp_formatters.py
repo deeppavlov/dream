@@ -47,11 +47,11 @@ def cobot_asr_formatter_service(payload: List):
 
 
 def preprocess_dialog(
-        dialog: Dict,
-        mode: str = "",
-        bot_last_turns: int = None,
-        remove_clarification: bool = False,
-        replace_utterances: bool = True
+    dialog: Dict,
+    mode: str = "",
+    bot_last_turns: int = None,
+    remove_clarification: bool = False,
+    replace_utterances: bool = True,
 ) -> Dict:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=bot_last_turns)
     if remove_clarification:
@@ -133,10 +133,7 @@ def prepare_histories(dialog: Dict, include_annotations: bool = False) -> Tuple[
 
 
 def unified_dialog_formatter(
-        dialog: Dict,
-        bot_last_turns: int = utils.LAST_N_TURNS,
-        include_annotations: bool = False,
-        ignore_last: bool = False
+    dialog: Dict, bot_last_turns: int = utils.LAST_N_TURNS, include_annotations: bool = False, ignore_last: bool = False
 ) -> List[Dict]:
     dialog = preprocess_dialog(dialog, "segments", bot_last_turns)
     utterances_histories, annotation_histories = prepare_histories(dialog, include_annotations=include_annotations)
@@ -146,9 +143,7 @@ def unified_dialog_formatter(
         if annotation_histories is not None:
             annotation_histories = annotation_histories[:-1]
 
-    result = {
-        "utterances_histories": [utterances_histories]
-    }
+    result = {"utterances_histories": [utterances_histories]}
     if annotation_histories is not None:
         result["annotation_histories"] = [annotation_histories]
 
@@ -611,10 +606,10 @@ def wp_formatter_dialog(dialog: Dict):
     if entity_info_list:
         for entity_info in entity_info_list:
             if (
-                    entity_info
-                    and "entity_substr" in entity_info
-                    and "entity_ids" in entity_info
-                    and "tokens_match_conf" in entity_info
+                entity_info
+                and "entity_substr" in entity_info
+                and "entity_ids" in entity_info
+                and "tokens_match_conf" in entity_info
             ):
                 input_entity_info_list.append(
                     {
@@ -653,7 +648,7 @@ def extract_entities(utterance):
 
 
 def unified_el_kbqa_formatter_dialog(dialog: Dict, formatter_type: str) -> List[Dict]:
-    if formatter_type == 'el':
+    if formatter_type == "el":
         num_last_utterances = 2
         entity_substr_list, entity_tags_list = extract_entities(dialog["human_utterances"][-1])
         triplets = dialog["human_utterances"][-1]["annotations"].get("property_extraction", [{}])
@@ -667,7 +662,7 @@ def unified_el_kbqa_formatter_dialog(dialog: Dict, formatter_type: str) -> List[
         context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
         return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": context}]
 
-    elif formatter_type == 'kbqa':
+    elif formatter_type == "kbqa":
         annotations = dialog["human_utterances"][-1]["annotations"]
         if "sentseg" in annotations:
             if "segments" in annotations["sentseg"]:
