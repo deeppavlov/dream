@@ -862,7 +862,7 @@
                     "url": "http://misheard-asr:8033/misheard_respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
-                "response_formatter": "state_formatters.dp_formatters:misheard_asr_formatter_service",
+                "response_formatter": "state_formatters.dp_formatters:cobot_asr_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
