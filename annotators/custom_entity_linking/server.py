@@ -50,19 +50,23 @@ def respond():
     context_batch = inp.get("context", [[""]])
     prex_info_batch = inp.get("property_extraction", [])
     opt_context_batch = []
-    for hist_utt in context_batch:
-        hist_utt = [utt for utt in hist_utt if len(utt) > 1]
-        last_utt = hist_utt[-1]
-        if last_utt[-1] not in {".", "!", "?"}:
-            last_utt = f"{last_utt}."
-        if len(hist_utt) > 1:
-            prev_utt = hist_utt[-2]
-            if prev_utt[-1] not in {".", "!", "?"}:
-                prev_utt = f"{prev_utt}."
-            opt_context_batch.append([prev_utt, last_utt])
+    logger.info(f"init context: {context_batch}")
+    for hist_uttr in context_batch:
+        if len(hist_uttr) == 1:
+            opt_context_batch.append(uttr_list)
         else:
-            opt_context_batch.append([last_utt])
+            prev_uttr = hist_uttr[-2]
+            cur_uttr = hist_uttr[-1]
+            is_q = (
+                any([prev_uttr.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
+                or "?" in prev_uttr
+            )
+            if is_q and len(cur_uttr.split())<3:
+                opt_context_batch.append(f"{prev_uttr} {cur_uttr}")
+            else:
+                opt_context_batch.append(cur_uttr)
 
+    logger.info(f"context batch: {opt_context_batch}")
     entity_info_batch = [[{}] for _ in entity_substr_batch]
     try:
         (
@@ -70,7 +74,7 @@ def respond():
             entity_ids_batch,
             conf_batch,
             entity_id_tags_batch,
-        ) = el(user_ids, entity_substr_batch, entity_tags_batch, opt_context_batch)
+        ) = el(user_ids, entity_substr_batch, entity_tags_batch)
         entity_info_batch = []
         for (
             entity_substr_list,
@@ -87,10 +91,6 @@ def respond():
             prex_info_batch,
             opt_context_batch
         ):
-            if context:
-                context = " ".join(context)
-            else:
-                context = ""
             entity_info_list = []
             triplets = {}
             if isinstance(prex_info, list) and prex_info:
@@ -127,7 +127,7 @@ def respond():
                         f_confs.append(conf)
                         f_entity_id_tags.append(entity_id_tag)
 
-                if f_entity_ids:
+                if f_entity_ids and entity_substr.lower() in context:
                     entity_info["entity_substr"] = entity_substr
                     entity_info["entity_ids"] = f_entity_ids
                     entity_info["confidences"] = [float(elem[2]) for elem in f_confs]
