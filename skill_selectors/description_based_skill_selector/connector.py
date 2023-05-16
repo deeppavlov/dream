@@ -18,7 +18,7 @@ RESTRICTION_FOR_SENSITIVE_CASE = int(getenv("RESTRICTION_FOR_SENSITIVE_CASE", 1)
 ALWAYS_TURN_ON_ALL_SKILLS = int(getenv("ALWAYS_TURN_ON_ALL_SKILLS", 0))
 
 
-class RuleBasedSkillSelectorConnector:
+class DescriptionBasedSkillSelectorConnector:
     async def send(self, payload: Dict, callback: Callable):
         st_time = time.time()
         try:

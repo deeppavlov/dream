@@ -128,10 +128,10 @@
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "description_based_skill_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -144,7 +144,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
-                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
                 }
             }
         },
