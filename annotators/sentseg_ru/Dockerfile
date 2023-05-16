@@ -1,4 +1,5 @@
 FROM deeppavlov/base-gpu:0.17.2
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.17.2
 
 ARG CONFIG
 ARG SED_ARG=" | "
@@ -8,13 +9,15 @@ ENV CONFIG=$CONFIG
 RUN mkdir /src /midas
 
 COPY ./requirements.txt /src/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r /src/requirements.txt && \
-    python -m spacy download ru_core_news_sm
+
+RUN pip install pip==21.3.1 && \
+    pip install -r /src/requirements.txt
 
 COPY . /src/
 
 WORKDIR /src
+
+RUN python -m spacy download ru_core_news_sm
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
