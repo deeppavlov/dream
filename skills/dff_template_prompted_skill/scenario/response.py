@@ -1,10 +1,10 @@
 import json
 import logging
 import re
-import requests
 import sentry_sdk
 from copy import deepcopy
 from os import getenv
+from pathlib import Path
 from typing import Any
 
 import common.dff.integration.context as int_ctx
@@ -128,20 +128,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     prompt = shared_memory.get("prompt", "")
     logger.info(f"prompt from shared memory: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
-    # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
-    if not GOALS_FROM_PROMPT:
-        goals_from_prompt = shared_memory.get("goals_from_prompt", "")
-        logger.info("Found goals for prompt from the dialog state")
-        if not goals_from_prompt:
-            goals_from_prompt = get_goals_from_prompt(
-                PROMPT,
-                GENERATIVE_SERVICE_URL,
-                GENERATIVE_SERVICE_CONFIG,
-                GENERATIVE_TIMEOUT,
-                sending_variables,
-            )
-            int_ctx.save_to_shared_memory(ctx, actor, goals_from_prompt=goals_from_prompt)
-            logger.info("Generated goals for prompt using generative service")
 
     if len(dialog_context) > 0:
         try:
@@ -160,13 +146,31 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
+
+    human_attrs_updates = {}
+    # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
+    if not GOALS_FROM_PROMPT:
+        prompt_name = Path(PROMPT_FILE).stem
+        goals_from_prompt = int_ctx.get_prompts_goals(ctx, actor).get(prompt_name, "")
+        logger.info("Found goals for prompt from the human attributes")
+        if not goals_from_prompt:
+            goals_from_prompt = get_goals_from_prompt(
+                PROMPT,
+                GENERATIVE_SERVICE_URL,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
+            )
+            human_attrs_updates[prompt_name] = goals_from_prompt
+            logger.info("Generated goals for prompt using generative service")
+
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
         hyp_text = " ".join(hyp.split())
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        gathering_responses(hyp_text, confidence, human_attrs_updates, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""

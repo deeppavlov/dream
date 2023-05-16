@@ -227,9 +227,17 @@ def dff_formatter(
     used_annotations=None,
     types_utterances=None,
     wanted_keys=None,
+    human_attributes_keys=None,
 ) -> List[Dict]:
     types_utterances = ["human_utterances", "bot_utterances"] if types_utterances is None else types_utterances
     wanted_keys = ["text", "annotations", "active_skill", "user"] if wanted_keys is None else wanted_keys
+    human_attributes_keys = [
+        "used_links",
+        "age_group",
+        "disliked_skills",
+        "entities",
+    ] if human_attributes_keys is None else human_attributes_keys
+
     # DialoFlow Framework formatter
     state_name = f"{service_name}_state"
     human_utter_index = len(dialog["human_utterances"]) - 1
@@ -237,10 +245,10 @@ def dff_formatter(
     human_attributes = dialog.get("human", {}).get("attributes", {})
     state = human_attributes.get(state_name, {})
     dff_shared_state = human_attributes.get("dff_shared_state", {"cross_states": {}, "cross_links": {}})
-    used_links = human_attributes.get("used_links", {})
-    age_group = human_attributes.get("age_group", "")
-    disliked_skills = human_attributes.get("disliked_skills", {})
-    entities = human_attributes.get("entities", {})
+
+    human_attributes_kwargs = {
+        f"{attr_key}_batch": [human_attributes.get(attr_key, {})] for attr_key in human_attributes_keys
+    }
 
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
     checking_unclarified_n_turns = human_utter_index - previous_human_utter_index
@@ -277,11 +285,8 @@ def dff_formatter(
             "dialog_batch": [new_dialog],
             f"{state_name}_batch": [state],
             "dff_shared_state_batch": [dff_shared_state],
-            "entities_batch": [entities],
-            "used_links_batch": [used_links],
-            "age_group_batch": [age_group],
-            "disliked_skills_batch": [disliked_skills],
             "clarification_request_flag_batch": [clarification_request_flag],
+            **human_attributes_kwargs,
         }
     ]
 
