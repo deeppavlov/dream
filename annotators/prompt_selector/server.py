@@ -48,7 +48,7 @@ def get_result(request):
             str_context = context[-1]
         for prompt_goals, prompt_name in zip(PROMPTS, PROMPTS_NAMES):
 
-            pairs += [[str_context, prompts_goals_from_attributes.get(prompt_name, "") if not prompt_goals else prompt_goals]]
+            pairs += [[str_context, prompts_goals_from_attributes[context_id].get(prompt_name, "") if not prompt_goals else prompt_goals]]
             context_ids += [context_id]
     context_ids = np.array(context_ids)
     if any([len(pair[1]) == 0 for pair in pairs]):
