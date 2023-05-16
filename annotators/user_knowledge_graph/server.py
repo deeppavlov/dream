@@ -60,78 +60,83 @@ def add_name_property(graph, user_id, names):
     logger.info(f"I already have you in the graph! Updating your property name to {names[0]}!")
 
 
-def add_any_relationship(utt, graph, entity_kind, entity_name, rel_type, user_id, entities_with_types, ex_triplets,
-                         existing_ids):
+def add_relationships2kg(
+        utt, graph, relationships_to_add2kg, user_id, entities_with_types, ex_triplets, existing_ids
+    ):
     """Creates an entity and a relation between it and the User from property extraction service."""
-    entity_kind = entity_kind.replace('_', '').title()
-    graph.ontology.create_property_kind_of_entity_kind(entity_kind, "Name")
-
-    logger.info(f"add_any_relationship, rel_type: {rel_type} --- entity_name: {entity_name} --- "
-                f"inflected: {inflect.singular_noun(entity_name)}")
     text = utt.get("text", "")
 
-    if USE_ABSTRACT_KINDS and \
-            rel_type.lower() in {"favorite_animal", "like_animal", "favorite_book", "like_read", "favorite_movie",
-                                 "favorite_food", "like_food", "favorite_drink", "like_drink", "favorite_sport",
-                                 "like_sports"} \
-            and not any([f" {word} {entity_name}" in text for word in ["the", "my", "his", "her"]]):    
-        entity_kind = f"Abstract{entity_kind.capitalize()}"
-        inflect_entity_name = inflect.singular_noun(entity_name)
-        if inflect_entity_name:
-            entity_name = inflect_entity_name
-        logger.info(f"correcting type and name, entity_kind: {entity_kind}, entity_name: {entity_name}")
+    entity_kinds=[]
+    new_entity_ids = []
+    rel_names = []
+    entity_names = []
+    for (entity_kind, entity_name, rel_name) in relationships_to_add2kg:
+        if USE_ABSTRACT_KINDS and \
+                rel_name.lower() in {"favorite_animal", "like_animal", "favorite_book", "like_read", "favorite_movie",
+                                    "favorite_food", "like_food", "favorite_drink", "like_drink", "favorite_sport",
+                                    "like_sports"} \
+                and not any([f" {word} {entity_name}" in text for word in ["the", "my", "his", "her"]]):    
+            entity_kind = f"Abstract{entity_kind.capitalize()}"
+            inflect_entity_name = inflect.singular_noun(entity_name)
+            if inflect_entity_name:
+                entity_name = inflect_entity_name
+            logger.info(f"correcting type and name, entity_kind: {entity_kind}, entity_name: {entity_name}")
 
+        if (entity_name, entity_kind) in entities_with_types:
+            new_entity_id = entities_with_types[(entity_name, entity_kind)]
+            logger.info(f"Entity exists: '{new_entity_id}'")
+        else:
+            entity_kinds.append(entity_kind)
+
+            new_entity_id = str(uuid.uuid4())
+            new_entity_id = entity_kind + '/' + new_entity_id
+            new_entity_ids.append(new_entity_id)
+            entity_names.append(entity_name)
+
+        if (user_id, rel_name, new_entity_id) in ex_triplets:
+            logger.info(f"triplet exists: {(rel_name, new_entity_id)}")
+        else:
+            rel_names.append(rel_name)
+
+    entity_kinds_to_create = set(entity_kinds)
     try:
-        logger.debug(f"Creating entity kind: {entity_kind}")
-        graph.ontology.create_entity_kind(entity_kind=entity_kind, parent=None)
-        logger.info(f"Created entity kind: {entity_kind}")
+        logger.debug(f"Creating entity kinds: {entity_kinds_to_create}")
+        graph.ontology.create_entity_kinds(entity_kinds=entity_kinds_to_create, parents=None)
     except ValueError:
-        logger.info(f"Kind '{entity_kind}' is already in DB")
+        logger.info(f"All kinds '{entity_kinds_to_create}' are already in DB")
 
-    entity_kind_properties = graph.ontology.get_entity_kind(entity_kind)
-    if "Name" not in entity_kind_properties:
-        logger.debug(f"Creating property kind 'Name' for kind '{entity_kind}'")
-        graph.ontology.create_property_kind_of_entity_kind(
-            entity_kind=entity_kind, property_kind="Name", property_type=str
-        )
-        logger.info(f"Created property kind 'Name' for kind '{entity_kind}'")
-    else:
-        logger.info(f"Kind '{entity_kind}' already has Name as a property") # try run it and observe debuging messages
-    if (entity_name, entity_kind) in entities_with_types:
-        new_entity_id = entities_with_types[(entity_name, entity_kind)]
-        logger.info(f"Entity exists: '{new_entity_id}'")
-    else:
-        new_entity_id = str(uuid.uuid4())
-        new_entity_id = entity_kind + '/' + new_entity_id
-        logger.debug(f"Adding entity with kind: {entity_kind} -- new_entity_id:'{new_entity_id}'")
-        graph.create_entity(entity_kind, new_entity_id, ["Name"], [entity_name])
-        logger.info(f"Added entity '{new_entity_id}' with Kind '{entity_kind}' and property Name '{entity_name}'!")
-
-    logger.info(f"define rel_name, entity_kind {entity_kind} --- entity_kind {entity_kind}")
-    rel_name = rel_type
-
-    if (user_id, rel_name, new_entity_id) in ex_triplets:
-        logger.info(f"triplet exists: {(rel_name, new_entity_id)}")
-    else:
-        logger.info(f"connecting {entity_name} with User by rel_type: {rel_type}, rel_name: {rel_name} relationship, "
-                    f"entity_kind {entity_kind} new_entity_id {new_entity_id}")
-        graph.ontology.create_relationship_kind("User", rel_name, entity_kind)
-        graph.create_relationship(user_id, rel_name, new_entity_id)
-        logger.info(f"{entity_name} is connected with User by {rel_type} relationship.")
-
-
-def add_any_property(graph, user_id, property_type, property_value):
-    """Adds a property from property extraction service."""
-    if property_type == "<blank>":
-        property_type = "other"
-    property_type = '_'.join(property_type.split(' '))
-    graph.ontology.create_property_kind_of_entity_kind("User", property_type)
-    graph.create_or_update_property_of_entity(
-        entity_id=user_id,
-        property_kind=property_type,
-        new_property_value=property_value,
+    logger.debug(f"Adding `Name` property to entity kinds")
+    graph.ontology.create_property_kinds_of_entity_kinds(
+        entity_kinds=entity_kinds, property_kinds=[["Name"]]*len(entity_kinds), property_types=[[str]]*len(entity_kinds)
     )
-    logger.info(f"I added a property {property_type} with value {property_value}!")
+
+    logger.debug(f"Creating entities: {new_entity_ids}")
+    graph.create_entities(entity_kinds, new_entity_ids, [["Name"]]*len(entity_kinds), [[name] for name in entity_names])
+    
+    logger.debug(f"Creating relationship kinds: {rel_names}")
+    graph.ontology.create_relationship_kinds(["User"]*len(entity_kinds), rel_names, entity_kinds)
+    
+    logger.debug(f"Creating relationships")
+    graph.create_relationships([user_id]*len(new_entity_ids), rel_names, new_entity_ids)
+
+
+def add_properties2kg(graph, user_id, properties_to_add2kg):
+    """Adds properties of user in the KG"""
+    property_types, property_values = [], []
+    for type, value in properties_to_add2kg:
+        if type == "<blank>":
+            type = "other"
+        type = '_'.join(type.split(' '))
+        property_types.append(type)
+        property_values.append(value)
+
+    graph.ontology.create_property_kinds_of_entity_kind("User", property_types)
+    graph.create_or_update_properties_of_entity(
+        entity_id=user_id,
+        property_kinds=property_types,
+        new_property_values=property_values,
+    )
+    logger.info(f"Added the following (property, value) pairs: {properties_to_add2kg}")
 
 
 def get_entity_type(attributes):
@@ -156,6 +161,9 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
 
     if isinstance(attributes, dict):
         attributes = [attributes]
+    relationships_to_add2kg = []
+    properties_to_add2kg = []
+    triplets = {}
     for attribute in attributes:
         if attribute and attribute['triplets']:
             triplets = attribute['triplets']
@@ -168,13 +176,21 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
                     relation = '_'.join(triplet['relation'].split(' '))
                     if relation in rel_kinds_dict:
                         entity_kind = rel_kinds_dict[relation]
-                    add_any_relationship(utt, graph, entity_kind, entity_name, relation.upper(), user_id,
-                                        entities_with_types, ex_triplets, existing_ids)
+                    relationships_to_add2kg.append((entity_kind, entity_name, relation.upper()))
                 else:
-                    add_any_property(graph, user_id, triplet['property'], triplet['object'])
-            return triplets
-    logger.info(no_rel_message)
-    return {}
+                    properties_to_add2kg.append((triplet['property'], triplet['object']))
+                                        
+    if properties_to_add2kg:
+        add_properties2kg(graph, user_id, properties_to_add2kg)
+
+    if relationships_to_add2kg:
+        add_relationships2kg(
+            utt, graph, relationships_to_add2kg, user_id, entities_with_types, ex_triplets, existing_ids
+        )
+    else:
+        logger.info(no_rel_message)
+    
+    return triplets
 
 
 def name_scenario(utt, user_id):
@@ -227,7 +243,6 @@ def get_result(request):
     user_id = "User/" + user_id
     all_entities = graph.get_all_entities()
     existing_ids = [entity["@id"] for entity in all_entities]
-    logger.info(f"Existing ids: {existing_ids}")
 
     kg_parser_annotations = []
     ex_triplets = []
