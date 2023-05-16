@@ -48,6 +48,10 @@ class DescriptionBasedSkillSelectorConnector:
             user_uttr_text = user_uttr["text"].lower()
             user_uttr_annotations = user_uttr["annotations"]
 
+            all_skill_names = dialog.get("attributes", {}).get("pipeline", [])
+            all_skill_names = [el.split(".")[1] for el in all_skill_names if "skills" in el]
+            prompted_skills = [skill for skill in all_skill_names if "prompted_skill" in skill]
+
             if user_uttr_text == "/get_dialog_id":
                 skills_for_uttr.append("dummy_skill")
             else:
@@ -55,6 +59,8 @@ class DescriptionBasedSkillSelectorConnector:
                 # adding linked-to skills
                 skills_for_uttr.extend(get_previously_active_skill(dialog))
 
+                if "dff_universal_prompted_skill" in prompted_skills:
+                    skills_for_uttr.append("dff_universal_prompted_skill")
                 skills_for_uttr.append("dff_universal_prompted_skill")
                 # turn on skills if prompts are selected by prompt_selector
                 ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
@@ -62,9 +68,6 @@ class DescriptionBasedSkillSelectorConnector:
                     for prompt_name in ranged_prompts:
                         skills_for_uttr.append(f"dff_{prompt_name}_prompted_skill")
                 else:
-                    all_skill_names = dialog.get("attributes", {}).get("pipeline", [])
-                    all_skill_names = [el.split(".")[1] for el in all_skill_names if "skills" in el]
-                    prompted_skills = [skill for skill in all_skill_names if "prompted_skill" in skill]
                     skills_for_uttr.extend(prompted_skills)
                     logger.info("Adding all prompted skills as prompt selector did not select anything.")
 

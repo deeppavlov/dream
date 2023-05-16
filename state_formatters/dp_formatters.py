@@ -1013,7 +1013,6 @@ def dff_prompted_skill_formatter(dialog, skill_name=None):
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
         wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
-        human_attributes_keys=["prompts_goals"],
     )
 
 
