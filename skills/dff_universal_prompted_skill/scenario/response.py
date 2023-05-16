@@ -1,7 +1,6 @@
 import json
 import logging
 import re
-import requests
 import sentry_sdk
 from copy import deepcopy
 from os import getenv
