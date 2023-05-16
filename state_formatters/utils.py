@@ -231,12 +231,16 @@ def dff_formatter(
 ) -> List[Dict]:
     types_utterances = ["human_utterances", "bot_utterances"] if types_utterances is None else types_utterances
     wanted_keys = ["text", "annotations", "active_skill", "user"] if wanted_keys is None else wanted_keys
-    human_attributes_keys = [
-        "used_links",
-        "age_group",
-        "disliked_skills",
-        "entities",
-    ] if human_attributes_keys is None else human_attributes_keys
+    human_attributes_keys = (
+        [
+            "used_links",
+            "age_group",
+            "disliked_skills",
+            "entities",
+        ]
+        if human_attributes_keys is None
+        else human_attributes_keys
+    )
 
     # DialoFlow Framework formatter
     state_name = f"{service_name}_state"
