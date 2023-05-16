@@ -83,6 +83,7 @@
                         "attributes": {
                             "disliked_skills": [],
                             "age_group": "",
+                            "prompts_goals": {},
                             "dff_dream_persona_prompted_skill_state": {
                                 "context": {
                                     "actor_state": {},
@@ -253,6 +254,7 @@
                         "attributes": {
                             "disliked_skills": [],
                             "age_group": "",
+                            "prompts_goals": {},
                             "dff_dream_persona_prompted_skill_state": {
                                 "context": {
                                     "actor_state": {},
@@ -351,17 +353,8 @@
             "cross_states": {}
         }
     ],
-    "entities_batch": [
+    "prompts_goals_batch": [
         {}
-    ],
-    "used_links_batch": [
-        {}
-    ],
-    "age_group_batch": [
-        ""
-    ],
-    "disliked_skills_batch": [
-        []
     ],
     "clarification_request_flag_batch": [
         false
