@@ -242,7 +242,7 @@ def dff_formatter(
     state_name = f"{service_name}_state"
     human_utter_index = len(dialog["human_utterances"]) - 1
 
-    human_attributes = dialog.get("human", {}).get("attributes", {})
+    human_attributes = dialog["human"].get("attributes", {})
     state = human_attributes.get(state_name, {})
     dff_shared_state = human_attributes.get("dff_shared_state", {"cross_states": {}, "cross_links": {}})
 
