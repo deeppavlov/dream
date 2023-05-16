@@ -53,7 +53,7 @@ class T5GenerativeIE(TorchModel):
         min_learning_rate: float = 1e-06,
         top_n: int = 1,
         batch_size: int = 100,
-        scores_thres: float = -0.17,
+        scores_thres: float = -0.57,
         device: str = "cpu",
         **kwargs,
     ) -> None:
