@@ -151,7 +151,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
     if not GOALS_FROM_PROMPT:
         prompt_name = Path(PROMPT_FILE).stem
-        goals_from_prompt = int_ctx.get_prompts_goals(ctx, actor).get(prompt_name, "")
+        prev_prompts_goals = int_ctx.get_prompts_goals(ctx, actor)
+        goals_from_prompt = prev_prompts_goals.get(prompt_name, "")
         if not goals_from_prompt:
             goals_from_prompt = get_goals_from_prompt(
                 PROMPT,
@@ -160,7 +161,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 GENERATIVE_TIMEOUT,
                 sending_variables,
             )
-            human_attrs_updates[prompt_name] = goals_from_prompt
+            human_attrs_updates["prompts_goals"] = deepcopy(prev_prompts_goals)
+            human_attrs_updates["prompts_goals"][prompt_name] = goals_from_prompt
             logger.info("Generated goals for prompt using generative service")
         else:
             logger.info("Found goals for prompt from the human attributes")
