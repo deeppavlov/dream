@@ -27,7 +27,7 @@ for filename in listdir("common/prompts"):
     prompt_name = Path(filename).stem
     if ".json" in filename and prompt_name in PROMPTS_TO_CONSIDER:
         data = json.load(open(f"common/prompts/{filename}", "r"))
-        PROMPTS.append(data["prompt"])
+        PROMPTS.append(data.get("goals", ""))
         PROMPTS_NAMES.append(prompt_name)
 
 
@@ -35,6 +35,8 @@ def get_result(request):
     global PROMPTS, PROMPTS_NAMES
     st_time = time.time()
     contexts = request.json["contexts"]
+    prompts_goals_from_attributes = request.json["prompts_goals"]
+
     result = []
     pairs = []
     context_ids = []
@@ -44,27 +46,32 @@ def get_result(request):
             str_context = "\n".join(context[-3:])
         else:
             str_context = context[-1]
-        for prompt in PROMPTS:
-            pairs += [[str_context, prompt]]
+        for prompt_goals, prompt_name in zip(PROMPTS, PROMPTS_NAMES):
+
+            pairs += [[str_context, prompts_goals_from_attributes.get(prompt_name, "") if not prompt_goals else prompt_goals]]
             context_ids += [context_id]
     context_ids = np.array(context_ids)
-    try:
-        scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0][
-            "batch"
-        ]
-        scores = np.array(scores)
-        for i, context in enumerate(contexts):
-            curr_ids = np.where(context_ids == i)[0]
-            most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
-            curr_result = {
-                "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
-                "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
-            }
-            result += [curr_result]
-    except Exception as exc:
-        logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
+    if any([len(pair[1]) == 0 for pair in pairs]):
+        logger.info("Some goals from prompts are empty. Skip ranking.")
         result = [{"prompts": [], "max_similarity": 0.0}] * len(contexts)
+    else:
+        try:
+            scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0][
+                "batch"
+            ]
+            scores = np.array(scores)
+            for i, context in enumerate(contexts):
+                curr_ids = np.where(context_ids == i)[0]
+                most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
+                curr_result = {
+                    "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
+                    "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
+                }
+                result += [curr_result]
+        except Exception as exc:
+            logger.exception(exc)
+            sentry_sdk.capture_exception(exc)
+            result = [{"prompts": [], "max_similarity": 0.0}] * len(contexts)
 
     total_time = time.time() - st_time
     logger.info(f"prompt-selector exec time: {total_time:.3f}s")
