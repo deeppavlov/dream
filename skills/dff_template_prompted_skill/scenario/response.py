@@ -10,6 +10,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt
 from df_engine.core import Context, Actor
 
 
@@ -33,7 +34,9 @@ assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
 
 with open(PROMPT_FILE, "r") as f:
-    PROMPT = json.load(f)["prompt"]
+    PROMPT_DICT = json.load(f)
+PROMPT = PROMPT_DICT["prompt"]
+GOALS_FROM_PROMPT = PROMPT_DICT.get("goals", "")
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
@@ -125,20 +128,31 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     prompt = shared_memory.get("prompt", "")
     logger.info(f"prompt from shared memory: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
+    # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
+    if not GOALS_FROM_PROMPT:
+        goals_from_prompt = shared_memory.get("goals_from_prompt", "")
+        logger.info("Found goals for prompt from the dialog state")
+        if not goals_from_prompt:
+            goals_from_prompt = get_goals_from_prompt(
+                PROMPT,
+                GENERATIVE_SERVICE_URL,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
+            )
+            int_ctx.save_to_shared_memory(ctx, actor, goals_from_prompt=goals_from_prompt)
+            logger.info("Generated goals for prompt using generative service")
 
     if len(dialog_context) > 0:
         try:
-            response = requests.post(
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
                 GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
-                    "configs": [GENERATIVE_SERVICE_CONFIG],
-                    **sending_variables,
-                },
-                timeout=GENERATIVE_TIMEOUT,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
             )
-            hypotheses = response.json()[0]
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)

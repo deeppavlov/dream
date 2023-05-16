@@ -10,6 +10,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.prompts import send_request_to_prompted_generative_service
 from df_engine.core import Context, Actor
 
 
@@ -127,17 +128,14 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     if len(dialog_context) > 0:
         try:
-            response = requests.post(
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                prompt,
                 lm_service_url,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt],
-                    "configs": [lm_service_config],
-                    **sending_variables,
-                },
-                timeout=GENERATIVE_TIMEOUT,
+                lm_service_config,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
             )
-            hypotheses = response.json()[0]
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
