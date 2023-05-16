@@ -107,6 +107,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
 
+    logger.info(f"prompt_shared_memory: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
     logger.info(f"use_kg_data: {USE_KG_DATA}")
 
@@ -117,7 +118,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["prompt"]) and kg_prompt[1]:
         # dialogue = " ".join(dialog_contexts)
-        final_prompt = PROMPT + f" Use the following facts about the user for your answer: {kg_prompt[1]}"
+        final_prompt = PROMPT + f" ADDITIONAL INSTRUCTION: Use the following facts about the user for your answer: {kg_prompt[1]}"
         # final_prompt = PROMPT + f"\nUse the following facts about the user for your answer: ```The user likes Italy```"
 
     else:
