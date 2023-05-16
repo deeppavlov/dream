@@ -152,7 +152,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if not GOALS_FROM_PROMPT:
         prompt_name = Path(PROMPT_FILE).stem
         goals_from_prompt = int_ctx.get_prompts_goals(ctx, actor).get(prompt_name, "")
-        logger.info("Found goals for prompt from the human attributes")
         if not goals_from_prompt:
             goals_from_prompt = get_goals_from_prompt(
                 PROMPT,
@@ -163,6 +162,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             )
             human_attrs_updates[prompt_name] = goals_from_prompt
             logger.info("Generated goals for prompt using generative service")
+        else:
+            logger.info("Found goals for prompt from the human attributes")
 
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
