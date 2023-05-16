@@ -1,0 +1,25 @@
+name: speech_function_predictor
+display_name: Speech Function Predictor
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: yields probabilities of speech functions that can follow a speech function
+  predicted by Speech Function Classifier
+ram_usage: 1.1G
+gpu_usage: 4.5G
+group: candidate_annotators
+connector:
+  protocol: http
+  timeout: 5.0
+  url: http://speech-function-predictor:8107/annotation
+dialog_formatter: state_formatters.dp_formatters:speech_function_hypotheses_predictor_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- candidate_annotators.speech_function_classifier
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: annotation
+service: annotators/speech_function_predictor/service_configs/speech-function-predictor
+date_created: '2023-03-16T09:45:32'

@@ -1,0 +1,25 @@
+name: dff_short_story_skill
+display_name: Short Story Skill
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: 'tells user short stories from 3 categories: (1) bedtime stories, such
+  as fables and moral stories, (2) horror stories, and (3) funny ones'
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 3.0
+  url: http://dff-short-story-skill:8057/respond
+dialog_formatter: state_formatters.dp_formatters:dff_short_story_skill_formatter
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_short_story_skill/service_configs/dff-short-story-skill
+date_created: '2023-03-16T09:45:32'

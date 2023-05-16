@@ -1,0 +1,25 @@
+name: dff_gaming_skill
+display_name: Gaming Skill
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: provides a video games discussion. Gaming Skill is for more general talk
+  about video games
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://dff-gaming-skill:8115/respond
+dialog_formatter: state_formatters.dp_formatters:dff_gaming_skill_formatter
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_gaming_skill/service_configs/dff-gaming-skill
+date_created: '2023-03-16T09:45:32'

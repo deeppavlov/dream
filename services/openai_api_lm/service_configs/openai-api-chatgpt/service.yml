@@ -1,0 +1,31 @@
+name: openai-api-chatgpt
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8145
+      SERVICE_NAME: openai_api_chatgpt
+      PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/openai_api_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8145
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./services/openai_api_lm:/src
+  - ./common:/src/common
+  ports:
+  - 8145:8145
+proxy: null

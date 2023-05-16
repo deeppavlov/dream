@@ -101,7 +101,10 @@ If one wants to create a new prompted distribution (distribution containing prom
                     "timeout": 4.5,
                     "url": "http://dff-dream-persona-gpt-j-prompted-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

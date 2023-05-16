@@ -73,7 +73,6 @@ def add_question_to_statement(
     not_sure_factoid,
     prev_skill_names,
 ):
-
     if not_sure_factoid and "factoid_qa" in best_skill_name:
         best_candidate["text"] = "I am not sure in my answer but I can try. " + best_candidate["text"]
     if best_candidate["text"].strip() in okay_statements:

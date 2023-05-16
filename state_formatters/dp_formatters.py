@@ -521,6 +521,13 @@ def persona_bot_formatter(dialog: Dict):
     ]
 
 
+def cropped_dialog(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    return [{"dialogs": [dialog]}]
+
+
 def full_dialog(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
@@ -999,75 +1006,13 @@ def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
 
 
-def dff_ai_faq_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_ai_faq_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_da_costa_clothes_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_da_costa_clothes_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_dream_persona_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_dream_persona_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_empathetic_marketing_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_empathetic_marketing_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_fairytale_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_fairytale_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_nutrition_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_nutrition_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_rhodes_coaching_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_rhodes_coaching_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_deepy_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_deepy_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
 def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
         skill_name,
+        bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1075,6 +1020,7 @@ def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
         "dff_universal_prompted_skill",
+        bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
         wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )

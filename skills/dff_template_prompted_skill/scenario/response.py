@@ -3,6 +3,7 @@ import logging
 import re
 import requests
 import sentry_sdk
+from copy import deepcopy
 from os import getenv
 from typing import Any
 
@@ -24,14 +25,9 @@ if GENERATIVE_SERVICE_CONFIG:
 
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+ALLOW_PROMPT_RESET = int(getenv("ALLOW_PROMPT_RESET", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}_list": [getenv(var, None)] for var in ENVVARS_TO_SEND}
-# check if at least one of the env variables is not None
-if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-    raise NotImplementedError(
-        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
-    )
 
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
@@ -40,7 +36,10 @@ with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
+PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
+PROMPT_RESET_COMMAND = re.compile(r"^/resetprompt")
 DEFAULT_CONFIDENCE = 0.9
+SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
 
 
@@ -51,7 +50,25 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
+
+    history = int_ctx.get_utterances(ctx, actor)
+    for i in range(1, len(history) + 1, 2):
+        is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i].get("text", ""))
+        is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i].get("text", ""))
+        if ALLOW_PROMPT_RESET and (is_new_prompt or is_reset_prompt):
+            # cut context on the last user utterance utilizing the current prompt
+            context = context[-i + 2 :]
+            break
+
     return context
+
+
+def if_none_var_values(sending_variables):
+    if len(sending_variables.keys()) > 0 and all(
+        [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
+    ):
+        return True
+    return False
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
@@ -73,19 +90,59 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
+    # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
+    # from user_utterance attributes or from environment
+    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+
+    if len(envvars_to_send):
+        # get variables which names are in `envvars_to_send` (splitted by comma if many)
+        # from the last human utterance's attributes
+        sending_variables = {
+            f"{var.lower()}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send
+        }
+        if if_none_var_values(sending_variables):
+            # get variables which names are in `envvars_to_send` (splitted by comma if many)
+            # from env variables
+            sending_variables = {f"{var.lower()}s": [getenv(var, None)] for var in envvars_to_send}
+            if if_none_var_values(sending_variables):
+                logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
+            else:
+                logger.info(f"Got {envvars_to_send}'s values from environment.")
+        else:
+            logger.info(f"Got {envvars_to_send}'s values from attributes.")
+    else:
+        sending_variables = {}
+
+    # adding kwargs to request from the last human utterance's attributes
+    lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    for _key, _value in lm_service_kwargs.items():
+        logger.info(f"Got/Re-writing {_key}s values from kwargs.")
+        sending_variables[f"{_key}s"] = [deepcopy(_value)]
+
+    shared_memory = int_ctx.get_shared_memory(ctx, actor)
+    prompt = shared_memory.get("prompt", "")
+    logger.info(f"prompt from shared memory: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
+
     if len(dialog_context) > 0:
-        response = requests.post(
-            GENERATIVE_SERVICE_URL,
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [PROMPT],
-                "configs": [GENERATIVE_SERVICE_CONFIG],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
-        )
-        hypotheses = response.json()[0]
+        try:
+            response = requests.post(
+                GENERATIVE_SERVICE_URL,
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
+                    "configs": [GENERATIVE_SERVICE_CONFIG],
+                    **sending_variables,
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            hypotheses = response.json()[0]
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            hypotheses = []
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
@@ -107,3 +164,22 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         bot_attr=curr_bot_attrs,
         hype_attr=curr_attrs,
     )(ctx, actor, *args, **kwargs)
+
+
+def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    human_uttr = int_ctx.get_last_human_utterance(ctx, actor).get("text", "")
+    prompt = PROMPT_REPLACEMENT_COMMAND.sub("", human_uttr).strip()
+    int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
+
+    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
+    return (
+        "Saved the new prompt for you. "
+        "To update the prompt, type in `/prompt prompttext` again. "
+        "To reset the prompt to the default one, use `/resetprompt` command."
+    )
+
+
+def reseting_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    int_ctx.save_to_shared_memory(ctx, actor, prompt=PROMPT)
+    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
+    return f"Reset the prompt to the default one for you:\n{PROMPT}"

@@ -1,0 +1,29 @@
+name: dff-dream-persona-llama7bru-prompted-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8151
+      SERVICE_NAME: dff_dream_persona_ru_prompted_skill
+      PROMPT_FILE: common/prompts/dream_persona_ru.json
+      GENERATIVE_SERVICE_URL: http://transformers-lm-llama7bru:8149/respond
+      GENERATIVE_TIMEOUT: 20
+      N_UTTERANCES_CONTEXT: 7
+    context: .
+    dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8151 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_template_prompted_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8151:8151
+proxy: null
