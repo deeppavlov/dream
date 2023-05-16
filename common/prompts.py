@@ -1,12 +1,5 @@
-import logging
 import requests
 
-import sentry_sdk
-
-
-sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 META_PROMPT = """Generate a very short description of goals of the assistant which is defined by the given prompt.
 
