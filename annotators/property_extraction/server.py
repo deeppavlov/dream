@@ -55,55 +55,6 @@ except Exception as e:
     raise e
 
 
-def get_relations(uttr_batch, thres=0.6):
-    relations_pred_batch = []
-    input_batch = list(zip(*itertools.product(uttr_batch, relations_all)))
-    rels_scores = rel_ranker(*input_batch)
-    # rels_scores = [int(scores[1] > thres) for scores in rels_scores]
-    rels_scores = np.array(rels_scores).reshape((len(uttr_batch), len(relations_all), 2))
-    
-    for curr_scores in rels_scores:
-        # pred_rels = [curr_rel for curr_score, curr_rel in zip(curr_scores, relations_all) if curr_score == 1]
-        # pred_rels = [rel for rel in pred_rels if rel] or [""]
-        pred_rels = []
-        rels_with_scores = [(curr_score[1], curr_rel) for curr_score, curr_rel in zip(curr_scores, relations_all) if curr_score[1] > thres]
-        logger.debug(f"rels_with_scores {rels_with_scores}")
-        for rel_group in rel_groups_list:
-            pred_rel_group = [(curr_score, curr_rel) for curr_score, curr_rel in rels_with_scores if curr_rel in rel_group]
-            logger.debug(f"pred_rel_group {pred_rel_group}")
-            if len(pred_rel_group) == 1:
-                pred_rel = pred_rel_group[0][1]
-                pred_rels.append(pred_rel)
-            elif len(pred_rel_group) >= 2:
-                pred_rel = max(pred_rel_group)[1]
-                pred_rels.append(pred_rel)
-        relations_pred_batch.append(pred_rels)
-    logger.debug(f"rel clf raw output: {relations_pred_batch}")
-    return relations_pred_batch
-
-
-def generate_triplets(uttr_batch, relations_pred_batch):
-    triplets_pred_batch = []
-    t5_input_uttrs = []
-    for uttr, preds in zip(uttr_batch, relations_pred_batch):
-        uttrs_mult = [uttr for pred in preds]
-        t5_input_uttrs.extend(uttrs_mult)
-    relations_pred_flat = list(itertools.chain(*relations_pred_batch))
-    t5_pred_triplets, t5_pred_scores = generative_ie(t5_input_uttrs, relations_pred_flat)
-    curr_idx = 0
-    for pred_rels in relations_pred_batch:
-        curr_triplets, curr_scores = [], []
-        for i in range(len(pred_rels)):
-            triplet_init = t5_pred_triplets[curr_idx]
-            if triplet_init:
-                curr_triplets.append(triplet_init)
-                curr_scores.append(t5_pred_scores[curr_idx])
-                curr_idx += 1
-        triplets_pred_batch.append((curr_triplets, curr_scores))
-    logger.debug(f"t5 raw output: {triplets_pred_batch}")
-    return triplets_pred_batch
-
-
 def sentrewrite(sentence, init_answer):
     answer = init_answer.strip(".")
     if any([sentence.startswith(elem) for elem in ["what's", "what is"]]):
@@ -123,10 +74,48 @@ def sentrewrite(sentence, init_answer):
         sentence = f"{sentence} {init_answer}"
     return sentence
 
+def get_relations(uttr_batch, thres=0.6):
+    relations_pred_batch = []
+    input_batch = list(zip(*itertools.product(uttr_batch, relations_all)))
+    rels_scores = rel_ranker(*input_batch)
+    rels_scores = np.array(rels_scores).reshape((len(uttr_batch), len(relations_all), 2))
+    for curr_scores in rels_scores:
+        pred_rels = []
+        rels_with_scores = [(curr_score[1], curr_rel) for curr_score, curr_rel in zip(curr_scores, relations_all) if curr_score[1] > thres]
+        for rel_group in rel_groups_list:
+            pred_rel_group = [(curr_score, curr_rel) for curr_score, curr_rel in rels_with_scores if curr_rel in rel_group]
+            if len(pred_rel_group) == 1:
+                pred_rel = pred_rel_group[0][1]
+                pred_rels.append(pred_rel)
+            elif len(pred_rel_group) >= 2:
+                pred_rel = max(pred_rel_group)[1]
+                pred_rels.append(pred_rel)
+        relations_pred_batch.append(pred_rels or [""])
+    logger.debug(f"rel clf raw output: {relations_pred_batch}")
+    return relations_pred_batch
 
-def postprocess_triplets(outputs_batch, uttrs):
-    triplets_batch = []
-    for (outputs, scores), uttr in zip(outputs_batch, uttrs):
+
+def generate_triplets(uttr_batch, relations_pred_batch):
+    triplets_raw_batch, triplets_corr_batch = [], []
+    t5_input_uttrs = []
+    for uttr, preds in zip(uttr_batch, relations_pred_batch):
+        uttrs_mult = [uttr for pred in preds]
+        t5_input_uttrs.extend(uttrs_mult)
+    relations_pred_flat = list(itertools.chain(*relations_pred_batch))
+    t5_pred_triplets, t5_pred_scores = generative_ie(t5_input_uttrs, relations_pred_flat)
+    curr_idx = 0
+    for pred_rels in relations_pred_batch:
+        curr_triplets, curr_scores = [], []
+        for i in range(len(pred_rels)):
+            triplet_init = t5_pred_triplets[curr_idx]
+            if triplet_init:
+                curr_triplets.append(triplet_init)
+                curr_scores.append(t5_pred_scores[curr_idx])
+                curr_idx += 1
+        triplets_raw_batch.append((curr_triplets, curr_scores))
+
+    logger.debug(f"t5 raw output: {triplets_raw_batch}")
+    for (outputs, scores), uttr in zip(triplets_raw_batch, uttr_batch):
         triplets = []
         for output in outputs:
             triplet = ""
@@ -141,8 +130,8 @@ def postprocess_triplets(outputs_batch, uttrs):
                 if obj.islower() and obj.capitalize() in uttr:
                     triplet[2] = obj.capitalize()
             triplets.append(triplet)
-        triplets_batch.append(triplets)
-    return triplets_batch
+        triplets_corr_batch.append(triplets)
+    return triplets_corr_batch
 
 
 def get_result(request):
@@ -187,8 +176,7 @@ def get_result(request):
 
     logger.info(f"input utterances: {uttrs}")
     relations_pred = get_relations(uttrs)
-    outputs_batch = generate_triplets(uttrs, relations_pred)
-    triplets_batch = postprocess_triplets(outputs_batch, uttrs)
+    triplets_batch = generate_triplets(uttrs, relations_pred)
     logger.info(f"triplets_batch {triplets_batch}")
 
     triplets_info_batch = []
