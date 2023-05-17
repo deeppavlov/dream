@@ -5,6 +5,7 @@ services:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
         sentence-ranker:8128, 
         transformers-lm-gptj:8130, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
+        openai-api-gpt4:8159, openai-api-gpt4-32k:8160,
         dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
@@ -109,7 +110,7 @@ services:
       args:
         SERVICE_PORT: 8158
         SERVICE_NAME: transformers_lm_oasst12b
-        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/oasst-sft-1-pythia-12b
+        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/pythia-12b-sft-v8-7k-steps
         HALF_PRECISION: 1
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
@@ -164,6 +165,46 @@ services:
         reservations:
           memory: 100M
 
+  openai-api-gpt4:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8159
+        SERVICE_NAME: openai_api_gpt4
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8159
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  openai-api-gpt4-32k:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8160
+        SERVICE_NAME: openai_api_gpt4_32k
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-32k
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8160
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
   dff-universal-prompted-skill:
     env_file: [ .env ]
     build:
@@ -172,6 +213,8 @@ services:
         SERVICE_NAME: dff_universal_prompted_skill
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 7
+        DEFAULT_LM_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
+        DEFAULT_LM_SERVICE_CONFIG: default_generative_config.json
       context: .
       dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8147 --reload

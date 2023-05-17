@@ -1,5 +1,5 @@
 name: transformers_lm_oasst12b
-display_name: Open-Assistant SFT-1 12B
+display_name: Open-Assistant Pythia 12B
 component_type: Generative
 model_type: NN-based
 is_customizable: false
