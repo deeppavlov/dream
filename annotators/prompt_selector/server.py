@@ -2,6 +2,7 @@ import json
 import logging
 import requests
 import time
+from copy import deepcopy
 from os import getenv, listdir
 from pathlib import Path
 
@@ -35,6 +36,7 @@ def get_result(request):
     global PROMPTS, PROMPTS_NAMES
     st_time = time.time()
     contexts = request.json["contexts"]
+    # prompts_goals_from_attributes = [{"promptname1": "promptgoal1", "promptname2": "promptgoal2"}]
     prompts_goals_from_attributes = request.json["prompts_goals"]
 
     result = []
@@ -46,13 +48,13 @@ def get_result(request):
             str_context = "\n".join(context[-3:])
         else:
             str_context = context[-1]
-        for prompt_goals, prompt_name in zip(PROMPTS, PROMPTS_NAMES):
+        for _prompt_goals, _prompt_name in zip(PROMPTS, PROMPTS_NAMES):
             pairs += [
                 [
                     str_context,
-                    prompts_goals_from_attributes[context_id].get(prompt_name, "")
-                    if not prompt_goals
-                    else prompt_goals,
+                    prompts_goals_from_attributes[context_id].get(_prompt_name, "")
+                    if not _prompt_goals
+                    else _prompt_goals,
                 ]
             ]
             context_ids += [context_id]
@@ -83,6 +85,19 @@ def get_result(request):
     logger.info(f"prompt-selector exec time: {total_time:.3f}s")
     logger.info(f"prompt-selector result: {result}")
     return result
+
+
+@app.route("/collect_goals", methods=["POST"])
+def collect_goals():
+    # prompts_goals_from_attributes = [{"promptname1": "promptgoal1", "promptname2": "promptgoal2"}]
+    prompts_goals_from_attributes = request.json["prompts_goals"]
+    result = []
+
+    for _prompts_goals_all in enumerate(prompts_goals_from_attributes):
+        # _prompts_goals_all = {"promptname1": "promptgoal1", "promptname2": "promptgoal2"}
+
+        result += [{"human_attributes": {"prompts_goals": deepcopy(_prompts_goals_all)}}]
+    return jsonify(prompts_goals_from_attributes)
 
 
 @app.route("/respond", methods=["POST"])

@@ -147,10 +147,10 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
 
-    human_attrs_updates = {}
     # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
+    goals_from_prompt = ""
+    prompt_name = Path(PROMPT_FILE).stem
     if not GOALS_FROM_PROMPT:
-        prompt_name = Path(PROMPT_FILE).stem
         prev_prompts_goals = int_ctx.get_prompts_goals(ctx, actor)
         goals_from_prompt = prev_prompts_goals.get(prompt_name, "")
         if not goals_from_prompt:
@@ -161,8 +161,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 GENERATIVE_TIMEOUT,
                 sending_variables,
             )
-            human_attrs_updates["prompts_goals"] = deepcopy(prev_prompts_goals)
-            human_attrs_updates["prompts_goals"][prompt_name] = goals_from_prompt
             logger.info("Generated goals for prompt using generative service")
         else:
             logger.info("Found goals for prompt from the human attributes")
@@ -173,7 +171,10 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, human_attrs_updates, {}, {"can_continue": CAN_NOT_CONTINUE})
+        _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
+        if goals_from_prompt:
+            _curr_attrs["prompts_goals"] = {prompt_name: goals_from_prompt}
+        gathering_responses(hyp_text, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:
         return ""
