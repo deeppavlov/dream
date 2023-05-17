@@ -96,28 +96,46 @@ def add_relationships2kg(
         if (user_id, rel_name, new_entity_id) in ex_triplets:
             logger.info(f"triplet exists: {(rel_name, new_entity_id)}")
         else:
-            rel_names.append(rel_name)
+            if not triplets_to_store:
+                triplets_to_store = {
+                    "entity_kinds": [],
+                    "rel_names": [],
+                    "entity_ids": [],
+                }
+            triplets_to_store["entity_kinds"].append(entity_kind)
+            triplets_to_store["rel_names"].append(rel_name)
+            triplets_to_store["entity_ids"].append(new_entity_id)
 
-    entity_kinds_to_create = set(entity_kinds)
-    try:
-        logger.debug(f"Creating entity kinds: {entity_kinds_to_create}")
-        graph.ontology.create_entity_kinds(entity_kinds=entity_kinds_to_create, parents=None)
-    except ValueError:
-        logger.info(f"All kinds '{entity_kinds_to_create}' are already in DB")
+    if entity_kinds:
+        entity_kinds_to_create = list(set(entity_kinds))
+        try:
+            logger.debug(f"Creating entity kinds: {entity_kinds_to_create}")
+            graph.ontology.create_entity_kinds(entity_kinds=entity_kinds_to_create, parents=None)
+        except ValueError:
+            logger.info(f"All kinds '{entity_kinds_to_create}' are already in DB")
 
-    logger.debug(f"Adding `Name` property to entity kinds")
-    graph.ontology.create_property_kinds_of_entity_kinds(
-        entity_kinds=entity_kinds, property_kinds=[["Name"]]*len(entity_kinds), property_types=[[str]]*len(entity_kinds)
-    )
+        logger.debug(f"Adding `Name` property to entity kinds")
+        graph.ontology.create_property_kinds_of_entity_kinds(
+            entity_kinds=entity_kinds, property_kinds=[["Name"]]*len(entity_kinds), property_types=[[str]]*len(entity_kinds)
+        )
 
-    logger.debug(f"Creating entities: {new_entity_ids}")
-    graph.create_entities(entity_kinds, new_entity_ids, [["Name"]]*len(entity_kinds), [[name] for name in entity_names])
+        logger.debug(f"Creating entities: {new_entity_ids}")
+        graph.create_entities(entity_kinds, new_entity_ids, [["Name"]]*len(entity_kinds), [[name] for name in entity_names])
     
-    logger.debug(f"Creating relationship kinds: {rel_names}")
-    graph.ontology.create_relationship_kinds(["User"]*len(entity_kinds), rel_names, entity_kinds)
-    
-    logger.debug(f"Creating relationships")
-    graph.create_relationships([user_id]*len(new_entity_ids), rel_names, new_entity_ids)
+    if triplets_to_store and triplets_to_store["rel_names"]:
+        logger.debug(f"Creating relationship kinds: {triplets_to_store['rel_names']} --> {triplets_to_store['entity_ids']}")
+        graph.ontology.create_relationship_kinds(
+            ["User"]*len(triplets_to_store["rel_names"]),
+            triplets_to_store["rel_names"],
+            triplets_to_store["entity_kinds"],
+        )
+        
+        logger.debug(f"Creating relationships")
+        graph.create_relationships(
+            [user_id]*len(triplets_to_store["rel_names"]),
+            triplets_to_store["rel_names"],
+            triplets_to_store["entity_ids"]
+        )
 
 
 def add_properties2kg(graph, user_id, properties_to_add2kg):
