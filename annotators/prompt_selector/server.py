@@ -105,7 +105,9 @@ def collect_goals():
     for _prompts_goals_all, _human_attr in zip(prompts_goals_from_attributes, human_attributes):
         # _prompts_goals_all = {"promptname1": "promptgoal1", "promptname2": "promptgoal2"}
         _prompts_goals_not_empty = {name: goals for name, goals in _prompts_goals_all.items() if len(goals)}
-        result += [{"human_attributes": _human_attr.get("prompts_goals", {}).update(_prompts_goals_not_empty)}]
+        _new_prompts_goals = deepcopy(_human_attr.get("prompts_goals", {}))
+        _new_prompts_goals.update(_prompts_goals_not_empty)
+        result += [{"human_attributes": {"prompts_goals": _new_prompts_goals}}]
     logger.info(f"prompt_selector collected goals from hypotheses' attributes: {result}")
     return jsonify(prompts_goals_from_attributes)
 
