@@ -73,8 +73,6 @@ def get_result(request):
             for i, context in enumerate(contexts):
                 curr_ids = np.where(context_ids == i)[0]
                 # assign to -1 scores for pairs with empty prompt (actually, its goals)
-                logger.info(f"is_empty_prompts: {is_empty_prompts[curr_ids]}")
-                logger.info(f"scores empty: {scores[curr_ids][is_empty_prompts[curr_ids]]}")
                 for _id in curr_ids:
                     if is_empty_prompts[_id]:
                         scores[_id] = -1.0
@@ -88,7 +86,6 @@ def get_result(request):
                     if is_empty_prompts[_id]:
                         curr_result["prompts"] += [PROMPTS_NAMES[_id]]
                 result += [curr_result]
-            logger.info(f"PROMPTS_NAMES: {PROMPTS_NAMES}\nscores:{scores[curr_ids]}\ncurr_result:{curr_result}")
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)

@@ -249,6 +249,8 @@
                             "income_per_year": null
                         },
                         "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
                             "prompts_goals": {},
                             "dff_dream_persona_prompted_skill_state": {
                                 "context": {
@@ -292,7 +294,8 @@
                             "dff_shared_state": {
                                 "cross_links": {},
                                 "cross_states": {}
-                            }
+                            },
+                            "used_links": {}
                         },
                         "user_type": "human"
                     }
@@ -346,6 +349,18 @@
             "cross_links": {},
             "cross_states": {}
         }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
     ],
     "prompts_goals_batch": [
         {}

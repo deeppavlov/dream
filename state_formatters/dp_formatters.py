@@ -1162,9 +1162,7 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
         hypotheses = dialog["human_utterances"][-2].get("hypotheses", [])
         for prompts_goals_dict in [hyp.get("prompts_goals", None) for hyp in hypotheses]:
             if prompts_goals_dict:
-                print(f"prompts_goals_dict: {prompts_goals_dict}")
                 prompts_goals.update(deepcopy(prompts_goals_dict))
-    print(prompts_goals)
     return [{"prompts_goals": [prompts_goals], "human_attributes": [dialog["human"]["attributes"]]}]
 
 
