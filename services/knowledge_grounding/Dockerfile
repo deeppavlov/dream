@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:1.5-cuda10.1-cudnn7-runtime
+FROM deeppavlov/deeppavlov
 
 ARG MODEL_CKPT
 
