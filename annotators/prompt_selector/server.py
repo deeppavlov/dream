@@ -77,7 +77,7 @@ def get_result(request):
                 logger.info(f"scores empty: {scores[curr_ids][is_empty_prompts[curr_ids]]}")
                 for _id in curr_ids:
                     if is_empty_prompts[_id]:
-                        scores[_id] = -1.
+                        scores[_id] = -1.0
                 most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
                 curr_result = {
                     "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
