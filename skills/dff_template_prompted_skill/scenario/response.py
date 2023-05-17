@@ -151,9 +151,11 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     goals_from_prompt = ""
     prompt_name = Path(PROMPT_FILE).stem
     if not GOALS_FROM_PROMPT:
+        # get already collected goals from prompts from human attributes
         prev_prompts_goals = int_ctx.get_prompts_goals(ctx, actor)
         goals_from_prompt = prev_prompts_goals.get(prompt_name, "")
         if not goals_from_prompt:
+            # if current prompt's goals are empty in human attributes, generate them!
             goals_from_prompt = get_goals_from_prompt(
                 PROMPT,
                 GENERATIVE_SERVICE_URL,
