@@ -122,8 +122,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/pSQhVbMPcWjL.yml",
-                    "service": "annotators/prompt_selector/service_configs/fairytale_assistant"
+                    "component": "components/HqbKuGPENqUm.yml",
+                    "service": "annotators/prompt_selector/service_configs/multiskill_ai_assistant"
                 }
             },
             "prompt_selector": {
