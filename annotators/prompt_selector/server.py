@@ -35,8 +35,9 @@ for filename in listdir("common/prompts"):
 def get_result(request):
     global PROMPTS, PROMPTS_NAMES
     st_time = time.time()
+    # batch of contexts
     contexts = request.json["contexts"]
-    # prompts_goals_from_attributes = [{"promptname1": "promptgoal1", "promptname2": "promptgoal2"}]
+    # batch of prompts_goals dicts [{"promptname1": "promptgoal1", "promptname2": "promptgoal2"}]
     prompts_goals_from_attributes = request.json["prompts_goals"]
 
     result = []
@@ -59,8 +60,9 @@ def get_result(request):
             ]
             context_ids += [context_id]
     context_ids = np.array(context_ids)
-    if any([len(pair[1]) == 0 for pair in pairs]):
-        logger.info("Some goals from prompts are empty. Skip ranking.")
+    is_empty_prompts = np.array([len(pair[1]) == 0 for pair in pairs])
+    if all(is_empty_prompts):
+        logger.info("All goals from prompts are empty. Skip ranking.")
         result = [{"prompts": [], "max_similarity": 0.0}] * len(contexts)
     else:
         try:
@@ -70,11 +72,15 @@ def get_result(request):
             scores = np.array(scores)
             for i, context in enumerate(contexts):
                 curr_ids = np.where(context_ids == i)[0]
+                # assign to -1 scores for pairs with empty prompt (actually, its goals)
+                scores[curr_ids][is_empty_prompts[curr_ids]] = -1.
                 most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
                 curr_result = {
                     "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
                     "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
                 }
+                # add to prompts to be turned on, those prompts which goals are empty
+                curr_result["prompts"] += list(PROMPTS_NAMES[is_empty_prompts[curr_ids]])
                 result += [curr_result]
         except Exception as exc:
             logger.exception(exc)
