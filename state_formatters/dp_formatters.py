@@ -1162,7 +1162,7 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
         hypotheses = dialog["human_utterances"][-1].get("hypotheses", [])
         for d in [hyp.get("prompts_goals", {}) for hyp in hypotheses]:
             prompts_goals.update(d)
-    return [{"prompts_goals": [prompts_goals]}]
+    return [{"prompts_goals": [prompts_goals], "human_attributes": [dialog["human"]["attributes"]]}]
 
 
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:

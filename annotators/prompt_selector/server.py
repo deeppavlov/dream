@@ -91,12 +91,13 @@ def get_result(request):
 def collect_goals():
     # prompts_goals_from_attributes = [{"promptname1": "promptgoal1", "promptname2": "promptgoal2"}]
     prompts_goals_from_attributes = request.json["prompts_goals"]
+    human_attributes = request.json["human_attributes"]
     result = []
 
-    for _prompts_goals_all in enumerate(prompts_goals_from_attributes):
+    for _prompts_goals_all, _human_attr in zip(prompts_goals_from_attributes, human_attributes):
         # _prompts_goals_all = {"promptname1": "promptgoal1", "promptname2": "promptgoal2"}
-
-        result += [{"human_attributes": {"prompts_goals": deepcopy(_prompts_goals_all)}}]
+        _prompts_goals_not_empty = {name: goals for name, goals in _prompts_goals_all.items() if len(goals)}
+        result += [{"human_attributes": _human_attr.get("prompts_goals", {}).update(_prompts_goals_not_empty)}]
     return jsonify(prompts_goals_from_attributes)
 
 
