@@ -99,12 +99,12 @@ def respond():
             obj2rel_dict = {}
             for triplet in triplets:
                 rel = ""
-                obj = triplet['object']
+                obj = triplet['object'].lower()
                 if "relation" in triplet:
                     rel = triplet["relation"]
                 elif "property" in triplet:
                     rel = triplet["property"]
-                obj2rel_dict[obj.lower()] = rel
+                obj2rel_dict[obj] = rel
             for entity_substr, entity_ids, confs, entity_id_tags in zip(
                 entity_substr_list,
                 entity_ids_list,
@@ -112,7 +112,9 @@ def respond():
                 entity_id_tags_list,
             ):
                 entity_info = {}
-                curr_rel = obj2rel_dict.get(entity_substr.lower(), "")
+                entity_substr = entity_substr.lower()
+                context = context.lower()
+                curr_rel = obj2rel_dict.get(entity_substr, "")
                 is_abstract = curr_rel.lower().replace("_", " ") in abstract_rels and not any(
                     [f" {word} {entity_substr}" in context for word in ["the", "my", "his", "her"]]
                 )
@@ -126,7 +128,7 @@ def respond():
                         f_confs.append(conf)
                         f_entity_id_tags.append(entity_id_tag)
 
-                if f_entity_ids and entity_substr.lower() in context:
+                if f_entity_ids and entity_substr in context:
                     entity_info["entity_substr"] = entity_substr
                     entity_info["entity_ids"] = f_entity_ids
                     entity_info["confidences"] = [float(elem[2]) for elem in f_confs]

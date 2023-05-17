@@ -68,7 +68,7 @@ def add_relationships2kg(
 
     entity_kinds=[]
     new_entity_ids = []
-    rel_names = []
+    triplets_to_store = {}
     entity_names = []
     for (entity_kind, entity_name, rel_name) in relationships_to_add2kg:
         if USE_ABSTRACT_KINDS and \
@@ -186,17 +186,17 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
         if attribute and attribute['triplets']:
             triplets = attribute['triplets']
             for triplet in triplets:
+                entity_name = triplet['object'].lower()
                 if triplet['subject'] != 'user':
                     logger.info(no_rel_message)
                 if 'relation' in triplet:
                     entity_kind = get_entity_type(attribute)
-                    entity_name = triplet['object']
                     relation = '_'.join(triplet['relation'].split(' '))
                     if relation in rel_kinds_dict:
                         entity_kind = rel_kinds_dict[relation]
                     relationships_to_add2kg.append((entity_kind, entity_name, relation.upper()))
                 else:
-                    properties_to_add2kg.append((triplet['property'], triplet['object']))
+                    properties_to_add2kg.append((triplet['property'], entity_name))
                                         
     if properties_to_add2kg:
         add_properties2kg(graph, user_id, properties_to_add2kg)
