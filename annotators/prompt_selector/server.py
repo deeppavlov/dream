@@ -73,15 +73,22 @@ def get_result(request):
             for i, context in enumerate(contexts):
                 curr_ids = np.where(context_ids == i)[0]
                 # assign to -1 scores for pairs with empty prompt (actually, its goals)
-                scores[curr_ids][is_empty_prompts[curr_ids]] = -1.
+                logger.info(f"is_empty_prompts: {is_empty_prompts[curr_ids]}")
+                logger.info(f"scores empty: {scores[curr_ids][is_empty_prompts[curr_ids]]}")
+                for _id in curr_ids:
+                    if is_empty_prompts[_id]:
+                        scores[_id] = -1.
                 most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
                 curr_result = {
                     "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
                     "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
                 }
                 # add to prompts to be turned on, those prompts which goals are empty
-                curr_result["prompts"] += list(PROMPTS_NAMES[is_empty_prompts[curr_ids]])
+                for _id in curr_ids:
+                    if is_empty_prompts[_id]:
+                        curr_result["prompts"] += [PROMPTS_NAMES[_id]]
                 result += [curr_result]
+            logger.info(f"PROMPTS_NAMES: {PROMPTS_NAMES}\nscores:{scores[curr_ids]}\ncurr_result:{curr_result}")
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
@@ -109,7 +116,7 @@ def collect_goals():
         _new_prompts_goals.update(_prompts_goals_not_empty)
         result += [{"human_attributes": {"prompts_goals": _new_prompts_goals}}]
     logger.info(f"prompt_selector collected goals from hypotheses' attributes: {result}")
-    return jsonify(prompts_goals_from_attributes)
+    return jsonify(result)
 
 
 @app.route("/respond", methods=["POST"])
