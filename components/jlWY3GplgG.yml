@@ -4,8 +4,9 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: This skill utilizes LangChain's GoogleSearchAPIWrapper
-    to use Google search and OpenAI llm for question answering.
+description: This skill utilizes OpenWeatherMap service to get the forecast,
+    LangChain's GoogleSearchAPIWrapper to use Google search and OpenAI llm
+    for question answering, and ChatGPT to handle all other user requests.
 ram_usage: 100M
 gpu_usage: null
 group: skills
