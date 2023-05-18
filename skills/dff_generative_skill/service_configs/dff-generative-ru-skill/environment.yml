@@ -1,0 +1,4 @@
+SERVICE_PORT: 8092
+SERVICE_NAME: dff_generative_skill
+LANGUAGE: RU
+GENERATIVE_SERVICE_URL: http://dialogpt-ru:8125/respond

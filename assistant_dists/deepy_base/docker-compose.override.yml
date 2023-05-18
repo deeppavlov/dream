@@ -7,14 +7,25 @@ services:
       WAIT_HOSTS: "spelling-preprocessing:8074, harvesters-maintenance-skill:3662, rule-based-response-selector:8005,
         emotion-classification-deepy:8015, dff-program-y-skill:8008"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+    ports:
+      - 4242:4242
 
   spelling-preprocessing:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
     ports:
       - 8074:8074
 

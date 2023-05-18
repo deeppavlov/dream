@@ -694,7 +694,6 @@ def sys_not_interested_in_person_request(ngrams, vars):
 def usr_not_interested_in_person_response(vars):
     logger.debug("exec usr_not_interested_in_person_response")
     try:
-
         shared_memory = state_utils.get_shared_memory(vars)
         # obtaining current context
         current_cobot_topic = shared_memory.get("current_cobot_topic", "")

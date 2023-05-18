@@ -65,7 +65,7 @@ class T5GenerativeIEPreprocessor(Component):
             return input_ids_batch, attention_mask_batch
         else:
             target_ids_batch, lengths = [], []
-            for (subj, rel, obj) in targets_batch:
+            for subj, rel, obj in targets_batch:
                 target = f"<subj> {subj} <rel> {rel} <obj> {obj}"
                 encoding = self.tokenizer.encode_plus(text=target, return_attention_mask=True, truncation=True)
                 input_ids = encoding["input_ids"]

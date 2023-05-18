@@ -3,11 +3,11 @@ FROM deeppavlov/base-gpu:0.17.6
 RUN apt-get update && apt-get install git -y
 
 ARG CONFIG
-ARG PORT
+ARG SERVICE_PORT
 ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 RUN pip freeze | grep deeppavlov
 

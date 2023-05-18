@@ -1,0 +1,5 @@
+CONFIG: entity_detection_rus.json
+SERVICE_PORT: 8103
+SRC_DIR: annotators/entity_detection_rus
+LANGUAGE: RU
+FLASK_APP: server

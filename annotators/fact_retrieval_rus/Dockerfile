@@ -4,13 +4,13 @@ RUN apt-get update && apt-get install git -y
 
 ARG COMMIT=0.13.0
 ARG CONFIG
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 ARG TOP_N
 
 ENV COMMIT=$COMMIT
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 ENV TOP_N=$TOP_N
 
 COPY ./annotators/fact_retrieval_rus/requirements.txt /src/requirements.txt

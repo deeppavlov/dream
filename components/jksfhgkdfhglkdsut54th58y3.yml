@@ -1,0 +1,23 @@
+name: transformers_lm_llama7bru
+display_name: Russian LLaMA 7B
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Generative service utilizing Russian LLaMA 7B by Ilya Gusev on HuggingFace
+ram_usage: 50G
+gpu_usage: 30G
+group: services
+connector:
+  protocol: http
+  timeout: 20.0
+  url: http://transformers-lm-llama7bru:8078/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/transformers_peft_lm/service_configs/transformers-lm-llama7bru
+date_created: '2023-04-16T09:45:32'

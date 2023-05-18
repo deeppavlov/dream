@@ -1,0 +1,4 @@
+SERVICE_PORT: 8133
+SERVICE_NAME: relative_persona_extractor
+N_SENTENCES_TO_RETURN: 3
+FLASK_APP: server

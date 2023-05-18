@@ -1,0 +1,33 @@
+name: ner-ru
+endpoints:
+- ner
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+      SERVICE_PORT: 8021
+      SRC_DIR: annotators/NER_deeppavlov
+      COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+      FLASK_APP: server
+      CUDA_VISIBLE_DEVICES: '0'
+    context: ./
+    dockerfile: annotators/NER_deeppavlov/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8021
+  environment:
+  - FLASK_APP=server
+  - CUDA_VISIBLE_DEVICES=0
+  tty: true
+  deploy:
+    resources:
+      limits:
+        memory: 2G
+      reservations:
+        memory: 2G
+  volumes:
+  - ./annotators/NER_deeppavlov:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8021:8021
+proxy: null

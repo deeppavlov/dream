@@ -1,0 +1,7 @@
+SERVICE_PORT: 8072
+SERVICE_NAME: kbqa
+CONFIG: kbqa_cq_mt_bert_lite.json
+SRC_DIR: annotators/kbqa/
+COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server
