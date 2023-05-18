@@ -106,7 +106,7 @@ def generate_triplets(uttr_batch, relations_pred_batch):
     logger.debug(f"t5 raw output: {t5_pred_triplets}")
 
     curr_idx = 0
-    for pred_rels in relations_pred_batch:
+    for uttr, pred_rels in zip(uttr_batch, relations_pred_batch):
         triplets = set()
         for rel in pred_rels:
             triplet_init = t5_pred_triplets[curr_idx]
