@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -27,6 +28,10 @@ NAMING = {
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+DEFAULT_CONFIGS = {
+    "EleutherAI/gpt-j-6B": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "OpenAssistant/oasst-sft-1-pythia-12b": json.load(open("generative_configs/default_generative_config.json", "r")),
+}
 
 
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
@@ -60,7 +65,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
-        result_cut = GENERATIVE_ROBOT_TEMPLATE.sub("\n", result_cut).strip()
+        result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
@@ -85,7 +90,11 @@ try:
         "num_return_sequences": 1,
     }
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
+        ["What is the goal of SpaceX?"],
+        model,
+        tokenizer,
+        "You are a SpaceX Assistant.",
+        default_config,
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -106,6 +115,7 @@ def respond():
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", [])
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 

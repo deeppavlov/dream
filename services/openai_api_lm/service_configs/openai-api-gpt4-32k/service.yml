@@ -1,0 +1,31 @@
+name: openai-api-gpt4-32k
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8160
+      SERVICE_NAME: openai_api_gpt4_32k
+      PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-32k
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/openai_api_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8160
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./services/openai_api_lm:/src
+  - ./common:/src/common
+  ports:
+  - 8160:8160
+proxy: null

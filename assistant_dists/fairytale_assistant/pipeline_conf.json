@@ -27,8 +27,8 @@
                 "last_chance"
             ],
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/kDMKXKzObbUL.yml",
+                "service": "services/agent_services/service_configs/fairytale_assistant"
             }
         },
         "timeout_service": {
@@ -51,8 +51,8 @@
                 "timeout"
             ],
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/2LVyFT6xI6CR.yml",
+                "service": "services/agent_services/service_configs/fairytale_assistant"
             }
         },
         "response_annotator_selectors": {
@@ -69,8 +69,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/response_annotator_selectors",
-                "container": "agent"
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "response_annotators": {
@@ -88,9 +88,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             }
         },
@@ -103,32 +102,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/SentSeg",
-                    "container": "sentseg",
-                    "endpoint": "sentseg"
-                }
-            },
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words",
-                    "endpoint": "badlisted_words"
+                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
             "prompt_selector": {
@@ -139,14 +118,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/prompt_selector",
-                    "container": "prompt-selector",
-                    "endpoint": "respond"
+                    "component": "components/pSQhVbMPcWjL.yml",
+                    "service": "annotators/prompt_selector/service_configs/fairytale_assistant"
                 }
             }
         },
@@ -166,8 +143,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "skill_selectors/rule_based_selector",
-                    "container": "agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
@@ -175,10 +152,13 @@
             "dff_fairytale_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 7.0,
+                    "timeout": 30.0,
                     "url": "http://dff-fairytale-prompted-skill:8139/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_fairytale_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_fairytale_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -186,9 +166,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_prompted_skill",
-                    "container": "dff-fairytale-prompted-skill",
-                    "endpoint": "respond"
+                    "component": "components/zTwDs7eGPcDvcrxtzgi4ag.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-fairytale-prompted-skill"
                 }
             },
             "dummy_skill": {
@@ -204,31 +183,12 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             }
         },
         "candidate_annotators": {
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words",
-                    "endpoint": "badlisted_words_batch"
-                }
-            },
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
@@ -243,9 +203,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification",
-                    "container": "combined-classification",
-                    "endpoint": "batch_model"
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             },
             "sentence_ranker": {
@@ -262,9 +221,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/sentence_ranker",
-                    "container": "sentence-ranker",
-                    "endpoint": "respond"
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
                 }
             }
         },
@@ -283,9 +241,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/ranking_based_response_selector",
-                    "container": "ranking-based-response-selector",
-                    "endpoint": "respond"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }
@@ -293,7 +250,7 @@
     "metadata": {
         "display_name": "Fairytale Assistant",
         "author": "Fairytale Nanny",
-        "description": "Your family's magical new storyteller has arrived! Enchant your little ones with an AI-powered, custom fairytale that weaves together their favorite characters and topics. Simply choose your characters and topics, and watch as the Fairytale Nanny AI Assistant spins an enchanting tale that delights and captivates your child's imagination. The perfect solution for bedtime, road trips, or cozy family evenings.",
+        "description": "This Assistant is designed to tell fairytales on a given topic or with given characters. The fairytales are intended for kids and cannot involve cruel topics!",
         "version": "0.0.1",
         "date_created": "2023-01-10T02:00:00",
         "ram_usage": "50 GB",

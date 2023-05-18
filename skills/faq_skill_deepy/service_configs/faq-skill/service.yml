@@ -1,0 +1,10 @@
+name: faq-skill
+endpoints:
+- respond
+compose:
+  build:
+    context: skills/faq_skill_deepy
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:3772 --timeout=1000
+  ports:
+  - 3710:3710
+proxy: null

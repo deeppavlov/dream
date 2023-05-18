@@ -1,0 +1,32 @@
+name: last_chance_service
+display_name: Last Chance Service
+component_type: null
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Last Chance Service
+ram_usage: 100M
+gpu_usage: null
+group: last_chance_service
+connector:
+  protocol: python
+  class_name: PredefinedTextConnector
+  response_text: Sorry, something went wrong inside. Please tell me, what did you
+    say.
+  annotations:
+    sentseg:
+      punct_sent: Sorry, something went wrong inside. Please tell me, what did you
+        say.
+      segments:
+      - Sorry, something went wrong inside.
+      - Please tell me, what did you say.
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: add_bot_utterance_last_chance
+tags:
+- last_chance
+endpoint: respond
+service: services/agent_services/service_configs/deepy_faq
+date_created: '2023-03-04T19:27:44'

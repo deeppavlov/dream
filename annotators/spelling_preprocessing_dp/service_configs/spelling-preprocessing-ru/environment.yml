@@ -1,0 +1,6 @@
+CONFIG: levenshtein_corrector_ru.json
+SERVICE_PORT: 8074
+SRC_DIR: annotators/spelling_preprocessing_dp
+COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+LANGUAGE: RU
+FLASK_APP: server
