@@ -61,15 +61,16 @@ def add_name_property(graph, user_id, names):
 
 
 def add_relationships2kg(
-        utt, graph, relationships_to_add2kg, user_id, entities_with_types, ex_triplets, existing_ids
+        utt, graph, relationships_to_add2kg, user_id, entities_with_types, ex_triplets, all_entities
     ):
     """Creates an entity and a relation between it and the User from property extraction service."""
     text = utt.get("text", "")
 
     entity_kinds=[]
     new_entity_ids = []
-    triplets_to_store = {}
+    entity_info = {}
     entity_names = []
+    all_entities_in_kg = {(entity["@type"], entity.get("Name")):entity["@id"] for entity in all_entities}
     for (entity_kind, entity_name, rel_name) in relationships_to_add2kg:
         if USE_ABSTRACT_KINDS and \
                 rel_name.lower() in {"favorite_animal", "like_animal", "favorite_book", "like_read", "favorite_movie",
@@ -86,25 +87,35 @@ def add_relationships2kg(
             new_entity_id = entities_with_types[(entity_name, entity_kind)]
             logger.info(f"Entity exists: '{new_entity_id}'")
         else:
-            entity_kinds.append(entity_kind)
-
-            new_entity_id = str(uuid.uuid4())
-            new_entity_id = entity_kind + '/' + new_entity_id
-            new_entity_ids.append(new_entity_id)
-            entity_names.append(entity_name)
+            # Entity might be in KG, but still not in entities_with_types in case if the entity
+            # isn't connected to this exact user. So, to avoid creating entities more than
+            # once -once for each user-, here's a checking if this entity exists in KG at all.
+            # If so, assign the entity id to `new_entity_id` to create a new relationship with this
+            # existing entity -or not, if the same relationship, that's in utterance, exists in KG-
+            if (entity_kind, entity_name) in all_entities_in_kg:
+                new_entity_id = all_entities_in_kg[(entity_kind, entity_name)]
+                logger.info(f"Entity exists: '{new_entity_id}'")
+            else:
+                new_entity_id = str(uuid.uuid4())
+                new_entity_id = entity_kind + '/' + new_entity_id
+                new_entity_ids.append(new_entity_id)
+                entity_names.append(entity_name)
+                entity_kinds.append(entity_kind)
 
         if (user_id, rel_name, new_entity_id) in ex_triplets:
             logger.info(f"triplet exists: {(rel_name, new_entity_id)}")
         else:
-            if not triplets_to_store:
-                triplets_to_store = {
+            if not entity_info:
+                entity_info = {
                     "entity_kinds": [],
                     "rel_names": [],
                     "entity_ids": [],
+                    "entity_names": [],
                 }
-            triplets_to_store["entity_kinds"].append(entity_kind)
-            triplets_to_store["rel_names"].append(rel_name)
-            triplets_to_store["entity_ids"].append(new_entity_id)
+            entity_info["entity_kinds"].append(entity_kind)
+            entity_info["rel_names"].append(rel_name)
+            entity_info["entity_ids"].append(new_entity_id)
+            entity_info["entity_names"].append(entity_name)
 
     if entity_kinds:
         entity_kinds_to_create = list(set(entity_kinds))
@@ -114,28 +125,42 @@ def add_relationships2kg(
         except ValueError:
             logger.info(f"All kinds '{entity_kinds_to_create}' are already in DB")
 
-        logger.debug(f"Adding `Name` property to entity kinds")
+        logger.debug("Adding `Name` property to entity kinds")
         graph.ontology.create_property_kinds_of_entity_kinds(
             entity_kinds=entity_kinds, property_kinds=[["Name"]]*len(entity_kinds), property_types=[[str]]*len(entity_kinds)
         )
 
         logger.debug(f"Creating entities: {new_entity_ids}")
         graph.create_entities(entity_kinds, new_entity_ids, [["Name"]]*len(entity_kinds), [[name] for name in entity_names])
-    
-    if triplets_to_store and triplets_to_store["rel_names"]:
-        logger.debug(f"Creating relationship kinds: {triplets_to_store['rel_names']} --> {triplets_to_store['entity_ids']}")
+
+    if entity_info and entity_info["rel_names"]:
+        logger.debug(
+            f"Creating relationship kinds: {entity_info['rel_names']} --> "
+            f"{entity_info['entity_ids']}"
+        )
         graph.ontology.create_relationship_kinds(
-            ["User"]*len(triplets_to_store["rel_names"]),
-            triplets_to_store["rel_names"],
-            triplets_to_store["entity_kinds"],
+            ["User"]*len(entity_info["rel_names"]),
+            entity_info["rel_names"],
+            entity_info["entity_kinds"],
         )
-        
-        logger.debug(f"Creating relationships")
+
+        logger.debug("Creating relationships")
         graph.create_relationships(
-            [user_id]*len(triplets_to_store["rel_names"]),
-            triplets_to_store["rel_names"],
-            triplets_to_store["entity_ids"]
+            [user_id]*len(entity_info["rel_names"]),
+            entity_info["rel_names"],
+            entity_info["entity_ids"]
         )
+
+        # add to index
+        substr_list = entity_info["entity_names"]
+        ids_list = entity_info["entity_ids"]
+        tags_list = entity_info["entity_kinds"]
+
+        logger.debug(f"Adding to index user_id '{user_id}' - entity_info: "
+                     f"'entity_substr': {substr_list}, 'entity_ids': {ids_list},"
+                     f" 'tags': {tags_list}")
+        graph.index.set_active_user_id(str(user_id.split("/")[-1]))
+        graph.index.add_entities(substr_list, ids_list, tags_list)
 
 
 def add_properties2kg(graph, user_id, properties_to_add2kg):
@@ -171,7 +196,7 @@ def get_entity_type(attributes):
     return 'Misc'
 
 
-def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, existing_ids):
+def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, all_entities):
     """Chooses what to add: property, relationship or nothing."""
     no_rel_message = "No relations were found!"
     attributes = utt.get("annotations", {}).get("property_extraction", {})
@@ -203,7 +228,13 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
 
     if relationships_to_add2kg:
         add_relationships2kg(
-            utt, graph, relationships_to_add2kg, user_id, entities_with_types, ex_triplets, existing_ids
+            utt,
+            graph,
+            relationships_to_add2kg,
+            user_id,
+            entities_with_types,
+            ex_triplets,
+            all_entities,
         )
     else:
         logger.info(no_rel_message)
@@ -286,35 +317,28 @@ def get_result(request):
     name_result = {}
     if entities:
         name_result = name_scenario(utt, user_id)
-    property_result = add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, existing_ids)
+    property_result = add_relations_or_properties(
+        utt, user_id, entities_with_types, ex_triplets, all_entities
+    )
     if name_result:
         added.append(name_result)
     if property_result:
         added.append(property_result)
 
-    all_entities_new = graph.get_all_entities()
-    all_entities_new = [entity for entity in all_entities_new
-                        if (entity["@id"] not in existing_ids and not entity["@id"].startswith("User/"))]
-
     substr_list, ids_list, tags_list = [], [], []
-    for entity in all_entities_new:
-        if "Name" in entity:
-            substr_list.append(entity["Name"])
-            ids_list.append(entity["@id"])
-            tags_list.append(entity["@type"])
     if name_result:
         substr_list.append(name_result["object"])
         ids_list.append(user_id)
         tags_list.append("Name")
     if substr_list:
         user_id = utt.get("user", {}).get("id", "")
-        logger.debug(f"""Adding to index user_id '{user_id}' "entity_info": "entity_substr": {substr_list},
-                                                           "entity_ids": {ids_list}, "tags": {tags_list}""")
+        logger.debug(f"Adding to index user_id '{user_id}' - entity_info: "
+                     f"'entity_substr': {substr_list}, 'entity_ids': {ids_list},"
+                     f" 'tags': {tags_list}")
         graph.index.set_active_user_id(str(user_id))
         graph.index.add_entities(substr_list, ids_list, tags_list)
-    logger.info(f"kg_parser_annotations: {kg_parser_annotations}")
 
-    return [{'added_to_graph': added, "triplets": kg_parser_annotations}]
+    return [{'added_to_graph': added, "triplets_already_in_graph": kg_parser_annotations}]
 
 
 @app.route("/respond", methods=["POST"])
