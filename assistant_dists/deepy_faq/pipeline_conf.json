@@ -13,8 +13,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/OpwVmWKiYYsK.yml",
+                "service": "services/agent_services/service_configs/deepy_faq"
             }
         },
         "timeout_service": {
@@ -29,8 +29,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/LB9M2ATJRuRM.yml",
+                "service": "services/agent_services/service_configs/deepy_faq"
             }
         },
         "annotators": {
@@ -42,13 +42,31 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing",
-                    "container": "spelling-preprocessing",
-                    "endpoint": "respond"
+                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
+                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
                 }
+            }
+        },
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "response_annotators": {
@@ -66,12 +84,12 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/emotion_classification_deepy",
-                    "container": "emotion-classification-deepy",
-                    "endpoint": "model"
+                    "component": "components/7dhiDqHqK6TYOAJAKK7grg.yml",
+                    "service": "annotators/emotion_classification_deepy/service_configs/emotion-classification-deepy"
                 }
             }
         },
+        "skill_selectors": {},
         "skills": {
             "faq_skill": {
                 "connector": {
@@ -86,9 +104,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/faq_skill_deepy",
-                    "container": "faq-skill",
-                    "endpoint": "respond"
+                    "component": "components/Tlo3lSEJHo570onfHN8w.yml",
+                    "service": "skills/faq_skill_deepy/service_configs/faq-skill"
                 }
             },
             "dff_program_y_skill": {
@@ -105,12 +122,12 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill",
-                    "container": "dff-program-y-skill",
-                    "endpoint": "respond"
+                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
+                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
                 }
             }
         },
+        "candidate_annotators": {},
         "response_selectors": {
             "response_selector": {
                 "connector": {
@@ -125,9 +142,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/rule_based_response_selector",
-                    "container": "rule-based-response-selector",
-                    "endpoint": "respond"
+                    "component": "components/KX4drAocVa5APcivWHeBNQ.yml",
+                    "service": "response_selectors/confidence_based_response_selector/service_configs/confidence-based-response-selector"
                 }
             }
         }

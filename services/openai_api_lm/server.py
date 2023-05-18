@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -22,6 +23,13 @@ CHATGPT_ROLES = ["assistant", "user"]
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+DEFAULT_CONFIGS = {
+    "text-davinci-003": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
+    "gpt-3.5-turbo": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+    "gpt-4": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+    "gpt-4-32k": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+}
+CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
@@ -31,8 +39,8 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     openai.api_key = openai_api_key
     openai.organization = openai_org if openai_org else None
 
-    if PRETRAINED_MODEL_NAME_OR_PATH == "gpt-3.5-turbo":
-        logger.info("model=gpt-3.5-turbo, use special chat completion endpoint")
+    if PRETRAINED_MODEL_NAME_OR_PATH in CHAT_COMPLETION_MODELS:
+        logger.info("Use special chat completion endpoint")
         s = len(context) % 2
         messages = [
             {"role": "system", "content": prompt},
@@ -71,8 +79,9 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     elif isinstance(response, str):
         outputs = [response.strip()]
 
-    outputs = [GENERATIVE_ROBOT_TEMPLATE.sub("\n", resp).strip() for resp in outputs]
-    outputs = [resp.split("\n")[0] for resp in outputs]
+    if PRETRAINED_MODEL_NAME_OR_PATH not in CHAT_COMPLETION_MODELS:
+        # post-processing of the responses by all models except of ChatGPT
+        outputs = [GENERATIVE_ROBOT_TEMPLATE.sub("\n", resp).strip() for resp in outputs]
     return outputs
 
 
@@ -87,10 +96,11 @@ def respond():
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", [])
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
-    openai_api_keys = request.json.get("OPENAI_API_KEY_list", [])
-    openai_orgs = request.json.get("OPENAI_ORGANIZATION_list", None)
+    openai_api_keys = request.json.get("openai_api_keys", [])
+    openai_orgs = request.json.get("openai_api_organizations", None)
     openai_orgs = [None] * len(contexts) if openai_orgs is None else openai_orgs
 
     try:

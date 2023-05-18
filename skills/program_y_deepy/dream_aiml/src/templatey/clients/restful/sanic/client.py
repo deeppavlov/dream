@@ -141,7 +141,6 @@ class SanicRestBotClient(RestBotClient):
             return self.format_error_response(userid, question, str(excep)), 500
 
     def run(self, sanic):
-
         print(
             "%s Client running on %s:%s"
             % (self.id, self.configuration.client_configuration.host, self.configuration.client_configuration.port)
@@ -184,7 +183,6 @@ class SanicRestBotClient(RestBotClient):
 
 
 if __name__ == "__main__":
-
     REST_CLIENT = None
 
     print("Initiating Sanic REST Service...")

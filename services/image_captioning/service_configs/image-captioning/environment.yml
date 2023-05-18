@@ -1,0 +1,4 @@
+SERVICE_PORT: 8123
+SERVICE_NAME: image_captioning
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

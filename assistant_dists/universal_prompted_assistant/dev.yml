@@ -10,23 +10,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  no-restrictions-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
+      - 8002:8002
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -46,13 +35,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8130:8130
-  transformers-lm-bloomz7b:
+  transformers-lm-oasst12b:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8146:8146
+      - 8158:8158
   openai-api-chatgpt:
     volumes:
       - "./services/openai_api_lm:/src"
@@ -65,6 +54,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8131:8131
+  openai-api-gpt4:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8159:8159
+  openai-api-gpt4-32k:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8160:8160
   dff-universal-prompted-skill:
     volumes:
       - "./skills/dff_universal_prompted_skill:/src"

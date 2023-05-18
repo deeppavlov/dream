@@ -112,7 +112,6 @@ class AIMLEmbeddedBotClient(BotClient):
         return client_args
 
     def load_configuration(self, arguments):
-
         client_config = self.get_client_configuration()
         self._configuration = ProgramyConfiguration(client_config)
 

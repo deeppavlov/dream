@@ -1,0 +1,23 @@
+name: harvesters_maintenance_skill
+display_name: Harvesters Maintenance Skill
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Harvesters maintenance skill
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  url: http://harvesters-maintenance-skill:3662/respond
+dialog_formatter: state_formatters.dp_formatters:full_dialog
+response_formatter: state_formatters.dp_formatters:base_skill_formatter
+previous_services:
+- annotators
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/harvesters_maintenance_skill_deepy/service_configs/harvesters-maintenance-skill
+date_created: '2023-03-16T09:45:32'

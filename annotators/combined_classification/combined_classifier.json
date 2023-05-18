@@ -4,13 +4,51 @@
       "BACKBONE": "distilbert-base-uncased",
       "MODELS_PATH": "~/.deeppavlov/models",
       "SINGLE_SENTENCE_LEN": 32,
-      "MULTI_SENTENCE_LEN": 128
+      "MULTI_SENTENCE_LEN": 128,
+      "NUM_TRAIN_EPOCHS": 5,
+      "GRADIENT_ACC_STEPS": 8
     },
     "download":[{
         "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/9in1_singlelabel_v2_no_history.tar.gz",
         "subdir": "{MODELS_PATH}"
       }]
   },
+  "dataset_reader":{
+      "class_name":"multitask_reader",
+      "reader_class_name":"basic_classification_reader",
+      "path":"null",
+      "train":"train.csv",
+      "valid":"valid.csv",
+      "test":"test.csv",
+      "sep":"\t",
+      "header":0,
+      "label_type":"int",
+      "tasks":{"emo":{"data_path":"go_emotions_clean_onelabel","x":"text","y":"label_id"},
+      "sentiment":{"data_path":"sentiment_dynabench","x":"text","y":"label_id"},
+      "toxic": {"data_path":"toxic_clean_onelabel","x":"text","y":"label_id"},
+      "factoid":{"data_path":"factoid","x":"text","y":"label_id"},
+      "midas":{"data_path":"midas","x":"last_phrase","y":"label_id"},
+      "deeppavlov_topics":{"data_path":"dp_topics","x":"text","y":"label_id"},
+      "topics":{"data_path":"cobot_topics","x":"text","y":"label_id"},
+      "da_topics":{"data_path":"cobot_dialogact_topics", "x":"text","y":"label_id"},
+      "da_intents":{"data_path":"cobot_dialogact_intents", "x":"text","y":"label_id"}}
+      },
+   "dataset_iterator":{
+      "class_name":"multitask_iterator",
+      "num_train_epochs":"{NUM_TRAIN_EPOCHS}",
+      "gradient_accumulation_steps":"{GRADIENT_ACC_STEPS}",
+      "iterator_class_name":"basic_classification_iterator", 
+      "seed":42,
+      "tasks":{"emo":{},
+               "sentiment":{}, 
+               "toxic":{}, 
+               "factoid":{}, 
+               "midas":{}, 
+               "deeppavlov_topics":{}, 
+               "topics":{}, 
+              "da_topics":{}, 
+              "da_intents":{}} 
+   },
   "chainer": {
     "in": [
       "x_emo",

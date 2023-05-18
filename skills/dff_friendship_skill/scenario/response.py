@@ -65,7 +65,6 @@ def compose_topic_offering(ctx: Context, actor: Actor, excluded_skills=None) -> 
     if skill_name in link_to_skill2i_like_to_talk:
         response = random.choice(link_to_skill2i_like_to_talk[skill_name])
     else:
-
         response = f"Would you like to talk about {skill_name}?"
     int_ctx.save_to_shared_memory(ctx, actor, offered_topics=link_to_skill2key_words.get(skill_name, skill_name))
 

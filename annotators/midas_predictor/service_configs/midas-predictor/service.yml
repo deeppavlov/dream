@@ -1,0 +1,36 @@
+name: midas-predictor
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8121
+      SERVICE_NAME: midas_predictor
+      FLASK_APP: server
+    context: ./annotators/midas_predictor/
+  command: flask run -h 0.0.0.0 -p 8121
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./annotators/midas_predictor:/src
+  ports:
+  - 8121:8121
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8121
+  - PORT=8121

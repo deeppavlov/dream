@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_light/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, badlisted-words:8018, dff-friendship-skill:8086,
-      dff-template-skill:8120, spelling-preprocessing:8074"
+          dff-template-skill:8120, spelling-preprocessing:8074"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1

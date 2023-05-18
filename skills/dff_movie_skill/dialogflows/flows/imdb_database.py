@@ -338,7 +338,6 @@ class IMDb:
         return to_ignore
 
     def collect_persons_and_movies(self, profession="actor"):
-
         self.professionals[f"{profession}s"] = {}
         self.professionals[f"lowercased_{profession}s"] = {}
 

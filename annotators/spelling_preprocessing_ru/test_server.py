@@ -5,7 +5,6 @@ config_name = os.getenv("CONFIG")
 
 
 def main():
-
     url = "http://0.0.0.0:8074/respond"
     if config_name == "levenshtein_corrector_ru.json":
         request_data = [{"sentences": ["я ге видел малако"]}]

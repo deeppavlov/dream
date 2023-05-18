@@ -3,7 +3,7 @@
 3882	harvesters-maintenance-gobot-skill
 4242	agent
 8004	convers-evaluator-annotator
-8005	rule-based-response-selector
+8005	confidence-based-response-selector
 8006	spacy-nounphrases
 8007	rake-keywords
 8008	dff-program-y-skill
