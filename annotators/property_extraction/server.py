@@ -113,7 +113,7 @@ def generate_triplets(uttr_batch, relations_pred_batch):
             curr_idx += 1
             triplet = ""
             fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
-            if fnd and fnd[0][1] in pred_rels:
+            if fnd:
                 triplet = list(fnd[0])
                 if triplet[0] in ["i", "my"]:
                     triplet[0] = "user"
