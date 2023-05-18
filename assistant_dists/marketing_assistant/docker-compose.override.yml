@@ -6,6 +6,10 @@ services:
         sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptj:8130, 
         dff-marketing-prompted-skill:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
 
   sentseg:
     env_file: [ .env ]

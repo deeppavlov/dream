@@ -110,6 +110,22 @@
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
+            "prompt_goals_collector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/collect_goals"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "update_attributes",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pmpzYhPX3ucz.yml",
+                    "service": "annotators/prompt_selector/service_configs/multiskill_ai_assistant"
+                }
+            },
             "prompt_selector": {
                 "connector": {
                     "protocol": "http",
@@ -118,7 +134,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
+                "previous_services": [
+                    "annotators.prompt_goals_collector"
+                ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
@@ -128,10 +146,10 @@
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "description_based_skill_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -144,7 +162,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
-                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
                 }
             }
         },

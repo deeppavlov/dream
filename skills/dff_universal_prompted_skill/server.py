@@ -93,5 +93,19 @@ def respond():
     return jsonify(responses)
 
 
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    # import common.test_utils as t_utils
+
+    # t_utils.save_to_test(request.json, "tests/lets_talk_in.json", indent=4)  # TEST
+    # responses = handler(request.json, RANDOM_SEED)  # TEST
+    # import common.test_utils as t_utils
+
+    # t_utils.save_to_test(responses, "tests/lets_talk_out.json", indent=4)  # TEST
+
+    responses = handler(request.json)
+    return jsonify(responses)
+
+
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=SERVICE_PORT)

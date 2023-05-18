@@ -9,7 +9,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service
+from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt
 from df_engine.core import Context, Actor
 
 
@@ -35,6 +35,18 @@ ENVVARS_TO_SEND = {
     "http://openai-api-gpt4:8159/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     "http://openai-api-gpt4-32k:8160/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
 }
+
+
+def generate_goals_for_prompt(prompt):
+    goals_from_prompt = get_goals_from_prompt(
+        PROMPT,
+        GENERATIVE_SERVICE_URL,
+        GENERATIVE_SERVICE_CONFIG,
+        GENERATIVE_TIMEOUT,
+        sending_variables,
+    )
+    logger.info(f"Generated goals: `{goals_from_prompt}` for prompt: `{prompt}` using generative service")
+    return goals_from_prompt
 
 
 def compose_data_for_model(ctx, actor):
