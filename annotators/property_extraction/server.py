@@ -74,7 +74,7 @@ def sentrewrite(sentence, init_answer):
         sentence = f"{sentence} {init_answer}"
     return sentence
 
-def get_relations(uttr_batch, thres=0.6):
+def get_relations(uttr_batch, thres=0.5):
     relations_pred_batch = []
     input_batch = list(zip(*itertools.product(uttr_batch, relations_all)))
     rels_scores = rel_ranker(*input_batch)
@@ -103,33 +103,24 @@ def generate_triplets(uttr_batch, relations_pred_batch):
         t5_input_uttrs.extend(uttrs_mult)
     relations_pred_flat = list(itertools.chain(*relations_pred_batch))
     t5_pred_triplets, t5_pred_scores = generative_ie(t5_input_uttrs, relations_pred_flat)
+    logger.debug(f"t5 raw output: {t5_pred_triplets}")
+
     curr_idx = 0
     for pred_rels in relations_pred_batch:
-        curr_triplets, curr_scores = [], []
-        for i in range(len(pred_rels)):
+        triplets = set()
+        for rel in pred_rels:
             triplet_init = t5_pred_triplets[curr_idx]
-            if triplet_init:
-                curr_triplets.append(triplet_init)
-                curr_scores.append(t5_pred_scores[curr_idx])
-                curr_idx += 1
-        triplets_raw_batch.append((curr_triplets, curr_scores))
-
-    logger.debug(f"t5 raw output: {triplets_raw_batch}")
-    for (outputs, scores), uttr in zip(triplets_raw_batch, uttr_batch):
-        triplets = []
-        for output in outputs:
+            curr_idx += 1
             triplet = ""
-            fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", output)
-            if fnd:
+            fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
+            if fnd and fnd[0][1] in pred_rels:
                 triplet = list(fnd[0])
-                if triplet[1] not in rel_type_dict:
-                    continue
-                if triplet[0] == "i":
+                if triplet[0] in ["i", "my"]:
                     triplet[0] = "user"
                 obj = triplet[2]
                 if obj.islower() and obj.capitalize() in uttr:
                     triplet[2] = obj.capitalize()
-            triplets.append(triplet)
+            triplets.add(tuple(triplet))
         triplets_corr_batch.append(triplets)
     return triplets_corr_batch
 

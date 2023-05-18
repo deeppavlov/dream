@@ -64,7 +64,7 @@ def respond():
     logger.info(f"init context: {context_batch}")
     for hist_uttr in context_batch:
         if len(hist_uttr) == 1:
-            opt_context_batch.append(uttr_list)
+            opt_context_batch.append(hist_uttr[0])
         else:
             prev_uttr = hist_uttr[-2]
             cur_uttr = hist_uttr[-1]
