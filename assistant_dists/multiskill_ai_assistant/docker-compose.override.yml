@@ -74,7 +74,7 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
-        N_SENTENCES_TO_RETURN: 3
+        N_SENTENCES_TO_RETURN: 2
         PROMPTS_TO_CONSIDER: dream_persona,casual_email,meeting_notes,official_email,plan_for_article
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
