@@ -3,7 +3,6 @@ import sentry_sdk
 import json
 import re
 import requests
-import random
 from os import getenv
 from typing import Any
 
@@ -23,7 +22,7 @@ from tools.weather_service import weather_forecast_now
 
 with open("api_conf.json", "r") as f:
     top_n_apis = json.load(f)
-    
+
 CITY_SLOT = OWMCitySlot()
 
 
@@ -31,33 +30,14 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "generative_configs/openai-chatgpt.json")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
-N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
-
-CONSIDERED_LM_SERVICES = {
-    "GPT-J 6B": {
-        "url": "http://transformers-lm-gptj:8130/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
-    "BLOOMZ 7B": {
-        "url": "http://transformers-lm-bloomz7b:8146/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
-    "ChatGPT": {
-        "url": "http://openai-api-chatgpt:8145/respond",
-        "config": json.load(open("generative_configs/openai-chatgpt.json", "r")),
-        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    },
-    "GPT-3.5": {
-        "url": "http://openai-api-davinci3:8131/respond",
-        "config": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
-        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    },
-}
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
@@ -71,6 +51,7 @@ if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in
 assert sending_variables["OPENAI_API_KEY"], logger.info("Type in OpenAI API key to `.env_scret`")
 assert sending_variables["GOOGLE_CSE_ID"], logger.info("Type in GOOGLE CSE ID to `.env_scret`")
 assert sending_variables["GOOGLE_API_KEY"], logger.info("Type in GOOGLE API key to `.env_scret`")
+assert sending_variables["OPENAI_ORGANIZATION"], logger.info("Type in OPENAI ORGANIZATION key to `.env_scret`")
 
 search = GoogleSearchAPIWrapper()
 tools = [
@@ -120,40 +101,23 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
-    logger.info(f"dialog_context: {dialog_context}")
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
     prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
-    logger.info(f"prompt: {prompt}")
-    lm_service = last_uttr.get("attributes", {}).get("lm_service", "GPT-J 6B")
-    logger.info(f"lm_service: {lm_service}")
-
-    if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
-        sending_variables = {
-            f"{var}_list": [getenv(var, None)] for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
-        }
-        # check if at least one of the env variables is not None
-        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-            raise NotImplementedError(
-                "ERROR: All environmental variables have None values. At least one of them must have not None value"
-            )
-    else:
-        sending_variables = {}
-
     if len(dialog_context) > 0:
         response = requests.post(
-            CONSIDERED_LM_SERVICES[lm_service]["url"],
+            GENERATIVE_SERVICE_URL,
             json={
                 "dialog_contexts": [dialog_context],
                 "prompts": [prompt],
-                "configs": [CONSIDERED_LM_SERVICES[lm_service]["config"]],
-                **sending_variables,
+                "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
+                "openai_api_organizations": [sending_variables["OPENAI_ORGANIZATION"]],
             },
             timeout=GENERATIVE_TIMEOUT,
         )
         hypotheses = response.json()[0]
     else:
         hypotheses = []
-    logger.info(f"generated hypotheses: {hypotheses}")
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
         hyp_text = " ".join(hyp.split())
@@ -181,37 +145,36 @@ def weather_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 api_func_mapping = {
     "google_api": google_api_response,
-    "transformers_lm": generative_response,
-    "weather_api": weather_api_response
+    "generative_lm": generative_response,
+    "weather_api": weather_api_response,
 }
+
 
 def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
-        api_to_use = choose_api(top_n_apis)
-        response = api_func_mapping[api_to_use]
+        prompt = f"""You have a dictionary of tools where keys are the names of the tools \
+              and values are dictionaries with tool descriptions:
+        {top_n_apis}
+        Based on these descriptions, choose the best tool to use in order to answer the following user request:
+        {ctx.last_request}
+        Return the name of the best tool exactly as it is written in the dictionary. \
+              DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
+
+        dialog_context = compose_data_for_model(ctx, actor)
+        try:
+            best_api = requests.post(
+                GENERATIVE_SERVICE_URL,
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt],
+                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
+                    "openai_api_organizations": [sending_variables["OPENAI_ORGANIZATION"]],
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            hypotheses = best_api.json()[0]
+            response = api_func_mapping[hypotheses[0]](ctx, actor)
+        except KeyError:
+            response = api_func_mapping["generative_lm"](ctx, actor)
         return response
-
-
-def choose_api(top_n_apis): 
-    # we will add some function to retrieve top_n_apis from a database, 
-    # now we imagine that we already have it
-    prompt = f"""You have a dictionary of tools where keys are the names of the tools and values are dictionaries with tool descriptions:
-    {top_n_apis}
-    Based on these descriptions, choose the best tool to use in order to answer the following user request:
-    {ctx.last_request}
-    Return the name of the best tool exactly as it is written in the dictionary."""
-    best_api = requests.post(
-            CONSIDERED_LM_SERVICES[lm_service]["url"],
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [prompt],
-                "configs": [CONSIDERED_LM_SERVICES[lm_service]["config"]],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
-        )
-    return best_api
-    
-    
-    
-

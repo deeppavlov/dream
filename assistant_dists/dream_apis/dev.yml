@@ -5,12 +5,18 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
+  convers-evaluator-annotator:
+    volumes:
+      - "./annotators/ConversationEvaluator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8004:8004
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-no-scripts-selector:
+  convers-evaluation-selector:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
       - "./common:/src/common"
@@ -41,19 +47,12 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8087:8087
-  sentence-ranker:
+  openai-api-chatgpt:
     volumes:
-      - "./services/sentence_ranker:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8128:8128
-  transformers-lm-gptj:
-    volumes:
-      - "./services/transformers_lm:/src"
+      - "./services/openai_api_lm:/src"
       - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8130:8130
+      - 8145:8145
   dff-api-skill:
     volumes:
       - "./skills/dff_api_skill:/src"

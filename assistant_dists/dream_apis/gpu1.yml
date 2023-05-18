@@ -29,14 +29,6 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  sentence-ranker:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=9
   dff-api-skill:
     restart: unless-stopped
-  transformers-lm-gptj:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
 version: '3.7'

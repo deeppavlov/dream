@@ -2,8 +2,8 @@
     "google_api": {
         "description": "Google API utilizes Google to respond to a wide variety of questions."
     },
-    "transformers_lm": {
-        "description": "This service uses language models from transformers to generate responses."
+    "generative_lm": {
+        "description": "This service uses language models to generate responses."
     },
     "weather_api": {
         "description": "The Weather API can provide current weather information for a given location."

@@ -23,31 +23,9 @@ flows = {
         "api_response_node": {
             RESPONSE: loc_rsp.response_with_chosen_api,
             TRANSITIONS: {lbl.repeat(): cnd.true()},
-        }
+        },
     },
 }
-
-# flows = {
-#     "api": {
-#         LOCAL: {PROCESSING: {"set_confidence": int_prs.set_confidence(1.0)}},
-#         "start_node": {
-#             RESPONSE: "",
-#             TRANSITIONS: {"google_api_response_node": cnd.true()},
-#         },
-#         "google_api_response_node": {
-#             RESPONSE: loc_rsp.google_api_response,
-#             TRANSITIONS: {lbl.repeat(): cnd.true()},
-#         },
-#         "transformers_lm_response_node:": {
-#             RESPONSE: loc_rsp.generative_response,
-#             TRANSITIONS: {lbl.repeat(): cnd.true()},
-#         },
-#         "weather_api_response_node:": {
-#             RESPONSE: loc_rsp.weather_api_response,
-#             TRANSITIONS: {lbl.repeat(): cnd.true()},
-#         }
-#     },
-# }
 
 actor = Actor(
     flows,

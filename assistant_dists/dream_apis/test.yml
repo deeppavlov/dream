@@ -17,8 +17,5 @@ services:
   convers-evaluation-selector:
   badlisted-words:
   spelling-preprocessing:
-  sentence-ranker:
-    environment:
-      - CUDA_VISIBLE_DEVICES=9
   dff-api-skill:
 version: '3.7'
