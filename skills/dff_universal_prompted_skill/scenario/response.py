@@ -137,13 +137,13 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    prompt = human_uttr_attributes.get("prompt", DEFAULT_PROMPT)
+    prompt = human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)
     logger.info(f"prompt: {prompt}")
-    lm_service_url = human_uttr_attributes.get("lm_service_url", DEFAULT_LM_SERVICE_URL)
+    lm_service_url = human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)
     logger.info(f"lm_service_url: {lm_service_url}")
     # this is a dictionary! not a file!
-    lm_service_config = human_uttr_attributes.get("lm_service_config", None)
-    lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
+    lm_service_config = human_uttr_attributes.pop("lm_service_config", None)
+    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
     sending_variables = compose_sending_variables(lm_service_url, lm_service_kwargs, **human_uttr_attributes)
 
