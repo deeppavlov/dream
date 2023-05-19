@@ -52,12 +52,19 @@ logger.info('Graph Loaded!')
 
 def add_name_property(graph, user_id, names):
     """Adds User Name property."""
-    graph.create_or_update_property_of_entity(
-        id_=user_id,
+    graph.ontology.create_property_kind_of_entity_kind(
+        entity_kind="User",
         property_kind="Name",
-        property_value=names[0],
+        property_type=str
     )
-    logger.info(f"I already have you in the graph! Updating your property name to {names[0]}!")
+    graph.create_or_update_property_of_entity(
+        entity_id=user_id,
+        property_kind="Name",
+        new_property_value=names[0],
+    )
+    logger.info(
+        f"Updated property 'Name' for user '{user_id}' to {names[0]}!"
+    )
 
 
 def add_relationships2kg(
@@ -242,7 +249,7 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
     return triplets
 
 
-def name_scenario(utt, user_id):
+def check_name_scenario(utt, user_id):
     """Checks if there is a Name given and adds it as a property."""
     names = get_named_persons(utt)
     if not names:
@@ -316,7 +323,7 @@ def get_result(request):
     added = []
     name_result = {}
     if entities:
-        name_result = name_scenario(utt, user_id)
+        name_result = check_name_scenario(utt, user_id)
     property_result = add_relations_or_properties(
         utt, user_id, entities_with_types, ex_triplets, all_entities
     )
