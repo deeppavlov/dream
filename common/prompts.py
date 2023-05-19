@@ -36,6 +36,6 @@ def get_goals_from_prompt(prompt, url, config, generative_timeout, sending_varia
             sending_variables=sending_variables,
         )
         goals_description = result[0]
-    except Exception as e:
+    except Exception:
         goals_description = prompt
     return goals_description
