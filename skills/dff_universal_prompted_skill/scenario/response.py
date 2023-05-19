@@ -43,9 +43,7 @@ def compose_sending_variables(lm_service_url, lm_service_kwargs, **kwargs):
     if len(envvars_to_send):
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
         # from the last human utterance's attributes
-        sending_variables = {
-            f"{var.lower()}s": [kwargs.get(var.lower(), None)] for var in envvars_to_send
-        }
+        sending_variables = {f"{var.lower()}s": [kwargs.get(var.lower(), None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
             # get variables which names are in `envvars_to_send` (splitted by comma if many)
             # from env variables

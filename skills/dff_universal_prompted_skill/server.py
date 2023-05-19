@@ -105,7 +105,8 @@ def goals_handler(requested_data):
         lm_service_url=lm_service_url,
         lm_service_config=lm_service_config,
         lm_service_kwargs=lm_service_kwargs,
-        **requested_data)
+        **requested_data,
+    )
     return goals_for_prompt
 
 
