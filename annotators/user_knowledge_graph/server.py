@@ -137,7 +137,7 @@ def add_relationships2kg(
             entity_kinds=entity_kinds, property_kinds=[["Name"]]*len(entity_kinds), property_types=[[str]]*len(entity_kinds)
         )
 
-        logger.debug(f"Creating entities: {new_entity_ids}")
+        logger.debug(f"Creating entities: {new_entity_ids} with names: {entity_names}")
         graph.create_entities(entity_kinds, new_entity_ids, [["Name"]]*len(entity_kinds), [[name] for name in entity_names])
 
     if entity_info and entity_info["rel_names"]:
@@ -312,8 +312,10 @@ def get_result(request):
                 kg_parser_annotations.append([user_id, rel, obj])
         logger.info(f"User with id {user_id} already exists!")
     else:
-        if len(graph.ontology.get_entity_kind("User")) == 1:
+        try:
             graph.ontology.create_entity_kind("User")
+        except ValueError:
+            logger.info("Kind User is already in DB")
         graph.create_entity("User", user_id, [], [])
         logger.info(f"Created User with id: {user_id}")
 
