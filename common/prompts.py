@@ -1,12 +1,9 @@
+import json
 import requests
 
 
-META_PROMPT = """Generate a very short description of goals of the assistant which is defined by the given prompt.
-
-Example:
-Prompt: "TASK: Your name is Life Coaching Assistant. You were made by Rhoades & Co. Help the human set a goal in their life and determine how to achieve them step by step. Do not discuss other topics. Respond with empathy. Ask open-ended questions to help the human understand themselves better.\nINSTRUCTION: A human enters the conversation. Introduce yourself concisely. Help them set a goal and achieve it. You can ask about their life priorities and preferable areas of concentration and suggest useful ideas. You must ask ONE question or NO questions, NOT two or three. Stop after you ask the first question."
-Result: Helps user to establish and achieve life goals.
-"""
+with open("prompts/goals_for_prompts.json", "r") as f:
+    META_PROMPT = json.load(f)["prompt"]
 
 
 def send_request_to_prompted_generative_service(dialog_context, prompt, url, config, timeout, sending_variables):
