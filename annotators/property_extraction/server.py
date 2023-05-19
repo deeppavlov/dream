@@ -74,6 +74,7 @@ def sentrewrite(sentence, init_answer):
         sentence = f"{sentence} {init_answer}"
     return sentence
 
+
 def get_relations(uttr_batch, thres=0.5):
     relations_pred_batch = []
     input_batch = list(zip(*itertools.product(uttr_batch, relations_all)))
@@ -81,9 +82,15 @@ def get_relations(uttr_batch, thres=0.5):
     rels_scores = np.array(rels_scores).reshape((len(uttr_batch), len(relations_all), 2))
     for curr_scores in rels_scores:
         pred_rels = []
-        rels_with_scores = [(curr_score[1], curr_rel) for curr_score, curr_rel in zip(curr_scores, relations_all) if curr_score[1] > thres]
+        rels_with_scores = [
+            (curr_score[1], curr_rel)
+            for curr_score, curr_rel in zip(curr_scores, relations_all)
+            if curr_score[1] > thres
+        ]
         for rel_group in rel_groups_list:
-            pred_rel_group = [(curr_score, curr_rel) for curr_score, curr_rel in rels_with_scores if curr_rel in rel_group]
+            pred_rel_group = [
+                (curr_score, curr_rel) for curr_score, curr_rel in rels_with_scores if curr_rel in rel_group
+            ]
             if len(pred_rel_group) == 1:
                 pred_rel = pred_rel_group[0][1]
                 pred_rels.append(pred_rel)
@@ -96,19 +103,19 @@ def get_relations(uttr_batch, thres=0.5):
 
 
 def generate_triplets(uttr_batch, relations_pred_batch):
-    triplets_raw_batch, triplets_corr_batch = [], []
+    triplets_corr_batch = []
     t5_input_uttrs = []
     for uttr, preds in zip(uttr_batch, relations_pred_batch):
-        uttrs_mult = [uttr for pred in preds]
+        uttrs_mult = [uttr for _ in preds]
         t5_input_uttrs.extend(uttrs_mult)
     relations_pred_flat = list(itertools.chain(*relations_pred_batch))
     t5_pred_triplets, t5_pred_scores = generative_ie(t5_input_uttrs, relations_pred_flat)
-    logger.debug(f"t5 raw output: {t5_pred_triplets}")
+    logger.debug(f"t5 raw output: {t5_pred_triplets} scores: {t5_pred_scores}")
 
     curr_idx = 0
     for uttr, pred_rels in zip(uttr_batch, relations_pred_batch):
         triplets = set()
-        for rel in pred_rels:
+        for _ in pred_rels:
             triplet_init = t5_pred_triplets[curr_idx]
             curr_idx += 1
             triplet = ""
