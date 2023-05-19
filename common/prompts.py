@@ -2,7 +2,7 @@ import json
 import requests
 
 
-with open("prompts/goals_for_prompts.json", "r") as f:
+with open("common/prompts/goals_for_prompts.json", "r") as f:
     META_PROMPT = json.load(f)["prompt"]
 
 
