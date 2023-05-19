@@ -143,7 +143,7 @@
                     "component": "components/pSQhVbMPcWjL.yml",
                     "service": "annotators/prompt_selector/service_configs/fairytale_assistant"
                 }
-            },
+            }
         },
         "skill_selectors": {
             "description_based_skill_selector": {
