@@ -478,13 +478,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 6363:6363
-      
-  dff-template-custom-kg-prompted-skill:
-    volumes:
-      - "./skills/dff_template_custom_kg_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8137:8137
   
   dff-template-prompted-skill:
     volumes:

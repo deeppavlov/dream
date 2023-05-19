@@ -14,8 +14,8 @@
         "class_name": "src.t5_generative_ie:T5GenerativeIE",
         "pretrained_transformer": "{TRANSFORMER}",
         "add_special_tokens": ["<subj>", "<rel>", "<obj>"],
-        "save_path": "{MODEL_PATH}/model",
-        "load_path": "{MODEL_PATH}/model",
+        "save_path": "{MODEL_PATH}/model_lite",
+        "load_path": "{MODEL_PATH}/model_lite",
         "optimizer": "AdamW",
         "optimizer_parameters": {
           "lr": 3e-05,

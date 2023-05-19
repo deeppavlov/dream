@@ -292,6 +292,22 @@ def get_result(request):
     user_id = "User/" + user_id
     all_entities = graph.get_all_entities()
     existing_ids = [entity["@id"] for entity in all_entities]
+    logger.info(f"Existing ids: {existing_ids}")
+
+    # Part to use custom knowledge in LLM prompt
+    triplets = []
+    for entity, entity_id in entities_with_types.items():
+        rels = graph.search_for_relationships(id_a=user_id, id_b=entity_id)
+        logger.info(f"rels from custom_el in KG --||-- {rels}")
+        for rel in rels:
+            triplets.append(["User", rel['rel'].split('_')[0].lower(), entity[0]]) #TODO: you can do better than this naive split
+    prompts = []
+    for triplet in triplets:
+        prompts.append(f"The user {triplet[1].replace('_', ' ').lower()} {triplet[2]}")     
+
+    prompt = "\n".join(prompts)
+    prompt = ["Respond to a new friend as a kind friendly person. You MUST provide all information in the list of facts.\n\nThe list of facts:", prompt]
+    logger.info(f"prompt -- {prompt}")
 
     kg_parser_annotations = []
     ex_triplets = []

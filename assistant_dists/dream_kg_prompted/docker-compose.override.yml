@@ -20,8 +20,8 @@ services:
           dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, terminusdb:6363, storygpt:8126,
-          prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8131, custom-entity-linking:8135,
-          dff-user-kg-skill:8132, dff-template-custom-kg-prompted-skill:8137, dff-template-prompted-skill:8133, transformers-lm-gptj:8130,
+          prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8131, custom-entity-linking:8137,
+          dff-user-kg-skill:8132, dff-template-prompted-skill:8133, transformers-lm-gptj:8130,
           convers-evaluation-no-scripts-selector:8139, sentence-ranker:8128, prompt-selector:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
@@ -34,7 +34,7 @@ services:
       context: .
       dockerfile: ./annotators/ConversationEvaluator/Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       mode: replicated
       replicas: 1
@@ -194,7 +194,7 @@ services:
     command:  python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
@@ -266,7 +266,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     tty: true
     deploy:
       resources:
@@ -393,7 +393,7 @@ services:
         PREPROCESS_DATA: "http://lnsigo.mipt.ru/export/alexaprize_data/comet/categories_oEffect%23oReact%23oWant%23xAttr%23xEffect%23xIntent%23xNeed%23xReact%23xWant-maxe1_17-maxe2_35-maxr_1.pickle"
         DECODING_ALGO: beam-3
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
@@ -415,7 +415,7 @@ services:
         PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
         DECODING_ALGO: beam-3
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
@@ -542,7 +542,7 @@ services:
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
@@ -585,7 +585,7 @@ services:
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -606,7 +606,7 @@ services:
       dockerfile: annotators/kbqa/Dockerfile
     command: flask run -h 0.0.0.0 -p 8072
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -656,7 +656,7 @@ services:
       context: ./services/knowledge_grounding/
     command: flask run -h 0.0.0.0 -p 8083
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -748,7 +748,7 @@ services:
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
@@ -896,7 +896,7 @@ services:
       context: ./annotators/midas_classification
     command: flask run -h 0.0.0.0 -p 8090
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -937,7 +937,7 @@ services:
       dockerfile: annotators/fact_retrieval/Dockerfile
     command: flask run -h 0.0.0.0 -p 8100
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -1083,7 +1083,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8103
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
     deploy:
       resources:
         limits:
@@ -1186,7 +1186,7 @@ services:
       context: ./services/dialogpt/
     command: flask run -h 0.0.0.0 -p 8125
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -1203,7 +1203,7 @@ services:
         SERVICE_PORT: 8122
     command: flask run -h 0.0.0.0 -p 8122
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -1223,7 +1223,7 @@ services:
       context: ./services/storygpt/
     command: flask run -h 0.0.0.0 -p 8126
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -1244,7 +1244,7 @@ services:
       context: ./services/prompt_storygpt/
     command: flask run -h 0.0.0.0 -p 8127
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -1279,7 +1279,7 @@ services:
     build:
       args:
         CONFIG: custom_entity_linking.json
-        PORT: 8135
+        PORT: 8137
         SRC_DIR: annotators/custom_entity_linking
       context: ./
       dockerfile: annotators/custom_entity_linking/Dockerfile
@@ -1294,21 +1294,22 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: t5_generative_ie_infer.json
-        PORT: 8131
+        CONFIG_T5: t5_generative_ie_infer.json
+        CONFIG_REL_RANKER: rel_ranking_roberta.json
+        SERVICE_PORT: 8136
         SRC_DIR: annotators/property_extraction/
       context: ./
       dockerfile: annotators/property_extraction/Dockerfile
     command: flask run -h 0.0.0.0 -p 8131
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=4
     deploy:
       resources:
         limits:
-          memory: 8.0G
+          memory: 7G
         reservations:
-          memory: 4.0G
+          memory: 7G
 
   user-knowledge-graph:
     env_file: [ .env ]
@@ -1321,7 +1322,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8129
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=3
+      - CUDA_VISIBLE_DEVICES=8
       - INDEX_LOAD_PATH=/root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
     deploy:
       resources:
@@ -1409,7 +1410,7 @@ services:
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -1430,7 +1431,7 @@ services:
       dockerfile: ./services/transformers_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8130
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
@@ -1438,28 +1439,6 @@ services:
           memory: 40G
         reservations:
           memory: 40G
-
-  dff-template-custom-kg-prompted-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8137
-        SERVICE_NAME: dff_template_custom_kg_prompted_skill
-        PROMPT_FILE: common/prompts/dream_persona.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
-        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
-        GENERATIVE_TIMEOUT: 5
-        N_UTTERANCES_CONTEXT: 3
-        USER_KG_SERVICE_URL: http://user-knowledge-graph:8129/respond
-      context: .
-      dockerfile: ./skills/dff_template_custom_kg_prompted_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8137 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
 
   dff-template-prompted-skill:
     env_file: [ .env ]

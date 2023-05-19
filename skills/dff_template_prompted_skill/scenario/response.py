@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+USE_KG_DATA = getenv("USE_KG_DATA", False)
+USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
@@ -31,6 +33,7 @@ ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
+assert USER_KG_SERVICE_URL
 
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
@@ -123,8 +126,21 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
+    logger.info(f"prompt_shared_memory: {prompt}")
     logger.info(f"prompt from shared memory: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
+
+    custom_el = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("custom_entity_linking")
+    user_kg = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("user_knowledge_graph")
+    logger.info(f"custom_el: {custom_el}")
+    logger.info(f"user_kg: {user_kg}")
+
+    if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["prompt"]) and kg_prompt[1]:
+        final_prompt = PROMPT + f" ADDITIONAL INSTRUCTION: Use the following facts about the user for your answer: {kg_prompt[1]}"
+
+    else:
+        final_prompt = PROMPT 
+    logger.info(f"final_prompt: {final_prompt}")
 
     if len(dialog_context) > 0:
         try:
@@ -132,7 +148,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 GENERATIVE_SERVICE_URL,
                 json={
                     "dialog_contexts": [dialog_context],
-                    "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
+                    "prompts": [final_prompt if len(final_prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
                     "configs": [GENERATIVE_SERVICE_CONFIG],
                     **sending_variables,
                 },
