@@ -120,7 +120,7 @@ def generate_triplets(uttr_batch, relations_pred_batch):
             curr_idx += 1
             triplet = ""
             fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
-            if fnd:
+            if fnd and fnd[0][1] in rel_type_dict:
                 triplet = list(fnd[0])
                 if triplet[0] in ["i", "my"]:
                     triplet[0] = "user"
@@ -158,7 +158,7 @@ def get_result(request):
             )
 
             is_sentence = False
-            parsed_sentence = nlp(utt_cur)
+            parsed_sentence = nlp(utt_cur_l)
             if parsed_sentence:
                 tokens = [elem.text for elem in parsed_sentence]
                 tags = [elem.tag_ for elem in parsed_sentence]
@@ -168,9 +168,9 @@ def get_result(request):
 
             logger.info(f"is_q: {is_q} --- is_s: {is_sentence} --- utt_prev: {utt_prev_l} --- utt_cur: {utt_cur_l}")
             if is_q and not is_sentence:
-                uttrs.append(sentrewrite(utt_prev, utt_cur))
+                uttrs.append(sentrewrite(utt_prev_l, utt_cur_l))
             else:
-                uttrs.append(utt_cur)
+                uttrs.append(utt_cur_l)
 
     logger.info(f"input utterances: {uttrs}")
     relations_pred = get_relations(uttrs)
