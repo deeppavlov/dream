@@ -1,0 +1,41 @@
+name: combined-classification
+endpoints:
+- model
+- batch_model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8087
+      SERVICE_NAME: combined_classification
+      CONFIG: combined_classifier.json
+      CUDA_VISIBLE_DEVICES: '0'
+    context: .
+    dockerfile: ./annotators/combined_classification/Dockerfile
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    resources:
+      limits:
+        memory: 2G
+      reservations:
+        memory: 2G
+  volumes:
+  - ./common:/src/common
+  - ./annotators/combined_classification:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8087:8087
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8087
+  - PORT=8087

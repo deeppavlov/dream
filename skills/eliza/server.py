@@ -24,6 +24,7 @@ app = Flask(__name__)
 eliza_init_model = eliza.Eliza()
 eliza_init_model.load("./doctor.txt")
 
+
 # for tests
 # curl -X POST "http://localhost:3000/respond" \
 # -H "accept: application/json"  -H "Content-Type: application/json" \

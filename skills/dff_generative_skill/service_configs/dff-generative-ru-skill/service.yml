@@ -1,0 +1,27 @@
+name: dff-generative-ru-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      SERVICE_PORT: 8092
+      SERVICE_NAME: dff_generative_skill
+      LANGUAGE: RU
+      GENERATIVE_SERVICE_URL: http://dialogpt-ru:8125/respond
+    context: .
+    dockerfile: ./skills/dff_generative_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8092 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_generative_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8092:8092
+proxy: null

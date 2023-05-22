@@ -1,0 +1,34 @@
+name: emotion-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    context: .
+    dockerfile: ./skills/emotion_skill/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8049
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./skills/emotion_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8049:8049
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8049
+  - PORT=8049

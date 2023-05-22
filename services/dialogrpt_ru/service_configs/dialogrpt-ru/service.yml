@@ -1,0 +1,30 @@
+name: dialogrpt-ru
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env_ru
+  build:
+    context: ./services/dialogrpt_ru/
+    args:
+      SERVICE_PORT: 8122
+      PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+      TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+  command: flask run -h 0.0.0.0 -p 8122
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 4G
+      reservations:
+        memory: 4G
+  volumes:
+  - ./services/dialogrpt_ru:/src
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8122:8122
+proxy: null

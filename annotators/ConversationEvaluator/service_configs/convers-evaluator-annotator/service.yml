@@ -1,0 +1,40 @@
+name: convers-evaluator-annotator
+endpoints:
+- batch_model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      CONFIG: conveval.json
+      SERVICE_PORT: 8004
+      DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
+      CUDA_VISIBLE_DEVICES: '0'
+    context: .
+    dockerfile: ./annotators/ConversationEvaluator/Dockerfile
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    mode: replicated
+    replicas: 1
+    resources:
+      limits:
+        memory: 2G
+      reservations:
+        memory: 2G
+  volumes:
+  - ./annotators/ConversationEvaluator:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8004:8004
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8004
+  - PORT=8004
