@@ -30,7 +30,9 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
     "EleutherAI/gpt-j-6B": json.load(open("generative_configs/default_generative_config.json", "r")),
-    "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(
+        open("generative_configs/default_generative_config.json", "r")
+    ),
 }
 
 
