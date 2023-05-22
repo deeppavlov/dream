@@ -130,7 +130,7 @@ services:
       - "./annotators/fact_retrieval_rus:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8161:8161
+      - 8130:8130
   text-qa-ru:
     volumes:
       - "./services/text_qa:/src"
