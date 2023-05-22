@@ -276,7 +276,7 @@ Dream Architecture is presented in the following image:
 | Prompt StoryGPT        | 3 GB RAM, 4 GB GPU      | generative service based on fine-tuned GPT-2, for the given topic represented by one noun returns short story on a given topic                                                                                                                        |
 | GPT-J 6B               | 1.5 GB RAM, 24.2 GB GPU | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this service, [GPT-J model](https://huggingface.co/EleutherAI/gpt-j-6B) is used.            |
 | BLOOMZ 7B              | 2.5 GB RAM, 29 GB GPU   | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this service, [BLOOMZ-7b1 model](https://huggingface.co/bigscience/bloomz-7b1) is used.     |
-| GPT-JT 6B              | 1.5 GB RAM, 24.2 GB GPU | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this service, [GPT-JT model](https://huggingface.co/togethercomputer/GPT-JT-6B-v1) is used. |
+| GPT-JT 6B              | 2.5 GB RAM, 25.1 GB GPU | generative service based on Transformers generative model, the model is set in docker compose argument `PRETRAINED_MODEL_NAME_OR_PATH` (in particular, in this service, [GPT-JT model](https://huggingface.co/togethercomputer/GPT-JT-6B-v1) is used. |
 
 
 ## Skills
