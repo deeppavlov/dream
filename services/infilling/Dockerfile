@@ -16,9 +16,10 @@ RUN pip install -r /src/requirements.txt
 
 COPY . /src
 
-WORKDIR /data/
-RUN ls && \
+RUN mkdir /data/ && \
+    ls && \
     python download_model.py model sto ilm | bash
+WORKDIR /data/
 
 RUN wget http://files.deeppavlov.ai/dream/infilling/additional_ids_to_tokens.pkl && \
     wget http://files.deeppavlov.ai/dream/infilling/vocab.bpe && \
