@@ -1,0 +1,33 @@
+name: gpt2-multilingual
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8132
+      SERVICE_NAME: gpt2_generator
+      CONFIG_NAME: mgpt.json
+      PRETRAINED_MODEL_NAME_OR_PATH: sberbank-ai/mGPT
+      N_HYPOTHESES_TO_GENERATE: 3
+      MAX_HISTORY_DEPTH: 3
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./services/gpt2_generator/
+  command: flask run -h 0.0.0.0 -p 8132
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 6G
+      reservations:
+        memory: 6G
+  volumes:
+  - ./services/gpt2_generator:/src
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8132:8132
+proxy: null

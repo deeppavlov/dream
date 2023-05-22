@@ -1,0 +1,36 @@
+name: dff-animals-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8094
+      SERVICE_NAME: dff_animals_skill
+      BREED_FACTS_DB: http://files.deeppavlov.ai/kbqa/wikidata/breed_facts.json
+    context: .
+    dockerfile: ./skills/dff_animals_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8094
+  deploy:
+    resources:
+      limits:
+        memory: 512M
+      reservations:
+        memory: 512M
+  volumes:
+  - ./skills/dff_animals_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8094:8094
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8094
+  - PORT=8094

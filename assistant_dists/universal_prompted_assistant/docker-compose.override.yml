@@ -1,0 +1,228 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_prompted_assistant/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
+        sentence-ranker:8128, 
+        transformers-lm-gptj:8130, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
+        openai-api-gpt4:8159, openai-api-gpt4-32k:8160,
+        dff-universal-prompted-skill:8147"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+
+  sentseg:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+  combined-classification:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: combined_classifier.json
+        SERVICE_PORT: 8087
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  ranking-based-response-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        LANGUAGE: EN
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+      context: .
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
+  transformers-lm-gptj:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8130
+        SERVICE_NAME: transformers_lm_gptj
+        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+        HALF_PRECISION: 0
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8130
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50G
+        reservations:
+          memory: 50G
+
+  transformers-lm-oasst12b:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8158
+        SERVICE_NAME: transformers_lm_oasst12b
+        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/pythia-12b-sft-v8-7k-steps
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8158
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 60G
+        reservations:
+          memory: 60G
+
+  openai-api-chatgpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8145
+        SERVICE_NAME: openai_api_chatgpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8145
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  openai-api-davinci3:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8131
+        SERVICE_NAME: openai_api_davinci3
+        PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8131
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  openai-api-gpt4:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8159
+        SERVICE_NAME: openai_api_gpt4
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8159
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  openai-api-gpt4-32k:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8160
+        SERVICE_NAME: openai_api_gpt4_32k
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-32k
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8160
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  dff-universal-prompted-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8147
+        SERVICE_NAME: dff_universal_prompted_skill
+        GENERATIVE_TIMEOUT: 20
+        N_UTTERANCES_CONTEXT: 7
+        DEFAULT_LM_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
+        DEFAULT_LM_SERVICE_CONFIG: default_generative_config.json
+      context: .
+      dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8147 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+version: '3.7'

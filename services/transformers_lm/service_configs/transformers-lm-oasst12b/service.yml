@@ -1,0 +1,43 @@
+name: transformers-lm-oasst12b
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8158
+      SERVICE_NAME: transformers_lm_oasst12b
+      PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/pythia-12b-sft-v8-7k-steps
+      HALF_PRECISION: 0
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8158
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 60G
+      reservations:
+        memory: 60G
+  volumes:
+  - ./services/transformers_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8158:8158
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8158
+  - PORT=8158

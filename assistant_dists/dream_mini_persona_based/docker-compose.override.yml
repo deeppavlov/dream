@@ -16,6 +16,8 @@ services:
     env_file: [ .env ]
     build:
       args:
+        SERVICE_PORT: 8090
+        SERVICE_NAME: midas_classification
         CONFIG: midas_conv_bert.json
       context: ./annotators/midas_classification
     command: flask run -h 0.0.0.0 -p 8090
@@ -73,9 +75,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 100M
         reservations:
-          memory: 256M
+          memory: 100M
 
   dff-intent-responder-skill:
     env_file: [ .env ]
@@ -117,6 +119,9 @@ services:
   badlisted-words:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8018
+        SERVICE_NAME: badlisted_words
       context: annotators/BadlistedWordsDetector/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
@@ -132,22 +137,18 @@ services:
     env_file: [ .env ]
     build:
       args:
-        CONFIG: brillmoore_wikitypos_en.json
-        PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: EN
-      context: ./
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
+      context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 6.5G
+          memory: 100M
         reservations:
-          memory: 6.5G
+          memory: 100M
 
   dialogpt:
     env_file: [ .env ]
@@ -158,6 +159,7 @@ services:
         PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
         N_HYPOTHESES_TO_GENERATE: 5
         CONFIG_NAME: dialogpt_en.json
+        MAX_HISTORY_DEPTH: 2
       context: .
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
@@ -176,7 +178,8 @@ services:
     build:
       args:
         SERVICE_PORT: 8128
-        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
@@ -194,18 +197,18 @@ services:
     build:
       args:
         SERVICE_PORT: 8140
-        SERVICE_NAME: seq2seq_persona_based 
+        SERVICE_NAME: seq2seq_persona_based
+        PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bart-base-en-persona-chat
+        PAIR_DIALOG_HISTORY_LENGTH: 2
+        CHAT_EVERY_SENT_MAX_LENGTH: 25
+        PERSONA_EVERY_SENT_MAX_LENGTH: 19
+        GENERATION_PARAMS_CONFIG: bart-base-en-persona-chat_v1.json
       context: .
       dockerfile: ./services/seq2seq_persona_based/Dockerfile
     command: flask run -h 0.0.0.0 -p 8140
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
-      - PRETRAINED_MODEL_NAME_OR_PATH=DeepPavlov/bart-base-en-persona-chat
-      - PAIR_DIALOG_HISTORY_LENGTH=2 
-      - CHAT_EVERY_SENT_MAX_LENGTH=25
-      - PERSONA_EVERY_SENT_MAX_LENGTH=19
-      - GENERATION_PARAMS_CONFIG=bart-base-en-persona-chat_v1.json
     deploy:
       resources:
         limits:
@@ -228,8 +231,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
 version: '3.7'

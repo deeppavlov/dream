@@ -85,14 +85,15 @@ class RuleBasedSkillSelectorConnector:
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
-            is_factoid = get_factoid(user_uttr).get("is_factoid", 0.0) > 0.96
+            is_factoid = "is_factoid" in get_factoid(user_uttr, probs=False)
             is_celebrity_mentioned = check_is_celebrity_mentioned(user_uttr)
 
             if_choose_topic_detected = if_choose_topic(user_uttr, bot_uttr)
             if_lets_chat_about_particular_topic_detected = if_chat_about_particular_topic(user_uttr, bot_uttr)
 
             dialog_len = len(dialog["human_utterances"])
-
+            if user_uttr.get("attributes", {}).get("image") is not None:
+                skills_for_uttr.append("dff_image_skill")
             exit_cond = "exit" in intent_catcher_intents and (
                 dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)
             )
@@ -275,6 +276,7 @@ class RuleBasedSkillSelectorConnector:
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
 
+            skills_for_uttr.append("dff_universal_prompted_skill")
             # turn on skills if prompts are selected by prompt_selector
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
             if ranged_prompts:

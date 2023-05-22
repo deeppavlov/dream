@@ -1,0 +1,35 @@
+name: dff-template-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8120
+      SERVICE_NAME: dff_template_skill
+    context: .
+    dockerfile: ./skills/dff_template_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_template_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8120:8120
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8120
+  - PORT=8120

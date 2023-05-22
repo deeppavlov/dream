@@ -19,25 +19,29 @@ def main():
     }
     gold = [
         {
-            "max_similarity": 0.6948127746582031,
+            "max_similarity": 0.551,
             "persona": [
                 "I like Italian food especially pasta and pizza.",
+                "I like visiting interesting places virtually.",
                 "I like to watch football and basketball on TV.",
-                "I like watching travel video blogs.",
             ],
         },
         {
-            "max_similarity": 0.6451027989387512,
+            "max_similarity": 0.474,
             "persona": [
+                "I like visiting interesting places virtually.",
                 "I like watching travel video blogs.",
-                "I like to watch football and basketball on TV.",
-                "I like Italian food especially pasta and pizza.",
+                "I like travelling.",
             ],
         },
     ]
 
     result = requests.post(url, json=input_data).json()
-    assert result == gold, print(f"Got: {result} but expected: {gold}")
+    simcheck = all([round(el["max_similarity"], 3) == gold_el["max_similarity"] for el, gold_el in zip(result, gold)])
+    assert simcheck, print(f"Similarities are not the same\nGot: {result} but expected: {gold}")
+    personacheck = all([el["persona"] == gold_el["persona"] for el, gold_el in zip(result, gold)])
+    assert personacheck, print(f"Persona sentences are not the same\nGot: {result} but expected: {gold}")
+
     print("Success!")
 
 

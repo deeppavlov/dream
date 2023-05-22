@@ -42,7 +42,8 @@ except Exception as e:
 logger.info(f"dialogpt is set to run on {device}")
 
 SHORT_UTTERANCE_PROBA = 0.7
-CONTEXT_DEPTH = 3
+MAX_HISTORY_DEPTH = os.environ.get("MAX_HISTORY_DEPTH")
+MAX_HISTORY_DEPTH = int(MAX_HISTORY_DEPTH) if MAX_HISTORY_DEPTH else MAX_HISTORY_DEPTH
 
 params_default = {
     "max_length": 128,
@@ -155,6 +156,11 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 def generate(context, num_return_sequences, context_depth):
     bot_input_ids = format_dialogue_for_inference(
         context, context_depth=context_depth, encode=True, tokenizer=tokenizer
@@ -182,10 +188,10 @@ def respond():
         for context in dialog_contexts:
             # context is a list of dicts, each dict contains text and speaker label
             # context = [{"text": "utterance text", "speaker": "human"}, ...]
-            logger.info(f"dialogpt inputs: {context[-CONTEXT_DEPTH:]}")
+            logger.info(f"dialogpt inputs: {context[-MAX_HISTORY_DEPTH:]}")
 
             hypotheses = generate(
-                context[-CONTEXT_DEPTH:], num_return_sequences=num_return_sequences, context_depth=CONTEXT_DEPTH
+                context[-MAX_HISTORY_DEPTH:], num_return_sequences=num_return_sequences, context_depth=MAX_HISTORY_DEPTH
             )
             logger.info(f"dialogpt hypotheses: {hypotheses}")
             batch_generated_responses.append(hypotheses)
@@ -198,4 +204,4 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"dialogpt exec time: {total_time:.3f}s")
 
-    return jsonify({"generated_responses": batch_generated_responses})
+    return jsonify(batch_generated_responses)

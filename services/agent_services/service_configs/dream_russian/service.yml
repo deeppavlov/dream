@@ -1,0 +1,17 @@
+name: agent
+endpoints:
+- respond
+compose:
+  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_russian/pipeline_conf.json'
+  environment:
+    WAIT_HOSTS: ''
+    WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+    HIGH_PRIORITY_INTENTS: 1
+    RESTRICTION_FOR_SENSITIVE_CASE: 1
+    ALWAYS_TURN_ON_ALL_SKILLS: 0
+    LANGUAGE: EN
+  volumes:
+  - .:/dp-agent
+  ports:
+  - 4242:4242
+proxy: null

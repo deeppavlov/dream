@@ -1,4 +1,5 @@
 {
+    "connectors": {},
     "services": {
         "last_chance_service": {
             "connector": {
@@ -7,7 +8,14 @@
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say."
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["last_chance"]
+            "tags": [
+                "last_chance"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/CJSHsz2Ac5ul.yml",
+                "service": "services/agent_services/service_configs/deepy_adv"
+            }
         },
         "timeout_service": {
             "connector": {
@@ -16,104 +24,178 @@
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else."
             },
             "state_manager_method": "add_bot_utterance_last_chance",
-            "tags": ["timeout"]
+            "tags": [
+                "timeout"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/zM6WUEh2x3PC.yml",
+                "service": "services/agent_services/service_configs/deepy_adv"
+            }
         },
         "annotators": {
             "spelling_preprocessing": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
+                    "timeout": 1.0,
                     "url": "http://spelling-preprocessing:8074/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
+                "previous_services": [],
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
+                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
+                }
             },
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://entity_linking:3556/model"
+                    "url": "http://entity-linking-deepy:8075/model"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:entity_linking_formatter",
-                "state_manager_method": "add_annotation"
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:entity_linking_formatter",
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/1hNMgFlLT00Lc1s41yqbxA.yml",
+                    "service": "annotators/entity_linking_deepy/service_configs/entity-linking-deepy"
+                }
             },
             "sentseg": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://sentseg:3558/sentseg"
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
                 },
-                "dialog_formatter": "dp_formatters:last_utt_dialog",
-                "response_formatter": "dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
+                }
             },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://intent-catcher:3557/detect"
+                    "timeout": 1.0,
+                    "url": "http://intent-catcher:8014/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "required_previous_services": [
+                "previous_services": [
                     "annotators.spelling_preprocessing",
                     "annotators.sentseg"
-                ]
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/1IjC3r9b1VJ082ceINXzHQ.yml",
+                    "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher"
+                }
             }
         },
-        "skills": {
-            "harvesters_maintenance_gobot_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "url": "http://harvesters_maintenance_gobot_skill:3552/respond"
-                },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_skill_formatter",
-                "state_manager_method": "add_hypothesis",
-                "previous_services": ["annotators"]
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
             },
-            "dff_program_y_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-program-y-skill:3555/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "annotators"
-                ],
-                "state_manager_method": "add_hypothesis"
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "response_annotators": {
             "emotion_classification": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "connectors:BatchConnector",
-                    "url": "http://emotion_classification:3554/model"
+                    "url": "http://emotion-classification-deepy:8015/model",
+                    "class_name": "assistant_dists.deepy_adv.connectors:BatchConnector"
                 },
-              "dialog_formatter": "dp_formatters:hypotheses_list",
-              "response_formatter": "dp_formatters:simple_formatter_service",
-              "previous_services": ["skills"],
-              "state_manager_method": "add_hypothesis_annotation_batch"
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/7dhiDqHqK6TYOAJAKK7grg.yml",
+                    "service": "annotators/emotion_classification_deepy/service_configs/emotion-classification-deepy"
+                }
             }
         },
-        "response_selectors": {
-            "rule_based_response_selector": {
+        "skill_selectors": {},
+        "skills": {
+            "harvesters_maintenance_gobot_skill": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule_based_response_selector:3553/respond"
+                    "url": "http://harvesters-maintenance-gobot-skill:3882/respond"
                 },
-                "dialog_formatter": "dp_formatters:full_dialog",
-                "response_formatter": "dp_formatters:base_response_selector_formatter_service",
-                "previous_services": ["response_annotators"],
-                "state_manager_method": "add_bot_utterance"
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_skill_formatter",
+                "previous_services": [
+                    "annotators"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/LUSJ19c38uOLAVZWYs5U8g.yml",
+                    "service": "skills/harvesters_maintenance_gobot_skill_deepy/service_configs/harvesters-maintenance-gobot-skill"
+                }
+            },
+            "dff_program_y_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://dff-program-y-skill:8008/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
+                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
+                }
+            }
+        },
+        "candidate_annotators": {},
+        "response_selectors": {
+            "response_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://rule-based-response-selector:8005/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "response_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/KX4drAocVa5APcivWHeBNQ.yml",
+                    "service": "response_selectors/rule_based_response_selector/service_configs/rule-based-response-selector"
+                }
             }
         }
     },
-    "connectors": {},
     "metadata": {
         "display_name": "Deepy Advanced",
         "author": "DeepPavlov",

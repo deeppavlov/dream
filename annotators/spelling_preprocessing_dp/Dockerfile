@@ -15,12 +15,12 @@ ENV LANGUAGE ${LANGUAGE}
 
 ARG CONFIG
 ARG COMMIT=0.13.0
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 COPY ./annotators/spelling_preprocessing_dp/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt

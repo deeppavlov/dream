@@ -268,7 +268,7 @@
                             "Not Found",
                             0.0
                         ],
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "animals": {
                                 "Causes": [
                                     "death",

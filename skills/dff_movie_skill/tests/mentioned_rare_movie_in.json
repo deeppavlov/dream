@@ -177,7 +177,7 @@
                                 "detected": 0
                             }
                         },
-                        "conceptnet": {},
+                        "comet_conceptnet": {},
                         "ner": [
                             []
                         ],
@@ -406,7 +406,7 @@
                                 "Movies_TV"
                             ]
                         },
-                        "conceptnet": {
+                        "comet_conceptnet": {
                             "her": {
                                 "Causes": [
                                     "you feel sad",

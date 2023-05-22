@@ -1,0 +1,47 @@
+name: wiki-parser
+endpoints:
+- model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8077
+      SERVICE_NAME: wiki_parser
+      WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt
+      WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
+      WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
+      CONFIG: wiki_parser.json
+      SRC_DIR: annotators/wiki_parser
+      COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
+      FAST: 1
+      CUDA_VISIBLE_DEVICES: ''''''
+      FLASK_APP: server
+    context: ./
+    dockerfile: annotators/wiki_parser/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8077
+  environment:
+  - CUDA_VISIBLE_DEVICES=''
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./annotators/wiki_parser:/src
+  - ./common:/src/common
+  ports:
+  - 8077:8077
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8077
+  - PORT=8077

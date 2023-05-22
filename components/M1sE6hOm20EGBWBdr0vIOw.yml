@@ -1,0 +1,26 @@
+name: entity_linking
+display_name: Entity Linking
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: finds Wikidata entity ids for the entities detected with Entity Detection
+ram_usage: 2.5G
+gpu_usage: 1.3G
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://entity-linking:8075/model
+dialog_formatter: state_formatters.dp_formatters:el_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.ner
+- annotators.entity_detection
+- annotators.spacy_nounphrases
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: model
+service: annotators/entity_linking/service_configs/entity-linking
+date_created: '2023-03-16T09:45:32'

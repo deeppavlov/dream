@@ -215,8 +215,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing_dp:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
   dff-grounding-skill:
@@ -272,15 +271,10 @@ services:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8087:8087
-  midas-classification:
-    volumes:
-      - "./annotators/midas_classification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8090:8090
   dff-travel-skill:
     volumes:
       - "./skills/dff_travel_skill:/src"
@@ -441,6 +435,25 @@ services:
       - "./common:/src/common"
     ports:
       - 8133:8133
+  property-extraction:
+    volumes:
+      - "./annotators/property_extraction:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8136:8136
+  infilling:
+    volumes:
+      - "./services/infilling:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8139:8139
+  masked-lm:
+    volumes:
+      - "./services/masked_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8141:8141
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

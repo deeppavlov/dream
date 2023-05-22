@@ -33,7 +33,7 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-selector:
+  scripts-priority-selector:
     volumes:
       - "./response_selectors/convers_evaluation_based_selector:/src"
       - "./common:/src/common"
@@ -207,8 +207,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   spelling-preprocessing:
     volumes:
-      - "./annotators/spelling_preprocessing_dp:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
   dff-grounding-skill:
@@ -263,14 +262,9 @@ services:
     volumes:
       - "./common:/src/common"
       - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"      
     ports:
       - 8087:8087
-  midas-classification:
-    volumes:
-      - "./annotators/midas_classification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8090:8090
   dff-travel-skill:
     volumes:
       - "./skills/dff_travel_skill:/src"

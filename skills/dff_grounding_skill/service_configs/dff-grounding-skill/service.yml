@@ -1,0 +1,35 @@
+name: dff-grounding-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8080
+      SERVICE_NAME: dff_grounding_skill
+    context: .
+    dockerfile: ./skills/dff_grounding_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8080 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_grounding_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8080:8080
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8080
+  - PORT=8080

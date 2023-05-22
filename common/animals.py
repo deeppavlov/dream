@@ -1,5 +1,6 @@
 import re
 from common.universal_templates import is_any_question_sentence_in_utterance, NOT_LIKE_PATTERN
+from common.utils import get_topics, TOPIC_GROUPS, get_comet_conceptnet_annotations
 
 LIKE_ANIMALS_REQUESTS = ["Do you like animals?"]
 HAVE_PETS_REQUESTS = ["Do you have pets?"]
@@ -88,7 +89,10 @@ re_tokenizer = re.compile(r"[\w']+|[^\w ]")
 
 
 def check_about_animals(user_uttr):
-    if re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
+    found_topics = get_topics(user_uttr, probs=False, which="all")
+    if any([animal_topic in found_topics for animal_topic in TOPIC_GROUPS["animals"]]):
+        return True
+    elif re.findall(ANIMALS_FIND_TEMPLATE, user_uttr["text"]):
         return True
     else:
         return False
@@ -96,7 +100,7 @@ def check_about_animals(user_uttr):
 
 def mentioned_animal(annotations):
     flag = False
-    conceptnet = annotations.get("conceptnet", {})
+    conceptnet = get_comet_conceptnet_annotations({"annotations": annotations})
     for elem, triplets in conceptnet.items():
         if "SymbolOf" in triplets:
             objects = triplets["SymbolOf"]
@@ -127,7 +131,7 @@ def find_entity_by_types(annotations, types_to_find):
 
 
 def find_entity_conceptnet(annotations, types_to_find):
-    conceptnet = annotations.get("conceptnet", {})
+    conceptnet = get_comet_conceptnet_annotations({"annotations": annotations})
     for elem, triplets in conceptnet.items():
         if "SymbolOf" in triplets:
             objects = triplets["SymbolOf"]

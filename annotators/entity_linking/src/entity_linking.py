@@ -14,6 +14,7 @@
 
 import re
 import sqlite3
+import time
 from logging import getLogger
 from typing import List, Dict, Tuple
 from collections import defaultdict
@@ -53,6 +54,7 @@ class EntityLinker(Component, Serializable):
         lang: str = "ru",
         use_descriptions: bool = True,
         use_tags: bool = False,
+        use_related_tags: bool = False,
         lemmatize: bool = False,
         full_paragraph: bool = False,
         use_connections: bool = False,
@@ -90,22 +92,19 @@ class EntityLinker(Component, Serializable):
         self.use_descriptions = use_descriptions
         self.use_connections = use_connections
         self.use_tags = use_tags
+        self.use_related_tags = use_related_tags
         self.full_paragraph = full_paragraph
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
         self.not_found_str = "not in wiki"
         self.related_tags = {
-            "loc": ["gpe", "country", "city", "us_state", "river"],
-            "gpe": ["loc", "country", "city", "us_state"],
-            "work_of_art": ["product", "law"],
+            "loc": ["gpe", "country", "city", "us_state", "river", "county"],
             "product": ["work_of_art"],
-            "law": ["work_of_art"],
-            "org": ["fac", "business"],
-            "business": ["org"],
-            "actor": ["per"],
-            "athlete": ["per"],
-            "musician": ["per"],
-            "politician": ["per"],
-            "writer": ["per"],
+            "org": ["fac", "business", "norp"],
+            "per": ["actor", "athlete", "musician", "politician", "writer"],
+            "event": ["championship", "sports_season", "sports_event"],
+            "film": ["work_of_art", "road"],
+            "misc": ["animal", "language", "law", "food", "nation"],
+            "sport_team": ["association_football_club", "sports_league", "national_sports_team"],
         }
         self.word_searcher = None
         if self.words_dict_filename:
@@ -231,11 +230,14 @@ class EntityLinker(Component, Serializable):
         if entity_substr_list:
             entities_scores_list = []
             cand_ent_scores_list = []
+            tm_st = time.time()
             for entity_substr, tags in zip(entity_substr_list, entity_tags_list):
                 for symb_old, symb_new in [("'", "''"), ("-", " "), ("@", ""), (".", ""), ("  ", " ")]:
                     entity_substr = entity_substr.replace(symb_old, symb_new)
                 cand_ent_init = defaultdict(set)
                 if len(entity_substr) > 1:
+                    if tags and isinstance(tags[0], str):
+                        tags = [tags]
                     cand_ent_init = self.find_exact_match(entity_substr, tags)
                     all_low_conf = True
                     for entity_id in cand_ent_init:
@@ -256,7 +258,7 @@ class EntityLinker(Component, Serializable):
                                     corr_tags.append([corr_tag, conf])
                                     corr_clean_tags.append(corr_tag)
 
-                    if (not cand_ent_init or all_low_conf) and corr_tags:
+                    if (not cand_ent_init or all_low_conf or self.use_related_tags) and corr_tags:
                         corr_cand_ent_init = self.find_exact_match(entity_substr, corr_tags)
                         cand_ent_init = {**cand_ent_init, **corr_cand_ent_init}
                     entity_substr_split = [
@@ -271,6 +273,7 @@ class EntityLinker(Component, Serializable):
                         corr_words = self.word_searcher(entity_substr_split[0], set(clean_tags + corr_clean_tags))
                         if corr_words:
                             cand_ent_init = self.find_exact_match(corr_words[0], tags + corr_tags)
+
                     if not cand_ent_init and len(entity_substr_split) > 1:
                         cand_ent_init = self.find_fuzzy_match(entity_substr_split, tags)
 
@@ -293,8 +296,10 @@ class EntityLinker(Component, Serializable):
                 pages_list.append(pages)
                 pages_dict_list.append({entity_id: page for entity_id, page in zip(entity_ids, pages)})
                 descr_list.append([elem[6] for elem in cand_ent_scores])
+            log.info(f"get candidate entities time: {time.time() - tm_st}")
 
             if self.use_descriptions:
+                tm_st = time.time()
                 substr_lens = [len(entity_substr.split()) for entity_substr in entity_substr_list]
                 entity_ids_list, conf_list = self.rank_by_description(
                     entity_substr_list,
@@ -311,6 +316,7 @@ class EntityLinker(Component, Serializable):
                     [pages_dict.get(entity_id, "") for entity_id in entity_ids]
                     for entity_ids, pages_dict in zip(entity_ids_list, pages_dict_list)
                 ]
+                log.info(f"get descriptions time: {time.time() - tm_st}")
 
         return entity_ids_list, conf_list, pages_list
 
@@ -335,13 +341,14 @@ class EntityLinker(Component, Serializable):
                     )
         if tags and tags[0][0] == "misc" and not cand_ent_init:
             for tag in self.cursors:
-                query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
-                res = self.cursors[tag].execute(query)
-                entities_and_ids = res.fetchall()
-                if entities_and_ids:
-                    cand_ent_init = self.process_cand_ent(
-                        cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf
-                    )
+                if tag not in {"actor", "athlete", "musician", "per", "politician", "writer"}:
+                    query = "SELECT * FROM inverted_index WHERE title MATCH '{}';".format(entity_substr)
+                    res = self.cursors[tag].execute(query)
+                    entities_and_ids = res.fetchall()
+                    if entities_and_ids:
+                        cand_ent_init = self.process_cand_ent(
+                            cand_ent_init, entities_and_ids, entity_substr_split, tag, tag_conf
+                        )
         return cand_ent_init
 
     def find_fuzzy_match(self, entity_substr_split, tags):

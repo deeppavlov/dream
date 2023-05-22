@@ -10,23 +10,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
+      - 8002:8002
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -52,7 +41,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8130:8130
-  dff-dream-persona-prompted-skill:
+  dff-dream-persona-gpt-j-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

@@ -1,75 +1,65 @@
 services:
   agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/deepy_faq/pipeline_conf.json'
     volumes:
-      - "./assistant_dists/deepy_faq:/dp-agent"
-      - "./skill_selectors/:/dp-agent/skill_selectors/"
-      - "./state_formatters/:/dp-agent/state_formatters/"
-      - "./skills/:/dp-agent/skills/"
-      - "./common/:/dp-agent/common/"
+      - ".:/dp-agent"
     environment:
-      WAIT_HOSTS: "spelling_preprocessing:8074, faq_skill:3772, rule_based_response_selector:3773,
-        emotion_classification:3774, dff-program-y-skill:3775"
+      WAIT_HOSTS: "spelling-preprocessing:8074, faq-skill:3772, rule-based-response-selector:8005,
+        emotion-classification-deepy:8015, dff-program-y-skill:8008"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
   spelling-preprocessing:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
-        CONFIG: brillmoore_wikitypos_en.json
-        PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: EN
-      context: ./
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
+      context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 6.5G
+          memory: 100M
         reservations:
-          memory: 6.5G
+          memory: 100M
+    ports:
+      - 8074:8074
 
-  faq_skill:
+  faq-skill:
     build:
       context: skills/faq_skill_deepy
     command: gunicorn --workers=1 server:app -b 0.0.0.0:3772 --timeout=1000
     ports:
       - 3710:3710
 
-  rule_based_response_selector:
+  rule-based-response-selector:
     build:
       context: response_selectors/rule_based_response_selector
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:3773
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8005
     volumes: []
     ports:
-      - 3773:3773
+      - 8005:8005
 
-  emotion_classification:
+  emotion-classification-deepy:
     build:
       context: annotators/emotion_classification_deepy
-    command: python -m deeppavlov riseapi emo_bert.json -p 3774
+    command: python -m deeppavlov riseapi emo_bert.json -p 8015
     ports:
-      - 3774:3774
+      - 8015:8015
 
   dff-program-y-skill:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 3775
+        SERVICE_PORT: 8008
         SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: EN
       context: .
       dockerfile: ./skills/dff_program_y_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:3775 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
     ports:
-      - 3775:3775
-    deploy:
-      resources:
-        limits:
-          memory: 1024M
-        reservations:
-          memory: 1024M
+      - 8008:8008
 
 version: "3.7"
