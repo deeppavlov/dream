@@ -76,10 +76,10 @@ If one wants to create a new prompted distribution (distribution containing prom
    to an unused one.
 3. Choose the generative service to be used. For that one needs to:
    1. in `dream/assistant_dists/dream_custom_prompted/` folder in files `docker-compose.override.yml`, `dev.yml` 
-   replace `transformers-lm-gptj` container description to a new one. 
+   replace `transformers-lm-gptjt` container description to a new one. 
    In particular, one may replace in `PRETRAINED_MODEL_NAME_OR_PATH` parameter 
-   a utilized Language Model (LM) `GPT-J` with another one from `Transformers` library. 
-   Please change a port (`8130` for `transformers-lm-gptj`) to unused ones. 
+   a utilized Language Model (LM) `GPT-JT` with another one from `Transformers` library. 
+   Please change a port (`8130` for `transformers-lm-gptjt`) to unused ones. 
    2. in all prompted skills' containers descriptions change `GENERATIVE_SERVICE_URL` to your generative model. 
    Take into account that the service name is constructed as `http://<container-name>:<port>/<endpoint>`. 
 4. For each prompted skill, one needs to create an input state formatter. To do that, one needs to:
@@ -99,7 +99,7 @@ If one wants to create a new prompted distribution (distribution containing prom
                 "connector": {
                     "protocol": "http",
                     "timeout": 4.5,
-                    "url": "http://dff-dream-persona-gpt-j-prompted-skill:8134/respond"
+                    "url": "http://dff-dream-persona-gpt-jt-prompted-skill:8134/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",

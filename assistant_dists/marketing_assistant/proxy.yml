@@ -27,7 +27,7 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8128
       - PORT=8128
 
-  transformers-lm-gptj:
+  transformers-lm-gptjt:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/

@@ -28,7 +28,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  transformers-lm-gptj:
+  transformers-lm-gptjt:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
