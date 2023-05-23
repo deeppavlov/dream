@@ -53,6 +53,6 @@ services:
       - "./skills/dff_google_api_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8156:8158
+      - 8162:8162
 
 version: "3.7"

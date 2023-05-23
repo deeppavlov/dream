@@ -2,7 +2,6 @@ services:
   agent:
     restart: unless-stopped
     volumes:
-      - "/cephfs/home/ignatov/artifacts:/output"
       - ".:/dp-agent"
     ports:
       - ${AGENT_PORT}:4242
