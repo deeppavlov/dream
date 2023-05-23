@@ -145,10 +145,10 @@ def goals_handler(requested_data):
         goals_for_prompt = ""
 
     logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}` using generative service")
-    return jsonify({"goals": goals_for_prompt})
+    return goals_for_prompt
 
 
 @app.route("/generate_goals", methods=["POST"])
 def generate_goals():
-    responses = goals_handler(request.json)
-    return jsonify(responses)
+    goals_for_prompt = goals_handler(request.json)
+    return jsonify({"goals": goals_for_prompt})
