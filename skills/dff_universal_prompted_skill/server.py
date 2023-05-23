@@ -11,7 +11,6 @@ from sentry_sdk.integrations.logging import ignore_logger
 
 from common.dff.integration.actor import load_ctxs, get_response
 from scenario.main import actor
-from scenario.response import generate_goals_for_prompt
 
 import test_server
 
@@ -91,28 +90,6 @@ def respond():
 
     # t_utils.save_to_test(responses, "tests/lets_talk_out.json", indent=4)  # TEST
     responses = handler(request.json)
-    return jsonify(responses)
-
-
-def goals_handler(requested_data):
-    prompt = requested_data.pop("prompt")
-    lm_service_url = requested_data.pop("lm_service_url", None)
-    lm_service_config = requested_data.pop("lm_service_config", None)
-    lm_service_kwargs = requested_data.pop("lm_service_kwargs", None)
-
-    goals_for_prompt = generate_goals_for_prompt(
-        prompt,
-        lm_service_url=lm_service_url,
-        lm_service_config=lm_service_config,
-        lm_service_kwargs=lm_service_kwargs,
-        **requested_data,
-    )
-    return goals_for_prompt
-
-
-@app.route("/generate_goals", methods=["POST"])
-def generate_goals():
-    responses = goals_handler(request.json)
     return jsonify(responses)
 
 

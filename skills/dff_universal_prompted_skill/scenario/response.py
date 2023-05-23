@@ -2,14 +2,13 @@ import json
 import logging
 import re
 import sentry_sdk
-from copy import deepcopy
 from os import getenv
 from typing import Any
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from df_engine.core import Context, Actor
 
 
@@ -37,50 +36,6 @@ ENVVARS_TO_SEND = {
 }
 
 
-def compose_sending_variables(lm_service_url, lm_service_kwargs, **kwargs):
-    envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
-
-    if len(envvars_to_send):
-        # get variables which names are in `envvars_to_send` (splitted by comma if many)
-        # from the last human utterance's attributes
-        sending_variables = {f"{var.lower()}s": [kwargs.get(var.lower(), None)] for var in envvars_to_send}
-        if if_none_var_values(sending_variables):
-            # get variables which names are in `envvars_to_send` (splitted by comma if many)
-            # from env variables
-            sending_variables = {f"{var.lower()}s": [getenv(var, None)] for var in envvars_to_send}
-            if if_none_var_values(sending_variables):
-                logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
-            else:
-                logger.info(f"Got {envvars_to_send}'s values from environment.")
-        else:
-            logger.info(f"Got {envvars_to_send}'s values from attributes.")
-    else:
-        sending_variables = {}
-
-    # adding kwargs to request from the last human utterance's attributes
-    for _key, _value in lm_service_kwargs.items():
-        logger.info(f"Got/Re-writing {_key}s values from kwargs.")
-        sending_variables[f"{_key}s"] = [deepcopy(_value)]
-    return sending_variables
-
-
-def generate_goals_for_prompt(prompt, lm_service_url=None, lm_service_config=None, lm_service_kwargs=None, **kwargs):
-    lm_service_url = lm_service_url if lm_service_url else DEFAULT_LM_SERVICE_URL
-    logger.info(f"lm_service_url: {lm_service_url}")
-    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    sending_variables = compose_sending_variables(lm_service_url, lm_service_kwargs, **kwargs)
-
-    goals_from_prompt = get_goals_from_prompt(
-        prompt,
-        lm_service_url,
-        lm_service_config,
-        GENERATIVE_TIMEOUT,
-        sending_variables,
-    )
-    logger.info(f"Generated goals: `{goals_from_prompt}` for prompt: `{prompt}` using generative service")
-    return goals_from_prompt
-
-
 def compose_data_for_model(ctx, actor):
     # consider N_UTTERANCES_CONTEXT last utterances
     context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
@@ -104,14 +59,6 @@ def compose_data_for_model(ctx, actor):
             break
 
     return context
-
-
-def if_none_var_values(sending_variables):
-    if len(sending_variables.keys()) > 0 and all(
-        [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
-    ):
-        return True
-    return False
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
@@ -143,7 +90,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service_config = human_uttr_attributes.pop("lm_service_config", None)
     lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    sending_variables = compose_sending_variables(lm_service_url, lm_service_kwargs, **human_uttr_attributes)
+    envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
+        **human_uttr_attributes,
+    )
 
     if len(dialog_context) > 0:
         try:

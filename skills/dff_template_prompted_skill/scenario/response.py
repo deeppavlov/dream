@@ -10,7 +10,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt
+from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, if_none_var_values
 from df_engine.core import Context, Actor
 
 
@@ -65,13 +65,6 @@ def compose_data_for_model(ctx, actor):
 
     return context
 
-
-def if_none_var_values(sending_variables):
-    if len(sending_variables.keys()) > 0 and all(
-        [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
-    ):
-        return True
-    return False
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
