@@ -114,9 +114,12 @@ def generate_triplets(uttr_batch, relations_pred_batch):
 
     curr_idx = 0
     for uttr, pred_rels in zip(uttr_batch, relations_pred_batch):
-        triplets = set()
+        triplets = []
+        scores_dict = {}
         for _ in pred_rels:
             triplet_init = t5_pred_triplets[curr_idx]
+            curr_score = t5_pred_scores[curr_idx]
+            existing_obj = [triplet[2].lower() for triplet in triplets]
             curr_idx += 1
             triplet = ""
             fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
@@ -125,9 +128,17 @@ def generate_triplets(uttr_batch, relations_pred_batch):
                 if triplet[0] in ["i", "my"]:
                     triplet[0] = "user"
                 obj = triplet[2]
+                if obj in existing_obj:
+                    prev_triplet, prev_score = scores_dict[obj]
+                    if curr_score > prev_score:
+                        logger.debug(f"popping {prev_triplet}, low score")
+                        triplets.remove(prev_triplet)
+                    else:
+                        continue
+                scores_dict[obj] = (triplet, curr_score)
                 if obj.islower() and obj.capitalize() in uttr:
                     triplet[2] = obj.capitalize()
-            triplets.add(tuple(triplet))
+            triplets.append(triplet)
         triplets_corr_batch.append(triplets)
     return triplets_corr_batch
 
