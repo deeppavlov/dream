@@ -143,7 +143,7 @@ def goals_handler(requested_data):
 
     context = ["hi", META_PROMPT + f'Prompt: "{prompt}"\nResult:']
     try:
-        goals_for_prompt = generate_responses(context,  model, tokenizer,  prompt)[0]
+        goals_for_prompt = generate_responses(context, model, tokenizer, prompt)[0]
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
