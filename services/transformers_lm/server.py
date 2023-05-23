@@ -5,13 +5,15 @@ import time
 
 import sentry_sdk
 import torch
-from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+from common.prompts import META_PROMPT
+from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,6 +30,7 @@ NAMING = {
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+
 DEFAULT_CONFIGS = {
     "EleutherAI/gpt-j-6B": json.load(open("generative_configs/default_generative_config.json", "r")),
     "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(
@@ -142,3 +145,26 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"transformers_lm exec time: {total_time:.3f}s")
     return jsonify(responses)
+
+
+def goals_handler(requested_data):
+    prompt = requested_data.pop("prompt")
+    lm_service_config = requested_data.pop("lm_service_config", None)
+    # lm_service_kwargs = requested_data.pop("lm_service_kwargs", None)
+
+    context = ["hi", META_PROMPT + f'Prompt: "{prompt}"\nResult:']
+    try:
+        goals_for_prompt = generate_responses(context,  model, tokenizer,  prompt, lm_service_config)[0]
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        goals_for_prompt = ""
+
+    logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}` using generative service")
+    return goals_for_prompt
+
+
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    goals_for_prompt = goals_handler(request.json)
+    return jsonify({"goals": goals_for_prompt})
