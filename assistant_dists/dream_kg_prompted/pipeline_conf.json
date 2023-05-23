@@ -315,7 +315,7 @@
             "custom_entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://custom-entity-linking:8135/model"
+                    "url": "http://custom-entity-linking:8137/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:custom_el_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
