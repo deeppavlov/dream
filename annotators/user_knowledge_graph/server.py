@@ -362,9 +362,10 @@ def get_result(request):
                      f" 'tags': {tags_list}")
         graph.index.set_active_user_id(str(user_id))
         graph.index.add_entities(substr_list, ids_list, tags_list)
+    
+    logger.info(f"added_to_graph: -- {added}, triplets_already_in_graph -- {kg_parser_annotations}")
 
-    return [{'added_to_graph': added, "triplets_already_in_graph": kg_parser_annotations}]
-
+    return [{'added_to_graph': added, "triplets_already_in_graph": kg_parser_annotations, "prompt": prompt}]
 
 @app.route("/respond", methods=["POST"])
 def respond():
