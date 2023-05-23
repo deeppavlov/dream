@@ -66,7 +66,6 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
-
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
