@@ -26,19 +26,18 @@ def send_request_to_prompted_generative_service(dialog_context, prompt, url, con
     return hypotheses
 
 
-def get_goals_from_prompt(prompt, url, config, generative_timeout, sending_variables):
-    context = ["hi", META_PROMPT + f'Prompt: "{prompt}"\nResult:']
+def get_goals_from_prompt(prompt, url, generative_timeout, sending_variables):
     try:
-        result = send_request_to_prompted_generative_service(
-            context,
-            prompt="",
-            url=url,
-            config=config,
+        goals_description = requests.post(
+            f"{url}/generate_goals",
+            json={
+                "prompt": prompt,
+                **sending_variables,
+            },
             timeout=generative_timeout,
-            sending_variables=sending_variables,
-        )
-        goals_description = result[0]
-    except Exception:
+        ).json()["goals"]
+    except Exception as e:
+        logger.info(f"Exception in `/generate_goals` endpoint:\n{e}")
         goals_description = prompt
     return goals_description
 
