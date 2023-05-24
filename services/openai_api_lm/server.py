@@ -137,7 +137,7 @@ def goals_handler(requested_data):
     openai_api_key = requested_data.pop("openai_api_key", None)
     openai_org = requested_data.pop("openai_org", None)
 
-    context = ["hi", META_PROMPT + f'Prompt: "{prompt}"\nResult:']
+    context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
     try:
         goals_for_prompt = generate_responses(context, openai_api_key, openai_org, "", lm_service_config)[0]
     except Exception as exc:
