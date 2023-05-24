@@ -154,7 +154,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 GENERATIVE_TIMEOUT,
                 sending_variables,
             )
-            logger.info("Generated goals for prompt using generative service")
+            logger.info(f"Generated goals for prompt using generative service:\n{goals_from_prompt}")
         else:
             logger.info("Found goals for prompt from the human attributes")
 
