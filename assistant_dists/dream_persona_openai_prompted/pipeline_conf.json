@@ -170,7 +170,7 @@
             "dff_dream_persona_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-dream-persona-davinci3-prompted-skill:8137/respond"
                 },
                 "dialog_formatter": {

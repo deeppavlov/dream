@@ -112,7 +112,7 @@
             "dff_deepy_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-deepy-prompted-skill:8152/respond"
                 },
                 "dialog_formatter": {

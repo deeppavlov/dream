@@ -170,7 +170,7 @@
             "dff_dream_persona_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-dream-persona-davinci3-prompted-skill:8137/respond"
                 },
                 "dialog_formatter": {
@@ -191,7 +191,7 @@
             "dff_casual_email_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-casual-email-prompted-skill:8154/respond"
                 },
                 "dialog_formatter": {
@@ -212,7 +212,7 @@
             "dff_meeting_notes_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-meeting-notes-prompted-skill:8155/respond"
                 },
                 "dialog_formatter": {
@@ -233,7 +233,7 @@
             "dff_official_email_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-official-email-prompted-skill:8156/respond"
                 },
                 "dialog_formatter": {
@@ -254,7 +254,7 @@
             "dff_plan_for_article_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-plan-for-article-prompted-skill:8157/respond"
                 },
                 "dialog_formatter": {
