@@ -143,9 +143,7 @@ def generate_goals():
     openai_orgs = [None] * len(prompts) if openai_orgs is None else openai_orgs
     try:
         responses = []
-        for openai_api_key, openai_org, prompt, config in zip(
-                openai_api_keys, openai_orgs, prompts, configs
-        ):
+        for openai_api_key, openai_org, prompt, config in zip(openai_api_keys, openai_orgs, prompts, configs):
             context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
             goals_for_prompt = generate_responses(context, openai_api_key, openai_org, "", config)[0]
             logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
