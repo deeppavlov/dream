@@ -20,7 +20,7 @@ class MintConnector:
         try:
             recieved_bytes: bytes = 0
             while recieved_bytes == 0:                           # if we recieved 0 bytes, we probably didn't recieve anything
-                recieved_bytes = self.cl_socket.recv(1024)
+                recieved_bytes = self.cl_socket.recv(1024)       # make async?
             if recieved_bytes == -1:
                 raise OSError("Socket handling failed.")
             response = recieved_bytes.decode()                   # "command executed", "no such command", etc.
