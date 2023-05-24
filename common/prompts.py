@@ -31,11 +31,11 @@ def get_goals_from_prompt(prompt, url, generative_timeout, sending_variables):
         goals_description = requests.post(
             f"{url}/generate_goals",
             json={
-                "prompt": prompt,
+                "prompts": [prompt],
                 **sending_variables,
             },
             timeout=generative_timeout,
-        ).json()["goals"]
+        ).json()[0]
     except Exception as e:
         logger.info(f"Exception in `/generate_goals` endpoint:\n{e}")
         goals_description = prompt
