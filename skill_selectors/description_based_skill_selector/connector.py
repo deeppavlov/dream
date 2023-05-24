@@ -61,12 +61,13 @@ class DescriptionBasedSkillSelectorConnector:
 
                 if "dff_universal_prompted_skill" in prompted_skills:
                     skills_for_uttr.append("dff_universal_prompted_skill")
-                skills_for_uttr.append("dff_universal_prompted_skill")
+
                 # turn on skills if prompts are selected by prompt_selector
                 ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
                 if ranged_prompts:
                     for prompt_name in ranged_prompts:
-                        skills_for_uttr.append(f"dff_{prompt_name}_prompted_skill")
+                        if f"dff_{prompt_name}_prompted_skill" in prompted_skills:
+                            skills_for_uttr.append(f"dff_{prompt_name}_prompted_skill")
                 else:
                     skills_for_uttr.extend(prompted_skills)
                     logger.info("Adding all prompted skills as prompt selector did not select anything.")
