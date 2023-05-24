@@ -65,7 +65,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/VFdfQBQqBODF.yml",
-                    "service": "annotators/prompt_selector/service_configs/multiskill_ai_assistant"
+                    "service": "annotators/prompt_selector/service_configs/deeppavlov_assistant"
                 }
             },
             "prompt_selector": {

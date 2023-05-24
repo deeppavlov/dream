@@ -4,9 +4,10 @@ component_type: null
 model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: Annotator collecting from the hypotheses on the previous step 
-  `prompts_goals` extracted by different prompted skills using generative services
-  and saving them to human attributes for future utilization by Prompt Selector.
+description: Annotator that collects prompts_goals from the previous step's 
+  hypotheses and saves them to human attributes for future use by the Prompt Selector; 
+  prompts_goals, in turn, are extracted by different prompted skills using 
+  generative services.
 ram_usage: 100M
 gpu_usage: null
 group: annotators

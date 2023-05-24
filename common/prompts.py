@@ -44,7 +44,7 @@ def get_goals_from_prompt(prompt, url, generative_timeout, sending_variables):
 
 
 def if_none_var_values(sending_variables):
-    if len(sending_variables.keys()) > 0 and all(
+    if len(sending_variables) > 0 and all(
         [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
     ):
         return True

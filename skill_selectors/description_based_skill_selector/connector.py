@@ -53,7 +53,7 @@ class DescriptionBasedSkillSelectorConnector:
             prompted_skills = [skill for skill in all_skill_names if "prompted_skill" in skill]
 
             if user_uttr_text == "/get_dialog_id":
-                skills_for_uttr.append("dummy_skill")
+                skills_for_uttr = ["dummy_skill"]
             else:
                 skills_for_uttr.append("dummy_skill")
                 # adding linked-to skills
