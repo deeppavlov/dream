@@ -13,24 +13,19 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = ["Assistant", "Human"]
-CHATGPT_ROLES = ["assistant", "user"]
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "text-davinci-003": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
-    "gpt-3.5-turbo": json.load(open("generative_configs/openai-chatgpt.json", "r")),
-    "gpt-4": json.load(open("generative_configs/openai-chatgpt.json", "r")),
-    "gpt-4-32k": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+    "claudev1": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "claudev12": json.load(open("generative_configs/default_generative_config.json", "r")),
 }
-CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]
 
 
 def generate_responses(context, anthropic_api_key, prompt, generation_params, continue_last_uttr=False):
@@ -52,9 +47,8 @@ def generate_responses(context, anthropic_api_key, prompt, generation_params, co
     response = client.completion(
         prompt=dialog_context,
         stop_sequences=[NAMING[1]],
-        model=PRETRAINED_MODEL_NAME_OR_PATH,  #"claude-v1",
+        model=PRETRAINED_MODEL_NAME_OR_PATH,
         **generation_params,
-        # max_tokens_to_sample=max_tokens_to_sample,
     )
 
     if isinstance(response, dict) and "completion" in response:
