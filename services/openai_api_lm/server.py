@@ -129,27 +129,31 @@ def respond():
     return jsonify(responses)
 
 
-def goals_handler(requested_data):
-    prompt = requested_data.pop("prompt")
-    lm_service_config = requested_data.pop("lm_service_config", None)
-    lm_service_config = {} if lm_service_config is None else lm_service_config
-    # lm_service_kwargs = requested_data.pop("lm_service_kwargs", None)
-    openai_api_key = requested_data.pop("openai_api_key", None)
-    openai_org = requested_data.pop("openai_org", None)
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    st_time = time.time()
 
-    context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+    prompts = request.json.get("prompts", [])
+    configs = request.json.get("configs", [])
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    openai_api_keys = request.json.get("openai_api_keys", [])
+    openai_orgs = request.json.get("openai_api_organizations", None)
+    openai_orgs = [None] * len(prompts) if openai_orgs is None else openai_orgs
     try:
-        goals_for_prompt = generate_responses(context, openai_api_key, openai_org, "", lm_service_config)[0]
+        responses = []
+        for openai_api_key, openai_org, prompt, config in zip(
+                openai_api_keys, openai_orgs, prompts, configs
+        ):
+            context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            goals_for_prompt = generate_responses(context, openai_api_key, openai_org, "", config)[0]
+            logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
+            responses += [goals_for_prompt]
+
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        goals_for_prompt = ""
+        responses = [""] * len(prompts)
 
-    logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}` using generative service")
-    return goals_for_prompt
-
-
-@app.route("/generate_goals", methods=["POST"])
-def generate_goals():
-    goals_for_prompt = goals_handler(request.json)
-    return jsonify({"goals": goals_for_prompt})
+    total_time = time.time() - st_time
+    logger.info(f"openai-api generate_goals exec time: {total_time:.3f}s")
+    return jsonify(responses)
