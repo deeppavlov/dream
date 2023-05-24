@@ -150,6 +150,7 @@ def respond():
 def goals_handler(requested_data):
     prompt = requested_data.pop("prompt")
     lm_service_config = requested_data.pop("lm_service_config", None)
+    lm_service_config = {} if lm_service_config is None else lm_service_config
     # lm_service_kwargs = requested_data.pop("lm_service_kwargs", None)
 
     context = ["hi", META_PROMPT + f'Prompt: "{prompt}"\nResult:']
