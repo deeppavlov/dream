@@ -149,10 +149,10 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if not goals_from_prompt:
             # if current prompt's goals are empty in human attributes, generate them!
             goals_from_prompt = get_goals_from_prompt(
-                PROMPT,
-                GENERATIVE_SERVICE_URL,
-                GENERATIVE_TIMEOUT,
-                sending_variables,
+                prompt=PROMPT,
+                url=GENERATIVE_SERVICE_URL,
+                generative_timeout=GENERATIVE_TIMEOUT,
+                sending_variables=sending_variables,
             )
             logger.info(f"Generated goals for prompt using generative service:\n{goals_from_prompt}")
         else:

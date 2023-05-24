@@ -27,9 +27,10 @@ def send_request_to_prompted_generative_service(dialog_context, prompt, url, con
 
 
 def get_goals_from_prompt(prompt, url, generative_timeout, sending_variables):
+    new_url = "/".join(url.split("/")[:-1])
     try:
         goals_description = requests.post(
-            f"{url}/generate_goals",
+            f"{new_url}/generate_goals",
             json={
                 "prompts": [prompt],
                 **sending_variables,
