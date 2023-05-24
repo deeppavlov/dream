@@ -151,7 +151,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             goals_from_prompt = get_goals_from_prompt(
                 PROMPT,
                 GENERATIVE_SERVICE_URL,
-                GENERATIVE_SERVICE_CONFIG,
                 GENERATIVE_TIMEOUT,
                 sending_variables,
             )
