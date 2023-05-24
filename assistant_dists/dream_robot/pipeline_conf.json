@@ -290,6 +290,17 @@
                 }
             }
         },
+        "mint_service": {
+            "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "state_manager_method": "add_hypothesis",
+            "connector": {
+                "protocol": "python",
+                "class_name": "skills.mint_skill.connector:MintConnector",
+                "host": "lnsigo.mipt.ru",
+                "port": 10000
+            }
+        },
         "skills": {
             "dff_program_y_skill": {
                 "connector": {
