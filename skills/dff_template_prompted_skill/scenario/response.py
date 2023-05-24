@@ -1,15 +1,16 @@
 import json
 import logging
 import re
-import requests
 import sentry_sdk
 from copy import deepcopy
 from os import getenv
+from pathlib import Path
 from typing import Any
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, if_none_var_values
 from df_engine.core import Context, Actor
 
 
@@ -33,7 +34,9 @@ assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
 
 with open(PROMPT_FILE, "r") as f:
-    PROMPT = json.load(f)["prompt"]
+    PROMPT_DICT = json.load(f)
+PROMPT = PROMPT_DICT["prompt"]
+GOALS_FROM_PROMPT = PROMPT_DICT.get("goals", "")
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
@@ -61,14 +64,6 @@ def compose_data_for_model(ctx, actor):
             break
 
     return context
-
-
-def if_none_var_values(sending_variables):
-    if len(sending_variables.keys()) > 0 and all(
-        [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
-    ):
-        return True
-    return False
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
@@ -128,17 +123,14 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     if len(dialog_context) > 0:
         try:
-            response = requests.post(
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
                 GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
-                    "configs": [GENERATIVE_SERVICE_CONFIG],
-                    **sending_variables,
-                },
-                timeout=GENERATIVE_TIMEOUT,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
             )
-            hypotheses = response.json()[0]
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
@@ -146,12 +138,35 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
+
+    # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
+    goals_from_prompt = ""
+    prompt_name = Path(PROMPT_FILE).stem
+    if not GOALS_FROM_PROMPT:
+        # get already collected goals from prompts from human attributes
+        prev_prompts_goals = int_ctx.get_prompts_goals(ctx, actor)
+        goals_from_prompt = prev_prompts_goals.get(prompt_name, "")
+        if not goals_from_prompt:
+            # if current prompt's goals are empty in human attributes, generate them!
+            goals_from_prompt = get_goals_from_prompt(
+                prompt=PROMPT,
+                url=GENERATIVE_SERVICE_URL,
+                generative_timeout=GENERATIVE_TIMEOUT,
+                sending_variables=sending_variables,
+            )
+            logger.info(f"Generated goals for prompt using generative service:\n{goals_from_prompt}")
+        else:
+            logger.info("Found goals for prompt from the human attributes")
+
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
         if len(hyp) and hyp[-1] not in [".", "?", "!"]:
             hyp += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
+        if goals_from_prompt:
+            _curr_attrs["prompts_goals"] = {prompt_name: goals_from_prompt}
+        gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:
         return ""

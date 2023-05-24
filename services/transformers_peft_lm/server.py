@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -9,6 +10,7 @@ from peft import PeftModel, PeftConfig
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
+from common.prompts import META_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
 
@@ -27,6 +29,12 @@ NAMING = {
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+
+DEFAULT_CONFIGS = {
+    "transformers-lm-bloomz7b": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "transformers-lm-gptj": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "transformers-lm-oasst12b": json.load(open("generative_configs/default_generative_config.json", "r")),
+}
 
 
 def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
@@ -126,3 +134,26 @@ def respond():
     total_time = time.time() - st_time
     logger.info(f"transformers_peft_lm exec time: {total_time:.3f}s")
     return jsonify(responses)
+
+
+def goals_handler(requested_data):
+    prompt = requested_data.pop("prompt")
+    # lm_service_config = requested_data.pop("lm_service_config", None)
+    # lm_service_kwargs = requested_data.pop("lm_service_kwargs", None)
+
+    context = ["hi", META_PROMPT + f'Prompt: "{prompt}"\nResult:']
+    try:
+        goals_for_prompt = generate_responses(context, model, tokenizer, "")[0]
+    except Exception as exc:
+        logger.exception(exc)
+        sentry_sdk.capture_exception(exc)
+        goals_for_prompt = ""
+
+    logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}` using generative service")
+    return goals_for_prompt
+
+
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    goals_for_prompt = goals_handler(request.json)
+    return jsonify({"goals": goals_for_prompt})

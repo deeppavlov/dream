@@ -6,6 +6,10 @@ services:
                    sentence-ranker:8128, prompt-selector:8135, openai-api-davinci3:8131,
                    dff-dream-persona-davinci3-prompted-skill:8137"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
 
   sentseg:
     env_file: [ .env ]
