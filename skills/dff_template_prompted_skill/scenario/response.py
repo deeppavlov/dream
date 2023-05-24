@@ -160,14 +160,13 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
-        hyp_text = " ".join(hyp.split())
-        if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-            hyp_text += "."
+        if len(hyp) and hyp[-1] not in [".", "?", "!"]:
+            hyp += "."
             confidence = LOW_CONFIDENCE
         _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
         if goals_from_prompt:
             _curr_attrs["prompts_goals"] = {prompt_name: goals_from_prompt}
-        gathering_responses(hyp_text, confidence, {}, {}, _curr_attrs)
+        gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:
         return ""
