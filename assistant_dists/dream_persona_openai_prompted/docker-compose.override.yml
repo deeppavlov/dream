@@ -135,7 +135,6 @@ services:
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8137 --reload
     deploy:
       resources:
         limits:

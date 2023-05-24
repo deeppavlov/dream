@@ -135,7 +135,6 @@ services:
         N_UTTERANCES_CONTEXT: 7
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8143 --reload
     deploy:
       resources:
         limits:
