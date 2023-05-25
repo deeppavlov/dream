@@ -1,6 +1,7 @@
 name: transformers-lm-llama7bru
 endpoints:
 - respond
+- generate_goals
 compose:
   env_file:
   - .env
