@@ -1169,3 +1169,12 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
+
+
+def socket_formatter(dialog: Dict) -> List[str]:
+    return [dialog['human_utterances'][-1]['text']]
+
+
+def socket_response_formatter(response: str) -> List[dict]:
+    logger.info(f'response formatter got response: {response}')
+    return [{'text': response, 'confidence': 0.9}]
