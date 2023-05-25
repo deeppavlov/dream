@@ -20,8 +20,9 @@
             },
             "used_links": {},
             "age_group": "",
-            "disliked_skills": []
-        },
+                "disliked_skills": [],
+                "prompts_goals": {}
+            },
         {},
         {
             "can_continue": "can_prompt"
