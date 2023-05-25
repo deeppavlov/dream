@@ -1,6 +1,7 @@
 name: openai-api-gpt4-32k
 endpoints:
 - respond
+- generate_goals
 compose:
   env_file:
   - .env
