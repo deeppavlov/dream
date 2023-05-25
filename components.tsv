@@ -107,7 +107,7 @@
 8103	entity-detection-ru,entity-detection
 8104	dff-funfact-skill
 8105	dff-bot-persona-skill
-8106
+8106    infilling
 8107	speech-function-predictor
 8108	speech-function-classifier
 8109	dff-gossip-skill
@@ -140,7 +140,7 @@
 8136	property-extraction
 8137	dff-dream-persona-davinci3-prompted-skill
 8138	dff-marketing-prompted-skill
-8139	infilling,dff-fairytale-prompted-skill
+8139	dff-fairytale-prompted-skill
 8140	seq2seq-persona-based
 8141	masked-lm,dff-nutrition-prompted-skill
 8142	dff-life-coaching-prompted-skill
