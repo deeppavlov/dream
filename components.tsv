@@ -103,7 +103,7 @@
 8099	dff-music-skill
 8100	fact-retrieval
 8101	dff-science-skill
-8102
+8102    masked-lm
 8103	entity-detection-ru,entity-detection
 8104	dff-funfact-skill
 8105	dff-bot-persona-skill
@@ -142,7 +142,7 @@
 8138	dff-marketing-prompted-skill
 8139	dff-fairytale-prompted-skill
 8140	seq2seq-persona-based
-8141	masked-lm,dff-nutrition-prompted-skill
+8141	dff-nutrition-prompted-skill
 8142	dff-life-coaching-prompted-skill
 8143	dff-ai-faq-prompted-skill
 8144	dff-fashion-stylist-prompted-skill

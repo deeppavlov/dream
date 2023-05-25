@@ -453,7 +453,7 @@ services:
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8141:8141
+      - 8102:8102
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
