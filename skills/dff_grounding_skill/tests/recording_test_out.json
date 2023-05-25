@@ -146,7 +146,8 @@
                 },
                 "used_links": {},
                 "age_group": "unknown",
-                "disliked_skills": []
+                "disliked_skills": [],
+                "prompts_goals": {}
             },
             {
                 "dff_grounding_skill_state": {
