@@ -57,6 +57,36 @@ def get_text(dialog):
         "spelling_preprocessing", dialog["human_utterances"][-1]["text"])
 
 
+def get_speeches(dialog: Dict) -> Dict:
+    return dialog["human_utterances"][-1].get("attributes", {}).get("speech", {})
+
+
+def get_human_utterances(dialog: Dict) -> List[Dict]:
+    return dialog["human_utterances"][-3:]
+
+
+def get_dialog_history(dialog: Dict) -> List[str]:
+    return [uttr["text"] for uttr in dialog["utterances"][-2:]]
+
+
+def get_entities_with_labels(dialog: Dict) -> Any:  # replace Any with the actual return type of get_entities
+    return get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+
+
+def get_entity_info(dialog: Dict) -> List[Dict]:
+    return dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+
+
+def get_named_entities(dialog: Dict) -> List[Dict]:
+    return dialog["human_utterances"][-1]["annotations"].get("ner", [{}])
+
+
+def get_tokenized_sentences(dialog: Dict) -> List[List[str]]:
+    tokens = dialog["human_utterances"][-1]["annotations"].get("spacy_annotator", [])
+    tokens = [token["text"] for token in tokens]
+    return [tokens] if len(tokens) else None
+
+
 def unified_formatter(
         dialog: Dict,
         result_keys: List,
@@ -83,18 +113,27 @@ def unified_formatter(
         dialog = preprocess_dialog(dialog, preprocess_params)
 
     keys_table = {
+        "speeches": get_speeches,
+        "human_utterances": get_human_utterances,
         "last_utterance": get_text,
         "last_utternace_batch": get_text,
         "human_utterance_history_batch": get_history,
-        "personality": dialog["bot"]["persona"] if service_name == "convert" else get_text(dialog),
-        "states_batch": dialog,
+        "personality": lambda dialog: dialog["bot"]["persona"] if "convert" == "convert" else get_text(dialog),
+        "states_batch": lambda dialog: dialog,
         "utterances_histories": get_utterance_histories,
         "annotation_histories": get_annotation_histories,
         "sentences": get_text,
-        "contexts": get_utterance_histories
+        "contexts": get_utterance_histories,
+        "utterances": get_dialog_history,
+        "entities_with_labels": get_entities_with_labels,
+        "named_entities": get_named_entities,
+        "entity_info": get_entity_info,
     }
 
-    formatted_dialog = {keys_table[key](dialog) for key in result_keys}
+    formatted_dialog = {key: keys_table[key](dialog) for key in result_keys}
+
+    if formatted_dialog.get("tokenized_sentences") is None:
+        del formatted_dialog["tokenized_sentences"]
 
     return [formatted_dialog]
 
@@ -205,17 +244,17 @@ def base_response_selector_formatter_service(payload: List):
 
 def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: asr_formatter
-    return [
-        {
-            "speeches": [dialog["human_utterances"][-1].get("attributes", {}).get("speech", {})],
-            "human_utterances": [dialog["human_utterances"][-3:]],
-        }
-    ]
+    return unified_formatter(
+        dialog=dialog,
+        result_keys=["speeches", "human_utterances"],
+        preprocess=False,
+        preprocess_params=None
+    )
 
 
 def last_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: dp_toxic_formatter, sent_segm_formatter, tfidf_formatter, sentiment_classification
-    return [{"sentences": [dialog["human_utterances"][-1]["text"]]}]
+    return unified_formatter(dialog, result_keys=["sentences"])
 
 
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
@@ -231,19 +270,15 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
-    dialog = preprocess_dialog(dialog, "punct_sent", 1, False, True)
-    dialog_history = [uttr["text"] for uttr in dialog["utterances"][-2:]]
-    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
-    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
-    named_entities = dialog["human_utterances"][-1]["annotations"].get("ner", [{}])
-    return [
-        {
-            "utterances": [dialog_history],
-            "entities_with_labels": [entities_with_labels],
-            "named_entities": [named_entities],
-            "entity_info": [entity_info_list],
-        }
-    ]
+    return unified_formatter(
+        dialog=dialog,
+        result_keys=["utterances", "entities_with_labels", "named_entities", "entity_info"],
+        last_n_utts=2,
+        preprocess=True,
+        preprocess_params={
+            "mode": "punct_sent", "bot_last_turns": 1, "remove_clarification": False, "replace_utterances": True
+        },
+    )
 
 
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
@@ -269,22 +304,7 @@ def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
 
 def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    tokens = dialog["human_utterances"][-1]["annotations"].get("spacy_annotator", [])
-    tokens = [token["text"] for token in tokens]
-    result = [
-        {
-            "sentences": [
-                dialog["human_utterances"][-1]["annotations"].get(
-                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-                )
-            ]
-        }
-    ]
-
-    if len(tokens):
-        result[0]["tokenized_sentences"] = [tokens]
-
-    return result
+    result = unified_formatter(dialog=dialog, result_keys=["sentences", "tokenized_sentences"])
 
 
 def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
