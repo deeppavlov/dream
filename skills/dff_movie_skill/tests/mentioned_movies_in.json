@@ -566,9 +566,6 @@
     "disliked_skills_batch": [
         []
     ],
-    "prompts_goals_batch": [
-        {}
-    ],
     "clarification_request_flag_batch": [
         false
     ]
