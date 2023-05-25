@@ -5,13 +5,15 @@ import time
 
 import sentry_sdk
 import torch
-from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+from common.prompts import META_PROMPT
+from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,9 +30,12 @@ NAMING = {
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+
 DEFAULT_CONFIGS = {
     "EleutherAI/gpt-j-6B": json.load(open("generative_configs/default_generative_config.json", "r")),
-    "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(
+        open("generative_configs/default_generative_config.json", "r")
+    ),
 }
 
 
@@ -139,4 +144,32 @@ def respond():
     logger.info(f"transformers_lm output: {responses}")
     total_time = time.time() - st_time
     logger.info(f"transformers_lm exec time: {total_time:.3f}s")
+    return jsonify(responses)
+
+
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    st_time = time.time()
+
+    prompts = request.json.get("prompts", None)
+    prompts = [] if prompts is None else prompts
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+
+    try:
+        responses = []
+        for prompt, config in zip(prompts, configs):
+            context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            goals_for_prompt = generate_responses(context, model, tokenizer, "", config)[0]
+            logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
+            responses += [goals_for_prompt]
+
+    except Exception as exc:
+        logger.info(exc)
+        sentry_sdk.capture_exception(exc)
+        responses = [""] * len(prompts)
+
+    total_time = time.time() - st_time
+    logger.info(f"openai-api generate_goals exec time: {total_time:.3f}s")
     return jsonify(responses)

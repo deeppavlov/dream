@@ -1,6 +1,7 @@
 name: transformers-lm-bloomz7b
 endpoints:
 - respond
+- generate_goals
 compose:
   env_file:
   - .env

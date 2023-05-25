@@ -1,6 +1,7 @@
 name: openai-api-chatgpt
 endpoints:
 - respond
+- generate_goals
 compose:
   env_file:
   - .env
