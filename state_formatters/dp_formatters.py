@@ -1,6 +1,6 @@
 import logging
 from copy import deepcopy
-from typing import Dict, List, Any, Tuple, Optional
+from typing import Dict, List, Any, Tuple, Optional, Union
 
 from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
@@ -87,6 +87,42 @@ def get_tokenized_sentences(dialog: Dict) -> List[List[str]]:
     return [tokens] if len(tokens) else None
 
 
+def get_sentences_with_history(dialog: Dict) -> List[str]:
+    last_human_utt = get_text(dialog)[0]
+    if dialog["bot_utterances"]:
+        # h sep b sep h sep b sep h
+        prev_bot_utts = [k["text"] for k in dialog["bot_utterances"][-2:]]
+        prev_human_utts = [
+            utt["annotations"].get("spelling_preprocessing", utt["text"]) for utt in dialog["human_utterances"][-3:-1]
+        ]
+        prev_utts = []
+        for human_utt, bot_utt in zip(prev_human_utts, prev_bot_utts):
+            prev_utts.append(human_utt)
+            prev_utts.append(bot_utt)
+        sentence_w_history = " [SEP] ".join(prev_utts + [last_human_utt])
+    else:
+        sentence_w_history = last_human_utt
+    return [sentence_w_history]
+
+
+def get_utterance_batch(utterance: Union[str, Dict]) -> str:
+    return " ".join(utterance["text"]) if isinstance(utterance["text"], list) else utterance["text"]
+
+
+def get_utterances_with_histories(dialog: Dict) -> List[List[str]]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    dialog = preprocess_dialog(dialog, {"mode": "segments", "remove_clarification": True, "replace_utterances": True})
+    utterances_histories_batch = []
+    for hyp in hypotheses:
+        utterances_histories = []
+        for utt in dialog["utterances"]:
+            utterances_histories = get_utterance_batch(utt)
+        # hyp["text"] is a string. We need to pass here list of strings.
+        utterances_histories.append(hyp["text"])
+        utterances_histories_batch.append(utterances_histories)
+    return utterances_histories_batch
+
+
 def unified_formatter(
         dialog: Dict,
         result_keys: List,
@@ -128,6 +164,8 @@ def unified_formatter(
         "entities_with_labels": get_entities_with_labels,
         "named_entities": get_named_entities,
         "entity_info": get_entity_info,
+        "sentences_with_history": get_sentences_with_history,
+        "utterances_with_histories": get_utterances_with_histories
     }
 
     formatted_dialog = {key: keys_table[key](dialog) for key in result_keys}
@@ -283,28 +321,16 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
-        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+    return unified_formatter(
+        dialog=dialog,
+        result_keys=["sentences", "sentences_with_history"],
+        service_name="preproc_last_human_utt_dialog_w_hist",
     )
-    if dialog["bot_utterances"]:
-        # h sep b sep h sep b sep h
-        prev_bot_utts = [k["text"] for k in dialog["bot_utterances"][-2:]]
-        prev_human_utts = [
-            utt["annotations"].get("spelling_preprocessing", utt["text"]) for utt in dialog["human_utterances"][-3:-1]
-        ]
-        prev_utts = []
-        for human_utt, bot_utt in zip(prev_human_utts, prev_bot_utts):
-            prev_utts.append(human_utt)
-            prev_utts.append(bot_utt)
-        sentence_w_history = " [SEP] ".join(prev_utts + [last_human_utt])
-    else:
-        sentence_w_history = last_human_utt
-    return [{"sentences": [last_human_utt], "sentences_with_history": [sentence_w_history]}]
 
 
 def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    result = unified_formatter(dialog=dialog, result_keys=["sentences", "tokenized_sentences"])
+    return unified_formatter(dialog=dialog, result_keys=["sentences", "tokenized_sentences"])
 
 
 def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
@@ -353,27 +379,24 @@ def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
 
 
 def hypothesis_histories_list(dialog: Dict):
-    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
-    dialog = preprocess_dialog(dialog, "segments", True, True)
-    utterances_histories_batch = []
-    for hyp in hypotheses:
-        utterances_histories = []
-        for utt in dialog["utterances"]:
-            utt_text = utt["text"]
-            if isinstance(utt_text, list):
-                utt_text = " ".join(utt_text)
-            utterances_histories.append(utt_text)
-        # hyp["text"] is a string. We need to pass here list of strings.
-        utterances_histories.append(hyp["text"])
-        utterances_histories_batch.append(utterances_histories)
-
-    return [{"utterances_with_histories": utterances_histories_batch}]
+    return unified_formatter(
+        dialog=dialog,
+        result_keys=["utterances_with_histories"],
+        last_n_utts=1,
+        preprocess=True,
+        preprocess_params={
+            "mode": "segments",
+            "remove_clarification": True,
+            "replace_utterances": True
+        },
+    )
 
 
 def last_utt_and_history_dialog(dialog: Dict) -> List:
     # Used by: topicalchat retrieval skills
     return unified_formatter(
-        dialog, result_keys=["sentences", "utterances_histories"],
+        dialog,
+        result_keys=["sentences", "utterances_histories"],
         preprocess=True,
         preprocess_params={
             "mode": "punct_sent",
@@ -941,6 +964,28 @@ def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
     )
 
 
+def get_utterance_info(utterance: Dict) -> Dict:
+    sentseg = utterance.get("annotations", {}).get("sentseg", {})
+    speech_function = utterance.get("annotations", {}).get("speech_function_classifier", [""])[-1]
+
+    return {
+        "phrase": sentseg.get("segments", [utterance["text"]]),
+        "prev_speech_function": speech_function
+    }
+
+
+def get_previous_info(dialog: Dict, role: str, index: int) -> Dict:
+    if role == 'human' and len(dialog[role + '_utterances']) > 1:
+        return get_utterance_info(dialog[role + '_utterances'][index])
+    elif role == 'bot' and dialog[role + '_utterances']:
+        return get_utterance_info(dialog[role + '_utterances'][index])
+    else:
+        return {
+            "prev_phrase": None,
+            "prev_speech_function": None
+        }
+
+
 def game_cooperative_skill_formatter(dialog: Dict):
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
@@ -966,62 +1011,64 @@ def speech_function_formatter(dialog: Dict):
     return [resp]
 
 
-def speech_function_bot_formatter(dialog: Dict):
-    bot_sentseg = dialog["bot_utterances"][-1].get("annotations", {}).get("sentseg", {})
-    resp = {"phrase": bot_sentseg.get("segments", [dialog["bot_utterances"][-1]["text"]])}
-    if len(dialog["human_utterances"]) > 1:
-        human_sentseg = dialog["human_utterances"][-2].get("annotations", {}).get("sentseg", {})
-        resp["prev_phrase"] = human_sentseg.get("segments", [dialog["human_utterances"][-2]["text"]])[-1]
-        human_function = (
-            dialog["human_utterances"][-2].get("annotations", {}).get("speech_function_classifier", [""])[-1]
-        )
-        resp["prev_speech_function"] = human_function
-    else:
-        resp["prev_phrase"] = None
-        resp["prev_speech_function"] = None
+def speech_function_formatter(dialog: Dict) -> List[Dict]:
+    resp = get_utterance_info(dialog['human_utterances'][-1])
+    resp.update(get_previous_info(dialog, 'bot', -1))
     return [resp]
 
 
-def speech_function_annotation(dialog: Dict):
-    human_sentseg = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {})
-    prev_phrase = human_sentseg.get("segments", [dialog["human_utterances"][-1]["text"]])[-1]
-    human_function = dialog["human_utterances"][-1].get("annotations", {}).get("speech_function_classifier", [""])[-1]
-    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
-    resp = [
+def speech_function_bot_formatter(dialog: Dict) -> List[Dict]:
+    resp = get_utterance_info(dialog['bot_utterances'][-1])
+    resp.update(get_previous_info(dialog, 'human', -2))
+    return [resp]
+
+
+def get_hypotheses_info(dialog: Dict) -> List[Dict]:
+    return dialog["human_utterances"][-1]["hypotheses"]
+
+
+def get_annotation_value(hypothesis: Dict, key: str) -> Any:
+    return hypothesis["annotations"].get(key, [""])
+
+
+def speech_function_annotation(dialog: Dict) -> List[Dict]:
+    utterance_info = get_utterance_info(dialog['human_utterances'][-1])
+    hypotheses = get_hypotheses_info(dialog)
+
+    return [
         {
-            "prev_phrase": prev_phrase,
-            "prev_speech_function": human_function,
+            "prev_phrase": utterance_info['phrase'][-1],
+            "prev_speech_function": utterance_info['prev_speech_function'],
             "phrase": h["text"],
         }
         for h in hypotheses
     ]
-    return [resp]
 
 
 def speech_function_predictor_formatter(dialog: Dict):
-    return [dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])]
+    return [get_annotation_value(dialog["human_utterances"][-1], "speech_function_classifier")]
 
 
 def speech_function_hypotheses_predictor_formatter(dialog: Dict):
-    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
-    ans = [h["annotations"].get("speech_function_classifier", [""]) for h in hypotheses]
-    return ans
+    hypotheses = get_hypotheses_info(dialog)
+    return [get_annotation_value(h, "speech_function_classifier") for h in hypotheses]
 
 
 def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
-    hypotheses = []
-    for hyp in dialog["human_utterances"][-1]["hypotheses"]:
-        hypotheses.append(
-            {
-                "text": hyp["text"],
-                "confidence": hyp.get("confidence", 0),
-                "convers_evaluator_annotator": hyp.get("annotations", {}).get("convers_evaluator_annotator", {}),
-            }
-        )
+    hypotheses = get_hypotheses_info(dialog)
+
+    result_hypotheses = [
+        {
+            "text": hyp["text"],
+            "confidence": hyp.get("confidence", 0),
+            "convers_evaluator_annotator": get_annotation_value(hyp, "convers_evaluator_annotator"),
+        }
+        for hyp in hypotheses
+    ]
 
     contexts = len(hypotheses) * [[uttr["text"] for uttr in dialog["utterances"]]]
 
-    return [{"contexts": contexts, "hypotheses": hypotheses}]
+    return [{"contexts": contexts, "hypotheses": result_hypotheses}]
 
 
 def topic_recommendation_formatter(dialog: Dict):
