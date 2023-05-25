@@ -22,5 +22,5 @@ required_previous_services: null
 state_manager_method: update_attributes
 tags: null
 endpoint: collect_goals
-service: annotators/prompt_selector/service_configs/dream_persona_rullama_prompted
+service: annotators/prompt_selector/service_configs/prompt-selector-ru
 date_created: '2023-03-16T09:45:32'
