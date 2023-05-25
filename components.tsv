@@ -111,7 +111,7 @@
 8107	speech-function-predictor
 8108	speech-function-classifier
 8109	dff-gossip-skill
-8110
+8110    fact-retrieval-ru
 8111	dff-wiki-skill
 8112	news-api-annotator
 8113	topic-recommendation
@@ -131,7 +131,7 @@
 8127	prompt-storygpt
 8128	sentence-ranker,sentence-ranker-multilingual
 8129	spacy-annotator-ru
-8130	transformers-lm-gptj,fact-retrieval-ru
+8130	transformers-lm-gptj
 8131	openai-api-davinci3
 8132	gpt2-multilingual
 8133	relative-persona-extractor

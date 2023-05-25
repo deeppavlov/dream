@@ -235,7 +235,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://fact-retrieval-ru:8130/respond"
+                    "url": "http://fact-retrieval-ru:8110/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_rus_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
