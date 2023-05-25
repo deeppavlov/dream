@@ -47,7 +47,7 @@ services:
       - "./annotators/toxic_classification_ru:/src"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8126:8126
+      - 8118:8118
   ner-ru:
     volumes:
       - './annotators/NER_deeppavlov:/src'

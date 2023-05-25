@@ -11,7 +11,7 @@ group: candidate_annotators
 connector:
   protocol: http
   timeout: 1.0
-  url: http://toxic-classification-ru:8126/respond_batch
+  url: http://toxic-classification-ru:8118/respond_batch
 dialog_formatter: state_formatters.dp_formatters:hypotheses_list
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services:

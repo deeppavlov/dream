@@ -119,7 +119,7 @@
 8115	dff-gaming-skill
 8116	wiki-facts
 8117	dff-art-skill
-8118
+8118    toxic-classification-ru
 8119	fact-random
 8120	dff-template-skill
 8121	midas-predictor
@@ -127,7 +127,7 @@
 8123	image-captioning
 8124    dff-image-skill
 8125	dialogpt,dialogpt-ru
-8126	toxic-classification-ru,storygpt
+8126	storygpt
 8127	prompt-storygpt
 8128	sentence-ranker,sentence-ranker-multilingual
 8129	spacy-annotator-ru
