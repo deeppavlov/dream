@@ -287,6 +287,7 @@
                 "used_links": {},
                 "age_group": "unknown",
                 "disliked_skills": [],
+                "prompts_goals": {},
                 "dff_grounding_skill": {
                     "used_universal_intent_responses": [
                         "I'm ashamed, I don't know.",
