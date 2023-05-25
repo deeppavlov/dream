@@ -28,6 +28,7 @@ def load_ctxs(requested_data):
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
     age_group_batch = requested_data.get("age_group_batch", [""] * len(dialog_batch))
     disliked_skills_batch = requested_data.get("disliked_skills_batch", [{}] * len(dialog_batch))
+    prompts_goals_batch = requested_data.get("prompts_goals_batch", [{}] * len(dialog_batch))
     clarification_request_flag_batch = requested_data.get(
         "clarification_request_flag_batch",
         [False] * len(dialog_batch),
@@ -44,6 +45,7 @@ def load_ctxs(requested_data):
         used_links,
         age_group,
         disliked_skills,
+        prompts_goals,
         clarification_request_flag,
         dialog_id,
     ) in zip(
@@ -55,6 +57,7 @@ def load_ctxs(requested_data):
         used_links_batch,
         age_group_batch,
         disliked_skills_batch,
+        prompts_goals_batch,
         clarification_request_flag_batch,
         dialog_id_batch,
     ):
@@ -67,6 +70,7 @@ def load_ctxs(requested_data):
             used_links,
             age_group,
             disliked_skills,
+            prompts_goals,
             clarification_request_flag,
             dialog_id,
         )
@@ -83,6 +87,7 @@ def get_ctx(
     used_links,
     age_group,
     disliked_skills,
+    prompts_goals,
     clarification_request_flag,
     dialog_id,
 ):
@@ -104,6 +109,7 @@ def get_ctx(
         "used_links": used_links,
         "age_group": age_group,
         "disliked_skills": disliked_skills,
+        "prompts_goals": prompts_goals,
         "clarification_request_flag": clarification_request_flag,
         "dialog_id": dialog_id,
     }
@@ -121,6 +127,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     used_links = agent["used_links"]
     age_group = agent["age_group"]
     disliked_skills = agent["disliked_skills"]
+    prompts_goals = agent["prompts_goals"]
     current_turn_dff_suspended = agent["current_turn_dff_suspended"]
     response_parts = agent.get("response_parts", [])
     history[str(human_utter_index)] = list(ctx.labels.values())[-1]
@@ -143,6 +150,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "used_links": used_links,
         "age_group": age_group,
         "disliked_skills": disliked_skills,
+        "prompts_goals": prompts_goals,
     }
     hype_attr = {"can_continue": can_continue}
     if response_parts:

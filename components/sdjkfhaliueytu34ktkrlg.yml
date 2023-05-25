@@ -15,7 +15,7 @@ gpu_usage: null
 group: services
 connector:
   protocol: http
-  timeout: 20.0
+  timeout: 120.0
   url: http://openai-api-chatgpt:8145/respond
 dialog_formatter: null
 response_formatter: null

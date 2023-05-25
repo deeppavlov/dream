@@ -129,6 +129,10 @@ def get_age_group(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["age_group"]
 
 
+def get_prompts_goals(ctx: Context, actor: Actor) -> dict:
+    return {} if ctx.validation else ctx.misc["agent"]["prompts_goals"]
+
+
 def set_age_group(ctx: Context, actor: Actor, set_age_group):
     if not ctx.validation:
         ctx.misc["agent"]["age_group"] = set_age_group

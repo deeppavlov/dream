@@ -241,6 +241,7 @@ def dff_formatter(
     age_group = human_attributes.get("age_group", "")
     disliked_skills = human_attributes.get("disliked_skills", {})
     entities = human_attributes.get("entities", {})
+    prompts_goals = human_attributes.get("prompts_goals", {})
 
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
     checking_unclarified_n_turns = human_utter_index - previous_human_utter_index
@@ -281,6 +282,7 @@ def dff_formatter(
             "used_links_batch": [used_links],
             "age_group_batch": [age_group],
             "disliked_skills_batch": [disliked_skills],
+            "prompts_goals_batch": [prompts_goals],
             "clarification_request_flag_batch": [clarification_request_flag],
             "dialog_id_batch": [dialog["dialog_id"]],
         }

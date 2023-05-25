@@ -1170,8 +1170,19 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     num_last_utterances = 4
     dialog = utils.get_last_n_turns(dialog, total_last_turns=num_last_utterances)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
-    return [{"contexts": contexts}]
+    contexts = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
+    prompts_goals = dialog["human"]["attributes"].get("prompts_goals", {})
+    return [{"contexts": [contexts], "prompts_goals": [prompts_goals]}]
+
+
+def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
+    prompts_goals = {}
+    if len(dialog["human_utterances"]) > 1:
+        hypotheses = dialog["human_utterances"][-2].get("hypotheses", [])
+        for prompts_goals_dict in [hyp.get("prompts_goals", None) for hyp in hypotheses]:
+            if prompts_goals_dict:
+                prompts_goals.update(deepcopy(prompts_goals_dict))
+    return [{"prompts_goals": [prompts_goals], "human_attributes": [dialog["human"]["attributes"]]}]
 
 
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
