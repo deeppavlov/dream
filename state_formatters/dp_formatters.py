@@ -8,10 +8,24 @@ import state_formatters.utils as utils
 logger = logging.getLogger(__name__)
 
 
-def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: eliza_formatter
-    dialog = utils.get_last_n_turns(dialog)
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+def preprocess_dialog(
+        dialog: Dict,
+        params: Dict = {
+            "mode": "",
+            "bot_last_turns": None,
+            "remove_clarification": False,
+            "replace_utterances": False
+        }
+) -> Dict:
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=params["bot_last_turns"])
+    if params["remove_clarification"]:
+        dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    if params["replace_utterances"]:
+        dialog = utils.replace_with_annotated_utterances(dialog, mode=params["mode"])
+    return dialog
+
+
+def get_history(dialog):
     history = []
     prev_human_utterance = None
     for utt in dialog["utterances"]:
@@ -19,149 +33,151 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
             prev_human_utterance = utt["annotations"].get("spelling_preprocessing", utt["text"])
         elif utt["user"]["user_type"] == "bot" and utt["active_skill"] == "eliza" and prev_human_utterance is not None:
             history.append(prev_human_utterance)
-    last_utterance = dialog["human_utterances"][-1]["annotations"].get(
-        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-    )
-    return [
-        {
-            "last_utterance_batch": [last_utterance],
-            "human_utterance_history_batch": [history],
-        }
-    ]
+    return history
 
+
+def get_utterance_histories(dialog):
+    return [[utt["text"] for utt in dialog["utterances"]]]
+
+
+def get_annotation_histories(dialog):
+    return [[deepcopy(utt.get("annotations")) for utt in dialog["utterances"]]]
+
+
+def get_ongoing_utterances(dialog):
+    return [utils.count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")]
+
+
+def get_human_attributes(dialog):
+    return [dialog["human"]["attributes"]]
+
+
+def get_text(dialog):
+    return dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing", dialog["human_utterances"][-1]["text"])
+
+
+def unified_formatter(
+        dialog: Dict,
+        result_keys: List,
+        service_name: str = "",
+        last_n_utts: int = None,
+        preprocess: bool = False,
+        preprocess_params: Dict = None
+) -> List:
+    """
+    Parameters
+    ----------
+    service_name: name of the service
+    dialog: full dialog state
+    result_keys: list of keys in result dialog
+    last_n_utts: how many last user utterances to take
+    preprocess: preprocess dialog,
+    preprocess_params: preprocess_params
+
+    Returns
+    -------
+    formatted dialog
+    """
+    if preprocess:
+        dialog = preprocess_dialog(dialog, preprocess_params)
+
+    keys_table = {
+        "last_utterance": get_text,
+        "last_utternace_batch": get_text,
+        "human_utterance_history_batch": get_history,
+        "personality": dialog["bot"]["persona"] if service_name == "convert" else get_text(dialog),
+        "states_batch": dialog,
+        "utterances_histories": get_utterance_histories,
+        "annotation_histories": get_annotation_histories,
+        "sentences": get_text,
+        "contexts": get_utterance_histories
+    }
+
+    formatted_dialog = {keys_table[key](dialog) for key in result_keys}
+
+    return [formatted_dialog]
+
+
+def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
+    # Used by: eliza_formatter
+    return unified_formatter(
+        service_name="eliza", dialog=dialog,
+        result_keys=["last_utterance_batch", "human_utterance_history_batch"],
+        preprocess=False
+    )
 
 def cobot_asr_formatter_service(payload: List):
-    # Used by: cobot_qa, misheard_asr_formatter
+    # Used by: cobot_qa, misheard_asr_formatter, personality_catcher_formatter
     hyps = []
-    for resp, conf, ha, ba in zip(payload[0], payload[1], payload[2], payload[3]):
-        if len(resp) > 0 and conf > 0.0:
-            hyps.append(
-                {
-                    "text": resp,
-                    "confidence": conf,
-                    "human_attributes": ha,
-                    "bot_attributes": ba,
-                }
-            )
-    return hyps
-
-
-def preprocess_dialog(
-    dialog: Dict,
-    mode: str = "",
-    bot_last_turns: int = None,
-    remove_clarification: bool = False,
-    replace_utterances: bool = True,
-) -> Dict:
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=bot_last_turns)
-    if remove_clarification:
-        dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    if replace_utterances:
-        dialog = utils.replace_with_annotated_utterances(dialog, mode=mode)
-    return dialog
+    if len(payload) == 4:
+        for resp, conf, ha, ba in zip(payload[0], payload[1], payload[2], payload[3]):
+            if len(resp) > 0 and conf > 0.0:
+                hyps.append(
+                    {
+                        "text": resp,
+                        "confidence": conf,
+                        "human_attributes": ha,
+                        "bot_attributes": ba,
+                    }
+                )
+        return hyps
+    elif len(payload) == 3:
+        return [
+            {
+                "text": payload[0],
+                "confidence": payload[1],
+                "personality": payload[2],
+                "bot_attributes": {"persona": payload[2]},
+            }
+        ]
 
 
 def base_skill_selector_formatter_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: base_skill_selector_formatter
-    dialog = preprocess_dialog(dialog, bot_last_turns=5, mode="punct_sent")
-    return [{"states_batch": [dialog]}]
+    return unified_formatter(preprocess=True, preprocess_params={"bot_last_turns": 5, "mode": "punct_sent"},
+                             dialog=dialog, result_keys=["states_batch"])
 
 
 def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: convert
-    dialog_20 = preprocess_dialog(dialog, mode="punct_sent", bot_last_turns=20, replace_utterances=False)
-    dialog = preprocess_dialog(dialog, mode="punct_sent")
-    return [
-        {
-            "utterances_histories": [[utt["text"] for utt in dialog_20["utterances"]]],
-            "personality": [dialog["bot"]["persona"]],
-            "num_ongoing_utt": [utils.count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")],
-            "human_attributes": [dialog["human"]["attributes"]],
+    return unified_formatter(
+        dialog, service_name="convert",
+        result_keys=["utterances_histories", "personality", "num_ongoing_utt", "human_attributes"],
+        preprocess=True, preprocess_params={
+            "mode": "punct_sent",
+            "bot_last_turns": None,
+            "remove_clarification": False,
+            "replace_utterances": False
         }
-    ]
+    )
 
 
 def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: personality_catcher_formatter
-    return [
-        {
-            "personality": [
-                dialog["human_utterances"][-1]["annotations"].get(
-                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-                )
-            ]
-        }
-    ]
-
-
-def personality_catcher_formatter_service(payload: List):
-    # Used by: personality_catcher_formatter
-    return [
-        {
-            "text": payload[0],
-            "confidence": payload[1],
-            "personality": payload[2],
-            "bot_attributes": {"persona": payload[2]},
-        }
-    ]
-
-
-def cobot_classifiers_formatter_service(payload: List):
-    # Used by: cobot_classifiers_formatter, sentiment_formatter
-    if len(payload) == 3:
-        return {
-            "text": payload[0],
-            "confidence": payload[1],
-            "is_badlisted": payload[2],
-        }
-    elif len(payload) == 2:
-        return {"text": payload[0], "confidence": payload[1]}
-    elif len(payload) == 1:
-        return {"text": payload[0]}
-    elif len(payload) == 0:
-        return {"text": []}
-
-
-def prepare_histories(dialog: Dict, include_annotations: bool = False) -> Tuple[List[str], Optional[List[Dict]]]:
-    utterances_histories = []
-    annotation_histories = [] if include_annotations else None
-    for utt in dialog["utterances"]:
-        utterances_histories.append(utt["text"])
-        if include_annotations:
-            annotation_histories.append(deepcopy(utt["annotations"]))
-    return utterances_histories, annotation_histories
-
-
-def unified_dialog_formatter(
-    dialog: Dict, bot_last_turns: int = utils.LAST_N_TURNS, include_annotations: bool = False, ignore_last: bool = False
-) -> List[Dict]:
-    dialog = preprocess_dialog(dialog, "segments", bot_last_turns)
-    utterances_histories, annotation_histories = prepare_histories(dialog, include_annotations=include_annotations)
-
-    if ignore_last:
-        utterances_histories = utterances_histories[:-1]
-        if annotation_histories is not None:
-            annotation_histories = annotation_histories[:-1]
-
-    result = {"utterances_histories": [utterances_histories]}
-    if annotation_histories is not None:
-        result["annotation_histories"] = [annotation_histories]
-
-    return [result]
+    return unified_formatter(dialog, result_keys=["personality"])
 
 
 def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sent_rewrite_formatter
-    return unified_dialog_formatter(dialog, utils.LAST_N_TURNS, True)
+    return unified_formatter(
+        dialog, result_keys=["utterances_histories", "annotation_histories"],
+        preprocess=True, preprocess_params={"bot_last_turns": utils.LAST_N_TURNS}
+    )
 
 
 def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
-    return unified_dialog_formatter(dialog, utils.LAST_N_TURNS + 1, True, True)
+    return unified_formatter(
+        dialog, result_keys=["utterances_histories", "annotation_histories"],
+        preprocess=True, preprocess_params={"bot_last_turns": utils.LAST_N_TURNS + 1}
+    )
 
 
 def cobot_formatter_dialog(dialog: Dict):
     # Used by: cobot_dialogact_formatter, cobot_classifiers_formatter
-    return unified_dialog_formatter(dialog, utils.LAST_N_TURNS)
+    return unified_formatter(
+        dialog, result_keys=["utterances_histories", "annotation_histories"],
+        preprocess=True, preprocess_params={"bot_last_turns": utils.LAST_N_TURNS}
+    )
 
 
 def base_response_selector_formatter_service(payload: List):
@@ -204,22 +220,14 @@ def last_utt_dialog(dialog: Dict) -> List[Dict]:
 
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    return [
-        {
-            "sentences": [
-                dialog["human_utterances"][-1]["annotations"].get(
-                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-                )
-            ]
-        }
-    ]
+    return unified_formatter(dialog, result_keys=["speeches"], service_name="sentseg")
 
 
 def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
-    num_last_utterances = 2
-    dialog = preprocess_dialog(dialog, remove_clarification=False, replace_utterances=True, mode="punct_sent")
-    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
-    return [{"sentences": context}]
+    return unified_formatter(
+        dialog, result_keys=["sentences"], preprocess=True,
+        preprocess_params={"mode": "punct_sent", "remove_clarification": False, "replace_utterances": False}
+    )
 
 
 def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -257,20 +265,6 @@ def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     else:
         sentence_w_history = last_human_utt
     return [{"sentences": [last_human_utt], "sentences_with_history": [sentence_w_history]}]
-
-
-def preproc_last_human_utt_and_nounphrases_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: cobot entities
-    return [
-        {
-            "sentences": [
-                dialog["human_utterances"][-1]["annotations"].get(
-                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-                )
-            ],
-            "nounphrases": [dialog["human_utterances"][-1]["annotations"].get("spacy_nounphrases", [])],
-        }
-    ]
 
 
 def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
@@ -358,16 +352,16 @@ def hypothesis_histories_list(dialog: Dict):
 
 def last_utt_and_history_dialog(dialog: Dict) -> List:
     # Used by: topicalchat retrieval skills
-    dialog = preprocess_dialog(dialog, "punct_sent", True, True)
-    sent = dialog["human_utterances"][-1]["annotations"].get(
-        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-    )
-    return [
-        {
-            "sentences": [sent],
-            "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
+    return unified_formatter(
+        dialog, result_keys=["sentences", "utterances_histories"],
+        preprocess=True,
+        preprocess_params={
+            "mode": "punct_sent",
+            "bot_last_turns": None,
+            "remove_clarification": False,
+            "replace_utterances": False
         }
-    ]
+    )
 
 
 def summarization_annotator_formatter(dialog: Dict):
@@ -400,11 +394,6 @@ def sentence_ranker_formatter(dialog: Dict) -> List[Dict]:
     return [{"sentence_pairs": sentence_pairs}]
 
 
-def dp_classes_formatter_service(payload: List):
-    # Used by: dp_toxic_formatter
-    return payload[0]
-
-
 def base_formatter_service(payload: List) -> List[Dict]:
     """
     Used by: dummy_skill_formatter, transfertransfo_formatter,
@@ -422,26 +411,6 @@ def simple_formatter_service(payload: List):
     sent_rewrite_formatter, sent_segm_formatter, base_skill_selector_formatter
     """
     logging.info(f"answer {payload}")
-    return payload
-
-
-def simple_batch_formatter_service(payload: List):
-    for i in range(len(payload["batch"])):
-        if len(payload["batch"][i]) == 3:
-            payload["batch"][i] = {
-                "text": payload["batch"][i][0],
-                "confidence": payload["batch"][i][1],
-                "is_badlisted": payload["batch"][i][2],
-            }
-        elif len(payload["batch"][i]) == 2:
-            payload["batch"][i] = {
-                "text": payload["batch"][i][0],
-                "confidence": payload["batch"][i][1],
-            }
-        elif len(payload["batch"][i]) == 1:
-            payload["batch"][i] = {"text": payload["batch"][i][0]}
-        elif len(payload["batch"][i]) == 0:
-            payload["batch"][i] = {"text": []}
     return payload
 
 
@@ -606,10 +575,10 @@ def wp_formatter_dialog(dialog: Dict):
     if entity_info_list:
         for entity_info in entity_info_list:
             if (
-                entity_info
-                and "entity_substr" in entity_info
-                and "entity_ids" in entity_info
-                and "tokens_match_conf" in entity_info
+                    entity_info
+                    and "entity_substr" in entity_info
+                    and "entity_ids" in entity_info
+                    and "tokens_match_conf" in entity_info
             ):
                 input_entity_info_list.append(
                     {
@@ -776,43 +745,6 @@ def fact_retrieval_rus_formatter_dialog(dialog: Dict):
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
             "entity_pages": [entity_pages_list],
-        }
-    ]
-
-
-def short_story_formatter_dialog(dialog: Dict):
-    # Used by: short_story_skill
-    return [
-        {
-            "intents": dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}),
-            "human_sentence": dialog["human_utterances"][-1]["annotations"].get(
-                "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-            ),
-            "state": dialog["bot"]["attributes"].get("short_story_skill_attributes", {}),
-        }
-    ]
-
-
-def attitude_formatter_service(payload: List):
-    # Used by: attitude_formatter
-    payload = payload[0]
-    if len(payload) == 2:
-        return {"text": payload[0], "confidence": payload[1]}
-    elif len(payload) == 1:
-        return {"text": payload[0]}
-    elif len(payload) == 0:
-        return {"text": []}
-
-
-def dialog_breakdown_formatter(dialog: Dict) -> List[Dict]:
-    # Used by: dialog_breakdown
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = " ".join([uttr["text"] for uttr in dialog["utterances"][-4:-1]])
-    return [
-        {
-            "context": [context],
-            "curr_utterance": [dialog["human_utterances"][-1]["text"]],
         }
     ]
 
@@ -989,18 +921,6 @@ def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
     )
 
 
-def hypotheses_list_for_dialog_breakdown(dialog: Dict) -> List[Dict]:
-    # Used by: dialog_breakdown
-    dialog = utils.get_last_n_turns(dialog, bot_last_turns=2)
-    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = " ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])
-    hyps = {"context": [], "curr_utterance": []}
-    for hyp in dialog["human_utterances"][-1]["hypotheses"]:
-        hyps["context"].append(context)
-        hyps["curr_utterance"].append(hyp["text"])
-    return [hyps]
-
-
 def game_cooperative_skill_formatter(dialog: Dict):
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
@@ -1111,6 +1031,7 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
 
 
 def context_formatter_dialog(dialog: Dict) -> List[Dict]:
+<<<<<<< HEAD
     num_last_utterances = 4
     dialog = utils.get_last_n_turns(dialog, total_last_turns=num_last_utterances)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
@@ -1132,6 +1053,17 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
             "human_attributes": [dialog["human"]["attributes"]],
         }
     ]
+=======
+    return unified_formatter(
+        dialog, result_keys=["contexts"],
+        preprocess=True, preprocess_params={
+            "mode": "punct_sent",
+            "bot_last_turns": 4,
+            "remove_clarification": False,
+            "replace_utterances": False
+        }
+    )
+>>>>>>> 1125d5d23 (Add unified formatter)
 
 
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
