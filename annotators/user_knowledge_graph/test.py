@@ -49,7 +49,7 @@ def main():
     TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
     TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
     INDEX_LOAD_PATH = Path(os.path.expanduser("INDEX_LOAD_PATH"))
-    USER_KG_PORT = 8138
+    USER_KG_PORT = 8129
 
     USER_KG_URL = f"http://0.0.0.0:{USER_KG_PORT}/respond"
 
@@ -114,6 +114,8 @@ def main():
     count = 0
     for data, golden_result in zip(request_data, golden_results):
         result = requests.post(USER_KG_URL, json=data).json()
+        for res in result:
+            del res ["prompt"]
         if result == golden_result:
             count += 1
     assert count == len(request_data)
