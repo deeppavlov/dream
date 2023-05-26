@@ -168,6 +168,7 @@ def add_relationships2kg(
                      f" 'tags': {tags_list}")
         graph.index.set_active_user_id(str(user_id.split("/")[-1]))
         graph.index.add_entities(substr_list, ids_list, tags_list)
+    return entity_info
 
 
 def add_properties2kg(graph, user_id, properties_to_add2kg):
@@ -233,8 +234,9 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
     if properties_to_add2kg:
         add_properties2kg(graph, user_id, properties_to_add2kg)
 
+    triplet_info = {}
     if relationships_to_add2kg:
-        add_relationships2kg(
+        triplet_info = add_relationships2kg(
             utt,
             graph,
             relationships_to_add2kg,
@@ -245,8 +247,8 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
         )
     else:
         logger.info(no_rel_message)
-    
-    return triplets
+
+    return triplet_info
 
 
 def check_name_scenario(utt, user_id):
@@ -346,7 +348,7 @@ def get_result(request):
                      f" 'tags': {tags_list}")
         graph.index.set_active_user_id(str(user_id))
         graph.index.add_entities(substr_list, ids_list, tags_list)
-
+    logger.info(f"added_to_graph -- {added}, triplets_already_in_graph -- {kg_parser_annotations}")
     return [{'added_to_graph': added, "triplets_already_in_graph": kg_parser_annotations}]
 
 
