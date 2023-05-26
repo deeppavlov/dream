@@ -123,6 +123,35 @@ def get_utterances_with_histories(dialog: Dict) -> List[List[str]]:
     return utterances_histories_batch
 
 
+def get_active_skills(dialog: Dict):
+    active_skills = [utt.get("active_skill", "") for utt in dialog["utterances"]]
+    active_skills = [skill for skill in active_skills if skill]
+    return [active_skills]
+
+
+def get_cobot_topics(dialog: Dict):
+    topics = []
+    for utt in dialog["utterances"]:
+        topics += utt.get("annotations", {}).get("cobot_topics", {}).get("text", [])
+    return [topics]
+
+
+def get_hypotheses(dialog: Dict):
+    hypots = [h["text"] for h in dialog["human_utterances"][-1]["hypotheses"]]
+    return hypots
+
+
+def get_contexts(dialog: Dict):
+    hypots = [h["text"] for h in dialog["human_utterances"][-1]["hypotheses"]]
+    contexts = len(hypots) * [dialog["human_utterances"][-1]["text"]]
+    return contexts
+
+
+def get_midas_preparation(dialog: Dict):
+    midas_dist = get_intents(dialog["human_utterances"][-1], probs=True, which="midas")
+    return [max(midas_dist, key=midas_dist.get)]
+
+
 def unified_formatter(
         dialog: Dict,
         result_keys: List,
@@ -165,7 +194,13 @@ def unified_formatter(
         "named_entities": get_named_entities,
         "entity_info": get_entity_info,
         "sentences_with_history": get_sentences_with_history,
-        "utterances_with_histories": get_utterances_with_histories
+        "utterances_with_histories": get_utterances_with_histories,
+        "active_skills": get_active_skills,
+        "cobot_topics": get_cobot_topics,
+        "dialog_context": get_contexts,
+        "hypotheses": get_hypotheses,
+        "last_midas_labels": get_midas_preparation,
+        "return_probas": lambda dialog: 1
     }
 
     formatted_dialog = {key: keys_table[key](dialog) for key in result_keys}
@@ -419,7 +454,9 @@ def summarization_annotator_formatter(dialog: Dict):
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
-    dialog = preprocess_dialog(dialog, "", True, False)
+    dialog = preprocess_dialog(
+        dialog, params={"mode": "", "remove_clarifications": True, "replace_utterances": False}
+    )
     conv = dict()
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     conv["hypotheses"] = [h["text"] for h in hypotheses]
@@ -431,7 +468,9 @@ def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
 
 
 def sentence_ranker_formatter(dialog: Dict) -> List[Dict]:
-    dialog = preprocess_dialog(dialog, remove_clarification=True, replace_utterances=False)
+    dialog = preprocess_dialog(
+        dialog, params={"mode": "", "remove_clarifications": True, "replace_utterances": False}
+    )
     last_human_uttr = dialog["human_utterances"][-1]["text"]
     sentence_pairs = [[last_human_uttr, h["text"]] for h in dialog["human_utterances"][-1]["hypotheses"]]
     return [{"sentence_pairs": sentence_pairs}]
@@ -458,7 +497,11 @@ def simple_formatter_service(payload: List):
 
 
 def utt_sentseg_unified_dialog(dialog: Dict, replace_utterances: bool = True) -> List[Dict]:
-    dialog = preprocess_dialog(dialog, "punct_sent", remove_clarification=True, replace_utterances=replace_utterances)
+    dialog = preprocess_dialog(dialog, params={
+        "mode": "punct_sent",
+        "remove_clarification": True,
+        "replace_utterances": replace_utterances
+    })
     return [{"dialogs": [dialog]}]
 
 
@@ -478,7 +521,11 @@ def utt_non_punct_dialog(dialog: Dict):
 
 
 def persona_bot_formatter(dialog: Dict):
-    distill_dialog = preprocess_dialog(dialog, "punct_sent", remove_clarification=True, replace_utterances=True)
+    distill_dialog = preprocess_dialog(dialog, params={
+        "mode": "punct_sent",
+        "remove_clarification": True,
+        "replace_utterances": True
+    })
     last_uttr = distill_dialog["human_utterances"][-1]
 
     utterances_histories = [utt["text"] for utt in distill_dialog["utterances"]]
@@ -503,11 +550,17 @@ def fetch_active_skills(bot_utterances: List[Dict]):
 
 
 def sentrewrite_dialog_formatter(dialog: Dict, bot_last_turns: Any, mode: str, active_skills: bool) -> List[Dict]:
+    all_prev_active_skills = []
     if active_skills:
         all_prev_active_skills = fetch_active_skills(dialog["bot_utterances"])
         all_prev_active_skills = all_prev_active_skills[-15:]
 
-    dialog = preprocess_dialog(dialog, mode, bot_last_turns, remove_clarification=True, replace_utterances=True)
+    dialog = preprocess_dialog(dialog, params={
+        "mode": mode, "bot_last_turns": bot_last_turns,
+        "remove_clarification": True,
+        "replace_utterances": True
+        }
+    )
 
     if active_skills:
         return [{"dialogs": [dialog], "all_prev_active_skills": [all_prev_active_skills]}]
@@ -997,20 +1050,6 @@ def game_cooperative_skill_formatter(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
 
-def speech_function_formatter(dialog: Dict):
-    human_sentseg = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {})
-    resp = {"phrase": human_sentseg.get("segments", [dialog["human_utterances"][-1]["text"]])}
-    try:
-        bot_sentseg = dialog["bot_utterances"][-1].get("annotations", {}).get("sentseg", {})
-        resp["prev_phrase"] = bot_sentseg.get("segments", [dialog["bot_utterances"][-1]["text"]])[-1]
-        bot_function = dialog["bot_utterances"][-1].get("annotations", {}).get("speech_function_classifier", [""])[-1]
-        resp["prev_speech_function"] = bot_function
-    except IndexError:
-        resp["prev_phrase"] = None
-        resp["prev_speech_function"] = None
-    return [resp]
-
-
 def speech_function_formatter(dialog: Dict) -> List[Dict]:
     resp = get_utterance_info(dialog['human_utterances'][-1])
     resp.update(get_previous_info(dialog, 'bot', -1))
@@ -1072,29 +1111,16 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
 
 
 def topic_recommendation_formatter(dialog: Dict):
-    dialog = utils.get_last_n_turns(dialog)
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    active_skills, topics = [], []
-    for utt in dialog["utterances"]:
-        active_skills.append(utt.get("active_skill", ""))
-        topics += utt.get("annotations", {}).get("cobot_topics", {}).get("text", [])
-    active_skills = [skill for skill in active_skills if skill]
-    return [{"active_skills": [active_skills], "cobot_topics": [topics]}]
-
-
-def midas_predictor_formatter(dialog: Dict):
-    last_uttr = dialog["human_utterances"][-1]
-    midas_dist = get_intents(last_uttr, probs=True, which="midas")
-    return [{"last_midas_labels": [max(midas_dist, key=midas_dist.get)], "return_probas": 1}]
+    return unified_formatter(
+        dialog,
+        result_keys=["active_skills", "cobot_topics"],
+        preprocess=True,
+        preprocess_params={"remove_clarification": True}
+    )
 
 
 def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
-    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
-    hypots = [h["text"] for h in hypotheses]
-
-    contexts = len(hypots) * [dialog["human_utterances"][-1]["text"]]
-
-    return [{"dialog_contexts": contexts, "hypotheses": hypots}]
+    return unified_formatter(dialog, result_keys=["dialog_contexts", "hypotheses"])
 
 
 def context_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -1131,6 +1157,10 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
         }
     )
 >>>>>>> 1125d5d23 (Add unified formatter)
+
+
+def midas_predictor_formatter(dialog: Dict):
+    return unified_formatter(dialog, result_keys=["last_midas_labels", "return_probas"])
 
 
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
