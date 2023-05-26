@@ -57,7 +57,8 @@
             "age_group": "unknown",
             "disliked_skills": [
                 "emotion_skill"
-            ]
+            ],
+            "prompts_goals": {}
         },
         {},
         {

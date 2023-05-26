@@ -125,7 +125,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         try:
             hypotheses = send_request_to_prompted_generative_service(
                 dialog_context,
-                [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
+                prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT,
                 GENERATIVE_SERVICE_URL,
                 GENERATIVE_SERVICE_CONFIG,
                 GENERATIVE_TIMEOUT,

@@ -16,7 +16,7 @@ def send_request_to_prompted_generative_service(dialog_context, prompt, url, con
         url,
         json={
             "dialog_contexts": [dialog_context],
-            "prompts": prompt,
+            "prompts": [prompt],
             "configs": [config],
             **sending_variables,
         },

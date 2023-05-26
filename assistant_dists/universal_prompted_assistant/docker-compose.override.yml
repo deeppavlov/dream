@@ -217,7 +217,6 @@ services:
         DEFAULT_LM_SERVICE_CONFIG: default_generative_config.json
       context: .
       dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8147 --reload
     deploy:
       resources:
         limits:
