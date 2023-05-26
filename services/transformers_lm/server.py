@@ -36,6 +36,7 @@ DEFAULT_CONFIGS = {
     "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(
         open("generative_configs/default_generative_config.json", "r")
     ),
+    "togethercomputer/GPT-JT-6B-v1": json.load(open("generative_configs/default_generative_config.json", "r")),
 }
 
 
