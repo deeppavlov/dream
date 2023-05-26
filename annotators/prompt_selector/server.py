@@ -80,6 +80,7 @@ def get_result(request):
                 curr_result = {
                     "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
                     "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
+                    "similarities": [scores[_id] for _id in most_relevant_sent_ids],
                 }
                 # add to prompts to be turned on, those prompts which goals are empty
                 for _id in curr_ids:

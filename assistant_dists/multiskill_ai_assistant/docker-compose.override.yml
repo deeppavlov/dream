@@ -74,7 +74,7 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
-        N_SENTENCES_TO_RETURN: 2
+        N_SENTENCES_TO_RETURN: 5
         PROMPTS_TO_CONSIDER: dream_persona,casual_email,meeting_notes,official_email,plan_for_article
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
@@ -94,7 +94,7 @@ services:
       args:
         SERVICE_PORT: 8128
         SERVICE_NAME: sentence_ranker
-        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialogRPT-updown
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-mpnet-base-v2
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
