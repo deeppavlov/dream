@@ -10,7 +10,7 @@ from peft import PeftModel, PeftConfig
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-from common.prompts import META_PROMPT
+from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
 
@@ -146,7 +146,7 @@ def generate_goals():
     try:
         responses = []
         for prompt in prompts:
-            context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
             goals_for_prompt = generate_responses(context, model, tokenizer, "")[0]
             logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
             responses += [goals_for_prompt]

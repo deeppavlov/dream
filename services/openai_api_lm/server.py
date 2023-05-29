@@ -5,7 +5,7 @@ import time
 
 import openai
 import sentry_sdk
-from common.prompts import META_PROMPT
+from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -144,7 +144,7 @@ def generate_goals():
     try:
         responses = []
         for openai_api_key, openai_org, prompt, config in zip(openai_api_keys, openai_orgs, prompts, configs):
-            context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
             goals_for_prompt = generate_responses(context, openai_api_key, openai_org, "", config)[0]
             logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
             responses += [goals_for_prompt]
