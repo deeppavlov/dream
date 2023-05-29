@@ -13,7 +13,7 @@ gpu_usage: 26G
 group: services
 connector:
   protocol: http
-  timeout: 20.0
+  timeout: 120.0
   url: http://transformers-lm-oasst12b:8158/respond
 dialog_formatter: null
 response_formatter: null

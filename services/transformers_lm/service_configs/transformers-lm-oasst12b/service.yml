@@ -1,6 +1,7 @@
 name: transformers-lm-oasst12b
 endpoints:
 - respond
+- generate_goals
 compose:
   env_file:
   - .env
