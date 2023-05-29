@@ -7,6 +7,8 @@ services:
       WAIT_HOSTS: "spelling-preprocessing:8074, harvesters-maintenance-skill:3662, rule-based-response-selector:8005,
         emotion-classification-deepy:8015, dff-program-y-skill:8008"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+    ports:
+      - 4242:4242
 
   spelling-preprocessing:
     env_file: [ .env ]

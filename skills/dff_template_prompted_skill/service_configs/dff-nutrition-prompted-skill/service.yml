@@ -1,0 +1,29 @@
+name: dff-nutrition-prompted-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8141
+      SERVICE_NAME: dff_nutrition_prompted_skill
+      PROMPT_FILE: common/prompts/nutrition.json
+      GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
+      GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+      GENERATIVE_TIMEOUT: 120
+      N_UTTERANCES_CONTEXT: 7
+    context: .
+    dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_template_prompted_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8141:8141
+proxy: null

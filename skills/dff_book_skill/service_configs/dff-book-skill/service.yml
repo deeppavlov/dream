@@ -1,0 +1,36 @@
+name: dff-book-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8032
+      SERVICE_NAME: dff_book_skill
+      QUERY_DICT: http://files.deeppavlov.ai/alexaprize_data/book_query_dict.pkl
+    context: .
+    dockerfile: ./skills/dff_book_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8032 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 512M
+      reservations:
+        memory: 512M
+  volumes:
+  - ./skills/dff_book_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8032:8032
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8032
+  - PORT=8032

@@ -446,14 +446,14 @@ services:
       - "./services/infilling:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8139:8139
+      - 8106:8106
   masked-lm:
     volumes:
       - "./services/masked_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8141:8141
+      - 8102:8102
   convert-based-nli:
     volumes:
       - "./annotators/ConveRTBasedNLI:/src"

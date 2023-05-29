@@ -1,0 +1,23 @@
+name: alexa_handler
+display_name: Alexa Handler
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: handler for several specific Alexa commands
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: python
+  class_name: skills.alexa_handler.connector:AlexaHandlerConnector
+dialog_formatter: state_formatters.dp_formatters:last_utt_dialog
+response_formatter: state_formatters.dp_formatters:cobot_qa_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: null
+service: skills/alexa_handler/service_configs/agent
+date_created: '2023-03-16T09:45:32'

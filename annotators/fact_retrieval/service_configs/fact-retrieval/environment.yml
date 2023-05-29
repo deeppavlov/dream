@@ -1,0 +1,10 @@
+SERVICE_PORT: 8100
+SERVICE_NAME: fact_retrieval
+CONFIG: configs/fact_retrieval_page.json
+CONFIG_WIKI: configs/page_extractor.json
+CONFIG_WHOW: configs/whow_page_extractor.json
+SRC_DIR: annotators/fact_retrieval/
+COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
+N_FACTS: 3
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

@@ -1,0 +1,11 @@
+name: harvesters-maintenance-skill
+endpoints:
+- respond
+compose:
+  build:
+    context: skills/harvesters_maintenance_skill_deepy
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:3662
+  volumes: []
+  ports:
+  - 3662:3662
+proxy: null

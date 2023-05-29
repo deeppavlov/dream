@@ -1,0 +1,30 @@
+name: personality-catcher
+endpoints:
+- personality_catcher
+compose:
+  env_file:
+  - .env
+  build:
+    context: ./skills/personality_catcher/
+  command: uvicorn server:app --host 0.0.0.0 --port 8010
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./skills/personality_catcher:/app
+  ports:
+  - 8010:8010
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8010
+  - PORT=8010

@@ -17,7 +17,6 @@ gold = [
 
 
 if __name__ == "__main__":
-
     requested_data = {"last_midas_labels": last_midas_labels, "return_probas": 1}
     result = requests.post(URL, json=requested_data).json()
     assert result == gold

@@ -29,7 +29,6 @@ def do_not_track(func):
 
 
 def setup_metrics(app):
-
     # readiness endpoint
     @app.route("/ready", methods=["GET"])
     @do_not_track

@@ -8,11 +8,11 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  transformers-lm-gptj:
+  transformers-lm-gptjt:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  transformers-lm-bloomz7b:
+  transformers-lm-oasst12b:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
