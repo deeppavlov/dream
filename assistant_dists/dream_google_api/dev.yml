@@ -16,17 +16,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -41,13 +30,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  dialogpt:
-    volumes:
-      - "./services/dialogpt:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8125:8125
   dff-google-api-skill:
     volumes:
       - "./skills/dff_google_api_skill:/src"
