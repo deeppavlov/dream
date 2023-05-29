@@ -13,7 +13,9 @@ from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 120))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
@@ -53,7 +55,9 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         request = context[-1]
-        candidates = requests.post(url=RANKING_FOR_QA, json={"sentences": [[request]]}).json()
+        candidates = requests.post(
+            url=RANKING_FOR_QA, json={"sentences": [[request]]}
+        ).json()
         context[
             -1
         ] = f"""{request} Answer to this question based on the text provided.
@@ -90,16 +94,19 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
         sending_variables = {
-            f"{var}_list": [getenv(var, None)] for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
+            f"{var.lower()}s": [getenv(var, None)]
+            for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
         }
         # check if at least one of the env variables is not None
-        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+        if len(sending_variables.keys()) > 0 and all(
+            [var_value is None for var_value in sending_variables.values()]
+        ):
             raise NotImplementedError(
                 "ERROR: All environmental variables have None values. At least one of them must have not None value"
             )
     else:
         sending_variables = {}
-
+    logger.info(f"sending_variables: {sending_variables}")
     if len(dialog_context) > 0:
         try:
             response = requests.post(
@@ -126,7 +133,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        gathering_responses(
+            hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+        )
 
     if len(curr_responses) == 0:
         return ""

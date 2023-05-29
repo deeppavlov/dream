@@ -29,14 +29,16 @@ except Exception as e:
 
 
 def get_answers(utterance: str, ranker):
-    ranker_output = ranker(utterance)[0]
-    candidates = []
+    ranker_output = ranker(utterance)
+    logger.info(f"ranker_output: `{ranker_output}`")
+    raw_candidates = ranker_output[0]
+    num_candidates = []
     nums = 0
-    for f_name in ranker_output:
+    for f_name in raw_candidates:
         nums += 1
         with open(DATASET_PATH + f_name) as f:
-            candidates.append(f"{nums}. {f.read()}")
-    return " ".join(candidates)
+            num_candidates.append(f"{nums}. {f.read()}")
+    return " ".join(num_candidates)
 
 
 @app.route("/rank", methods=["POST"])
