@@ -16,12 +16,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
   combined-classification:
     volumes:
       - "./common:/src/common"
