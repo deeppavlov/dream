@@ -10,7 +10,7 @@ gpu_usage: 30G
 group: services
 connector:
   protocol: http
-  timeout: 20.0
+  timeout: 120.0
   url: http://transformers-lm-llama7bru:8078/respond
 dialog_formatter: null
 response_formatter: null

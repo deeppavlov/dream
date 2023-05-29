@@ -29,4 +29,4 @@ RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 COPY skills/dff_universal_prompted_skill/ ./
 COPY ./common/ ./common/
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout ${GENERATIVE_TIMEOUT:-30}

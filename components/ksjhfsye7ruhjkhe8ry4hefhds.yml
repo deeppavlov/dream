@@ -14,7 +14,7 @@ gpu_usage: 25G
 group: services
 connector:
   protocol: http
-  timeout: 20.0
+  timeout: 120.0
   url: http://transformers-lm-gptj:8130/respond
 dialog_formatter: null
 response_formatter: null

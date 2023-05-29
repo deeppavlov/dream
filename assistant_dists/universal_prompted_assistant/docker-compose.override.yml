@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
         sentence-ranker:8128, 
-        transformers-lm-gptj:8130, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
+        transformers-lm-gptjt:8161, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
         openai-api-gpt4:8159, openai-api-gpt4-32k:8160,
         dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -83,17 +83,17 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-gptj:
+  transformers-lm-gptjt:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8130
-        SERVICE_NAME: transformers_lm_gptj
-        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+        SERVICE_PORT: 8161
+        SERVICE_NAME: transformers_lm_gptjt
+        PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
         HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
+    command: flask run -h 0.0.0.0 -p 8161
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -211,13 +211,12 @@ services:
       args:
         SERVICE_PORT: 8147
         SERVICE_NAME: dff_universal_prompted_skill
-        GENERATIVE_TIMEOUT: 20
+        GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
         DEFAULT_LM_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
         DEFAULT_LM_SERVICE_CONFIG: default_generative_config.json
       context: .
       dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8147 --reload
     deploy:
       resources:
         limits:
