@@ -3,14 +3,13 @@
 import json
 import logging
 import numpy as np
-import requests
 import time
 from copy import deepcopy
 from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, if_none_var_values
+from common.prompts import send_request_to_prompted_generative_service
 from common.utils import is_toxic_or_badlisted_utterance
 
 
