@@ -120,7 +120,8 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    configs = request.json.get("configs", [])
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
     configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)

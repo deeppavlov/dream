@@ -96,7 +96,8 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    configs = request.json.get("configs", [])
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
     configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
@@ -130,6 +131,36 @@ def respond():
 
 
 @app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    st_time = time.time()
+
+    prompts = request.json.get("prompts", None)
+    prompts = [] if prompts is None else prompts
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    openai_api_keys = request.json.get("openai_api_keys", [])
+    openai_orgs = request.json.get("openai_api_organizations", None)
+    openai_orgs = [None] * len(prompts) if openai_orgs is None else openai_orgs
+    try:
+        responses = []
+        for openai_api_key, openai_org, prompt, config in zip(openai_api_keys, openai_orgs, prompts, configs):
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            goals_for_prompt = generate_responses(context, openai_api_key, openai_org, "", config)[0]
+            logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
+            responses += [goals_for_prompt]
+
+    except Exception as exc:
+        logger.info(exc)
+        sentry_sdk.capture_exception(exc)
+        responses = [""] * len(prompts)
+
+    total_time = time.time() - st_time
+    logger.info(f"openai-api generate_goals exec time: {total_time:.3f}s")
+    return jsonify(responses)
+
+
+@app.route("/select_skills_by_goals", methods=["POST"])
 def generate_goals():
     st_time = time.time()
 
