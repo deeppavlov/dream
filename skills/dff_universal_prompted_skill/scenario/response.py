@@ -1,7 +1,6 @@
 import json
 import logging
 import re
-import requests
 import sentry_sdk
 from os import getenv
 from typing import Any
@@ -9,6 +8,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from df_engine.core import Context, Actor
 
 
@@ -22,30 +22,18 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 DEFAULT_PROMPT = "Respond like a friendly chatbot."
-
-CONSIDERED_LM_SERVICES = {
-    "GPT-J 6B": {
-        "url": "http://transformers-lm-gptj:8130/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
-    "BLOOMZ 7B": {
-        "url": "http://transformers-lm-bloomz7b:8146/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
-    "ChatGPT": {
-        "url": "http://openai-api-chatgpt:8145/respond",
-        "config": json.load(open("generative_configs/openai-chatgpt.json", "r")),
-        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    },
-    "GPT-3.5": {
-        "url": "http://openai-api-davinci3:8131/respond",
-        "config": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
-        "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    },
-    "Open-Assistant SFT-1 12B": {
-        "url": "http://transformers-lm-oasst12b:8158/respond",
-        "config": json.load(open("generative_configs/default_generative_config.json", "r")),
-    },
+DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-oasst12b:8158/respond")
+DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
+DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
+ENVVARS_TO_SEND = {
+    "http://transformers-lm-gptj:8130/respond": [],
+    "http://transformers-lm-bloomz7b:8146/respond": [],
+    "http://transformers-lm-oasst12b:8158/respond": [],
+    "http://openai-api-chatgpt:8145/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-davinci3:8131/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-gpt4:8159/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-gpt4-32k:8160/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://transformers-lm-gptjt:8161/respond": [],
 }
 
 
@@ -94,46 +82,45 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
-    last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    prompt = last_uttr.get("attributes", {}).get("prompt", DEFAULT_PROMPT)
+    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    prompt = human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)
     logger.info(f"prompt: {prompt}")
-    lm_service = last_uttr.get("attributes", {}).get("lm_service", "GPT-J 6B")
-    logger.info(f"lm_service: {lm_service}")
-
-    if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
-        sending_variables = {
-            f"{var}_list": [getenv(var, None)] for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
-        }
-        # check if at least one of the env variables is not None
-        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-            raise NotImplementedError(
-                "ERROR: All environmental variables have None values. At least one of them must have not None value"
-            )
-    else:
-        sending_variables = {}
+    lm_service_url = human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)
+    logger.info(f"lm_service_url: {lm_service_url}")
+    # this is a dictionary! not a file!
+    lm_service_config = human_uttr_attributes.pop("lm_service_config", None)
+    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
+        **human_uttr_attributes,
+    )
 
     if len(dialog_context) > 0:
-        response = requests.post(
-            CONSIDERED_LM_SERVICES[lm_service]["url"],
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [prompt],
-                "configs": [CONSIDERED_LM_SERVICES[lm_service]["config"]],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
-        )
-        hypotheses = response.json()[0]
+        try:
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                prompt,
+                lm_service_url,
+                lm_service_config,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
+            )
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            hypotheses = []
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
-        hyp_text = " ".join(hyp.split())
-        if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-            hyp_text += "."
+        if len(hyp) and hyp[-1] not in [".", "?", "!"]:
+            hyp += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        gathering_responses(hyp, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""

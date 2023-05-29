@@ -113,7 +113,8 @@
                 },
                 "used_links": {},
                 "age_group": "",
-                "disliked_skills": []
+                "disliked_skills": [],
+                "prompts_goals": {}
             },
             {
                 "dff_generative_skill_state": {
@@ -217,7 +218,8 @@
                 },
                 "used_links": {},
                 "age_group": "",
-                "disliked_skills": []
+                "disliked_skills": [],
+                "prompts_goals": {}
             },
             {
                 "dff_generative_skill_state": {
@@ -321,7 +323,8 @@
                 },
                 "used_links": {},
                 "age_group": "",
-                "disliked_skills": []
+                "disliked_skills": [],
+                "prompts_goals": {}
             }
         ],
         [

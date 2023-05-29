@@ -9,12 +9,12 @@ doc-ranker:
   description: Ranks chunks of the input document based on their relevance to the user's request and returns top N most relevant.
   ram_usage: 1.7G
   gpu_usage: 2.4G
-  port: 8150
+  port: 8161
   endpoints:
     - group: services
       endpoint: rank
   build_args:
-    SERVICE_PORT: 8150
+    SERVICE_PORT: 8161
     CONFIG_PATH: ./doc_ranker_config.json
     ORIGINAL_FILE_PATH: ./common/docs/big_apple.txt
     DATASET_PATH: /data/big_apple_dataset/

@@ -158,7 +158,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 120.0,
-                    "url": "http://dff-qa-llm-skill:8151/respond"
+                    "url": "http://dff-qa-llm-skill:8162/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_qa_llm_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

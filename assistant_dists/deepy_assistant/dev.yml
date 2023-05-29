@@ -5,29 +5,12 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  sentseg:
+  ranking-based-response-selector:
     volumes:
-      - "./annotators/SentSeg:/src"
-    ports:
-      - 8011:8011
-  no-restrictions-selector:
-    volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
-  combined-classification:
-    volumes:
-      - "./common:/src/common"
-      - "./annotators/combined_classification:/src"
-    ports:
-      - 8087:8087
+      - 8002:8002
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
@@ -51,6 +34,6 @@ services:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8148:8148
+      - 8152:8152
 
 version: "3.7"

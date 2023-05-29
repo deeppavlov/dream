@@ -45,12 +45,12 @@ services:
       - "./services/doc_ranker:/src"
       - "./common:/src/common"
     ports:
-      - 8150:8150
+      - 8161:8161
   dff-qa-llm-skill:
     volumes:
       - "./skills/dff_qa_llm_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8151:8151
+      - 8162:8162
 
 version: "3.7"

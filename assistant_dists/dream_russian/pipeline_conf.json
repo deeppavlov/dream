@@ -36,8 +36,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/ofdqbJszMago.yml",
+                "service": "services/agent_services/service_configs/dream_russian"
             }
         },
         "timeout_service": {
@@ -64,8 +64,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/o11NkX9o26nr.yml",
+                "service": "services/agent_services/service_configs/dream_russian"
             }
         },
         "annotators": {
@@ -77,12 +77,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing_dp",
-                    "container": "spelling-preprocessing-ru",
-                    "endpoint": "respond"
+                    "component": "components/OOF0PmuxswPuZintDoAlXw.yml",
+                    "service": "annotators/spelling_preprocessing_dp/service_configs/spelling-preprocessing-ru"
                 }
             },
             "spacy_annotator": {
@@ -96,9 +96,8 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_annotator",
-                    "container": "spacy-annotator-ru",
-                    "endpoint": "respond"
+                    "component": "components/2U9da1Fyq1KvANddliIN5g.yml",
+                    "service": "annotators/spacy_annotator/service_configs/spacy-annotator-ru"
                 }
             },
             "sentseg": {
@@ -115,9 +114,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/sentseg_ru",
-                    "container": "sentseg-ru",
-                    "endpoint": "sentseg"
+                    "component": "components/Nw2SnrS4DGoALg6Cu58Zw.yml",
+                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
                 }
             },
             "badlisted_words": {
@@ -135,16 +133,15 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector_ru",
-                    "container": "badlisted-words-ru",
-                    "endpoint": "badlisted_words"
+                    "component": "components/WzIX0HJ0Xyo4V8ItwLew.yml",
+                    "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
                 }
             },
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8126/respond"
+                    "url": "http://toxic-classification-ru:8118/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -154,9 +151,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/toxic_classification_ru",
-                    "container": "toxic-classification-ru",
-                    "endpoint": "respond"
+                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
+                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
             "intent_catcher": {
@@ -174,9 +170,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers",
-                    "container": "intent-catcher-ru",
-                    "endpoint": "detect"
+                    "component": "components/v2RpT5Ryi2ke97ANZxRnJg.yml",
+                    "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher-ru"
                 }
             },
             "ner": {
@@ -194,9 +189,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/NER_deeppavlov",
-                    "container": "ner-ru",
-                    "endpoint": "ner"
+                    "component": "components/Jlk28u7nVCSNqrT1YpLAQ.yml",
+                    "service": "annotators/NER_deeppavlov/service_configs/ner-ru"
                 }
             },
             "entity_detection": {
@@ -214,9 +208,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection_rus",
-                    "container": "entity-detection-ru",
-                    "endpoint": "respond"
+                    "component": "components/1VPCe8n0dmU8o2hC0NeeWQ.yml",
+                    "service": "annotators/entity_detection_rus/service_configs/entity-detection-ru"
                 }
             },
             "entity_linking": {
@@ -234,16 +227,15 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_linking_rus",
-                    "container": "entity-linking-ru",
-                    "endpoint": "model"
+                    "component": "components/m30AHfu4VgC51bUU6Jo7A.yml",
+                    "service": "annotators/entity_linking_rus/service_configs/entity-linking-ru"
                 }
             },
             "fact_retrieval": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://fact-retrieval-ru:8130/respond"
+                    "url": "http://fact-retrieval-ru:8110/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fact_retrieval_rus_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -253,9 +245,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fact_retrieval_rus",
-                    "container": "fact-retrieval-ru",
-                    "endpoint": "respond"
+                    "component": "components/vE3pRKimWyPc5qaeW8Q1Q.yml",
+                    "service": "annotators/fact_retrieval_rus/service_configs/fact-retrieval-ru"
                 }
             },
             "wiki_parser": {
@@ -272,9 +263,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/wiki_parser",
-                    "container": "wiki-parser-ru",
-                    "endpoint": "model"
+                    "component": "components/feDgqHKLibnMNM3HSbnmA.yml",
+                    "service": "annotators/wiki_parser/service_configs/wiki-parser-ru"
                 }
             }
         },
@@ -293,9 +283,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/sentseg_ru",
-                    "container": "sentseg-ru",
-                    "endpoint": "sentseg"
+                    "component": "components/4SJxJlf3E8TTM94Uiqt5Xg.yml",
+                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
                 }
             },
             "ner": {
@@ -313,9 +302,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/NER_deeppavlov",
-                    "container": "ner-ru",
-                    "endpoint": "ner"
+                    "component": "components/Jlk28u7nVCSNqrT1YpLAQ.yml",
+                    "service": "annotators/NER_deeppavlov/service_configs/ner-ru"
                 }
             }
         },
@@ -334,8 +322,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/response_annotator_selectors",
-                "container": "agent"
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "candidate_annotators": {
@@ -353,9 +341,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_annotator",
-                    "container": "spacy-annotator-ru",
-                    "endpoint": "respond_batch"
+                    "component": "components/2U9da1Fyq1KvANddliIN5g.yml",
+                    "service": "annotators/spacy_annotator/service_configs/spacy-annotator-ru"
                 }
             },
             "badlisted_words": {
@@ -372,16 +359,15 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector_ru",
-                    "container": "badlisted-words-ru",
-                    "endpoint": "badlisted_words_batch"
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
                 }
             },
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8126/respond_batch"
+                    "url": "http://toxic-classification-ru:8118/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -391,9 +377,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/toxic_classification_ru",
-                    "container": "toxic-classification-ru",
-                    "endpoint": "respond_batch"
+                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
+                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
             "entity_detection": {
@@ -410,9 +395,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
-                    "container": "entity-detection",
-                    "endpoint": "respond_batch"
+                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
+                    "service": "annotators/entity_detection/service_configs/entity-detection"
                 }
             },
             "dialogrpt": {
@@ -429,9 +413,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/dialogrpt_ru",
-                    "container": "dialogrpt-ru",
-                    "endpoint": "respond"
+                    "component": "components/DUW2u7FwPMyhBOWrK1HTg.yml",
+                    "service": "services/dialogrpt_ru/service_configs/dialogrpt-ru"
                 }
             }
         },
@@ -451,8 +434,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "skill_selectors/rule_based_selector",
-                    "container": "agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
@@ -471,9 +454,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill",
-                    "container": "dff-program-y-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/rJL2LobMLcELiot0Fy9w.yml",
+                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-ru-skill"
                 }
             },
             "dff_intent_responder_skill": {
@@ -490,9 +472,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill",
-                    "container": "dff-intent-responder-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/qJPPqfjKviUyvDTCn2Xw.yml",
+                    "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-ru-skill"
                 }
             },
             "dummy_skill": {
@@ -508,8 +489,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
             "personal_info_skill": {
@@ -526,9 +507,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personal_info_skill",
-                    "container": "personal-info-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/RJuoKZw7krAuB4LrP5fQ.yml",
+                    "service": "skills/personal_info_skill/service_configs/personal-info-ru-skill"
                 }
             },
             "dff_friendship_skill": {
@@ -545,9 +525,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_friendship_skill",
-                    "container": "dff-friendship-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/cyCwlcQF9mAtDNcxOS6CA.yml",
+                    "service": "skills/dff_friendship_skill/service_configs/dff-friendship-ru-skill"
                 }
             },
             "dff_generative_skill": {
@@ -564,9 +543,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_generative_skill",
-                    "container": "dff-generative-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/FJpakzPR4IC8F1sos7FSg.yml",
+                    "service": "skills/dff_generative_skill/service_configs/dff-generative-ru-skill"
                 }
             },
             "dff_template_skill": {
@@ -583,9 +561,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_template_skill",
-                    "container": "dff-template-skill",
-                    "endpoint": "respond"
+                    "component": "components/pC342KBWtheQNnXjIni6A.yml",
+                    "service": "skills/dff_template_skill/service_configs/dff-template-skill"
                 }
             },
             "text_qa": {
@@ -602,9 +579,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/text_qa",
-                    "container": "text-qa-ru",
-                    "endpoint": "model"
+                    "component": "components/mtdRL2FMMYwzdfEeRtVmug.yml",
+                    "service": "services/text_qa/service_configs/text-qa-ru"
                 }
             }
         },
@@ -623,9 +599,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "container": "convers-evaluation-selector-ru",
-                    "endpoint": "respond"
+                    "component": "components/SFiPofc4cGq6IRlit38e8A.yml",
+                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector-ru"
                 }
             }
         }

@@ -1,0 +1,26 @@
+name: dff-friendship-ru-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      SERVICE_PORT: 8086
+      SERVICE_NAME: dff_friendship_skill
+      LANGUAGE: RU
+    context: .
+    dockerfile: ./skills/dff_friendship_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8086
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_friendship_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8086:8086
+proxy: null

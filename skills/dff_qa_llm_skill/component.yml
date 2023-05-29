@@ -12,12 +12,12 @@ dff-qa-llm-skill:
     to generate the response based on the context, the question, and the selected parts.
   ram_usage: 150M
   gpu_usage: null
-  port: 8151
+  port: 8162
   endpoints:
     - group: skills
       endpoint: respond
   build_args:
-    SERVICE_PORT: 8151
+    SERVICE_PORT: 8162
     SERVICE_NAME: dff_qa_llm_skill
     GENERATIVE_TIMEOUT: 120
     N_UTTERANCES_CONTEXT: 7

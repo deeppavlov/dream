@@ -1,0 +1,28 @@
+name: badlisted-words-ru
+endpoints:
+- badlisted_words
+- badlisted_words_batch
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      SERVICE_PORT: 8018
+      SERVICE_NAME: badlisted_words
+      FLASK_APP: server
+    context: annotators/BadlistedWordsDetector_ru/
+  command: flask run -h 0.0.0.0 -p 8018
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./annotators/BadlistedWordsDetector_ru:/src
+  - ./common:/src/common
+  ports:
+  - 8018:8018
+proxy: null

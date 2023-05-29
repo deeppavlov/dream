@@ -1,0 +1,35 @@
+name: dff-program-y-wide-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8064
+      SERVICE_NAME: dff_program_y_wide_skill
+    context: .
+    dockerfile: ./skills/dff_program_y_wide_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8064 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 1024M
+      reservations:
+        memory: 1024M
+  volumes:
+  - ./skills/dff_program_y_wide_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8064:8064
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8064
+  - PORT=8064

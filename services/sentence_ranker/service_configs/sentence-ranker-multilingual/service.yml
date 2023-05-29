@@ -1,0 +1,29 @@
+name: sentence-ranker-multilingual
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8128
+      PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bert-base-multilingual-cased-sentence
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./services/sentence_ranker/
+  command: flask run -h 0.0.0.0 -p 8128
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 3G
+      reservations:
+        memory: 3G
+  volumes:
+  - ./services/sentence_ranker:/src
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8128:8128
+proxy: null
