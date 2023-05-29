@@ -21,7 +21,7 @@ RANKING_FOR_QA = getenv("RANKING_FOR_QA")
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
-DEFAULT_PROMPT = "Answer questions based on parts of a financial report."
+DEFAULT_PROMPT = "Answer questions based on part of a text."
 CONSIDERED_LM_SERVICES = {
     "ChatGPT": {
         "url": "http://openai-api-chatgpt:8145/respond",

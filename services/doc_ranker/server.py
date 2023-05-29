@@ -14,12 +14,9 @@ DATASET_PATH = os.environ.get("DATASET_PATH", None)
 ORIGINAL_FILE_PATH = os.environ.get("ORIGINAL_FILE_PATH", None)
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
 SERVICE_PORT = os.environ.get("SERVICE_PORT", None)
-if CONFIG_PATH is None:
-    raise NotImplementedError("No config file name is given.")
-if DATASET_PATH is None:
-    raise NotImplementedError("No final dataset path is given.")
-if ORIGINAL_FILE_PATH is None:
-    raise NotImplementedError("No original file path is given.")
+assert CONFIG_PATH, logger.info("No config file name is given.")
+assert DATASET_PATH, logger.info("No final dataset path is given.")
+assert ORIGINAL_FILE_PATH, logger.info("No original file path is given.")
 
 
 try:
