@@ -19,7 +19,7 @@ ARG N_UTTERANCES_CONTEXT
 ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
 
 COPY skills/dff_universal_prompted_skill/requirements.txt .
-RUN python -c "pip install -r requirements.txt; import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+RUN pip install -r requirements.txt && python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
 COPY skills/dff_universal_prompted_skill/ ./
 COPY ./common/ ./common/

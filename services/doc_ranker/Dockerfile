@@ -11,7 +11,7 @@ ARG DATASET_PATH
 ENV DATASET_PATH ${DATASET_PATH}
 
 COPY services/doc_ranker/requirements.txt /src/requirements.txt
-RUN python -c "pip install -r /src/requirements.txt; import nltk; nltk.download('punkt'); spacy download en_core_web_sm"
+RUN pip install -r /src/requirements.txt && python -c "import nltk; nltk.download('punkt')" && spacy download en_core_web_sm
 RUN mkdir /data/
 
 COPY services/doc_ranker /src
