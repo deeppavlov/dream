@@ -111,7 +111,7 @@ def select_with_generative_service(contexts, human_uttr_attributes):
             GENERATIVE_SERVICE_CONFIG,
             GENERATIVE_TIMEOUT,
             sending_variables,
-        )[0][0]
+        )[0]
         result += [prompt_names_compiled.findall(resp)]
     return result
 
