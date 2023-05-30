@@ -3,13 +3,13 @@
 import json
 import logging
 import numpy as np
-import requests
 import time
 from copy import deepcopy
 from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.prompts import send_request_to_prompted_generative_service
 from common.utils import is_toxic_or_badlisted_utterance
 
 
@@ -62,18 +62,15 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses):
     try:
-        response = requests.post(
+        response = send_request_to_prompted_generative_service(
+            dialog_context,
+            PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses]),
             GENERATIVE_SERVICE_URL,
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [PROMPT],
-                "configs": [GENERATIVE_SERVICE_CONFIG],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
+            GENERATIVE_SERVICE_CONFIG,
+            GENERATIVE_TIMEOUT,
+            sending_variables,
         )
-        # batch of a list of one string [["this is the response"]]
-        result = response.json()[0][0]
+        result = response[0]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -114,6 +111,7 @@ def respond():
             selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
             selected_attributes.append(hypotheses[best_id])
+
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
@@ -122,6 +120,7 @@ def respond():
                 "Selected a response with the highest confidence."
             )
             selected_resp, best_id = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])
+
             selected_responses.append(hypotheses[best_id].pop("text"))
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))

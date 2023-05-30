@@ -33,6 +33,7 @@ ENVVARS_TO_SEND = {
     "http://openai-api-davinci3:8131/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     "http://openai-api-gpt4:8159/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     "http://openai-api-gpt4-32k:8160/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://transformers-lm-gptjt:8161/respond": [],
 }
 
 
