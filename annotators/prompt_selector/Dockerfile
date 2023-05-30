@@ -8,6 +8,8 @@ RUN pip install --no-cache -r /src/requirements.txt
 COPY ./annotators/prompt_selector/ /src/
 COPY ./common/ /src/common/
 
+ARG SERVICE_NAME
+ENV SERVICE_NAME ${SERVICE_NAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 ARG N_SENTENCES_TO_RETURN
