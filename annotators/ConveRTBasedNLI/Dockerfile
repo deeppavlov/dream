@@ -11,10 +11,6 @@ RUN pip install -r /src/requirements.txt
 COPY ${WORK_DIR} /src
 WORKDIR /src
 
-RUN mkdir /cache
-RUN mkdir /data
-RUN mkdir /data/nli_model/
-RUN mkdir /data/convert_model/
+RUN mkdir /cache /data /data/nli_model/ /data/convert_model/
 
-RUN curl -L $NLI_URL --output /tmp/nli_model.tar.gz && tar -xf /tmp/nli_model.tar.gz -C /data/nli_model && rm /tmp/nli_model.tar.gz
-RUN curl -L $CONVERT_URL --output /tmp/conv_model.tar.gz && tar -xf /tmp/conv_model.tar.gz -C /data/convert_model && rm /tmp/conv_model.tar.gz
+RUN curl -L $NLI_URL --output /tmp/nli_model.tar.gz && tar -xf /tmp/nli_model.tar.gz -C /data/nli_model && rm /tmp/nli_model.tar.gz && curl -L $CONVERT_URL --output /tmp/conv_model.tar.gz && tar -xf /tmp/conv_model.tar.gz -C /data/convert_model && rm /tmp/conv_model.tar.gz
