@@ -16,15 +16,13 @@ def main():
         "prompts_goals": [
             {
                 "pizza": "Assists the user in ordering food and providing answers based on a pre-defined FAQ list.",
-                "dream_persona": "Responds in a friendly and caring manner to engage and connect with the user."
+                "dream_persona": "Responds in a friendly and caring manner to engage and connect with the user.",
             },
         ],
         "last_human_utterances": [
             {
                 "text": "What is SpaceX?",
-                "attributes": {
-                    "openai_api_key": getenv("OPENAI_API_KEY")
-                },
+                "attributes": {"openai_api_key": getenv("OPENAI_API_KEY")},
             },
         ],
     }

@@ -63,9 +63,7 @@ def cut_context(context, return_str=True):
 def select_with_sentence_ranker(contexts, pairs, context_ids, is_empty_prompts):
     result = []
 
-    scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0][
-        "batch"
-    ]
+    scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0]["batch"]
     scores = np.array(scores)
     for i, context in enumerate(contexts):
         curr_ids = np.where(context_ids == i)[0]
@@ -99,10 +97,10 @@ def select_with_generative_service(contexts, human_uttr_attributes):
             **uttr_attrs,
         )
         dialog_context = "\n".join([f'"{el}"' for el in cut_context(context, return_str=False)])
-        dialog_context = f'Dialog context:\n\n{dialog_context}'
+        dialog_context = f"Dialog context:\n\n{dialog_context}"
 
         skills_descriptions = "\n".join([f'"{pname}": "{pdescr}"' for pname, pdescr in zip(PROMPTS_NAMES, PROMPTS)])
-        skills_descriptions = f'Names and Descriptions of Skills:\n\n{skills_descriptions}'
+        skills_descriptions = f"Names and Descriptions of Skills:\n\n{skills_descriptions}"
 
         logger.info(f"Passing to LLM:\n{dialog_context}\n\n{skills_descriptions}\n")
 
@@ -112,7 +110,8 @@ def select_with_generative_service(contexts, human_uttr_attributes):
             GENERATIVE_SERVICE_URL,
             GENERATIVE_SERVICE_CONFIG,
             GENERATIVE_TIMEOUT,
-            sending_variables)[0][0]
+            sending_variables,
+        )[0][0]
         result += [prompt_names_compiled.findall(resp)]
     return result
 
