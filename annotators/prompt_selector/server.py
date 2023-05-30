@@ -45,7 +45,7 @@ ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
 SKILL_SELECTION_PROMPT = json.load(open(f"common/prompts/skill_selector.json", "r"))["prompt"]
 SKILL_SELECTION_PROMPT = SKILL_SELECTION_PROMPT.replace("N_SENTENCES_TO_RETURN", str(N_SENTENCES_TO_RETURN))
-skill_names_compiled = re.compile(r'"([A-Z0-9a-z_]+)"')
+prompt_names_compiled = re.compile(f'({"|".join(PROMPTS_NAMES)})', re.IGNORECASE)
 
 
 def cut_context(context, return_str=True):
@@ -113,7 +113,7 @@ def select_with_generative_service(contexts, human_uttr_attributes):
             GENERATIVE_SERVICE_CONFIG,
             GENERATIVE_TIMEOUT,
             sending_variables)[0][0]
-        result += [skill_names_compiled.findall(resp)]
+        result += [prompt_names_compiled.findall(resp)]
     return result
 
 
