@@ -25,7 +25,7 @@ flows = {
     },
     "context_driven_response": {
         "command_selector": {
-            RESPONSE: rsp.command_selector_response,
+            RESPONSE: rsp.mint_response,
             PROCESSING: {"set_confidence": rsp.set_confidence_from_input},
         },
     },

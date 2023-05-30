@@ -1,7 +1,7 @@
-dff-command-selector-ru-skill:
-  name: dff_command_selector_skill
+dff-mint-skill:
+  name: dff_mint_skill
   display_name: Commands Responses
-  container_name: dff-command-selector-ru-skill
+  container_name: dff-mint-skill
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: true
@@ -10,14 +10,14 @@ dff-command-selector-ru-skill:
     Intent Catcher annotator
   ram_usage: 100M
   gpu_usage: null
-  port: 8015
+  port: 8337
   endpoints:
   - group: skills
     endpoint: respond
   build_args:
-    SERVICE_PORT: 8015
-    SERVICE_NAME: dff_command_selector_skill
-    LANGUAGE: RU
+    SERVICE_PORT: 8337
+    SERVICE_NAME: dff_mint_skill
+    LANGUAGE: EN
     ROS_FSM_SERVER: http://robot-fake-server:8137
-  date_created: '2023-03-16T09:45:32'
+  date_created: '2023-05-30T09:45:32'
 

@@ -78,24 +78,9 @@ except Exception as exc:
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 
-# import pathlib
-# import json
-
-# for in_file in pathlib.Path("tests").glob("./*_in.json"):
-#     logger.error(in_file)
-#     test_in = json.load(in_file.open())
-#     responses = handler(test_in, RANDOM_SEED)
-#     out_file = str(in_file).replace("in.json", "out.json")
-#     import common.test_utils as t_utils
-
-#     t_utils.save_to_test(responses, out_file, indent=4)  # TEST
-
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
-    # responses = handler(request.json, RANDOM_SEED)  # TEST
-    # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
     responses = handler(request.json)
     return jsonify(responses)
 

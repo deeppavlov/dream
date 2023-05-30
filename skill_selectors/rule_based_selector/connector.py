@@ -22,7 +22,8 @@ from common.universal_templates import (
 from common.utils import (
     high_priority_intents,
     low_priority_intents,
-    command_intents,
+    #command_intents,
+    mint_intents,
     get_topics,
     get_intents,
     get_named_locations,
@@ -83,7 +84,8 @@ class RuleBasedSkillSelectorConnector:
                 [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
             )
             low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
-            command_detected = any([k for k in intent_catcher_intents if k in command_intents])
+            #command_detected = any([k for k in intent_catcher_intents if k in command_intents])
+            mint_cmd_detected = any([k for k in intent_catcher_intents if k in mint_intents])
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
@@ -125,10 +127,13 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
-            elif command_detected:
-                skills_for_uttr.append("dummy_skill")
+            #elif command_detected:
+                #skills_for_uttr.append("dummy_skill")
                 # process intents with Command Selector
-                skills_for_uttr.append("dff_command_selector_skill")
+                #skills_for_uttr.append("dff_command_selector_skill")
+            elif mint_cmd_detected:
+                skills_for_uttr.append("dummy_skill")
+                skills_for_uttr.append("dff_mint_skill")
             elif is_sensitive_topic_and_request(user_uttr) and RESTRICTION_FOR_SENSITIVE_CASE:
                 # process user utterance with sensitive content, "safe mode"
 
