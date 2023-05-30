@@ -16,6 +16,7 @@ RUN mkdir /data/
 
 COPY services/doc_ranker /src
 COPY documents /src/documents
+COPY common /src/common
 
 RUN python train_model_if_not_exist.py
 
