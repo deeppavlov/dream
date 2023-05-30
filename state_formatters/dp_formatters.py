@@ -1153,7 +1153,13 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     contexts = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
     prompts_goals = dialog["human"]["attributes"].get("prompts_goals", {})
-    return [{"contexts": [contexts], "prompts_goals": [prompts_goals]}]
+    return [
+        {
+            "contexts": [contexts],
+            "prompts_goals": [prompts_goals],
+            "last_human_utterances": [dialog["human_utterances"][-1]]
+        }
+    ]
 
 
 def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
