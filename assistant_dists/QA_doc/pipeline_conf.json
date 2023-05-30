@@ -110,6 +110,40 @@
                     "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
+            },
+            "save_ranker_model": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://doc-ranker:8161/save_ranker_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jkb98534UUIjfdn67IN.yml",
+                    "service": "annotators/doc_ranker/service_configs/doc-ranker"
+                }
+            },
+            "doc_ranker": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://doc-ranker:8161/return_candidates"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                     "annotators.save_ranker_model"
+                    ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jkb98534UUIjfdn67IN.yml",
+                    "service": "annotators/doc_ranker/service_configs/doc-ranker"
+                }
             }
         },
         "skill_selectors": {
