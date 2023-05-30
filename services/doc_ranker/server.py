@@ -41,10 +41,16 @@ def get_answers(utterance: str, ranker):
     return " ".join(num_candidates)
 
 
-@app.route("/rank", methods=["POST"])
-def detect():
+@app.route("/return_candidates", methods=["POST"]) #change endpoint name in pipeline conf
+def return_candidates():
     utterances = request.json["sentences"][-1]
     logger.info(f"Input: `{utterances}`.")
     results = get_answers(utterances, ranker_model)
     logger.info(f"Output: `{results}`.")
     return jsonify(results)
+
+
+@app.route("/save_model_path", methods=["POST"]) #add to pipeline conf
+def save_model_path():
+    result = [{"bot_attribiutes": {"ranker_model_path": MODEL_PATH}}] #decide what to do with model path
+    return jsonify(result)

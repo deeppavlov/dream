@@ -45,4 +45,3 @@ else:
     model_config["chainer"]["pipe"][1]["top_n"] = PARAGRAPHS_NUM
     ranker = train_model(model_config)
     print("Model is trained.")
-    print(os.getcwd())
