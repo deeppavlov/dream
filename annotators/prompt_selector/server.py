@@ -38,7 +38,7 @@ GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
-    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
