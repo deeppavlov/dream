@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import requests
 import time
 from copy import deepcopy
@@ -9,6 +10,8 @@ from pathlib import Path
 import numpy as np
 import sentry_sdk
 from flask import Flask, request, jsonify
+
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -31,6 +34,86 @@ for filename in listdir("common/prompts"):
         PROMPTS.append(data.get("goals", ""))
         PROMPTS_NAMES.append(prompt_name)
 
+GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
+GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
+ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
+ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+
+SKILL_SELECTION_PROMPT = json.load(open(f"common/prompts/skill_selector.json", "r"))["prompt"]
+SKILL_SELECTION_PROMPT = SKILL_SELECTION_PROMPT.replace("N_SENTENCES_TO_RETURN", str(N_SENTENCES_TO_RETURN))
+skill_names_compiled = re.compile(r'"([A-Z0-9a-z_]+)"')
+
+
+def cut_context(context, return_str=True):
+    if len(context[-1].split()) < 5:
+        depth = 3
+    else:
+        depth = 1
+
+    if return_str:
+        return "\n".join(context[-depth:])
+    else:
+        return context[-depth:]
+
+
+def select_with_sentence_ranker(contexts, pairs, context_ids, is_empty_prompts):
+    result = []
+
+    scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0][
+        "batch"
+    ]
+    scores = np.array(scores)
+    for i, context in enumerate(contexts):
+        curr_ids = np.where(context_ids == i)[0]
+        # assign to -1 scores for pairs with empty prompt (actually, its goals)
+        for _id in curr_ids:
+            if is_empty_prompts[_id]:
+                scores[_id] = -1.0
+        most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
+        curr_result = {
+            "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
+            "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
+        }
+        # add to prompts to be turned on, those prompts which goals are empty
+        for _id in curr_ids:
+            if is_empty_prompts[_id]:
+                curr_result["prompts"] += [PROMPTS_NAMES[_id]]
+        result += [curr_result]
+    return result
+
+
+def select_with_generative_service(contexts, human_uttr_attributes):
+    result = []
+
+    for context, uttr_attrs in zip(contexts, human_uttr_attributes):
+        lm_service_kwargs = uttr_attrs.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else uttr_attrs.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **uttr_attrs,
+        )
+        dialog_context = "\n".join([f'"{el}"' for el in cut_context(context, return_str=False)])
+        dialog_context = f'Dialog context:\n\n{dialog_context}'
+
+        skills_descriptions = "\n".join([f'"{pname}": "{pdescr}"' for pname, pdescr in zip(PROMPTS_NAMES, PROMPTS)])
+        skills_descriptions = f'Names and Descriptions of Skills:\n\n{skills_descriptions}'
+
+        resp = send_request_to_prompted_generative_service(
+            [f"{dialog_context}\n\n{skills_descriptions}\n"],
+            SKILL_SELECTION_PROMPT,
+            GENERATIVE_SERVICE_URL,
+            GENERATIVE_SERVICE_CONFIG,
+            GENERATIVE_TIMEOUT,
+            sending_variables)[0][0]
+        result += [skill_names_compiled.findall(resp)]
+    return result
+
 
 def get_result(request):
     global PROMPTS, PROMPTS_NAMES
@@ -39,16 +122,13 @@ def get_result(request):
     contexts = request.json["contexts"]
     # batch of prompts_goals dicts [{"promptname1": "promptgoal1", "promptname2": "promptgoal2"}]
     prompts_goals_from_attributes = request.json["prompts_goals"]
+    last_human_utterances = request.json["last_human_utterances"]
 
-    result = []
     pairs = []
     context_ids = []
 
     for context_id, context in enumerate(contexts):
-        if len(context[-1].split()) < 5:
-            str_context = "\n".join(context[-3:])
-        else:
-            str_context = context[-1]
+        str_context = cut_context(context)
         for _prompt_goals, _prompt_name in zip(PROMPTS, PROMPTS_NAMES):
             pairs += [
                 [
@@ -66,26 +146,11 @@ def get_result(request):
         result = [{"prompts": [], "max_similarity": 0.0}] * len(contexts)
     else:
         try:
-            scores = requests.post(SENTENCE_RANKER_SERVICE_URL, json={"sentence_pairs": pairs}, timeout=1.5).json()[0][
-                "batch"
-            ]
-            scores = np.array(scores)
-            for i, context in enumerate(contexts):
-                curr_ids = np.where(context_ids == i)[0]
-                # assign to -1 scores for pairs with empty prompt (actually, its goals)
-                for _id in curr_ids:
-                    if is_empty_prompts[_id]:
-                        scores[_id] = -1.0
-                most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
-                curr_result = {
-                    "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
-                    "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
-                }
-                # add to prompts to be turned on, those prompts which goals are empty
-                for _id in curr_ids:
-                    if is_empty_prompts[_id]:
-                        curr_result["prompts"] += [PROMPTS_NAMES[_id]]
-                result += [curr_result]
+            if GENERATIVE_SERVICE_URL:
+                human_uttr_attributes = [uttr.get("attributes", {}) for uttr in last_human_utterances]
+                result = select_with_generative_service(contexts, human_uttr_attributes)
+            else:
+                result = select_with_sentence_ranker(contexts, pairs, context_ids, is_empty_prompts)
         except Exception as exc:
             logger.exception(exc)
             sentry_sdk.capture_exception(exc)
