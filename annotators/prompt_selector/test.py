@@ -1,3 +1,4 @@
+from os import getenv
 import requests
 
 
@@ -11,7 +12,21 @@ def main():
             [
                 "What is SpaceX?",
             ],
-        ]
+        ],
+        "prompts_goals": [
+            {
+                "pizza": "Assists the user in ordering food and providing answers based on a pre-defined FAQ list.",
+                "dream_persona": "Responds in a friendly and caring manner to engage and connect with the user."
+            },
+        ],
+        "last_human_utterances": [
+            {
+                "text": "What is SpaceX?",
+                "attributes": {
+                    "openai_api_key": getenv("OPENAI_API_KEY")
+                },
+            },
+        ],
     }
     gold = [
         {"prompts": ["pizza", "dream_persona"], "max_similarity": 0.7664722204208374},
