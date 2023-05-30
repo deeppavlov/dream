@@ -76,6 +76,10 @@ services:
         SERVICE_NAME: prompt_selector
         N_SENTENCES_TO_RETURN: 2
         PROMPTS_TO_CONSIDER: dream_persona,casual_email,meeting_notes,official_email,plan_for_article
+        GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
+        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_TIMEOUT: 120
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
