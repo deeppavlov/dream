@@ -54,6 +54,8 @@ MOST_DUMMY_RESPONSES = [
 ]
 LANGUAGE = getenv("LANGUAGE", "EN")
 GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
+TOXIC_FILTERING = getenv("TOXIC_FILTERING", True)
+CONTRADICTION_FILTERING = getenv("CONTRADICTION_FILTERING", True)
 
 
 @app.route("/respond", methods=["POST"])
@@ -74,7 +76,7 @@ def respond():
     for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
         curr_confidences = []
         curr_scores = []
-        curr_is_toxics = []
+        curr_is_toxics_or_contr = []
 
         try:
             curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
@@ -94,9 +96,13 @@ def respond():
                 is_toxic_utterance = is_toxic_or_badlisted_utterance(skill_data)
                 is_contr_utterance = is_contradiction_utterance(skill_data)
 
-                is_toxic_or_contr_utterance = is_toxic_utterance or is_contr_utterance
+                is_toxic_or_contr_utterance = False
+                if is_toxic_utterance and TOXIC_FILTERING:
+                    is_toxic_or_contr_utterance = is_toxic_utterance
+                if is_contr_utterance and CONTRADICTION_FILTERING:
+                    is_toxic_or_contr_utterance = is_contr_utterance
 
-                curr_is_toxics.append(is_toxic_or_contr_utterance)
+                curr_is_toxics_or_contr.append(is_toxic_or_contr_utterance)
 
                 if is_toxic_or_contr_utterance:
                     with sentry_sdk.push_scope() as scope:
@@ -114,7 +120,7 @@ def respond():
                     calculate_single_evaluator_score(skill_data.get("annotations"), skill_data["confidence"])
                 ]
 
-            curr_is_toxics = np.array(curr_is_toxics)
+            curr_is_toxics_or_contr = np.array(curr_is_toxics_or_contr)
             curr_scores = np.array(curr_scores)
             curr_confidences = np.array(curr_confidences)
             # now we collected all current candidates and their annotations. select response among them
@@ -122,7 +128,7 @@ def respond():
                 curr_candidates,
                 curr_scores,
                 curr_confidences,
-                curr_is_toxics,
+                curr_is_toxics_or_contr,
                 dialog,
                 all_prev_active_skills,
             )
