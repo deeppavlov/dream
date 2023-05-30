@@ -1,7 +1,7 @@
 SERVICE_PORT: 8161
 SERVICE_NAME: doc_ranker
 CONFIG_PATH: ./doc_ranker_config.json
-ORIGINAL_FILE_PATH: ./common/docs/big_apple.txt
+ORIGINAL_FILE_PATH: ./documents/big_apple.txt
 DATASET_PATH: /data/big_apple_dataset/
-CUDA_VISIBLE_DEVICES: '0'
+CUDA_VISIBLE_DEVICES: "0"
 FLASK_APP: server

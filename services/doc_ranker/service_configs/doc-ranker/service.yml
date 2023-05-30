@@ -1,23 +1,23 @@
 name: doc-ranker
 endpoints:
-- respond
+  - respond
 compose:
   env_file:
-  - .env
+    - .env
   build:
     args:
       SERVICE_PORT: 8161
       SERVICE_NAME: doc_ranker
       CONFIG_PATH: ./doc_ranker_config.json
-      ORIGINAL_FILE_PATH: ./common/docs/big_apple.txt
+      ORIGINAL_FILE_PATH: ./documents/big_apple.txt
       DATASET_PATH: /data/big_apple_dataset/
-      CUDA_VISIBLE_DEVICES: '0'
+      CUDA_VISIBLE_DEVICES: "0"
       FLASK_APP: server
     context: ./services/doc_ranker/
   command: flask run -h 0.0.0.0 -p 8161
   environment:
-  - CUDA_VISIBLE_DEVICES=0
-  - FLASK_APP=server
+    - CUDA_VISIBLE_DEVICES=0
+    - FLASK_APP=server
   deploy:
     resources:
       limits:
@@ -28,15 +28,15 @@ compose:
     - "./services/doc_ranker:/src"
     - "./common:/src/common"
   ports:
-  - 8161:8161
+    - 8161:8161
 proxy:
   command:
-  - nginx
-  - -g
-  - daemon off;
+    - nginx
+    - -g
+    - daemon off;
   build:
     context: dp/proxy/
     dockerfile: Dockerfile
   environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8161
-  - PORT=8161
+    - PROXY_PASS=dream.deeppavlov.ai:8161
+    - PORT=8161

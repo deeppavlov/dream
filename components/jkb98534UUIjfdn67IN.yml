@@ -15,6 +15,6 @@ endpoints:
 build_args:
   SERVICE_PORT: 8161
   CONFIG_PATH: ./doc_ranker_config.json
-  ORIGINAL_FILE_PATH: ./common/docs/big_apple.txt
+  ORIGINAL_FILE_PATH: ./documents/big_apple.txt
   DATASET_PATH: /data/big_apple_dataset/
 date_created: "2023-03-16T09:45:32"

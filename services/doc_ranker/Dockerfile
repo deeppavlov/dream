@@ -15,7 +15,7 @@ RUN pip install -r /src/requirements.txt && python -c "import nltk; nltk.downloa
 RUN mkdir /data/
 
 COPY services/doc_ranker /src
-COPY common /src/common
+COPY documents /src/documents
 
 RUN python train_model_if_not_exist.py
 
