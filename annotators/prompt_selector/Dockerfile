@@ -3,7 +3,7 @@ FROM python:3.9.16-slim
 WORKDIR /src
 
 COPY annotators/prompt_selector/requirements.txt /src/requirements.txt
-RUN pip install --no-cache -r /src/requirements.txt
+RUN pip install --upgrade pip && pip install --no-cache -r /src/requirements.txt
 
 COPY ./annotators/prompt_selector/ /src/
 COPY ./common/ /src/common/
