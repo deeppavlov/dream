@@ -104,6 +104,8 @@ def select_with_generative_service(contexts, human_uttr_attributes):
         skills_descriptions = "\n".join([f'"{pname}": "{pdescr}"' for pname, pdescr in zip(PROMPTS_NAMES, PROMPTS)])
         skills_descriptions = f'Names and Descriptions of Skills:\n\n{skills_descriptions}'
 
+        logger.info(f"Passing to LLM:\n{dialog_context}\n\n{skills_descriptions}\n")
+
         resp = send_request_to_prompted_generative_service(
             [f"{dialog_context}\n\n{skills_descriptions}\n"],
             SKILL_SELECTION_PROMPT,
@@ -147,6 +149,7 @@ def get_result(request):
     else:
         try:
             if GENERATIVE_SERVICE_URL:
+                logger.info(f"Selecting wih given generative_service: {GENERATIVE_SERVICE_URL}.")
                 human_uttr_attributes = [uttr.get("attributes", {}) for uttr in last_human_utterances]
                 result = select_with_generative_service(contexts, human_uttr_attributes)
             else:
