@@ -119,7 +119,7 @@ def respond():
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
 
         hypotheses_texts = [hyp["text"] for hyp in hypotheses]
-        logger.info(f"Hypotheses: {hypotheses_texts}")
+        logger.info(f"Hypotheses: {json.dumps(hypotheses_texts, indent=2)}")
 
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
