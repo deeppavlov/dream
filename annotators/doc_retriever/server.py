@@ -21,7 +21,7 @@ DATASET_PATH = os.environ.get("DATASET_PATH", None)
 ORIGINAL_FILE_PATH = os.environ.get("ORIGINAL_FILE_PATH", None)
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
 SERVICE_PORT = os.environ.get("SERVICE_PORT", None)
-FILE_SERVER_URL = os.environ.get("SERVICE_PORT", None)
+FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
 server_url = urlparse(FILE_SERVER_URL)
 assert CONFIG_PATH, logger.info("No config file name is given.")
 assert DATASET_PATH, logger.info("No final dataset path is given.")
@@ -52,27 +52,34 @@ def write_file_to_server(filename, filepath):
         FILE_SERVER_URL, files={"file": (filename, open(filepath, "rb"))}
     )
     resp.raise_for_status()
-    download_link = resp.json()['downloadLink']
-    download_link = urlparse(download_link)._replace(scheme=server_url.scheme,
-                                                    netloc=server_url.netloc).geturl()
+    download_link = resp.json()["downloadLink"]
+    download_link = (
+        urlparse(download_link)
+        ._replace(scheme=server_url.scheme, netloc=server_url.netloc)
+        .geturl()
+    )
     return download_link
 
 
 @app.route("/return_candidates", methods=["POST"])
 def return_candidates():
     try:
-        bot_attributes = request.json["bot_attributes"]
+        bot_attributes = request.json.get(
+            "bot_attributes", []
+        )  # how to get bot attributes?
+        # bot_attributes = request.json.get("bot_attributes", [" "]) ??? what is request.json here?
         model_config = read_json(CONFIG_PATH)
         db_link = bot_attributes.get("db_path", "")
+        logger.info("db_link: {db_link}")
         db_file = requests.get(db_link)
-        with open('/data/odqa/userfile.db', 'wb') as f:
+        with open("/data/odqa/userfile.db", "wb") as f:
             f.write(db_file.content)
         matrix_link = bot_attributes.get("matrix_path", "")
         matrix_file = requests.get(matrix_link)
-        with open('/data/odqa/userfile_tfidf_matrix.npz', 'wb') as f:
+        with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
             f.write(matrix_file.content)
-        # model_config["dataset_iterator"]["load_path"] = 
-        # model_config["chainer"]["pipe"][0]["load_path"] = 
+        # model_config["dataset_iterator"]["load_path"] =
+        # model_config["chainer"]["pipe"][0]["load_path"] =
         ranker_model = build_model(model_config)
         logger.info("Model loaded")
     except Exception as e:
@@ -88,18 +95,29 @@ def return_candidates():
 
 @app.route("/save_model_path", methods=["POST"])
 def save_model_path():
-    bot_attributes = request.json["bot_attributes"]
+    logger.info("start")
+    bot_attributes = request.json.get(
+        "bot_attributes", []
+    )  # how to get bot attributes?
     result = []
     if "db_path" not in bot_attributes:
         file_name = generate_random_string(10)
         db_file_name = f"{file_name}.db"
         matrix_file_name = f"{file_name}.npz"
         try:
+            logger.info("start writing")
             db_link = write_file_to_server(db_file_name, "/data/odqa/userfile.db")
-            matrix_link = write_file_to_server(matrix_file_name, "/data/odqa/userfile_tfidf_matrix.npz")
+            matrix_link = write_file_to_server(
+                matrix_file_name, "/data/odqa/userfile_tfidf_matrix.npz"
+            )
             result = [
-            {"bot_attribiutes": {"db_path": db_link, "matrix_path": matrix_link}}
-        ]
+                {"bot_attribiutes": {"db_path": db_link, "matrix_path": matrix_link}}
+            ]
+            logger.info("finish writing")
         except Exception as e:
             logger.error(e)
     return jsonify(result)
+
+
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)
