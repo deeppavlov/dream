@@ -135,8 +135,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"custom_el: {custom_el}")
     logger.info(f"user_kg: {user_kg}")
 
-    if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["prompt"]) and kg_prompt[1]:
-        final_prompt = PROMPT + f" ADDITIONAL INSTRUCTION: Use the following facts about the user for your answer: {kg_prompt[1]}"
+    if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["kg_prompt"]):
+        final_prompt = PROMPT + f" ADDITIONAL INSTRUCTION: Use the following facts about the user for your answer: {kg_prompt}"
 
     else:
         final_prompt = PROMPT 

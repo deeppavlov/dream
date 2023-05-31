@@ -5,6 +5,7 @@ import os
 import inflect
 from flask import Flask, jsonify, request
 from pathlib import Path
+import requests
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 from common.utils import get_named_persons
@@ -17,6 +18,7 @@ app = Flask(__name__)
 inflect = inflect.engine()
 
 USE_ABSTRACT_KINDS = True
+USE_KG_DATA = os.getenv("USE_KG_DATA", False)
 
 rel_kinds_dict = {
     "favorite_animal": "animal",
@@ -49,6 +51,15 @@ graph = TerminusdbKnowledgeGraph(
 logger.info('Graph Loaded!')
 
 # graph.ontology.drop_database(drop_index=True)
+
+DEFAULT_CONFIG = {
+    "max_tokens": 64,
+    "temperature": 0.4,
+    "top_p": 1.0,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
+}
+
 
 def add_name_property(graph, user_id, names):
     """Adds User Name property."""
@@ -275,6 +286,33 @@ def check_name_scenario(utt, user_id):
     return result
 
 
+def generate_prompt(triplets):
+    CHAT_GPT_PORT = os.getenv("CHAT_GPT_PORT")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    assert OPENAI_API_KEY, "Error: OpenAI API key is not specified in env"
+
+    url = f"http://openai-api-chatgpt:{CHAT_GPT_PORT}/respond"
+    contexts = [
+        [
+        ],
+    ]
+    prompts = [
+        # "Generate natural language sentences based on the following triplets. One sentence for each triplets"
+        "Translate from rdf to sentences. Triplets"
+        f" : {triplets}"
+    ]
+    json_input = {
+        "dialog_contexts": contexts,
+        "prompts": prompts,
+        "configs": [DEFAULT_CONFIG] * len(contexts),
+        "openai_api_keys": [OPENAI_API_KEY] * len(contexts)
+    }
+
+    return requests.post(
+        url, json=json_input
+    ).json()
+
+
 def get_result(request):
     """Collects all relation & property information from one utterance and adds to graph."""
     uttrs = request.json.get("utterances", [])
@@ -301,7 +339,6 @@ def get_result(request):
     user_id = "User/" + user_id
     all_entities = graph.get_all_entities()
     existing_ids = [entity["@id"] for entity in all_entities]
-    logger.info(f"Existing ids: {existing_ids}")
 
     # Part to use custom knowledge in LLM prompt
     triplets = []
@@ -310,13 +347,14 @@ def get_result(request):
         logger.info(f"rels from custom_el in KG --||-- {rels}")
         for rel in rels:
             triplets.append(["User", rel['rel'].split('_')[0].lower(), entity[0]]) #TODO: you can do better than this naive split
-    prompts = []
-    for triplet in triplets:
-        prompts.append(f"The user {triplet[1].replace('_', ' ').lower()} {triplet[2]}")     
 
-    prompt = "\n".join(prompts)
-    prompt = ["Respond to a new friend as a kind friendly person. You MUST provide all information in the list of facts.\n\nThe list of facts:", prompt]
-    logger.info(f"prompt -- {prompt}")
+    triplets = ", ".join([str(triplet) for triplet in triplets])
+    logger.info(f"triplets -- {triplets}")
+
+    if triplets and USE_KG_DATA:
+        prompt = generate_prompt(triplets)
+    else:
+        prompt = ""
 
     kg_parser_annotations = []
     ex_triplets = []
@@ -365,9 +403,9 @@ def get_result(request):
         graph.index.set_active_user_id(str(user_id))
         graph.index.add_entities(substr_list, ids_list, tags_list)
     
-    logger.info(f"added_to_graph: -- {added}, triplets_already_in_graph -- {kg_parser_annotations}")
+    logger.info(f"added_to_graph: -- {added}, triplets_already_in_graph -- {kg_parser_annotations}, kg_prompt -- {prompt}")
 
-    return [{'added_to_graph': added, "triplets_already_in_graph": kg_parser_annotations, "prompt": prompt}]
+    return [{'added_to_graph': added, "triplets_already_in_graph": kg_parser_annotations, "kg_prompt": prompt}]
 
 @app.route("/respond", methods=["POST"])
 def respond():

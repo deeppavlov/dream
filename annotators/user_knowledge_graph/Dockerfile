@@ -20,6 +20,13 @@ COPY annotators/user_knowledge_graph/ ./
 ARG PORT
 ENV PORT ${PORT}
 
+
+ARG CHAT_GPT_PORT
+ENV CHAT_GPT_PORT ${CHAT_GPT_PORT}
+
+ARG OPENAI_API_KEY
+ENV OPENAI_API_KEY ${OPENAI_API_KEY}
+
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
 #HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${PORT}/healthcheck || exit 1
 

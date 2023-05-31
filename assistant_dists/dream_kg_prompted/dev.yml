@@ -494,4 +494,11 @@ services:
     ports:
       - 8133:8133
 
+  openai-api-chatgpt:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8145:8145
+
 version: "3.7"
