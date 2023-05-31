@@ -45,7 +45,7 @@ services:
           memory: 2G
 
   llm-based-response-selector:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8003
