@@ -115,25 +115,25 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 5,
-                    "url": "http://doc-ranker:8161/save_ranker_model"
+                    "url": "http://doc-retriever:8161/save_ranker_model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [],
-                "state_manager_method": "add_annotation",
+                "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
                     "component": "components/jkb98534UUIjfdn67IN.yml",
-                    "service": "annotators/doc_ranker/service_configs/doc-ranker"
+                    "service": "annotators/doc_retriever/service_configs/doc-retriever"
                 }
             },
-            "doc_ranker": {
+            "doc_retriever": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 5,
-                    "url": "http://doc-ranker:8161/return_candidates"
+                    "url": "http://doc-retriever:8161/return_candidates"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                      "annotators.save_ranker_model"
@@ -142,7 +142,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/jkb98534UUIjfdn67IN.yml",
-                    "service": "annotators/doc_ranker/service_configs/doc-ranker"
+                    "service": "annotators/doc_retriever/service_configs/doc-retriever"
                 }
             }
         },

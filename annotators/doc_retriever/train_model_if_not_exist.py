@@ -34,7 +34,7 @@ def build_dataset():
                 buf = ""
 
 
-if expand_path(model_config["metadata"]["variables"]["MODEL_PATH"]).exists():
+if expand_path(model_config["metadata"]["variables"]["MODELS_PATH"]).exists(): #заменила с MODEL_PATH
     # model folder exists, so it is already trained
     print("Model is already trained.")
 else:

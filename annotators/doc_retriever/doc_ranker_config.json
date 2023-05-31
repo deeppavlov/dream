@@ -1,14 +1,14 @@
 {
   "dataset_reader": {
     "class_name": "odqa_reader",
-    "data_path": "{DOWNLOADS_PATH}/odqa/enwiki",
-    "save_path": "{DOWNLOADS_PATH}/odqa/enwiki.db",
+    "data_path": "",
+    "save_path": "/data/odqa/userfile.db",
     "dataset_format": "wiki"
   },
   "dataset_iterator": {
     "class_name": "sqlite_iterator",
     "shuffle": false,
-    "load_path": "{DOWNLOADS_PATH}/odqa/enwiki.db"
+    "load_path": "/data/odqa/userfile.db"
   },
   "chainer": {
     "in": [
@@ -30,8 +30,8 @@
           "doc_ids",
           "doc_nums"
         ],
-        "save_path": "{MODELS_PATH}/odqa/enwiki_tfidf_matrix.npz",
-        "load_path": "{MODELS_PATH}/odqa/enwiki_tfidf_matrix.npz",
+        "save_path": "/data/odqa/userfile_tfidf_matrix.npz",
+        "load_path": "/data/odqa/userfile_tfidf_matrix.npz",
         "tokenizer": {
           "class_name": "stream_spacy_tokenizer",
           "lemmas": true,
@@ -66,8 +66,7 @@
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
-      "MODELS_PATH": "{ROOT_PATH}/models",
-      "MODEL_PATH": "{ROOT_PATH}/models/rankers/doc_ranker"
+      "MODELS_PATH": "{ROOT_PATH}/models"
     },
     "download": [
       {

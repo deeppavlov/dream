@@ -34,9 +34,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
-  doc-ranker:
+  doc-retriever:
     volumes:
-      - "./services/doc_ranker:/src"
+      - "./services/doc_retriever:/src"
       - "./common:/src/common"
     ports:
       - 8161:8161

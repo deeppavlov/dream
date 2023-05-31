@@ -162,5 +162,5 @@
 8158	transformers-lm-oasst12b
 8159	openai-api-gpt4
 8160	openai-api-gpt4-32k
-8161	doc-ranker
+8161	doc-retriever
 8162	dff-qa-llm-skill

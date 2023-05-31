@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/QA_doc/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, no-restrictions-selector:8009, combined-classification:8087, 
-        sentence-ranker:8128, openai-api-chatgpt:8145, doc-ranker:8161, dff-qa-llm-skill:8162"
+        sentence-ranker:8128, openai-api-chatgpt:8145, doc-retriever:8161, dff-qa-llm-skill:8162"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -20,14 +20,14 @@ services:
         reservations:
           memory: 1.5G
 
-  doc-ranker:
+  doc-retriever:
     env_file: [ .env ]
     build:
       context: .
-      dockerfile: ./services/doc_ranker/Dockerfile
+      dockerfile: ./services/doc_retriever/Dockerfile
       args:
         SERVICE_PORT: 8161
-        CONFIG_PATH: ./doc_ranker_config.json
+        CONFIG_PATH: ./doc_retriever_config.json
         ORIGINAL_FILE_PATH: ./documents/big_apple.txt
         DATASET_PATH: /data/big_apple_dataset/
     command: python -m flask run -h 0.0.0.0 -p 8161

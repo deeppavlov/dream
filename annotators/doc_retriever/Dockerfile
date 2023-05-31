@@ -10,11 +10,11 @@ ENV ORIGINAL_FILE_PATH ${ORIGINAL_FILE_PATH}
 ARG DATASET_PATH
 ENV DATASET_PATH ${DATASET_PATH}
 
-COPY services/doc_ranker/requirements.txt /src/requirements.txt
+COPY services/doc_retriever/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt && python -c "import nltk; nltk.download('punkt')" && spacy download en_core_web_sm
 RUN mkdir /data/
 
-COPY services/doc_ranker /src
+COPY services/doc_retriever /src
 COPY documents /src/documents
 COPY common /src/common
 
