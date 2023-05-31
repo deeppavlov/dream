@@ -43,7 +43,7 @@ if GENERATIVE_SERVICE_CONFIG:
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
-SKILL_SELECTION_PROMPT = json.load(open(f"common/prompts/skill_selector.json", "r"))["prompt"]
+SKILL_SELECTION_PROMPT = json.load(open("common/prompts/skill_selector.json", "r"))["prompt"]
 SKILL_SELECTION_PROMPT = SKILL_SELECTION_PROMPT.replace("N_SENTENCES_TO_RETURN", str(N_SENTENCES_TO_RETURN))
 prompt_names_compiled = re.compile(f'({"|".join(PROMPTS_NAMES)})', re.IGNORECASE)
 
