@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188, fromage:8189"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -109,7 +109,7 @@ services:
     command:  python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=1
     deploy:
       resources:
         limits:
@@ -165,7 +165,7 @@ services:
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=1
       - FLASK_APP=server
     deploy:
       resources:
@@ -173,6 +173,25 @@ services:
           memory: 2G
         reservations:
           memory: 2G
+
+  fromage:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8189
+        SERVICE_NAME: fromage
+      context: .
+      dockerfile: ./services/fromage/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8189
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+        reservations:
+          memory: 5G
 
   sentence-ranker:
     env_file: [ .env ]
@@ -184,7 +203,7 @@ services:
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=1
       - FLASK_APP=server
     deploy:
       resources:
@@ -202,7 +221,7 @@ services:
       context: ./services/image_captioning/
     command: flask run -h 0.0.0.0 -p 8123
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=1
       - FLASK_APP=server
     deploy:
       resources:

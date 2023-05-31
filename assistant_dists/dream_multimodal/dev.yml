@@ -58,6 +58,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
+  fromage:
+    volumes:
+      - "./services/fromage:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8189:8189
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
@@ -70,10 +77,5 @@ services:
       - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8123:8123
-  dff-image-skill:
-    volumes:
-      - "./skills/dff_image_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8188:8188
+
 version: "3.7"

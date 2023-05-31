@@ -324,13 +324,13 @@
                     "endpoint": "respond"
                 }
             },
-            "dff_image_skill": {
+            "fromage": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://dff-image-skill:8188/respond"
+                    "timeout": 3.0,
+                    "url": "http://fromage:8189/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_image_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -338,8 +338,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_image_skill",
-                    "container": "dff-image-skill",
+                    "directory": "services/fromage",
+                    "container": "fromage",
                     "endpoint": "respond"
                 }
             }

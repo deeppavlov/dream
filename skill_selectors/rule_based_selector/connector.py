@@ -172,6 +172,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("meta_script_skill")
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dialogpt")  # generative skill
+                skills_for_uttr.append("fromage")  # generative skill
                 skills_for_uttr.append("dialogpt_persona_based")  # generative skill persona-based
                 skills_for_uttr.append("seq2seq_persona_based")  # generative skill persona-based
                 skills_for_uttr.append("small_talk_skill")
