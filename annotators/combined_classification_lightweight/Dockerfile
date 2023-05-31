@@ -1,0 +1,21 @@
+FROM deeppavlov/base-gpu:0.17.5
+
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@1.1.1
+
+ARG CONFIG
+
+ARG SERVICE_PORT
+ENV CONFIG=$CONFIG
+ENV SERVICE_PORT=$SERVICE_PORT
+
+WORKDIR /src
+RUN mkdir common
+
+COPY annotators/combined_classification/requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+
+COPY annotators/combined_classification/ ./
+COPY common/ common/
+
+CMD gunicorn --workers=1 --bind 0.0.0.0:8150 --timeout=1200 server:app
+
