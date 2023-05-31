@@ -21,7 +21,7 @@ services:
           user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
           midas-predictor:8121, dialogpt:8125, infilling:8122, dff-template-skill:8120, terminusdb:6363, storygpt:8126,
           prompt-storygpt:8127, user-knowledge-graph:8129, property-extraction:8131, custom-entity-linking:8137,
-          dff-user-kg-skill:8132, dff-template-prompted-skill:8133, transformers-lm-gptj:8130,
+          dff-user-kg-skill:8132, dff-template-prompted-skill:8133, transformers-lm-gptjt:8161, transformers-lm-oasst12b:8158,
           convers-evaluation-no-scripts-selector:8139, sentence-ranker:8128, prompt-selector:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
   convers-evaluator-annotator:
@@ -1418,27 +1418,48 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-gptj:
+  transformers-lm-gptjt:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8130
-        SERVICE_NAME: transformers_lm_gptj
-        PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+        SERVICE_PORT: 8161
+        SERVICE_NAME: transformers_lm_gptjt
+        PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
         HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
+    command: flask run -h 0.0.0.0 -p 8161
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50G
+        reservations:
+          memory: 50G
+
+  transformers-lm-oasst12b:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8158
+        SERVICE_NAME: transformers_lm_oasst12b
+        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/pythia-12b-sft-v8-7k-steps
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8158
     environment:
       - CUDA_VISIBLE_DEVICES=7
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 40G
+          memory: 60G
         reservations:
-          memory: 40G
-
+          memory: 60G
+          
   dff-template-prompted-skill:
     env_file: [ .env ]
     build:
@@ -1446,7 +1467,7 @@ services:
         SERVICE_PORT: 8133
         SERVICE_NAME: dff_template_prompted_skill
         PROMPT_FILE: common/prompts/dream_persona.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-gptj:8130/respond
+        GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
         GENERATIVE_SERVICE_CONFIG: default_generative_config.json
         GENERATIVE_TIMEOUT: 10
         N_UTTERANCES_CONTEXT: 3
