@@ -125,8 +125,8 @@ def respond():
         selected_resp = select_response(dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
         try:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
-
-            selected_responses.append(hypotheses[best_id].pop("text"))
+            hypotheses[best_id].pop("text")
+            selected_responses.append(selected_resp)
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
