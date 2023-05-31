@@ -53,14 +53,14 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8074
       - PORT=8074
 
-  # entity-linking:
-  #   command: [ "nginx", "-g", "daemon off;" ]
-  #   build:
-  #     context: dp/proxy/
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - PROXY_PASS=proxy.deeppavlov.ai:8075
-  #     - PORT=8075
+  entity-linking:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8075
+      - PORT=8075
 
   dff-friendship-skill:
     command: ["nginx", "-g", "daemon off;"]
