@@ -1,8 +1,6 @@
 FROM python:3.6
 
-RUN mkdir /src
-RUN mkdir /data
-RUN mkdir /src/common
+RUN mkdir /src /src/common /data
 
 COPY ./skills/reddit_ner_skill/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
