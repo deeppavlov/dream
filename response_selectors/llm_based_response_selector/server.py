@@ -92,9 +92,11 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
 def find_most_similar_hypothesis(final_text, hypotheses):
     scores = []
     for hyp in hypotheses:
-        scores += [difflib.SequenceMatcher(None, final_text, hyp["text"]).ratio()]
-    hypotheses_texts = [hyp["text"] for hyp in hypotheses]
-    logger.info(f"Hypotheses: {hypotheses_texts}\nScores: {scores}")
+        if final_text in hyp["text"]:
+            scores += [0.99]
+        else:
+            scores += [difflib.SequenceMatcher(None, final_text, hyp["text"]).ratio()]
+    logger.info(f"Scores: {scores}")
     return np.argmax(scores)
 
 
@@ -115,6 +117,9 @@ def respond():
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
+
+        hypotheses_texts = [hyp["text"] for hyp in hypotheses]
+        logger.info(f"Hypotheses: {hypotheses_texts}")
 
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
