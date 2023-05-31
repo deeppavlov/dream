@@ -1,0 +1,47 @@
+services:
+  dff-program-y-skill:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8008
+      - PORT=8008
+
+  spelling-preprocessing:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8074
+      - PORT=8074
+    
+  badlisted-words:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8018
+      - PORT=8018
+
+  dff-friendship-skill:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8086
+      - PORT=8086
+
+  dff-template-skill:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8120
+      - PORT=8120
+
+version: '3.7'
