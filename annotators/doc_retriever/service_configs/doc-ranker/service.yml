@@ -13,7 +13,7 @@ compose:
       DATASET_PATH: /data/big_apple_dataset/
       CUDA_VISIBLE_DEVICES: "0"
       FLASK_APP: server
-    context: ./services/doc_retriever/
+    context: ./annotators/doc_retriever/
   command: flask run -h 0.0.0.0 -p 8161
   environment:
     - CUDA_VISIBLE_DEVICES=0
@@ -25,7 +25,7 @@ compose:
       reservations:
         memory: 3.5G
   volumes:
-    - "./services/doc_retriever:/src"
+    - "./annotators/doc_retriever:/src"
     - "./common:/src/common"
   ports:
     - 8161:8161

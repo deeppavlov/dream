@@ -24,7 +24,7 @@ services:
     env_file: [ .env ]
     build:
       context: .
-      dockerfile: ./services/doc_retriever/Dockerfile
+      dockerfile: ./annotators/doc_retriever/Dockerfile
       args:
         SERVICE_PORT: 8161
         CONFIG_PATH: ./doc_retriever_config.json

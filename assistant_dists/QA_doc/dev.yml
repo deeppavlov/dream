@@ -36,7 +36,7 @@ services:
       - 8145:8145
   doc-retriever:
     volumes:
-      - "./services/doc_retriever:/src"
+      - "./annotators/doc_retriever:/src"
       - "./common:/src/common"
     ports:
       - 8161:8161
