@@ -9,3 +9,4 @@ sentry-sdk==0.12.3
 pydantic==1.3
 deeppavlov==1.0.1
 spacy==2.2.3
+pyopenssl==23.0.0

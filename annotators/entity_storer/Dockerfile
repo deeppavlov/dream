@@ -1,13 +1,13 @@
-FROM python:3.9.1
+FROM python:3.9.16-slim
 
 ARG WORK_DIR
 
 RUN mkdir /src
 COPY ${WORK_DIR}/requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN pip install -r /src/requirements.txt && \
+    python -m spacy download en_core_web_sm && \
+    python -m nltk.downloader wordnet
 
-RUN python -m spacy download en_core_web_sm
-RUN python -m nltk.downloader wordnet
 
 COPY common /src/common
 COPY ${WORK_DIR} /src

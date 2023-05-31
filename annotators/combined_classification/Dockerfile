@@ -1,7 +1,5 @@
 FROM deeppavlov/base-gpu:0.17.5
 
-RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@1.1.1
-
 WORKDIR /base/DeepPavlov
 
 ARG CONFIG
@@ -20,4 +18,3 @@ COPY annotators/combined_classification/ ./
 COPY common/ common/
 
 CMD gunicorn --workers=1 --bind 0.0.0.0:8087 --timeout=1200 server:app
-
