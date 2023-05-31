@@ -129,23 +129,41 @@ services:
         reservations:
           memory: 128M
 
-  dff-command-selector-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8012
-        SERVICE_NAME: dff_command_selector_skill
-        LANGUAGE: EN
-        ROS_FSM_SERVER: http://robot-fake-server:8137
-      context: .
-      dockerfile: ./skills/dff_command_selector_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8015 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
+  # dff-command-selector-skill:
+  #   env_file: [ .env ]
+  #   build:
+  #     args:
+  #       SERVICE_PORT: 8012
+  #       SERVICE_NAME: dff_command_selector_skill
+  #       LANGUAGE: EN
+  #       ROS_FSM_SERVER: http://robot-fake-server:8137
+  #     context: .
+  #     dockerfile: ./skills/dff_command_selector_skill/Dockerfile
+  #   command: gunicorn --workers=1 server:app -b 0.0.0.0:8015 --reload
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 128M
+  #       reservations:
+  #         memory: 128M
+
+  dff-mint-skill:
+  env_file: [ .env ]
+  build:
+    args:
+      SERVICE_PORT: 8337
+      SERVICE_NAME: dff_mint_skill
+      LANGUAGE: EN
+      ROS_FSM_SERVER: http://robot-fake-server:8137
+    context: .
+    dockerfile: ./skills/dff_mint_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8337 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
 
   intent-catcher-commands:
     env_file: [.env]
@@ -184,6 +202,8 @@ services:
   spelling-preprocessing:
     env_file: [ .env ]
     build:
+      args:
+        SERVICE_PORT: 8074
       context: ./annotators/spelling_preprocessing/
     command: flask run -h 0.0.0.0 -p 8074
     environment:
@@ -263,15 +283,33 @@ services:
         reservations:
           memory: 2G
 
-  robot-command-sender:
+  # robot-command-sender:
+  #   env_file: [ .env ]
+  #   build:
+  #     args:
+  #       SERVICE_PORT: 8135
+  #       ROS_FSM_SERVER: http://robot-fake-server:8137
+  #     context: .
+  #     dockerfile: ./services/robot_command_sender/Dockerfile
+  #   command: flask run -h 0.0.0.0 -p 8135
+  #   environment:
+  #     - FLASK_APP=server
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 100M
+  #       reservations:
+  #         memory: 100M
+
+  mint-sender:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8135
+        SERVICE_PORT: 8338
         ROS_FSM_SERVER: http://robot-fake-server:8137
       context: .
-      dockerfile: ./services/robot_command_sender/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8135
+      dockerfile: ./services/mint_sender/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8338
     environment:
       - FLASK_APP=server
     deploy:

@@ -1,4 +1,4 @@
-dff-command-selector-ru-skill:
+dff-mint-skill:
 - group: skills
   connector:
     protocol: http
