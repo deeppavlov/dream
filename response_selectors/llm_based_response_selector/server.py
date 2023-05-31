@@ -24,7 +24,7 @@ GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
-    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
@@ -62,9 +62,12 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses):
     try:
+        curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses])
+        logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
+        logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
         response = send_request_to_prompted_generative_service(
             dialog_context,
-            PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses]),
+            curr_prompt,
             GENERATIVE_SERVICE_URL,
             GENERATIVE_SERVICE_CONFIG,
             GENERATIVE_TIMEOUT,
