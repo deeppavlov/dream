@@ -48,7 +48,7 @@ def main():
     TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
     TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
     TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
-    INDEX_LOAD_PATH = Path(os.path.expanduser("INDEX_LOAD_PATH"))
+    INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_graph"))
     USER_KG_PORT = 8138
 
     USER_KG_URL = f"http://0.0.0.0:{USER_KG_PORT}/respond"
