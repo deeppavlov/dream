@@ -1157,7 +1157,7 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
         {
             "contexts": [contexts],
             "prompts_goals": [prompts_goals],
-            "last_human_utterances": [dialog["human_utterances"][-1]]
+            "last_human_utterances": [dialog["human_utterances"][-1]],
         }
     ]
 
