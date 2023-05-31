@@ -332,7 +332,7 @@
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
+                    "timeout": 120.0,
                     "url": "http://llm-based-response-selector:8003/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
