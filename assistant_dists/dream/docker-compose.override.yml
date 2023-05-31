@@ -148,6 +148,7 @@ services:
         CONV_EVAL_STRENGTH: 0.4
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: EN
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -1275,7 +1276,7 @@ services:
       args:
         SERVICE_PORT: 8128
         SERVICE_NAME: sentence_ranker
-        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
@@ -1354,9 +1355,9 @@ services:
     build:
       context: ./services/infilling/
       args:
-        SERVICE_PORT: 8139
+        SERVICE_PORT: 8106
         SERVICE_NAME: infilling
-    command: flask run -h 0.0.0.0 -p 8139
+    command: flask run -h 0.0.0.0 -p 8106
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -1372,10 +1373,10 @@ services:
     build:
       context: ./services/masked_lm/
       args:
-        SERVICE_PORT: 8141
+        SERVICE_PORT: 8102
         SERVICE_NAME: masked_lm
         PRETRAINED_MODEL_NAME_OR_PATH: "bert-base-uncased"
-    command: flask run -h 0.0.0.0 -p 8141
+    command: flask run -h 0.0.0.0 -p 8102
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server

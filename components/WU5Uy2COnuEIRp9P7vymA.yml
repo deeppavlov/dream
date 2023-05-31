@@ -1,0 +1,24 @@
+name: spacy_nounphrases
+display_name: Spacy Nounphrases
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: extracts nounphrases using Spacy and filters out generic ones
+ram_usage: 180M
+gpu_usage: null
+group: candidate_annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://spacy-nounphrases:8006/respond_batch
+dialog_formatter: state_formatters.dp_formatters:hypotheses_list
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- skills
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: respond_batch
+service: annotators/spacy_nounphrases/service_configs/spacy-nounphrases
+date_created: '2023-03-16T09:45:32'

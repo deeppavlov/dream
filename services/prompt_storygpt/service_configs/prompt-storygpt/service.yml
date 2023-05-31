@@ -1,0 +1,42 @@
+name: prompt-storygpt
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8127
+      SERVICE_NAME: prompt_storygpt
+      MODELS_URL: http://files.deeppavlov.ai/dream_data/story_skill/finetuned2.tar.gz
+      BART_MODEL_NAME: facebook/bart-large
+      FINETUNED_MODEL_NAME: /data/finetuned2
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./services/prompt_storygpt/
+  command: flask run -h 0.0.0.0 -p 8127
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 10G
+      reservations:
+        memory: 10G
+  volumes:
+  - ./services/prompt_storygpt:/src
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8127:8127
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8127
+  - PORT=8127

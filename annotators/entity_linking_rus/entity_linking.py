@@ -144,7 +144,13 @@ class EntityLinker(Component, Serializable):
                 entity_offsets_batch.append(entity_offsets_list)
 
         entity_ids_batch, entity_conf_batch, entity_pages_batch = [], [], []
-        for (entity_substr_list, entity_offsets_list, entity_tags_list, sentences_list, sentences_offsets_list,) in zip(
+        for (
+            entity_substr_list,
+            entity_offsets_list,
+            entity_tags_list,
+            sentences_list,
+            sentences_offsets_list,
+        ) in zip(
             entity_substr_batch,
             entity_offsets_batch,
             entity_tags_batch,
@@ -498,7 +504,13 @@ class EntityLinker(Component, Serializable):
 
         scores_list = self.entity_ranker(contexts, cand_ent_list, cand_ent_descr_list)
 
-        for (entity_substr, candidate_entities, substr_len, entities_scores, scores,) in zip(
+        for (
+            entity_substr,
+            candidate_entities,
+            substr_len,
+            entities_scores,
+            scores,
+        ) in zip(
             entity_substr_list,
             cand_ent_list,
             substr_lens,

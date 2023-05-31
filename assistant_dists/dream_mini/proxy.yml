@@ -6,7 +6,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8008
+      - PROXY_PASS=proxy.deeppavlov.ai:8008
       - PORT=8008
 
   sentseg:
@@ -15,7 +15,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8011
+      - PROXY_PASS=proxy.deeppavlov.ai:8011
       - PORT=8011
 
   dff-intent-responder-skill:
@@ -24,7 +24,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8012
+      - PROXY_PASS=proxy.deeppavlov.ai:8012
       - PORT=8012
 
   intent-catcher:
@@ -33,7 +33,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8014
+      - PROXY_PASS=proxy.deeppavlov.ai:8014
       - PORT=8014
 
   badlisted-words:
@@ -42,7 +42,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8018
+      - PROXY_PASS=proxy.deeppavlov.ai:8018
       - PORT=8018
 
   spelling-preprocessing:
@@ -51,7 +51,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8074
+      - PROXY_PASS=proxy.deeppavlov.ai:8074
       - PORT=8074
 
   convers-evaluation-selector:
@@ -60,7 +60,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8009
+      - PROXY_PASS=proxy.deeppavlov.ai:8009
       - PORT=8009
 
   dialogpt:
@@ -69,7 +69,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8125
+      - PROXY_PASS=proxy.deeppavlov.ai:8125
       - PORT=8125
 
   sentence-ranker:
@@ -78,6 +78,6 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8128
+      - PROXY_PASS=proxy.deeppavlov.ai:8128
       - PORT=8128
 version: '3.7'

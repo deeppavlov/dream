@@ -43,7 +43,6 @@ def sample_from_logits(logits, temp=1.0, topk=None, nucleus=1.0):
 
 
 def infill_with_ilm(model, special_tokens_to_ids, x, num_infills=1, max_sequence_length=256, nucleus=0.95):
-
     _sep_id = special_tokens_to_ids["<|startofinfill|>"]
     _end_span_id = special_tokens_to_ids["<|endofinfill|>"]
     _special_ids = special_tokens_to_ids.values()

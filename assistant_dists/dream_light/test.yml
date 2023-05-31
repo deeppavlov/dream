@@ -1,0 +1,19 @@
+services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+    ports:
+      - ${AGENT_PORT}:4242
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  dff-program-y-skill:
+  badlisted-words:
+  spelling-preprocessing:
+  dff-friendship-skill:
+  confidence-based-response-selector:
+  dff-template-skill:
+version: '3.7'

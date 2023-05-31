@@ -76,7 +76,6 @@ def predict_intents(batch_texts: List[List[str]], regexp, intents_model, thresho
     responds = []
     not_detected_utterances = []
     for text_id, text in enumerate(batch_texts):
-
         resp = {intent: {"detected": 0, "confidence": 0.0} for intent in ALL_INTENTS}
         not_detected_utterance = text.copy()
         for intent, reg in regexp.items():

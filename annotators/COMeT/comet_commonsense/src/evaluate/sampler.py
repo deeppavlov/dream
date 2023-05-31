@@ -227,7 +227,6 @@ class BeamSampler(TopKSampler):
         MMB = torch.cat([MMB, torch.ones(XMB.size(0), 1, device=MMB.device)], 1)
 
         for _ in range(end_len):
-
             # Compute distribution for current beam
             lm_probs = F.log_softmax(model(XMB.unsqueeze(1), sequence_mask=MMB), dim=-1)
             dist = lm_probs[:, -1, :].squeeze()
@@ -244,16 +243,16 @@ class BeamSampler(TopKSampler):
 
             if paper_results:
                 # Results from paper with slightly buggy beam search
-                current_beam_lls = beam_lls.unsqueeze(1).repeat(1, self.opt.eval.bs).view(self.opt.eval.bs ** 2)
+                current_beam_lls = beam_lls.unsqueeze(1).repeat(1, self.opt.eval.bs).view(self.opt.eval.bs**2)
             else:
                 # Current beam search implementation
-                current_beam_lls = beam_losses[-1].unsqueeze(1).repeat(1, self.opt.eval.bs).view(self.opt.eval.bs ** 2)
+                current_beam_lls = beam_losses[-1].unsqueeze(1).repeat(1, self.opt.eval.bs).view(self.opt.eval.bs**2)
 
             # Compute losses of hypotheses, masking those that have ended
-            hyp_beam_lls = (hyp_beam_lls.view(self.opt.eval.bs ** 2) * hypothesis_mask.view(-1)) + current_beam_lls
+            hyp_beam_lls = (hyp_beam_lls.view(self.opt.eval.bs**2) * hypothesis_mask.view(-1)) + current_beam_lls
 
             # Get normalizer for sequences
-            temp_counts = counts.unsqueeze(1).repeat(1, self.opt.eval.bs).view(self.opt.eval.bs ** 2)
+            temp_counts = counts.unsqueeze(1).repeat(1, self.opt.eval.bs).view(self.opt.eval.bs**2)
 
             # Select best beams with lowest aggregate loss
             beam_lls, top_beam_idxs = (hyp_beam_lls / temp_counts).topk(self.opt.eval.bs)
@@ -282,7 +281,7 @@ class BeamSampler(TopKSampler):
                 .repeat(self.opt.eval.bs, 1)
                 .t()
                 .contiguous()
-                .view(self.opt.eval.bs ** 2, -1)[top_beam_idxs]
+                .view(self.opt.eval.bs**2, -1)[top_beam_idxs]
             )
             beam_seqs = torch.cat((beam_seqs, beam_toks.unsqueeze(1)), dim=1)
 
@@ -294,7 +293,7 @@ class BeamSampler(TopKSampler):
                 .transpose(2, 1)
                 .transpose(1, 0)
                 .contiguous()
-                .view(self.opt.eval.bs ** 2, XMB.size(1), XMB.size(2))[top_beam_idxs]
+                .view(self.opt.eval.bs**2, XMB.size(1), XMB.size(2))[top_beam_idxs]
             )
 
             XMB, MMB = self.append_batch(XMB, beam_toks, MMB)

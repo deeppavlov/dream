@@ -75,5 +75,5 @@ services:
       - "./skills/dff_image_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8188:8188
+      - 8124:8124
 version: "3.7"

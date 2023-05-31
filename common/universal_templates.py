@@ -23,7 +23,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 
 GENERATIVE_ROBOT_TEMPLATE = re.compile(
-    r"(AI:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:)\s?"
+    r"(?:AI:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:|Чат-?бот:)\s?"
 )
 DUMMY_DONTKNOW_RESPONSES = {
     "EN": [
@@ -177,7 +177,16 @@ SOMETHING_LIKE = [
     "всякое",
     "другое",
 ]
-NOTHING_LIKE = ["nothing", "none", "neither", "ничего", "нечего", "ни о чем", "не о чем", r"ни то,? ни то"]
+NOTHING_LIKE = [
+    "nothing",
+    "none",
+    "neither",
+    "ничего",
+    "нечего",
+    "ни о чем",
+    "не о чем",
+    r"ни то,? ни то",
+]
 DONOTKNOW_LIKE = [
     r"(i )?(do not|don't) know",
     "you (choose|decide|pick up)",
@@ -198,7 +207,8 @@ SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
 SOMETHING_ELSE = re.compile(
-    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))", re.IGNORECASE
+    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))",
+    re.IGNORECASE,
 )
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
@@ -315,7 +325,8 @@ LIKE_WORDS = r"\b(prefer|adore|enjoy|love|like|stand|into\b|fond of|passionate o
 LIKE_PATTERN = re.compile(LIKE_WORDS, re.IGNORECASE)
 
 NOT_LIKE_PATTERN = re.compile(
-    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)", re.IGNORECASE
+    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)",
+    re.IGNORECASE,
 )
 
 STOP_PATTERN = re.compile(r"(stop|shut|something else|change|don't want)", re.IGNORECASE)
@@ -470,7 +481,8 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     elif prev_what_to_chat_about or chat_about:
         if key_words:
             trigger_pattern = re.compile(
-                rf"{join_word_beginnings_in_or_pattern(key_words)}[a-zA-Z0-9,\-\' ]+\?", re.IGNORECASE
+                rf"{join_word_beginnings_in_or_pattern(key_words)}[a-zA-Z0-9,\-\' ]+\?",
+                re.IGNORECASE,
             )
             offered_this_topic = trigger_pattern.search(prev_uttr_)
             user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
@@ -480,10 +492,16 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
                 return False
         elif compiled_pattern:
             if isinstance(compiled_pattern, str):
-                offered_this_topic = re.search(rf"{compiled_pattern}[a-zA-Z0-9,\-\' ]+\?", prev_uttr_, re.IGNORECASE)
+                offered_this_topic = re.search(
+                    rf"{compiled_pattern}[a-zA-Z0-9,\-\' ]+\?",
+                    prev_uttr_,
+                    re.IGNORECASE,
+                )
             else:
                 offered_this_topic = re.search(
-                    rf"{compiled_pattern.pattern}[a-zA-Z0-9,\-\' ]+\?", prev_uttr_, re.IGNORECASE
+                    rf"{compiled_pattern.pattern}[a-zA-Z0-9,\-\' ]+\?",
+                    prev_uttr_,
+                    re.IGNORECASE,
                 )
             user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
             if re.search(compiled_pattern, uttr_) or (offered_this_topic and user_agrees_or_any):
@@ -570,10 +588,12 @@ MY_FAVORITE_PATTERN = re.compile(
 I_LOVE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_LOVE, re.IGNORECASE)
 I_HATE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_HATE, re.IGNORECASE)
 WHAT_FAVORITE_PATTERN = re.compile(
-    r"(what|which)[a-z0-9A-Z \-]* your (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)", re.IGNORECASE
+    r"(what|which)[a-z0-9A-Z \-]* your (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)",
+    re.IGNORECASE,
 )
 WHAT_LESS_FAVORITE_PATTERN = re.compile(
-    r"(what|which)[a-z0-9A-Z \-]* your ((less|least)[- ]favou?rite|(the )?worst|unloved|unlovable)", re.IGNORECASE
+    r"(what|which)[a-z0-9A-Z \-]* your ((less|least)[- ]favou?rite|(the )?worst|unloved|unlovable)",
+    re.IGNORECASE,
 )
 WHAT_DO_YOU_THINK_PATTERN = re.compile(
     r"(what (do|did|are|were) you (think|believe|recognize|sure|understand|feel|appeal|suppose|imagine|guess|"

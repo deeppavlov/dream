@@ -1,0 +1,32 @@
+name: eliza
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    context: ./skills/eliza/
+  command: flask run -h 0.0.0.0 -p 8047
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./skills/eliza:/src
+  ports:
+  - 8047:8047
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8047
+  - PORT=8047
