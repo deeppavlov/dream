@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import difflib
 import json
 import logging
 import numpy as np
@@ -61,7 +62,6 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
-        # lm_service_config = GENERATIVE_SERVICE_CONFIG if GENERATIVE_SERVICE_CONFIG else human_uttr_attributes.pop("lm_service_config", None)
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
@@ -89,6 +89,15 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
     return result
 
 
+def find_most_similar_hypothesis(final_text, hypotheses):
+    scores = []
+    for hyp in hypotheses:
+        scores += [difflib.SequenceMatcher(None, final_text, hyp["text"]).ratio()]
+    hypotheses_texts = [hyp["text"] for hyp in hypotheses]
+    logger.info(f"Hypotheses: {hypotheses_texts}\nScores: {scores}")
+    return np.argmax(scores)
+
+
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
@@ -110,7 +119,7 @@ def respond():
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
         try:
-            best_id = hypotheses.index(selected_resp)
+            best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
 
             selected_responses.append(hypotheses[best_id].pop("text"))
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
