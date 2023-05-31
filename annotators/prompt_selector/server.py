@@ -112,7 +112,8 @@ def select_with_generative_service(contexts, human_uttr_attributes):
             GENERATIVE_TIMEOUT,
             sending_variables,
         )[0]
-        result += [{"prompts": prompt_names_compiled.findall(resp)}]
+        resp = [name.lower() for name in prompt_names_compiled.findall(resp)]
+        result += [{"prompts": resp}]
     return result
 
 

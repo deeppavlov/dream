@@ -69,7 +69,7 @@ services:
           memory: 100M
 
   prompt-selector:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8135
