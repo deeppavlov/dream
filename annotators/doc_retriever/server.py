@@ -64,22 +64,23 @@ def write_file_to_server(filename, filepath):
 @app.route("/return_candidates", methods=["POST"])
 def return_candidates():
     try:
-        bot_attributes = request.json.get(
-            "bot_attributes", []
+        logger.info(f"request: {request.json}")
+        bot_attributes = (
+            request.json["dialogs"][-1].get("bot", {}).get("attributes", {})
         )  # how to get bot attributes?
+        logger.info(f"attributes in return_candidates:  {bot_attributes}")
         # bot_attributes = request.json.get("bot_attributes", [" "]) ??? what is request.json here?
         model_config = read_json(CONFIG_PATH)
         db_link = bot_attributes.get("db_path", "")
-        logger.info("db_link: {db_link}")
+        logger.info(f"db_link: {db_link}")
         db_file = requests.get(db_link)
-        with open("/data/odqa/userfile.db", "wb") as f:
+        with open("/data/odqa/userfile.db", "wb") as f:  # удалить эти файлы из даты
             f.write(db_file.content)
         matrix_link = bot_attributes.get("matrix_path", "")
         matrix_file = requests.get(matrix_link)
         with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
             f.write(matrix_file.content)
-        # model_config["dataset_iterator"]["load_path"] =
-        # model_config["chainer"]["pipe"][0]["load_path"] =
+        logger.info(f"Files downloaded successfully.")
         ranker_model = build_model(model_config)
         logger.info("Model loaded")
     except Exception as e:
@@ -96,8 +97,8 @@ def return_candidates():
 @app.route("/save_model_path", methods=["POST"])
 def save_model_path():
     logger.info("start")
-    bot_attributes = request.json.get(
-        "bot_attributes", []
+    bot_attributes = (
+        request.json["dialogs"][-1].get("bot", {}).get("attributes", {})
     )  # how to get bot attributes?
     result = []
     if "db_path" not in bot_attributes:
@@ -106,14 +107,17 @@ def save_model_path():
         matrix_file_name = f"{file_name}.npz"
         try:
             logger.info("start writing")
-            db_link = write_file_to_server(db_file_name, "/data/odqa/userfile.db")
+            db_link = write_file_to_server(
+                db_file_name, "/data/odqa/userfile.db"
+            )  # удалить эти файлы из даты
             matrix_link = write_file_to_server(
                 matrix_file_name, "/data/odqa/userfile_tfidf_matrix.npz"
             )
             result = [
-                {"bot_attribiutes": {"db_path": db_link, "matrix_path": matrix_link}}
+                {"bot_attributes": {"db_path": db_link, "matrix_path": matrix_link}}
             ]
             logger.info("finish writing")
+            logger.info(f"attributes in save_model: {result}")
         except Exception as e:
             logger.error(e)
     return jsonify(result)

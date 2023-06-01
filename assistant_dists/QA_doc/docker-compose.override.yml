@@ -6,6 +6,9 @@ services:
         sentence-ranker:8128, openai-api-chatgpt:8145, doc-retriever:8161, dff-qa-llm-skill:8162"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
+
   sentseg:
     env_file: [ .env ]
     build:
