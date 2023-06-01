@@ -25,7 +25,7 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
     "claudev1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
-    "claudev12": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "claudev13": json.load(open("common/generative_configs/default_generative_config.json", "r")),
 }
 
 
