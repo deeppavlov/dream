@@ -31,9 +31,9 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 DEFAULT_CONFIGS = {
-    "transformers-lm-bloomz7b": json.load(open("generative_configs/default_generative_config.json", "r")),
-    "transformers-lm-gptj": json.load(open("generative_configs/default_generative_config.json", "r")),
-    "transformers-lm-oasst12b": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "transformers-lm-bloomz7b": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "transformers-lm-gptj": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "transformers-lm-oasst12b": json.load(open("common/generative_configs/default_generative_config.json", "r")),
 }
 
 
