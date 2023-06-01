@@ -28,6 +28,7 @@ from deeppavlov.core.models.component import Component
 from deeppavlov.core.models.serializable import Serializable
 
 log = getLogger(__name__)
+nltk.download("stopwords")
 
 
 @register("entity_linker")
@@ -41,11 +42,6 @@ class EntityLinker(Component, Serializable):
         load_path: str,
         num_entities_to_return: int = 10,
         lang: str = "en",
-        use_descriptions: bool = True,
-        use_tags: bool = False,
-        lemmatize: bool = False,
-        full_paragraph: bool = False,
-        use_connections: bool = False,
         **kwargs,
     ) -> None:
         """
@@ -57,21 +53,15 @@ class EntityLinker(Component, Serializable):
             num_entities_to_return: number of candidate entities for the substring which are returned
             lang: russian or english
             use_description: whether to perform entity ranking by context and description
-            lemmatize: whether to lemmatize tokens
             **kwargs:
         """
         super().__init__(save_path=None, load_path=load_path)
-        self.lemmatize = lemmatize
         self.num_entities_to_return = num_entities_to_return
         self.lang = f"@{lang}"
         if self.lang == "@en":
             self.stopwords = set(stopwords.words("english"))
         elif self.lang == "@ru":
             self.stopwords = set(stopwords.words("russian"))
-        self.use_descriptions = use_descriptions
-        self.use_connections = use_connections
-        self.use_tags = use_tags
-        self.full_paragraph = full_paragraph
         self.re_tokenizer = re.compile(r"[\w']+|[^\w ]")
         self.not_found_str = "not in wiki"
         self.stemmer = nltk.PorterStemmer()
@@ -92,7 +82,14 @@ class EntityLinker(Component, Serializable):
 
     def add_custom_entities(self, user_id, entity_substr_list, entity_ids_list, tags_list):
         if self.conn is None:
-            self.load()
+            if not os.path.exists(self.load_path):
+                os.makedirs(self.load_path)
+            self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
+            self.cur = self.conn.cursor()
+            self.cur.execute(
+                "CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
+                "UNINDEXED, tag, user_id, tokenize = 'porter ascii');"
+            )
 
         for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
             entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")
@@ -120,49 +117,16 @@ class EntityLinker(Component, Serializable):
         user_ids: List[str],
         entity_substr_batch: List[List[str]],
         entity_tags_batch: List[List[str]] = None,
-        sent_batch: List[List[str]] = None,
-        entity_offsets_batch: List[List[List[int]]] = None,
-        sent_offsets_batch: List[List[Tuple[int, int]]] = None,
     ):
-        if sent_offsets_batch is None and sent_batch is not None:
-            sent_offsets_batch = []
-            for sent_list in sent_batch:
-                sent_offsets_list = []
-                start = 0
-                for sentence in sent_list:
-                    end = start + len(sentence)
-                    sent_offsets_list.append([start, end])
-                    start = end + 1
-                sent_offsets_batch.append(sent_offsets_list)
-
-        if sent_batch is None:
-            sent_batch = [[] for _ in entity_substr_batch]
-            sent_offsets_batch = [[] for _ in entity_substr_batch]
-
-        log.info(f"sent_batch {sent_batch}")
-        if entity_offsets_batch is None and sent_batch is not None:
-            entity_offsets_batch = []
-            for entity_substr_list, sent_list in zip(entity_substr_batch, sent_batch):
-                text = " ".join(sent_list).lower()
-                log.info(f"text {text}")
-                entity_offsets_list = []
-                for entity_substr in entity_substr_list:
-                    st_offset = text.find(entity_substr.lower())
-                    end_offset = st_offset + len(entity_substr)
-                    entity_offsets_list.append([st_offset, end_offset])
-                entity_offsets_batch.append(entity_offsets_list)
 
         entity_ids_batch, entity_conf_batch, entity_id_tags_batch = [], [], []
-        for user_id, entity_substr_list, entity_offsets_list, entity_tags_list, sent_list, sent_offsets_list in zip(
-            user_ids, entity_substr_batch, entity_offsets_batch, entity_tags_batch, sent_batch, sent_offsets_batch
+        for user_id, entity_substr_list, entity_tags_list in zip(
+            user_ids, entity_substr_batch, entity_tags_batch
         ):
             entity_ids_list, entity_conf_list, entity_id_tags_list = self.link_entities(
                 user_id,
                 entity_substr_list,
-                entity_offsets_list,
                 entity_tags_list,
-                sent_list,
-                sent_offsets_list,
             )
             log.info(f"user_id: {user_id} entity_ids_list: {entity_ids_list} entity_conf_list: {entity_conf_list}")
 
@@ -175,15 +139,9 @@ class EntityLinker(Component, Serializable):
         self,
         user_id: str,
         entity_substr_list: List[str],
-        entity_offsets_list: List[List[int]],
         entity_tags_list: List[str],
-        sentences_list: List[str],
-        sentences_offsets_list: List[List[int]],
     ) -> List[List[str]]:
-        log.info(
-            f"entity_substr_list {entity_substr_list} entity_tags_list {entity_tags_list} "
-            f"entity_offsets_list {entity_offsets_list}"
-        )
+        log.info(f"entity_substr_list {entity_substr_list} entity_tags_list {entity_tags_list} ")
         entity_ids_list, conf_list, entity_id_tags_list = [], [], []
         if entity_substr_list:
             for entity_substr, tags in zip(entity_substr_list, entity_tags_list):
