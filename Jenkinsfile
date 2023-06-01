@@ -661,6 +661,10 @@ pipeline {
     cleanup {
       script {
         if (started) {
+          sh './tests/runtests_multiskill_davinci3.sh MODE=clean'
+          sh './tests/runtests_marketing_gtjt.sh MODE=clean'
+          sh './tests/runtests_nutrition_oasst.sh MODE=clean'
+          sh './tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
           sh './tests/runtests.sh MODE=clean'
           sh './tests/runtests_russian.sh MODE=clean'
           sh './tests/runtests_multilingual.sh MODE=clean'
