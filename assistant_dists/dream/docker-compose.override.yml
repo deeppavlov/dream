@@ -787,7 +787,7 @@ services:
         CONFIG: combined_classifier.json
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8087
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8087
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
