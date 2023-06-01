@@ -5,13 +5,14 @@ import time
 
 import anthropic
 import sentry_sdk
-from common.prompts import META_PROMPT
+from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -23,8 +24,8 @@ NAMING = ["Assistant", "Human"]
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "claudev1": json.load(open("generative_configs/default_generative_config.json", "r")),
-    "claudev12": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "claudev1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "claudev12": json.load(open("common/generative_configs/default_generative_config.json", "r")),
 }
 
 
@@ -68,7 +69,8 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    configs = request.json.get("configs", [])
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
     configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
@@ -112,7 +114,7 @@ def generate_goals():
     try:
         responses = []
         for anthropic_api_key, prompt, config in zip(anthropic_api_keys, prompts, configs):
-            context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
             goals_for_prompt = generate_responses(context, anthropic_api_key, "", config)[0]
             logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
             responses += [goals_for_prompt]
