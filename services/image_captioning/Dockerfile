@@ -7,32 +7,29 @@ ENV PRETRAINED_MODEL_NAME_OR_PATH ${PRETRAINED_MODEL_NAME_OR_PATH}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-RUN python -m pip install --upgrade pip
 
-RUN apt update
-RUN apt install build-essential -y
-
-RUN apt-get install ffmpeg libsm6 libxext6  -y
-RUN apt-get update && apt-get install git -y
+RUN apt-get update && \
+    apt-get install build-essential -y && \
+    apt-get install ffmpeg libsm6 libxext6  -y && \
+    apt-get install git -y && \
+    apt-get install wget -y
 
 RUN conda remove PyYAML
 
-RUN mkdir /ofa && \
-    git clone https://github.com/dariamitciuk/OFA.git /ofa && \
-    cd /ofa && \
+WORKDIR /ofa
+
+RUN git clone https://github.com/dariamitciuk/OFA.git && \
     pip install -r requirements.txt && \
     git checkout 153048138044edcbe0b099463810a971a7bf0057
 
-WORKDIR /ofa
-
 COPY ./requirements.txt /ofa/requirements.txt
-RUN pip install -r requirements.txt
 
-RUN apt-get install wget -y
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models
 
-RUN wget http://files.deeppavlov.ai/dream_data/image_captioning/caption.pt -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
+RUN mkdir -p /opt/conda/lib/python3.7/site-packages/data/models && \
+    wget http://files.deeppavlov.ai/dream_data/image_captioning/caption.pt -O /opt/conda/lib/python3.7/site-packages/data/models/caption.pt
 
 COPY . /ofa
 
