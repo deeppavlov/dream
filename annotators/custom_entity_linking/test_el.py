@@ -4,7 +4,7 @@ use_context = True
 
 
 def main():
-    url = "http://0.0.0.0:8153"
+    url = "http://0.0.0.0:8137"
     inserted_data = {
         "user_id": "1234",
         "entity_info": {"entity_substr": ["forrest gump"], "entity_ids": ["film/123"], "tags": ["film"]},

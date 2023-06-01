@@ -13,8 +13,19 @@ app = Flask(__name__)
 
 config_name = os.getenv("CONFIG")
 
-with open("abstract_rels.txt", "r") as inp:
-    abstract_rels = [line.strip() for line in inp.readlines()]
+abstract_rels = {
+    "favorite animal",
+    "like animal",
+    "favorite book",
+    "like read",
+    "favorite movie",
+    "favorite food",
+    "like food",
+    "favorite drink",
+    "like drink",
+    "favorite sport",
+    "like sports",
+}
 
 try:
     el = build_model(config_name, download=True)
@@ -27,8 +38,9 @@ except Exception as e:
 
 @app.route("/add_entities", methods=["POST"])
 def add_entities():
-    user_id = request.json.get("user_id", "")
-    entity_info = request.json.get("entity_info", {})
+    inp = request.json
+    user_id = inp.get("user_id", "")
+    entity_info = inp.get("entity_info", {})
     entity_substr_list = entity_info.get("entity_substr", [])
     entity_ids_list = entity_info.get("entity_ids", [])
     tags_list = entity_info.get("tags", [])
@@ -37,82 +49,93 @@ def add_entities():
     return {}
 
 
-def preprocess_hist_utt(context_batch):
-    opt_context_batch = []
-    for hist_utt in context_batch:
-        hist_utt = [utt for utt in hist_utt if len(utt) > 1]
-        last_utt = hist_utt[-1]
-        if last_utt[-1] not in {".", "!", "?"}:
-            last_utt = f"{last_utt}."
-        if len(hist_utt) > 1:
-            prev_utt = hist_utt[-2]
-            if prev_utt[-1] not in {".", "!", "?"}:
-                prev_utt = f"{prev_utt}."
-            opt_context_batch.append([prev_utt, last_utt])
-        else:
-            opt_context_batch.append([last_utt])
-    return opt_context_batch
-
-
-def define_entity_info(prex_info, context, substr_list, ids_list, conf_list, id_tags_list):
-    entity_info_list = []
-    triplet = dict()
-    if isinstance(prex_info, list) and prex_info:
-        prex_info = prex_info[0]
-    if prex_info:
-        triplet = prex_info.get("triplet", {})
-    rel = ""
-    if "relation" in triplet:
-        rel = triplet["relation"]
-    elif "property" in triplet:
-        rel = triplet["property"]
-    for substr, ids, confs, id_tags in zip(substr_list, ids_list, conf_list, id_tags_list):
-        entity_info = {}
-        is_abstract = rel.lower().replace("_", " ") in abstract_rels and not any(
-            [f" {word} {substr}" in context for word in ["the", "my", "his", "her"]]
-        )
-
-        f_ids, f_confs, f_id_tags = [], [], []
-        for entity_id, conf, id_tag in zip(ids, confs, id_tags):
-            if id_tag.startswith("Abstract") and not is_abstract:
-                pass
-            else:
-                f_ids.append(entity_id)
-                f_confs.append(conf)
-                f_id_tags.append(id_tag)
-
-        if f_ids:
-            entity_info["entity_substr"] = substr
-            entity_info["entity_ids"] = f_ids
-            entity_info["confidences"] = [float(elem[2]) for elem in f_confs]
-            entity_info["tokens_match_conf"] = [float(elem[0]) for elem in f_confs]
-            entity_info["entity_id_tags"] = f_id_tags
-            entity_info_list.append(entity_info)
-    return entity_info_list
-
-
 @app.route("/model", methods=["POST"])
 def respond():
     st_time = time.time()
-    user_ids = request.json.get("user_id", [""])
-    substr_batch = request.json.get("entity_substr", [[""]])
-    tags_batch = request.json.get("entity_tags", [["" for _ in substr_list] for substr_list in substr_batch])
-    context_batch = request.json.get("context", [[""]])
-    prex_info_batch = request.json.get("property_extraction", [dict() for _ in substr_batch])
-    opt_context_batch = preprocess_hist_utt(context_batch)
-
-    entity_info_batch = [[dict()] for _ in substr_batch]
-    try:
-        substr_batch, ids_batch, conf_batch, id_tags_batch = el(user_ids, substr_batch, tags_batch, opt_context_batch)
-        entity_info_batch = []
-        for (substr_list, ids_list, conf_list, id_tags_list, prex_info, context) in zip(
-            substr_batch, ids_batch, conf_batch, id_tags_batch, prex_info_batch, opt_context_batch
-        ):
-            if context:
-                context = " ".join(context)
+    inp = request.json
+    user_ids = inp.get("user_id", [""])
+    entity_substr_batch = inp.get("entity_substr", [[""]])
+    entity_tags_batch = inp.get(
+        "entity_tags", [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
+    )
+    context_batch = inp.get("context", [[""]])
+    prex_info_batch = inp.get("property_extraction", [{} for _ in entity_substr_batch])
+    opt_context_batch = []
+    logger.info(f"init context: {context_batch}")
+    for hist_uttr in context_batch:
+        if len(hist_uttr) == 1:
+            opt_context_batch.append(hist_uttr[0])
+        else:
+            prev_uttr = hist_uttr[-2]
+            cur_uttr = hist_uttr[-1]
+            is_q = (
+                any([prev_uttr.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
+                or "?" in prev_uttr
+            )
+            if is_q and len(cur_uttr.split())<3:
+                opt_context_batch.append(f"{prev_uttr} {cur_uttr}")
             else:
-                context = ""
-            entity_info_list = define_entity_info(prex_info, context, substr_list, ids_list, conf_list, id_tags_list)
+                opt_context_batch.append(cur_uttr)
+
+    logger.info(f"context batch: {opt_context_batch}")
+    entity_info_batch = [[{}] for _ in entity_substr_batch]
+    try:
+        (
+            entity_substr_batch,
+            entity_ids_batch,
+            conf_batch,
+            entity_id_tags_batch,
+        ) = el(user_ids, entity_substr_batch, entity_tags_batch)
+        entity_info_batch = []
+        for (entity_substr_list, entity_ids_list, conf_list, entity_id_tags_list, prex_info, context) in zip(
+            entity_substr_batch, entity_ids_batch, conf_batch, entity_id_tags_batch, prex_info_batch, opt_context_batch
+        ):
+            entity_info_list = []
+            triplets = {}
+            if isinstance(prex_info, list) and prex_info:
+                prex_info = prex_info[0]
+            if prex_info:
+                triplets = prex_info.get("triplets", {})
+            obj2rel_dict = {}
+            for triplet in triplets:
+                rel = ""
+                obj = triplet['object'].lower()
+                if "relation" in triplet:
+                    rel = triplet["relation"]
+                elif "property" in triplet:
+                    rel = triplet["property"]
+                obj2rel_dict[obj] = rel
+            for entity_substr, entity_ids, confs, entity_id_tags in zip(
+                entity_substr_list,
+                entity_ids_list,
+                conf_list,
+                entity_id_tags_list,
+            ):
+                entity_info = {}
+                entity_substr = entity_substr.lower()
+                logger.info(f"context -- {context}")
+                context = context.lower()
+                curr_rel = obj2rel_dict.get(entity_substr, "")
+                is_abstract = curr_rel.lower().replace("_", " ") in abstract_rels and not any(
+                    [f" {word} {entity_substr}" in context for word in ["the", "my", "his", "her"]]
+                )
+
+                f_entity_ids, f_confs, f_entity_id_tags = [], [], []
+                for entity_id, conf, entity_id_tag in zip(entity_ids, confs, entity_id_tags):
+                    if entity_id_tag.startswith("Abstract") and not is_abstract:
+                        pass
+                    else:
+                        f_entity_ids.append(entity_id)
+                        f_confs.append(conf)
+                        f_entity_id_tags.append(entity_id_tag)
+
+                if f_entity_ids and entity_substr in context:
+                    entity_info["entity_substr"] = entity_substr
+                    entity_info["entity_ids"] = f_entity_ids
+                    entity_info["confidences"] = [float(elem[2]) for elem in f_confs]
+                    entity_info["tokens_match_conf"] = [float(elem[0]) for elem in f_confs]
+                    entity_info["entity_id_tags"] = f_entity_id_tags
+                    entity_info_list.append(entity_info)
             entity_info_batch.append(entity_info_list)
     except Exception as e:
         sentry_sdk.capture_exception(e)
