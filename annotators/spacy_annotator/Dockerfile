@@ -1,4 +1,4 @@
-FROM python:3.8.4
+FROM python:3.9.16-slim
 
 ARG SRC_DIR
 ENV SRC_DIR ${SRC_DIR}
@@ -14,8 +14,9 @@ ENV ANNOTATE_BATCH_WITH_TOKENS_ONLY ${ANNOTATE_BATCH_WITH_TOKENS_ONLY}
 RUN mkdir /src
 
 COPY $SRC_DIR/requirements.txt /src/requirements.txt
-RUN pip install --upgrade pip && pip install -r /src/requirements.txt
-RUN python -m spacy download ${SPACY_MODEL}
+
+RUN pip install -r /src/requirements.txt && \
+    python -m spacy download ${SPACY_MODEL}
 
 COPY $SRC_DIR /src/
 COPY ./common/ /src/common/

@@ -1,0 +1,28 @@
+services:
+  agent:
+    restart: unless-stopped
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+      - ".:/dp-agent"
+    ports:
+      - ${AGENT_PORT}:4242
+  mongo:
+    restart: unless-stopped
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  dff-program-y-skill:
+    restart: unless-stopped
+  badlisted-words:
+    restart: unless-stopped
+  spelling-preprocessing:
+    restart: unless-stopped
+  dff-friendship-skill:
+    restart: unless-stopped
+  dff-template-skill:
+    restart: unless-stopped
+  confidence-based-response-selector:
+    restart: unless-stopped
+version: '3.7'

@@ -180,7 +180,7 @@
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://rule-based-response-selector:8005/respond"
+                    "url": "http://confidence-based-response-selector:8005/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -191,7 +191,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/KX4drAocVa5APcivWHeBNQ.yml",
-                    "service": "response_selectors/rule_based_response_selector/service_configs/rule-based-response-selector"
+                    "service": "response_selectors/confidence_based_response_selector/service_configs/confidence-based-response-selector"
                 }
             }
         }

@@ -2,7 +2,6 @@ import json
 import logging
 import re
 import sentry_sdk
-from copy import deepcopy
 from os import getenv
 from pathlib import Path
 from typing import Any
@@ -10,7 +9,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, if_none_var_values
+from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, compose_sending_variables
 from df_engine.core import Context, Actor
 
 
@@ -21,7 +20,7 @@ GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
-    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 
 PROMPT_FILE = getenv("PROMPT_FILE")
@@ -88,44 +87,26 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
-
-    if len(envvars_to_send):
-        # get variables which names are in `envvars_to_send` (splitted by comma if many)
-        # from the last human utterance's attributes
-        sending_variables = {
-            f"{var.lower()}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send
-        }
-        if if_none_var_values(sending_variables):
-            # get variables which names are in `envvars_to_send` (splitted by comma if many)
-            # from env variables
-            sending_variables = {f"{var.lower()}s": [getenv(var, None)] for var in envvars_to_send}
-            if if_none_var_values(sending_variables):
-                logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
-            else:
-                logger.info(f"Got {envvars_to_send}'s values from environment.")
-        else:
-            logger.info(f"Got {envvars_to_send}'s values from attributes.")
-    else:
-        sending_variables = {}
-
-    # adding kwargs to request from the last human utterance's attributes
-    lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
+    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    for _key, _value in lm_service_kwargs.items():
-        logger.info(f"Got/Re-writing {_key}s values from kwargs.")
-        sending_variables[f"{_key}s"] = [deepcopy(_value)]
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
+        **human_uttr_attributes,
+    )
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
-    logger.info(f"prompt from shared memory: {prompt}")
+    prompt = prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
+    logger.info(f"prompt: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
 
     if len(dialog_context) > 0:
         try:
             hypotheses = send_request_to_prompted_generative_service(
                 dialog_context,
-                [prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
+                prompt,
                 GENERATIVE_SERVICE_URL,
                 GENERATIVE_SERVICE_CONFIG,
                 GENERATIVE_TIMEOUT,

@@ -2,7 +2,7 @@ import os
 import requests
 
 
-INFILLING_SERVICE_URL = os.getenv("INFILLING_SERVICE_URL", "http://0.0.0.0:8122/respond")
+INFILLING_SERVICE_URL = os.getenv("INFILLING_SERVICE_URL", "http://0.0.0.0:8106/respond")
 
 
 def infill_texts(texts, timeout=1):

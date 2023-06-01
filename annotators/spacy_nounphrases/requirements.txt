@@ -3,6 +3,9 @@ itsdangerous==2.0.1
 gunicorn==20.0.4
 sentry-sdk==0.13.4
 requests==2.22.0
-spacy==3.2.3
+spacy>=3.3.0
 jinja2<=3.0.3
 Werkzeug<=2.0.3
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.3.0/en_core_web_sm-3.3.0-py3-none-any.whl
+typing-inspect==0.8.0
+typing_extensions==4.5.0

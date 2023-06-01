@@ -8,7 +8,7 @@ from os import getenv
 logger = logging.getLogger(__name__)
 
 with open("common/prompts/goals_for_prompts.json", "r") as f:
-    META_PROMPT = json.load(f)["prompt"]
+    META_GOALS_PROMPT = json.load(f)["prompt"]
 
 
 def send_request_to_prompted_generative_service(dialog_context, prompt, url, config, timeout, sending_variables):
@@ -16,7 +16,7 @@ def send_request_to_prompted_generative_service(dialog_context, prompt, url, con
         url,
         json={
             "dialog_contexts": [dialog_context],
-            "prompts": prompt,
+            "prompts": [prompt],
             "configs": [config],
             **sending_variables,
         },
