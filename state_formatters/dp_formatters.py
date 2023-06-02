@@ -701,10 +701,6 @@ def mint_formatter_service(dialog: Dict) -> List[Dict]:
    return [{"text": [dialog["human_utterances"][-1]["text"]]}]
 
 
-def mint_skill_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dff_formatter(dialog, "dff_voice_skill")
-
-
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     num_last_utterances = 2

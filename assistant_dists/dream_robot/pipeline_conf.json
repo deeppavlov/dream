@@ -290,17 +290,6 @@
                 }
             }
         },
-        "mint_service": {
-            "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
-            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-            "state_manager_method": "add_hypothesis",
-            "connector": {
-                "protocol": "python",
-                "class_name": "skills.mint_skill.connector:MintConnector",
-                "host": "lnsigo.mipt.ru",
-                "port": 10000
-            }
-        },
         "skills": {
             "dff_program_y_skill": {
                 "connector": {
@@ -346,7 +335,7 @@
                     "timeout": 2,
                     "url": "http://dff-mint-skill:8337/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_mint_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -412,11 +401,11 @@
             }
         },
         "actors": {
-            "robot_command_sender": {
+            "mint_sender": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://robot-command-sender:8135/send"
+                    "url": "http://mint-sender:8338/send"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_bot_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
