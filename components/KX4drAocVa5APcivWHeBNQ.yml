@@ -11,7 +11,7 @@ gpu_usage: null
 group: response_selectors
 connector:
   protocol: http
-  url: http://rule-based-response-selector:8005/respond
+  url: http://confidence-based-response-selector:8005/respond
 dialog_formatter: state_formatters.dp_formatters:full_dialog
 response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
 previous_services:
@@ -20,5 +20,5 @@ required_previous_services: null
 state_manager_method: add_bot_utterance
 tags: null
 endpoint: respond
-service: response_selectors/rule_based_response_selector/service_configs/rule-based-response-selector
+service: response_selectors/confidence_based_response_selector/service_configs/confidence-based-response-selector
 date_created: '2023-03-16T09:45:32'
