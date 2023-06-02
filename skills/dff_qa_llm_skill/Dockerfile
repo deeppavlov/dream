@@ -18,10 +18,12 @@ ENV GENERATIVE_TIMEOUT ${GENERATIVE_TIMEOUT}
 ARG N_UTTERANCES_CONTEXT
 ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
 
-COPY skills/dff_universal_prompted_skill/requirements.txt .
+COPY skills/dff_qa_llm_skill/requirements.txt .
 RUN pip install -r requirements.txt && python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+RUN mkdir /data/
 
-COPY skills/dff_universal_prompted_skill/ ./
-COPY ./common/ ./common/
+COPY skills/dff_qa_llm_skill/ /src
+COPY documents /src/documents
+COPY common /src/common
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout ${GENERATIVE_TIMEOUT:-30}

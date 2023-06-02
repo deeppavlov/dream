@@ -5,7 +5,7 @@ SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
 
 def main_test():
-    url = "http://0.0.0.0:{SERVICE_PORT}/rank"
+    url = "http://0.0.0.0:{SERVICE_PORT}/return_candidates"
     result = requests.post(
         url=url,
         json={
@@ -20,7 +20,9 @@ def main_test():
         },
     )
     assert result.ok, "Failed to reach host. Check if it's up and healthy."
-    assert len(result) and [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
+    assert len(result) and [
+        all(len(sample[0]) > 0 for sample in result)
+    ], f"Got\n{result}\n, something is wrong"
     print("Success!")
 
 

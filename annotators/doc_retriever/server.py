@@ -4,8 +4,13 @@ import sentry_sdk
 import random
 import string
 import requests
+import time
+import numpy as np
+import sys
 from deeppavlov import build_model
+from io import BytesIO
 from deeppavlov.core.common.file import read_json
+import pickle as pl
 from urllib.parse import urlparse
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -30,16 +35,10 @@ assert FILE_SERVER_URL, logger.info("No file server url path is given.")
 
 
 def get_answers(utterance: str, ranker):
-    ranker_output = ranker(utterance)
+    ranker_output = ranker([utterance])
     logger.info(f"ranker_output: `{ranker_output}`")
-    raw_candidates = ranker_output[0]
-    num_candidates = []
-    nums = 0
-    for f_name in raw_candidates:
-        nums += 1
-        with open(DATASET_PATH + f_name) as f:
-            num_candidates.append(f"{nums}. {f.read()}")
-    return " ".join(num_candidates)
+    raw_candidates = ranker_output[0]  # list
+    return raw_candidates
 
 
 def generate_random_string(length):
@@ -49,7 +48,7 @@ def generate_random_string(length):
 
 def write_file_to_server(filename, filepath):
     resp = requests.post(
-        FILE_SERVER_URL, files={"file": (filename, open(filepath, "rb"))}
+        FILE_SERVER_URL, files={"file": (filename, open(filepath, "rb"))}, timeout=30
     )
     resp.raise_for_status()
     download_link = resp.json()["downloadLink"]
@@ -67,31 +66,40 @@ def return_candidates():
         logger.info(f"request: {request.json}")
         bot_attributes = (
             request.json["dialogs"][-1].get("bot", {}).get("attributes", {})
-        )  # how to get bot attributes?
+        )
         logger.info(f"attributes in return_candidates:  {bot_attributes}")
-        # bot_attributes = request.json.get("bot_attributes", [" "]) ??? what is request.json here?
-        model_config = read_json(CONFIG_PATH)
         db_link = bot_attributes.get("db_path", "")
         logger.info(f"db_link: {db_link}")
         db_file = requests.get(db_link)
         with open("/data/odqa/userfile.db", "wb") as f:  # удалить эти файлы из даты
             f.write(db_file.content)
         matrix_link = bot_attributes.get("matrix_path", "")
-        matrix_file = requests.get(matrix_link)
-        with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
-            f.write(matrix_file.content)
+        logger.info(f"matrix_link: {matrix_link}")
+        matrix_file = requests.get(matrix_link, timeout=30)
+        np.save("/data/odqa/userfile_tfidf_matrix.npz", matrix_file.content)
+        # with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
+        #     f.write(matrix_file.content)
         logger.info(f"Files downloaded successfully.")
-        ranker_model = build_model(model_config)
+        ranker_model = build_model(CONFIG_PATH)
+        # ranker_model = None
         logger.info("Model loaded")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         raise e
-    utterances = request.json["sentences"][-1]
+    utterances = request.json["dialogs"][-1]["utterances"][-1]["text"]
     logger.info(f"Input: `{utterances}`.")
     results = get_answers(utterances, ranker_model)
-    logger.info(f"Output: `{results}`.")
-    return jsonify(results)
+    logger.info(f"Output: `{str(results)}`.")
+    return jsonify(
+        [
+            {
+                "candidate_files": results,
+                "dataset_path": DATASET_PATH,
+                "file_path": ORIGINAL_FILE_PATH,
+            }
+        ]
+    )
 
 
 @app.route("/save_model_path", methods=["POST"])
@@ -110,6 +118,10 @@ def save_model_path():
             db_link = write_file_to_server(
                 db_file_name, "/data/odqa/userfile.db"
             )  # удалить эти файлы из даты
+            logger.info(
+                f"userfile_tfidf_matrix: `{sys.getsizeof('/data/odqa/userfile_tfidf_matrix.npz')}`"
+            )
+            logger.info(f"userfile: `{sys.getsizeof('/data/odqa/userfile.db')}`")
             matrix_link = write_file_to_server(
                 matrix_file_name, "/data/odqa/userfile_tfidf_matrix.npz"
             )
@@ -120,6 +132,7 @@ def save_model_path():
             logger.info(f"attributes in save_model: {result}")
         except Exception as e:
             logger.error(e)
+    logger.info(f"result: {result}")
     return jsonify(result)
 
 
