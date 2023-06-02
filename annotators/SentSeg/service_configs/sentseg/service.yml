@@ -1,0 +1,32 @@
+name: sentseg
+endpoints:
+- sentseg
+compose:
+  env_file:
+  - .env
+  build:
+    context: ./annotators/SentSeg/
+  command: flask run -h 0.0.0.0 -p 8011
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 1.5G
+      reservations:
+        memory: 1.5G
+  volumes:
+  - ./annotators/SentSeg:/src
+  ports:
+  - 8011:8011
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8011
+  - PORT=8011

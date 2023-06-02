@@ -1,0 +1,24 @@
+name: dff_weather_skill
+display_name: Weather Skill
+component_type: Script-based w/o NNs
+model_type: External API
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: uses the OpenWeatherMap service to get the forecast for the user's location
+ram_usage: 1.4G
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://dff-weather-skill:8037/respond
+dialog_formatter: state_formatters.dp_formatters:dff_weather_skill_formatter
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_weather_skill/service_configs/dff-weather-skill
+date_created: '2023-03-16T09:45:32'

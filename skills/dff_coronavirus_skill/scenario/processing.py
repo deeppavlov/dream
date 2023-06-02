@@ -86,7 +86,6 @@ def offer_more(
     else:
         response = processed_node.response
     if not facts_exhausted:
-
         processed_node.response = f"{response} Would you want to learn more?"
         ctx.a_s["processed_node"] = processed_node
         return ctx

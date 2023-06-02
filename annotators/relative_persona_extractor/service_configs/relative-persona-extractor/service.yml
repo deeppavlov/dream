@@ -1,0 +1,39 @@
+name: relative-persona-extractor
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8133
+      SERVICE_NAME: relative_persona_extractor
+      N_SENTENCES_TO_RETURN: 3
+      FLASK_APP: server
+    context: .
+    dockerfile: ./annotators/relative_persona_extractor/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8133
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./annotators/relative_persona_extractor:/src
+  - ./common:/src/common
+  ports:
+  - 8133:8133
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8133
+  - PORT=8133

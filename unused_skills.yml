@@ -135,7 +135,7 @@ services:
   wikidata-dial-skill:
     build:
       args:
-        PORT: 8091
+         SERVICE_PORT: 8091
       context: skills/wikidata_dial_skill
     command: flask run -h 0.0.0.0 -p 8091
     environment:
@@ -153,7 +153,7 @@ services:
     build:
       args:
         CONFIG: kg_dial_generator.json
-        PORT: 8092
+        SERVICE_PORT: 8092
         COMMIT: 5dac85a06fde0e2983c7569ae058e3bf2d45ce2c
       context: services/wikidata_dial_service
     command: flask run -h 0.0.0.0 -p 8092

@@ -1,0 +1,33 @@
+name: text-qa-ru
+endpoints:
+- model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8078
+      SERVICE_NAME: text_qa
+      CONFIG: qa_rus.json
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+      LANGUAGE: RU
+    context: services/text_qa
+    dockerfile: Dockerfile
+  command: flask run -h 0.0.0.0 -p 8078
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  - LANGUAGE=RU
+  deploy:
+    resources:
+      limits:
+        memory: 3G
+      reservations:
+        memory: 3G
+  volumes:
+  - ./services/text_qa:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8078:8078
+proxy: null

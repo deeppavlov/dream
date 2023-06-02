@@ -56,7 +56,6 @@ def respond():
     final_attributes = []
 
     for dialog in dialogs_batch:
-
         bot_response = "I really do not know what to answer."
         confidence = 0.0
         dialog_position, dialog_id, dialog_type = -1, "", ""
@@ -69,7 +68,6 @@ def respond():
             last_active_skill = ""
 
         if last_active_skill in ["dummy_skill", "dummy_skill_dialog"]:
-
             if last_active_skill == "dummy_skill":
                 text = dialog["bot_utterances"][-1]["text"]
                 for key, value in TOPIC_DIALOGS.items():
@@ -91,7 +89,6 @@ def respond():
                         dialog_type = hypothesis["dialog_type"]
 
             if dialog_type in ["topic", "noun_phrase"]:
-
                 if dialog_type == "topic":
                     anticipated_dialog = TOPIC_DIALOGS[dialog_id]
                 else:

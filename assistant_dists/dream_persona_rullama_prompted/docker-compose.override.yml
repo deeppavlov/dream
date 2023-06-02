@@ -1,0 +1,116 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_rullama_prompted/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
+          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
+          dff-dream-persona-llama7bru-prompted-skill:8151"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
+      HIGH_PRIORITY_INTENTS: 0
+      RESTRICTION_FOR_SENSITIVE_CASE: 0
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: RU
+
+  ranking-based-response-selector-ru:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        SENTENCE_RANKER_ANNOTATION_NAME: dialogrpt
+        SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+      context: .
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  dialogrpt-ru:
+    env_file: [ .env_ru ]
+    build:
+      context: ./services/dialogrpt_ru/
+      args:
+        SERVICE_PORT: 8122
+        PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+        TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
+    command: flask run -h 0.0.0.0 -p 8122
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
+
+  prompt-selector-ru:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8135
+        SERVICE_NAME: prompt_selector
+        N_SENTENCES_TO_RETURN: 3
+        PROMPTS_TO_CONSIDER: dream_persona_ru
+      context: .
+      dockerfile: ./annotators/prompt_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8135
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  transformers-lm-llama7bru:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8149
+        SERVICE_NAME: transformers_lm_llama7bru
+        PRETRAINED_MODEL_NAME_OR_PATH: IlyaGusev/llama_7b_ru_turbo_alpaca_lora
+        LANGUAGE: RU
+      context: .
+      dockerfile: ./services/transformers_peft_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8149
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50G
+        reservations:
+          memory: 50G
+
+  dff-dream-persona-llama7bru-prompted-skill:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8151
+        SERVICE_NAME: dff_dream_persona_ru_prompted_skill
+        PROMPT_FILE: common/prompts/dream_persona_ru.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-llama7bru:8149/respond
+        GENERATIVE_TIMEOUT: 120
+        N_UTTERANCES_CONTEXT: 7
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+version: '3.7'

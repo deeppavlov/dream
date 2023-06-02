@@ -1,0 +1,28 @@
+name: topic_recommendation
+display_name: Topic Recommendation
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: offers a topic for further conversation using the information about the
+  discussed topics and user's preferences. Current version is based on Reddit personalities
+  (see Dream Report for Alexa Prize 4).
+ram_usage: 100M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://topic-recommendation:8113/respond
+dialog_formatter: state_formatters.dp_formatters:topic_recommendation_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.spelling_preprocessing
+- annotators.sentseg
+- annotators.combined_classification
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: respond
+service: annotators/topic_recommendation/service_configs/topic-recommendation
+date_created: '2023-03-16T09:45:32'

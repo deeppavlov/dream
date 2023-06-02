@@ -55,7 +55,6 @@ class TfidfRanker(Component):
         filter_flag: bool = False,
         **kwargs,
     ):
-
         self.top_n = top_n
         self.out_top_n = out_top_n
         self.vectorizer = vectorizer

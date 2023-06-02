@@ -1,0 +1,32 @@
+- name: dff_prompted_skill_template
+  display_name: Prompted Skill Template
+  author: publisher@deeppavlov.ai
+#  is_customizable: true
+  description: Template for creating Prompted Skills
+  endpoints:
+  - group: skills
+    endpoint: respond
+  config_keys:
+#    SERVICE_PORT: int
+    SERVICE_NAME: str
+    PROMPT_FILE: str
+    GENERATIVE_SERVICE_URL: str
+    GENERATIVE_SERVICE_CONFIG: str
+    GENERATIVE_TIMEOUT: int
+    N_UTTERANCES_CONTEXT: int
+- name: unused_template_prompted_skill
+  display_name: Unused Prompted Skill Template
+  author: publisher@deeppavlov.ai
+#  is_customizable: true
+  description: Unused template for creating Prompted Skills
+  endpoints:
+  - group: skills
+    endpoint: respond
+  config_keys:
+#    SERVICE_PORT: int
+    SERVICE_NAME: str
+    PROMPT_FILE: str
+    GENERATIVE_SERVICE_URL: str
+    GENERATIVE_SERVICE_CONFIG: str
+    GENERATIVE_TIMEOUT: int
+    N_UTTERANCES_CONTEXT: int
