@@ -211,7 +211,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "component": "components/7v330b9odypuiugqeiuqij.yml",
                     "service": "annotators/property_extraction/service_configs/property-extraction"
                 }
             },
