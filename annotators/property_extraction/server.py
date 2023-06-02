@@ -148,7 +148,7 @@ def get_result(request):
     entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in init_uttrs])
     entity_info_batch = request.json.get("entity_info", [[] for _ in init_uttrs])
     logger.info(
-        f"init_uttrs {init_uttrs}, entities_with_labels_batch: {entities_with_labels_batch} entity_info_batch: {entity_info_batch}"
+        f"init_uttrs {init_uttrs} entities_with_labels: {entities_with_labels_batch} entity_info: {entity_info_batch}"
     )
     uttrs = []
     for uttr_list in init_uttrs:
