@@ -84,12 +84,13 @@ def respond():
                 triplets = prex_info.get("triplets", {})
             obj2rel_dict = {}
             for triplet in triplets:
-                rel = ""
                 obj = triplet['object'].lower()
                 if "relation" in triplet:
                     rel = triplet["relation"]
                 elif "property" in triplet:
                     rel = triplet["property"]
+                else:
+                    rel = ""
                 obj2rel_dict[obj] = rel
             for entity_substr, entity_ids, confs, entity_id_tags in zip(
                 entity_substr_list,

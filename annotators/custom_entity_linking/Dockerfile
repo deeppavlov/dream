@@ -1,5 +1,7 @@
 FROM tensorflow/tensorflow:1.15.2-gpu
 
+WORKDIR /src
+
 RUN apt-key del 7fa2af80  && \
     rm -f /etc/apt/sources.list.d/cuda*.list && \
     curl https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-keyring_1.0-1_all.deb \
@@ -26,12 +28,12 @@ ARG SED_ARG=" | "
 ENV CONFIG=$CONFIG
 ENV PORT=$PORT
 
-COPY ./annotators/custom_entity_linking/requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+COPY ./annotators/custom_entity_linking/requirements.txt ./requirements.txt
+RUN pip install -r ./requirements.txt
 
-COPY $SRC_DIR /src
+COPY $SRC_DIR .
 
-WORKDIR /src
+
 RUN python -m deeppavlov install $CONFIG
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
