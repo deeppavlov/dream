@@ -13,7 +13,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
 
@@ -55,6 +54,8 @@ except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
     raise e
+
+app = Flask(__name__)
 
 
 @app.route("/model", methods=["POST"])
