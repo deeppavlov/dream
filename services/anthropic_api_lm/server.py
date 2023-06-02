@@ -78,9 +78,7 @@ def respond():
 
     try:
         responses = []
-        for context, anthropic_api_key, prompt, config in zip(
-            contexts, anthropic_api_keys, prompts, configs
-        ):
+        for context, anthropic_api_key, prompt, config in zip(contexts, anthropic_api_keys, prompts, configs):
             curr_responses = []
             outputs = generate_responses(context, anthropic_api_key, prompt, config)
             for response in outputs:
