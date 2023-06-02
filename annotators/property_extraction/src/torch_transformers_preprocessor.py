@@ -46,10 +46,10 @@ class T5GenerativeIEPreprocessor(Component):
         special_tokens_dict = {"additional_special_tokens": add_special_tokens}
         self.tokenizer.add_special_tokens(special_tokens_dict)
 
-    def __call__(self, uttr_batch: List[str], targets_batch: List[str] = None):
+    def __call__(self, uttr_batch: List[str], relations_batch: List[str], targets_batch: List[str] = None):
         input_ids_batch, attention_mask_batch, lengths = [], [], []
-        for uttr in uttr_batch:
-            encoding = self.tokenizer.encode_plus(text=uttr, return_attention_mask=True, truncation=True)
+        for uttr, rel in zip(uttr_batch, relations_batch):
+            encoding = self.tokenizer.encode_plus(text=uttr, text_pair=rel, return_attention_mask=True, truncation=True)
             input_ids = encoding["input_ids"]
             attention_mask = encoding["attention_mask"]
             input_ids_batch.append(input_ids)

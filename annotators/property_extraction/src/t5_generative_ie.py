@@ -1,17 +1,3 @@
-# Copyright 2017 Neural Networks and Deep Learning lab, MIPT
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import re
 from logging import getLogger
 from pathlib import Path
@@ -51,16 +37,14 @@ class T5GenerativeIE(TorchModel):
         load_before_drop: bool = True,
         clip_norm: Optional[float] = None,
         min_learning_rate: float = 1e-06,
-        generate_max_length: int = 50,
         top_n: int = 1,
-        batch_decode: bool = False,
-        scores_thres: float = -0.17,
+        batch_size: int = 50,
+        scores_thres: float = -0.57,
         device: str = "cpu",
         **kwargs,
     ) -> None:
         if not optimizer_parameters:
             optimizer_parameters = {"lr": 0.01, "weight_decay": 0.01, "betas": (0.9, 0.999), "eps": 1e-6}
-        self.generate_max_length = generate_max_length
 
         self.attention_probs_keep_prob = attention_probs_keep_prob
         self.hidden_keep_prob = hidden_keep_prob
@@ -71,9 +55,15 @@ class T5GenerativeIE(TorchModel):
         self.tokenizer = AutoTokenizer.from_pretrained(pretrained_transformer, do_lower_case=False)
         special_tokens_dict = {"additional_special_tokens": add_special_tokens}
         self.tokenizer.add_special_tokens(special_tokens_dict)
-        self.replace_tokens = [("<pad>", ""), ("</s>", ""), ("<extra_id_0>", "")]
+        self.replace_tokens = [
+            ("<pad>", ""),
+            ("</s>", ""),
+            ("<extra_id_0>", ""),
+            ("<unk>blank>", "<blank>"),
+            ("<unk>", ""),
+        ]
         self.top_n = top_n
-        self.batch_decode = batch_decode
+        self.batch_size = batch_size
         self.scores_thres = scores_thres
 
         super().__init__(
@@ -116,57 +106,45 @@ class T5GenerativeIE(TorchModel):
 
     def __call__(self, input_ids_batch, attention_mask_batch):
         model = self.model.module if hasattr(self.model, "module") else self.model
-        if self.batch_decode:
-            input_ids_batch = torch.LongTensor(input_ids_batch).to(self.device)
-            attention_mask_batch = torch.LongTensor(attention_mask_batch).to(self.device)
+        answers_batch, scores_batch = [], []
+        num_batches = len(input_ids_batch) // self.batch_size + int(len(input_ids_batch) % self.batch_size > 0)
+        for i in range(num_batches):
+            input_ids = torch.LongTensor(input_ids_batch[i * self.batch_size : (i + 1) * self.batch_size]).to(
+                self.device
+            )
+            attention_mask = torch.LongTensor(attention_mask_batch[i * self.batch_size : (i + 1) * self.batch_size]).to(
+                self.device
+            )
             input_ = {
-                "input_ids": input_ids_batch,
-                "attention_mask": attention_mask_batch,
+                "input_ids": input_ids,
+                "attention_mask": attention_mask,
             }
             with torch.no_grad():
-                answer_ids_batch = model.generate(**input_)
-            init_answers_batch = self.tokenizer.batch_decode(answer_ids_batch, skip_special_tokens=False)
-            answers_batch = []
-            for answer in init_answers_batch:
-                for old_tok, new_tok in self.replace_tokens:
-                    answer = answer.replace(old_tok, new_tok)
-                answers_batch.append(answer)
-            return answers_batch
-        else:
-            answers_batch, scores_batch = [], []
-            for input_ids in input_ids_batch:
-                input_ids = torch.LongTensor([input_ids]).to(self.device)
-                with torch.no_grad():
-                    outputs = model.generate(
-                        input_ids,
-                        num_beams=5,
-                        num_return_sequences=self.top_n,
-                        return_dict_in_generate=True,
-                        output_scores=True,
-                    )
-                    sequences = outputs.sequences
-                    scores = outputs.sequences_scores
-                    scores = scores.cpu().numpy().tolist()
-                    answers = [self.tokenizer.decode(output, skip_special_tokens=False) for output in sequences]
-                    logger.info(f"triplets {answers} scores {scores}")
-                    processed_answers, processed_scores = [], []
-                    for answer, score in zip(answers, scores):
-                        if score > self.scores_thres:
-                            for old_tok, new_tok in self.replace_tokens:
-                                answer = answer.replace(old_tok, new_tok)
-                            processed_answers.append(answer)
-                            processed_scores.append(score)
-                if self.top_n == 1:
-                    if processed_answers:
-                        answers_batch.append(processed_answers[0])
-                        scores_batch.append(processed_scores[0])
+                outputs = model.generate(
+                    **input_,
+                    num_beams=5,
+                    num_return_sequences=self.top_n,
+                    return_dict_in_generate=True,
+                    output_scores=True,
+                )
+                sequences = outputs.sequences
+                scores = outputs.sequences_scores
+                scores = scores.cpu().numpy().tolist()
+                answers = [self.tokenizer.decode(output, skip_special_tokens=False) for output in sequences]
+                logger.debug(f"triplets {answers} scores {scores}")
+                processed_answers, processed_scores = [], []
+                for answer, score in zip(answers, scores):
+                    if score > self.scores_thres:
+                        for old_tok, new_tok in self.replace_tokens:
+                            answer = answer.replace(old_tok, new_tok)
+                        processed_answers.append(answer)
+                        processed_scores.append(score)
                     else:
-                        answers_batch.append("")
-                        scores_batch.append(0.0)
-                else:
-                    answers_batch.append(processed_answers)
-                    scores_batch.append(processed_scores)
-            return answers_batch, scores_batch
+                        processed_answers.append("")
+                        processed_scores.append(0.0)
+            answers_batch.extend(processed_answers)
+            scores_batch.extend(processed_scores)
+        return answers_batch, scores_batch
 
     @overrides
     def load(self, fname=None):
