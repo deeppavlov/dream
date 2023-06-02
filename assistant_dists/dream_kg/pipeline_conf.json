@@ -231,7 +231,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "component": "components/7v330b9odypuiugqeiuqij.yml",
                     "service": "annotators/custom_entity_linking/service_configs/custom-entity-linking"
                 }
             },
