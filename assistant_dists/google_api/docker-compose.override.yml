@@ -2,27 +2,13 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/google_api/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
+      WAIT_HOSTS: "ranking-based-response-selector:8002, combined-classification:8087, 
         sentence-ranker:8128, dff-google-api-skill:8162"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
-
-  sentseg:
-    env_file: [ .env ]
-    build:
-      context: ./annotators/SentSeg/
-    command: flask run -h 0.0.0.0 -p 8011
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1.5G
-        reservations:
-          memory: 1.5G
 
   combined-classification:
     env_file: [ .env ]
