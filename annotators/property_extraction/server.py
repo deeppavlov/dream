@@ -1,4 +1,3 @@
-import copy
 import logging
 import os
 import re
@@ -26,7 +25,6 @@ nlp = spacy.load("en_core_web_sm")
 
 t5_config = os.getenv("CONFIG_T5")
 rel_ranker_config = os.getenv("CONFIG_REL_RANKER")
-port = int(os.getenv("SERVICE_PORT"))
 add_entity_info = int(os.getenv("ADD_ENTITY_INFO", "0"))
 
 rel_type_dict = {}
@@ -204,6 +202,7 @@ def get_result(request):
                         if not offsets:
                             start_offset = uttr.find(entity_substr.lower())
                             end_offset = start_offset + len(entity_substr)
+                            offsets = [start_offset, end_offset]
                         if entity_substr in [triplet[0], triplet[2]]:
                             entity_substr_dict[entity_substr] = {"offsets": offsets}
 
@@ -258,7 +257,3 @@ def get_result(request):
 def respond():
     result = get_result(request)
     return jsonify(result)
-
-
-#if __name__ == "__main__":
-#    app.run(debug=True, host="0.0.0.0", port=port)
