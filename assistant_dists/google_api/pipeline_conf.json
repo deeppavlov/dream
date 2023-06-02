@@ -171,10 +171,10 @@
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "description_based_skill_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -187,7 +187,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
-                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
                 }
             }
         },
@@ -236,9 +236,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://ranking-based-response-selector:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
@@ -246,8 +246,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ly2AVNtIcJpTWz1qJ1mvKQ.yml",
-                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }
