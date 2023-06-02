@@ -5,9 +5,7 @@ from flask import Flask, request, jsonify
 import sentry_sdk
 from deeppavlov import build_model
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -46,15 +44,10 @@ def respond():
     entity_substr_batch = request.json.get("entity_substr", [[""]])
     entity_tags_batch = request.json.get(
         "entity_tags",
-        [
-            ["" for _ in entity_substr_list]
-            for entity_substr_list in entity_substr_batch
-        ],
+        [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch],
     )
     context_batch = request.json.get("context", [[""]])
-    prex_info_batch = request.json.get(
-        "property_extraction", [{} for _ in entity_substr_batch]
-    )
+    prex_info_batch = request.json.get("property_extraction", [{} for _ in entity_substr_batch])
     opt_context_batch = []
     logger.info(f"init context: {context_batch}")
     for hist_uttr in context_batch:
@@ -64,12 +57,7 @@ def respond():
             prev_uttr = hist_uttr[-2]
             cur_uttr = hist_uttr[-1]
             is_q = (
-                any(
-                    [
-                        prev_uttr.startswith(q_word)
-                        for q_word in ["what ", "who ", "when ", "where "]
-                    ]
-                )
+                any([prev_uttr.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
                 or "?" in prev_uttr
             )
             if is_q and len(cur_uttr.split()) < 3:
@@ -129,19 +117,12 @@ def respond():
                 logger.info(f"context -- {context}")
                 context = context.lower()
                 curr_rel = obj2rel_dict.get(entity_substr, "")
-                is_abstract = curr_rel.lower().replace(
-                    "_", " "
-                ) in abstract_rels and not any(
-                    [
-                        f" {word} {entity_substr}" in context
-                        for word in ["the", "my", "his", "her"]
-                    ]
+                is_abstract = curr_rel.lower().replace("_", " ") in abstract_rels and not any(
+                    [f" {word} {entity_substr}" in context for word in ["the", "my", "his", "her"]]
                 )
 
                 f_entity_ids, f_confs, f_entity_id_tags = [], [], []
-                for entity_id, conf, entity_id_tag in zip(
-                    entity_ids, confs, entity_id_tags
-                ):
+                for entity_id, conf, entity_id_tag in zip(entity_ids, confs, entity_id_tags):
                     if entity_id_tag.startswith("Abstract") and not is_abstract:
                         pass
                     else:
@@ -153,9 +134,7 @@ def respond():
                     entity_info["entity_substr"] = entity_substr
                     entity_info["entity_ids"] = f_entity_ids
                     entity_info["confidences"] = [float(elem[2]) for elem in f_confs]
-                    entity_info["tokens_match_conf"] = [
-                        float(elem[0]) for elem in f_confs
-                    ]
+                    entity_info["tokens_match_conf"] = [float(elem[0]) for elem in f_confs]
                     entity_info["entity_id_tags"] = f_entity_id_tags
                     entity_info_list.append(entity_info)
             entity_info_batch.append(entity_info_list)
