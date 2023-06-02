@@ -64,10 +64,9 @@ def compose_data_for_model(ctx, actor):
             .get("dataset_path", "")
         )
         logger.info(
-            f"raw_candidates: {raw_candidates}, ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}"
+            f"Building dataset to get candidate texts. raw_candidates: {raw_candidates}, ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}"
         )
         build_dataset(DATASET_PATH, ORIGINAL_FILE_PATH)
-        logger.info(f"dataset built successfuly")
         num_candidates = []
         nums = 0
         for f_name in raw_candidates:
@@ -76,11 +75,15 @@ def compose_data_for_model(ctx, actor):
                 num_candidates.append(f"{nums}. {f.read()}")
         final_candidates = " ".join(num_candidates)
         request = utterance_texts[-1]
+        logger.info(
+            f"Dataset built successfully")
         utterance_texts[
             -1
-        ] = f"""{request} Answer to this question based on the text provided.
- If necessary, structure your answer as bullet points.
- You may also present information in tables. The text: ### {final_candidates} ###"""
+        ] = f"""TEXT: ### {final_candidates} ###
+USER: {request} 
+Reply to USER. If USER makes a request or asks a question, answer based on TEXT provided.
+If necessary, structure your answer as bullet points. You may also present information in tables.
+If TEXT does not contain the answer, apologize and say that you cannot answer based on the given text."""
     return utterance_texts
 
 
@@ -105,8 +108,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     lm_service = "ChatGPT"
-    logger.info(f"lm_service: {lm_service}")
-
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
         sending_variables = {
             f"{var.lower()}s": [getenv(var, None)]

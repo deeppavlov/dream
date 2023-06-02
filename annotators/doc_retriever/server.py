@@ -63,34 +63,33 @@ def write_file_to_server(filename, filepath):
 @app.route("/return_candidates", methods=["POST"])
 def return_candidates():
     try:
-        logger.info(f"request: {request.json}")
         bot_attributes = (
             request.json["dialogs"][-1].get("bot", {}).get("attributes", {})
         )
-        logger.info(f"attributes in return_candidates:  {bot_attributes}")
         db_link = bot_attributes.get("db_path", "")
-        logger.info(f"db_link: {db_link}")
-        db_file = requests.get(db_link)
-        with open("/data/odqa/userfile.db", "wb") as f:  # удалить эти файлы из даты
-            f.write(db_file.content)
         matrix_link = bot_attributes.get("matrix_path", "")
-        logger.info(f"matrix_link: {matrix_link}")
+        logger.info(
+            f"Started downloading files from server (db_link: {db_link}, matrix_link: {matrix_link})."
+        )
+        db_file = requests.get(db_link)
         matrix_file = requests.get(matrix_link, timeout=30)
+        if not os.path.exists("/data/odqa"):
+            os.mkdir("/data/odqa")
+        with open("/data/odqa/userfile.db", "wb") as f:
+            f.write(db_file.content)
         np.save("/data/odqa/userfile_tfidf_matrix.npz", matrix_file.content)
-        # with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
-        #     f.write(matrix_file.content)
+        logger.info(f"os.listdir: {os.listdir('/data/odqa')}")
         logger.info(f"Files downloaded successfully.")
         ranker_model = build_model(CONFIG_PATH)
-        # ranker_model = None
-        logger.info("Model loaded")
+        logger.info("Model loaded.")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         raise e
     utterances = request.json["dialogs"][-1]["utterances"][-1]["text"]
-    logger.info(f"Input: `{utterances}`.")
+    logger.info(f"Input utterance: `{utterances}`.")
     results = get_answers(utterances, ranker_model)
-    logger.info(f"Output: `{str(results)}`.")
+    logger.info(f"Output candidate files: `{str(results)}`.")
     return jsonify(
         [
             {
@@ -104,35 +103,32 @@ def return_candidates():
 
 @app.route("/save_model_path", methods=["POST"])
 def save_model_path():
-    logger.info("start")
+    logger.info("Started writing files to server.")
     bot_attributes = (
         request.json["dialogs"][-1].get("bot", {}).get("attributes", {})
     )  # how to get bot attributes?
-    result = []
     if "db_path" not in bot_attributes:
         file_name = generate_random_string(10)
         db_file_name = f"{file_name}.db"
         matrix_file_name = f"{file_name}.npz"
         try:
-            logger.info("start writing")
             db_link = write_file_to_server(
                 db_file_name, "/data/odqa/userfile.db"
             )  # удалить эти файлы из даты
-            logger.info(
-                f"userfile_tfidf_matrix: `{sys.getsizeof('/data/odqa/userfile_tfidf_matrix.npz')}`"
-            )
-            logger.info(f"userfile: `{sys.getsizeof('/data/odqa/userfile.db')}`")
             matrix_link = write_file_to_server(
                 matrix_file_name, "/data/odqa/userfile_tfidf_matrix.npz"
             )
+            logger.info("Files successfully written to server.")
+            os.remove("/data/odqa/userfile.db")
+            os.remove("/data/odqa/userfile_tfidf_matrix.npz")
             result = [
                 {"bot_attributes": {"db_path": db_link, "matrix_path": matrix_link}}
             ]
-            logger.info("finish writing")
-            logger.info(f"attributes in save_model: {result}")
+            logger.info(f"Bot attributes in save_model: {result}")
         except Exception as e:
             logger.error(e)
-    logger.info(f"result: {result}")
+    else:
+        result = [{}]
     return jsonify(result)
 
 
