@@ -11,9 +11,6 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 
 RUN mkdir /src
 
-COPY ./services/ros_flask_server/requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
-
 COPY ./services/ros_flask_server /src/
 COPY ./common/ /src/common/
 
@@ -34,6 +31,10 @@ SHELL ["/usr/bin/bash", "-c"]
 RUN sudo apt update
 RUN sudo apt install -y lsb-release build-essential python3 gcc g++ make cmake git python-is-python3 apt-utils nginx
 
+COPY ./services/ros_flask_server/requirements.txt /src/requirements.txt
+RUN apt install -y python3-pip
+RUN pip install -r /src/requirements.txt
+
 RUN sudo apt install -y ufw
 
 RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -52,7 +53,6 @@ RUN sudo apt install -y python3-rosdep python3-rosinstall python3-rosinstall-gen
 RUN sudo rosdep init
 RUN rosdep update
 
-RUN sudo apt install -y python3-pip
 RUN pip install flask
 
 RUN cat /home/$USERNAME/.bashrc
