@@ -63,11 +63,11 @@
             }
         },
         "annotators": {
-            "robot_notifications": {
+            "mint_status": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://robot-notifications:8136/check"
+                    "timeout": 10,
+                    "url": "http://mint-status:8340/check"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

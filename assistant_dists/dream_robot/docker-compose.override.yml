@@ -283,30 +283,29 @@ services:
         reservations:
           memory: 2G
 
-  # robot-command-sender:
-  #   env_file: [ .env ]
-  #   build:
-  #     args:
-  #       SERVICE_PORT: 8135
-  #       ROS_FSM_SERVER: http://robot-fake-server:8137
-  #     context: .
-  #     dockerfile: ./services/robot_command_sender/Dockerfile
-  #   command: flask run -h 0.0.0.0 -p 8135
-  #   environment:
-  #     - FLASK_APP=server
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 100M
-  #       reservations:
-  #         memory: 100M
+  ros-flask-server:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8339
+      context: .
+      dockerfile: ./services/ros-flask-server/Dockerfile
+    command: ./launch.sh
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   mint-sender:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8338
-        ROS_FSM_SERVER: http://robot-fake-server:8137
+        ROS_FLASK_SERVER: http://ros-flask-server:8339
       context: .
       dockerfile: ./services/mint_sender/Dockerfile
     command: flask run -h 0.0.0.0 -p 8338

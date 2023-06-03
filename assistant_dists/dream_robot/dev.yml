@@ -89,29 +89,23 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
-#  robot-command-sender:
-#    volumes:
-#      - "./services/robot_command_sender:/src"
-#      - "./common:/src/common"
-#    ports:
-#      - 8135:8135
   mint-sender:
     volumes:
       - "./services/mint_sender:/src"
       - "./common:/src/common"
     ports:
       - 8338:8338
-  robot-notifications:
+  mint_status:
     volumes:
-      - "./services/robot_notifications:/src"
+      - "./services/mint_status:/src"
       - "./common:/src/common"
     ports:
-      - 8136:8136
-  robot-fake-server:
+      - 8340:8340
+  ros-flask-server:
     volumes:
-      - "./services/robot_fake_server:/src"
-      - "./common:/src/common"
+      - "./services/ros_flask_server:/home/dkr/"
+      - "./common:/home/dkr/common"
     ports:
-      - 8137:8137
+      - 8339:8339
 
 version: "3.7"
