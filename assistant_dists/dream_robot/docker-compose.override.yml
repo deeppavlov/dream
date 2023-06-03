@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           intent-catcher-commands:8014, badlisted-words:8018,
           spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, 
-          dff-mint-skill:8337, mint-sender:8338"
+          dff-mint-skill:8337, mint-sender:8338, ros-flask-server:8349, mint-status:8340"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
