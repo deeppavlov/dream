@@ -39,7 +39,7 @@ def respond_set_commands():
     st_time = time.perf_counter() #########################################################
     VALID_COMMANDS = list(map(lambda i: i.lower(), request.json.get("commands", [])))     #
     if not VALID_COMMANDS:                                                                #
-        logger.info(f"mint-server used did not send valid commands list," +               #
+        logger.info(f"mint-server user did not send valid commands list," +               #
                     "resetting to default")                                               #
     logger.info(f"mint-server `VALID_COMMANDS` set: {VALID_COMMANDS}")                    #
                                                                                           #
