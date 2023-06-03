@@ -32,7 +32,7 @@ RUN sudo apt update
 RUN sudo apt install -y lsb-release build-essential python3 gcc g++ make cmake git python-is-python3 apt-utils nginx
 
 COPY ./services/ros_flask_server/requirements.txt /src/requirements.txt
-RUN apt install -y python3-pip
+RUN sudo apt install -y python3-pip
 RUN pip install -r /src/requirements.txt
 
 RUN sudo apt install -y ufw
