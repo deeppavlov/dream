@@ -40,18 +40,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8012:8012
-#  dff-command-selector-skill:
-#    volumes:
-#      - "./skills/dff_command_selector_skill:/src"
-#      - "./common:/src/common"
-#    ports:
-#      - 8015:8015
-  dff-mint-skill:
-    volumes:
-      - "./skills/dff_mint_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8015:8015
   intent-catcher-commands:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"
@@ -89,23 +77,29 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
+  dff-mint-skill:
+    volumes:
+      - "./skills/dff_mint_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8337:8337
   mint-sender:
     volumes:
       - "./services/mint_sender:/src"
       - "./common:/src/common"
     ports:
       - 8338:8338
-  mint_status:
-    volumes:
-      - "./services/mint_status:/src"
-      - "./common:/src/common"
-    ports:
-      - 8340:8340
   ros-flask-server:
     volumes:
       - "./services/ros_flask_server:/home/dkr/"
       - "./common:/home/dkr/common"
     ports:
       - 8339:8339
+  mint_status:
+    volumes:
+      - "./services/mint_status:/src"
+      - "./common:/src/common"
+    ports:
+      - 8340:8340
 
 version: "3.7"
