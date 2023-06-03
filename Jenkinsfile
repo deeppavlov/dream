@@ -141,7 +141,7 @@ pipeline {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env_secret
                 tests/runtests_multiskill_davinci3.sh MODE=clean
-                tests/runtests_marketing_gtjt.sh MODE=build
+                tests/runtests_marketing_gptjt.sh MODE=build
               '''
             }
             catch (Exception e) {
@@ -154,7 +154,7 @@ pipeline {
       post {
         failure {
           script {
-            sh 'tests/runtests_marketing_gtjt.sh MODE=clean'
+            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
           }
         }
         success {
@@ -171,7 +171,7 @@ pipeline {
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh 'tests/runtests_marketing_gtjt.sh MODE=clean && tests/runtests_marketing_gtjt.sh MODE=start'
+              sh 'tests/runtests_marketing_gptjt.sh MODE=clean && tests/runtests_marketing_gptjt.sh MODE=start'
             }
             catch (Exception e) {
               int duration = (currentBuild.duration - startTime) / 1000
@@ -183,7 +183,7 @@ pipeline {
       post {
         failure {
           script {
-            sh 'tests/runtests_marketing_gtjt.sh MODE=clean'
+            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
           }
         }
         success {
@@ -194,7 +194,7 @@ pipeline {
         }
         aborted {
           script {
-            sh 'tests/runtests_marketing_gtjt.sh MODE=clean'
+            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
           }
         }
       }
@@ -206,7 +206,7 @@ pipeline {
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh label: 'test skills', script: 'tests/runtests_marketing_gtjt.sh MODE=test_skills'
+              sh label: 'test skills', script: 'tests/runtests_marketing_gptjt.sh MODE=test_skills'
             }
             catch (Exception e) {
               int duration = (currentBuild.duration - startTime) / 1000
@@ -223,7 +223,7 @@ pipeline {
         }
         aborted {
           script {
-            sh 'tests/runtests_marketing_gtjt.sh MODE=clean'
+            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
           }
         }
       }
@@ -238,7 +238,7 @@ pipeline {
             try {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env_secret
-                tests/runtests_marketing_gtjt.sh MODE=clean
+                tests/runtests_marketing_gptjt.sh MODE=clean
                 tests/runtests_deeppavlov_chatgpt.sh MODE=build
               '''
             }
@@ -662,7 +662,7 @@ pipeline {
       script {
         if (started) {
           sh './tests/runtests_multiskill_davinci3.sh MODE=clean'
-          sh './tests/runtests_marketing_gtjt.sh MODE=clean'
+          sh './tests/runtests_marketing_gptjt.sh MODE=clean'
           sh './tests/runtests_nutrition_oasst.sh MODE=clean'
           sh './tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
           sh './tests/runtests.sh MODE=clean'
