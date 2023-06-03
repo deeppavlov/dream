@@ -95,7 +95,7 @@ services:
       - "./common:/home/dkr/common"
     ports:
       - 8339:8339
-  mint_status:
+  mint-status:
     volumes:
       - "./services/mint_status:/src"
       - "./common:/src/common"
