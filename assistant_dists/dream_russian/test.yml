@@ -7,9 +7,6 @@ services:
   mongo:
     command: mongod
     image: mongo:4.0.0
-    # # you can use persistent local volume if you need
-    # volumes:
-    #   - ./venv/data/db_data:/root/data/db
   dff-program-y-ru-skill:
   convers-evaluation-selector-ru:
   dff-intent-responder-ru-skill:
