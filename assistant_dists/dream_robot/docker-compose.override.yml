@@ -3,9 +3,9 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_robot/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
-          dff-intent-responder-skill:8012, intent-catcher-commands:8014, badlisted-words:8018,
+          intent-catcher-commands:8014, badlisted-words:8018,
           spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, 
-          dff-mint-skill:8337, mint-sender:8338, robot-notifications:8136, robot-fake-server:8137"
+          dff-mint-skill:8337, mint-sender:8338"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -112,59 +112,6 @@ services:
         reservations:
           memory: 100M
 
-  dff-intent-responder-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8012
-        SERVICE_NAME: dff_intent_responder_skill
-        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
-      context: .
-      dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-
-  # dff-command-selector-skill:
-  #   env_file: [ .env ]
-  #   build:
-  #     args:
-  #       SERVICE_PORT: 8012
-  #       SERVICE_NAME: dff_command_selector_skill
-  #       LANGUAGE: EN
-  #       ROS_FSM_SERVER: http://robot-fake-server:8137
-  #     context: .
-  #     dockerfile: ./skills/dff_command_selector_skill/Dockerfile
-  #   command: gunicorn --workers=1 server:app -b 0.0.0.0:8015 --reload
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 128M
-  #       reservations:
-  #         memory: 128M
-
-  dff-mint-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8337
-        SERVICE_NAME: dff_mint_skill
-        LANGUAGE: EN
-        ROS_FSM_SERVER: http://robot-fake-server:8137
-      context: .
-      dockerfile: ./skills/dff_mint_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8337 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-
   intent-catcher-commands:
     env_file: [.env]
     build:
@@ -177,7 +124,7 @@ services:
     command:  python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -229,7 +176,7 @@ services:
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
@@ -253,7 +200,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8103
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -274,7 +221,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0
     tty: true
     deploy:
       resources:
@@ -318,15 +265,15 @@ services:
         reservations:
           memory: 100M
 
-  robot-notifications:
+  mint-status:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8136
-        ROS_FSM_SERVER: http://robot-fake-server:8137
+        SERVICE_PORT: 8340
+        ROS_FLASK_SERVER: http://ros-flask-server:8339
       context: .
-      dockerfile: ./services/robot_notifications/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8136
+      dockerfile: ./services/mint_status/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8340
     environment:
       - FLASK_APP=server
     deploy:
@@ -336,21 +283,22 @@ services:
         reservations:
           memory: 100M
 
-  robot-fake-server:
+  dff-mint-skill:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8137
+        SERVICE_PORT: 8337
+        SERVICE_NAME: dff_mint_skill
+        LANGUAGE: EN
+        ROS_FLASK_SERVER: http://ros-flask-server:8339
       context: .
-      dockerfile: ./services/robot_fake_server/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8137
-    environment:
-      - FLASK_APP=server
+      dockerfile: ./skills/dff_mint_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8337 --reload
     deploy:
       resources:
         limits:
-          memory: 100M
+          memory: 128M
         reservations:
-          memory: 100M
+          memory: 128M
 
 version: '3.7'

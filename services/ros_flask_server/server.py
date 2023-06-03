@@ -12,8 +12,6 @@ from os import getenv
 
 import sentry_sdk
 
-from flask import Flask, request, jsonify
-
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
@@ -32,6 +30,7 @@ EXECUTING_COMMAND = None
 
 # WARNING: naive implementation: only 1 client supported
 
+
 @app.route("/set_commands", methods=["POST"])
 def respond_set_commands():
     global VALID_COMMANDS
@@ -48,6 +47,7 @@ def respond_set_commands():
     logger.info(f"mint-server `is_command_valid` exec time: {total_time:.3f}s")
 
     return {"result": True}
+
 
 @app.route("/is_command_valid", methods=["POST"])
 def respond_is_command_valid():
