@@ -2,7 +2,7 @@
 import threading
 import rospy
 
-from std_msgs.msg import String​
+from std_msgs.msg import String
 from flask import Flask, request
 from flask import jsonify
 
@@ -30,19 +30,20 @@ VALID_COMMANDS = []
 COMMAND_QUEUE = []
 EXECUTING_COMMAND = None
 
+# WARNING: naive implementation: only 1 client supported
 
 @app.route("/set_commands", methods=["POST"])
 def respond_set_commands():
     global VALID_COMMANDS
 
-    st_time = time.perf_counter() ########################################################
-    VALID_COMMANDS = list(map(lambda i: i.lower(), request.json.get("commands", [])))    #
-    if not VALID_COMMANDS:                                                               #
-        logger.info(f"mint-server used did not send valid commands list," +              #
-                    "resetting to default")                                              #
-    logger.info(f"mint-server `VALID_COMMANDS` set: {VALID_COMMANDS}")                   #
-                                                                                         #
-    total_time = time.perf_counter() - st_time ###########################################
+    st_time = time.perf_counter() #########################################################
+    VALID_COMMANDS = list(map(lambda i: i.lower(), request.json.get("commands", [])))     #
+    if not VALID_COMMANDS:                                                                #
+        logger.info(f"mint-server used did not send valid commands list," +               #
+                    "resetting to default")                                               #
+    logger.info(f"mint-server `VALID_COMMANDS` set: {VALID_COMMANDS}")                    #
+                                                                                          #
+    total_time = time.perf_counter() - st_time ############################################
 
     logger.info(f"mint-server `is_command_valid` exec time: {total_time:.3f}s")
 
@@ -50,13 +51,13 @@ def respond_set_commands():
 
 @app.route("/is_command_valid", methods=["POST"])
 def respond_is_command_valid():
-    st_time = time.perf_counter() ########################################################
-                                                                                         #
-    command = request.json.get("command", None)                                          #
-    results = {"result": command in VALID_COMMANDS}                                      #
-    logger.info(f"mint-server `is_command_valid` results: {results}")                    #
-                                                                                         #
-    total_time = time.perf_counter() - st_time ###########################################
+    st_time = time.perf_counter() #########################################################
+                                                                                          #
+    command = request.json.get("command", None)                                           #
+    results = {"result": command in VALID_COMMANDS}                                       #
+    logger.info(f"mint-server `is_command_valid` results: {results}")                     #
+                                                                                          #
+    total_time = time.perf_counter() - st_time ############################################
 
     logger.info(f"mint-server `is_command_valid` exec time: {total_time:.3f}s")
 
@@ -113,7 +114,7 @@ def respond_is_command_performed():
 
 
 @app.route("/command_is_performed", methods=["POST"])
-def respond_is_command_performed():
+def respond_command_is_performed():
     global EXECUTING_COMMAND
 
     st_time = time.perf_counter() #########################################################
