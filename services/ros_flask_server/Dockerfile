@@ -40,6 +40,7 @@ RUN sudo apt install -y ufw
 RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 RUN sudo apt update
+RUN sudo apt install --fix-missing
 RUN sudo apt install -y ros-noetic-desktop
 
 RUN source /opt/ros/noetic/setup.bash
@@ -57,20 +58,20 @@ RUN pip install flask
 
 RUN cat /home/$USERNAME/.bashrc
 
-COPY ./listener.py /home/$USERNAME/listener.py
-COPY ./flask_server.py /home/$USERNAME/server.py
+COPY ./services/ros_flask_server/listener.py /home/$USERNAME/listener.py
+COPY ./services/ros_flask_server/server.py /home/$USERNAME/server.py
 
-COPY ./launch.sh /home/$USERNAME/launch.sh
-RUN chmod +x /home/$USERNAME/launch.sh
+COPY ./services/ros_flask_server/launch.sh /home/$USERNAME/launch.sh
+RUN sudo chmod +x /home/$USERNAME/launch.sh
 
 RUN mkdir -p ~/catkin_ws/src
 RUN touch ~/catkin_init.sh
 RUN echo "cd ~/catkin_ws && catkin_make && source devel/setup.bash && echo $ROS_PACKAGE_PATH && cd ~/catkin_ws/src && catkin_create_pkg ros_dream std_msgs rospy roscpp && cd ~/catkin_ws && catkin_make && source ~/catkin_ws/devel/setup.bash && source ~/.bashrc && mkdir ~/catkin_ws/src/ros_dream/scripts && mv ~/talker.py ~/catkin_ws/src/ros_dream/scripts/talker.py && mv ~/listener.py ~/catkin_ws/src/ros_dream/scripts/listener.py && cd ~/catkin_ws && catkin_make && cd ~ && source ~/catkin_ws/devel/setup.bash && roscore" >> ~/catkin_init.sh
 
-RUN chmod +x ~/catkin_init.sh
+RUN sudo chmod +x ~/catkin_init.sh
 
 RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 WORKDIR /home/$USERNAME/
 
-CMD ./launch.sh
+CMD sudo ./launch.sh

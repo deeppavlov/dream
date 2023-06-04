@@ -10,7 +10,7 @@ from df_engine.core import Actor, Context
 
 
 LANGUAGE = getenv("LANGUAGE", "EN")
-ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
+ROS_FLASK_SERVER = getenv("ROS_FLASK_SERVER")
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
         command = "move_forward"
         response = "Moving forward."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
@@ -53,7 +53,7 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
         command = "move_backward"
         response = "Moving backward."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""

@@ -25,8 +25,8 @@ COPY ./common/ ./common/
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-ARG ROS_FSM_SERVER
-ENV ROS_FSM_SERVER ${ROS_FSM_SERVER}
+ARG ROS_FLASK_SERVER
+ENV ROS_FLASK_SERVER ${ROS_FLASK_SERVER}
 
 # wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
