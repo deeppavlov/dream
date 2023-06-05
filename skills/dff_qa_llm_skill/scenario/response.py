@@ -36,13 +36,9 @@ CONSIDERED_LM_SERVICES = {
 
 
 def compose_data_for_model(ctx, actor):
-    # consider N_UTTERANCES_CONTEXT last utterances
     context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
     utterance_texts = [uttr.get("text", "") for uttr in context]
     if utterance_texts:
-        # dataset_path = int_ctx.get_dialog(ctx, actor)["bot"]["attributes"][ #возможно переделать, перенести в аннотацию
-        #     "dataset_path"
-        # ]
         with open("test_annotations.json", "w") as f:
             json.dump(context[-1].get("annotations", {}), f)
         raw_candidates = (
@@ -113,7 +109,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             f"{var.lower()}s": [getenv(var, None)]
             for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
         }
-        # check if at least one of the env variables is not None
         if len(sending_variables.keys()) > 0 and all(
             [var_value is None for var_value in sending_variables.values()]
         ):

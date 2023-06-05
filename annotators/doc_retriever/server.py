@@ -36,8 +36,7 @@ assert FILE_SERVER_URL, logger.info("No file server url path is given.")
 
 def get_answers(utterance: str, ranker):
     ranker_output = ranker([utterance])
-    logger.info(f"ranker_output: `{ranker_output}`")
-    raw_candidates = ranker_output[0]  # list
+    raw_candidates = ranker_output[0] 
     return raw_candidates
 
 
@@ -77,8 +76,8 @@ def return_candidates():
             os.mkdir("/data/odqa")
         with open("/data/odqa/userfile.db", "wb") as f:
             f.write(db_file.content)
-        np.savez("/data/odqa/userfile_tfidf_matrix.npz", matrix_file.content)
-        logger.info(f"os.listdir: {os.listdir('/data/odqa')}")
+        with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
+            f.write(matrix_file.content)
         logger.info(f"Files downloaded successfully.")
         ranker_model = build_model(CONFIG_PATH)
         logger.info("Model loaded.")
@@ -87,9 +86,8 @@ def return_candidates():
         logger.exception(e)
         raise e
     utterances = request.json["dialogs"][-1]["utterances"][-1]["text"]
-    logger.info(f"Input utterance: `{utterances}`.")
     results = get_answers(utterances, ranker_model)
-    logger.info(f"Output candidate files: `{str(results)}`.")
+    logger.info(f"Output candidate files: '{str(results)}'.")
     return jsonify(
         [
             {
@@ -106,7 +104,7 @@ def save_model_path():
     logger.info("Started writing files to server.")
     bot_attributes = (
         request.json["dialogs"][-1].get("bot", {}).get("attributes", {})
-    )  # how to get bot attributes?
+    )
     if "db_path" not in bot_attributes:
         file_name = generate_random_string(10)
         db_file_name = f"{file_name}.db"
@@ -114,13 +112,14 @@ def save_model_path():
         try:
             db_link = write_file_to_server(
                 db_file_name, "/data/odqa/userfile.db"
-            )  # удалить эти файлы из даты
+            )  
             matrix_link = write_file_to_server(
                 matrix_file_name, "/data/odqa/userfile_tfidf_matrix.npz"
             )
-            logger.info("Files successfully written to server.")
+            time.sleep(1)
             os.remove("/data/odqa/userfile.db")
             os.remove("/data/odqa/userfile_tfidf_matrix.npz")
+            logger.info("Files successfully written to server and removed from /data.")
             result = [
                 {"bot_attributes": {"db_path": db_link, "matrix_path": matrix_link}}
             ]
