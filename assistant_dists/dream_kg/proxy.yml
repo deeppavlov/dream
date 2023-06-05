@@ -8,15 +8,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8004
       - PORT=8004
 
-  dff-program-y-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8008
-      - PORT=8008
-
   sentseg:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -62,15 +53,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8075
       - PORT=8075
 
-  dff-friendship-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8086
-      - PORT=8086
-
   combined-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -106,6 +88,15 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8009
       - PORT=8009
+
+  transformers-lm-gptjt:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8161
+      - PORT=8161
 
   dff-template-skill:
     command: [ "nginx", "-g", "daemon off;" ]
