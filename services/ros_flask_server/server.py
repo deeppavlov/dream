@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-talker = rospy.Publisher('talker', String, queue_size=1)
+#talker = rospy.Publisher('talker', String, queue_size=1)     # ROS CURRENTLY COMMENTED
 
 threading.Thread(target=lambda: rospy.init_node('listener', disable_signals=True)).start()
 
@@ -69,7 +69,7 @@ def respond_perform_command():
     st_time = time.perf_counter() #########################################################
                                                                                           #
     command = request.json.get("command", None)                                           #
-    talker.publish(command)                                                               #
+    #talker.publish(command)                                                              #
     results = {"result": command in VALID_COMMANDS}                                       #
     COMMAND_QUEUE.append(command)                                                         #
     logger.info(f"mint-server `perform_command` {command} appended to queue?: {results}") #

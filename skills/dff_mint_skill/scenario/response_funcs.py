@@ -5,7 +5,6 @@ from os import getenv
 
 import common.dff.integration.context as int_ctx
 from common.robot import check_if_valid_robot_command
-from common.utils import get_entities
 from df_engine.core import Actor, Context
 
 
