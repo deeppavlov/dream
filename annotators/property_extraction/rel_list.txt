@@ -25,7 +25,7 @@ has_degree r
 has_hobby r
 has_profession r
 have r
-have_chidren r
+have_children r
 have_family r
 have_pet r
 have_sibling r
@@ -42,7 +42,7 @@ like_music r
 like_read r
 like_sports r
 like_watching r
-live_in_citystatecountry r
+live_in_city_state_country r
 live_in_general r
 marital_status p
 member_of r
