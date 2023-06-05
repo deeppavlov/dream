@@ -45,13 +45,13 @@ services:
       - "./common:/src/common"
       - "./documents:/src/documents"
     ports:
-      - 8161:8161
+      - 8163:8163
   dff-qa-llm-skill:
     volumes:
       - "./skills/dff_qa_llm_skill:/src"
       - "./common:/src/common"
       - "./documents:/src/documents"
     ports:
-      - 8162:8162
+      - 8164:8164
 
 version: "3.7"
