@@ -66,8 +66,7 @@ def preprocess_context(context_batch):
 
 
 def process_entity_info(
-    entity_substr_batch, entity_ids_batch, conf_batch, entity_id_tags_batch,
-    prex_info_batch, optimized_context_batch
+    entity_substr_batch, entity_ids_batch, conf_batch, entity_id_tags_batch, prex_info_batch, optimized_context_batch
 ):
     """Processes entity information based on various conditions.
 
@@ -138,7 +137,8 @@ def process_entity_info(
             filtered_entity_ids, filtered_confs, filtered_entity_id_tags = [], [], []
 
             # Filter entity information based on condition:
-            # - Exclude entities marked as "Abstract" in db if they are not considered abstract according to is_abstract.
+            # - Exclude entities marked as "Abstract" in db if they are not considered
+            # abstract according to is_abstract.
             for entity_id, conf, entity_id_tag in zip(entity_ids, confs, entity_id_tags):
                 if entity_id_tag.startswith("Abstract") and not is_abstract:
                     pass
@@ -191,8 +191,12 @@ def respond():
 
         # Process entity information
         entity_info_batch = process_entity_info(
-            entity_substr_batch, entity_ids_batch, conf_batch, entity_id_tags_batch,
-            prex_info_batch, optimized_context_batch
+            entity_substr_batch,
+            entity_ids_batch,
+            conf_batch,
+            entity_id_tags_batch,
+            prex_info_batch,
+            optimized_context_batch,
         )
 
     except Exception as e:
