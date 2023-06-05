@@ -122,7 +122,9 @@ def respond():
         logger.info(f"Hypotheses: {json.dumps(hypotheses_texts, indent=2)}")
 
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
-        selected_resp = select_response(dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
+        selected_resp = select_response(
+            dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {})
+        )
         try:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
             hypotheses[best_id].pop("text")
