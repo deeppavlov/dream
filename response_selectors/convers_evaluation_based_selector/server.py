@@ -118,16 +118,29 @@ def respond():
 
                 curr_is_toxics_or_contr.append(is_toxic_or_contr_utterance)
 
-                if is_toxic_or_contr_utterance:
+                if is_toxic_utterance:
                     with sentry_sdk.push_scope() as scope:
                         scope.set_extra("utterance", skill_data["text"])
                         scope.set_extra("selected_skills", skill_data)
                         sentry_sdk.capture_message(
-                            "response selector got candidate with badlisted phrases "
-                            "or detected contradiction"
+                            "response selector got candidate with badlisted phrases"
                         )
                         msg = (
-                            "response selector got candidate with badlisted phrases or detected contradiction:\n"
+                            "response selector got candidate with badlisted phrases:\n"
+                            f"utterance: {skill_data['text']}\n"
+                            f"skill name: {skill_data['skill_name']}"
+                        )
+                        logger.info(msg)
+
+                if is_contr_utterance:
+                    with sentry_sdk.push_scope() as scope:
+                        scope.set_extra("utterance", skill_data["text"])
+                        scope.set_extra("selected_skills", skill_data)
+                        sentry_sdk.capture_message(
+                            "response selector got contradicting candidate"
+                        )
+                        msg = (
+                            "response selector got contradicting candidate:\n"
                             f"utterance: {skill_data['text']}\n"
                             f"skill name: {skill_data['skill_name']}"
                         )
