@@ -44,4 +44,12 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8120
       - PORT=8120
 
+  combined-classification-lightweight:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=dream.deeppavlov.ai:8150
+      - PORT=8150
 version: '3.7'

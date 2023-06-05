@@ -175,22 +175,6 @@ services:
         reservations:
           memory: 3G
 
-  combined-classification-lightweight:
-    env_file: [ .env ]
-    build:
-      args:
-        CONFIG: combined_classifier.json
-        SERVICE_NAME: combined_classification
-        SERVICE_PORT: 8150
-      context: .
-      dockerfile: ./annotators/combined_classification_lightweight/Dockerfile
-    environment:
-      CUDA_VISIBLE_DEVICES: ""  
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
+
 
 version: '3.7'
