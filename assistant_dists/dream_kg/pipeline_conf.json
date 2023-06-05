@@ -524,9 +524,9 @@
         }
     },
     "metadata": {
-        "display_name": "Dream",
+        "display_name": "Dream KG",
         "author": "DeepPavlov",
-        "description": "Full version of DeepPavlov Dream Socialbot",
+        "description": "Distribution that utilizes Knowledge Graph",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
         "ram_usage": "50 GB",
