@@ -77,7 +77,7 @@ def return_candidates():
             os.mkdir("/data/odqa")
         with open("/data/odqa/userfile.db", "wb") as f:
             f.write(db_file.content)
-        np.save("/data/odqa/userfile_tfidf_matrix.npz", matrix_file.content)
+        np.savez("/data/odqa/userfile_tfidf_matrix.npz", matrix_file.content)
         logger.info(f"os.listdir: {os.listdir('/data/odqa')}")
         logger.info(f"Files downloaded successfully.")
         ranker_model = build_model(CONFIG_PATH)
