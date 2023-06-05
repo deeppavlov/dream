@@ -1,12 +1,11 @@
-FROM python:3.7.4
+FROM python:3.9.16-slim
 
-RUN mkdir /src
-
-COPY ./requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
-RUN spacy download en_core_web_sm
-
-COPY . /src/
 WORKDIR /src
+
+COPY ./requirements.txt requirements.txt
+RUN pip install -r /src/requirements.txt && \
+    python -m spacy download en_core_web_sm
+
+COPY . .
 
 CMD gunicorn --workers=2 server:app
