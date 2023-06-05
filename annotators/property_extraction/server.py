@@ -100,6 +100,31 @@ def get_relations(uttr_batch, thres=0.5):
     return relations_pred_batch
 
 
+def postprocess_triplets(triplets_init, scores_init, uttr):
+    triplets, existing_obj = [], []
+    scores_dict = {}
+    for triplet_init, score in zip(triplets_init, scores_init):
+        triplet = ""
+        fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
+        if fnd and fnd[0][1] in rel_type_dict:
+            triplet = list(fnd[0])
+            if triplet[0] in ["i", "my"]:
+                triplet[0] = "user"
+            obj = triplet[2]
+            if obj in existing_obj:
+                prev_triplet, prev_score = scores_dict[obj]
+                if score > prev_score:
+                    triplets.remove(prev_triplet)
+                else:
+                    continue
+            scores_dict[obj] = (triplet, score)
+            existing_obj.append(obj)
+            if obj.islower() and obj.capitalize() in uttr:
+                triplet[2] = obj.capitalize()
+        triplets.append(triplet)
+    return triplets
+
+
 def generate_triplets(uttr_batch, relations_pred_batch):
     triplets_corr_batch = []
     t5_input_uttrs = []
@@ -110,33 +135,13 @@ def generate_triplets(uttr_batch, relations_pred_batch):
     t5_pred_triplets, t5_pred_scores = generative_ie(t5_input_uttrs, relations_pred_flat)
     logger.debug(f"t5 raw output: {t5_pred_triplets} scores: {t5_pred_scores}")
 
-    curr_idx = 0
+    offset_start = 0
     for uttr, pred_rels in zip(uttr_batch, relations_pred_batch):
-        triplets = []
-        scores_dict = {}
-        for _ in pred_rels:
-            triplet_init = t5_pred_triplets[curr_idx]
-            curr_score = t5_pred_scores[curr_idx]
-            existing_obj = [triplet[2].lower() for triplet in triplets]
-            curr_idx += 1
-            triplet = ""
-            fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
-            if fnd and fnd[0][1] in rel_type_dict:
-                triplet = list(fnd[0])
-                if triplet[0] in ["i", "my"]:
-                    triplet[0] = "user"
-                obj = triplet[2]
-                if obj in existing_obj:
-                    prev_triplet, prev_score = scores_dict[obj]
-                    if curr_score > prev_score:
-                        logger.debug(f"popping {prev_triplet}, low score")
-                        triplets.remove(prev_triplet)
-                    else:
-                        continue
-                scores_dict[obj] = (triplet, curr_score)
-                if obj.islower() and obj.capitalize() in uttr:
-                    triplet[2] = obj.capitalize()
-            triplets.append(triplet)
+        rels_len = len(pred_rels)
+        triplets_init = t5_pred_triplets[offset_start : (offset_start+rels_len)]
+        scores_init = t5_pred_scores[offset_start : (offset_start+rels_len)]
+        offset_start += rels_len
+        triplets = postprocess_triplets(triplets_init, scores_init, uttr)
         triplets_corr_batch.append(triplets)
     return triplets_corr_batch
 
@@ -153,7 +158,7 @@ def get_result(request):
     uttrs = []
     for uttr_list in init_uttrs:
         if len(uttr_list) == 1:
-            uttrs.append(uttr_list[0])
+            uttrs.append(uttr_list[0].lower())
         else:
             utt_prev = uttr_list[-2]
             utt_prev_sentences = nltk.sent_tokenize(utt_prev)
@@ -257,3 +262,6 @@ def get_result(request):
 def respond():
     result = get_result(request)
     return jsonify(result)
+
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=8136)
