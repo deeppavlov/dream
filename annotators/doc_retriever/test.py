@@ -20,9 +20,7 @@ def main_test():
         },
     )
     assert result.ok, "Failed to reach host. Check if it's up and healthy."
-    assert len(result) and [
-        all(len(sample[0]) > 0 for sample in result)
-    ], f"Got\n{result}\n, something is wrong"
+    assert len(result) and [all(len(sample[0]) > 0 for sample in result)], f"Got\n{result}\n, something is wrong"
     print("Success!")
 
 

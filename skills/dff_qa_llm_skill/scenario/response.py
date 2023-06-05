@@ -4,9 +4,7 @@ import re
 import requests
 import sentry_sdk
 from os import getenv
-import os
 from typing import Any
-import nltk.data
 
 from common.build_dataset import build_dataset
 import common.dff.integration.context as int_ctx
@@ -16,9 +14,7 @@ from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 120))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
@@ -41,26 +37,12 @@ def compose_data_for_model(ctx, actor):
     if utterance_texts:
         with open("test_annotations.json", "w") as f:
             json.dump(context[-1].get("annotations", {}), f)
-        raw_candidates = (
-            context[-1]
-            .get("annotations", {})
-            .get("doc_retriever", {})
-            .get("candidate_files", [])
-        )
-        ORIGINAL_FILE_PATH = (
-            context[-1]
-            .get("annotations", {})
-            .get("doc_retriever", {})
-            .get("file_path", "")
-        )
-        DATASET_PATH = (
-            context[-1]
-            .get("annotations", {})
-            .get("doc_retriever", {})
-            .get("dataset_path", "")
-        )
+        raw_candidates = context[-1].get("annotations", {}).get("doc_retriever", {}).get("candidate_files", [])
+        ORIGINAL_FILE_PATH = context[-1].get("annotations", {}).get("doc_retriever", {}).get("file_path", "")
+        DATASET_PATH = context[-1].get("annotations", {}).get("doc_retriever", {}).get("dataset_path", "")
         logger.info(
-            f"Building dataset to get candidate texts. raw_candidates: {raw_candidates}, ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}"
+            f'''Building dataset to get candidate texts. raw_candidates: {raw_candidates},
+            ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}'''
         )
         build_dataset(DATASET_PATH, ORIGINAL_FILE_PATH)
         num_candidates = []
@@ -71,12 +53,11 @@ def compose_data_for_model(ctx, actor):
                 num_candidates.append(f"{nums}. {f.read()}")
         final_candidates = " ".join(num_candidates)
         request = utterance_texts[-1]
-        logger.info(
-            f"Dataset built successfully")
+        logger.info("Dataset built successfully")
         utterance_texts[
             -1
         ] = f"""TEXT: ### {final_candidates} ###
-USER: {request} 
+USER: {request}
 Reply to USER. If USER makes a request or asks a question, answer based on TEXT provided.
 If necessary, structure your answer as bullet points. You may also present information in tables.
 If TEXT does not contain the answer, apologize and say that you cannot answer based on the given text."""
@@ -106,12 +87,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service = "ChatGPT"
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
         sending_variables = {
-            f"{var.lower()}s": [getenv(var, None)]
-            for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
+            f"{var.lower()}s": [getenv(var, None)] for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
         }
-        if len(sending_variables.keys()) > 0 and all(
-            [var_value is None for var_value in sending_variables.values()]
-        ):
+        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
             raise NotImplementedError(
                 "ERROR: All environmental variables have None values. At least one of them must have not None value"
             )
@@ -144,9 +122,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(
-            hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
-        )
+        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
     if len(curr_responses) == 0:
         return ""

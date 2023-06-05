@@ -103,14 +103,7 @@ def get_result(request, what_to_annotate):
                 probas_batch,
             ) = entity_detection(utts_list)
             logger.info(f"entity_substr_batch {entity_substr_batch} tags_batch {tags_batch}")
-            for (
-                entity_substr_list,
-                tags_list,
-                probas_list,
-                entity_offsets_list,
-                uttr,
-                num,
-            ) in zip(
+            for (entity_substr_list, tags_list, probas_list, entity_offsets_list, uttr, num,) in zip(
                 entity_substr_batch,
                 tags_batch,
                 probas_batch,

@@ -1,6 +1,7 @@
 import os
 import nltk.data
 
+
 def build_dataset(dataset_path, original_file_path):
     if not os.path.exists(dataset_path):
         os.mkdir(dataset_path)
