@@ -41,8 +41,8 @@ def compose_data_for_model(ctx, actor):
         ORIGINAL_FILE_PATH = context[-1].get("annotations", {}).get("doc_retriever", {}).get("file_path", "")
         DATASET_PATH = context[-1].get("annotations", {}).get("doc_retriever", {}).get("dataset_path", "")
         logger.info(
-            f'''Building dataset to get candidate texts. raw_candidates: {raw_candidates},
-            ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}'''
+            f"""Building dataset to get candidate texts. raw_candidates: {raw_candidates},
+            ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}"""
         )
         build_dataset(DATASET_PATH, ORIGINAL_FILE_PATH)
         num_candidates = []
