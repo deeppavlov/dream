@@ -11,7 +11,11 @@ def main():
             [
                 "What is SpaceX?",
             ],
-        ]
+        ],
+        "prompts_goals": [
+            {},
+            {},
+        ],
     }
     gold = [
         {"prompts": ["pizza", "dream_persona"], "max_similarity": 0.7664722204208374},
