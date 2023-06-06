@@ -63,5 +63,5 @@ RUN source /home/$USERNAME/.bashrc
 
 WORKDIR /home/$USERNAME/
 
-CMD gunicorn --workers=1 server:app
-#CMD (trap 'kill 0' SIGINT; roscore & gunicorn --workers=1 server:app)
+CMD gunicorn -b 0.0.0.0:$SERVICE_PORT --workers=1 server:app
+#CMD (trap 'kill 0' SIGINT; ./catkin_init.sh && roscore & gunicorn --workers=1 server:app)

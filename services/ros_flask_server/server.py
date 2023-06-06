@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import threading
-import rospy
+#import rospy
 
-from std_msgs.msg import String
+#from std_msgs.msg import String
 from flask import Flask, request
 from flask import jsonify
 
@@ -22,9 +22,9 @@ app = Flask(__name__)
 
 #talker = rospy.Publisher('talker', String, queue_size=1)     # ROS CURRENTLY COMMENTED
 
-threading.Thread(target=lambda: rospy.init_node('listener', disable_signals=True)).start()
+#threading.Thread(target=lambda: rospy.init_node('listener', disable_signals=True)).start()
 
-VALID_COMMANDS = []
+VALID_COMMANDS = ['move_forward', 'move_backward'] # may be hardcoded for testing without client
 COMMAND_QUEUE = []
 EXECUTING_COMMAND = None
 
@@ -54,7 +54,7 @@ def respond_is_command_valid():
     st_time = time.perf_counter() #########################################################
                                                                                           #
     command = request.json.get("command", None)                                           #
-    results = {"result": command in VALID_COMMANDS}                                       #
+    results = {"result": any(item in command for item in VALID_COMMANDS)}                 #
     logger.info(f"mint-server `is_command_valid` results: {results}")                     #
                                                                                           #
     total_time = time.perf_counter() - st_time ############################################
