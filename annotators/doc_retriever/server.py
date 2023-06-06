@@ -48,6 +48,7 @@ def write_file_to_server(filename, filepath):
 
 @app.route("/return_candidates", methods=["POST"])
 def return_candidates():
+    results = []
     try:
         bot_attributes = request.json["dialogs"][-1].get("bot", {}).get("attributes", {})
         db_link = bot_attributes.get("db_path", "")
@@ -64,12 +65,12 @@ def return_candidates():
         logger.info("Files downloaded successfully.")
         ranker_model = build_model(CONFIG_PATH)
         logger.info("Model loaded.")
+        utterances = request.json["dialogs"][-1].get("utterances", [{}])[-1].get("text", "")
+        results = get_answers(utterances, ranker_model)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         raise e
-    utterances = request.json["dialogs"][-1].get("utterances", [{}])[-1].get("text", "")
-    results = get_answers(utterances, ranker_model)
     logger.info(f"Output candidate files: '{results}'.")
     return jsonify(
         [
