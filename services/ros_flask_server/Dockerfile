@@ -52,13 +52,13 @@ RUN cat /home/$USERNAME/.bashrc
 
 #RUN sudo chmod +x /home/$USERNAME/launch.sh
 
-RUN mkdir -p ~/catkin_ws/src
-RUN touch ~/catkin_init.sh
-RUN echo "cd ~/catkin_ws && catkin_make && source devel/setup.bash && echo $ROS_PACKAGE_PATH && cd ~/catkin_ws/src && catkin_create_pkg ros_dream std_msgs rospy roscpp && cd ~/catkin_ws && catkin_make && source ~/catkin_ws/devel/setup.bash && source ~/.bashrc && mkdir ~/catkin_ws/src/ros_dream/scripts && mv ~/listener.py ~/catkin_ws/src/ros_dream/scripts/listener.py && cd ~/catkin_ws && catkin_make && cd ~ && source ~/catkin_ws/devel/setup.bash && roscore" >> ~/catkin_init.sh
+RUN mkdir -p /home/$USERNAME/catkin_ws/src
+RUN touch /home/$USERNAME/catkin_init.sh
+RUN echo "cd ~/catkin_ws && catkin_make && source devel/setup.bash && echo $ROS_PACKAGE_PATH && cd ~/catkin_ws/src && catkin_create_pkg ros_dream std_msgs rospy roscpp && cd ~/catkin_ws && catkin_make && source ~/catkin_ws/devel/setup.bash && source ~/.bashrc && mkdir ~/catkin_ws/src/ros_dream/scripts && mv ~/listener.py ~/catkin_ws/src/ros_dream/scripts/listener.py && cd ~/catkin_ws && catkin_make && cd ~ && source ~/catkin_ws/devel/setup.bash && roscore" >> /home/$USERNAME/catkin_init.sh
 
-RUN sudo chmod +x ~/catkin_init.sh
+RUN sudo chmod +x /home/$USERNAME/catkin_init.sh
 
-RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+RUN echo "source /home/dkr/catkin_ws/devel/setup.bash" >> /home/$USERNAME/.bashrc
 RUN source /home/$USERNAME/.bashrc
 
 WORKDIR /home/$USERNAME/
