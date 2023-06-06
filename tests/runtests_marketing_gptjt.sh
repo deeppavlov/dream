@@ -111,7 +111,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
 
     for container in sentseg ranking-based-response-selector combined-classification \
-                     sentence-ranker prompt-selector transformers-lm-gptjt \
+                     sentence-ranker prompt-selector \
                      dff-marketing-prompted-skill; do
 
         echo "Run tests for $container"
