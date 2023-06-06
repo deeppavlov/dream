@@ -68,9 +68,9 @@ def return_candidates():
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         raise e
-    utterances = request.json["dialogs"][-1]["utterances"][-1]["text"]
+    utterances = request.json["dialogs"][-1].get("utterances", [{}])[-1].get("text", "")
     results = get_answers(utterances, ranker_model)
-    logger.info(f"Output candidate files: '{str(results)}'.")
+    logger.info(f"Output candidate files: '{results}'.")
     return jsonify(
         [
             {

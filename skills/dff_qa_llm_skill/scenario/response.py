@@ -95,7 +95,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             )
     else:
         sending_variables = {}
-    logger.info(f"sending_variables: {sending_variables}")
     if len(dialog_context) > 0:
         try:
             response = requests.post(
