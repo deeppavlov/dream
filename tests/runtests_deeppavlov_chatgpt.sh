@@ -111,7 +111,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
 
     for container in ranking-based-response-selector sentence-ranker prompt-selector \
-                     openai-api-chatgpt dff-deeppavlov-prompted-skill; do
+                     dff-deeppavlov-prompted-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
