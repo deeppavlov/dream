@@ -139,6 +139,7 @@ def main():
     count = 0
     for data, golden_result in zip(request_data, golden_results):
         result = requests.post(USER_KG_URL, json=data).json()
+        print(result)
         result = format_for_comparison(result)
         if compare_results(result, golden_result):
             count += 1
