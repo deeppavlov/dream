@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           intent-catcher-commands:8014, badlisted-words:8018,
           spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, 
-          dff-mint-skill:8337, mint-sender:8338, ros-flask-server:8339, mint-status:8340"
+          dff-mint-skill:8337, mint-sender:8338, ros-flask-server:5000, mint-status:8340"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -234,7 +234,7 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8339
+        SERVICE_PORT: 5000
       context: .
       dockerfile: ./services/ros_flask_server/Dockerfile
     environment:
@@ -251,7 +251,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8338
-        ROS_FLASK_SERVER: http://ros-flask-server:8339
+        ROS_FLASK_SERVER: http://ros-flask-server:5000
       context: .
       dockerfile: ./services/mint_sender/Dockerfile
     command: flask run -h 0.0.0.0 -p 8338
@@ -269,7 +269,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8340
-        ROS_FLASK_SERVER: http://ros-flask-server:8339
+        ROS_FLASK_SERVER: http://ros-flask-server:5000
       context: .
       dockerfile: ./services/mint_status/Dockerfile
     command: flask run -h 0.0.0.0 -p 8340
@@ -289,7 +289,7 @@ services:
         SERVICE_PORT: 8337
         SERVICE_NAME: dff_mint_skill
         LANGUAGE: EN
-        ROS_FLASK_SERVER: http://ros-flask-server:8339
+        ROS_FLASK_SERVER: http://ros-flask-server:5000
       context: .
       dockerfile: ./skills/dff_mint_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8337 --reload

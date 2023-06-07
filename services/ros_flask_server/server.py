@@ -132,4 +132,4 @@ def respond_command_is_performed():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8339, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

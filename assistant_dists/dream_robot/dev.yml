@@ -94,7 +94,7 @@ services:
       - "./services/ros_flask_server:/home/dkr/"
       - "./common:/home/dkr/common"
     ports:
-      - 8339:8339
+      - 5000:5000
   mint-status:
     volumes:
       - "./services/mint_status:/src"
