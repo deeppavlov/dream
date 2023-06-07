@@ -56,7 +56,7 @@ function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
     #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
     # else
-        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream -f docker-compose.yml -f assistant_dists/nutrition_assistant/docker-compose.override.yml -f assistant_dists/nutrition_assistant/test.yml -f assistant_dists/nutrition_assistant/proxy.yml"
+        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p test -f docker-compose.yml -f assistant_dists/nutrition_assistant/docker-compose.override.yml -f assistant_dists/nutrition_assistant/test.yml -f assistant_dists/nutrition_assistant/proxy.yml"
     # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
