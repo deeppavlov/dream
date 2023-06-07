@@ -232,6 +232,8 @@ services:
 
   ros-flask-server:
     env_file: [ .env ]
+    ports:
+      - "5000:5000"
     build:
       args:
         SERVICE_PORT: 5000
