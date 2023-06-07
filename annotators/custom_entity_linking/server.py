@@ -202,6 +202,7 @@ def respond():
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
+        entity_info_batch = [[]] * len(entity_substr_batch)
 
     total_time = time.time() - st_time
     logger.info(f"entity_info_batch: {entity_info_batch}")
