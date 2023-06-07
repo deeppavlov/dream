@@ -307,6 +307,4 @@ services:
 
   terminusdb-server:
     image: terminusdb/terminusdb-server:latest
-    ports:
-      - 6363:6363
 version: '3.7'
