@@ -9,6 +9,10 @@ RUN pip install -r requirements.txt
 # ###################### CUSTOM SECTION ######################################
 # Here you can make changes 
 
+COPY skills/dff_qa_llm_skill/requirements.txt .
+RUN pip install -r requirements.txt && python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+RUN mkdir /data/
+
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 ARG SERVICE_PORT
@@ -17,10 +21,6 @@ ARG GENERATIVE_TIMEOUT
 ENV GENERATIVE_TIMEOUT ${GENERATIVE_TIMEOUT}
 ARG N_UTTERANCES_CONTEXT
 ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
-
-COPY skills/dff_qa_llm_skill/requirements.txt .
-RUN pip install -r requirements.txt && python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
-RUN mkdir /data/
 
 COPY skills/dff_qa_llm_skill/ /src
 COPY documents /src/documents

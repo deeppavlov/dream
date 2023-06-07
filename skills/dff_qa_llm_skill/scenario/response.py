@@ -14,7 +14,9 @@ from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 120))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
@@ -25,7 +27,7 @@ DEFAULT_PROMPT = "Answer questions based on part of a text."
 CONSIDERED_LM_SERVICES = {
     "ChatGPT": {
         "url": "http://openai-api-chatgpt:8145/respond",
-        "config": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+        "config": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
         "envvars_to_send": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     }
 }
@@ -37,9 +39,24 @@ def compose_data_for_model(ctx, actor):
     if utterance_texts:
         with open("test_annotations.json", "w") as f:
             json.dump(context[-1].get("annotations", {}), f)
-        raw_candidates = context[-1].get("annotations", {}).get("doc_retriever", {}).get("candidate_files", [])
-        ORIGINAL_FILE_PATH = context[-1].get("annotations", {}).get("doc_retriever", {}).get("file_path", "")
-        DATASET_PATH = context[-1].get("annotations", {}).get("doc_retriever", {}).get("dataset_path", "")
+        raw_candidates = (
+            context[-1]
+            .get("annotations", {})
+            .get("doc_retriever", {})
+            .get("candidate_files", [])
+        )
+        ORIGINAL_FILE_PATH = (
+            context[-1]
+            .get("annotations", {})
+            .get("doc_retriever", {})
+            .get("file_path", "")
+        )
+        DATASET_PATH = (
+            context[-1]
+            .get("annotations", {})
+            .get("doc_retriever", {})
+            .get("dataset_path", "")
+        )
         logger.info(
             f"""Building dataset to get candidate texts. raw_candidates: {raw_candidates},
             ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}"""
@@ -87,9 +104,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     lm_service = "ChatGPT"
     if "envvars_to_send" in CONSIDERED_LM_SERVICES[lm_service]:
         sending_variables = {
-            f"{var.lower()}s": [getenv(var, None)] for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
+            f"{var.lower()}s": [getenv(var, None)]
+            for var in CONSIDERED_LM_SERVICES[lm_service]["envvars_to_send"]
         }
-        if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
+        if len(sending_variables.keys()) > 0 and all(
+            [var_value is None for var_value in sending_variables.values()]
+        ):
             raise NotImplementedError(
                 "ERROR: All environmental variables have None values. At least one of them must have not None value"
             )
@@ -121,7 +141,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
             hyp_text += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        gathering_responses(
+            hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE}
+        )
 
     if len(curr_responses) == 0:
         return ""
