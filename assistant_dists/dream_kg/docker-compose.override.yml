@@ -1359,16 +1359,15 @@ services:
 
   terminusdb-server:
     image: terminusdb/terminusdb-server:latest
-    ports:
-      - 6363:6363
 
   user-knowledge-graph:
-    env_file: [ .env ]
+    env_file: [ .env, .env_secret]
     build:
       args:
         SERVICE_PORT: 8138
         SRC_DIR: annotators/user_knowledge_graph/
         SERVICE_NAME: user_knowledge_graph
+        ENVVARS_TO_SEND: TERMINUSDB_SERVER_PASSWORD
       context: ./
       dockerfile: annotators/user_knowledge_graph/Dockerfile
     command: flask run -h 0.0.0.0 -p 8138
@@ -1399,11 +1398,12 @@ services:
           memory: 512M
 
   dff-travel-italy-skill:
-    env_file: [.env]
+    env_file: [.env, .env_secret]
     build:
       args:
         SERVICE_PORT: 8139
         SERVICE_NAME: dff_travel_italy_skill
+        ENVVARS_TO_SEND: TERMINUSDB_SERVER_PASSWORD
       context: .
       dockerfile: ./skills/dff_travel_italy_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8139 --reload
