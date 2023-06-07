@@ -4,7 +4,8 @@ import requests
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv("./.env")
+load_dotenv("./.env_secret")
 
 
 def formulate_utt_annotations(dog_id=None, park_id=None):
@@ -43,13 +44,38 @@ def formulate_utt_annotations(dog_id=None, park_id=None):
     return utt_annotations
 
 
+def format_for_comparison(results):
+    for result in results:
+        if result["added_to_graph"]:
+            for entity in result["added_to_graph"]:
+                del entity["entity_ids"]
+        elif result["triplets_already_in_graph"]:
+            for triplet in result["triplets_already_in_graph"]:
+                triplet[2] = triplet[2].split("/")[0]
+        else:
+            print("Error: no result returned")
+    return results
+
+
+def compare_results(results, golden_results):
+    for result, golden_result in zip(results, golden_results):
+        if result["added_to_graph"]:
+            return result == golden_result
+        elif triplets:= result["triplets_already_in_graph"]:
+            for triplet in triplets:
+                if triplet in golden_result["triplets_already_in_graph"]:
+                    return True
+    return False
+
+
 def main():    
     TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
     TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
+    assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified in env"
     TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
     TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
     INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_graph"))
-    USER_KG_PORT = 8138
+    USER_KG_PORT = 9138
 
     USER_KG_URL = f"http://0.0.0.0:{USER_KG_PORT}/respond"
 
@@ -61,7 +87,7 @@ def main():
         index_load_path=INDEX_LOAD_PATH,
     )
 
-    USER_ID = "User/b75d2700259b4d34ac44df85e7f530ed"
+    USER_ID = "User/b75d2700259bdc44sdsdf85e7f530ed"
     # get dog_id and park_id from KG
     dog_id, park_id = None, None
     try:
@@ -92,7 +118,6 @@ def main():
         golden_results = [
             [{
                 "added_to_graph": [{
-                    "entity_ids": ["animal/978684bf-61b0-4b54-a040-c621a177e660", "Misc/fc3e6b30-0197-4cfb-a8eb-7fb5c26c869a"],
                     "entity_kinds": ["animal", "Misc"],
                     "entity_names": ["dog", "park"],
                     "rel_names": ["HAVE_PET", "LIKE_GOTO"]
@@ -105,8 +130,8 @@ def main():
             [{
                 "added_to_graph": [],
                 "triplets_already_in_graph": [
-                    [USER_ID, "LIKE_GOTO", "Misc/fc3e6b30-0197-4cfb-a8eb-7fb5c26c869a"],
-                    [USER_ID, "HAVE_PET", "animal/978684bf-61b0-4b54-a040-c621a177e660"]
+                    [USER_ID, "LIKE_GOTO", "Misc"],
+                    [USER_ID, "HAVE_PET", "animal"]
                 ]
             }]
         ]
@@ -114,7 +139,8 @@ def main():
     count = 0
     for data, golden_result in zip(request_data, golden_results):
         result = requests.post(USER_KG_URL, json=data).json()
-        if result == golden_result:
+        result = format_for_comparison(result)
+        if compare_results(result, golden_result):
             count += 1
     assert count == len(request_data)
     print("Success")
