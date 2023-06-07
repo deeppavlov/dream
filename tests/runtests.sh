@@ -131,7 +131,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
-    # docker-compose -f docker-compose.yml -f dev.yml ps --services | grep -wv -e agent -e mongo
+    # docker-compose -p test -f docker-compose.yml -f dev.yml ps --services | grep -wv -e agent -e mongo
 
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing test data to each skill selected for testing"
