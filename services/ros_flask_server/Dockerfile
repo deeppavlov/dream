@@ -35,8 +35,6 @@ RUN apt install -y python3-rosdep python3-rosinstall python3-rosinstall-generato
 RUN rosdep init
 RUN rosdep update
 
-RUN mkdir -p /src/catkin_ws/src
-
 WORKDIR /src/
 
-CMD cd catkin_ws && export PATH=/src/.local/bin:$PATH && source /opt/ros/noetic/setup.bash && catkin_make && source devel/setup.bash && cd src && catkin_create_pkg ros_dream std_msgs rospy roscpp && cd /src/catkin_ws && mkdir /src/catkin_ws/src/ros_dream/scripts && mv /src/listener.py /src/catkin_ws/src/ros_dream/scripts/listener.py && catkin_make && cd /src && source /src/catkin_ws/devel/setup.bash && (trap 'kill 0' SIGINT; roscore & gunicorn -b 0.0.0.0:$SERVICE_PORT --workers=1 server:app)
+CMD rm -rf /src/catkin_ws; mkdir -p /src/catkin_ws/src && cd catkin_ws && export PATH=/src/.local/bin:$PATH && source /opt/ros/noetic/setup.bash && catkin_make && source devel/setup.bash && cd src && catkin_create_pkg ros_dream std_msgs rospy roscpp && cd /src/catkin_ws && mkdir /src/catkin_ws/src/ros_dream/scripts && mv /src/listener.py /src/catkin_ws/src/ros_dream/scripts/listener.py && catkin_make && cd /src && source /src/catkin_ws/devel/setup.bash && (trap 'kill 0' SIGINT; roscore & gunicorn -b 0.0.0.0:$SERVICE_PORT --workers=1 server:app)
