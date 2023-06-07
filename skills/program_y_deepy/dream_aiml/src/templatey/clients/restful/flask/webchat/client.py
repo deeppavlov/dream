@@ -93,7 +93,6 @@ class WebChatBotClient(FlaskRestBotClient):
         return answer
 
     def receive_message(self, request):
-
         api_key_response = self.check_api_key(request)
         if api_key_response is not None:
             return api_key_response
@@ -123,7 +122,6 @@ class WebChatBotClient(FlaskRestBotClient):
 
 
 if __name__ == "__main__":
-
     WEB_CLIENT = None
 
     print("Initiating WebChat Client...")

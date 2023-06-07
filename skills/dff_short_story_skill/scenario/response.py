@@ -91,7 +91,6 @@ def choose_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def which_story(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-
     prev_node = get_previous_node(ctx, actor)
     if prev_node in ["start_node", "fallback_node"]:
         int_ctx.set_can_continue(ctx, actor, MUST_CONTINUE)

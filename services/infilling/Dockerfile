@@ -16,15 +16,15 @@ RUN pip install -r /src/requirements.txt
 
 COPY . /src
 
-RUN mkdir /data/
-RUN ls
-RUN python download_model.py model sto ilm | bash
+RUN mkdir /data/ && \
+    ls && \
+    python download_model.py model sto ilm | bash
 WORKDIR /data/
 
-RUN wget http://files.deeppavlov.ai/dream/infilling/additional_ids_to_tokens.pkl
-RUN wget http://files.deeppavlov.ai/dream/infilling/vocab.bpe
-RUN wget http://files.deeppavlov.ai/dream/infilling/encoder.json
-RUN wget http://files.deeppavlov.ai/dream/infilling/config.json
+RUN wget http://files.deeppavlov.ai/dream/infilling/additional_ids_to_tokens.pkl && \
+    wget http://files.deeppavlov.ai/dream/infilling/vocab.bpe && \
+    wget http://files.deeppavlov.ai/dream/infilling/encoder.json && \
+    wget http://files.deeppavlov.ai/dream/infilling/config.json
 
 WORKDIR /src
 

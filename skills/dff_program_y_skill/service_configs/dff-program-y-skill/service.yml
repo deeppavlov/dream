@@ -1,0 +1,36 @@
+name: dff-program-y-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8008
+      SERVICE_NAME: dff_program_y_skill
+      LANGUAGE: EN
+    context: .
+    dockerfile: ./skills/dff_program_y_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 1024M
+      reservations:
+        memory: 1024M
+  volumes:
+  - ./skills/dff_program_y_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8008:8008
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8008
+  - PORT=8008

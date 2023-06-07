@@ -521,6 +521,13 @@ def persona_bot_formatter(dialog: Dict):
     ]
 
 
+def cropped_dialog(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    return [{"dialogs": [dialog]}]
+
+
 def full_dialog(dialog: Dict):
     return [{"dialogs": [dialog]}]
 
@@ -687,7 +694,7 @@ def prepare_el_input(dialog: Dict):
                 entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
 
     return entity_substr_list, entity_tags_list, context
 
@@ -1008,17 +1015,23 @@ def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
 
 
-def dff_dream_persona_prompted_skill_formatter(dialog):
+def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
-        "dff_dream_persona_prompted_skill",
+        skill_name,
+        bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
-def dff_prompted_skill_formatter(dialog, skill_name=None):
+def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
-        dialog, skill_name, types_utterances=["human_utterances", "bot_utterances", "utterances"]
+        dialog,
+        "dff_universal_prompted_skill",
+        bot_last_turns=5,
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
@@ -1147,8 +1160,19 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     num_last_utterances = 4
     dialog = utils.get_last_n_turns(dialog, total_last_turns=num_last_utterances)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
-    return [{"contexts": contexts}]
+    contexts = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
+    prompts_goals = dialog["human"]["attributes"].get("prompts_goals", {})
+    return [{"contexts": [contexts], "prompts_goals": [prompts_goals]}]
+
+
+def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
+    prompts_goals = {}
+    if len(dialog["human_utterances"]) > 1:
+        hypotheses = dialog["human_utterances"][-2].get("hypotheses", [])
+        for prompts_goals_dict in [hyp.get("prompts_goals", None) for hyp in hypotheses]:
+            if prompts_goals_dict:
+                prompts_goals.update(deepcopy(prompts_goals_dict))
+    return [{"prompts_goals": [prompts_goals], "human_attributes": [dialog["human"]["attributes"]]}]
 
 
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:

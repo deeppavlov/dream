@@ -25,7 +25,12 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "last_chance"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/uBwLe0Jusl7Q.yml",
+                "service": "services/agent_services/service_configs/dream_persona_prompted"
+            }
         },
         "timeout_service": {
             "connector": {
@@ -45,7 +50,84 @@
             "state_manager_method": "add_bot_utterance_last_chance",
             "tags": [
                 "timeout"
-            ]
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/Vi0jGZfqNIU8.yml",
+                "service": "services/agent_services/service_configs/dream_persona_prompted"
+            }
+        },
+        "annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
+                }
+            },
+            "prompt_goals_collector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/collect_goals"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "update_attributes",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/Wps5FHxkwj3Z.yml",
+                    "service": "annotators/prompt_selector/service_configs/dream_persona_prompted"
+                }
+            },
+            "prompt_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.prompt_goals_collector"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/Wps5FHxkwj3Z.yml",
+                    "service": "annotators/prompt_selector/service_configs/dream_persona_prompted"
+                }
+            }
+        },
+        "response_annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
+                }
+            }
         },
         "response_annotator_selectors": {
             "connector": {
@@ -58,71 +140,56 @@
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
             "tags": [
                 "selector"
-            ]
-        },
-        "response_annotators": {
-            "sentseg": {
-                "connector": "connectors.sentseg",
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_annotator_selectors"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
-        "annotators": {
-            "spelling_preprocessing": {
+        "candidate_annotators": {
+            "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://spelling-preprocessing:8074/respond"
+                    "timeout": 2.0,
+                    "url": "http://combined-classification:8087/batch_model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn"
-            },
-            "sentseg": {
-                "connector": "connectors.sentseg",
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "skills"
                 ],
-                "state_manager_method": "add_annotation"
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
+                }
             },
-            "badlisted_words": {
+            "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://badlisted-words:8018/badlisted_words"
+                    "timeout": 1.0,
+                    "url": "http://sentence-ranker:8128/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing"
+                    "skills"
                 ],
-                "state_manager_method": "add_annotation"
-            },
-            "prompt_selector": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://prompt-selector:8135/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ]
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
+                }
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "description_based_skill_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -131,22 +198,35 @@
                 ],
                 "tags": [
                     "selector"
-                ]
+                ],
+                "is_enabled": true,
+                "source": {
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
+                }
             }
         },
         "skills": {
             "dff_dream_persona_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
-                    "url": "http://dff-dream-persona-prompted-skill:8134/respond"
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-persona-gpt-j-prompted-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_dream_persona_prompted_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/6lLhP7zuoiI0bxJEDLWUg.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-gpt-jt-prompted-skill"
+                }
             },
             "dummy_skill": {
                 "connector": {
@@ -158,70 +238,39 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
-            }
-        },
-        "candidate_annotators": {
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://badlisted-words:8018/badlisted_words_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "combined_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://combined-classification:8087/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
-            },
-            "sentence_ranker": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://sentence-ranker:8128/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
             }
         },
         "response_selectors": {
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1,
-                    "url": "http://convers-evaluation-no-scripts-selector:8009/respond"
+                    "timeout": 1.0,
+                    "url": "http://ranking-based-response-selector:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
                 ],
-                "state_manager_method": "add_bot_utterance"
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
+                }
             }
         }
     },
     "metadata": {
-        "display_name": "ChatGPT-based Prompted Dream",
+        "display_name": "Persona-based Prompted Dream",
         "author": "DeepPavlov",
-        "description": "Mini version of DeepPavlov Dream Socialbot with the use of prompted generative models. This is a generative-based socialbot that uses large language models to generate most of the responses. You can upload specify own prompts (json files) to be used in LLM-powered reply generation.",
+        "description": "This is a simple dialog system that can chat with you on any topic. It has a pre-defined 'personality' and uses `GPT-JT 6B` model to generate responses.",
         "version": "0.0.1",
         "date_created": "2023-01-10T02:00:00",
         "ram_usage": "50 GB",

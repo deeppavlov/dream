@@ -1,0 +1,6 @@
+SERVICE_PORT: 8129
+SRC_DIR: annotators/spacy_annotator
+SPACY_MODEL: ru_core_news_sm
+TOKEN_ATTRIBUTES: pos_|dep_|lemma_|ent_iob_|ent_type_|morph
+ANNOTATE_BATCH_WITH_TOKENS_ONLY: 1
+FLASK_APP: server

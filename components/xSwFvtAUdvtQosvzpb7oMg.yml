@@ -1,0 +1,26 @@
+name: rule_based_selector
+display_name: Rule-based Skill Selector
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Algorithm that selects list of skills to generate candidate responses
+  to the current context based on topics, entities, emotions, toxicity, dialogue acts
+  and dialogue history
+ram_usage: 100M
+gpu_usage: null
+group: skill_selectors
+connector:
+  protocol: python
+  class_name: skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector
+dialog_formatter: state_formatters.dp_formatters:base_skill_selector_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators
+required_previous_services: null
+state_manager_method: null
+tags:
+- selector
+endpoint: respond
+service: skill_selectors/rule_based_selector/service_configs/agent
+date_created: '2023-03-16T09:45:32'

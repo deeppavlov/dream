@@ -7,7 +7,6 @@ RUN pip install -r /src/requirements.txt
 ARG MODELS_URL
 ENV MODELS_URL ${MODELS_URL:-http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip}
 
-RUN mkdir /global_data
 WORKDIR /global_data
 
 RUN wget ${MODELS_URL} -O ./new_vectorizer_2.zip

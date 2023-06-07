@@ -1,0 +1,5 @@
+CONFIG: custom_entity_linking.json
+SERVICE_PORT: 8153
+SRC_DIR: annotators/custom_entity_linking/
+SERVICE_NAME: custom_entity_linking
+FLASK_APP: server

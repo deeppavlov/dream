@@ -265,12 +265,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"      
     ports:
       - 8087:8087
-  midas-classification:
-    volumes:
-      - "./annotators/midas_classification:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8090:8090
   dff-travel-skill:
     volumes:
       - "./skills/dff_travel_skill:/src"

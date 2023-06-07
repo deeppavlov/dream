@@ -1,0 +1,6 @@
+SERVICE_PORT: 8151
+SERVICE_NAME: dff_dream_persona_ru_prompted_skill
+PROMPT_FILE: common/prompts/dream_persona_ru.json
+GENERATIVE_SERVICE_URL: http://transformers-lm-llama7bru:8149/respond
+GENERATIVE_TIMEOUT: 120
+N_UTTERANCES_CONTEXT: 7

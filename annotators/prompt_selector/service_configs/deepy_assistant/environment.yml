@@ -1,0 +1,5 @@
+SERVICE_PORT: 8135
+SERVICE_NAME: prompt_selector
+N_SENTENCES_TO_RETURN: 1
+PROMPTS_TO_CONSIDER: deepy,deepy_faq
+FLASK_APP: server

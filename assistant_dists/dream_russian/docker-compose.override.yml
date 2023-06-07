@@ -7,8 +7,8 @@ services:
           ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011,
           spelling-preprocessing-ru:8074, entity-linking-ru:8075, wiki-parser-ru:8077, dff-generative-ru-skill:8092,
           dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
-          dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8126,
-          fact-retrieval-ru:8130, text-qa-ru:8078"
+          dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118,
+          fact-retrieval-ru:8110, text-qa-ru:8078"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -125,6 +125,9 @@ services:
   badlisted-words-ru:
     env_file: [ .env_ru ]
     build:
+      args:
+        SERVICE_PORT: 8018
+        SERVICE_NAME: badlisted_words
       context: annotators/BadlistedWordsDetector_ru/
     command: flask run -h 0.0.0.0 -p 8018
     environment:
@@ -141,10 +144,10 @@ services:
     build:
       context: ./annotators/toxic_classification_ru/
       args:
-        SERVICE_PORT: 8126
+        SERVICE_PORT: 8118
         PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
         LANGUAGE: RU
-    command: flask run -h 0.0.0.0 -p 8126
+    command: flask run -h 0.0.0.0 -p 8118
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -160,7 +163,7 @@ services:
     build:
       args:
         CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
-        PORT: 8021
+        SERVICE_PORT: 8021
         SRC_DIR: annotators/NER_deeppavlov
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
       context: ./
@@ -182,7 +185,7 @@ services:
     build:
       args:
         CONFIG: entity_detection_rus.json
-        PORT: 8103
+        SERVICE_PORT: 8103
         SRC_DIR: annotators/entity_detection_rus
         LANGUAGE: RU
       context: ./
@@ -219,8 +222,9 @@ services:
     env_file: [ .env_ru ]
     build:
       args:
+        SERVICE_PORT: 8075
+        SERVICE_NAME: entity_linking
         CONFIG: entity_linking_rus.json
-        PORT: 8075
         SRC_DIR: annotators/entity_linking_rus
         LANGUAGE: RU
       context: ./
@@ -238,11 +242,12 @@ services:
     env_file: [ .env_ru ]
     build:
       args:
+        SERVICE_PORT: 8077
+        SERVICE_NAME: wiki_parser
         WIKI_LITE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt
         WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
         WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
         CONFIG: wiki_parser.json
-        PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
         LANGUAGE: RU
@@ -265,7 +270,7 @@ services:
     build:
       args:
         CONFIG: levenshtein_corrector_ru.json
-        PORT: 8074
+        SERVICE_PORT: 8074
         SRC_DIR: annotators/spelling_preprocessing_dp
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
         LANGUAGE: RU
@@ -402,11 +407,11 @@ services:
         CONFIG: fact_retrieval_rus.json
         COMMIT: c8264bf82eaa3ed138395ab68f71d47a4175f2fc
         TOP_N: 20
-        PORT: 8130
+        SERVICE_PORT: 8110
         SRC_DIR: annotators/fact_retrieval_rus
       context: ./
       dockerfile: annotators/fact_retrieval_rus/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
+    command: flask run -h 0.0.0.0 -p 8110
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -421,8 +426,9 @@ services:
     env_file: [ .env ]
     build:
       args:
+        SERVICE_PORT: 8078
+        SERVICE_NAME: text_qa
         CONFIG: qa_rus.json
-        PORT: 8078
       context: services/text_qa
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078

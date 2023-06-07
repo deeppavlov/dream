@@ -1,0 +1,27 @@
+name: entity_storer
+display_name: Entity Storer
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: a rule-based component, which stores entities from the user's and socialbot's
+  utterances if opinion expression is detected with patterns or MIDAS Classifier and
+  saves them along with the detected attitude to dialogue state
+ram_usage: 220M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://entity-storer:8089/respond
+dialog_formatter: state_formatters.dp_formatters:entity_storer_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.combined_classification
+- annotators.intent_catcher
+required_previous_services: null
+state_manager_method: update_attributes
+tags: null
+endpoint: respond
+service: annotators/entity_storer/service_configs/entity-storer
+date_created: '2023-03-16T09:45:32'
