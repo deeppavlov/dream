@@ -8,3 +8,4 @@ jinja2<=3.0.3
 Werkzeug<=2.0.3
 transformers==4.25.1
 torch==1.13.1
+typing-extensions
