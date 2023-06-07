@@ -138,8 +138,8 @@ def generate_triplets(uttr_batch, relations_pred_batch):
     offset_start = 0
     for uttr, pred_rels in zip(uttr_batch, relations_pred_batch):
         rels_len = len(pred_rels)
-        triplets_init = t5_pred_triplets[offset_start : (offset_start+rels_len)]
-        scores_init = t5_pred_scores[offset_start : (offset_start+rels_len)]
+        triplets_init = t5_pred_triplets[offset_start : (offset_start + rels_len)]
+        scores_init = t5_pred_scores[offset_start : (offset_start + rels_len)]
         offset_start += rels_len
         triplets = postprocess_triplets(triplets_init, scores_init, uttr)
         triplets_corr_batch.append(triplets)
@@ -262,6 +262,7 @@ def get_result(request):
 def respond():
     result = get_result(request)
     return jsonify(result)
+
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=8136)
