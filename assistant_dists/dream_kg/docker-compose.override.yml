@@ -7,7 +7,7 @@ services:
           badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075,
           combined-classification:8087, dff-friendship-skill:8086, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153, dff-template-skill:8120, terminusdb-server:6363,
-          user-knowledge-graph:8138"
+          user-knowledge-graph:8027"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -313,13 +313,13 @@ services:
     env_file: [ .env, .env_secret]
     build:
       args:
-        SERVICE_PORT: 8138
+        SERVICE_PORT: 8027
         SRC_DIR: annotators/user_knowledge_graph/
         SERVICE_NAME: user_knowledge_graph
         ENVVARS_TO_SEND: TERMINUSDB_SERVER_PASSWORD
       context: ./
       dockerfile: annotators/user_knowledge_graph/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8138
+    command: flask run -h 0.0.0.0 -p 8027
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=3

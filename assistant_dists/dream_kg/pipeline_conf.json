@@ -425,15 +425,20 @@
             "user_knowledge_graph": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://user-knowledge-graph:8138/respond"
+                    "url": "http://user-knowledge-graph:8027/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
                 "previous_services": [
                     "annotators.property_extraction",
                     "annotators.custom_entity_linking"
-                ]
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/74p4006d17yappr7ji7dtf.yml",
+                    "service": "annotators/user_knowledge_graph/service_configs/user-knowledge-graph"
+                }
             }
         },
         "skill_selectors": {
