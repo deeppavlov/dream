@@ -1,23 +1,25 @@
-FROM python:3.7.4
+FROM python:3.7-slim
 
 ARG DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/elmo2.tar.gz
 ARG MODEL_META_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.meta
 ARG MODEL_DATA_URL=files.deeppavlov.ai/alexaprize_data/sentseg/model.data-00000-of-00001
 
 WORKDIR /src
-RUN mkdir /data
-RUN mkdir /elmo2
+RUN mkdir /data /elmo2 tfhub_cache_dir
 
-RUN curl -L $DATA_URL --output /tmp/elmo2.tar.gz && tar -xf /tmp/elmo2.tar.gz -C /elmo2 && rm /tmp/elmo2.tar.gz
-RUN curl -L $MODEL_META_URL --output /data/model.meta
-RUN curl -L $MODEL_DATA_URL --output /data/model.data-00000-of-00001
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -L $DATA_URL --output /tmp/elmo2.tar.gz && \
+    tar -xf /tmp/elmo2.tar.gz -C /elmo2 && \
+    rm /tmp/elmo2.tar.gz && \
+    curl -L $MODEL_META_URL --output /data/model.meta && \
+    curl -L $MODEL_DATA_URL --output /data/model.data-00000-of-00001
 
-RUN mkdir tfhub_cache_dir
 ENV TFHUB_CACHE_DIR tfhub_cache_dir
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -c "import nltk; nltk.download('punkt')"
+RUN pip install -r requirements.txt && \
+    python -c "import nltk; nltk.download('punkt')"
 
 COPY . .
 COPY model.index /data/

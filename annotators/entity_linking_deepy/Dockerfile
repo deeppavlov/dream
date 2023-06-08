@@ -8,9 +8,6 @@ ARG SRC_DIR
 ENV CONFIG=$CONFIG
 ENV SERVICE_PORT=$SERVICE_PORT
 
-RUN pip install pybind11==2.2.4
-RUN pip install hdt==2.3
-
 COPY ./annotators/entity_linking_deepy/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
