@@ -54,7 +54,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests_multiskill_davinci3.sh MODE=clean'
           }
@@ -83,11 +83,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests_multiskill_davinci3.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
@@ -152,7 +147,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
           }
@@ -181,11 +176,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
@@ -250,7 +240,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
           }
@@ -279,11 +269,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
@@ -348,7 +333,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
           }
@@ -377,11 +362,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
@@ -446,7 +426,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests.sh MODE=clean'
           }
@@ -476,11 +456,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
@@ -572,7 +547,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests_russian.sh MODE=clean'
           }
@@ -602,11 +577,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests_russian.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
