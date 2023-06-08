@@ -1,4 +1,11 @@
-from typing import List, TypedDict
+import sys
+
+if sys.version_info[0] == 3 and sys.version_info[1] >= 8:
+    from typing import List, TypedDict
+else:
+    from typing_extensions import TypedDict
+    from typing import List
+
 from dataclasses import dataclass
 from itertools import chain
 
