@@ -81,7 +81,7 @@ class RuleBasedSkillSelectorConnector:
 
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
             high_priority_intent_detected = any(
-                [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
+                [k for k in intent_catcher_intents if k in high_priority_intents["dff_mint_skill"]]
             )
             low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
             #command_detected = any([k for k in intent_catcher_intents if k in command_intents])
@@ -126,7 +126,7 @@ class RuleBasedSkillSelectorConnector:
             elif high_priority_intent_detected and HIGH_PRIORITY_INTENTS:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
-                skills_for_uttr.append("dff_intent_responder_skill")
+                skills_for_uttr.append("dff_mint_skill")
             #elif command_detected:
                 #skills_for_uttr.append("dummy_skill")
                 # process intents with Command Selector
@@ -175,7 +175,7 @@ class RuleBasedSkillSelectorConnector:
             else:
                 # general case
                 if low_priority_intent_detected:
-                    skills_for_uttr.append("dff_intent_responder_skill")
+                    skills_for_uttr.append("dff_mint_skill")
                 # adding open-domain skills
                 skills_for_uttr.append("dff_grounding_skill")
                 skills_for_uttr.append("dff_program_y_skill")
