@@ -10,7 +10,7 @@ def main():
                 "text": "Move forward for 10 meters",
                 "hypotheses": [
                     {
-                        "skill_name": "dff_intent_responder_skill",
+                        "skill_name": "dff_mint_skill",
                         "text": "Moving forward for 10 meters",
                         "command_to_perform": "move_forward_10",
                     }
@@ -20,7 +20,7 @@ def main():
                 "text": "Move backward for 10 meters",
                 "hypotheses": [
                     {
-                        "skill_name": "dff_intent_responder_skill",
+                        "skill_name": "dff_mint_skill",
                         "text": "Moving backward for 10 meters",
                         "command_to_perform": "move_backward_10",
                     }
@@ -28,8 +28,8 @@ def main():
             },
         ],
         "bot_utterances": [
-            {"text": "Moving forward for 10 meters", "confidence": 1.0, "active_skill": "dff_intent_responder_skill"},
-            {"text": "Moving backward for 10 meters", "confidence": 1.0, "active_skill": "dff_intent_responder_skill"},
+            {"text": "Moving forward for 10 meters", "confidence": 1.0, "active_skill": "dff_mint_skill"},
+            {"text": "Moving backward for 10 meters", "confidence": 1.0, "active_skill": "dff_mint_skill"},
         ],
         "dialog_ids": ["test_dialog_id", "test_dialog_id"],
     }

@@ -205,7 +205,7 @@ def rule_score_based_selection(
         curr_score = None
         is_misheard = misheard_with_spec1 in candidates[i]["text"] or misheard_with_spec2 in candidates[i]["text"]
         intent_name = get_intent_name(candidates[i]["text"])
-        is_intent_candidate = (skill_names[i] in ["dff_intent_responder_skill", "dff_program_y_skill"]) and intent_name
+        is_intent_candidate = (skill_names[i] in ["dff_mint_skill", "dff_program_y_skill"]) and intent_name
         is_intent_candidate = is_intent_candidate and intent_name not in low_priority_intents
         # print("is intent candidate? " + str(is_intent_candidate), flush=True)
 

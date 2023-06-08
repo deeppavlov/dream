@@ -310,11 +310,11 @@
                     "endpoint": "respond"
                 }
             },
-            "dff_intent_responder_skill": {
+            "dff_mint_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-intent-responder-skill:8012/respond"
+                    "url": "http://dff-mint-skill:8337/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -324,23 +324,10 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill",
-                    "container": "dff-intent-responder-skill",
+                    "directory": "skills/dff_mint_skill",
+                    "container": "dff-mint-skill",
                     "endpoint": "respond"
                 }
-            },
-            "dff_mint_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2,
-                    "url": "http://dff-mint-skill:8337/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
             },
             "dummy_skill": {
                 "connector": {

@@ -101,7 +101,7 @@ def add_question_to_statement(
 def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
     for i, cand in enumerate(candidates):
         # no penalties for repeat intent
-        if cand["skill_name"] == "dff_intent_responder_skill" and "#+#repeat" in cand["text"]:
+        if cand["skill_name"] == "dff_mint_skill" and "#+#repeat" in cand["text"]:
             continue
         # TODO: remove the quick fix of gcs petitions, issue is https://github.com/deeppavlov/assistant/issues/80
         if cand["skill_name"] in ["game_cooperative_skill", "news_api_skill", "dff_movie_skill"]:
