@@ -559,6 +559,7 @@ pipeline {
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
               sh '''
+                cat /home/ignatov/secrets.txt >> .env_ru
                 tests/runtests.sh MODE=clean
                 tests/runtests_russian.sh MODE=build
               '''
