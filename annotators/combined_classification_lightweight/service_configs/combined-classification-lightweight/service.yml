@@ -10,7 +10,7 @@ compose:
       SERVICE_PORT: 8150
       SERVICE_NAME: combined_classification
       CONFIG: combined_classifier.json
-      CUDA_VISIBLE_DEVICES: '0'
+      CUDA_VISIBLE_DEVICES: ''
     context: .
     dockerfile: ./annotators/combined_classification_lightweight/Dockerfile
   command: gunicorn --workers=1 server:app -b 0.0.0.0:8150 --timeout 600

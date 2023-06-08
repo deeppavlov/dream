@@ -12,7 +12,3 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  combined-classification-lightweight:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
