@@ -98,14 +98,15 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
-    logger.info(f"prompt from shared memory: {prompt}")
+    prompt = prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
+    logger.info(f"prompt: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
 
     if len(dialog_context) > 0:
         try:
             hypotheses = send_request_to_prompted_generative_service(
                 dialog_context,
-                prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT,
+                prompt,
                 GENERATIVE_SERVICE_URL,
                 GENERATIVE_SERVICE_CONFIG,
                 GENERATIVE_TIMEOUT,

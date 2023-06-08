@@ -1,3 +1,4 @@
+git+https://github.com/deeppavlov/DeepPavlov.git@0.12.0
 sentry-sdk==0.13.0
 gunicorn==19.9.0
 jinja2<=3.0.3
