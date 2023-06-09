@@ -80,3 +80,7 @@ def batch_respond():
     logger.debug(f"combined_classification_lightweight batch result: {answer}")
     logger.info(f"combined_classification_lightweight exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
+
+
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0", port=3000)
