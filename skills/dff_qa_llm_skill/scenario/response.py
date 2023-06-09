@@ -3,14 +3,13 @@ import logging
 import re
 import sentry_sdk
 from os import getenv
-from pathlib import Path
 from typing import Any
 
 from common.build_dataset import build_dataset
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, compose_sending_variables
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from df_engine.core import Context, Actor
 
 
@@ -47,23 +46,23 @@ def compose_data_for_model(ctx, actor):
             .get("doc_retriever", {})
             .get("candidate_files", [])
         )
-        ORIGINAL_FILE_PATH = (
+        file_paths_on_server = (
             context[-1]
             .get("annotations", {})
             .get("doc_retriever", {})
             .get("file_path", "")
         )
-        DATASET_PATH = '/data/temporary_dataset'
+        dataset_path = '/data/temporary_dataset'
         logger.info(
             f"""Building dataset to get candidate texts. raw_candidates: {raw_candidates},
-            ORIGINAL_FILE_PATH: {ORIGINAL_FILE_PATH}, DATASET_PATH: {DATASET_PATH}"""
+            file_paths_on_server: {file_paths_on_server}, dataset_path: {dataset_path}"""
         )
-        build_dataset(DATASET_PATH, ORIGINAL_FILE_PATH)
+        build_dataset(dataset_path, file_paths_on_server)
         num_candidates = []
         nums = 0
         for f_name in raw_candidates:
             nums += 1
-            with open(DATASET_PATH + f_name) as f:
+            with open(dataset_path + f_name) as f:
                 num_candidates.append(f"{nums}. {f.read()}")
         final_candidates = " ".join(num_candidates)
         request = utterance_texts[-1]
