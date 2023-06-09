@@ -31,7 +31,7 @@ services:
       args:
         SERVICE_PORT: 8163
         CONFIG_PATH: ./doc_retriever_config.json
-        ORIGINAL_FILE_PATH: ./documents/big_apple.txt
+        ORIGINAL_FILES_PATHS: ./documents/big_apple.txt,./documents/book-war-and-peace.txt
     command: python -m flask run -h 0.0.0.0 -p 8163
     environment:
       - FLASK_APP=server

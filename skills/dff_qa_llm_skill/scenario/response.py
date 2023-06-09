@@ -3,22 +3,29 @@ import logging
 import re
 import sentry_sdk
 from os import getenv
+import os
 from typing import Any
+import requests
 
 from common.build_dataset import build_dataset
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+from common.prompts import (
+    send_request_to_prompted_generative_service,
+    compose_sending_variables,
+)
 from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG") # add env!!!
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")  # add env!!!
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 if GENERATIVE_SERVICE_CONFIG:
@@ -30,15 +37,18 @@ ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 assert GENERATIVE_SERVICE_URL
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
+FIND_ID = re.compile(r"file=([0-9a-zA-Z]*).txt")
 DEFAULT_CONFIDENCE = 0.9
 SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
 
 
 def compose_data_for_model(ctx, actor):
-    context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
+    if not os.path.exists("/data/documents"):
+        os.mkdir("/data/documents")
+    dialog = int_ctx.get_dialog(ctx, actor)
+    context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
     utterance_texts = [uttr.get("text", "") for uttr in context]
-
     if utterance_texts:
         raw_candidates = (
             context[-1]
@@ -46,18 +56,32 @@ def compose_data_for_model(ctx, actor):
             .get("doc_retriever", {})
             .get("candidate_files", [])
         )
-        file_paths_on_server = (
+        filepaths_on_server = (
             context[-1]
-            .get("annotations", {})
-            .get("doc_retriever", {})
-            .get("file_path", "")
+            .get("user", {})
+            .get("attributes", {})
+            .get(
+                "documents_qa_model", {}
+            )  # todo: look if the way I save attributes is the right way!!!
+            .get("documents", [])
+            # dialog.get("bot", {}).get("attributes", {}).get("document_links", []) # todo: why doesn't it work???
         )
-        dataset_path = '/data/temporary_dataset'
+        filepaths_in_container = []
+        for filepath in filepaths_on_server:
+            file_id = re.search(FIND_ID, filepath).group(1)
+            filepath_container = f"/data/documents/{file_id}.txt"  # todo: check if in server.py getting file id works okay for dreambuilder (link example: 'http://files:3000/file?file=Y6oJEK1pT2.txt')
+            orig_file = requests.get(filepath, timeout=30)
+            with open(filepath_container, "wb") as f:
+                f.write(orig_file.content)
+            filepaths_in_container.append(filepath_container)
+        dataset_path = "/data/temporary_dataset/"
+        if not os.path.exists(dataset_path):
+            os.mkdir(dataset_path)
         logger.info(
             f"""Building dataset to get candidate texts. raw_candidates: {raw_candidates},
-            file_paths_on_server: {file_paths_on_server}, dataset_path: {dataset_path}"""
+filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}"""
         )
-        build_dataset(dataset_path, file_paths_on_server)
+        build_dataset(dataset_path, filepaths_in_container)
         num_candidates = []
         nums = 0
         for f_name in raw_candidates:
@@ -95,13 +119,19 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_bot_attrs += [bot_attr]
             curr_attrs += [attr]
 
-    dialog_context = compose_data_for_model(ctx, actor)    
+    dialog_context = compose_data_for_model(ctx, actor)
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
-    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get(
+        "attributes", {}
+    )
     lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+    envvars_to_send = (
+        ENVVARS_TO_SEND
+        if len(ENVVARS_TO_SEND)
+        else human_uttr_attributes.get("envvars_to_send", [])
+    )
     sending_variables = compose_sending_variables(
         lm_service_kwargs,
         envvars_to_send,
@@ -126,7 +156,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
-
 
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE

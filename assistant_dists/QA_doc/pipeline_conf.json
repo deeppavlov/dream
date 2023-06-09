@@ -113,7 +113,7 @@
       "train_and_upload_model": {
         "connector": {
           "protocol": "http",
-          "timeout": 5,
+          "timeout": 40,
           "url": "http://doc-retriever:8163/train_and_upload_model"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
@@ -129,7 +129,7 @@
       "doc_retriever": {
         "connector": {
           "protocol": "http",
-          "timeout": 30,
+          "timeout": 50,
           "url": "http://doc-retriever:8163/return_candidates"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
