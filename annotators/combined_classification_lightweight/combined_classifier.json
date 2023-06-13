@@ -1,0 +1,221 @@
+{
+  "metadata": {
+    "variables": {
+      "BACKBONE": "huawei-noah/TinyBERT_General_4L_312D",
+      "MODELS_PATH": "~/.deeppavlov/models",
+      "SINGLE_SENTENCE_LEN": 32,
+      "MULTI_SENTENCE_LEN": 128
+    },
+    "download":[{
+        "url": "http://files.deeppavlov.ai/dream_data/distil9in1_singlelabel/9in1_singlelabel_v3_no_history_lightweight.tar.gz",
+        "subdir": "{MODELS_PATH}"
+      }]
+  },
+  "chainer": {
+    "in": [
+      "x_emo",
+      "x_sentiment",
+      "x_toxic",
+      "x_factoid",
+      "x_midas",
+      "x_deeppavlov_topics",
+      "x_topics",
+      "x_dialogact_topics",
+      "x_dialogact_intents"
+    ],
+    "pipe": [
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_emo"
+        ],
+        "out": [
+          "bert_features_x_emo"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_sentiment"
+        ],
+        "out": [
+          "bert_features_x_sentiment"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_toxic"
+        ],
+        "out": [
+          "bert_features_x_toxic"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_factoid"
+        ],
+        "out": [
+          "bert_features_x_factoid"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_midas"
+        ],
+        "out": [
+          "bert_features_x_midas"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_deeppavlov_topics"
+        ],
+        "out": [
+          "bert_features_x_deeppavlov_topics"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_topics"
+        ],
+        "out": [
+          "bert_features_x_topics"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_dialogact_topics"
+        ],
+        "out": [
+          "bert_features_x_dialogact_topics"
+        ]
+      },
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x_dialogact_intents"
+        ],
+        "out": [
+          "bert_features_x_dialogact_intents"
+        ]
+      },
+      {
+        "id": "multitask_transformer",
+        "class_name": "multitask_transformer",
+        "optimizer_parameters": {
+          "lr": 2e-5
+        },
+        "learning_rate_drop_patience": 2,
+        "learning_rate_drop_div": 2.0,
+        "return_probas": true,
+        "backbone_model": "{BACKBONE}",
+        "save_path": "{MODELS_PATH}/model",
+        "load_path": "{MODELS_PATH}/model",
+        "tasks": {
+          "emo": {
+            "type": "classification",
+            "options": 7,
+            "type_to_cache": 0
+          },
+          "sentiment": {
+            "type": "classification",
+            "options": 3,
+            "type_to_cache": 0
+          },
+          "toxic": {
+            "type": "classification",
+            "options": 8,
+            "type_to_cache": 0
+          },
+          "factoid": {
+            "type": "classification",
+            "options": 2,
+            "type_to_cache": 0
+          },
+          "midas": {
+            "type": "classification",
+            "options": 15,
+            "type_to_cache": 0
+          },
+          "deeppavlov_topics": {
+            "type": "classification",
+            "options": 33,
+            "type_to_cache": 0
+          },
+          "topics": {
+            "type": "classification",
+            "options": 22,
+            "type_to_cache": 0
+          },
+          "dialogact_topics": {
+            "type": "classification",
+            "options": 11,
+            "type_to_cache": 0
+          },
+          "dialogact_intents": {
+            "type": "classification",
+            "options": 11,
+            "type_to_cache": 0
+          }
+        },
+        "in": [
+          "bert_features_x_emo",
+          "bert_features_x_sentiment",
+          "bert_features_x_toxic",
+          "bert_features_x_factoid",
+          "bert_features_x_midas",
+          "bert_features_x_deeppavlov_topics",
+          "bert_features_x_topics",
+          "bert_features_x_dialogact_topics",
+          "bert_features_x_dialogact_intents"
+        ],
+        "out": [
+          "y_emo_pred_probas",
+          "y_sentiment_pred_probas",
+          "y_toxic_pred_probas",
+          "y_factoid_pred_probas",
+          "y_midas_pred_probas",
+          "y_deeppavlov_topics_pred_probas",
+          "y_topics_pred_probas",
+          "y_dialogact_topics_pred_probas",
+          "y_dialogact_intents_pred_probas"
+        ]
+      }
+    ],
+    "out": [
+      "y_emo_pred_probas",
+      "y_sentiment_pred_probas",
+      "y_toxic_pred_probas",
+      "y_factoid_pred_probas",
+      "y_midas_pred_probas",
+      "y_deeppavlov_topics_pred_probas",
+      "y_topics_pred_probas",
+      "y_dialogact_topics_pred_probas",
+      "y_dialogact_intents_pred_probas"        
+    ]
+  }
+}
