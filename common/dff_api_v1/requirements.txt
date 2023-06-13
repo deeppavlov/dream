@@ -6,7 +6,7 @@ itsdangerous==2.0.1
 gunicorn==19.9.0
 healthcheck==1.3.3
 # bound to a specific commit temporarily
-git+https://github.com/deeppavlov/dialog_flow_framework@13921ae
+dff==0.4.1
 # test
 requests==2.22.0
 jinja2<=3.0.3
