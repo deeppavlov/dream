@@ -291,7 +291,7 @@ flows = {
             RESPONSE: "Aha, so was it {LIKE_FOOD}? If so, where and how did you first try it?",
             PROCESSING: {
                 "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
-                "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),
             },
             TRANSITIONS: {
                 ("italy_disappointments", "neg_experience"): cnd.true(),
@@ -318,7 +318,7 @@ flows = {
                     user_dislike=["prop:dislike", "default:such situation"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
-                "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
+                "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
             },
             TRANSITIONS: {
                 ("global_flow", "fallback"): cnd.true(),
