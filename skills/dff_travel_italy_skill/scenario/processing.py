@@ -47,7 +47,7 @@ def fill_responses_by_slots_from_graph():
         user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
         entity = 'LIKE_FOOD'
         entity_type = entity + '/AbstractFood'
-        entity_with_id = user_existing_entities[entity_type][0]
+        entity_with_id = user_existing_entities[entity_type][-1]
         logger.info(f"entity_with_id -- {entity_with_id}")
         slot_value = graph.get_properties_of_entity(entity_with_id)['Name']
         logger.info(f"slot_value -- {slot_value}")
