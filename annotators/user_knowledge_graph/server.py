@@ -1,10 +1,10 @@
 import logging
 import uuid
 import os
-
+import json
+from pathlib import Path
 import inflect
 from flask import Flask, jsonify, request
-from pathlib import Path
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 from common.utils import get_named_persons
@@ -18,20 +18,9 @@ inflect = inflect.engine()
 
 USE_ABSTRACT_KINDS = True
 
-rel_kinds_dict = {
-    "favorite_animal": "animal",
-    "have_pet": "animal",
-    "like_animal": "animal",
-    "favorite_book": "book",
-    "like_read": "book",
-    "favorite_movie": "film",
-    "favorite_food": "food",
-    "like_food": "food",
-    "favorite_drink": "food",
-    "like_drink": "food",
-    "favorite_sport": "type_of_sport",
-    "like_sports": "type_of_sport"
-}
+with open('rel_list.json') as file:
+    rel_kinds_dict = json.load(file)
+
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
