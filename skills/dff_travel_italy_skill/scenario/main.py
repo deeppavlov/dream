@@ -47,7 +47,7 @@ flows = {
             ("travel_italy_general", "like_italy"): loc_cnd.is_proposed_skill,
             ("italian_food_flow_restart", "tell_more"): cnd.all(
                 [
-                    loc_cnd.has_entity_in_graph('FAVORITE_FOOD/AbstractFood'),
+                    loc_cnd.has_entity_in_graph('LIKE_FOOD/AbstractFood'),
                     loc_cnd.uttr_about_favorite_food,
                 ]
             ),
@@ -252,10 +252,10 @@ flows = {
             },
         },
         "fav_food": {
-            RESPONSE: "Oh, {user_fav_food} is to-die-for. What drink does it go best with?",
+            RESPONSE: "Oh, {user_like_food} is to-die-for. What drink does it go best with?",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    user_fav_food=["prop:favorite_food", "default:this dish"]
+                    user_like_food=["prop:like_food", "default:this dish"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
@@ -272,10 +272,10 @@ flows = {
             },
         },
         "fav_drink": {
-            RESPONSE: "It is a useful recommendation. I'll try {user_fav_drink} next time. Thank you!",
+            RESPONSE: "It is a useful recommendation. I'll try {user_like_drink} next time. Thank you!",
             PROCESSING: {
                 "entity_extraction": int_prs.entities(
-                    user_fav_drink=["prop:favorite_drink", "default:this pairing"]
+                    user_like_drink=["prop:like_drink", "default:this pairing"]
                 ),
                 "fill_responses_by_slots": int_prs.fill_responses_by_slots(),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
@@ -288,7 +288,7 @@ flows = {
     },
     "italian_food_flow_restart": {
         "tell_more": {
-            RESPONSE: "Aha, so was it {FAVORITE_FOOD}? If so, where and how did you first try it?",
+            RESPONSE: "Aha, so was it {LIKE_FOOD}? If so, where and how did you first try it?",
             PROCESSING: {
                 "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
                 "set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE),
