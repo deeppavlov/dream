@@ -4,7 +4,7 @@
 3882	harvesters-maintenance-gobot-skill
 4242    agent
 8002	ranking-based-response-selector,ranking-based-response-selector-ru
-8003
+8003    llm-based-response-selector
 8004	convers-evaluator-annotator
 8005	confidence-based-response-selector
 8006	spacy-nounphrases

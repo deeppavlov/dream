@@ -10,9 +10,9 @@ services:
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
-  ranking-based-response-selector:
+  llm-based-response-selector:
     volumes:
-      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./response_selectors/llm_based_response_selector:/src"
       - "./common:/src/common"
   combined-classification:
     volumes:
