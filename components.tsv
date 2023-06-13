@@ -163,4 +163,6 @@
 8159	openai-api-gpt4
 8160	openai-api-gpt4-32k
 8161
-8162    dff-google-api-skill
+8162	dff-google-api-skill
+8163	anthropic-api-claudev13
+8164	anthropic-api-claudev1
