@@ -20,9 +20,9 @@ def upload_document(filename, filepath, file_server_url):
     return download_link
 
 
-def build_dataset_and_train_model(model_config, dataset_path, DOC_PATH_OR_LINK):
+def build_dataset_and_train_model(model_config, dataset_path, doc_path_or_link):
     print("Model is not trained.\nLet's train the model!\n\n")
-    build_dataset(dataset_path, DOC_PATH_OR_LINK)
+    build_dataset(dataset_path, doc_path_or_link)
     print("Dataset built. Now training the model.")
     train_model(model_config)
     print("Model is trained.")

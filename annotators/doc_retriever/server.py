@@ -7,7 +7,6 @@ import requests
 import time
 import shutil
 from deeppavlov import build_model
-from urllib.parse import urlparse
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov.core.common.file import read_json
@@ -29,7 +28,6 @@ if DOC_PATH_OR_LINK:
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
 SERVICE_PORT = os.environ.get("SERVICE_PORT", None)
 FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
-server_url = urlparse(FILE_SERVER_URL)
 MODEL_CONFIG = read_json(CONFIG_PATH)
 MODEL_CONFIG["dataset_reader"]["dataset_format"] = "txt"
 MODEL_CONFIG["chainer"]["pipe"][1]["top_n"] = PARAGRAPHS_NUM
@@ -94,7 +92,7 @@ def train_and_upload_model():
         os.mkdir("/data/odqa")
     for dialog in dialogs:
         attributes = dialog.get("bot", {}).get("attributes", {})
-        MODEL_NEEDS_TRAIN = False  # in most cases, we don't re-train the model
+        model_needs_train = False  # in most cases, we don't re-train the model
         filepaths_in_container = []
         if (
             not DOC_PATH_OR_LINK
@@ -105,8 +103,8 @@ def train_and_upload_model():
                 ) != attributes.get(
                     "document_links", []
                 ):  # if in dreambuilder the list of docs changed compared to previous step
-                    MODEL_NEEDS_TRAIN = True  # if list of files changed, then we need to retrain the model
-                    DOC_NEEDS_UPLOAD = False  # doc is on server already
+                    model_needs_train = True  # if list of files changed, then we need to retrain the model
+                    doc_needs_upload = False  # doc is on server already
                     document_links = dialog.get("human_attributes", [])[-1].get(
                         "documents", []
                     )  # we get incoming document links
@@ -123,11 +121,9 @@ def train_and_upload_model():
                         # linking ids and initial links
             else:
                 logger.info("No documents specified in human_attributes.")
-        if (
-            "document_links" not in attributes
-        ):  # if there is no document_link in bot attributes -> the model was never trained
-            MODEL_NEEDS_TRAIN = True
-            DOC_NEEDS_UPLOAD = True  # in all not dreambuilder cases, doc needs to be uploaded to server
+        if "document_links" not in attributes:  # if there is no document_link in bot attributes -> the model was never trained
+            model_needs_train = True
+            doc_needs_upload = True  # in all not dreambuilder cases, doc needs to be uploaded to server
             if "http" in DOC_PATH_OR_LINK[0]:  # if any element is a link
                 # dream option; we get file url, download it, need to upload to files:3000
                 for filepath in DOC_PATH_OR_LINK:
@@ -159,7 +155,7 @@ def train_and_upload_model():
                     )  # linking ids and initial filenames
                     filepaths_in_container.append(filepath_in_container)  # save paths
         logger.info(f"filepaths_in_container: {filepaths_in_container}")
-        if MODEL_NEEDS_TRAIN:
+        if model_needs_train:
             try:
                 logger.info("Started training model.")
                 build_dataset_and_train_model(
@@ -175,7 +171,7 @@ def train_and_upload_model():
                     "/data/odqa/userfile_tfidf_matrix.npz",
                     FILE_SERVER_URL,
                 )
-                if DOC_NEEDS_UPLOAD:  # only if doc is not already on fileserver
+                if doc_needs_upload:  # only if doc is not already on fileserver
                     document_links = []
                     for filepath in filepaths_in_container:
                         new_filename = filepath.split("/")[-1]
