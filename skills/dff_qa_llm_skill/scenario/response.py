@@ -53,12 +53,10 @@ def get_text_for_candidates(dataset_path: str, raw_candidates: List[str]) -> str
     return " ".join(num_candidates)
 
 
-def compose_data_for_model(ctx, actor):
+def compose_data_for_model(ctx: Context, actor: Actor) -> str:
     if not os.path.exists("/data/documents"):
         os.mkdir("/data/documents")
     dialog = int_ctx.get_dialog(ctx, actor)
-    with open("testttttttt.py", "w") as f:
-        f.write(str(dialog))
     context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
     utterance_texts = [uttr.get("text", "") for uttr in context]
     if utterance_texts:
