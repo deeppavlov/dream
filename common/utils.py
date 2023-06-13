@@ -1308,6 +1308,12 @@ def is_toxic_or_badlisted_utterance(annotated_utterance):
     return is_toxic_utterance(annotated_utterance) or is_badlisted_utterance(annotated_utterance)
 
 
+def is_contradiction_utterance(annotated_utterance):
+    contradiction_result = annotated_utterance.get("annotations", {}).get("convert_based_nli", {}).get("decision", "")
+
+    return "contradiction" in contradiction_result
+
+
 FACTOID_PATTERNS = re.compile(
     r"^(do you know |((can |could )you )tell me )?(please )?"
     r"((what|who|which|where) (is|are|was|were)\b|how to\b|when)",

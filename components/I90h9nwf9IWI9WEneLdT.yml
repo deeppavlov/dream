@@ -1,0 +1,24 @@
+name: convert-based-nli
+display_name: ConveRT based NLI
+container_name: convert-based-nli
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: DeepPavlov
+description: Defines wheather 2 sentences are correlated as entailment, neutral or contradiction
+ram_usage: 1.5G
+gpu_usage: null
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://convert-based-nli:8150/batch_model
+dialog_formatter: state_formatters.dp_formatters:convert_nli_hypotheses_annotator_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- skills
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: batch_model
+service: annotators/ConveRTBasedNLI/service_configs/convert-based-nli
+date_created: '2023-06-05T09:45:32'

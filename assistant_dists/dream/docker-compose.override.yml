@@ -1387,6 +1387,22 @@ services:
           memory: 4G
         reservations:
           memory: 4G
+          
+  convert-based-nli:
+    env_file: [.env]
+    build:
+      args:
+        TRAINED_MODEL_PATH: /data/nli_model
+      context: ./annotators/ConveRTBasedNLI/
+    command: flask run -h 0.0.0.0 -p 8150
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
 
   dff-template-skill:
     env_file: [ .env ]
@@ -1403,4 +1419,5 @@ services:
           memory: 128M
         reservations:
           memory: 128M
+
 version: '3.7'

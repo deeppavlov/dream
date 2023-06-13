@@ -705,6 +705,25 @@
                     "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
                     "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
+            },
+            "convert_based_nli": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 10,
+                    "url": "http://convert-based-nli:8150/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:convert_nli_hypotheses_annotator_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/ConveRTBasedNLI",
+                    "container": "convert-based-nli",
+                    "endpoint": "batch_model"
+                }
             }
         },
         "skill_selectors": {

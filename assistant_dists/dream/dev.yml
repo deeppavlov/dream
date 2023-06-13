@@ -454,6 +454,11 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8102:8102
+  convert-based-nli:
+    volumes:
+      - "./annotators/ConveRTBasedNLI:/src"
+    ports:
+      - 8150:8150
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"

@@ -15,12 +15,17 @@ from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec, HI_THIS_IS_DREAM
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, DUMMY_DONTKNOW_RESPONSES
+from common.universal_templates import (
+    if_chat_about_particular_topic,
+    if_choose_topic,
+    DUMMY_DONTKNOW_RESPONSES,
+)
 from common.utils import (
     get_intent_name,
     low_priority_intents,
     substitute_nonwords,
     is_toxic_or_badlisted_utterance,
+    is_contradiction_utterance,
 )
 from common.response_selection import ACTIVE_SKILLS
 from tag_based_selection import tag_based_response_selection
@@ -39,12 +44,16 @@ from utils import (
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG
+)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-CALL_BY_NAME_PROBABILITY = float(getenv("CALL_BY_NAME_PROBABILITY", 0.5))  # if name is already known
+CALL_BY_NAME_PROBABILITY = float(
+    getenv("CALL_BY_NAME_PROBABILITY", 0.5)
+)  # if name is already known
 TAG_BASED_SELECTION = getenv("TAG_BASED_SELECTION", False)
 MOST_DUMMY_RESPONSES = [
     "I really do not know what to answer.",
@@ -53,6 +62,8 @@ MOST_DUMMY_RESPONSES = [
 ]
 LANGUAGE = getenv("LANGUAGE", "EN")
 GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
+TOXIC_FILTERING = getenv("TOXIC_FILTERING", True)
+CONTRADICTION_FILTERING = getenv("CONTRADICTION_FILTERING", True)
 
 
 @app.route("/respond", methods=["POST"])
@@ -61,7 +72,9 @@ def respond():
 
     st_time = time.time()
     dialogs_batch = request.json["dialogs"]
-    all_prev_active_skills_batch = request.json.get("all_prev_active_skills", [[]] * len(dialogs_batch))
+    all_prev_active_skills_batch = request.json.get(
+        "all_prev_active_skills", [[]] * len(dialogs_batch)
+    )
 
     selected_skill_names = []
     selected_texts = []
@@ -70,10 +83,12 @@ def respond():
     selected_bot_attributes = []
     selected_attributes = []
 
-    for i, (dialog, all_prev_active_skills) in enumerate(zip(dialogs_batch, all_prev_active_skills_batch)):
+    for i, (dialog, all_prev_active_skills) in enumerate(
+        zip(dialogs_batch, all_prev_active_skills_batch)
+    ):
         curr_confidences = []
         curr_scores = []
-        curr_is_toxics = []
+        curr_is_toxics_or_contr = []
 
         try:
             curr_candidates = dialog["human_utterances"][-1]["hypotheses"]
@@ -88,16 +103,28 @@ def respond():
                 curr_confidences += [skill_data["confidence"]]
                 if skill_data["text"] and skill_data["confidence"]:
                     if not skill_data.get("annotations"):
-                        logger.warning(f"Valid skill data without annotations: {skill_data}")
+                        logger.warning(
+                            f"Valid skill data without annotations: {skill_data}"
+                        )
 
                 is_toxic_utterance = is_toxic_or_badlisted_utterance(skill_data)
-                curr_is_toxics.append(is_toxic_utterance)
+                is_contr_utterance = is_contradiction_utterance(skill_data)
+
+                is_toxic_or_contr_utterance = False
+                if is_toxic_utterance and TOXIC_FILTERING:
+                    is_toxic_or_contr_utterance = is_toxic_utterance
+                if is_contr_utterance and CONTRADICTION_FILTERING:
+                    is_toxic_or_contr_utterance = is_contr_utterance
+
+                curr_is_toxics_or_contr.append(is_toxic_or_contr_utterance)
 
                 if is_toxic_utterance:
                     with sentry_sdk.push_scope() as scope:
                         scope.set_extra("utterance", skill_data["text"])
                         scope.set_extra("selected_skills", skill_data)
-                        sentry_sdk.capture_message("response selector got candidate with badlisted phrases")
+                        sentry_sdk.capture_message(
+                            "response selector got candidate with badlisted phrases"
+                        )
                         msg = (
                             "response selector got candidate with badlisted phrases:\n"
                             f"utterance: {skill_data['text']}\n"
@@ -105,19 +132,42 @@ def respond():
                         )
                         logger.info(msg)
 
+                if is_contr_utterance:
+                    with sentry_sdk.push_scope() as scope:
+                        scope.set_extra("utterance", skill_data["text"])
+                        scope.set_extra("selected_skills", skill_data)
+                        sentry_sdk.capture_message(
+                            "response selector got contradicting candidate"
+                        )
+                        msg = (
+                            "response selector got contradicting candidate:\n"
+                            f"utterance: {skill_data['text']}\n"
+                            f"skill name: {skill_data['skill_name']}"
+                        )
+                        logger.info(msg)
+
                 curr_scores += [
-                    calculate_single_evaluator_score(skill_data.get("annotations"), skill_data["confidence"])
+                    calculate_single_evaluator_score(
+                        skill_data.get("annotations"), skill_data["confidence"]
+                    )
                 ]
 
-            curr_is_toxics = np.array(curr_is_toxics)
+            curr_is_toxics_or_contr = np.array(curr_is_toxics_or_contr)
             curr_scores = np.array(curr_scores)
             curr_confidences = np.array(curr_confidences)
             # now we collected all current candidates and their annotations. select response among them
-            best_skill_name, best_text, best_confidence, best_human_attrs, best_bot_attrs, best_attrs = select_response(
+            (
+                best_skill_name,
+                best_text,
+                best_confidence,
+                best_human_attrs,
+                best_bot_attrs,
+                best_attrs,
+            ) = select_response(
                 curr_candidates,
                 curr_scores,
                 curr_confidences,
-                curr_is_toxics,
+                curr_is_toxics_or_contr,
                 dialog,
                 all_prev_active_skills,
             )
@@ -125,10 +175,14 @@ def respond():
             logger.exception(e)
             sentry_sdk.capture_exception(e)
             if dialog["human_utterances"][-1].get("hypotheses", []):
-                logger.info("Response Selector Error: randomly choosing final response among hypotheses.")
+                logger.info(
+                    "Response Selector Error: randomly choosing final response among hypotheses."
+                )
                 best_cand = random.choice(dialog["human_utterances"][-1]["hypotheses"])
             else:
-                logger.info("Response Selector Error: randomly choosing response among dummy responses.")
+                logger.info(
+                    "Response Selector Error: randomly choosing response among dummy responses."
+                )
                 best_cand = {
                     "text": random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]),
                     "confidence": 0.1,
@@ -177,7 +231,13 @@ def respond():
 
 
 def rule_score_based_selection(
-    dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
+    dialog,
+    candidates,
+    scores,
+    confidences,
+    is_toxics,
+    bot_utterances,
+    all_prev_active_skills,
 ):
     curr_single_scores = []
 
@@ -199,17 +259,30 @@ def rule_score_based_selection(
         factoid_index = skill_names.index("factoid_qa")
         logging.debug("factoid")
         logging.debug(str(candidates[factoid_index]))
-        if "not sure" in candidates[factoid_index] and candidates[factoid_index]["not sure"]:
+        if (
+            "not sure" in candidates[factoid_index]
+            and candidates[factoid_index]["not sure"]
+        ):
             not_sure_factoid = True
     for i in range(len(scores)):
         curr_score = None
-        is_misheard = misheard_with_spec1 in candidates[i]["text"] or misheard_with_spec2 in candidates[i]["text"]
+        is_misheard = (
+            misheard_with_spec1 in candidates[i]["text"]
+            or misheard_with_spec2 in candidates[i]["text"]
+        )
         intent_name = get_intent_name(candidates[i]["text"])
-        is_intent_candidate = (skill_names[i] in ["dff_intent_responder_skill", "dff_program_y_skill"]) and intent_name
-        is_intent_candidate = is_intent_candidate and intent_name not in low_priority_intents
+        is_intent_candidate = (
+            skill_names[i] in ["dff_intent_responder_skill", "dff_program_y_skill"]
+        ) and intent_name
+        is_intent_candidate = (
+            is_intent_candidate and intent_name not in low_priority_intents
+        )
         # print("is intent candidate? " + str(is_intent_candidate), flush=True)
 
-        if len(dialog["human_utterances"]) == 1 and greeting_spec[LANGUAGE] not in candidates[i]["text"]:
+        if (
+            len(dialog["human_utterances"]) == 1
+            and greeting_spec[LANGUAGE] not in candidates[i]["text"]
+        ):
             logger.info("Dialog Beginning detected.")
             if (
                 if_chat_about_particular_topic(dialog["utterances"][0])
@@ -220,50 +293,86 @@ def rule_score_based_selection(
                 if skill_names[i] == "factoid_qa":
                     logger.info("Particular topic. Facts + Greeting to very big score.")
                     # I don't have an opinion on that but I know some facts.
-                    resp = candidates[i]["text"].replace("I don't have an opinion on that but I know some facts.", "")
+                    resp = candidates[i]["text"].replace(
+                        "I don't have an opinion on that but I know some facts.", ""
+                    )
                     candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {resp}"
                     curr_score = very_big_score
-                elif skill_names[i] == "meta_script_skill" and len(candidates[i]["text"]) > 0 and confidences[i] > 0.98:
-                    logger.info("Particular topic. meta_script_skill + Greeting to very big score.")
+                elif (
+                    skill_names[i] == "meta_script_skill"
+                    and len(candidates[i]["text"]) > 0
+                    and confidences[i] > 0.98
+                ):
+                    logger.info(
+                        "Particular topic. meta_script_skill + Greeting to very big score."
+                    )
                     # I don't have an opinion on that but I know some facts.
                     resp = candidates[i]["text"]
                     candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {resp}"
                     curr_score = very_big_score
                 elif skill_names[i] == "small_talk_skill":
-                    logger.info("Particular topic. Small-talk + Greeting NOT to very big score.")
+                    logger.info(
+                        "Particular topic. Small-talk + Greeting NOT to very big score."
+                    )
                     # for now do not give small talk a very big score here
-                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
+                    candidates[i][
+                        "text"
+                    ] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
                     # curr_score = very_big_score
-            elif if_choose_topic(dialog["utterances"][0]) and "about it" not in dialog["utterances"][0]["text"].lower():
+            elif (
+                if_choose_topic(dialog["utterances"][0])
+                and "about it" not in dialog["utterances"][0]["text"].lower()
+            ):
                 logger.info("User wants bot to choose the topic")
                 # if user says `let's chat about something`
                 if skill_names[i] == "small_talk_skill":
                     logger.info("No topic. Small-talk + Greeting to very big score.")
-                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
+                    candidates[i][
+                        "text"
+                    ] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
                     curr_score = very_big_score
-                elif skill_names[i] == "meta_script_skill" and len(candidates[i]["text"]) > 0:
+                elif (
+                    skill_names[i] == "meta_script_skill"
+                    and len(candidates[i]["text"]) > 0
+                ):
                     logger.info("No topic. Meta-script + Greeting to very big score.")
-                    candidates[i]["text"] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
+                    candidates[i][
+                        "text"
+                    ] = f"{HI_THIS_IS_DREAM[LANGUAGE]} {candidates[i]['text']}"
                     curr_score = very_big_score
             else:
                 logger.info("User just wants to talk.")
                 # if user says something else
-                if skill_names[i] == "program_y" and greeting_spec[LANGUAGE] in candidates[i]["text"]:
+                if (
+                    skill_names[i] == "program_y"
+                    and greeting_spec[LANGUAGE] in candidates[i]["text"]
+                ):
                     logger.info("Just chat. Program-y to very big score.")
                     curr_score = very_big_score
         elif (
             skill_names[i] == "dff_friendship_skill"
-            and (how_are_you_spec in candidates[i]["text"] or what_i_can_do_spec in candidates[i]["text"])
+            and (
+                how_are_you_spec in candidates[i]["text"]
+                or what_i_can_do_spec in candidates[i]["text"]
+            )
             and len(dialog["utterances"]) < 16
         ):
             curr_score = very_big_score
-        elif skill_names[i] == "dff_friendship_skill" and greeting_spec[LANGUAGE] in candidates[i]["text"]:
+        elif (
+            skill_names[i] == "dff_friendship_skill"
+            and greeting_spec[LANGUAGE] in candidates[i]["text"]
+        ):
             if len(dialog["utterances"]) < 2:
                 curr_score = very_big_score
             else:
-                confidences[i] = 0.2  # Low confidence for greeting in the middle of dialogue
+                confidences[
+                    i
+                ] = 0.2  # Low confidence for greeting in the middle of dialogue
         # we don't have 'cobotqa' anymore; instead we have factoid_qa
-        elif skill_names[i] in ["factoid_qa"] and "Here's something I found on the web." in candidates[i]["text"]:
+        elif (
+            skill_names[i] in ["factoid_qa"]
+            and "Here's something I found on the web." in candidates[i]["text"]
+        ):
             confidences[i] = 0.6
         elif (
             skill_names[i] == "factoid_qa"
@@ -278,17 +387,33 @@ def rule_score_based_selection(
             curr_score = very_big_score
         elif is_intent_candidate:
             curr_score = very_big_score
-        elif skill_names[i] in ["dummy_skill", "convert_reddit", "alice", "eliza", "tdidf_retrieval", "program_y"]:
-            if "question" in candidates[i].get("type", "") or "?" in candidates[i]["text"]:
+        elif skill_names[i] in [
+            "dummy_skill",
+            "convert_reddit",
+            "alice",
+            "eliza",
+            "tdidf_retrieval",
+            "program_y",
+        ]:
+            if (
+                "question" in candidates[i].get("type", "")
+                or "?" in candidates[i]["text"]
+            ):
                 penalty_start_utt = 1
                 if skill_names[i] == "program_y":
                     penalty_start_utt = 4
 
                 n_questions = 0
-                if len(bot_utterances) >= penalty_start_utt and "?" in bot_utterances[-1]:
+                if (
+                    len(bot_utterances) >= penalty_start_utt
+                    and "?" in bot_utterances[-1]
+                ):
                     confidences[i] /= 1.5
                     n_questions += 1
-                if len(bot_utterances) >= penalty_start_utt + 1 and "?" in bot_utterances[-2]:
+                if (
+                    len(bot_utterances) >= penalty_start_utt + 1
+                    and "?" in bot_utterances[-2]
+                ):
                     confidences[i] /= 1.1
                     n_questions += 1
                 if n_questions == 2:
@@ -298,7 +423,9 @@ def rule_score_based_selection(
             if "link_to_for_response_selector" in candidates[i].get("type", ""):
                 link_to_question = candidates[i]["text"]
                 link_to_human_attrs = candidates[i].get("human_attributes", {})
-        if skill_names[i] == "dummy_skill" and "question" in candidates[i].get("type", ""):
+        if skill_names[i] == "dummy_skill" and "question" in candidates[i].get(
+            "type", ""
+        ):
             dummy_question = candidates[i]["text"]
             dummy_question_human_attr = candidates[i].get("human_attributes", {})
 
@@ -314,22 +441,32 @@ def rule_score_based_selection(
             confidence = confidences[i]
             skill_name = skill_names[i]
             logger.info(
-                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. " f"Toxicity: {is_toxics[i]}"
+                f"Skill {skill_name} has final score: {score}. Confidence: {confidence}. "
+                f"Toxicity: {is_toxics[i]}"
             )
             curr_single_scores.append(score)
         else:
             score = scores[i]
             skill_name = skill_names[i]
-            logger.info(f"Skill {skill_name} has final score: {score}. " f"Toxicity: {is_toxics[i]}")
+            logger.info(
+                f"Skill {skill_name} has final score: {score}. "
+                f"Toxicity: {is_toxics[i]}"
+            )
             curr_single_scores.append(score)
 
     highest_conf_exist = True if any(confidences >= 1.0) else False
     if highest_conf_exist:
         logger.info("Found skill with the highest confidence.")
     for j in range(len(candidates)):
-        if highest_conf_exist and confidences[j] < 1.0 and curr_single_scores[j] < very_big_score:
+        if (
+            highest_conf_exist
+            and confidences[j] < 1.0
+            and curr_single_scores[j] < very_big_score
+        ):
             # need to drop this candidates
-            logger.info(f"Dropping {skill_names[j]} which does not have a highest confidence or `very big score`.")
+            logger.info(
+                f"Dropping {skill_names[j]} which does not have a highest confidence or `very big score`."
+            )
             curr_single_scores[j] = very_low_score
 
     best_id = np.argmax(curr_single_scores)
@@ -351,16 +488,24 @@ def rule_score_based_selection(
     return best_candidate, best_id, curr_single_scores
 
 
-def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev_active_skills=None):
+def select_response(
+    candidates, scores, confidences, is_toxics, dialog, all_prev_active_skills=None
+):
     # TOXICITY & BADLISTS checks
-    n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(scores, confidences, is_toxics)
+    n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(
+        scores, confidences, is_toxics
+    )
     if n_toxic_candidates == len(candidates):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
         return None, np.random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]), 1.0, {}, {}
 
     # REPEAT checks
-    bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]
-    prev_large_utterances = [[sent] for utt in bot_utterances[:-15] for sent in utt if len(sent) >= 40]
+    bot_utterances = [
+        sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]
+    ]
+    prev_large_utterances = [
+        [sent] for utt in bot_utterances[:-15] for sent in utt if len(sent) >= 40
+    ]
     bot_utterances = prev_large_utterances + bot_utterances[-15:]
     # flatten 2d list to 1d list of all appeared sentences of bot replies
     bot_utterances = sum(bot_utterances, [])
@@ -369,12 +514,23 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     if TAG_BASED_SELECTION:
         logger.info("Tag based selection")
         best_candidate, best_id, curr_single_scores = tag_based_response_selection(
-            dialog, candidates, scores, confidences, bot_utterances, all_prev_active_skills
+            dialog,
+            candidates,
+            scores,
+            confidences,
+            bot_utterances,
+            all_prev_active_skills,
         )
     else:
         logger.info("Confidence & ConvEvaluationAnnotator Scores based selection")
         best_candidate, best_id, curr_single_scores = rule_score_based_selection(
-            dialog, candidates, scores, confidences, is_toxics, bot_utterances, all_prev_active_skills
+            dialog,
+            candidates,
+            scores,
+            confidences,
+            is_toxics,
+            bot_utterances,
+            all_prev_active_skills,
         )
 
     logger.info(f"Best candidate: {best_candidate}")
@@ -384,7 +540,11 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     best_human_attributes = best_candidate.get("human_attributes", {})
     best_bot_attributes = best_candidate.get("bot_attributes", {})
 
-    if len(dialog["bot_utterances"]) == 0 and greeting_spec[LANGUAGE] not in best_text and GREETING_FIRST:
+    if (
+        len(dialog["bot_utterances"]) == 0
+        and greeting_spec[LANGUAGE] not in best_text
+        and GREETING_FIRST
+    ):
         # add greeting to the first bot uttr, if it's not already included
         best_text = f"{HI_THIS_IS_DREAM[LANGUAGE]} {best_text}"
 
@@ -399,7 +559,10 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
         if sum(curr_single_scores) == 0.0:
             break
 
-    if dialog["human"]["profile"].get("name", False) and best_skill_name != "personal_info_skill":
+    if (
+        dialog["human"]["profile"].get("name", False)
+        and best_skill_name != "personal_info_skill"
+    ):
         name = dialog["human"]["profile"].get("name", False)
         if len(dialog["bot_utterances"]) >= 1:
             if re.search(r"\b" + name + r"\b", dialog["bot_utterances"][-1]["text"]):
@@ -423,7 +586,14 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     candidates[best_id].pop("annotations", {})
     best_attrs = candidates[best_id]
 
-    return best_skill_name, best_text, best_confidence, best_human_attributes, best_bot_attributes, best_attrs
+    return (
+        best_skill_name,
+        best_text,
+        best_confidence,
+        best_human_attributes,
+        best_bot_attributes,
+        best_attrs,
+    )
 
 
 if __name__ == "__main__":
