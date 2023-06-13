@@ -1,5 +1,4 @@
 import requests
-import os
 
 from deeppavlov import train_model
 from common.build_dataset import build_dataset
@@ -21,13 +20,9 @@ def upload_document(filename, filepath, file_server_url):
     return download_link
 
 
-# перенести это все в сервер.пай ((( сделать функцией, импортнуть
-def build_dataset_and_train_model(model_config, dataset_path, ORIGINAL_FILES_PATHS):
+def build_dataset_and_train_model(model_config, dataset_path, DOC_PATH_OR_LINK):
     print("Model is not trained.\nLet's train the model!\n\n")
-    build_dataset(dataset_path, ORIGINAL_FILES_PATHS)
-    # for filename in os.listdir(dataset_path):
-    #     with open(os.path.join(os.getcwd(), filename), 'r') as f: 
-
+    build_dataset(dataset_path, DOC_PATH_OR_LINK)
     print("Dataset built. Now training the model.")
     train_model(model_config)
     print("Model is trained.")

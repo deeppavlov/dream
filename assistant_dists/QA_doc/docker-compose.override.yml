@@ -2,8 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/QA_doc/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, combined-classification:8087, ranking-based-response-selector:8002, 
-        sentence-ranker:8128, openai-api-chatgpt:8145, doc-retriever:8163, dff-qa-llm-skill:8164"
+      WAIT_HOSTS: "sentseg:8011, combined-classification:8087, ranking-based-response-selector:8002, sentence-ranker:8128, openai-api-chatgpt:8145, doc-retriever:8163, dff-qa-llm-skill:8164"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   files:
@@ -31,7 +30,7 @@ services:
       args:
         SERVICE_PORT: 8163
         CONFIG_PATH: ./doc_retriever_config.json
-        ORIGINAL_FILES_PATHS: ./documents/big_apple.txt,./documents/book-war-and-peace.txt
+        DOC_PATH_OR_LINK: ./documents/big_apple.txt,./documents/book-war-and-peace.txt
     command: python -m flask run -h 0.0.0.0 -p 8163
     environment:
       - FLASK_APP=server

@@ -4,7 +4,7 @@ import re
 import sentry_sdk
 from os import getenv
 import os
-from typing import Any
+from typing import Any, List
 import requests
 
 from common.build_dataset import build_dataset
@@ -43,10 +43,22 @@ SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
 
 
+def get_text_for_candidates(dataset_path: str, raw_candidates: List[str]) -> str:
+    num_candidates = []
+    nums = 0
+    for f_name in raw_candidates:
+        nums += 1
+        with open(dataset_path + f_name) as f:
+            num_candidates.append(f"{nums}. {f.read()}")
+    return " ".join(num_candidates)
+
+
 def compose_data_for_model(ctx, actor):
     if not os.path.exists("/data/documents"):
         os.mkdir("/data/documents")
     dialog = int_ctx.get_dialog(ctx, actor)
+    with open("testttttttt.py", "w") as f:
+        f.write(str(dialog))
     context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
     utterance_texts = [uttr.get("text", "") for uttr in context]
     if utterance_texts:
@@ -60,16 +72,13 @@ def compose_data_for_model(ctx, actor):
             context[-1]
             .get("user", {})
             .get("attributes", {})
-            .get(
-                "documents_qa_model", {}
-            )  # todo: look if the way I save attributes is the right way!!!
-            .get("documents", [])
-            # dialog.get("bot", {}).get("attributes", {}).get("document_links", []) # todo: why doesn't it work???
+            .get("documents_qa_model", {})
+            .get("document_links", [])
         )
         filepaths_in_container = []
         for filepath in filepaths_on_server:
             file_id = re.search(FIND_ID, filepath).group(1)
-            filepath_container = f"/data/documents/{file_id}.txt"  # todo: check if in server.py getting file id works okay for dreambuilder (link example: 'http://files:3000/file?file=Y6oJEK1pT2.txt')
+            filepath_container = f"/data/documents/{file_id}.txt"
             orig_file = requests.get(filepath, timeout=30)
             with open(filepath_container, "wb") as f:
                 f.write(orig_file.content)
@@ -82,20 +91,14 @@ def compose_data_for_model(ctx, actor):
 filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}"""
         )
         build_dataset(dataset_path, filepaths_in_container)
-        num_candidates = []
-        nums = 0
-        for f_name in raw_candidates:
-            nums += 1
-            with open(dataset_path + f_name) as f:
-                num_candidates.append(f"{nums}. {f.read()}")
-        final_candidates = " ".join(num_candidates)
-        request = utterance_texts[-1]
         logger.info("Dataset built successfully")
+        final_candidates = get_text_for_candidates(dataset_path, raw_candidates)
+        request = utterance_texts[-1]
         utterance_texts[
             -1
         ] = f"""TEXT: ### {final_candidates} ###
 USER: {request}
-Reply to USER. If USER makes a request or asks a question, answer based on TEXT provided.
+Reply to USER. If USER makes a request or asks a question, answer based on TEXT that contains some information about the subject.
 If necessary, structure your answer as bullet points. You may also present information in tables.
 If TEXT does not contain the answer, apologize and say that you cannot answer based on the given text."""
     return utterance_texts
@@ -120,8 +123,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
-    # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
-    # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get(
         "attributes", {}
     )

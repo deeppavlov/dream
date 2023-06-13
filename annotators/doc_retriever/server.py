@@ -22,42 +22,32 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
 # original_document. если лежит, берем его. если нет, чекаем атрибуты. и постоянно чекаем атрибуты на каждом шаге
-ORIGINAL_FILES_PATHS = os.environ.get("ORIGINAL_FILES_PATHS", "")
-logger.info(f"ORIGINAL_FILES_PATHS {ORIGINAL_FILES_PATHS}")
-if ORIGINAL_FILES_PATHS:
-    ORIGINAL_FILES_PATHS = ORIGINAL_FILES_PATHS.split(",")
-logger.info(f"ORIGINAL_FILES_PATHS {ORIGINAL_FILES_PATHS}")
+PARAGRAPHS_NUM = 5
+DOC_PATH_OR_LINK = os.environ.get("DOC_PATH_OR_LINK", "")
+if DOC_PATH_OR_LINK:
+    DOC_PATH_OR_LINK = DOC_PATH_OR_LINK.split(",")  # we may have multiple files
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
 SERVICE_PORT = os.environ.get("SERVICE_PORT", None)
 FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
-PARAGRAPHS_NUM = 5
 server_url = urlparse(FILE_SERVER_URL)
-assert CONFIG_PATH, logger.info("No config file name is given.")
-assert FILE_SERVER_URL, logger.info("No file server url path is given.")
 MODEL_CONFIG = read_json(CONFIG_PATH)
 MODEL_CONFIG["dataset_reader"]["dataset_format"] = "txt"
 MODEL_CONFIG["chainer"]["pipe"][1]["top_n"] = PARAGRAPHS_NUM
 MODEL_CONFIG["dataset_reader"]["data_path"] = "/data/temporary_dataset/"
 
 
-def get_answers(utterance: str, ranker):
-    ranker_output = ranker([utterance])
-    raw_candidates = ranker_output[0]
-    return raw_candidates
-
-
-def generate_random_string(length):
+def generate_random_string(length: int) -> str:
     characters = string.ascii_letters + string.digits
     return "".join(random.choice(characters) for _ in range(length))
 
 
-def download_file_to_data(filepath):
+def download_file_to_data(filepath: str) -> str:
     file_id = generate_random_string(10)
-    filepath_container = f"/data/documents/{file_id}.txt"
+    filepath_in_container = f"/data/documents/{file_id}.txt"
     orig_file = requests.get(filepath, timeout=30)
-    with open(filepath_container, "wb") as f:
+    with open(filepath_in_container, "wb") as f:
         f.write(orig_file.content)
-    return filepath_container
+    return filepath_in_container
 
 
 @app.route("/return_candidates", methods=["POST"])
@@ -74,184 +64,161 @@ def return_candidates():
             )
             db_file = requests.get(db_link)
             matrix_file = requests.get(matrix_link, timeout=30)
-            # if not os.path.exists("/data/odqa"):
-            #     os.mkdir("/data/odqa")
             with open("/data/odqa/userfile.db", "wb") as f:
                 f.write(db_file.content)
             with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
                 f.write(matrix_file.content)
             logger.info("Files downloaded successfully.")
-            ranker_model = build_model(
-                MODEL_CONFIG
-            )  # todo: check if it works with config, not path
+            ranker_model = build_model(MODEL_CONFIG)
             logger.info("Model loaded.")
             utterances = dialog.get("human_utterances", [{}])[-1].get(
                 "text", ""
-            )  # todo: проверить везде смену utterances->human_utterances
-            results = get_answers(utterances, ranker_model)
-            candidates_list.append(
-                {"candidate_files": results}
-            )  # todo: write about results
+            ) 
+            results = ranker_model([utterances])[0]
+            candidates_list.append({"candidate_files": results})
         except Exception as e:
             logger.error(e)
-            candidates_list.append(
-                {}
-            )  # todo: добавить дефолтные значения, посмотреть как это сделано. для одного элемента батча!!!
+            candidates_list.append({})
         logger.info(f"Output candidate files: '{candidates_list}'.")
     return jsonify(candidates_list)
 
 
 @app.route("/train_and_upload_model", methods=["POST"])
 def train_and_upload_model():
-    bot_attributes = []
+    attributes_to_add = []
     dialogs = request.json["dialogs"]
-    docs_and_links = []
+    docs_and_links = []  # list with dict of ids - original links/paths
     if not os.path.exists("/data/documents"):
         os.mkdir("/data/documents")
     if not os.path.exists("/data/odqa"):
         os.mkdir("/data/odqa")
     for dialog in dialogs:
-        attributes = dialog.get("bot", {}).get("attributes", {})  # todo: batches
-        NEED_TRAIN = False  # in most cases, we don't re-train the model
-        FILE_PATHS_IN_CONTAINER = []
-        if not ORIGINAL_FILES_PATHS:  # if empty, then it's the dreambuilder option
+        attributes = dialog.get("bot", {}).get("attributes", {})
+        MODEL_NEEDS_TRAIN = False  # in most cases, we don't re-train the model
+        filepaths_in_container = []
+        if (
+            not DOC_PATH_OR_LINK
+        ):  # if empty, then it's the dreambuilder option - file is already on files:3000; url comes in human_attributes
             if dialog.get("human_attributes", []):
                 if dialog.get("human_attributes", [])[-1].get(
                     "documents", []
-                ) != attributes.get("document_links", []):
-                    # if in dreambuilder the list of docs changed compared to previous step
-                    NEED_TRAIN = (
-                        True  # if list of files changed, then we retrain the model
-                    )
-                    if (
-                        not ORIGINAL_FILES_PATHS
-                    ):  # dreambuilder option; file is already on files:3000; url comes in human_attributes
-                        DOC_NEEDS_UPLOAD = False  # doc is on server already
-                        document_links = dialog.get("human_attributes", [])[-1].get(
-                            "documents", []
-                        )  # we get incoming document links
-                        for link in document_links:
-                            filepath_container = download_file_to_data(link)
-                            FILE_PATHS_IN_CONTAINER.append(
-                                filepath_container
-                            )  # we download all incoming files to /data and save paths
-                            docs_and_links.append(
-                                (link.split("/")[-1].replace(".txt", ""), link)
-                            )  # linking ids and initial links
+                ) != attributes.get(
+                    "document_links", []
+                ):  # if in dreambuilder the list of docs changed compared to previous step
+                    MODEL_NEEDS_TRAIN = True  # if list of files changed, then we need to retrain the model
+                    DOC_NEEDS_UPLOAD = False  # doc is on server already
+                    document_links = dialog.get("human_attributes", [])[-1].get(
+                        "documents", []
+                    )  # we get incoming document links
+                    for link in document_links:
+                        filepath_in_container = download_file_to_data(link)
+                        filepaths_in_container.append(filepath_in_container)
+                        # we download all incoming files to /data and save paths
+                        docs_and_links.append(
+                            {
+                                "document_id": link.split("file=")[-1].replace(".txt", ""),
+                                "initial_path_or_link": link,
+                            }
+                        )
+                        # linking ids and initial links
             else:
                 logger.info("No documents specified in human_attributes.")
         if (
             "document_links" not in attributes
-        ):  # if there is no document_link in attributes -> the model was never trained
-            NEED_TRAIN = True
+        ):  # if there is no document_link in bot attributes -> the model was never trained
+            MODEL_NEEDS_TRAIN = True
             DOC_NEEDS_UPLOAD = True  # in all not dreambuilder cases, doc needs to be uploaded to server
-            # FILE_ID = generate_random_string(10)
-            # FILE_PATH_IN_CONTAINER = f"/data/documents/{FILE_ID}.txt"
-            # for filepath in ORIGINAL_FILES_PATHS:
-            #     filepath_container = download_file_to_data(filepath)
-            #     FILE_PATHS_IN_CONTAINER.append(filepath_container)
-            # if ( #removed it case it's already covered earlier
-            #     not ORIGINAL_FILES_PATHS
-            # ):  # dreambuilder option, but first; file is already on files:3000; url comes in attributes
-            #     document_links = dialog.get("human_attributes", [])[-1].get(
-            #         "documents", []
-            #     )  # todo: ensure that dialog is okay
-            #     assert document_links, logger.info(
-            #         "No document path or url provided."
-            #     )
-            #     for filepath in document_links:
-            #         filepath_container = download_file_to_data(filepath)
-            #         FILE_PATHS_IN_CONTAINER.append(filepath_container)
-            #     DOC_NEEDS_UPLOAD = False  # if the file is on files:3000, then no need to upload again
-            if (
-                "http" in ORIGINAL_FILES_PATHS[0]  # if any element is a link
-            ):  # dream option; we get file url, download it, need to upload to files:3000
-                for filepath in ORIGINAL_FILES_PATHS:
-                    filepath_container = download_file_to_data(
-                        filepath
-                    )  # download all files to data
+            if "http" in DOC_PATH_OR_LINK[0]:  # if any element is a link
+                # dream option; we get file url, download it, need to upload to files:3000
+                for filepath in DOC_PATH_OR_LINK:
+                    filepath_in_container = download_file_to_data(filepath)
+                    # download all files to data
                     docs_and_links.append(
-                        (
-                            filepath_container.split("/")[-1].replace(".txt", ""),
-                            filepath,
-                        )
-                    )  # linking ids and initial links
-                    FILE_PATHS_IN_CONTAINER.append(filepath_container)  # save paths
+                        {
+                            "document_id": filepath_in_container.split("/")[-1].replace(
+                                ".txt", ""
+                            ),
+                            "initial_path_or_link": filepath,
+                        }
+                    )
+                    # linking ids and initial links
+                    filepaths_in_container.append(filepath_in_container)  # save paths
             else:  # dream option; we get file path inside our folder, need to upload to files:3000
-                for filepath in ORIGINAL_FILES_PATHS:
+                for filepath in DOC_PATH_OR_LINK:
                     file_id = generate_random_string(10)
-                    filepath_container = f"/data/documents/{file_id}.txt"
+                    filepath_in_container = f"/data/documents/{file_id}.txt"
+                    shutil.copyfile(filepath, filepath_in_container)
+                    # move all the files to /data (for uniformness all files are always stored there)
                     docs_and_links.append(
-                        (
-                            filepath_container.split("/")[-1].replace(".txt", ""),
-                            filepath,
-                        )
+                        {
+                            "document_id": filepath_in_container.split("/")[-1].replace(
+                                ".txt", ""
+                            ),
+                            "initial_path_or_link": filepath,
+                        }
                     )  # linking ids and initial filenames
-                    shutil.copyfile(
-                        filepath, filepath_container
-                    )  # move all the files to /data (for uniformness all files are alqays stored there)
-                    FILE_PATHS_IN_CONTAINER.append(filepath_container)  # save paths
-        if NEED_TRAIN:
-            try:  # todo: think what we do with names (db, npz) if ORIGINAL_FILES_PATHS is already a link on server
+                    filepaths_in_container.append(filepath_in_container)  # save paths
+        logger.info(f"filepaths_in_container: {filepaths_in_container}")
+        if MODEL_NEEDS_TRAIN:
+            try:
                 logger.info("Started training model.")
-                logger.info(f"FILE_PATHS_IN_CONTAINER: {FILE_PATHS_IN_CONTAINER}")
                 build_dataset_and_train_model(
-                    MODEL_CONFIG, "/data/temporary_dataset/", FILE_PATHS_IN_CONTAINER
-                )  # FILE_PATHS_IN_CONTAINER are used to create a database to work with
-                logger.info("Started writing files to server.")
-                MODEL_ID = generate_random_string(10)
+                    MODEL_CONFIG, "/data/temporary_dataset/", filepaths_in_container
+                )  # filepaths_in_container are used to create a database to work with
+                logger.info("Started writing model files to server.")
+                model_id = generate_random_string(10)
                 db_link = upload_document(
-                    f"{MODEL_ID}.db", "/data/odqa/userfile.db", FILE_SERVER_URL
+                    f"{model_id}.db", "/data/odqa/userfile.db", FILE_SERVER_URL
                 )
                 matrix_link = upload_document(
-                    f"{MODEL_ID}.npz",
+                    f"{model_id}.npz",
                     "/data/odqa/userfile_tfidf_matrix.npz",
                     FILE_SERVER_URL,
                 )
                 if DOC_NEEDS_UPLOAD:  # only if doc is not already on fileserver
                     document_links = []
-                    for filepath in FILE_PATHS_IN_CONTAINER:
-                        new_filename = filepath.split("/")[
-                            -1
-                        ]  # file already has a random-id name (assigned earlier), so we just get it
+                    for filepath in filepaths_in_container:
+                        new_filename = filepath.split("/")[-1]
+                        # file already has a random-id name (assigned earlier), so we just get it
                         document_link = upload_document(
                             new_filename, filepath, FILE_SERVER_URL
                         )
-                        document_links.append(
-                            document_link  # save all the links to relevant files on server
-                        )  # todo add to folder on server!!!
+                        document_links.append(document_link)
+                        # save all the links to relevant files on server
+                        # todo: in the future add to folder on server!!!
                 time.sleep(1)
                 # remove all the generated and downloaded files (stateless paradigm)
                 os.remove("/data/odqa/userfile.db")
                 os.remove("/data/odqa/userfile_tfidf_matrix.npz")
-                for filepath in FILE_PATHS_IN_CONTAINER:
+                for filepath in filepaths_in_container:
                     os.remove(filepath)
                 shutil.rmtree("/data/temporary_dataset/", ignore_errors=True)
                 logger.info(
                     "Files successfully written to server. Everyting removed from /data."
                 )
-                bot_attributes.append(
+                attributes_to_add.append(
                     {
                         "bot_attributes": {
-                            "db_link": db_link,  # todo: maybe replace db_link and matrix_link with MODEL_ID
+                            "db_link": db_link,  # todo: in the future maybe replace db_link and matrix_link with model_id
                             "matrix_link": matrix_link,
                             "document_links": document_links,
                         },
                         "human_attributes": {
                             "documents_qa_model": {
-                                "model_id": MODEL_ID,
-                                "documents": document_links,
+                                "model_id": model_id,
+                                "document_ids_and_info": docs_and_links,
+                                "document_links": document_links,
                             }
                         },
                     }
-                )  # todo: check if we need three links, not just id
-                logger.info(f"Bot attributes in save_model: {bot_attributes}")
+                )
+                logger.info(f"Attributes in save_model: {attributes_to_add}")
             except Exception as e:
                 logger.error(e)
-                bot_attributes.append({})
+                attributes_to_add.append({})
         else:
-            bot_attributes.append({})
-    return jsonify(bot_attributes)
+            attributes_to_add.append({})
+    return jsonify(attributes_to_add)
 
 
 if __name__ == "__main__":
