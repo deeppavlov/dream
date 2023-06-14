@@ -136,7 +136,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"user_kg: {user_kg}")
 
     if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["kg_prompt"]):
-        final_prompt = PROMPT + f" ADDITIONAL INSTRUCTION: Use the following facts about the user for your answer: {kg_prompt}"
+        kg_prompt = re.sub(r'[-\n]', '', kg_prompt[0][0].lower()).split('.')
+        kg_prompt = ",".join(kg_prompt[:-1])
+        final_prompt = PROMPT + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
 
     else:
         final_prompt = PROMPT 
