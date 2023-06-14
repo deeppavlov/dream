@@ -113,7 +113,7 @@
       "train_and_upload_model": {
         "connector": {
           "protocol": "http",
-          "timeout": 40,
+          "timeout": 50,
           "url": "http://doc-retriever:8163/train_and_upload_model"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
@@ -129,7 +129,7 @@
       "doc_retriever": {
         "connector": {
           "protocol": "http",
-          "timeout": 50,
+          "timeout": 20,
           "url": "http://doc-retriever:8163/return_candidates"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
@@ -140,7 +140,7 @@
         "state_manager_method": "add_annotation",
         "is_enabled": true,
         "source": {
-          "component": "components/jkb98534UUIjfdn67IN.yml",
+          "component": "components/nlknkn768678DUFYbcjk.yml",
           "service": "annotators/doc_retriever/service_configs/doc-retriever"
         }
       }
