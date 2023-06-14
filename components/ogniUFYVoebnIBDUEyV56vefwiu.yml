@@ -1,4 +1,4 @@
-name: dff_qa_llm_skill
+name: dff_document_qa_llm_skill
 display_name: DFF QA LLM-based Skill
 component_type: Generative
 model_type: NN-based
@@ -14,7 +14,7 @@ group: skills
 connector:
   protocol: http
   timeout: 240.0
-  url: http://dff-qa-llm-skill:8164/respond
+  url: http://dff-document-qa-llm-skill:8164/respond
 dialog_formatter: state_formatters.dp_formatters:dff_qa_llm_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
@@ -23,5 +23,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_qa_llm_skill/service_configs/dff-qa-llm-skill
+service: skills/dff_document_qa_llm_skill/service_configs/dff-document-qa-llm-skill
 date_created: "2023-03-16T09:45:32"

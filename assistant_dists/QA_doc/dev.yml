@@ -40,9 +40,9 @@ services:
       - "./documents:/src/documents"
     ports:
       - 8163:8163
-  dff-qa-llm-skill:
+  dff-document-qa-llm-skill:
     volumes:
-      - "./skills/dff_qa_llm_skill:/src"
+      - "./skills/dff_document_qa_llm_skill:/src"
       - "./common:/src/common"
       - "./documents:/src/documents"
     ports:

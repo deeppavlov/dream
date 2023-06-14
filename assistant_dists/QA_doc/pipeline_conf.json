@@ -146,10 +146,10 @@
       }
     },
     "skill_selectors": {
-      "rule_based_selector": {
+      "description_based_skill_selector": {
         "connector": {
           "protocol": "python",
-          "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+          "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
         },
         "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -161,19 +161,19 @@
         ],
         "is_enabled": true,
         "source": {
-          "directory": "skill_selectors/rule_based_selector",
-          "container": "agent"
+          "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+          "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
         }
       }
     },
     "skills": {
-      "dff_qa_llm_skill": {
+      "dff_document_qa_llm_skill": {
         "connector": {
           "protocol": "http",
           "timeout": 240.0,
-          "url": "http://dff-qa-llm-skill:8164/respond"
+          "url": "http://dff-document-qa-llm-skill:8164/respond"
         },
-        "dialog_formatter": "state_formatters.dp_formatters:dff_qa_llm_skill_formatter",
+        "dialog_formatter": "state_formatters.dp_formatters:dff_document_qa_llm_skill_formatter",
         "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
         "previous_services": [
           "skill_selectors"
@@ -182,7 +182,7 @@
         "is_enabled": true,
         "source": {
           "component": "components/ogniUFYVoebnIBDUEyV56vefwiu.yml",
-          "service": "skills/dff_qa_llm_skill/service_configs/dff-qa-llm-skill"
+          "service": "skills/dff_document_qa_llm_skill/service_configs/dff-document-qa-llm-skill"
         }
       },
       "dummy_skill": {
