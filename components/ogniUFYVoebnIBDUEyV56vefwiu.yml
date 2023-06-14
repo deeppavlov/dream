@@ -13,9 +13,9 @@ gpu_usage: null
 group: skills
 connector:
   protocol: http
-  timeout: 240.0
+  timeout: 120.0
   url: http://dff-document-qa-llm-skill:8164/respond
-dialog_formatter: state_formatters.dp_formatters:dff_qa_llm_formatter
+dialog_formatter: state_formatters.dp_formatters:dff_prompted_skill_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
   - skill_selectors
