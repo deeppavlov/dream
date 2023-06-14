@@ -2,13 +2,13 @@ import os
 import nltk.data
 
 
-def build_dataset(dataset_path, DOC_PATH_OR_LINK):
+def build_dataset(dataset_path, doc_path_or_link):
     if not os.path.exists(dataset_path):
         os.mkdir(dataset_path)
     tokenizer = nltk.data.load("tokenizers/punkt/english.pickle")
     i = 0
     docs_to_parts_dict = {}
-    for filepath in DOC_PATH_OR_LINK:
+    for filepath in doc_path_or_link:
         with open(filepath, "r") as f:
             list_files = []
             buf = ""
@@ -21,9 +21,7 @@ def build_dataset(dataset_path, DOC_PATH_OR_LINK):
                 if len(words) > 100:
                     i += 1
                     new_f = dataset_path + str(i) + ".txt"
-                    with open(
-                        new_f, "w"
-                    ) as f_out:  # think about this for downloaded = binary files
+                    with open(new_f, "w") as f_out: 
                         f_out.write(buf)
                     buf = ""
                     list_files.append(new_f)
