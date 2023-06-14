@@ -21,7 +21,7 @@ def build_dataset(dataset_path, doc_path_or_link):
                 if len(words) > 100:
                     i += 1
                     new_f = dataset_path + str(i) + ".txt"
-                    with open(new_f, "w") as f_out: 
+                    with open(new_f, "w") as f_out:
                         f_out.write(buf)
                     buf = ""
                     list_files.append(new_f)

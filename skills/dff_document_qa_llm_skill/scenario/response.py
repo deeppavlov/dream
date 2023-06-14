@@ -19,9 +19,7 @@ from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
@@ -60,18 +58,9 @@ def compose_data_for_model(ctx: Context, actor: Actor) -> str:
     context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
     utterance_texts = [uttr.get("text", "") for uttr in context]
     if utterance_texts:
-        raw_candidates = (
-            context[-1]
-            .get("annotations", {})
-            .get("doc_retriever", {})
-            .get("candidate_files", [])
-        )
+        raw_candidates = context[-1].get("annotations", {}).get("doc_retriever", {}).get("candidate_files", [])
         filepaths_on_server = (
-            context[-1]
-            .get("user", {})
-            .get("attributes", {})
-            .get("documents_qa_model", {})
-            .get("document_links", [])
+            context[-1].get("user", {}).get("attributes", {}).get("documents_qa_model", {}).get("document_links", [])
         )
         filepaths_in_container = []
         for filepath in filepaths_on_server:
@@ -96,7 +85,7 @@ filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}""
             -1
         ] = f"""TEXT: ### {final_candidates} ###
 USER: {request}
-Reply to USER. If USER makes a request or asks a question, answer based on TEXT that contains some information about the subject.
+Reply to USER. If USER asks a question, answer based on TEXT that contains some information about the subject.
 If necessary, structure your answer as bullet points. You may also present information in tables.
 If TEXT does not contain the answer, apologize and say that you cannot answer based on the given text.
 Only answer the question asked, do not include additional information. TEXT may contain unretaed information."""
@@ -122,16 +111,10 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
-    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get(
-        "attributes", {}
-    )
+    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
     lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    envvars_to_send = (
-        ENVVARS_TO_SEND
-        if len(ENVVARS_TO_SEND)
-        else human_uttr_attributes.get("envvars_to_send", [])
-    )
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
     sending_variables = compose_sending_variables(
         lm_service_kwargs,
         envvars_to_send,

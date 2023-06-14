@@ -14,9 +14,7 @@ from utils import upload_document, build_dataset_and_train_model
 
 # logging here because it conflicts with tf
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
@@ -57,9 +55,7 @@ def return_candidates():
         db_link = bot_attributes.get("db_link", "")  # where to download model files
         matrix_link = bot_attributes.get("matrix_link", "")
         try:
-            logger.info(
-                f"Started downloading files from server (db_link: {db_link}, matrix_link: {matrix_link})."
-            )
+            logger.info(f"Started downloading files from server (db_link: {db_link}, matrix_link: {matrix_link}).")
             db_file = requests.get(db_link)
             matrix_file = requests.get(matrix_link, timeout=30)
             with open("/data/odqa/userfile.db", "wb") as f:
@@ -69,9 +65,7 @@ def return_candidates():
             logger.info("Files downloaded successfully.")
             ranker_model = build_model(MODEL_CONFIG)
             logger.info("Model loaded.")
-            utterances = dialog.get("human_utterances", [{}])[-1].get(
-                "text", ""
-            ) 
+            utterances = dialog.get("human_utterances", [{}])[-1].get("text", "")
             results = ranker_model([utterances])[0]
             candidates_list.append({"candidate_files": results})
         except Exception as e:
@@ -98,9 +92,7 @@ def train_and_upload_model():
             not DOC_PATH_OR_LINK
         ):  # if empty, then it's the dreambuilder option - file is already on files:3000; url comes in human_attributes
             if dialog.get("human_attributes", []):
-                if dialog.get("human_attributes", [])[-1].get(
-                    "documents", []
-                ) != attributes.get(
+                if dialog.get("human_attributes", [])[-1].get("documents", []) != attributes.get(
                     "document_links", []
                 ):  # if in dreambuilder the list of docs changed compared to previous step
                     model_needs_train = True  # if list of files changed, then we need to retrain the model
@@ -121,7 +113,9 @@ def train_and_upload_model():
                         # linking ids and initial links
             else:
                 logger.info("No documents specified in human_attributes.")
-        if "document_links" not in attributes:  # if there is no document_link in bot attributes -> the model was never trained
+        if (
+            "document_links" not in attributes
+        ):  # if there is no document_link in bot attributes -> the model was never trained
             model_needs_train = True
             doc_needs_upload = True  # in all not dreambuilder cases, doc needs to be uploaded to server
             if "http" in DOC_PATH_OR_LINK[0]:  # if any element is a link
@@ -131,9 +125,7 @@ def train_and_upload_model():
                     # download all files to data
                     docs_and_links.append(
                         {
-                            "document_id": filepath_in_container.split("/")[-1].replace(
-                                ".txt", ""
-                            ),
+                            "document_id": filepath_in_container.split("/")[-1].replace(".txt", ""),
                             "initial_path_or_link": filepath,
                         }
                     )
@@ -147,9 +139,7 @@ def train_and_upload_model():
                     # move all the files to /data (for uniformness all files are always stored there)
                     docs_and_links.append(
                         {
-                            "document_id": filepath_in_container.split("/")[-1].replace(
-                                ".txt", ""
-                            ),
+                            "document_id": filepath_in_container.split("/")[-1].replace(".txt", ""),
                             "initial_path_or_link": filepath,
                         }
                     )  # linking ids and initial filenames
@@ -163,9 +153,7 @@ def train_and_upload_model():
                 )  # filepaths_in_container are used to create a database to work with
                 logger.info("Started writing model files to server.")
                 model_id = generate_random_string(10)
-                db_link = upload_document(
-                    f"{model_id}.db", "/data/odqa/userfile.db", FILE_SERVER_URL
-                )
+                db_link = upload_document(f"{model_id}.db", "/data/odqa/userfile.db", FILE_SERVER_URL)
                 matrix_link = upload_document(
                     f"{model_id}.npz",
                     "/data/odqa/userfile_tfidf_matrix.npz",
@@ -176,9 +164,7 @@ def train_and_upload_model():
                     for filepath in filepaths_in_container:
                         new_filename = filepath.split("/")[-1]
                         # file already has a random-id name (assigned earlier), so we just get it
-                        document_link = upload_document(
-                            new_filename, filepath, FILE_SERVER_URL
-                        )
+                        document_link = upload_document(new_filename, filepath, FILE_SERVER_URL)
                         document_links.append(document_link)
                         # save all the links to relevant files on server
                         # todo: in the future add to folder on server!!!
@@ -189,13 +175,11 @@ def train_and_upload_model():
                 for filepath in filepaths_in_container:
                     os.remove(filepath)
                 shutil.rmtree("/data/temporary_dataset/", ignore_errors=True)
-                logger.info(
-                    "Files successfully written to server. Everyting removed from /data."
-                )
+                logger.info("Files successfully written to server. Everyting removed from /data.")
                 attributes_to_add.append(
                     {
                         "bot_attributes": {
-                            "db_link": db_link,  # todo: in the future maybe replace db_link and matrix_link with model_id
+                            "db_link": db_link,  # todo: maybe replace db_link and matrix_link with model_id
                             "matrix_link": matrix_link,
                             "document_links": document_links,
                         },
