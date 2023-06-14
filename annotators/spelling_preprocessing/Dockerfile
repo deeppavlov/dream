@@ -1,11 +1,10 @@
-FROM python:3.7.4
+FROM python:3.9.16
 
-RUN mkdir /src
+WORKDIR /src
 
 COPY ./requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN apt install -y curl && pip install -r /src/requirements.txt
 
 COPY . /src/
-WORKDIR /src
 
 CMD gunicorn --workers=2 server:app

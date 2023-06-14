@@ -1,0 +1,10 @@
+name: emotion-classification-deepy
+endpoints:
+- model
+compose:
+  build:
+    context: annotators/emotion_classification_deepy
+  command: python -m deeppavlov riseapi emo_bert.json -p 8015
+  ports:
+  - 8015:8015
+proxy: null

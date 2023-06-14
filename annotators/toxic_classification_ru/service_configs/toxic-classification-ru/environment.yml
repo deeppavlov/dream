@@ -1,0 +1,5 @@
+SERVICE_PORT: 8126
+PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
+LANGUAGE: RU
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

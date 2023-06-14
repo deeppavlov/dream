@@ -1,3 +1,5 @@
+pybind11==2.2.4
+hdt==2.3
 aiohttp
 jinja2<=3.0.3
 Werkzeug<=2.0.3

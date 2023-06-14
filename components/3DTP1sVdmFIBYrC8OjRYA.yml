@@ -1,0 +1,24 @@
+name: toxic_classification
+display_name: Toxic Classification
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Toxic classification model from Transformers specified as PRETRAINED_MODEL_NAME_OR_PATH
+ram_usage: 3.5G
+gpu_usage: 3G
+group: candidate_annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://toxic-classification-ru:8118/respond_batch
+dialog_formatter: state_formatters.dp_formatters:hypotheses_list
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- skills
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: respond_batch
+service: annotators/toxic_classification_ru/service_configs/toxic-classification-ru
+date_created: '2023-03-16T09:45:32'

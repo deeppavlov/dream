@@ -15,12 +15,10 @@ RUN : \
 
 RUN apt-get update && \
 	apt-get upgrade -y && \
-	apt-get install -y git libsqlite3-dev
+	apt-get install -y git libsqlite3-dev python3.10-venv
 
-RUN apt-get install python3.10-venv -y
 RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
-RUN python3.10 --version
 WORKDIR /src
 
 ARG SERVICE_PORT

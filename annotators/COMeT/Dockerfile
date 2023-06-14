@@ -30,9 +30,7 @@ COPY $SERVICE_HOME/ /src/
 COPY ./common/ /src/common/
 WORKDIR /src
 
-RUN mkdir /data/
-RUN mkdir /data/models/
-RUN mkdir /data/comet_commonsense/
+RUN mkdir /data/ /data/models/ /data/comet_commonsense/
 
 RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/comet/model.tar.gz -P /data/models/ && \
     tar -xzf /data/models/model.tar.gz -C /data/comet_commonsense/ && \
@@ -40,7 +38,5 @@ RUN wget -c -q http://lnsigo.mipt.ru/export/alexaprize_data/comet/model.tar.gz -
 
 RUN wget ${PRETRAINED_MODEL} -q -P /data/comet_commonsense/pretrained_models/ && \
     wget ${PREPROCESS_DATA} -q -P /data/comet_commonsense/data/${GRAPH}/processed/generation/
-
-WORKDIR /src
 
 CMD uvicorn server:app --host 0.0.0.0 --port ${SERVICE_PORT}

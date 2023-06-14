@@ -1,0 +1,27 @@
+name: dff_meeting_notes_prompted_skill
+display_name: Meeting Notes Skill
+component_type: Generative
+model_type: NN-based
+is_customizable: true
+author: publisher@deeppavlov.ai
+description: Prompt-based skill that utilizes GPT-3.5 to generate
+  meeting notes based on the meeting script.
+ram_usage: 150M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://dff-meeting-notes-prompted-skill:8155/respond
+dialog_formatter:
+  name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+  skill_name: dff_meeting_notes_prompted_skill
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_template_prompted_skill/service_configs/dff-meeting-notes-prompted-skill
+date_created: '2023-04-26T09:45:32'

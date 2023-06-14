@@ -1,0 +1,26 @@
+name: dff-image-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8124
+      SERVICE_NAME: dff_image_skill
+      LANGUAGE: EN
+    context: .
+    dockerfile: ./skills/dff_image_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8124 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 1024M
+      reservations:
+        memory: 1024M
+  volumes:
+  - ./skills/dff_image_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8124:8124
+proxy: null
