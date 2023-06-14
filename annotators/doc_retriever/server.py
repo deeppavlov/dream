@@ -10,7 +10,7 @@ from deeppavlov import build_model
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov.core.common.file import read_json
-from train_model_if_not_exist import upload_document, build_dataset_and_train_model
+from utils import upload_document, build_dataset_and_train_model
 
 # logging here because it conflicts with tf
 
@@ -20,7 +20,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
-# original_document. если лежит, берем его. если нет, чекаем атрибуты. и постоянно чекаем атрибуты на каждом шаге
+
 PARAGRAPHS_NUM = 5
 DOC_PATH_OR_LINK = os.environ.get("DOC_PATH_OR_LINK", "")
 if DOC_PATH_OR_LINK:

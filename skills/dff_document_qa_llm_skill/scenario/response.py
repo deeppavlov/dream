@@ -98,7 +98,8 @@ filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}""
 USER: {request}
 Reply to USER. If USER makes a request or asks a question, answer based on TEXT that contains some information about the subject.
 If necessary, structure your answer as bullet points. You may also present information in tables.
-If TEXT does not contain the answer, apologize and say that you cannot answer based on the given text."""
+If TEXT does not contain the answer, apologize and say that you cannot answer based on the given text.
+Only answer the question asked, do not include additional information. TEXT may contain unretaed information."""
     return utterance_texts
 
 
