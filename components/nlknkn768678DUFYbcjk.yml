@@ -11,7 +11,7 @@ group: annotators
 connector:
   protocol: http
   timeout: 20.0
-  url: http://doc-retriever:8163/return_candidates
+  url: http://doc-retriever:8165/return_candidates
 dialog_formatter: state_formatters.dp_formatters:utt_non_punct_dialog
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services: null

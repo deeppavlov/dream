@@ -114,7 +114,7 @@
         "connector": {
           "protocol": "http",
           "timeout": 50,
-          "url": "http://doc-retriever:8163/train_and_upload_model"
+          "url": "http://doc-retriever:8165/train_and_upload_model"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -130,7 +130,7 @@
         "connector": {
           "protocol": "http",
           "timeout": 20,
-          "url": "http://doc-retriever:8163/return_candidates"
+          "url": "http://doc-retriever:8165/return_candidates"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
         "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -171,7 +171,7 @@
         "connector": {
           "protocol": "http",
           "timeout": 120.0,
-          "url": "http://dff-document-qa-llm-skill:8164/respond"
+          "url": "http://dff-document-qa-llm-skill:8166/respond"
         },
         "dialog_formatter": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
         "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

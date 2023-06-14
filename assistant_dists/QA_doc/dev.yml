@@ -39,13 +39,13 @@ services:
       - "./common:/src/common"
       - "./documents:/src/documents"
     ports:
-      - 8163:8163
+      - 8165:8165
   dff-document-qa-llm-skill:
     volumes:
       - "./skills/dff_document_qa_llm_skill:/src"
       - "./common:/src/common"
       - "./documents:/src/documents"
     ports:
-      - 8164:8164
+      - 8166:8166
 
 version: "3.7"
