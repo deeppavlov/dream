@@ -1,0 +1,277 @@
+{
+    "connectors": {},
+    "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {}
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/sbDcAqiNqxFz.yml",
+                "service": "services/agent_services/service_configs/dream"
+            }
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "annotations": {}
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/rFC0YJOoDFvS.yml",
+                "service": "services/agent_services/service_configs/dream"
+            }
+        },
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg",
+                    "ner",
+                    "sentrewrite",
+                    "spacy_nounphrases"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
+            }
+        },
+        "response_annotators": {},
+        "annotators": {
+            "spelling_preprocessing": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://spelling-preprocessing:8074/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
+                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
+                }
+            },
+            "badlisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://badlisted-words:8018/badlisted_words"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
+                }
+            },
+            "combined_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 3.0,
+                    "url": "http://combined-classification-lightweight:8150/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/combined_classification_lightweight",
+                    "container": "combined-classification-lightweight",
+                    "endpoint": "model"
+                }
+            }
+        },
+        "skill_selectors": {
+            "rule_based_selector": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ],
+                "is_enabled": true,
+                "source": {
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                }
+            }
+        },
+        "skills": {
+            "dff_program_y_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-program-y-skill:8008/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
+                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
+                }
+            },
+            "dummy_skill": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
+            },
+            "dff_friendship_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://dff-friendship-skill:8086/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_friendship_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/haBUc1rsCitGmBzndrKl5w.yml",
+                    "service": "skills/dff_friendship_skill/service_configs/dff-friendship-skill"
+                }
+            },
+            "dff_template_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2,
+                    "url": "http://dff-template-skill:8120/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_template_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pC342KBWtheQNnXjIni6A.yml",
+                    "service": "skills/dff_template_skill/service_configs/dff-template-skill"
+                }
+            }
+        },
+        "candidate_annotators": {
+            "badlisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1,
+                    "url": "http://badlisted-words:8018/badlisted_words_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
+                }
+            },
+            "combined_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://combined-classification-lightweight:8150/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "directory": "annotators/combined_classification_lightweight",
+                    "container": "combined-classification-lightweight",
+                    "endpoint": "batch_model"
+                }
+            }
+        },
+        "response_selectors": {
+            "response_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "url": "http://confidence-based-response-selector:8005/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/KX4drAocVa5APcivWHeBNQ.yml",
+                    "service": "response_selectors/confidence_based_response_selector/service_configs/confidence-based-response-selector"
+                }
+            }
+        }
+    },
+    "metadata": {
+        "display_name": "Dream Light",
+        "author": "DeepPavlov",
+        "description": "Version of DeepPavlov Dream Socialbot that requires only CPU.",
+        "version": "0.1.0",
+        "date_created": "2022-12-12T12:12:00",
+        "ram_usage": "1.5 GB",
+        "gpu_usage": "0 GB",
+        "disk_usage": "50 GB"
+    }
+}
