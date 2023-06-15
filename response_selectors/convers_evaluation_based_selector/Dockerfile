@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.9.16-slim
 
 WORKDIR /src
 
@@ -41,8 +41,8 @@ ENV QUESTION_TO_QUESTION_DOWNSCORE_COEF ${QUESTION_TO_QUESTION_DOWNSCORE_COEF}
 
 
 COPY ./response_selectors/convers_evaluation_based_selector/requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-RUN python -c "import nltk; nltk.download('punkt')"
+RUN pip install -r requirements.txt && \
+    python -c "import nltk; nltk.download('punkt')"
 
 ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}

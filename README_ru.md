@@ -165,7 +165,7 @@ convers-evaluator-annotator:
     context: dp/proxy/
     dockerfile: Dockerfile
   environment:
-    - PROXY_PASS=dream.deeppavlov.ai:8004
+    - PROXY_PASS=proxy.deeppavlov.ai:8004
     - PORT=8004
 ```
 и включайте этот файл в команду запуска:
@@ -214,6 +214,7 @@ docker-compose -f docker-compose.yml -f assistant_dists/dream/docker-compose.ove
 | DFF Intent Responder | 50 MB RAM                | provides template-based replies for some of the intents detected by Intent Catcher annotator                                        |
 | DFF Program Y Skill  | 80 MB RAM                | **[New DFF version]** Chatbot Program Y (https://github.com/keiffster/program-y) adapted for Dream socialbot                        |
 | DFF Friendship Skill | 70 MB RAM                | **[New DFF version]** DFF-based skill to greet the user in the beginning of the dialog, and forward the user to some scripted skill |
+| DFF Template Skill   | 50 MB RAM                | **[New DFF version]** DFF-based skill that provides an example of DFF usage                                                         |
 | Text QA              | 3.8 GiB RAM, 5.2 GiB GPU | Навык для ответа на вопросы по тексту.                                                                                              |
 
 

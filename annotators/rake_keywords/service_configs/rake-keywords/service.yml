@@ -1,0 +1,37 @@
+name: rake-keywords
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8007
+      SERVICE_NAME: rake_keywords
+      FLASK_APP: server
+    context: .
+    dockerfile: ./annotators/rake_keywords/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8007
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./annotators/rake_keywords:/src
+  ports:
+  - 8007:8007
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8007
+  - PORT=8007

@@ -72,7 +72,6 @@ class TorchTransformersClassifierModel(TorchModel):
         num_special_tokens: int = None,
         **kwargs,
     ) -> None:
-
         if not optimizer_parameters:
             optimizer_parameters = ({"lr": 1e-3, "weight_decay": 0.01, "betas": (0.9, 0.999), "eps": 1e-6},)
 
@@ -321,7 +320,6 @@ class AutoModelForBinaryClassification(torch.nn.Module):
         output_hidden_states=None,
         return_dict=None,
     ):
-
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
 
         outputs = self.model(

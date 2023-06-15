@@ -1,0 +1,31 @@
+name: spacy-annotator-ru
+endpoints:
+- respond
+- respond_batch
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      SERVICE_PORT: 8129
+      SRC_DIR: annotators/spacy_annotator
+      SPACY_MODEL: ru_core_news_sm
+      TOKEN_ATTRIBUTES: pos_|dep_|lemma_|ent_iob_|ent_type_|morph
+      ANNOTATE_BATCH_WITH_TOKENS_ONLY: 1
+      FLASK_APP: server
+    context: ./
+    dockerfile: annotators/spacy_annotator/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8129
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./annotators/spacy_annotator:/src
+  ports:
+  - 8129:8129
+proxy: null

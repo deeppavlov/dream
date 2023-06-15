@@ -64,7 +64,6 @@ class TorchTransformersElRanker(TorchModel):
         entity_tokens_pos: List[int],
         labels: List[int],
     ) -> float:
-
         _input = {"labels": labels}
         _input["entity_tokens_pos"] = entity_tokens_pos
         for elem in ["input_ids", "attention_mask"]:
@@ -97,7 +96,6 @@ class TorchTransformersElRanker(TorchModel):
         c_features: List[Dict],
         entity_tokens_pos: List[int],
     ) -> Union[List[int], List[np.ndarray]]:
-
         self.model.eval()
 
         _input = {"entity_tokens_pos": entity_tokens_pos}
@@ -169,7 +167,6 @@ class TextEncoder(nn.Module):
         attention_mask: Tensor,
         entity_tokens_pos: List[int] = None,
     ) -> Union[Tuple[Any, Tensor], Tuple[Tensor]]:
-
         if entity_tokens_pos is not None:
             q_outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
             q_hidden_states = q_outputs.last_hidden_state
@@ -249,7 +246,6 @@ class SiameseBertElModel(nn.Module):
         entity_tokens_pos: List,
         labels: List[int] = None,
     ) -> Union[Tuple[Any, Tensor], Tuple[Tensor]]:
-
         entity_emb = self.encoder(
             input_ids=q_input_ids,
             attention_mask=q_attention_mask,

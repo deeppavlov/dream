@@ -1,0 +1,37 @@
+name: dff-movie-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8023
+      SERVICE_NAME: dff_movie_skill
+      DATABASE_URL: http://files.deeppavlov.ai/alexaprize_data/database_most_popular_main_info_v2.json
+      MOVIE_PLOTS_URL: http://files.deeppavlov.ai/alexaprize_data/movie_plots_v0.tar.gz
+    context: .
+    dockerfile: skills/dff_movie_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8023 --timeout 180
+  deploy:
+    resources:
+      limits:
+        memory: 1536M
+      reservations:
+        memory: 1536M
+  volumes:
+  - ./common:/src/common
+  - ./skills/dff_movie_skill:/src
+  ports:
+  - 8023:8023
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8023
+  - PORT=8023

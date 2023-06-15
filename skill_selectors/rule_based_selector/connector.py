@@ -182,6 +182,7 @@ class RuleBasedSkillSelectorConnector:
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("gpt2_generator")
+                skills_for_uttr.append("faq_skill_deepy")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -278,6 +279,7 @@ class RuleBasedSkillSelectorConnector:
                     if len(nouns) >= 5:
                         skills_for_uttr.append("dff_short_story_skill")
 
+            skills_for_uttr.append("dff_universal_prompted_skill")
             # turn on skills if prompts are selected by prompt_selector
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
             if ranged_prompts:
