@@ -21,8 +21,6 @@ services:
     restart: unless-stopped
   convers-evaluation-selector:
     restart: unless-stopped
-  badlisted-words:
-    restart: unless-stopped
   spelling-preprocessing:
     restart: unless-stopped
   convers-evaluator-annotator:

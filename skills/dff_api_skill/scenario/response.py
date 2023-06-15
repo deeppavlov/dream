@@ -51,7 +51,6 @@ if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in
 assert sending_variables["OPENAI_API_KEY"], logger.info("Type in OpenAI API key to `.env_scret`")
 assert sending_variables["GOOGLE_CSE_ID"], logger.info("Type in GOOGLE CSE ID to `.env_scret`")
 assert sending_variables["GOOGLE_API_KEY"], logger.info("Type in GOOGLE API key to `.env_scret`")
-assert sending_variables["OPENAI_ORGANIZATION"], logger.info("Type in OPENAI ORGANIZATION key to `.env_scret`")
 
 search = GoogleSearchAPIWrapper()
 tools = [
@@ -111,7 +110,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 "prompts": [prompt],
                 "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
                 "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                "openai_api_organizations": [sending_variables["OPENAI_ORGANIZATION"]],
             },
             timeout=GENERATIVE_TIMEOUT,
         )
@@ -152,14 +150,13 @@ api_func_mapping = {
 
 def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
-        prompt = f"""You have a dictionary of tools where keys are the names of the tools \
-              and values are dictionaries with tool descriptions:
-        {top_n_apis}
-        Based on these descriptions, choose the best tool to use in order to answer the following user request:
-        {ctx.last_request}
-        Return the name of the best tool exactly as it is written in the dictionary. \
-              DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
-
+        prompt = f"""You have a dictionary of tools where keys are the names \
+of the tools and values are dictionaries with tool descriptions:
+{top_n_apis}
+Based on these descriptions, choose the best tool to use in order to answer \
+the following user request: {ctx.last_request}
+Return the name of the best tool exactly as it is written in the dictionary. \
+DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
         dialog_context = compose_data_for_model(ctx, actor)
         try:
             best_api = requests.post(
@@ -169,7 +166,6 @@ def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str
                     "prompts": [prompt],
                     "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
                     "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                    "openai_api_organizations": [sending_variables["OPENAI_ORGANIZATION"]],
                 },
                 timeout=GENERATIVE_TIMEOUT,
             )

@@ -15,7 +15,6 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
   convers-evaluation-selector:
-  badlisted-words:
   spelling-preprocessing:
   dff-api-skill:
 version: '3.7'
