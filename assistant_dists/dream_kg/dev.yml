@@ -114,7 +114,7 @@ services:
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8138:8138
+      - 8027:8027
   dff-user-kg-skill:
     volumes:
       - "./skills/dff_user_kg_skill:/src"

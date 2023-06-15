@@ -8,6 +8,7 @@ services:
           combined-classification:8087, dff-friendship-skill:8086, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153, dff-template-skill:8120, terminusdb-server:6363,
           user-knowledge-graph:8027, dff-user-kg-skill:8132, dff-travel-italy-skill:8139"
+          user-knowledge-graph:8027,dff-user-kg-skill:8132, dff-travel-italy-skill:8139"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -361,5 +362,4 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
 version: '3.7'
