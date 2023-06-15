@@ -1,0 +1,11 @@
+name: confidence-based-response-selector
+endpoints:
+- respond
+compose:
+  build:
+    context: response_selectors/confidence_based_response_selector
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8005
+  volumes: []
+  ports:
+  - 8005:8005
+proxy: null

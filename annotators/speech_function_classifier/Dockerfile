@@ -14,9 +14,8 @@ RUN mkdir /models && \
 
 COPY annotators/speech_function_classifier/requirements.txt requirements.txt
 
-RUN pip install -r requirements.txt
-
-RUN python -c "import nltk; nltk.download('punkt')"
+RUN pip install -r requirements.txt && \
+    python -c "import nltk; nltk.download('punkt')"
 
 COPY . ./
 

@@ -7,8 +7,8 @@ services:
           ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011,
           spelling-preprocessing-ru:8074, entity-linking-ru:8075, wiki-parser-ru:8077, dff-generative-ru-skill:8092,
           dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
-          dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8126,
-          fact-retrieval-ru:8130, text-qa-ru:8078"
+          dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118,
+          fact-retrieval-ru:8110, text-qa-ru:8078"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -28,9 +28,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 1024M
         reservations:
-          memory: 128M
+          memory: 1024M
 
   convers-evaluation-selector-ru:
     env_file: [ .env_ru ]
@@ -144,10 +144,10 @@ services:
     build:
       context: ./annotators/toxic_classification_ru/
       args:
-        SERVICE_PORT: 8126
+        SERVICE_PORT: 8118
         PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
         LANGUAGE: RU
-    command: flask run -h 0.0.0.0 -p 8126
+    command: flask run -h 0.0.0.0 -p 8118
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -407,11 +407,11 @@ services:
         CONFIG: fact_retrieval_rus.json
         COMMIT: c8264bf82eaa3ed138395ab68f71d47a4175f2fc
         TOP_N: 20
-        SERVICE_PORT: 8130
+        SERVICE_PORT: 8110
         SRC_DIR: annotators/fact_retrieval_rus
       context: ./
       dockerfile: annotators/fact_retrieval_rus/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8130
+    command: flask run -h 0.0.0.0 -p 8110
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
