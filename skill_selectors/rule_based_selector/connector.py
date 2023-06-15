@@ -183,6 +183,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("gpt2_generator")
                 skills_for_uttr.append("faq_skill_deepy")
+                skills_for_uttr.append("dff_reasoning_skill")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
