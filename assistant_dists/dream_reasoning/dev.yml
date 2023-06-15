@@ -1,0 +1,83 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  convers-evaluator-annotator:
+    volumes:
+      - "./annotators/ConversationEvaluator:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8004:8004
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  convers-evaluation-selector:
+    volumes:
+      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8009:8009
+  badlisted-words:
+    volumes:
+      - "./annotators/BadlistedWordsDetector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8018:8018
+  mongo:
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  spelling-preprocessing:
+    volumes:
+      - "./annotators/spelling_preprocessing:/src"
+    ports:
+      - 8074:8074
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8087:8087
+  openai-api-chatgpt:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8145:8145
+  # goal-detector:
+  #   volumes:
+  #     - "./annotators/goal_detector:/src"
+  #   ports:
+  #     - 8163:8163
+  # transformers-lm-gptjt:
+  #    volumes:
+  #      - "./services/transformers_lm:/src"
+  #      - "./common:/src/common"
+  #      - "~/.deeppavlov/cache:/root/.cache"
+  #    ports:
+  #      - 8161:8161
+  #  dff-dream-persona-gpt-jt-prompted-skill:
+  #    volumes:
+  #      - "./skills/dff_template_prompted_skill:/src"
+  #      - "./common:/src/common"
+  #    ports:
+  #      - 8134:8134
+  dff-reasoning-skill:
+    volumes:
+      - "./skills/dff_reasoning_skill:/src"
+      - "./common:/src/common"
+      - "./skills/dff_weather_skill/tools:/src/tools"
+      - "./skills/dff_weather_skill/data:/src/data"
+    ports:
+      - 8162:8162
+
+version: "3.7"

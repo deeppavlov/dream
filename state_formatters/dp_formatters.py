@@ -936,6 +936,16 @@ def dff_generative_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_generative_skill")
 
 
+def dff_reasoning_skill_formatter(dialog):
+    return utils.dff_formatter(
+        dialog,
+        "dff_reasoning_skill",
+        bot_last_turns=5,
+        types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
+    )
+
+
 def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
