@@ -1,6 +1,15 @@
+import os
+from pathlib import Path
 import requests
+from dotenv import load_dotenv
+from deeppavlov_kg import TerminusdbKnowledgeGraph
 
-use_context = True
+load_dotenv("./.env")
+
+TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
+INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_graph"))
+
+graph = TerminusdbKnowledgeGraph(db_name=TERMINUSDB_SERVER_DB, index_load_path=INDEX_LOAD_PATH)
 
 
 def main():
@@ -13,7 +22,12 @@ def main():
             "tags": ["film"],
         },
     }
-    requests.post(f"{url}/add_entities", json=inserted_data)
+    graph.index.set_active_user_id(inserted_data["user_id"])
+    graph.index.add_entities(
+        inserted_data["entity_info"]["entity_substr"],
+        inserted_data["entity_info"]["entity_ids"],
+        inserted_data["entity_info"]["tags"],
+    )
 
     request_data = [
         {

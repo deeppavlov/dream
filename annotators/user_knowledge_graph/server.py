@@ -1,10 +1,10 @@
 import logging
 import uuid
 import os
-
+import json
+from pathlib import Path
 import inflect
 from flask import Flask, jsonify, request
-from pathlib import Path
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 from common.utils import get_named_persons
@@ -18,20 +18,9 @@ inflect = inflect.engine()
 
 USE_ABSTRACT_KINDS = True
 
-rel_kinds_dict = {
-    "favorite_animal": "animal",
-    "have_pet": "animal",
-    "like_animal": "animal",
-    "favorite_book": "book",
-    "like_read": "book",
-    "favorite_movie": "film",
-    "favorite_food": "food",
-    "like_food": "food",
-    "favorite_drink": "food",
-    "like_drink": "food",
-    "favorite_sport": "type_of_sport",
-    "like_sports": "type_of_sport"
-}
+with open('rel_list.json') as file:
+    rel_kinds_dict = json.load(file)
+
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
@@ -69,10 +58,9 @@ def add_name_property(graph, user_id, names):
 
 
 def add_relationships2kg(
-        utt, graph, relationships_to_add2kg, user_id, entities_with_types, ex_triplets, all_entities
+        text, graph, relationships_to_add2kg, user_id, entities_with_types, ex_triplets, all_entities
     ):
     """Creates an entity and a relation between it and the User from property extraction service."""
-    text = utt.get("text", "")
 
     entity_kinds=[]
     new_entity_ids = []
@@ -205,10 +193,9 @@ def get_entity_type(attributes):
     return 'Misc'
 
 
-def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, all_entities):
+def add_relations_or_properties(text, attributes, user_id, entities_with_types, ex_triplets, all_entities):
     """Chooses what to add: property, relationship or nothing."""
     no_rel_message = "No relations were found!"
-    attributes = utt.get("annotations", {}).get("property_extraction", {})
     logger.info(f'Attributes: {attributes}')
 
     if isinstance(attributes, dict):
@@ -238,7 +225,7 @@ def add_relations_or_properties(utt, user_id, entities_with_types, ex_triplets, 
     triplet_info = {}
     if relationships_to_add2kg:
         triplet_info = add_relationships2kg(
-            utt,
+            text,
             graph,
             relationships_to_add2kg,
             user_id,
@@ -280,8 +267,13 @@ def get_result(request):
     """Collects all relation & property information from one utterance and adds to graph."""
     uttrs = request.json.get("utterances", [])
     utt = uttrs[0]
-    annotations = uttrs[0].get("annotations", {})
+
+    user_id = str(utt.get("user", {}).get("id", ""))
+    annotations = utt.get("annotations", {})
     custom_el_annotations = annotations.get("custom_entity_linking", [])
+    prop_ex_annotations = annotations.get('property_extraction', [])
+    last_utt = utt["text"]
+
     entities_with_types = {}
     found_kg_ids = []
     for entity_info in custom_el_annotations:
@@ -290,47 +282,41 @@ def get_result(request):
                 entity_info["entity_ids"][0]
             found_kg_ids.append(entity_info["entity_ids"][0])
 
-    logger.info(f"Text: {uttrs[0]['text']}")
-    logger.info(f"Property Extraction: {annotations.get('property_extraction', [])}")
+    logger.info(f"Last utterance: {last_utt}")
+    logger.info(f"Property Extraction: {prop_ex_annotations}")
 
-    last_utt = utt["text"]
     logger.info(f"Utterance: {last_utt}")
     if not last_utt:
         return "Empty utterance"
 
-    user_id = str(utt.get("user", {}).get("id", ""))
-    user_id = "User/" + user_id
+    db_user_id = "User/" + user_id
     all_entities = graph.get_all_entities()
     existing_ids = [entity["@id"] for entity in all_entities]
 
     kg_parser_annotations = []
     ex_triplets = []
-    if user_id in existing_ids:
-        entity_rel_info = graph.search_for_relationships(id_a=user_id)
+    if db_user_id in existing_ids:
+        entity_rel_info = graph.search_for_relationships(id_a=db_user_id)
         for dic in entity_rel_info:
             rel = dic["rel"]
             obj = dic["id_b"]
-            ex_triplets.append((user_id, rel, obj))
+            ex_triplets.append((db_user_id, rel, obj))
             if obj in found_kg_ids:
-                kg_parser_annotations.append([user_id, rel, obj])
-        logger.info(f"User with id {user_id} already exists!")
+                kg_parser_annotations.append([db_user_id, rel, obj])
+        logger.info(f"User with id {db_user_id} already exists!")
     else:
         try:
             graph.ontology.create_entity_kind("User")
         except ValueError:
             logger.info("Kind User is already in DB")
-        graph.create_entity("User", user_id, [], [])
-        logger.info(f"Created User with id: {user_id}")
+        graph.create_entity("User", db_user_id, [], [])
+        logger.info(f"Created User with id: {db_user_id}")
 
-    entity_detection = utt.get("annotations", {}).get("entity_detection", {})
-    entities = entity_detection.get("labelled_entities", [])
-    entities = [entity.get("text", "no entity name") for entity in entities]
     added = []
     name_result = {}
-    if entities:
-        name_result = check_name_scenario(utt, user_id)
+    name_result = check_name_scenario(utt, db_user_id)
     property_result = add_relations_or_properties(
-        utt, user_id, entities_with_types, ex_triplets, all_entities
+        last_utt, prop_ex_annotations, db_user_id, entities_with_types, ex_triplets, all_entities
     )
     if name_result:
         added.append(name_result)
@@ -340,10 +326,9 @@ def get_result(request):
     substr_list, ids_list, tags_list = [], [], []
     if name_result:
         substr_list.append(name_result["object"])
-        ids_list.append(user_id)
+        ids_list.append(db_user_id)
         tags_list.append("Name")
     if substr_list:
-        user_id = utt.get("user", {}).get("id", "")
         logger.debug(f"Adding to index user_id '{user_id}' - entity_info: "
                      f"'entity_substr': {substr_list}, 'entity_ids': {ids_list},"
                      f" 'tags': {tags_list}")
