@@ -7,14 +7,14 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8165
+      SERVICE_PORT: 8167
       SERVICE_NAME: openai_api_chatgpt_16k
       PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo-16k
       CUDA_VISIBLE_DEVICES: '0'
       FLASK_APP: server
     context: .
     dockerfile: ./services/openai_api_lm/Dockerfile
-  command: flask run -h 0.0.0.0 -p 8165
+  command: flask run -h 0.0.0.0 -p 8167
   environment:
   - CUDA_VISIBLE_DEVICES=0
   - FLASK_APP=server
@@ -28,5 +28,5 @@ compose:
   - ./services/openai_api_lm:/src
   - ./common:/src/common
   ports:
-  - 8165:8165
+  - 8167:8167
 proxy: null

@@ -15,7 +15,7 @@ group: services
 connector:
   protocol: http
   timeout: 120.0
-  url: http://openai-api-chatgpt-16k:8165/respond
+  url: http://openai-api-chatgpt-16k:8167/respond
 dialog_formatter: null
 response_formatter: null
 previous_services: null

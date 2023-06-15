@@ -166,4 +166,6 @@
 8162	dff-google-api-skill
 8163	anthropic-api-claudev13
 8164	anthropic-api-claudev1
-8165    openai-api-chatgpt-16k
+8165
+8166
+8167    openai-api-chatgpt-16k
