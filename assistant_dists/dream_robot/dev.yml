@@ -34,12 +34,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  dff-intent-responder-skill:
-    volumes:
-      - "./skills/dff_intent_responder_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8012:8012
   intent-catcher-commands:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"

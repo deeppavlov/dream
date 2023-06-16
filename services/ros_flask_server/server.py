@@ -23,7 +23,7 @@ talker = rospy.Publisher('talker', String, queue_size=1)     # ROS CURRENTLY COM
 
 threading.Thread(target=lambda: rospy.init_node('listener', disable_signals=True)).start()
 
-VALID_COMMANDS = ['move_forward', 'move_backward'] # may be hardcoded for testing without client
+VALID_COMMANDS = [] # may be hardcoded for testing without client
 COMMAND_QUEUE = []
 EXECUTING_COMMAND = None
 
