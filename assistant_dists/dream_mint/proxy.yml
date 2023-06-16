@@ -5,7 +5,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8004
+      - PROXY_PASS=proxy.deeppavlov.ai:8004
       - PORT=8004
 
   dff-program-y-skill:
@@ -14,7 +14,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8008
+      - PROXY_PASS=proxy.deeppavlov.ai:8008
       - PORT=8008
 
   sentseg:
@@ -23,7 +23,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8011
+      - PROXY_PASS=proxy.deeppavlov.ai:8011
       - PORT=8011
 
   dff-intent-responder-skill:
@@ -32,7 +32,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8012
+      - PROXY_PASS=proxy.deeppavlov.ai:8012
       - PORT=8012
 
   ner:
@@ -41,7 +41,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8021
+      - PROXY_PASS=proxy.deeppavlov.ai:8021
       - PORT=8021
 
   badlisted-words:
@@ -50,7 +50,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8018
+      - PROXY_PASS=proxy.deeppavlov.ai:8018
       - PORT=8018
 
   spelling-preprocessing:
@@ -59,7 +59,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8074
+      - PROXY_PASS=proxy.deeppavlov.ai:8074
       - PORT=8074
 
   dialogpt:
@@ -68,7 +68,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8125
+      - PROXY_PASS=proxy.deeppavlov.ai:8125
       - PORT=8125
 
   entity-detection:
@@ -77,7 +77,16 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8103
+      - PROXY_PASS=proxy.deeppavlov.ai:8103
       - PORT=8103
+
+  # intent-catcher-commands:
+  #   command: [ "nginx", "-g", "daemon off;" ]
+  #   build:
+  #     context: dp/proxy/
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PROXY_PASS=proxy.deeppavlov.ai:8014
+  #     - PORT=8014
 
 version: '3.7'
