@@ -371,20 +371,7 @@ def fact_retrieval_rus_formatter_dialog(dialog: Dict):
 
 
 def entity_storer_formatter(dialog: Dict) -> List[Dict]:
-    human_utter_index = len(dialog["human_utterances"]) - 1
-    attributes = {"entities": dialog.get("human", {}).get("attributes", {}).get("entities", {})}
-
-    # rm all execpt human_utterances, bot_utterances
-    # we need only: text, annotations, active_skill
-    new_dialog = utils.clean_up_utterances_to_avoid_unwanted_keys(
-        dialog, types_utterances=["human_utterances", "bot_utterances"]
-    )
-
-    new_dialog["human"] = {"attributes": attributes}
-
-    return [{"human_utter_indexes": [human_utter_index], "dialogs": [new_dialog]}]
-
-    utils.dream_formatter(
+    return utils.dream_formatter(
         dialog,
         result_keys=["human_utter_index", "dialogs"],
         preprocess=True,
@@ -808,31 +795,51 @@ def skill_with_attributes_formatter_service(payload: List):
     return result
 
 
-def extract_segments_or_text(utterance: Dict):
-    if "sentseg" in utterance["annotations"]:
-        return utterance["annotations"]["sentseg"]["segments"]
-    else:
-        return [utterance["text"]]
-
-
 def last_utt_sentseg_segments_dialog(dialog: Dict):
-    # Used by: intent_catcher_formatter
-    segments = extract_segments_or_text(dialog["human_utterances"][-1])
-    return [{"sentences": [segments]}]
+    return utils.dream_formatter(
+        dialog,
+        ["sentences"],
+        additional_params={
+            "annotation_type": "sentseg",
+            "default_result": [dialog["human_utterances"][-1]["text"]],
+            "utterance_type": "human_utterances",
+        },
+    )
 
 
 def ner_formatter_dialog(dialog: Dict):
-    # Used by: ner_formatter
-    segments = extract_segments_or_text(dialog["human_utterances"][-1])
-    return [{"last_utterances": [segments]}]
+    return utils.dream_formatter(
+        dialog,
+        ["last_utterances"],
+        additional_params={
+            "annotation_type": "sentseg",
+            "default_result": [dialog["human_utterances"][-1]["text"]],
+            "utterance_type": "human_utterances",
+        },
+    )
 
 
 def ner_formatter_last_bot_dialog(dialog: Dict):
     if len(dialog["bot_utterances"]):
-        segments = extract_segments_or_text(dialog["bot_utterances"][-1])
+        return utils.dream_formatter(
+            dialog,
+            ["last_utterances"],
+            additional_params={
+                "annotation_type": "sentseg",
+                "default_result": [dialog["bot_utterances"][-1]["text"]],
+                "utterance_type": "bot_utterances",
+            },
+        )
     else:
-        segments = [""]
-    return [{"last_utterances": [segments]}]
+        return utils.dream_formatter(
+            dialog,
+            ["get_annotation"],
+            additional_params={
+                "annotation_type": "sentseg",
+                "default_result": [""],
+                "utterance_type": "bot_utterances",
+            },
+        )
 
 
 def wp_formatter_dialog(dialog: Dict):

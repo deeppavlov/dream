@@ -519,8 +519,18 @@ def get_dialog_history(dialog, last_n_utts: int = 2):
     return [" ".join([uttr["text"] for uttr in dialog["utterances"][-last_n_utts:]])]
 
 
-def get_human_utter_index(dialog):
-    return len(dialog["utterances"]) - 1
+def get_new_dialog(dialog):
+    attributes = {"entities": dialog.get("human", {}).get("attributes", {}).get("entities", {})}
+
+    # rm all execpt human_utterances, bot_utterances
+    # we need only: text, annotations, active_skill
+    new_dialog = clean_up_utterances_to_avoid_unwanted_keys(
+        dialog, types_utterances=["human_utterances", "bot_utterances"]
+    )
+
+    new_dialog["human"] = {"attributes": attributes}
+
+    return new_dialog
 
 
 def dream_formatter(
@@ -568,7 +578,7 @@ def dream_formatter(
         ("states_batch", "dialogs"): lambda dialog: dialog,
         "annotation_histories": get_annotation_histories,
         "entities_with_labels": get_entities_with_labels,
-        ("named_entities", "entity_info"): get_annotation,
+        ("named_entities", "entity_info", "last_utterances", "sentences"): get_annotation,
         ("entity_substr", "entity_tags"): extract_entities if service_name == "kbqa" else get_entities,
         "x_init": get_x_init,
         "sentences_with_history": get_sentences_with_history,
@@ -585,10 +595,21 @@ def dream_formatter(
         "human_sentences": get_human_sentences,
         "dialog_history": get_dialog_history,
         "dialogs": clean_up_utterances_to_avoid_unwanted_keys,
-        "human_utter_index": get_human_utter_index,
+        "human_utter_index": lambda dialog: len(dialog["utterances"] - 1),
+        "new_dialog": get_new_dialog,
     }
 
-    formatted_dialog = {key: keys_table[key](dialog, **additional_params) for key in result_keys}
+    formatted_dialog = dict()
+
+    for result_key in result_keys:
+        for key in keys_table.keys():
+            if isinstance(key, tuple):
+                if result_key in key:
+                    formatted_dialog[result_key] = keys_table[key](dialog)
+            else:
+                formatted_dialog[result_key] = keys_table[key](dialog)
+
+    # formatted_dialog = {key: keys_table[key](dialog, **additional_params) for key in result_keys}
 
     if formatted_dialog.get("tokenized_sentences") is None:
         del formatted_dialog["tokenized_sentences"]
