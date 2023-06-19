@@ -1,4 +1,4 @@
-name: anthropic-api-claudev13
+name: anthropic-api-claude-instant-v1
 endpoints:
 - respond
 - generate_goals
@@ -8,8 +8,8 @@ compose:
   build:
     args:
       SERVICE_PORT: 8163
-      SERVICE_NAME: anthropic_api_claudev13
-      PRETRAINED_MODEL_NAME_OR_PATH: claude-v1.2
+      SERVICE_NAME: anthropic_api_claude_instant_v1
+      PRETRAINED_MODEL_NAME_OR_PATH: claude-instant-1
       CUDA_VISIBLE_DEVICES: '0'
       FLASK_APP: server
     context: .
