@@ -3,7 +3,7 @@ dff-api-skill:
   connector:
     protocol: http
     timeout: 10.0
-    url: http://dff-api-skill:8157/respond
+    url: http://dff-api-skill:8168/respond
   dialog_formatter: state_formatters.dp_formatters:dff_prompted_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:

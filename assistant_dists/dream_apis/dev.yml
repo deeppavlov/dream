@@ -54,5 +54,5 @@ services:
       - "./skills/dff_weather_skill/tools:/src/tools"
       - "./skills/dff_weather_skill/data:/src/data"
     ports:
-      - 8157:8157
+      - 8168:8168
 version: "3.7"

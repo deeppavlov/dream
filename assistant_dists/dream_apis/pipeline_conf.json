@@ -212,7 +212,7 @@
             "dff_api_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10.0,
+                    "timeout": 20.0,
                     "url": "http://dff-api-skill:8157/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_prompted_skill_formatter",

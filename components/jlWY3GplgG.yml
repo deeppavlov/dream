@@ -12,8 +12,8 @@ gpu_usage: null
 group: skills
 connector:
   protocol: http
-  timeout: 15.0
-  url: http://dff-api-skill:8157/respond
+  timeout: 20.0
+  url: http://dff-api-skill:8168/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_api_skill_formatter
   skill_name: dff_api_skill
