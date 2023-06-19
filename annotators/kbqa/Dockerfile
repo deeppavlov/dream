@@ -17,7 +17,7 @@ RUN apt update &&  \
     apt install -y git
 
 RUN pip install --upgrade pip && \
-    pip install -r /src/requirements.txt
+    pip install -r /src/requirements.txt && \
     pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
 
 COPY $SRC_DIR /src

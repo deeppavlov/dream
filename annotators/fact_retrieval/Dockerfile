@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu
+FROM deeppavlov/deeppavlov:1.2.0-gpu
 
 RUN apt-get update && apt-get install git -y
 
@@ -19,8 +19,7 @@ ENV N_FACTS=$N_FACTS
 
 COPY ./annotators/fact_retrieval/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && \
-    pip install -r /src/requirements.txt && \
-    pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
+    pip install -r /src/requirements.txt
 
 COPY $SRC_DIR /src
 
