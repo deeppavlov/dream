@@ -1,5 +1,4 @@
 import logging
-from copy import deepcopy
 from typing import Dict, List, Any
 
 from common.utils import get_entities
