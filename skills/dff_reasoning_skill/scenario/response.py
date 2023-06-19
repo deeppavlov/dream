@@ -5,6 +5,7 @@ import re
 import requests
 from os import getenv
 from typing import Any
+import time
 
 from langchain.agents import Tool
 from langchain.memory import ConversationBufferMemory
@@ -16,6 +17,7 @@ from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+import common.dialogflow_framework.utils.state as state_utils
 
 from tools.city_slot import OWMCitySlot
 from tools.weather_service import weather_forecast_now
@@ -31,7 +33,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "generative_configs/openai-chatgpt.json")
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "generative_configs/openai-chatgpt.json") #to fix
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 
@@ -65,9 +67,9 @@ llm = OpenAI(temperature=0)
 agent_chain = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, memory=memory)
 
 
-def google_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def google_api_response(ctx: Context, actor: Actor, thought, *args, **kwargs) -> str:
     if not ctx.validation:
-        answer = agent_chain.run(ctx.last_request)
+        answer = agent_chain.run(thought)
         return answer
 
 
@@ -81,7 +83,7 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
-def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
+def generative_response(ctx: Context, actor: Actor, thought, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
         [],
@@ -137,8 +139,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     )(ctx, actor, *args, **kwargs)
 
 
-def weather_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    location_name = CITY_SLOT(ctx.last_request)
+def weather_api_response(ctx: Context, actor: Actor, thought, *args, **kwargs) -> str:
+    location_name = CITY_SLOT(thought)
     return weather_forecast_now(location_name)
 
 
@@ -149,16 +151,49 @@ api_func_mapping = {
 }
 
 
+def thought(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        thoughts = shared_memory.get("thought", None)
+        int_ctx.save_to_shared_memory(ctx, actor, thoughts=thoughts)
+        prompt = f"""You received the following user request:
+{ctx.last_request}
+Think about what do you need to do to handle this request. \
+Return your thought in one sentence"""
+
+        dialog_context = compose_data_for_model(ctx, actor)
+        try:
+            response = requests.post(
+                GENERATIVE_SERVICE_URL,
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt],
+                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            thought = response.json()[0][0]
+        except KeyError:
+            thought = ""
+        int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
+        logger.info(f"thought: {thought}")
+        time.sleep(5)
+        return thought
+    
+
 def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
-        prompt = f"""You have a dictionary of tools where keys are the names of the tools \
-              and values are dictionaries with tool descriptions:
-        {top_n_apis}
-        Based on these descriptions, choose the best tool to use in order to answer the following user request:
-        {ctx.last_request}
-        Return the name of the best tool exactly as it is written in the dictionary. \
-              DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
-
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        thought = shared_memory.get("thought", None)
+        api2use = shared_memory.get("api2use", None)
+        prompt = f"""YOUR TASK:
+{thought}
+AVAILABLE TOOLS:
+{top_n_apis}
+Choose the best tool to use according to what you need to do. \
+Return the name of the best tool to use exactly as it is written in the dictionary. \
+DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
         dialog_context = compose_data_for_model(ctx, actor)
         try:
             best_api = requests.post(
@@ -172,7 +207,33 @@ def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str
                 timeout=GENERATIVE_TIMEOUT,
             )
             hypotheses = best_api.json()[0]
-            response = api_func_mapping[hypotheses[0]](ctx, actor)
+            try:
+                if top_n_apis[hypotheses[0]]["needs_approval"] == "False":
+                    response = api_func_mapping[hypotheses[0]](ctx, actor, thought=thought)
+                else:
+                    response = f"""I need to use {hypotheses[0]} to handle your request. Do you approve?"""              
+                api2use = hypotheses[0]
+            except KeyError:
+                for key in top_n_apis.keys():
+                    if key in hypotheses[0]:
+                        if top_n_apis[key]["needs_approval"] == "False":
+                            response = api_func_mapping[key](ctx, actor, thought=thought)
+                        else:
+                            response = f"""I need to use {key} to handle your request. Do you approve?"""
+                            api2use = key
+                        break
         except KeyError:
-            response = api_func_mapping["generative_lm"](ctx, actor)
+            response = api_func_mapping["generative_lm"](ctx, actor, thought=thought)
+        
+        int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
+        int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+        return response
+
+
+def response_with_approved_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        thought = shared_memory.get("thought", None)
+        api2use = shared_memory.get("api2use", None)
+        response = api_func_mapping[api2use](ctx, actor, thought=thought)
         return response
