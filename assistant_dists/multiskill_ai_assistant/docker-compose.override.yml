@@ -2,11 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/multiskill_ai_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, llm-based-response-selector:8003, combined-classification:8087,
-        sentence-ranker:8128, prompt-selector:8135, 
-        openai-api-davinci3:8131, dff-dream-persona-davinci3-prompted-skill:8137,
-        dff-casual-email-prompted-skill:8154, dff-meeting-notes-prompted-skill:8155,
-        dff-official-email-prompted-skill:8156, dff-plan-for-article-prompted-skill:8157"
+      WAIT_HOSTS: "sentseg:8011, llm-based-response-selector:8003, combined-classification:8087, sentence-ranker:8128, prompt-selector:8135, openai-api-davinci3:8131, dff-dream-persona-davinci3-prompted-skill:8137, dff-casual-email-prompted-skill:8154, dff-meeting-notes-prompted-skill:8155, dff-official-email-prompted-skill:8156, dff-plan-for-article-prompted-skill:8157, transformers-lm-oasst12b:8158"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -47,17 +43,16 @@ services:
           memory: 2G
 
   llm-based-response-selector:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8003
         SERVICE_NAME: response_selector
         LANGUAGE: EN
-        GENERATIVE_SERVICE_URL: http://openai-api-davinci3:8131/respond
-        GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003-long.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
         FILTER_TOXIC_OR_BADLISTED: 1
       context: .
       dockerfile: ./response_selectors/llm_based_response_selector/Dockerfile
@@ -70,6 +65,27 @@ services:
           memory: 100M
         reservations:
           memory: 100M
+
+  transformers-lm-oasst12b:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8158
+        SERVICE_NAME: transformers_lm_oasst12b
+        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/pythia-12b-sft-v8-7k-steps
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8158
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 60G
+        reservations:
+          memory: 60G
 
   prompt-selector:
     env_file: [ .env ]
@@ -131,7 +147,7 @@ services:
           memory: 100M
 
   dff-dream-persona-davinci3-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8137
@@ -152,7 +168,7 @@ services:
           memory: 128M
 
   dff-casual-email-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8154
@@ -173,7 +189,7 @@ services:
           memory: 128M
 
   dff-meeting-notes-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8155
@@ -194,7 +210,7 @@ services:
           memory: 128M
 
   dff-official-email-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8156
@@ -215,7 +231,7 @@ services:
           memory: 128M
 
   dff-plan-for-article-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8157
