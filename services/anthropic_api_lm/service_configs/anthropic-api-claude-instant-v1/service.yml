@@ -10,13 +10,11 @@ compose:
       SERVICE_PORT: 8163
       SERVICE_NAME: anthropic_api_claude_instant_v1
       PRETRAINED_MODEL_NAME_OR_PATH: claude-instant-1
-      CUDA_VISIBLE_DEVICES: '0'
       FLASK_APP: server
     context: .
     dockerfile: ./services/anthropic_api_lm/Dockerfile
   command: flask run -h 0.0.0.0 -p 8163
   environment:
-  - CUDA_VISIBLE_DEVICES=0
   - FLASK_APP=server
   deploy:
     resources:
