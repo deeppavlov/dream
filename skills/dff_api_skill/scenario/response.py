@@ -31,7 +31,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "generative_configs/openai-chatgpt.json")
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 
@@ -108,7 +108,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             json={
                 "dialog_contexts": [dialog_context],
                 "prompts": [prompt],
-                "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                 "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
             },
             timeout=GENERATIVE_TIMEOUT,
@@ -164,7 +164,7 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
                 json={
                     "dialog_contexts": [dialog_context],
                     "prompts": [prompt],
-                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                     "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
                 },
                 timeout=GENERATIVE_TIMEOUT,
