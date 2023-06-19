@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu:0.17.2
+FROM deeppavlov/deeppavlov:1.1.1-gpu
 
 ARG CONFIG
 ARG COMMIT
@@ -12,8 +12,12 @@ ENV SERVICE_PORT=$SERVICE_PORT
 ENV COMMIT=$COMMIT
 
 COPY ./annotators/kbqa/requirements.txt /src/requirements.txt
+
+RUN apt update &&  \
+    apt install -y git
+
 RUN pip install --upgrade pip && \
-    pip install -r /src/requirements.txt && \
+    pip install -r /src/requirements.txt
     pip install https://codeload.github.com/deeppavlov/DeepPavlov/tar.gz/${COMMIT}
 
 COPY $SRC_DIR /src
