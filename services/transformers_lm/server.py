@@ -15,7 +15,9 @@ from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
@@ -27,27 +29,38 @@ NAMING = {
     "EN": ["AI", "Human"],
     "RU": ["Чат-бот", "Человек"],
 }
-from transformers import LlamaForCausalLM, LlamaTokenizer
+
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 DEFAULT_CONFIGS = {
-    "EleutherAI/gpt-j-6B": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "EleutherAI/gpt-j-6B": json.load(
+        open("common/generative_configs/default_generative_config.json", "r")
+    ),
     "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(
         open("common/generative_configs/default_generative_config.json", "r")
     ),
-    "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
-    "lmsys/vicuna-13b-v1.3": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "togethercomputer/GPT-JT-6B-v1": json.load(
+        open("common/generative_configs/default_generative_config.json", "r")
+    ),
+    "lmsys/vicuna-13b-v1.3": json.load(
+        open("common/generative_configs/default_generative_config.json", "r")
+    ),
 }
 
 
-def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
+def generate_responses(
+    context, model, tokenizer, prompt, generation_params, continue_last_uttr=False
+):
     outputs = []
     dialog_context = ""
     if prompt:
         dialog_context += prompt + "\n"
     s = len(context) % 2
-    context = [f"{NAMING[LANGUAGE][(s + uttr_id) % 2]}: {uttr}" for uttr_id, uttr in enumerate(context)]
+    context = [
+        f"{NAMING[LANGUAGE][(s + uttr_id) % 2]}: {uttr}"
+        for uttr_id, uttr in enumerate(context)
+    ]
     if continue_last_uttr:
         dialog_context += "\n".join(context)
     else:
@@ -72,7 +85,9 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
-        result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
+        result_cut = [
+            x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()
+        ][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
@@ -82,7 +97,9 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if HALF_PRECISION:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
+        model = AutoModelForCausalLM.from_pretrained(
+            PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16
+        )
     else:
         model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     if torch.cuda.is_available():
@@ -123,7 +140,10 @@ def respond():
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
-    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    configs = [
+        DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el
+        for el in configs
+    ]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
@@ -158,13 +178,18 @@ def generate_goals():
     prompts = [] if prompts is None else prompts
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
-    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    configs = [
+        DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el
+        for el in configs
+    ]
 
     try:
         responses = []
         for prompt, config in zip(prompts, configs):
             context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
-            goals_for_prompt = generate_responses(context, model, tokenizer, "", config)[0]
+            goals_for_prompt = generate_responses(
+                context, model, tokenizer, "", config
+            )[0]
             logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
             responses += [goals_for_prompt]
 
