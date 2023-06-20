@@ -14,3 +14,4 @@ faiss-cpu==1.7.0
 cryptography==2.8
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz#egg=en_core_web_sm==2.2.5
 spacy==2.2.3
+protobuf==3.20.1
