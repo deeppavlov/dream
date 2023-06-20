@@ -154,8 +154,7 @@ api_func_mapping = {
 def thought(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        thoughts = shared_memory.get("thought", None)
-        int_ctx.save_to_shared_memory(ctx, actor, thoughts=thoughts)
+        thought = shared_memory.get("thought", None)
         prompt = f"""You received the following user request:
 {ctx.last_request}
 Think about what do you need to do to handle this request. \
@@ -175,11 +174,72 @@ Return your thought in one sentence"""
             )
             thought = response.json()[0][0]
         except KeyError:
-            thought = ""
+            thought = None
         int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
         logger.info(f"thought: {thought}")
         time.sleep(5)
         return thought
+    
+
+def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        thought = shared_memory.get("thought", None)
+        answer = shared_memory.get("needs_details", None)
+        prompt = f"""Here is your task:
+{thought}
+Do you need to clarify any details with the user? \
+ANSWER ONLY YES/NO"""
+        dialog_context = compose_data_for_model(ctx, actor)
+        try:
+            response = requests.post(
+                GENERATIVE_SERVICE_URL,
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt],
+                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            answer = response.json()[0][0]
+        except KeyError:
+            answer = None
+        
+        int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
+        int_ctx.save_to_shared_memory(ctx, actor, needs_details=answer)
+        return answer
+    
+
+def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        thought = shared_memory.get("thought", None)
+        question = shared_memory.get("question", None)
+        prompt = f"""Here is your task:
+{thought}
+Formulate a clarifying question to the user to get necessary information \
+to complete the task"""
+        dialog_context = compose_data_for_model(ctx, actor)
+        try:
+            response = requests.post(
+                GENERATIVE_SERVICE_URL,
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt],
+                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            question = response.json()[0][0]
+        except KeyError:
+            question = None
+        int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
+        int_ctx.save_to_shared_memory(ctx, actor, question=question)
+        logger.info(f"question: {thought}")
+        time.sleep(5)
+        return question
     
 
 def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
