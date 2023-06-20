@@ -1,15 +1,17 @@
 {
     "google_api": {
         "description": "Google API utilizes Google to respond to a wide variety of questions.",
-        "needs_approval": "True"
+        "needs_approval": "True",
+        "input_template": "Just the request in a string format"
     },
     "generative_lm": {
         "description": "This service uses language models to generate responses.",
-        "needs_approval": "False"
-
+        "needs_approval": "False",
+        "input_template": "Just the request in a string format"
     },
     "weather_api": {
         "description": "The Weather API can provide current weather information for a given location.",
-        "needs_approval": "False"
+        "needs_approval": "False",
+        "input_template": "Just the request in a string format"
     }
 }

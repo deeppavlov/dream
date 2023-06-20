@@ -11,6 +11,7 @@ import common.set_is_final_answer as is_final_answer
 
 from . import response as loc_rsp
 from . import condition as loc_cnd
+from . import processing as loc_prc
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
@@ -54,7 +55,8 @@ flows = {
         "clarify_details": {
             RESPONSE: loc_rsp.clarify_details,
             PROCESSING: {
-                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)
+                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True),
+                "save_user_answer": loc_prc.save_user_answer
             },
             TRANSITIONS: {"api_response_node": cnd.true()},
         },

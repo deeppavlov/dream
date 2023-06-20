@@ -67,9 +67,10 @@ llm = OpenAI(temperature=0)
 agent_chain = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, memory=memory)
 
 
-def google_api_response(ctx: Context, actor: Actor, thought, *args, **kwargs) -> str:
+def google_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
-        answer = agent_chain.run(thought)
+        api_input = compose_input_for_API(ctx, actor)
+        answer = agent_chain.run(api_input)
         return answer
 
 
@@ -83,7 +84,7 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
-def generative_response(ctx: Context, actor: Actor, thought, *args, **kwargs) -> Any:
+def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
         [],
@@ -139,8 +140,9 @@ def generative_response(ctx: Context, actor: Actor, thought, *args, **kwargs) ->
     )(ctx, actor, *args, **kwargs)
 
 
-def weather_api_response(ctx: Context, actor: Actor, thought, *args, **kwargs) -> str:
-    location_name = CITY_SLOT(thought)
+def weather_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    api_input = compose_input_for_API(ctx, actor)
+    location_name = CITY_SLOT(api_input)
     return weather_forecast_now(location_name)
 
 
@@ -186,7 +188,7 @@ def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         thought = shared_memory.get("thought", None)
         answer = shared_memory.get("needs_details", None)
-        prompt = f"""Here is your task:
+        prompt = f"""Here is your goal:
 {thought}
 Do you need to clarify any details with the user? \
 ANSWER ONLY YES/NO"""
@@ -216,7 +218,7 @@ def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         thought = shared_memory.get("thought", None)
         question = shared_memory.get("question", None)
-        prompt = f"""Here is your task:
+        prompt = f"""Here is your goal:
 {thought}
 Formulate a clarifying question to the user to get necessary information \
 to complete the task"""
@@ -242,12 +244,53 @@ to complete the task"""
         return question
     
 
+def compose_input_for_API(ctx: Context, actor: Actor, *args, **kwargs):
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        thought = shared_memory.get("thought", None)
+        question = shared_memory.get("question", None)
+        answer = ctx.misc.get("slots", {}).get("details_answer", None)
+        api2use = shared_memory.get("api2use", None)
+        input_template = top_n_apis[api2use]["input_template"]
+        dialog_context = compose_data_for_model(ctx, actor)
+        if question and answer:
+            prompt = f"""YOUR GOAL: {thought}
+CLARIFYING QUESTION TO THE USER: {question}
+ANSWER TO THE QUESTION: {answer}
+Form an input to the {api2use} tool, taking all info above into account. \
+Input format: {input_template}"""
+        else:
+            prompt = f"""YOUR GOAL: {thought}
+Form an input to the {api2use} tool to achieve the goal. \
+Input format: {input_template}"""
+            
+        try:
+            response = requests.post(
+                GENERATIVE_SERVICE_URL,
+                json={
+                    "dialog_contexts": [dialog_context],
+                    "prompts": [prompt],
+                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
+                },
+                timeout=GENERATIVE_TIMEOUT,
+            )
+            api_input = response.json()[0][0]
+        except KeyError:
+            api_input = None
+        
+        logger.info(f"api_input: {api_input}")
+        int_ctx.save_to_shared_memory(ctx, actor, api_input=api_input)
+        return api_input
+
+
+
 def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         thought = shared_memory.get("thought", None)
         api2use = shared_memory.get("api2use", None)
-        prompt = f"""YOUR TASK:
+        prompt = f"""YOUR GOAL:
 {thought}
 AVAILABLE TOOLS:
 {top_n_apis}
@@ -269,7 +312,7 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
             hypotheses = best_api.json()[0]
             try:
                 if top_n_apis[hypotheses[0]]["needs_approval"] == "False":
-                    response = api_func_mapping[hypotheses[0]](ctx, actor, thought=thought)
+                    response = api_func_mapping[hypotheses[0]](ctx, actor)
                 else:
                     response = f"""I need to use {hypotheses[0]} to handle your request. Do you approve?"""              
                 api2use = hypotheses[0]
@@ -277,21 +320,21 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
                 for key in top_n_apis.keys():
                     if key in hypotheses[0]:
                         if top_n_apis[key]["needs_approval"] == "False":
-                            response = api_func_mapping[key](ctx, actor, thought=thought)
+                            response = api_func_mapping[key](ctx, actor)
                         else:
                             response = f"""I need to use {key} to handle your request. Do you approve?"""
                             api2use = key
                         break
 
         except KeyError:
-            response = api_func_mapping["generative_lm"](ctx, actor, thought=thought)
+            response = api_func_mapping["generative_lm"](ctx, actor)
         
         int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
         int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
         try:
             return response
         except UnboundLocalError:
-            return api_func_mapping["generative_lm"](ctx, actor, thought=thought)
+            return api_func_mapping["generative_lm"](ctx, actor)
 
 
 def response_with_approved_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -299,5 +342,5 @@ def response_with_approved_api(ctx: Context, actor: Actor, *args, **kwargs) -> s
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         thought = shared_memory.get("thought", None)
         api2use = shared_memory.get("api2use", None)
-        response = api_func_mapping[api2use](ctx, actor, thought=thought)
+        response = api_func_mapping[api2use](ctx, actor)
         return response
