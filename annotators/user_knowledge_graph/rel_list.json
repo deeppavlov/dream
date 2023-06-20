@@ -10,5 +10,6 @@
     "favorite_drink": "food",
     "like_drink": "food",
     "favorite_sport": "type_of_sport",
-    "like_sports": "type_of_sport"
+    "like_sports": "type_of_sport",
+    "like_goto": "place"
 }
