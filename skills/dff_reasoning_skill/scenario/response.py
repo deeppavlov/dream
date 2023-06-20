@@ -191,7 +191,7 @@ def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str
 {thought}
 AVAILABLE TOOLS:
 {top_n_apis}
-Choose the best tool to use according to what you need to do. \
+Choose the best tool to use to complete your task. \
 Return the name of the best tool to use exactly as it is written in the dictionary. \
 DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
         dialog_context = compose_data_for_model(ctx, actor)
@@ -222,12 +222,16 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
                             response = f"""I need to use {key} to handle your request. Do you approve?"""
                             api2use = key
                         break
+
         except KeyError:
             response = api_func_mapping["generative_lm"](ctx, actor, thought=thought)
         
         int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
         int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-        return response
+        try:
+            return response
+        except UnboundLocalError:
+            return api_func_mapping["generative_lm"](ctx, actor, thought=thought)
 
 
 def response_with_approved_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
