@@ -53,6 +53,8 @@ if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in
 assert sending_variables["OPENAI_API_KEY"], logger.info("Type in OpenAI API key to `.env_scret`")
 assert sending_variables["GOOGLE_CSE_ID"], logger.info("Type in GOOGLE CSE ID to `.env_scret`")
 assert sending_variables["GOOGLE_API_KEY"], logger.info("Type in GOOGLE API key to `.env_scret`")
+assert sending_variables["OPENWEATHERMAP_API_KEY"], logger.info("Type in OPENWEATHERMAP API key to `.env_scret`")
+assert sending_variables["NEWS_API_KEY"], logger.info("Type in NEWS API key to `.env_scret`")
 
 search = GoogleSearchAPIWrapper()
 tools = [
@@ -146,10 +148,30 @@ def weather_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return weather_forecast_now(location_name)
 
 
+def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    query_params = {
+      "source": "bbc-news",
+      "sortBy": "top",
+      "apiKey": sending_variables["NEWS_API_KEY"]
+    }
+    main_url = " https://newsapi.org/v1/articles"
+    res = requests.get(main_url, params=query_params)
+    open_bbc_page = res.json()
+    article = open_bbc_page["articles"]
+    results = [] 
+    for ar in article:
+        results.append(ar["title"])
+
+    return "\n".join(results)
+
+
+
+
 api_func_mapping = {
     "google_api": google_api_response,
     "generative_lm": generative_response,
     "weather_api": weather_api_response,
+    "news_api": news_api_response,
 }
 
 

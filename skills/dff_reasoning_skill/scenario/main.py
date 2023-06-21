@@ -18,17 +18,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 flows = {
-    # GLOBAL: {
-    #     TRANSITIONS: {
-    #         # ("api", "api_usage_approved"): cnd.all(
-    #         #     [loc_cnd.is_last_utt_approval, int_cnd.is_yes_vars]
-    #         # ),
-    #         # ("api", "api_usage_not_approved"): cnd.all(
-    #         #     [loc_cnd.is_last_utt_approval, int_cnd.is_no_vars]
-    #         # ),
-    #         # ("api", "thought_node"): cnd.true(),
-    #     }
-    # },
     "api": {
         LOCAL: {PROCESSING: {"set_confidence": int_prs.set_confidence(1.0)}},
         "start_node": {
