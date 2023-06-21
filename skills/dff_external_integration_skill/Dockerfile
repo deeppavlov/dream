@@ -16,10 +16,10 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 ARG ENVVARS_TO_SEND
 ENV ENVVARS_TO_SEND ${ENVVARS_TO_SEND}
 
-COPY skills/dff_google_api_skill/requirements.txt .
+COPY skills/dff_external_integration_skill/requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY skills/dff_google_api_skill/ ./
+COPY skills/dff_external_integration_skill/ ./
 COPY ./common/ ./common/
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}

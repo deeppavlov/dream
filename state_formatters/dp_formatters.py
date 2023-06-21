@@ -1169,3 +1169,9 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
+
+
+def dff_external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
+    batches = utils.dff_formatter(dialog, "dff_external_integration_skill_formatter")
+    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
+    return batches
