@@ -5,7 +5,6 @@ RUN apt-get update && apt-get install git -y
 ARG CONFIG
 ARG CONFIG_WIKI
 ARG CONFIG_WHOW
-ARG COMMIT=0.13.0
 ARG SERVICE_PORT
 ARG SRC_DIR
 ARG SED_ARG=" | "
