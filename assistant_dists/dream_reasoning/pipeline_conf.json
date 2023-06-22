@@ -231,7 +231,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 30.0,
-                    "url": "http://dff-reasoning-skill:8168/respond"
+                    "url": "http://dff-reasoning-skill:8169/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

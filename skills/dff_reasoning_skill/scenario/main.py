@@ -19,7 +19,11 @@ logger = logging.getLogger(__name__)
 
 flows = {
     "api": {
-        LOCAL: {PROCESSING: {"set_confidence": int_prs.set_confidence(1.0)}},
+        LOCAL: {
+            PROCESSING: {
+                "set_confidence": int_prs.set_confidence(1.0),
+            },
+        },
         "start_node": {
             RESPONSE: "",
             TRANSITIONS: {"thought_node": cnd.true()},
@@ -27,7 +31,7 @@ flows = {
         "thought_node": {
             RESPONSE: loc_rsp.thought,
             PROCESSING: {
-                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(False)
+                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(False),
             },
             TRANSITIONS: {"check_if_needs_details": cnd.true()},
         },
@@ -38,7 +42,7 @@ flows = {
             },
             TRANSITIONS: {
                 "clarify_details": loc_cnd.needs_details,
-                "api_response_node": cnd.neg(loc_cnd.needs_details)
+                "api_response_node": cnd.true()
             },
         },
         "clarify_details": {

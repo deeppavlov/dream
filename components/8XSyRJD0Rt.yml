@@ -1,0 +1,27 @@
+name: dff_reasoning_skill
+display_name: DeepPavlov Reasoning Skill
+component_type: Generative
+model_type: NN-based
+is_customizable: true
+author: publisher@deeppavlov.ai
+description: This skill utilizes several APIs to handle user requests.
+    Skill uses ChatGPT to think which API is best to use and to form an input for it.
+ram_usage: 1.5G
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 30.0
+  url: http://dff-reasoning-skill:8169/respond
+dialog_formatter:
+   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+   skill_name: dff_reasoning_skill
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_book_sfc_skill/service_configs/dff-reasoning-skill
+date_created: '2023-03-16T09:45:32'

@@ -1,10 +1,12 @@
-dff-google-api-skill:
+dff-reasoning-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 5.0
-    url: http://dff-google-api-skill:8156/respond
-  dialog_formatter: state_formatters.dp_formatters:dff_google_api_skill_formatter
+    timeout: 30.0
+    url: http://dff-reasoning-skill:8169/respond
+  dialog_formatter:
+    name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+    skill_name: dff_reasoning_skill
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors

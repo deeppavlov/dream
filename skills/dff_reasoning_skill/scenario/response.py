@@ -34,9 +34,9 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json") #to fix
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
-N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
+GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
+N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
@@ -337,39 +337,47 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
                 timeout=GENERATIVE_TIMEOUT,
             )
             hypotheses = best_api.json()[0]
+            logger.info(f"1: hypotheses: {hypotheses[0]}")
             try:
                 if top_n_apis[hypotheses[0]]["needs_approval"] == "False":
                     api2use = hypotheses[0]
                     int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                    response = api_func_mapping[hypotheses[0]](ctx, actor)
+                    response = api_func_mapping[api2use](ctx, actor)
+                    logger.info(f"2: response: {response}")
                 else:
                     api2use = hypotheses[0]
                     int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                    response = f"""I need to use {hypotheses[0]} to handle your request. Do you approve?"""              
+                    response = f"""I need to use {api2use} to handle your request. Do you approve?""" 
+                    logger.info(f"3: response: {response}")             
             except KeyError:
                 for key in top_n_apis.keys():
                     if key in hypotheses[0]:
                         if top_n_apis[key]["needs_approval"] == "False":
                             api2use = key
                             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                            response = api_func_mapping[key](ctx, actor)
+                            response = api_func_mapping[api2use](ctx, actor)
+                            logger.info(f"4: response: {response}")
                         else:
                             api2use = key
                             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                            response = f"""I need to use {key} to handle your request. Do you approve?"""
+                            response = f"""I need to use {api2use} to handle your request. Do you approve?"""
+                            logger.info(f"5: response: {response}")
                         break
 
         except KeyError:
             api2use = "generative_lm"
             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
             response = api_func_mapping[api2use](ctx, actor)
+            logger.info(f"6: response: {response}")
         
         try:
+            logger.info(f"7: response: {response}")
             return response
         except UnboundLocalError:
             api2use = "generative_lm"
             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
             response = api_func_mapping[api2use](ctx, actor)
+            logger.info(f"8: response: {response}")
             return response
 
 
