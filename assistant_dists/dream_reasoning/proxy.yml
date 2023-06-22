@@ -17,15 +17,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8011
       - PORT=8011
 
-  badlisted-words:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8018
-      - PORT=8018
-
   spelling-preprocessing:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -52,14 +43,5 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8009
       - PORT=8009
-
-  dff-template-skill:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8120
-      - PORT=8120
       
 version: '3.7'

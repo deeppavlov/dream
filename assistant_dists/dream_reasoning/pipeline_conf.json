@@ -92,24 +92,6 @@
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
-                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
-                }
-            },
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
@@ -249,9 +231,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 30.0,
-                    "url": "http://dff-reasoning-skill:8162/respond"
+                    "url": "http://dff-reasoning-skill:8168/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_reasoning_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -259,7 +241,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/jlWY3GplgG.yml",
+                    "component": "components/8XSyRJD0Rt.yml",
                     "service": "skills/dff_reasoning_skill/service_configs/dff-reasoning-skill"
                 }
             },
@@ -305,7 +287,7 @@
     "metadata": {
         "display_name": "Dream Reasoning",
         "author": "DeepPavlov",
-        "description": "Version of DeepPavlov Dream Socialbot that uses reasoning and planning to handle requests",
+        "description": "Version of DeepPavlov Dream Socialbot that uses resasoning and APIs to handle requests",
         "version": "0.1.0",
         "date_created": "2022-05-16T12:12:00",
         "ram_usage": "50 GB",

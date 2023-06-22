@@ -21,18 +21,13 @@ services:
     restart: unless-stopped
   convers-evaluation-selector:
     restart: unless-stopped
-  badlisted-words:
-    restart: unless-stopped
   spelling-preprocessing:
     restart: unless-stopped
   convers-evaluator-annotator:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=6
-  # goal-detector:
-  #   restart: unless-stopped
-  # transformers-lm-gptjt:
-  #   restart: unless-stopped
-  #   environment:
-  #     - CUDA_VISIBLE_DEVICES=0
+  dff-reasoning-skill:
+    restart: unless-stopped
+
 version: '3.7'

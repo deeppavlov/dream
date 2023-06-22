@@ -14,12 +14,11 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
-  badlisted-words:
   spelling-preprocessing:
   convers-evaluator-annotator:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  dff-template-skill:
+  dff-reasoning-skill:
 version: '3.7'

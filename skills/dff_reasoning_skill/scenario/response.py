@@ -6,6 +6,7 @@ import requests
 from os import getenv
 from typing import Any
 import time
+import wolframalpha
 
 from langchain.agents import Tool
 from langchain.memory import ConversationBufferMemory
@@ -33,9 +34,9 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "generative_configs/openai-chatgpt.json") #to fix
+GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json") #to fix
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
-N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
+N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
@@ -53,8 +54,8 @@ if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in
 assert sending_variables["OPENAI_API_KEY"], logger.info("Type in OpenAI API key to `.env_scret`")
 assert sending_variables["GOOGLE_CSE_ID"], logger.info("Type in GOOGLE CSE ID to `.env_scret`")
 assert sending_variables["GOOGLE_API_KEY"], logger.info("Type in GOOGLE API key to `.env_scret`")
-assert sending_variables["OPENWEATHERMAP_API_KEY"], logger.info("Type in OPENWEATHERMAP API key to `.env_scret`")
 assert sending_variables["NEWS_API_KEY"], logger.info("Type in NEWS API key to `.env_scret`")
+assert sending_variables["WOLFRAMALPHA_APP_ID"], logger.info("Type in WOLFRAMALPHA APPID key to `.env_scret`")
 
 search = GoogleSearchAPIWrapper()
 tools = [
@@ -105,17 +106,15 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
-    last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
-    prompt = last_uttr.get("attributes", {}).get("prompt", "Respond like a friendly chatbot.")
+    prompt = compose_input_for_API(ctx, actor)
     if len(dialog_context) > 0:
         response = requests.post(
             GENERATIVE_SERVICE_URL,
             json={
                 "dialog_contexts": [dialog_context],
                 "prompts": [prompt],
-                "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                 "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                # "openai_api_organizations": [sending_variables["OPENAI_ORGANIZATION"]],
             },
             timeout=GENERATIVE_TIMEOUT,
         )
@@ -165,6 +164,12 @@ def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return "\n".join(results)
 
 
+def wolframalpha_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    api_input = compose_input_for_API(ctx, actor)
+    client = wolframalpha.Client(sending_variables["WOLFRAMALPHA_APP_ID"])
+    res = client.query(api_input)
+    answer = next(res.results).text
+    return answer
 
 
 api_func_mapping = {
@@ -172,6 +177,7 @@ api_func_mapping = {
     "generative_lm": generative_response,
     "weather_api": weather_api_response,
     "news_api": news_api_response,
+    "wolframalpha_api": wolframalpha_response
 }
 
 
@@ -191,7 +197,7 @@ Return your thought in one sentence"""
                 json={
                     "dialog_contexts": [dialog_context],
                     "prompts": [prompt],
-                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                     "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
                 },
                 timeout=GENERATIVE_TIMEOUT,
@@ -200,7 +206,7 @@ Return your thought in one sentence"""
         except KeyError:
             thought = None
         int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
-        logger.info(f"thought: {thought}")
+        logger.info(f"THOUGHT: {thought}")
         time.sleep(5)
         return thought
     
@@ -221,7 +227,7 @@ ANSWER ONLY YES/NO"""
                 json={
                     "dialog_contexts": [dialog_context],
                     "prompts": [prompt],
-                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                     "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
                 },
                 timeout=GENERATIVE_TIMEOUT,
@@ -230,7 +236,7 @@ ANSWER ONLY YES/NO"""
         except KeyError:
             answer = None
         
-        int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
+        logger.info(F"NEEDS_CLARIFICATION: {answer}")
         int_ctx.save_to_shared_memory(ctx, actor, needs_details=answer)
         return answer
     
@@ -251,7 +257,7 @@ to complete the task"""
                 json={
                     "dialog_contexts": [dialog_context],
                     "prompts": [prompt],
-                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                     "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
                 },
                 timeout=GENERATIVE_TIMEOUT,
@@ -259,9 +265,8 @@ to complete the task"""
             question = response.json()[0][0]
         except KeyError:
             question = None
-        int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
         int_ctx.save_to_shared_memory(ctx, actor, question=question)
-        logger.info(f"question: {thought}")
+        logger.info(f"CLARIFYING QUESTION: {question}")
         time.sleep(5)
         return question
     
@@ -272,7 +277,7 @@ def compose_input_for_API(ctx: Context, actor: Actor, *args, **kwargs):
         thought = shared_memory.get("thought", None)
         question = shared_memory.get("question", None)
         answer = ctx.misc.get("slots", {}).get("details_answer", None)
-        api2use = shared_memory.get("api2use", None)
+        api2use = shared_memory.get("api2use", "generative_lm")
         input_template = top_n_apis[api2use]["input_template"]
         dialog_context = compose_data_for_model(ctx, actor)
         if question and answer:
@@ -292,7 +297,7 @@ Input format: {input_template}"""
                 json={
                     "dialog_contexts": [dialog_context],
                     "prompts": [prompt],
-                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                     "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
                 },
                 timeout=GENERATIVE_TIMEOUT,
@@ -301,7 +306,7 @@ Input format: {input_template}"""
         except KeyError:
             api_input = None
         
-        logger.info(f"api_input: {api_input}")
+        logger.info(f"API INPUT: {api_input}")
         int_ctx.save_to_shared_memory(ctx, actor, api_input=api_input)
         return api_input
 
@@ -326,7 +331,7 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
                 json={
                     "dialog_contexts": [dialog_context],
                     "prompts": [prompt],
-                    "configs": [json.load(open(GENERATIVE_SERVICE_CONFIG, "r"))],
+                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
                     "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
                 },
                 timeout=GENERATIVE_TIMEOUT,
@@ -334,35 +339,43 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
             hypotheses = best_api.json()[0]
             try:
                 if top_n_apis[hypotheses[0]]["needs_approval"] == "False":
+                    api2use = hypotheses[0]
+                    int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
                     response = api_func_mapping[hypotheses[0]](ctx, actor)
                 else:
+                    api2use = hypotheses[0]
+                    int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
                     response = f"""I need to use {hypotheses[0]} to handle your request. Do you approve?"""              
-                api2use = hypotheses[0]
             except KeyError:
                 for key in top_n_apis.keys():
                     if key in hypotheses[0]:
                         if top_n_apis[key]["needs_approval"] == "False":
+                            api2use = key
+                            int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
                             response = api_func_mapping[key](ctx, actor)
                         else:
-                            response = f"""I need to use {key} to handle your request. Do you approve?"""
                             api2use = key
+                            int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+                            response = f"""I need to use {key} to handle your request. Do you approve?"""
                         break
 
         except KeyError:
-            response = api_func_mapping["generative_lm"](ctx, actor)
+            api2use = "generative_lm"
+            int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+            response = api_func_mapping[api2use](ctx, actor)
         
-        int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
-        int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
         try:
             return response
         except UnboundLocalError:
-            return api_func_mapping["generative_lm"](ctx, actor)
+            api2use = "generative_lm"
+            int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+            response = api_func_mapping[api2use](ctx, actor)
+            return response
 
 
 def response_with_approved_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        thought = shared_memory.get("thought", None)
         api2use = shared_memory.get("api2use", None)
         response = api_func_mapping[api2use](ctx, actor)
         return response

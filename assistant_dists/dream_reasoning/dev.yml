@@ -22,12 +22,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
   mongo:
     ports:
       - 27017:27017
@@ -53,24 +47,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
-  # goal-detector:
-  #   volumes:
-  #     - "./annotators/goal_detector:/src"
-  #   ports:
-  #     - 8163:8163
-  # transformers-lm-gptjt:
-  #    volumes:
-  #      - "./services/transformers_lm:/src"
-  #      - "./common:/src/common"
-  #      - "~/.deeppavlov/cache:/root/.cache"
-  #    ports:
-  #      - 8161:8161
-  #  dff-dream-persona-gpt-jt-prompted-skill:
-  #    volumes:
-  #      - "./skills/dff_template_prompted_skill:/src"
-  #      - "./common:/src/common"
-  #    ports:
-  #      - 8134:8134
   dff-reasoning-skill:
     volumes:
       - "./skills/dff_reasoning_skill:/src"
@@ -78,6 +54,6 @@ services:
       - "./skills/dff_weather_skill/tools:/src/tools"
       - "./skills/dff_weather_skill/data:/src/data"
     ports:
-      - 8162:8162
+      - 8168:8168
 
 version: "3.7"

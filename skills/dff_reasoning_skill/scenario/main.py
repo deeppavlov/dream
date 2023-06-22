@@ -45,7 +45,7 @@ flows = {
             RESPONSE: loc_rsp.clarify_details,
             PROCESSING: {
                 "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True),
-                "save_user_answer": loc_prc.save_user_answer
+                "save_user_answer": loc_prc.save_user_answer()
             },
             TRANSITIONS: {"api_response_node": cnd.true()},
         },
@@ -54,7 +54,7 @@ flows = {
             PROCESSING: {
                 "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)
             },
-            TRANSITIONS: {},
+            TRANSITIONS: {"thought_node": cnd.true()},
         },
         "api_usage_not_approved": {
             RESPONSE: "Sorry, I'm afraid I don't know what I can do then.",
@@ -74,7 +74,8 @@ flows = {
             ),
                 "api_usage_not_approved": cnd.all(
                 [loc_cnd.is_last_utt_approval, int_cnd.is_no_vars]
-            )
+            ),
+                "thought_node": cnd.true()
             },
         },
     },
