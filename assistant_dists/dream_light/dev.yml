@@ -12,12 +12,12 @@ services:
     ports:
       - 8074:8074
     
-  dff-program-y-skill:
+  external-integration-skill:
     volumes:
-      - "./skills/dff_program_y_skill:/src"
+      - "./skills/external_integration_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8008:8008
+      - 8888:8888
       
   badlisted-words:
     volumes:
@@ -25,13 +25,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-
-  dff-friendship-skill:
-    volumes:
-      - "./skills/dff_friendship_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8086:8086
   
   dff-template-skill:
     volumes:
