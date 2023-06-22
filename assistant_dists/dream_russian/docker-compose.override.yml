@@ -28,9 +28,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 1024M
         reservations:
-          memory: 128M
+          memory: 1024M
 
   convers-evaluation-selector-ru:
     env_file: [ .env_ru ]

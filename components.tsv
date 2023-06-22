@@ -4,7 +4,7 @@
 3882	harvesters-maintenance-gobot-skill
 4242    agent
 8002	ranking-based-response-selector,ranking-based-response-selector-ru
-8003
+8003    llm-based-response-selector
 8004	convers-evaluator-annotator
 8005	confidence-based-response-selector
 8006	spacy-nounphrases
@@ -151,7 +151,7 @@
 8147	dff-universal-prompted-skill
 8148
 8149	transformers-lm-llama7bru
-8150
+8150	combined-classification-lightweight
 8151	dff-dream-persona-llama7bru-prompted-skill
 8152	dff-deepy-prompted-skill
 8153
@@ -162,3 +162,10 @@
 8158	transformers-lm-oasst12b
 8159	openai-api-gpt4
 8160	openai-api-gpt4-32k
+8161
+8162	dff-google-api-skill
+8163	anthropic-api-claudev13
+8164	anthropic-api-claudev1
+8165
+8166
+8167    openai-api-chatgpt-16k

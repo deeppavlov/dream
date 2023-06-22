@@ -7,11 +7,13 @@ services:
   kbqa:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=5
   text-qa:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=5
   comet-atomic:
@@ -24,6 +26,9 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=6
   combined-classification:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=7
   mongo:
@@ -42,6 +47,7 @@ services:
   intent-catcher:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=6
   badlisted-words:
@@ -69,6 +75,7 @@ services:
   entity-linking:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=9
   wiki-parser:
@@ -89,6 +96,7 @@ services:
   fact-retrieval:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=7
   dff-bot-persona-skill:
@@ -104,6 +112,7 @@ services:
   entity-detection:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=8
   convers-evaluator-annotator:
@@ -114,18 +123,28 @@ services:
   dff-coronavirus-skill:
   dff-short-story-skill:
   dialogpt:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=6
   storygpt:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=5
   prompt-storygpt:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=8
   seq2seq-persona-based:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=9
   sentence-ranker:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=9
   dff-template-skill:
@@ -133,9 +152,13 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   infilling:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=""
   masked-lm:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=""
 version: '3.7'

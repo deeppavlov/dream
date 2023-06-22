@@ -1,0 +1,89 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/google_api/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "ranking-based-response-selector:8002, combined-classification:8087, 
+        sentence-ranker:8128, dff-google-api-skill:8162"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+
+  combined-classification:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: combined_classifier.json
+        SERVICE_PORT: 8087
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  ranking-based-response-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        LANGUAGE: EN
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+      context: .
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
+  dff-google-api-skill:
+    env_file: [ .env,.env_secret ]
+    build:
+      args:
+        SERVICE_PORT: 8162
+        SERVICE_NAME: dff_google_api_skill
+        ENVVARS_TO_SEND: OPENAI_API_KEY,GOOGLE_CSE_ID,GOOGLE_API_KEY
+      context: .
+      dockerfile: ./skills/dff_google_api_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+version: '3.7'
