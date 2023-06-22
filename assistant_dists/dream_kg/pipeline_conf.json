@@ -532,10 +532,12 @@
                 "source": {
                     "component": "components/pC342KBWtheQNnXjIni6A.yml",
                     "service": "skills/dff_template_skill/service_configs/dff-template-skill"
+                }
             },
             "dff_user_kg_skill": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2.0,
                     "url": "http://dff-user-kg-skill:8132/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_user_kg_skill_formatter",
@@ -543,11 +545,17 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pmXHLkbPWpFqq37vtWCuS.yml",
+                    "service": "skills/dff_user_kg_skill/service_configs/dff-user-kg-skill"
+                }
             },
             "dff_travel_italy_skill": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2.0,
                     "url": "http://dff-travel-italy-skill:8139/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_travel_italy_skill_formatter",
@@ -555,7 +563,11 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/FahT3rhiav1Bg2Q17wvE.yml",
+                    "service": "skills/dff_travel_italy_skill/service_configs/dff-travel-italy-skill"
                 }
             }
         },
