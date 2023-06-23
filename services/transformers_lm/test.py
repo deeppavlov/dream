@@ -8,7 +8,7 @@ DEFAULT_CONFIG = {
     "top_p": 0.9,
     "temperature": 0.9,
     "do_sample": True,
-    "num_return_sequences": 2
+    "num_return_sequences": 2,
 }
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
