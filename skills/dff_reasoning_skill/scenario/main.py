@@ -1,9 +1,8 @@
 import logging
 
-from df_engine.core.keywords import TRANSITIONS, RESPONSE, LOCAL, PROCESSING, GLOBAL
+from df_engine.core.keywords import TRANSITIONS, RESPONSE, LOCAL, PROCESSING
 from df_engine.core import Actor
 import df_engine.conditions as cnd
-import df_engine.labels as lbl
 
 import common.dff.integration.processing as int_prs
 import common.dff.integration.condition as int_cnd

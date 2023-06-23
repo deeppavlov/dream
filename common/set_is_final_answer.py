@@ -6,5 +6,5 @@ def set_is_final_answer_flag(is_final_answer_flag):
         if not ctx.validation:
             ctx.misc["agent"]["response"].update({"is_final_answer": is_final_answer_flag})
         return ctx
-    
+
     return update_is_final_answer

@@ -1,6 +1,5 @@
 import logging
 import re
-from os import getenv
 
 from df_engine.core import Actor, Context
 import common.dff.integration.context as int_ctx

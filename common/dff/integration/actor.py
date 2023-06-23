@@ -83,7 +83,7 @@ def get_ctx(
     age_group,
     disliked_skills,
     prompts_goals,
-    clarification_request_flag
+    clarification_request_flag,
 ):
     context = state.get("context", {})
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
@@ -104,7 +104,7 @@ def get_ctx(
         "age_group": age_group,
         "disliked_skills": disliked_skills,
         "prompts_goals": prompts_goals,
-        "clarification_request_flag": clarification_request_flag
+        "clarification_request_flag": clarification_request_flag,
     }
     ctx = Context.cast(context)
     ctx.misc["agent"] = agent

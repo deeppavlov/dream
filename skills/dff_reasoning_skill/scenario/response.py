@@ -18,7 +18,6 @@ from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-import common.dialogflow_framework.utils.state as state_utils
 
 from tools.city_slot import OWMCitySlot
 from tools.weather_service import weather_forecast_now
