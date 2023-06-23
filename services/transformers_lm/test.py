@@ -3,12 +3,12 @@ import requests
 
 
 DEFAULT_CONFIG = {
-    "max_length": 60,
-    "min_length": 8,
+    "max_new_tokens": 120,
+    "min_new_tokens": 8,
     "top_p": 0.9,
     "temperature": 0.9,
     "do_sample": True,
-    "num_return_sequences": 2,
+    "num_return_sequences": 2
 }
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
