@@ -37,49 +37,34 @@ flows = {
         },
         "check_if_needs_details": {
             RESPONSE: loc_rsp.check_if_needs_details,
-            PROCESSING: {
-                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(False)
-            },
-            TRANSITIONS: {
-                "clarify_details": loc_cnd.needs_details,
-                "api_response_node": cnd.true()
-            },
+            PROCESSING: {"set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(False)},
+            TRANSITIONS: {"clarify_details": loc_cnd.needs_details, "api_response_node": cnd.true()},
         },
         "clarify_details": {
             RESPONSE: loc_rsp.clarify_details,
             PROCESSING: {
                 "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True),
-                "save_user_answer": loc_prc.save_user_answer()
+                "save_user_answer": loc_prc.save_user_answer(),
             },
             TRANSITIONS: {"api_response_node": cnd.true()},
         },
         "api_usage_approved": {
             RESPONSE: loc_rsp.response_with_approved_api,
-            PROCESSING: {
-                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)
-            },
+            PROCESSING: {"set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)},
             TRANSITIONS: {"thought_node": cnd.true()},
         },
         "api_usage_not_approved": {
             RESPONSE: "Sorry, I'm afraid I don't know what I can do then.",
-            PROCESSING: {
-                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)
-            },
+            PROCESSING: {"set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)},
             TRANSITIONS: {},
         },
         "api_response_node": {
             RESPONSE: loc_rsp.response_with_chosen_api,
-            PROCESSING: {
-                "set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)
-            },
+            PROCESSING: {"set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)},
             TRANSITIONS: {
-                "api_usage_approved": cnd.all(
-                [loc_cnd.is_last_utt_approval, int_cnd.is_yes_vars]
-            ),
-                "api_usage_not_approved": cnd.all(
-                [loc_cnd.is_last_utt_approval, int_cnd.is_no_vars]
-            ),
-                "thought_node": cnd.true()
+                "api_usage_approved": cnd.all([loc_cnd.is_last_utt_approval, int_cnd.is_yes_vars]),
+                "api_usage_not_approved": cnd.all([loc_cnd.is_last_utt_approval, int_cnd.is_no_vars]),
+                "thought_node": cnd.true(),
             },
         },
     },

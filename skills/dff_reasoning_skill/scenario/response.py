@@ -148,16 +148,12 @@ def weather_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    query_params = {
-      "source": "bbc-news",
-      "sortBy": "top",
-      "apiKey": sending_variables["NEWS_API_KEY"]
-    }
+    query_params = {"source": "bbc-news", "sortBy": "top", "apiKey": sending_variables["NEWS_API_KEY"]}
     main_url = " https://newsapi.org/v1/articles"
     res = requests.get(main_url, params=query_params)
     open_bbc_page = res.json()
     article = open_bbc_page["articles"]
-    results = [] 
+    results = []
     for ar in article:
         results.append(ar["title"])
 
@@ -177,7 +173,7 @@ api_func_mapping = {
     "generative_lm": generative_response,
     "weather_api": weather_api_response,
     "news_api": news_api_response,
-    "wolframalpha_api": wolframalpha_response
+    "wolframalpha_api": wolframalpha_response,
 }
 
 
@@ -209,7 +205,7 @@ Return your thought in one sentence"""
         logger.info(f"THOUGHT: {thought}")
         time.sleep(5)
         return thought
-    
+
 
 def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
@@ -235,11 +231,11 @@ ANSWER ONLY YES/NO"""
             answer = response.json()[0][0]
         except KeyError:
             answer = None
-        
-        logger.info(F"NEEDS_CLARIFICATION: {answer}")
+
+        logger.info(f"NEEDS_CLARIFICATION: {answer}")
         int_ctx.save_to_shared_memory(ctx, actor, needs_details=answer)
         return answer
-    
+
 
 def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
@@ -269,7 +265,7 @@ to complete the task"""
         logger.info(f"CLARIFYING QUESTION: {question}")
         time.sleep(5)
         return question
-    
+
 
 def compose_input_for_API(ctx: Context, actor: Actor, *args, **kwargs):
     if not ctx.validation:
@@ -290,7 +286,7 @@ Input format: {input_template}"""
             prompt = f"""YOUR GOAL: {thought}
 Form an input to the {api2use} tool to achieve the goal. \
 Input format: {input_template}"""
-            
+
         try:
             response = requests.post(
                 GENERATIVE_SERVICE_URL,
@@ -305,13 +301,12 @@ Input format: {input_template}"""
             api_input = response.json()[0][0]
         except KeyError:
             api_input = None
-        
+
         logger.info(f"API INPUT: {api_input}")
         int_ctx.save_to_shared_memory(ctx, actor, api_input=api_input)
         int_ctx.save_to_shared_memory(ctx, actor, question=None)
         int_ctx.save_to_shared_memory(ctx, actor, answer=None)
         return api_input
-
 
 
 def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -339,18 +334,15 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
                 timeout=GENERATIVE_TIMEOUT,
             )
             hypotheses = best_api.json()[0]
-            logger.info(f"1: hypotheses: {hypotheses[0]}")
             try:
                 if top_n_apis[hypotheses[0]]["needs_approval"] == "False":
                     api2use = hypotheses[0]
                     int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
                     response = api_func_mapping[api2use](ctx, actor)
-                    logger.info(f"2: response: {response}")
                 else:
                     api2use = hypotheses[0]
                     int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                    response = f"""I need to use {api2use} to handle your request. Do you approve?""" 
-                    logger.info(f"3: response: {response}")             
+                    response = f"""I need to use {api2use} to handle your request. Do you approve?"""
             except KeyError:
                 for key in top_n_apis.keys():
                     if key in hypotheses[0]:
@@ -358,28 +350,23 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
                             api2use = key
                             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
                             response = api_func_mapping[api2use](ctx, actor)
-                            logger.info(f"4: response: {response}")
                         else:
                             api2use = key
                             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
                             response = f"""I need to use {api2use} to handle your request. Do you approve?"""
-                            logger.info(f"5: response: {response}")
                         break
 
         except KeyError:
             api2use = "generative_lm"
             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
             response = api_func_mapping[api2use](ctx, actor)
-            logger.info(f"6: response: {response}")
-        
+
         try:
-            logger.info(f"7: response: {response}")
             return response
         except UnboundLocalError:
             api2use = "generative_lm"
             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
             response = api_func_mapping[api2use](ctx, actor)
-            logger.info(f"8: response: {response}")
             return response
 
 

@@ -12,18 +12,14 @@ logger = logging.getLogger(__name__)
 
 def is_last_utt_approval(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     bot_uttr = int_ctx.get_last_bot_utterance(ctx, actor).get("text", "")
-    logger.info(f"bot_uttr: {bot_uttr}")
     if "Do you approve?" in bot_uttr:
-        logger.info(f"is_yes")
         return True
     return False
-
 
 
 def needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     answer = shared_memory.get("needs_details", None)
     if answer and re.search(yes_templates, answer.lower()):
-        logger.info("""condition is true""")
         return True
     return False
