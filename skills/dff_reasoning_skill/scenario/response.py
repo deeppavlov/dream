@@ -308,6 +308,8 @@ Input format: {input_template}"""
         
         logger.info(f"API INPUT: {api_input}")
         int_ctx.save_to_shared_memory(ctx, actor, api_input=api_input)
+        int_ctx.save_to_shared_memory(ctx, actor, question=None)
+        int_ctx.save_to_shared_memory(ctx, actor, answer=None)
         return api_input
 
 
