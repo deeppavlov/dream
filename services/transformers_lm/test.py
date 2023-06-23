@@ -3,7 +3,7 @@ import requests
 
 
 DEFAULT_CONFIG = {
-    "max_new_tokens": 120,
+    "max_new_tokens": 60,
     "min_new_tokens": 8,
     "top_p": 0.9,
     "temperature": 0.9,
