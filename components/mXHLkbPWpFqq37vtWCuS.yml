@@ -4,8 +4,8 @@ component_type: Script-based w/o NNs
 model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: Looks up entities detected by Entity Detection and uses these entities in bot's responses
-ram_usage: 400M
+description: An example skill for looking up entities detected by Entity Detection and using these entities in bot's responses
+ram_usage: 512M
 gpu_usage: null
 group: skills
 connector:
