@@ -2,7 +2,7 @@ import logging
 import json
 from os import getenv
 import sentry_sdk
-from flask import Flask, request, jsonify
+from flask import Flask, request
 import requests
 
 # import common.dff.integration.context as int_ctx
@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
 # можно сделать фейковый сервис либо на серваке через прокси поднимаю агента и отдельно скилл (в разных окнах)
-EXTERNAL_SKILL_URL = "http://0.0.0.0:4242"  # посмотреть как добавить
+# EXTERNAL_SKILL_URL = "http://0.0.0.0:4242"  # посмотреть как добавить
 ARGUMENT_TO_SEND = getenv("ARGUMENT_TO_SEND", "payload")
 RESPONSE_KEY = getenv("RESPONSE_KEY", None)
 
@@ -40,6 +40,7 @@ def respond():
             "http://0.0.0.0:4242",
             json={
                 "user_id": f"test-user-000",
+                "dialog_id": 'dsfmpm545-0j-rbgmoboprgop',
                 "payload": "Who are you? who built you? what can you do?",
             },
         ).json()

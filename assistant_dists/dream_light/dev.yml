@@ -55,4 +55,10 @@ services:
     ports:
       - 8150:8150
 
+  external-fake-server:
+    volumes:
+      - "./services/external_fake_server:/src"
+      - "./common:/src/common"
+    ports:
+      - 8889:8889
 version: "3.7"
