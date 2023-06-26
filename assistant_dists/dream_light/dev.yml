@@ -17,7 +17,7 @@ services:
       - "./skills/external_integration_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8888:8888
+      - 8198:8198
       
   badlisted-words:
     volumes:
@@ -60,5 +60,5 @@ services:
       - "./services/external_fake_server:/src"
       - "./common:/src/common"
     ports:
-      - 8889:8889
+      - 8199:8199
 version: "3.7"

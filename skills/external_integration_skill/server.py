@@ -20,8 +20,6 @@ logger.setLevel(gunicorn_logger.level)
 app = Flask(__name__)
 
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
-# можно сделать фейковый сервис либо на серваке через прокси поднимаю агента и отдельно скилл (в разных окнах)
-# EXTERNAL_SKILL_URL = "http://0.0.0.0:4242"  # посмотреть как добавить
 ARGUMENT_TO_SEND = getenv("ARGUMENT_TO_SEND", "payload")
 RESPONSE_KEY = getenv("RESPONSE_KEY", None)
 
@@ -37,13 +35,15 @@ def respond():
         dialog_id = dialog.get("dialog_id", "unknown")
         message_text = dialog.get("human_utterances", [{}])[-1].get("text", "")
         result = requests.post(
-            "http://0.0.0.0:4242",
+            EXTERNAL_SKILL_URL,
             json={
                 "user_id": f"test-user-000",
-                "dialog_id": 'dsfmpm545-0j-rbgmoboprgop',
+                "dialog_id": "dsfmpm545-0j-rbgmoboprgop",
                 "payload": "Who are you? who built you? what can you do?",
             },
-        ).json()
+        )
+        logger.info(str(result))
+        result = result.json()
         logger.info(str(result))
         payload = {
             "user_id": "test-user-000",
