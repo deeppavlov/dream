@@ -8,7 +8,6 @@ import time
 import shutil
 import pypdfium2 as pdfium
 from bs4 import BeautifulSoup
-import re
 from deeppavlov import build_model
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -41,9 +40,9 @@ def get_extension(filepath):
 
 
 def pdf_to_text(file):
-    pdf = pdfium.PdfDocument(file) #supports file path strings, bytes, and byte buffers
+    pdf = pdfium.PdfDocument(file)  # supports file path strings, bytes, and byte buffers
     n_pages = len(pdf)
-    full_doc_text = ''
+    full_doc_text = ""
     for page in range(n_pages):
         page_index = pdf[page]
         textpage = page_index.get_textpage()
@@ -60,22 +59,22 @@ def html_to_text(file):
 
 def get_text_from_filepath(filepath: str) -> str:
     file_extension = get_extension(filepath)
-    if 'pdf' in file_extension:
+    if "pdf" in file_extension:
         full_doc_text = pdf_to_text(filepath)
-    elif 'html' in file_extension:
-        with open(filepath, 'r') as f:
+    elif "html" in file_extension:
+        with open(filepath, "r") as f:
             html_doc = f.read()
         full_doc_text = html_to_text(html_doc)
     else:
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             full_doc_text = f.read()
     return full_doc_text
 
 
 def get_text_from_fileobject(file_object: str, file_extension: str) -> str:
-    if 'pdf' in file_extension:
+    if "pdf" in file_extension:
         full_doc_text = pdf_to_text(file_object)
-    elif 'html' in file_extension:
+    elif "html" in file_extension:
         full_doc_text = html_to_text(file_object)
     else:
         full_doc_text = file_object
@@ -92,7 +91,7 @@ def download_file_to_data(filepath: str) -> str:
     filepath_in_container = f"/data/documents/{file_id}.txt"
     orig_file = requests.get(filepath, timeout=30)
     file_extension = get_extension(filepath)
-    if 'pdf' in file_extension:
+    if "pdf" in file_extension:
         orig_file_text = get_text_from_fileobject(orig_file.content, file_extension)
     else:
         orig_file_text = get_text_from_fileobject(orig_file.text, file_extension)
