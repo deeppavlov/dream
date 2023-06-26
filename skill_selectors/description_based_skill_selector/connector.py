@@ -51,6 +51,7 @@ class DescriptionBasedSkillSelectorConnector:
             all_skill_names = dialog.get("attributes", {}).get("pipeline", [])
             all_skill_names = [el.split(".")[1] for el in all_skill_names if "skills" in el]
             prompted_skills = [skill for skill in all_skill_names if "prompted_skill" in skill]
+            not_prompted_skills = list(set(all_skill_names).difference(set(prompted_skills)))
 
             if user_uttr_text == "/get_dialog_id":
                 skills_for_uttr = ["dummy_skill"]
@@ -71,6 +72,9 @@ class DescriptionBasedSkillSelectorConnector:
                 else:
                     skills_for_uttr.extend(prompted_skills)
                     logger.info("Adding all prompted skills as prompt selector did not select anything.")
+
+                # turn on all other skills from pipeline that are not prompted
+                skills_for_uttr.extend(not_prompted_skills)
 
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
