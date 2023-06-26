@@ -39,6 +39,11 @@ def get_extension(filepath):
     return file_extension
 
 
+def get_filename(filepath):
+    filename, _ = os.path.splitext(filepath)
+    return filename
+
+
 def pdf_to_text(file):
     pdf = pdfium.PdfDocument(file)  # supports file path strings, bytes, and byte buffers
     n_pages = len(pdf)
@@ -88,9 +93,9 @@ def generate_random_string(length: int) -> str:
 
 def download_file_to_data(filepath: str) -> str:
     file_id = generate_random_string(10)
-    filepath_in_container = f"/data/documents/{file_id}.txt"
-    orig_file = requests.get(filepath, timeout=30)
     file_extension = get_extension(filepath)
+    filepath_in_container = f"/data/documents/{file_id}{file_extension}"
+    orig_file = requests.get(filepath, timeout=30)
     orig_file_text = get_text_from_fileobject(orig_file, file_extension)
     with open(filepath_in_container, "w") as f:
         f.write(orig_file_text)
@@ -176,7 +181,7 @@ def train_and_upload_model():
                     # download all files to data
                     docs_and_links.append(
                         {
-                            "document_id": filepath_in_container.split("/")[-1].replace(".txt", ""),
+                            "document_id": get_filename(filepath_in_container),
                             "initial_path_or_link": filepath,
                         }
                     )
@@ -185,7 +190,8 @@ def train_and_upload_model():
             else:  # dream option; we get file path inside our folder, need to upload to files:3000
                 for filepath in DOC_PATH_OR_LINK:
                     file_id = generate_random_string(10)
-                    filepath_in_container = f"/data/documents/{file_id}.txt"
+                    file_extension = get_extension(filepath)
+                    filepath_in_container = f"/data/documents/{file_id}{file_extension}"
                     orig_file_text = get_text_from_filepath(filepath)
                     with open(filepath_in_container, "w") as f:
                         f.write(orig_file_text)
@@ -193,7 +199,7 @@ def train_and_upload_model():
                     # move all the files to /data (for uniformness all files are always stored there)
                     docs_and_links.append(
                         {
-                            "document_id": filepath_in_container.split("/")[-1].replace(".txt", ""),
+                            "document_id": get_filename(filepath_in_container),
                             "initial_path_or_link": filepath,
                         }
                     )  # linking ids and initial filenames
