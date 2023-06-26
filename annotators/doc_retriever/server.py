@@ -94,7 +94,7 @@ def generate_random_string(length: int) -> str:
 def download_file_to_data(filepath: str) -> str:
     file_id = generate_random_string(10)
     file_extension = get_extension(filepath)
-    filepath_in_container = f"/data/documents/{file_id}{file_extension}"
+    filepath_in_container = f"/data/documents/{file_id}.txt"
     orig_file = requests.get(filepath, timeout=30)
     orig_file_text = get_text_from_fileobject(orig_file, file_extension)
     with open(filepath_in_container, "w") as f:
@@ -162,7 +162,7 @@ def train_and_upload_model():
                         # we download all incoming files to /data and save paths
                         docs_and_links.append(
                             {
-                                "document_id": link.split("file=")[-1].replace(".txt", ""),
+                                "document_id": get_filename(link).split('/')[-1],
                                 "initial_path_or_link": link,
                             }
                         )
@@ -181,7 +181,7 @@ def train_and_upload_model():
                     # download all files to data
                     docs_and_links.append(
                         {
-                            "document_id": get_filename(filepath_in_container),
+                            "document_id": get_filename(filepath_in_container).split('/')[-1],
                             "initial_path_or_link": filepath,
                         }
                     )
@@ -190,8 +190,7 @@ def train_and_upload_model():
             else:  # dream option; we get file path inside our folder, need to upload to files:3000
                 for filepath in DOC_PATH_OR_LINK:
                     file_id = generate_random_string(10)
-                    file_extension = get_extension(filepath)
-                    filepath_in_container = f"/data/documents/{file_id}{file_extension}"
+                    filepath_in_container = f"/data/documents/{file_id}.txt"
                     orig_file_text = get_text_from_filepath(filepath)
                     with open(filepath_in_container, "w") as f:
                         f.write(orig_file_text)
@@ -199,7 +198,7 @@ def train_and_upload_model():
                     # move all the files to /data (for uniformness all files are always stored there)
                     docs_and_links.append(
                         {
-                            "document_id": get_filename(filepath_in_container),
+                            "document_id": get_filename(filepath_in_container).split('/')[-1],
                             "initial_path_or_link": filepath,
                         }
                     )  # linking ids and initial filenames
