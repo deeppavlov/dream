@@ -6,6 +6,9 @@ import string
 import requests
 import time
 import shutil
+import pypdfium2 as pdfium
+from bs4 import BeautifulSoup
+import re
 from deeppavlov import build_model
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -32,6 +35,53 @@ MODEL_CONFIG["chainer"]["pipe"][1]["top_n"] = PARAGRAPHS_NUM
 MODEL_CONFIG["dataset_reader"]["data_path"] = "/data/temporary_dataset/"
 
 
+def get_extension(filepath):
+    _, file_extension = os.path.splitext(filepath)
+    return file_extension
+
+
+def pdf_to_text(file):
+    pdf = pdfium.PdfDocument(file) #supports file path strings, bytes, and byte buffers
+    n_pages = len(pdf)
+    full_doc_text = ''
+    for page in range(n_pages):
+        page_index = pdf[page]
+        textpage = page_index.get_textpage()
+        text_all = textpage.get_text_range()
+        full_doc_text += text_all
+    return full_doc_text
+
+
+def html_to_text(file):
+    soup = BeautifulSoup(file)
+    full_doc_text = soup.get_text(strip=True)
+    return full_doc_text
+
+
+def get_text_from_filepath(filepath: str) -> str:
+    file_extension = get_extension(filepath)
+    if 'pdf' in file_extension:
+        full_doc_text = pdf_to_text(filepath)
+    elif 'html' in file_extension:
+        with open(filepath, 'r') as f:
+            html_doc = f.read()
+        full_doc_text = html_to_text(html_doc)
+    else:
+        with open(filepath, 'r') as f:
+            full_doc_text = f.read()
+    return full_doc_text
+
+
+def get_text_from_fileobject(file_object: str, file_extension: str) -> str:
+    if 'pdf' in file_extension:
+        full_doc_text = pdf_to_text(file_object)
+    elif 'html' in file_extension:
+        full_doc_text = html_to_text(file_object)
+    else:
+        full_doc_text = file_object
+    return full_doc_text
+
+
 def generate_random_string(length: int) -> str:
     characters = string.ascii_letters + string.digits
     return "".join(random.choice(characters) for _ in range(length))
@@ -41,8 +91,13 @@ def download_file_to_data(filepath: str) -> str:
     file_id = generate_random_string(10)
     filepath_in_container = f"/data/documents/{file_id}.txt"
     orig_file = requests.get(filepath, timeout=30)
-    with open(filepath_in_container, "wb") as f:
-        f.write(orig_file.content)
+    file_extension = get_extension(filepath)
+    if 'pdf' in file_extension:
+        orig_file_text = get_text_from_fileobject(orig_file.content, file_extension)
+    else:
+        orig_file_text = get_text_from_fileobject(orig_file.text, file_extension)
+    with open(filepath_in_container, "w") as f:
+        f.write(orig_file_text)
     return filepath_in_container
 
 
@@ -135,7 +190,10 @@ def train_and_upload_model():
                 for filepath in DOC_PATH_OR_LINK:
                     file_id = generate_random_string(10)
                     filepath_in_container = f"/data/documents/{file_id}.txt"
-                    shutil.copyfile(filepath, filepath_in_container)
+                    orig_file_text = get_text_from_filepath(filepath)
+                    with open(filepath_in_container, "w") as f:
+                        f.write(orig_file_text)
+                    # shutil.copyfile(filepath, filepath_in_container)
                     # move all the files to /data (for uniformness all files are always stored there)
                     docs_and_links.append(
                         {

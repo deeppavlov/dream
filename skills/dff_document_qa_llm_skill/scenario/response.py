@@ -83,12 +83,13 @@ filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}""
         request = utterance_texts[-1]
         utterance_texts[
             -1
-        ] = f"""TEXT: ### {final_candidates} ###
+        ] = f"""Text: ### {final_candidates} ###
 USER: {request}
-Reply to USER. If USER asks a question, answer based on TEXT that contains some information about the subject.
+Reply to USER. If USER asks a question, answer based on Text that contains some information about the subject.
 If necessary, structure your answer as bullet points. You may also present information in tables.
-If TEXT does not contain the answer, apologize and say that you cannot answer based on the given text.
-Only answer the question asked, do not include additional information. TEXT may contain unretaed information."""
+If text does not contain the answer, apologize and say that you cannot answer based on the given text.
+Only answer the question asked, do not include additional information. Text may contain unrelated information.
+Do not provide sources. """
     return utterance_texts
 
 
