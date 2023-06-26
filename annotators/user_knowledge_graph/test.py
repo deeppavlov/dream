@@ -12,8 +12,8 @@ def formulate_utt_annotations(dog_id=None, park_id=None):
     utt_annotations = {
         "property_extraction": {
             "triplets": [
-                {"subject": "user", "relation": "have_pet", "object": "dog"},
-                {"subject": "user", "relation": "like_goto", "object": "park"},
+                {"subject": "user", "relation": "HAVE_PET", "object": "dog"},
+                {"subject": "user", "relation": "LIKE_GOTO", "object": "park"},
             ]
         },
         "custom_entity_linking": [],
@@ -27,7 +27,7 @@ def formulate_utt_annotations(dog_id=None, park_id=None):
                 "entity_ids": [dog_id],
                 "confidences": [1.0],
                 "tokens_match_conf": [1.0],
-                "entity_id_tags": ["animal"],
+                "entity_id_tags": ["Animal"],
             },
         )
     if park_id is not None:
@@ -37,38 +37,41 @@ def formulate_utt_annotations(dog_id=None, park_id=None):
                 "entity_ids": [park_id],
                 "confidences": [1.0],
                 "tokens_match_conf": [1.0],
-                "entity_id_tags": ["Misc"],
+                "entity_id_tags": ["Place"],
             },
         )
 
     return utt_annotations
 
 
-def format_for_comparison(results):
+def prepare_for_comparison(results):
     for result in results:
-        if result["added_to_graph"]:
-            for entity in result["added_to_graph"]:
-                del entity["entity_ids"]
-        elif result["triplets_already_in_graph"]:
-            for triplet in result["triplets_already_in_graph"]:
+        if triplets:=result["added_to_graph"]:
+            for triplet in triplets:
                 triplet[2] = triplet[2].split("/")[0]
-        else:
-            print("Error: no result returned")
+        if triplets:=result["triplets_already_in_graph"]:
+            for triplet in triplets:
+                triplet[2] = triplet[2].split("/")[0]
+
     return results
 
 
-def compare_results(results, golden_results):
+def compare_results(results, golden_results) -> bool:
+    def compare(triplets, golden_result):
+        for triplet in triplets:
+            if triplet not in golden_result:
+                return False
+        return True
+    is_successfull = []
     for result, golden_result in zip(results, golden_results):
-        if result["added_to_graph"]:
-            return result == golden_result
-        elif triplets:= result["triplets_already_in_graph"]:
-            for triplet in triplets:
-                if triplet in golden_result["triplets_already_in_graph"]:
-                    return True
-    return False
+        is_added = compare(result["added_to_graph"], golden_result["added_to_graph"])
+        is_in_graph = compare(result["triplets_already_in_graph"], golden_result["triplets_already_in_graph"])
+        is_successfull.append(is_added)
+        is_successfull.append(is_in_graph)
+    return all(is_successfull)
 
 
-def main():    
+def main():
     TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
     TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
     assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified in env"
@@ -92,11 +95,11 @@ def main():
     dog_id, park_id = None, None
     try:
         user_props = graph.get_properties_of_entity(USER_ID)
-        entities_info = graph.get_properties_of_entities([*user_props["HAVE_PET/animal"], *user_props["LIKE_GOTO/Misc"]])
+        entities_info = graph.get_properties_of_entities([*user_props["HAVE_PET/Animal"], *user_props["LIKE_GOTO/Place"]])
         for entity_info in entities_info:
-            if entity_info.get("Name") == "dog":
+            if entity_info.get("substr") == "dog":
                 dog_id = entity_info["@id"]
-            elif entity_info.get("Name") == "park":
+            elif entity_info.get("substr") == "park":
                 park_id = entity_info["@id"]
         print(f"Found park_id: '{park_id}' and dog_ig: '{dog_id}'")
         added_new_entities = False
@@ -114,14 +117,14 @@ def main():
         }
     ]
 
+    triplets = [
+            [USER_ID, "LIKE_GOTO", "Place"],
+            [USER_ID, "HAVE_PET", "Animal"]
+        ]
     if added_new_entities:
         golden_results = [
             [{
-                "added_to_graph": [{
-                    "entity_kinds": ["animal", "Misc"],
-                    "entity_names": ["dog", "park"],
-                    "rel_names": ["HAVE_PET", "LIKE_GOTO"]
-                }],
+                "added_to_graph": triplets,
                 "triplets_already_in_graph": []
             }]
         ]
@@ -129,10 +132,7 @@ def main():
         golden_results = [
             [{
                 "added_to_graph": [],
-                "triplets_already_in_graph": [
-                    [USER_ID, "LIKE_GOTO", "Misc"],
-                    [USER_ID, "HAVE_PET", "animal"]
-                ]
+                "triplets_already_in_graph": triplets
             }]
         ]
 
@@ -140,7 +140,7 @@ def main():
     for data, golden_result in zip(request_data, golden_results):
         result = requests.post(USER_KG_URL, json=data).json()
         print(result)
-        result = format_for_comparison(result)
+        result = prepare_for_comparison(result)
         if compare_results(result, golden_result):
             count += 1
     assert count == len(request_data)
