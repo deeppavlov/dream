@@ -162,7 +162,7 @@ def train_and_upload_model():
                         # we download all incoming files to /data and save paths
                         docs_and_links.append(
                             {
-                                "document_id": get_filename(link).split('/')[-1],
+                                "document_id": get_filename(link).split("/")[-1],
                                 "initial_path_or_link": link,
                             }
                         )
@@ -181,7 +181,7 @@ def train_and_upload_model():
                     # download all files to data
                     docs_and_links.append(
                         {
-                            "document_id": get_filename(filepath_in_container).split('/')[-1],
+                            "document_id": get_filename(filepath_in_container).split("/")[-1],
                             "initial_path_or_link": filepath,
                         }
                     )
@@ -198,7 +198,7 @@ def train_and_upload_model():
                     # move all the files to /data (for uniformness all files are always stored there)
                     docs_and_links.append(
                         {
-                            "document_id": get_filename(filepath_in_container).split('/')[-1],
+                            "document_id": get_filename(filepath_in_container).split("/")[-1],
                             "initial_path_or_link": filepath,
                         }
                     )  # linking ids and initial filenames
