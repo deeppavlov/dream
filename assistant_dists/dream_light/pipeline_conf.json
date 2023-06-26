@@ -105,9 +105,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification_lightweight",
-                    "container": "combined-classification-lightweight",
-                    "endpoint": "model"
+                    "component": "components/dflkgjdlkh342r9ndf.yml",
+                    "service": "annotators/combined_classification_lightweight/service_configs/combined-classification-lightweight"
                 }
             }
         },
@@ -238,9 +237,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification_lightweight",
-                    "container": "combined-classification-lightweight",
-                    "endpoint": "batch_model"
+                    "component": "components/dflkgjdlkh342r9ndf.yml",
+                    "service": "annotators/combined_classification_lightweight/service_configs/combined-classification-lightweight"
                 }
             }
         },
