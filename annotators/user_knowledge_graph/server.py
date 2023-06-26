@@ -25,7 +25,7 @@ TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
 INDEX_LOAD_PATH=Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
 
-graph = TerminusdbKnowledgeGraph(
+kg_graph = TerminusdbKnowledgeGraph(
     db_name=TERMINUSDB_SERVER_DB,
     team=TERMINUSDB_SERVER_TEAM,
     server=TERMINUSDB_SERVER_URL,
@@ -34,15 +34,16 @@ graph = TerminusdbKnowledgeGraph(
 )
 logger.info('Graph Loaded!')
 
-# [
-#     {
-#         'triplets': [
-#             {'object': '2 dog', 'relation': 'have pet', 'subject': 'user'}, {'object': 'travel', 'relation': 'like activity', 'subject': 'user'}
-#         ]
-#     }
-# ]
+
 def check_property_vs_relationship(utterances_info: List[dict]) -> Tuple[list, list]:
-    """Checks if the prop_ex triplets are relationship or property triplets."""
+    """Checks if the prop_ex triplets are relationship or property triplets.
+
+    Args:
+      utterances_info: List of dictionaries containing the utterance information.
+
+    Returns:
+      A tuple containing two lists: relationships and properties.
+    """
     if isinstance(utterances_info, dict):
         utterances_info = [utterances_info]
 
@@ -56,22 +57,6 @@ def check_property_vs_relationship(utterances_info: List[dict]) -> Tuple[list, l
                     properties.append(triplet)
     return relationships, properties
 
-
-# [
-#     {
-#         'confidences': [1.0, 1.0],
-#         'entity_id_tags': ['Misc', 'AbstractBook'],
-#         'entity_ids': ['Misc/c4076d20-769b-4812-ba27-a5d88d2dc2f9', 'AbstractBook/3fd23b02-604d-4846-8dc7-018c716d7f5a'],
-#         'entity_substr': 'travel',
-#         'tokens_match_conf': [1.0, 1.0]
-#     }, {
-#         'confidences': [1.0],
-#         'entity_id_tags': ['Misc'],
-#         'entity_ids': ['Misc/6ca7c2b7-2af9-4e9a-b485-27df1c63a4d0'],
-#         'entity_substr': 'venice',
-#         'tokens_match_conf': [1.0]
-#     }
-# ]
 
 def get_entity_type(attributes):
     #TODO: this doesn't work. Most likely it should get output of entity-detection not prop-ex
@@ -91,8 +76,15 @@ def get_entity_type(attributes):
 
 
 def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list) -> Tuple[dict, list]:
+    """Checks if the entities returned by property extraction are present in the index.
+
+    Returns:
+      A tuple containing a dictionary and a list: entities_in_index and entities_not_in_index.
+    Output example:
+      entities_in_index, entities_not_in_index --  {('dog', 'Animal'): 
+        'Animal/ed8f16ae-56fb-46dc-b542-20987056fd00'}, [('dog', 'Animal'))]
+    """
     entities_in_index, entities_not_in_index = {}, []
-    # logger.info(f"custom_el_annotations -- {custom_el_annotations}")
     for triplet in prop_ex_triplets:
         in_index = False
         for entity_info in custom_el_annotations:
@@ -101,7 +93,6 @@ def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list)
                 entities_in_index[(entity_info["entity_substr"], entity_info["entity_id_tags"][0])] = entity_info["entity_ids"][0]
                 break
         if not in_index:
-            # relation = '_'.join(triplet['relation'].split(' '))
             if triplet["relation"] in rel_kinds_dict:
                 entity_kind = rel_kinds_dict[triplet["relation"]]
             else:
@@ -111,6 +102,17 @@ def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list)
 
 
 def check_entities_in_kg(graph, entities: list) -> Tuple[list, list]:
+    """Checks if the entities, that aren't in index, are present in kg.
+    
+    As index stores and retrieves entities only related to each user (it stores them as triplets), there are
+    situations where the entity exists in kg but not connected to this current user, so not found in index.
+
+    Returns:
+      A tuple containing two lists: entities_in_kg and entities_not_in_kg.
+    Output example:
+      entities_in_kg -- 
+      entities_not_in_kg -- [('park', 'Place')]
+    """
     entities_in_kg, entities_not_in_kg = [], []
 
     all_entities_in_kg = graph.get_all_entities()
@@ -125,19 +127,19 @@ def check_entities_in_kg(graph, entities: list) -> Tuple[list, list]:
     return entities_in_kg, entities_not_in_kg
 
 
-def add_entities_to_index(graph, user_id, entities_info_lists):
-
-    substr_list = entities_info_lists["substr_list"]
-    entity_ids = entities_info_lists["entity_ids"]
-    tags_list = entities_info_lists["tags_list"]
-    logger.debug(f"Adding to index user_id '{user_id}' - entity_info: "
-                    f"'entity_substr': {substr_list}, 'entity_ids': {entity_ids},"
-                    f" 'tags': {tags_list}")
-    graph.index.set_active_user_id("2700259bdcd44")
-    graph.index.add_entities(substr_list, entity_ids, tags_list)
-
-
-def create_entities(graph, entities_info: List[Tuple[str, str]], has_name_property=False, entity_ids: Optional[List[str]] = None):
+def create_entities(
+        graph, entities_info: List[Tuple[str, str]], has_name_property=False, entity_ids: Optional[List[str]] = None
+) -> Dict[str, list]:
+    """Adds entities and entity kinds into kg.
+    Returns:
+      entities_info_lists: new created entities
+    Output example:
+      {
+        'substr_list': ['dog', 'park'],
+        'tags_list': ['Animal', 'Place'],
+        'entity_ids': ['Animal/6e224463-e9a9-4e43-b548-a3c52f30de66', 'Place/aa3f15fb-b00d-4f92-be95-75b3748d6f5f']
+      }
+    """
     if entity_ids is None:
         entity_ids = [""] * len(entities_info)
 
@@ -153,12 +155,12 @@ def create_entities(graph, entities_info: List[Tuple[str, str]], has_name_proper
             entity_id = "/".join([entity_info[1], str(uuid4())])
         entities_info_lists["entity_ids"].append(entity_id)
     logger.debug(f"entities_info_lists -- {entities_info_lists}")
-    
+
     try:
         graph.ontology.create_entity_kinds(entities_info_lists["tags_list"])
     except ValueError:
         logger.info(f"All entity kinds '{entities_info_lists['tags_list']}' are already in KG")
-    
+
     substr = "name" if has_name_property else "substr"
     property_kinds = [[substr]]*len(entities_info_lists["substr_list"])
     property_values = [[substr] for substr in entities_info_lists["substr_list"]]
@@ -178,9 +180,10 @@ def create_entities(graph, entities_info: List[Tuple[str, str]], has_name_proper
     return entities_info_lists
 
 
-def prepare_triplets(entities_in_index, triplets, user_id):
-    """Prepares the triplets to be in the format '[{"subject": user_id, "relationship": value, "object": entity_id}]'
-    to be used in check_triplets_in_kg. Where value is got from triplets and entity_id is got from entities_in_index.
+def prepare_triplets(entities_in_index: dict, triplets: list, user_id: str) -> List[dict]:
+    """Prepares the property extraction triplets to be in the format
+    '[{"subject": user_id, "relationship": value, "object": entity_id}]' to be used in check_triplets_in_kg.
+    Where value is got from triplets and entity_id is got from entities_in_index.
     """
     prepared_triplets = []
     new_entities_in_index = {}
@@ -195,8 +198,10 @@ def prepare_triplets(entities_in_index, triplets, user_id):
     return prepared_triplets
 
 
-def check_triplets_in_kg(graph, triplets):
-    """Checks if the prop_ex relationship kinds, between user and entities in index, are the same as the ones in kg."""
+def check_triplets_in_kg(graph, triplets: List[dict]) -> Tuple[list, dict]:
+    """Checks if the subject and object, that've been extracted by property extraction and present in index,
+    are connected by the same relationship as in kg.
+    """
     triplets_in_kg, triplets_not_in_kg = [], {
         "ids_a": [], "relationship_kinds": [], "ids_b": []
     }
@@ -220,22 +225,36 @@ def check_triplets_in_kg(graph, triplets):
     return triplets_in_kg, triplets_not_in_kg
 
 
-def prepare_triplets_to_add_to_dbs(triplets_not_in_kg: Dict[str, list], prop_ex_rel_triplets, entities_in_kg_not_in_index, new_entities, user_id):
-    # triplets_not_in_kg -- {'ids_a': ['User/b75d2700259bdcd44sdsdf85e7f530ed', 'User/b75d2700259bdcd44sdsdf85e7f530ed'], 'relationship_kinds': ['have_pet', 'like_goto'], 'ids_b': [None, None]}
-    # prop_ex_rel_triplets -- [{'subject': 'user', 'relation': 'have_pet', 'object': 'dog'}, {'subject': 'user', 'relation': 'like_goto', 'object': 'park'}]
-    # entities_in_kg -- [{'@id': 'animal/19f7c81c-04a5-492d-85cc-fcf955aec044', '@type': 'animal', 'substr': 'dog'}, {'@id': 'place/cca82750-2569-4c96-a1db-7e0cd7fb4d49', '@type': 'place', 'substr': 'park'}]
-    # new_entities -- ['terminusdb:///data/animal/19f7c81c-04a5-492d-85cc-fcf955aec044', 'terminusdb:///data/place/cca82750-2569-4c96-a1db-7e0cd7fb4d49']
-    # new_entities -- {"entity_ids": [], "substr_list": [], "tags_list": []}
+def prepare_triplets_to_add_to_dbs(
+        triplets_not_in_kg: Dict[str, list],
+        prop_ex_rel_triplets: list,
+        entities_in_kg_not_in_index: list,
+        new_entities: dict,
+        user_id: str
+):
+    """Prepares each of these triplets to be added to dbs:
+    [triplets not in kg but in index,
+    triplets between user and entities, that're in kg but not in index,
+    triplets between user and new created entities]
+
+    Output example:
+      triplets_to_kg -- {
+        'ids_a': ['User/b75d2700259bdc44sdsdf85e7f530ed'],
+        'relationship_kinds': ['HAVE_PET'],
+        'ids_b': ['Animal/6e224463-e9a9-4e43-b548-a3c52f30de66']
+      }
+      triplets_to_index -- {
+        'substr_list': ['dog'], 'tags_list': ['Animal'], 'entity_ids': ['Animal/6e224463-e9a9-4e43-b548-a3c52f30de66']
+      }
+    """
     triplets_to_kg, triplets_to_index = triplets_not_in_kg, {"substr_list": [], "tags_list": [], "entity_ids": []}
-    # for idx, relationship_kind in enumerate(triplets_not_in_kg["relationship_kinds"]):
-    #     id_b = [str(uuid4()) for triplet in prop_ex_rel_triplets if triplet["relation"]==relationship_kind][0] #TODO this 0 index could reduce solutions, fix that
-    #     triplets_to_kg["ids_b"][idx] = id_b
+
     for entity in entities_in_kg_not_in_index:
         relationship_kind = [triplet["relation"] for triplet in prop_ex_rel_triplets if triplet["object"]==entity["substr"]][0] #TODO this 0 index could reduce solutions, fix that
         triplets_to_kg["ids_a"].append(user_id)
         triplets_to_kg["relationship_kinds"].append(relationship_kind)
         triplets_to_kg["ids_b"].append(entity["@id"])
-        
+
         triplets_to_index["substr_list"].append(entity["substr"])
         triplets_to_index["tags_list"].append(entity["@type"])
         triplets_to_index["entity_ids"].append(entity["@id"])
@@ -250,13 +269,23 @@ def prepare_triplets_to_add_to_dbs(triplets_not_in_kg: Dict[str, list], prop_ex_
         triplets_to_index["tags_list"] += new_entities["tags_list"]
         triplets_to_index["entity_ids"] += new_entities["entity_ids"]
 
-
-    # triplets_to_kg -- {'ids_a': ['User/b75d2700259bdcd44sdsdf85e7f530ed', 'User/b75d2700259bdcd44sdsdf85e7f530ed'], 'relationship_kinds': ['have_pet', 'like_goto'], 'ids_b': [None, None]}
-    # triplets_to_index -- {"substr_list": [], "tags_list": [], "entity_ids": []}
     return triplets_to_kg, triplets_to_index
 
 
-def add_triplets_to_dbs(graph, user_id, triplets_to_kg, triplets_to_index) -> List[tuple]:
+def add_entities_to_index(graph, user_id: str, entities_info_lists: dict):
+    
+    substr_list = entities_info_lists["substr_list"]
+    entity_ids = entities_info_lists["entity_ids"]
+    tags_list = entities_info_lists["tags_list"]
+    logger.debug(f"Adding to index user_id '{user_id}' - entity_info: "
+                    f"'entity_substr': {substr_list}, 'entity_ids': {entity_ids},"
+                    f" 'tags': {tags_list}")
+    graph.index.set_active_user_id("2700259bdcd44")
+    graph.index.add_entities(substr_list, entity_ids, tags_list)
+
+
+def add_triplets_to_dbs(graph, user_id: str, triplets_to_kg: dict, triplets_to_index: dict) -> List[tuple]:
+    """Adds triplets to each of kg and index."""
     kinds_b = [id_b.split("/")[0] for id_b in triplets_to_kg["ids_b"]]
 
     if len(triplets_to_kg["ids_a"]):
@@ -287,7 +316,8 @@ def add_triplets_to_dbs(graph, user_id, triplets_to_kg, triplets_to_index) -> Li
     return list(output)
 
 
-def upper_case_input(annotations: Dict[str, list]):
+def upper_case_input(annotations: Dict[str, list]) -> Dict[str, list]:
+    """Upper-cases the relationship kind in each triplet in the prop_ex annotations"""
     annotations_with_capitalized = {}
     for triplet in annotations["triplets"]:
         triplet["relation"] = triplet["relation"].upper()
@@ -320,7 +350,7 @@ def get_result(request, graph):
 
     if entities_not_in_index:
         entities_in_kg_not_in_index, entities_not_in_kg = check_entities_in_kg(graph, entities_not_in_index)
-        logger.info(f"entities_not_in_kg -- {entities_not_in_kg}")
+        logger.debug(f"entities_not_in_kg -- {entities_not_in_kg}")
 
         if entities_not_in_kg:
             new_entities = create_entities(graph, entities_not_in_kg)
@@ -330,7 +360,7 @@ def get_result(request, graph):
         entities_in_kg_not_in_index =[]
         new_entities = {}
     logger.info(f"new_entities -- {new_entities}")
-    logger.info(f"entities_in_kg -- {entities_in_kg_not_in_index}")
+    logger.info(f"entities_in_kg_not_in_index -- {entities_in_kg_not_in_index}")
 
     if entities_in_index:
         triplets_of_entities_in_index = prepare_triplets(entities_in_index, prop_ex_rel_triplets, user_id)
@@ -347,7 +377,7 @@ def get_result(request, graph):
 
     if triplets_not_in_kg["ids_b"] or new_entities or entities_in_kg_not_in_index:
         triplets_to_kg, triplets_to_index = prepare_triplets_to_add_to_dbs(triplets_not_in_kg, prop_ex_rel_triplets, entities_in_kg_not_in_index, new_entities, user_id)
-        logger.info(f"triplets_to_kg -- {triplets_to_kg}\n triplets_to_index -- {triplets_to_index}")
+        logger.debug(f"triplets_to_kg -- {triplets_to_kg}\n triplets_to_index -- {triplets_to_index}")
         triplets_added_to_kg = add_triplets_to_dbs(graph, user_id, triplets_to_kg, triplets_to_index)
     else:
         triplets_added_to_kg = []
@@ -355,9 +385,10 @@ def get_result(request, graph):
     logger.info(f"added_to_graph -- {triplets_added_to_kg}, triplets_already_in_graph -- {triplets_already_in_kg}")
     return [{'added_to_graph': triplets_added_to_kg, "triplets_already_in_graph": triplets_already_in_kg}]
 
+
 @app.route("/respond", methods=["POST"])
 def respond():
-    result = get_result(request, graph)
+    result = get_result(request, kg_graph)
     return jsonify(result)
 
 
