@@ -46,10 +46,10 @@ def formulate_utt_annotations(dog_id=None, park_id=None):
 
 def prepare_for_comparison(results):
     for result in results:
-        if triplets:=result["added_to_graph"]:
+        if triplets := result["added_to_graph"]:
             for triplet in triplets:
                 triplet[2] = triplet[2].split("/")[0]
-        if triplets:=result["triplets_already_in_graph"]:
+        if triplets := result["triplets_already_in_graph"]:
             for triplet in triplets:
                 triplet[2] = triplet[2].split("/")[0]
 
@@ -62,6 +62,7 @@ def compare_results(results, golden_results) -> bool:
             if triplet not in golden_result:
                 return False
         return True
+
     is_successfull = []
     for result, golden_result in zip(results, golden_results):
         is_added = compare(result["added_to_graph"], golden_result["added_to_graph"])
@@ -95,7 +96,9 @@ def main():
     dog_id, park_id = None, None
     try:
         user_props = graph.get_properties_of_entity(USER_ID)
-        entities_info = graph.get_properties_of_entities([*user_props["HAVE_PET/Animal"], *user_props["LIKE_GOTO/Place"]])
+        entities_info = graph.get_properties_of_entities(
+            [*user_props["HAVE_PET/Animal"], *user_props["LIKE_GOTO/Place"]]
+        )
         for entity_info in entities_info:
             if entity_info.get("substr") == "dog":
                 dog_id = entity_info["@id"]
@@ -109,32 +112,21 @@ def main():
 
     request_data = [
         {
-            "utterances": [{
-                "text": "i have a dog and a cat",
-                "user": {"id": USER_ID.split("/")[1]},
-                "annotations": formulate_utt_annotations(dog_id, park_id),
-            }]
+            "utterances": [
+                {
+                    "text": "i have a dog and a cat",
+                    "user": {"id": USER_ID.split("/")[1]},
+                    "annotations": formulate_utt_annotations(dog_id, park_id),
+                }
+            ]
         }
     ]
 
-    triplets = [
-            [USER_ID, "LIKE_GOTO", "Place"],
-            [USER_ID, "HAVE_PET", "Animal"]
-        ]
+    golden_triplets = [[USER_ID, "LIKE_GOTO", "Place"], [USER_ID, "HAVE_PET", "Animal"]]
     if added_new_entities:
-        golden_results = [
-            [{
-                "added_to_graph": triplets,
-                "triplets_already_in_graph": []
-            }]
-        ]
+        golden_results = [[{"added_to_graph": golden_triplets, "triplets_already_in_graph": []}]]
     else:
-        golden_results = [
-            [{
-                "added_to_graph": [],
-                "triplets_already_in_graph": triplets
-            }]
-        ]
+        golden_results = [[{"added_to_graph": [], "triplets_already_in_graph": golden_triplets}]]
 
     count = 0
     for data, golden_result in zip(request_data, golden_results):
