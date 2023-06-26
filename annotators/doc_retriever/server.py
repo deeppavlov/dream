@@ -73,11 +73,11 @@ def get_text_from_filepath(filepath: str) -> str:
 
 def get_text_from_fileobject(file_object: str, file_extension: str) -> str:
     if "pdf" in file_extension:
-        full_doc_text = pdf_to_text(file_object)
+        full_doc_text = pdf_to_text(file_object.content)
     elif "html" in file_extension:
-        full_doc_text = html_to_text(file_object)
+        full_doc_text = html_to_text(file_object.text)
     else:
-        full_doc_text = file_object
+        full_doc_text = file_object.text
     return full_doc_text
 
 
@@ -91,10 +91,7 @@ def download_file_to_data(filepath: str) -> str:
     filepath_in_container = f"/data/documents/{file_id}.txt"
     orig_file = requests.get(filepath, timeout=30)
     file_extension = get_extension(filepath)
-    if "pdf" in file_extension:
-        orig_file_text = get_text_from_fileobject(orig_file.content, file_extension)
-    else:
-        orig_file_text = get_text_from_fileobject(orig_file.text, file_extension)
+    orig_file_text = get_text_from_fileobject(orig_file, file_extension)
     with open(filepath_in_container, "w") as f:
         f.write(orig_file_text)
     return filepath_in_container
