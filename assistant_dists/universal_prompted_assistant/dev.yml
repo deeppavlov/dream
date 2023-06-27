@@ -72,6 +72,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8167:8167
+  anthropic-api-claude-v1:
+    volumes:
+      - "./services/anthropic_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8164:8164
+  anthropic-api-claude-instant-v1:
+    volumes:
+      - "./services/anthropic_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8163:8163
   dff-universal-prompted-skill:
     volumes:
       - "./skills/dff_universal_prompted_skill:/src"

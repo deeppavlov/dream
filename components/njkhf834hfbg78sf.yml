@@ -1,4 +1,4 @@
-name: anthropic_api_claudev13
+name: anthropic_api_claude_instant_v1
 display_name: Anthropic Claude v1.3
 component_type: Generative
 model_type: NN-based
@@ -17,7 +17,7 @@ group: services
 connector:
   protocol: http
   timeout: 120.0
-  url: http://anthropic-api-claudev13:8163/respond
+  url: http://anthropic-api-claude-instant-v1:8163/respond
 dialog_formatter: null
 response_formatter: null
 previous_services: null
@@ -25,5 +25,5 @@ required_previous_services: null
 state_manager_method: null
 tags: null
 endpoint: respond
-service: services/anthropic_api_lm/service_configs/anthropic-api-claudev13
+service: services/anthropic_api_lm/service_configs/anthropic-api-claude-instant-v1
 date_created: '2023-06-01T09:45:32'
