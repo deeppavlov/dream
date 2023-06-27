@@ -17,11 +17,11 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  dff-program-y-skill:
-    restart: unless-stopped
   sentseg:
     restart: unless-stopped
   convers-evaluation-selector:
+    restart: unless-stopped
+  badlisted-words:
     restart: unless-stopped
   ner:
     restart: unless-stopped
@@ -35,8 +35,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
   spelling-preprocessing:
     restart: unless-stopped
-  dff-friendship-skill:
-    restart: unless-stopped
   entity-detection:
     restart: unless-stopped
     volumes:
@@ -47,6 +45,10 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=6
+  transformers-lm-gptjt:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
   dff-template-skill:
     restart: unless-stopped
   property-extraction:

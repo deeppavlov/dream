@@ -14,9 +14,9 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   spacy-nounphrases:
-  dff-program-y-skill:
   sentseg:
   convers-evaluation-selector:
+  badlisted-words:
   ner:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -28,7 +28,6 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=9
   spelling-preprocessing:
-  dff-friendship-skill:
   entity-detection:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
