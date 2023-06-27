@@ -1,0 +1,29 @@
+name: anthropic_api_claudev13
+display_name: Anthropic Claude v1.3
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: The Anthropic's largest language model which is 
+  more robust against red-team inputs, better at precise instruction-following, 
+  better at code, and better and non-English dialogue and writing.
+  For more details, refer to 
+  [Anthropic website](https://console.anthropic.com/docs/api/reference). 
+  Paid. You must provide your Anthropic API key to use the model. 
+  Your Anthropic account will be charged according to your usage.
+ram_usage: 100M
+gpu_usage: null
+group: services
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://anthropic-api-claudev13:8163/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/anthropic_api_lm/service_configs/anthropic-api-claudev13
+date_created: '2023-06-01T09:45:32'

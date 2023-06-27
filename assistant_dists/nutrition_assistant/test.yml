@@ -1,0 +1,43 @@
+services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+    ports:
+      - ${AGENT_PORT}:4242
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+  ranking-based-response-selector:
+    volumes:
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  prompt-selector:
+    volumes:
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
+  transformers-lm-oasst12b:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+  dff-nutrition-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+
+version: "3.7"

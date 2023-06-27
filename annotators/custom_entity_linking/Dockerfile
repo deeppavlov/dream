@@ -34,7 +34,8 @@ RUN pip install -r ./requirements.txt
 COPY $SRC_DIR .
 
 
-RUN python -m deeppavlov install $CONFIG
+RUN python -m deeppavlov install $CONFIG && \
+    python -c "import nltk; nltk.download('stopwords')"
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
