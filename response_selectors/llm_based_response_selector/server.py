@@ -58,7 +58,10 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses, human_uttr_attributes):
     try:
-        curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses])
+        if "transformers" in GENERATIVE_SERVICE_URL:
+            curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses]) + "\n" + PROMPT
+        else:
+            curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses])
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
