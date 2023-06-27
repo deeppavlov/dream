@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu:0.17.2
+FROM deeppavlov/deeppavlov:1.1.1-gpu
 
 COPY $SRC_DIR /src
 WORKDIR /src
