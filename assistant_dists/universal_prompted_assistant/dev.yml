@@ -28,13 +28,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  transformers-lm-gptj:
+  transformers-lm-gptjt:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8130:8130
+      - 8161:8161
   transformers-lm-oasst12b:
     volumes:
       - "./services/transformers_lm:/src"
@@ -66,6 +66,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8160:8160
+  openai-api-chatgpt-16k:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8167:8167
   dff-universal-prompted-skill:
     volumes:
       - "./skills/dff_universal_prompted_skill:/src"

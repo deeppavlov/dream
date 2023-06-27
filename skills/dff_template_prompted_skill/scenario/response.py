@@ -1,15 +1,15 @@
 import json
 import logging
 import re
-import requests
 import sentry_sdk
-from copy import deepcopy
 from os import getenv
+from pathlib import Path
 from typing import Any
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, compose_sending_variables
 from df_engine.core import Context, Actor
 
 
@@ -22,7 +22,7 @@ GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 USE_KG_DATA = getenv("USE_KG_DATA", False)
 USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
 if GENERATIVE_SERVICE_CONFIG:
-    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 
 PROMPT_FILE = getenv("PROMPT_FILE")
@@ -36,7 +36,9 @@ assert PROMPT_FILE
 assert USER_KG_SERVICE_URL
 
 with open(PROMPT_FILE, "r") as f:
-    PROMPT = json.load(f)["prompt"]
+    PROMPT_DICT = json.load(f)
+PROMPT = PROMPT_DICT["prompt"]
+GOALS_FROM_PROMPT = PROMPT_DICT.get("goals", "")
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
@@ -66,14 +68,6 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
-def if_none_var_values(sending_variables):
-    if len(sending_variables.keys()) > 0 and all(
-        [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
-    ):
-        return True
-    return False
-
-
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
@@ -96,67 +90,31 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
-
-    if len(envvars_to_send):
-        # get variables which names are in `envvars_to_send` (splitted by comma if many)
-        # from the last human utterance's attributes
-        sending_variables = {
-            f"{var.lower()}s": [human_uttr_attributes.get(var.lower(), None)] for var in envvars_to_send
-        }
-        if if_none_var_values(sending_variables):
-            # get variables which names are in `envvars_to_send` (splitted by comma if many)
-            # from env variables
-            sending_variables = {f"{var.lower()}s": [getenv(var, None)] for var in envvars_to_send}
-            if if_none_var_values(sending_variables):
-                logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
-            else:
-                logger.info(f"Got {envvars_to_send}'s values from environment.")
-        else:
-            logger.info(f"Got {envvars_to_send}'s values from attributes.")
-    else:
-        sending_variables = {}
-
-    # adding kwargs to request from the last human utterance's attributes
-    lm_service_kwargs = human_uttr_attributes.get("lm_service_kwargs", None)
+    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    for _key, _value in lm_service_kwargs.items():
-        logger.info(f"Got/Re-writing {_key}s values from kwargs.")
-        sending_variables[f"{_key}s"] = [deepcopy(_value)]
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
+        **human_uttr_attributes,
+    )
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
-    logger.info(f"prompt_shared_memory: {prompt}")
-    logger.info(f"prompt from shared memory: {prompt}")
+    prompt = prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
+    logger.info(f"prompt: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
-
-    custom_el = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("custom_entity_linking")
-    user_kg = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("user_knowledge_graph")
-    logger.info(f"custom_el: {custom_el}")
-    logger.info(f"user_kg: {user_kg}")
-
-    if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["kg_prompt"]):
-        kg_prompt = re.sub(r'[-\n]', '', kg_prompt[0][0].lower()).split('.')
-        kg_prompt = ",".join(kg_prompt[:-1])
-        final_prompt = PROMPT + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
-
-    else:
-        final_prompt = PROMPT 
-    logger.info(f"final_prompt: {final_prompt}")
 
     if len(dialog_context) > 0:
         try:
-            response = requests.post(
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                prompt,
                 GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [final_prompt if len(final_prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT],
-                    "configs": [GENERATIVE_SERVICE_CONFIG],
-                    **sending_variables,
-                },
-                timeout=GENERATIVE_TIMEOUT,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
             )
-            hypotheses = response.json()[0]
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
@@ -164,13 +122,35 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     else:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
+
+    # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
+    goals_from_prompt = ""
+    prompt_name = Path(PROMPT_FILE).stem
+    if not GOALS_FROM_PROMPT:
+        # get already collected goals from prompts from human attributes
+        prev_prompts_goals = int_ctx.get_prompts_goals(ctx, actor)
+        goals_from_prompt = prev_prompts_goals.get(prompt_name, "")
+        if not goals_from_prompt:
+            # if current prompt's goals are empty in human attributes, generate them!
+            goals_from_prompt = get_goals_from_prompt(
+                prompt=PROMPT,
+                url=GENERATIVE_SERVICE_URL,
+                generative_timeout=GENERATIVE_TIMEOUT,
+                sending_variables=sending_variables,
+            )
+            logger.info(f"Generated goals for prompt using generative service:\n{goals_from_prompt}")
+        else:
+            logger.info("Found goals for prompt from the human attributes")
+
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
-        hyp_text = " ".join(hyp.split())
-        if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-            hyp_text += "."
+        if len(hyp) and hyp[-1] not in [".", "?", "!"]:
+            hyp += "."
             confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
+        if goals_from_prompt:
+            _curr_attrs["prompts_goals"] = {prompt_name: goals_from_prompt}
+        gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:
         return ""

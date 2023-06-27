@@ -1,6 +1,7 @@
 name: prompt-selector
 endpoints:
 - respond
+- collect_goals
 compose:
   env_file:
   - .env
