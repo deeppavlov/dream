@@ -1,5 +1,5 @@
 name: anthropic_api_claude_instant_v1
-display_name: Anthropic Claude v1.3
+display_name: Anthropic Claude Instant v1
 component_type: Generative
 model_type: NN-based
 is_customizable: false
