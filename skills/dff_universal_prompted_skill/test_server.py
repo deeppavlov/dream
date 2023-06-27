@@ -10,7 +10,7 @@ URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 
 
 def handler(requested_data, random_seed):
-    hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}, timeout=4).json()
+    hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}, timeout=120).json()
     return hypothesis
 
 

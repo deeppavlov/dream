@@ -27,10 +27,11 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
     "text-davinci-003": json.load(open("common/generative_configs/openai-text-davinci-003.json", "r")),
     "gpt-3.5-turbo": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
+    "gpt-3.5-turbo-16k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-4": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-4-32k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
 }
-CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]
+CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"]
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):

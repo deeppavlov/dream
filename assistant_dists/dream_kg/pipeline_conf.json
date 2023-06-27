@@ -211,7 +211,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "component": "components/7v330b9odypuiugqeiuqij.yml",
                     "service": "annotators/property_extraction/service_configs/property-extraction"
                 }
             },
@@ -463,13 +463,16 @@
             }
         },
         "skills": {
-            "dff_program_y_skill": {
+            "dff_dream_persona_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://dff-program-y-skill:8008/respond"
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-persona-gpt-j-prompted-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -477,8 +480,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
-                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
+                    "component": "components/6lLhP7zuoiI0bxJEDLWUg.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-gpt-jt-prompted-skill"
                 }
             },
             "dummy_skill": {
@@ -496,24 +499,6 @@
                 "source": {
                     "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
                     "service": "skills/dummy_skill/service_configs/agent"
-                }
-            },
-            "dff_friendship_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://dff-friendship-skill:8086/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_friendship_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/haBUc1rsCitGmBzndrKl5w.yml",
-                    "service": "skills/dff_friendship_skill/service_configs/dff-friendship-skill"
                 }
             },
             "dff_template_skill": {
@@ -557,9 +542,9 @@
         }
     },
     "metadata": {
-        "display_name": "Dream",
+        "display_name": "Dream KG",
         "author": "DeepPavlov",
-        "description": "Full version of DeepPavlov Dream Socialbot",
+        "description": "Distribution that utilizes Knowledge Graph",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
         "ram_usage": "50 GB",

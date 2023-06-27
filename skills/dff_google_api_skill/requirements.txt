@@ -1,0 +1,5 @@
+click==7.1.2
+nltk==3.8
+langchain==0.0.130
+google_api_python_client==2.83.0
+openai==0.27.3
