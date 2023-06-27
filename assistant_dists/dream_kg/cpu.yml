@@ -20,7 +20,7 @@ services:
   custom-entity-linking:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  transformers-lm-gptjt:
+  transformers-lm-oasst12b:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

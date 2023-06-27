@@ -28,13 +28,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  transformers-lm-gptjt:
+  transformers-lm-vicuna13b:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8161:8161
+      - 8168:8168
   transformers-lm-oasst12b:
     volumes:
       - "./services/transformers_lm:/src"

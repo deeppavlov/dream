@@ -27,13 +27,13 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8128
       - PORT=8128
 
-  transformers-lm-gptjt:
+  transformers-lm-vicuna13b:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8161
-      - PORT=8161
+      - PROXY_PASS=proxy.deeppavlov.ai:8168
+      - PORT=8168
 
 version: '3.7'

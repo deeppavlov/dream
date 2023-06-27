@@ -1,5 +1,4 @@
 name: transformers-lm-gptjt
-endpoints:
 - respond
 compose:
   env_file:

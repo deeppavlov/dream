@@ -2,11 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_prompted_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
-        sentence-ranker:8128, 
-        transformers-lm-gptjt:8161, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
-        openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167,
-        dff-universal-prompted-skill:8147"
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, sentence-ranker:8128, transformers-lm-vicuna13b:8168, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131, openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167, dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -84,17 +80,17 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-gptjt:
+  transformers-lm-vicuna13b:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8161
-        SERVICE_NAME: transformers_lm_gptjt
-        PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
+        SERVICE_PORT: 8168
+        SERVICE_NAME: transformers_lm_vicuna13b
+        PRETRAINED_MODEL_NAME_OR_PATH: lmsys/vicuna-13b-v1.3
         HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8161
+    command: flask run -h 0.0.0.0 -p 8168
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
