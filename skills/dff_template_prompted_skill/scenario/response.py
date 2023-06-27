@@ -102,6 +102,17 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
     prompt = prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
+
+    custom_el = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("custom_entity_linking")
+    user_kg = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("user_knowledge_graph")
+
+    if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["kg_prompt"]):
+        logger.info(f"custom_el: {custom_el}")
+        logger.info(f"user_kg: {user_kg}")
+        kg_prompt = re.sub(r'[-\n]', '', kg_prompt[0][0].lower()).split('.')
+        kg_prompt = ",".join(kg_prompt[:-1])
+        prompt = prompt + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
+
     logger.info(f"prompt: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
 
