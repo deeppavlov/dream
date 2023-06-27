@@ -17,7 +17,6 @@ services:
   dff-program-y-skill:
   sentseg:
   convers-evaluation-selector:
-  badlisted-words:
   ner:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

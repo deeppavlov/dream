@@ -23,8 +23,6 @@ services:
     restart: unless-stopped
   convers-evaluation-selector:
     restart: unless-stopped
-  badlisted-words:
-    restart: unless-stopped
   ner:
     restart: unless-stopped
     volumes:

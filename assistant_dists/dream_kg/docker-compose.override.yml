@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
           spacy-nounphrases:8006, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009,
-          badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075,
+          ner:8021, spelling-preprocessing:8074, entity-linking:8075,
           combined-classification:8087, dff-friendship-skill:8086, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153, dff-template-skill:8120, terminusdb-server:6363"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
@@ -116,23 +116,6 @@ services:
           memory: 100M
         reservations:
           memory: 100M
-
-  badlisted-words:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8018
-        SERVICE_NAME: badlisted_words
-      context: annotators/BadlistedWordsDetector/
-    command: flask run -h 0.0.0.0 -p 8018
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   ner:
     env_file: [ .env ]

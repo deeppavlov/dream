@@ -26,15 +26,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8011
       - PORT=8011
 
-  badlisted-words:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8018
-      - PORT=8018
-
   ner:
     command: ["nginx", "-g", "daemon off;"]
     build:
