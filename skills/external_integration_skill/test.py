@@ -11,14 +11,14 @@ def test_respond():
             "dialogs": [
                 {
                     "dialog_id": "11b8940f99738c4d92d54076daab4bb6",
-                    "payload": "hi",
+                    "human_utterances": [{"text": "hi"}],
                 }
             ]
         },
     ).json()
-    assert result == {"response": "Success!", "confidence": 0.9}, print(f"Got result: {result}, something is wrong.")
+    print(result)
+    assert result == [['Success!', 0.9]], print(f"Got result: {result}, something is wrong.")
     print("Success!")
-
 
 if __name__ == "__main__":
     test_respond()
