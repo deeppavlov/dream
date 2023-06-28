@@ -2,26 +2,21 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8137"
+    url = "http://0.0.0.0:8199/return_response"
 
     request_datas = [
-        {"command": "move_backward_10", "dialog_ids": "test_dialog_id"},
-        {"command": "move_forward_10", "dialog_ids": "test_dialog_id"},
+        {"dialog_id": "jknvawoioqb783HGGIUUGI", "payload": "How are you doing?"},
+        {"dialog_id": None, "payload": ""},
     ]
     gold_results = [
-        {"result": True},
-        {"result": True},
-        {"result": True},
-        {"result": False},
-        {"result": True},
-        {"result": False},
+        {"response": "Success!", "confidence": 0.9},
+        {"response": "", "confidence": 0.0},
     ]
     i = 0
-    for endpoint in ["is_command_valid", "perform_command", "is_command_performed"]:
-        for request_data in request_datas:
-            result = requests.post(f"{url}/{endpoint}", json=request_data).json()
-            assert result == gold_results[i]
-            i += 1
+    for request_data in request_datas:
+        result = requests.post(url, json=request_data).json()
+        assert result == gold_results[i], print(f"Got result: {result}, something is wrong.")
+        i += 1
     print("Success!")
 
 

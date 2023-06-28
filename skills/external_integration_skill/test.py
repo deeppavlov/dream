@@ -1,7 +1,6 @@
 import requests
-from os import getenv
 
-SERVICE_PORT = 8888
+SERVICE_PORT = 8198
 
 
 def test_respond():
@@ -12,16 +11,12 @@ def test_respond():
             "dialogs": [
                 {
                     "dialog_id": "11b8940f99738c4d92d54076daab4bb6",
-                    "human_utterances": [{"text": "hi"}],
+                    "payload": "hi",
                 }
             ]
         },
     ).json()
-    print(result)
-
-    assert len(result) and [
-        all(len(sample[0]) > 0 for sample in result)
-    ], f"Got\n{result}\n, something is wrong"
+    assert result == {"response": "Success!", "confidence": 0.9}, print(f"Got result: {result}, something is wrong.")
     print("Success!")
 
 

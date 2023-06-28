@@ -25,12 +25,12 @@ def return_response():
     st_time = time.time()
     message = request.json.get("payload", None)
     dialog_id = request.json.get("dialog_id", None)
+    logger.info(f"fake-external-server got message: {message}, dialog_id: {dialog_id}")
     if message and dialog_id:
-        results = {"response": "Response"}
+        results = {"response": "Success!", "confidence": 0.9}
     else:
-        results = {"response": ""}
+        results = {"response": "", "confidence": 0.0}
     logger.info(f"fake-external-server `return_response` results: {results}")
-
     total_time = time.time() - st_time
     logger.info(f"fake-external-server `return_response` exec time: {total_time:.3f}s")
     return jsonify(results)
