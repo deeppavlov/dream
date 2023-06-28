@@ -273,7 +273,7 @@ def prepare_triplets_to_add_to_dbs(
 
 
 def add_entities_to_index(graph, user_id: str, entities_info_lists: dict):
-
+    user_id = user_id.split("/")[-1]
     substr_list = entities_info_lists["substr_list"]
     entity_ids = entities_info_lists["entity_ids"]
     tags_list = entities_info_lists["tags_list"]
@@ -282,7 +282,7 @@ def add_entities_to_index(graph, user_id: str, entities_info_lists: dict):
         f"'entity_substr': {substr_list}, 'entity_ids': {entity_ids},"
         f" 'tags': {tags_list}"
     )
-    graph.index.set_active_user_id("2700259bdcd44")
+    graph.index.set_active_user_id(user_id)
     graph.index.add_entities(substr_list, entity_ids, tags_list)
 
 
@@ -318,13 +318,13 @@ def add_triplets_to_dbs(graph, user_id: str, triplets_to_kg: dict, triplets_to_i
     return list(output)
 
 
-def upper_case_input(annotations: Dict[str, list]) -> Dict[str, list]:
+def upper_case_input(annotations: List[dict]) -> List[dict]:
     """Upper-cases the relationship kind in each triplet in the prop_ex annotations"""
-    annotations_with_capitalized = {}
-    for triplet in annotations["triplets"]:
-        triplet["relation"] = triplet["relation"].upper()
-    if annotations_with_capitalized:
-        annotations = annotations_with_capitalized
+    for annotation in annotations:
+        annotation["triplets"] = [
+            {"subject": triplet["subject"], "relation": triplet["relation"].upper(), "object": triplet["object"]}
+            for triplet in annotation["triplets"]
+        ]
     return annotations
 
 
@@ -339,7 +339,9 @@ def get_result(request, graph):
     annotations = utt.get("annotations", {})
     custom_el_annotations = annotations.get("custom_entity_linking", [])
     logger.info(f"custom_el_annotations --  {custom_el_annotations}")
-    prop_ex_annotations = upper_case_input(annotations.get("property_extraction", []))
+    prop_ex_annotations = annotations.get("property_extraction", [])
+    logger.debug(f"prop_ex_annotations before upper-casing --  {prop_ex_annotations}")
+    prop_ex_annotations = upper_case_input(prop_ex_annotations)
     logger.info(f"prop_ex_annotations --  {prop_ex_annotations}")
 
     create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])

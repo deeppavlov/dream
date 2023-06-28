@@ -10,12 +10,12 @@ load_dotenv("./.env_secret")
 
 def formulate_utt_annotations(dog_id=None, park_id=None):
     utt_annotations = {
-        "property_extraction": {
+        "property_extraction": [{
             "triplets": [
                 {"subject": "user", "relation": "HAVE_PET", "object": "dog"},
                 {"subject": "user", "relation": "LIKE_GOTO", "object": "park"},
             ]
-        },
+        }],
         "custom_entity_linking": [],
     }
 

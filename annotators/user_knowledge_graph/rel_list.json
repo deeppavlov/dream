@@ -1,15 +1,15 @@
 {
-    "FAVORITE_ANIMAL": "Animal",
-    "HAVE_PET": "Animal",
-    "LIKE_ANIMAL": "Animal",
-    "FAVORITE_BOOK": "Book",
-    "LIKE_READ": "Book",
-    "FAVORITE_MOVIE": "Film",
-    "FAVORITE_FOOD": "Food",
-    "LIKE_FOOD": "Food",
-    "FAVORITE_DRINK": "Food",
-    "LIKE_DRINK": "Food",
-    "FAVORITE_SPORT": "Type_of_sport",
-    "LIKE_SPORTS": "Type_of_sport",
-    "LIKE_GOTO": "Place"
+    "FAVORITE ANIMAL": "Animal",
+    "HAVE PET": "Animal",
+    "LIKE ANIMAL": "Animal",
+    "FAVORITE BOOK": "Book",
+    "LIKE READ": "Book",
+    "FAVORITE MOVIE": "Film",
+    "FAVORITE FOOD": "Food",
+    "LIKE FOOD": "Food",
+    "FAVORITE DRINK": "Food",
+    "LIKE DRINK": "Food",
+    "FAVORITE SPORT": "Type_of_sport",
+    "LIKE SPORTS": "Type_of_sport",
+    "LIKE GOTO": "Place"
 }
