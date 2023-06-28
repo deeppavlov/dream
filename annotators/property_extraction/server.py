@@ -40,7 +40,8 @@ with open("rel_list.txt", "r") as fl:
             rel_type = "property"
         rel_type_dict[rel.replace("_", " ")] = rel_type
 
-with open("rel_groups.pickle", "rb") as fl:
+rels_path = os.path.expanduser("~/.deeppavlov/models/classifiers/rel_ranking_prex/rel_groups.pickle")
+with open(rels_path, "rb") as fl:
     rel_groups_list = pickle.load(fl)
 
 try:
