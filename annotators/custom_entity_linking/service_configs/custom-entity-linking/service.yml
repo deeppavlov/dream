@@ -1,0 +1,26 @@
+name: custom-entity-linking
+endpoints:
+- model
+- add_entities
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      CONFIG: custom_entity_linking.json
+      PORT: 8153
+      SRC_DIR: annotators/custom_entity_linking
+    context: ./
+    dockerfile: annotators/custom_entity_linking/Dockerfile
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - "./annotators/custom_entity_linking:/src"
+  - "~/.deeppavlov:/root/.deeppavlov"
+  ports:
+  - 8153:8153
+proxy: null
