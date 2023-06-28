@@ -12,8 +12,8 @@ def formulate_utt_annotations(dog_id=None, park_id=None):
     utt_annotations = {
         "property_extraction": [{
             "triplets": [
-                {"subject": "user", "relation": "HAVE_PET", "object": "dog"},
-                {"subject": "user", "relation": "LIKE_GOTO", "object": "park"},
+                {"subject": "user", "relation": "HAVE PET", "object": "dog"},
+                {"subject": "user", "relation": "LIKE GOTO", "object": "park"},
             ]
         }],
         "custom_entity_linking": [],
@@ -97,7 +97,7 @@ def main():
     try:
         user_props = graph.get_properties_of_entity(USER_ID)
         entities_info = graph.get_properties_of_entities(
-            [*user_props["HAVE_PET/Animal"], *user_props["LIKE_GOTO/Place"]]
+            [*user_props["HAVE PET/Animal"], *user_props["LIKE GOTO/Place"]]
         )
         for entity_info in entities_info:
             if entity_info.get("substr") == "dog":
@@ -107,7 +107,7 @@ def main():
         print(f"Found park_id: '{park_id}' and dog_ig: '{dog_id}'")
         added_new_entities = False
     except Exception:
-        print("User isn't found")
+        print("Adding new entities and rels")
         added_new_entities = True
 
     request_data = [
@@ -122,7 +122,7 @@ def main():
         }
     ]
 
-    golden_triplets = [[USER_ID, "LIKE_GOTO", "Place"], [USER_ID, "HAVE_PET", "Animal"]]
+    golden_triplets = [[USER_ID, "LIKE GOTO", "Place"], [USER_ID, "HAVE PET", "Animal"]]
     if added_new_entities:
         golden_results = [[{"added_to_graph": golden_triplets, "triplets_already_in_graph": []}]]
     else:
