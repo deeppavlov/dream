@@ -51,6 +51,7 @@ def respond():
             confidence = 0.0
         responses.append(response)
         confidences.append(confidence)
+    logger.info(f"Responses: {str(responses)}, confidences: {str(confidences)}")
     return jsonify(list(zip(responses, confidences)))
 
 

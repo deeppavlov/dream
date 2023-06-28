@@ -1,0 +1,38 @@
+name: external-integration-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8168
+      SERVICE_NAME: external_integration_skill
+      EXTERNAL_SKILL_URL: http://external-fake-server:8169/return_response
+      ARGUMENT_TO_SEND: payload
+      RESPONSE_KEY: response
+    context: .
+    dockerfile: ./skills/external_integration_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:$8168 --timeout=300
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/external_integration_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8168:8168
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8168
+  - PORT=8168
