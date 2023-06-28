@@ -12,12 +12,12 @@ services:
     ports:
       - 8074:8074
     
-  external-integration-skill:
+  dff-program-y-skill:
     volumes:
-      - "./skills/external_integration_skill:/src"
+      - "./skills/dff_program_y_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8198:8198
+      - 8008:8008
       
   badlisted-words:
     volumes:
@@ -25,6 +25,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
+
+  dff-friendship-skill:
+    volumes:
+      - "./skills/dff_friendship_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8086:8086
   
   dff-template-skill:
     volumes:
@@ -55,10 +62,4 @@ services:
     ports:
       - 8150:8150
 
-  external-fake-server:
-    volumes:
-      - "./services/external_fake_server:/src"
-      - "./common:/src/common"
-    ports:
-      - 8199:8199
 version: "3.7"

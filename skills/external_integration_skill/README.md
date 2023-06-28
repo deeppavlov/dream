@@ -91,6 +91,13 @@ __pipeline_conf.json (add to skills)__
 }
 ```
 
+To leave only your skill in the pipeline you can either get rid of the others in docker-compose.yml and dev.yml or do the following:
+
+__skill_selectors/rule_based_selector/connector.py__
+```
+asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr)))) -> asyncio.create_task(callback(task_id=payload["task_id"], response=['external_integration_skill']))
+```
+
 ## Integrating real external services
 
 Do the same, but leave out external-fake-server component. Also, pay attention to ```EXTERNAL_SKILL_URL```, ```ARGUMENT_TO_SEND```, ```RESPONSE_KEY```. ```EXTERNAL_SKILL_URL``` is the link to the external service. ```ARGUMENT_TO_SEND``` and ```RESPONSE_KEY``` both depend on the input and output format of the external service. ```ARGUMENT_TO_SEND``` is the key of the input json in which the external skill is expecting to receive the text of the message to reply to ("payload" by default); ```RESPONSE_KEY``` is the key in which the output json of the external skills contains the text of the reply we want to get ("response" by default).
