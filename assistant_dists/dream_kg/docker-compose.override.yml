@@ -8,7 +8,7 @@ services:
           combined-classification:8087, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153,
           transformers-lm-gptjt:8161, dff-dream-persona-gpt-jt-prompted-skill:8134,
-          dff-template-skill:8120, terminusdb-server:6363, user-knowledge-graph:8027"
+          dff-template-skill:8120, terminusdb-server:6363, user-knowledge-memorizer:8027"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -299,16 +299,16 @@ services:
   terminusdb-server:
     image: terminusdb/terminusdb-server:latest
 
-  user-knowledge-graph:
+  user-knowledge-memorizer:
     env_file: [ .env, .env_secret]
     build:
       args:
         SERVICE_PORT: 8027
-        SRC_DIR: annotators/user_knowledge_graph/
-        SERVICE_NAME: user_knowledge_graph
+        SRC_DIR: annotators/user_knowledge_memorizer/
+        SERVICE_NAME: user_knowledge_memorizer
         ENVVARS_TO_SEND: TERMINUSDB_SERVER_PASSWORD
       context: ./
-      dockerfile: annotators/user_knowledge_graph/Dockerfile
+      dockerfile: annotators/user_knowledge_memorizer/Dockerfile
     command: flask run -h 0.0.0.0 -p 8027
     environment:
       - FLASK_APP=server

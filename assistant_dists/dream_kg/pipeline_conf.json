@@ -422,12 +422,12 @@
                     "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             },
-            "user_knowledge_graph": {
+            "user_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://user-knowledge-graph:8027/respond"
+                    "url": "http://user-knowledge-memorizer:8027/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_memorizer_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.property_extraction",
@@ -437,7 +437,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/74p4006d17yappr7ji7dtf.yml",
-                    "service": "annotators/user_knowledge_graph/service_configs/user-knowledge-graph"
+                    "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer"
                 }
             }
         },

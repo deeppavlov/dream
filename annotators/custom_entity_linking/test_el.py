@@ -7,7 +7,7 @@ from deeppavlov_kg import TerminusdbKnowledgeGraph
 load_dotenv("./.env")
 
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
-INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_graph"))
+INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_memorizer"))
 
 graph = TerminusdbKnowledgeGraph(db_name=TERMINUSDB_SERVER_DB, index_load_path=INDEX_LOAD_PATH)
 

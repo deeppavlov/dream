@@ -1,0 +1,4 @@
+SERVICE_PORT: 8027
+SRC_DIR: annotators/user_knowledge_memorizer/
+SERVICE_NAME: user_knowledge_memorizer
+FLASK_APP: server

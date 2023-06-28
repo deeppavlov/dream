@@ -1,4 +1,4 @@
-name: user-knowledge-graph
+name: user-knowledge-memorizer
 endpoints:
 - respond
 compose:
@@ -7,11 +7,11 @@ compose:
   build:
     args:
       SERVICE_PORT: 8027
-      SRC_DIR: annotators/user_knowledge_graph/
-      SERVICE_NAME: user_knowledge_graph
+      SRC_DIR: annotators/user_knowledge_memorizer/
+      SERVICE_NAME: user_knowledge_memorizer
       FLASK_APP: server
     context: ./
-    dockerfile: annotators/user_knowledge_graph/Dockerfile
+    dockerfile: annotators/user_knowledge_memorizer/Dockerfile
   command: flask run -h 0.0.0.0 -p 8027
   environment:
   - FLASK_APP=server
@@ -22,7 +22,7 @@ compose:
       reservations:
         memory: 256M
   volumes:
-  - ./annotators/user_knowledge_graph:/src
+  - ./annotators/user_knowledge_memorizer:/src
   - ~/.deeppavlov:/root/.deeppavlov
   ports:
   - 8027:8027

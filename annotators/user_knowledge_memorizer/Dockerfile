@@ -9,7 +9,7 @@ ENV SERVICE_PORT=$SERVICE_PORT
 
 RUN pip install -U pip wheel setuptools
 
-COPY ./annotators/user_knowledge_graph/requirements.txt .
+COPY ./annotators/user_knowledge_memorizer/requirements.txt .
 RUN pip install --upgrade pip && \
     pip install --no-cache -r /src/requirements.txt && \
     python -m nltk.downloader wordnet && \
