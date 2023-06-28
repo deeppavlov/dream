@@ -6,12 +6,12 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8188
+      SERVICE_PORT: 8124
       SERVICE_NAME: dff_image_skill
       LANGUAGE: EN
     context: .
     dockerfile: ./skills/dff_image_skill/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:8188 --reload
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8124 --reload
   deploy:
     resources:
       limits:
@@ -22,5 +22,5 @@ compose:
   - ./skills/dff_image_skill:/src
   - ./common:/src/common
   ports:
-  - 8188:8188
+  - 8124:8124
 proxy: null

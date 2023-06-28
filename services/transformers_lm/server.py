@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from common.prompts import META_PROMPT
+from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
 
@@ -32,10 +32,11 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 DEFAULT_CONFIGS = {
-    "EleutherAI/gpt-j-6B": json.load(open("generative_configs/default_generative_config.json", "r")),
+    "EleutherAI/gpt-j-6B": json.load(open("common/generative_configs/default_generative_config.json", "r")),
     "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(
-        open("generative_configs/default_generative_config.json", "r")
+        open("common/generative_configs/default_generative_config.json", "r")
     ),
+    "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
 }
 
 
@@ -51,9 +52,6 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
-    max_length = generation_params.get("max_length", 50)
-    generation_params.pop("max_length", None)
-
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
     with torch.no_grad():
@@ -61,7 +59,6 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
             bot_input_ids,
-            max_length=len(tokenizer(dialog_context)["input_ids"]) + max_length,
             pad_token_id=tokenizer.eos_token_id,
             **generation_params,
         )
@@ -86,20 +83,13 @@ try:
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
-    default_config = {
-        "max_length": 60,
-        "min_length": 8,
-        "top_p": 0.9,
-        "temperature": 0.9,
-        "do_sample": True,
-        "num_return_sequences": 1,
-    }
+    config = DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]
     example_response = generate_responses(
         ["What is the goal of SpaceX?"],
         model,
         tokenizer,
         "You are a SpaceX Assistant.",
-        default_config,
+        config,
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -119,7 +109,8 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    configs = request.json.get("configs", [])
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
     configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
@@ -160,7 +151,7 @@ def generate_goals():
     try:
         responses = []
         for prompt, config in zip(prompts, configs):
-            context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
             goals_for_prompt = generate_responses(context, model, tokenizer, "", config)[0]
             logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
             responses += [goals_for_prompt]

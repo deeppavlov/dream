@@ -1,7 +1,7 @@
 [
     [
         "Привет, это чат-бот Dream! Как дела?",
-        1.0,
+        0.95,
         {
             "dff_friendship_skill_state": {
                 "shared_memory": {
@@ -40,8 +40,9 @@
             },
             "used_links": {},
             "age_group": "",
-            "disliked_skills": []
-        },
+                "disliked_skills": [],
+                "prompts_goals": {}
+            },
         {},
         {
             "can_continue": "must"

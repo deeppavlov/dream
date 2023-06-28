@@ -5,7 +5,7 @@ import time
 
 import openai
 import sentry_sdk
-from common.prompts import META_PROMPT
+from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -25,12 +25,13 @@ CHATGPT_ROLES = ["assistant", "user"]
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "text-davinci-003": json.load(open("generative_configs/openai-text-davinci-003.json", "r")),
-    "gpt-3.5-turbo": json.load(open("generative_configs/openai-chatgpt.json", "r")),
-    "gpt-4": json.load(open("generative_configs/openai-chatgpt.json", "r")),
-    "gpt-4-32k": json.load(open("generative_configs/openai-chatgpt.json", "r")),
+    "text-davinci-003": json.load(open("common/generative_configs/openai-text-davinci-003.json", "r")),
+    "gpt-3.5-turbo": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
+    "gpt-3.5-turbo-16k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
+    "gpt-4": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
+    "gpt-4-32k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
 }
-CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-4", "gpt-4-32k"]
+CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"]
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
@@ -96,7 +97,8 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    configs = request.json.get("configs", [])
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
     configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
@@ -144,7 +146,7 @@ def generate_goals():
     try:
         responses = []
         for openai_api_key, openai_org, prompt, config in zip(openai_api_keys, openai_orgs, prompts, configs):
-            context = ["hi", META_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
             goals_for_prompt = generate_responses(context, openai_api_key, openai_org, "", config)[0]
             logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
             responses += [goals_for_prompt]

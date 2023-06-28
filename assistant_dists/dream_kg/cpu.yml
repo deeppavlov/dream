@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  ner:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  spacy-nounphrases:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  combined-classification:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  entity-detection:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  convers-evaluator-annotator:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  custom-entity-linking:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  transformers-lm-gptjt:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""

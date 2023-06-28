@@ -1,30 +1,30 @@
 #!/usr/bin/env python
 
+import difflib
 import json
 import logging
 import numpy as np
-import requests
 import time
 from copy import deepcopy
 from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.utils import is_toxic_or_badlisted_utterance
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
+GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
-    with open(f"generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
@@ -35,12 +35,8 @@ PROMPT = (
 )
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}s": [getenv(var, None)] for var in ENVVARS_TO_SEND}
-# check if at least one of the env variables is not None
-if len(sending_variables) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-    raise NotImplementedError(
-        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
-    )
+
+assert GENERATIVE_SERVICE_URL
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
@@ -60,20 +56,32 @@ def select_response_by_scores(hypotheses, scores):
     return result, best_id
 
 
-def select_response(dialog_context, hypotheses):
+def select_response(dialog_context, hypotheses, human_uttr_attributes):
     try:
-        response = requests.post(
-            GENERATIVE_SERVICE_URL,
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [PROMPT],
-                "configs": [GENERATIVE_SERVICE_CONFIG],
-                **sending_variables,
-            },
-            timeout=GENERATIVE_TIMEOUT,
+        if "transformers" in GENERATIVE_SERVICE_URL:
+            curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses]) + "\n" + PROMPT
+        else:
+            curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses])
+        logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
+        logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
+
+        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **human_uttr_attributes,
         )
-        # batch of a list of one string [["this is the response"]]
-        result = response.json()[0][0]
+        response = send_request_to_prompted_generative_service(
+            dialog_context,
+            curr_prompt,
+            GENERATIVE_SERVICE_URL,
+            GENERATIVE_SERVICE_CONFIG,
+            GENERATIVE_TIMEOUT,
+            sending_variables,
+        )
+        result = response[0]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -82,6 +90,17 @@ def select_response(dialog_context, hypotheses):
     logger.info(f"llm_based_response_selector selected:\n`{result}`")
 
     return result
+
+
+def find_most_similar_hypothesis(final_text, hypotheses):
+    scores = []
+    for hyp in hypotheses:
+        if final_text in hyp["text"]:
+            scores += [0.99]
+        else:
+            scores += [difflib.SequenceMatcher(None, final_text, hyp["text"]).ratio()]
+    logger.info(f"Scores: {scores}")
+    return np.argmax(scores)
 
 
 @app.route("/respond", methods=["POST"])
@@ -103,24 +122,22 @@ def respond():
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
 
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
-        selected_resp = select_response(dialog_context, hypotheses)
-        try:
-            best_id = hypotheses.index(selected_resp)
-
-            selected_responses.append(hypotheses[best_id].pop("text"))
+        selected_resp = select_response(
+            dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {})
+        )
+        if selected_resp:
+            best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
+            hypotheses[best_id].pop("text")
+            selected_responses.append(selected_resp)
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
             selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
             selected_attributes.append(hypotheses[best_id])
-        except Exception as e:
-            sentry_sdk.capture_exception(e)
-            logger.exception(e)
-            logger.info(
-                "Exception in finding selected response in hypotheses. "
-                "Selected a response with the highest confidence."
-            )
+
+        else:
+            logger.info("Select a response with the highest confidence.")
             selected_resp, best_id = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])
             selected_responses.append(hypotheses[best_id].pop("text"))
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))

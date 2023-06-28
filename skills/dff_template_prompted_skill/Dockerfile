@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.9.16-slim
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -31,6 +31,7 @@ ARG N_UTTERANCES_CONTEXT
 ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
 ARG ENVVARS_TO_SEND
 ENV ENVVARS_TO_SEND ${ENVVARS_TO_SEND}
+
 ARG ALLOW_PROMPT_RESET=0
 ENV ALLOW_PROMPT_RESET ${ALLOW_PROMPT_RESET}
 

@@ -1,7 +1,7 @@
 [
     [
         "Anyway, I believe you are an interesting person. What are your hobbies?",
-        1.0,
+        0.95,
         {
             "dff_friendship_skill_state": {
                 "shared_memory": {
@@ -57,7 +57,8 @@
             "age_group": "unknown",
             "disliked_skills": [
                 "emotion_skill"
-            ]
+            ],
+            "prompts_goals": {}
         },
         {},
         {
