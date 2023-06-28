@@ -154,7 +154,7 @@
 8150	combined-classification-lightweight
 8151	dff-dream-persona-llama7bru-prompted-skill
 8152	dff-deepy-prompted-skill
-8153
+8153    custom-entity-linking
 8154	dff-casual-email-prompted-skill
 8155	dff-meeting-notes-prompted-skill
 8156	dff-official-email-prompted-skill
@@ -164,8 +164,8 @@
 8160	openai-api-gpt4-32k
 8161
 8162	dff-google-api-skill
-8163	anthropic-api-claudev13
-8164	anthropic-api-claudev1
+8163	anthropic-api-claude-instant-v1
+8164	anthropic-api-claude-v1
 8165
 8166
 8167    openai-api-chatgpt-16k
