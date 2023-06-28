@@ -1,6 +1,6 @@
 import requests
 
-SERVICE_PORT = 8198
+SERVICE_PORT = 8168
 
 
 def test_respond():
@@ -17,8 +17,11 @@ def test_respond():
         },
     ).json()
     print(result)
-    assert result == [['Success!', 0.9]], print(f"Got result: {result}, something is wrong.")
+    assert result == [["Success!", 0.9]], print(
+        f"Got result: {result}, something is wrong."
+    )
     print("Success!")
+
 
 if __name__ == "__main__":
     test_respond()
