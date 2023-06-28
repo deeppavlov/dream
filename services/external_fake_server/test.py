@@ -15,9 +15,7 @@ def main():
     i = 0
     for request_data in request_datas:
         result = requests.post(url, json=request_data).json()
-        assert result == gold_results[i], print(
-            f"Got result: {result}, something is wrong."
-        )
+        assert result == gold_results[i], print(f"Got result: {result}, something is wrong.")
         i += 1
     print("Success!")
 

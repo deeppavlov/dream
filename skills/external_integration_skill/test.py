@@ -17,9 +17,7 @@ def test_respond():
         },
     ).json()
     print(result)
-    assert result == [["Success!", 0.9]], print(
-        f"Got result: {result}, something is wrong."
-    )
+    assert result == [["Success!", 0.9]], print(f"Got result: {result}, something is wrong.")
     print("Success!")
 
 
