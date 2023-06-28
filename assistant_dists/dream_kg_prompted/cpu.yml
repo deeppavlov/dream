@@ -4,34 +4,12 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  kbqa:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
   spacy-nounphrases:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
-  comet-atomic:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
-  comet-conceptnet:
-    environment:
-      DEVICE: cpu
-      CUDA_VISIBLE_DEVICES: ""
-  knowledge-grounding:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
-  midas-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   combined-classification:
     environment:
-      CUDA_VISIBLE_DEVICES: ""
-  text-qa:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
-  fact-retrieval:
-    environment:
+      DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
   entity-detection:
     environment:
@@ -40,18 +18,10 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  storygpt:
+  custom-entity-linking:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  prompt-storygpt:
+  sentence-ranker:
     environment:
-      CUDA_VISIBLE_DEVICES: ""
-  dialogpt:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
-  infilling:
-    environment:
-      CUDA_VISIBLE_DEVICES: ""
-  intent-catcher:
-    environment:
+      DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
