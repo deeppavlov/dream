@@ -34,7 +34,7 @@ services:
       - "./skills/dff_command_selector_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8015:8015
+      - 8016:8016
   intent-catcher-commands-ru:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"

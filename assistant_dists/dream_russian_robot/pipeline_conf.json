@@ -451,7 +451,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-command-selector-ru-skill:8015/respond"
+                    "url": "http://dff-command-selector-ru-skill:8016/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_command_selector_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

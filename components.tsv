@@ -17,7 +17,7 @@
 8013	toxic-classification-multilingual
 8014	intent-catcher,intent-catcher-ru
 8015	emotion-classification-deepy
-8016
+8016    dff-command-selector-skill,dff-command-selector-ru-skill
 8017	sentrewrite
 8018	badlisted-words,badlisted-words-ru
 8019

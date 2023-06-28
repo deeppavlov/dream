@@ -1,0 +1,26 @@
+name: dff-command-selector-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8016
+      SERVICE_NAME: dff_command_selector_skill
+      LANGUAGE: EN
+      ROS_FSM_SERVER: http://robot-fake-server:8137
+    context: .
+    dockerfile: ./skills/dff_command_selector_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8016 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_command_selector_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8016:8016
