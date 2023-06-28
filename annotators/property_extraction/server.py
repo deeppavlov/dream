@@ -4,6 +4,7 @@ import re
 import time
 import pickle
 import itertools
+import json
 
 import nltk
 import sentry_sdk
@@ -27,6 +28,15 @@ t5_config = os.getenv("CONFIG_T5")
 rel_ranker_config = os.getenv("CONFIG_REL_RANKER")
 add_entity_info = int(os.getenv("ADD_ENTITY_INFO", "0"))
 
+try:
+    generative_ie = build_model(t5_config, download=True)
+    rel_ranker = build_model(rel_ranker_config, download=True)
+    logger.info("property extraction model is loaded.")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
+
 rel_type_dict = {}
 relations_all = []
 with open("rel_list.txt", "r") as fl:
@@ -40,18 +50,12 @@ with open("rel_list.txt", "r") as fl:
             rel_type = "property"
         rel_type_dict[rel.replace("_", " ")] = rel_type
 
-rels_path = os.path.expanduser("~/.deeppavlov/models/classifiers/rel_ranking_prex/rel_groups.pickle")
+config_metadata = json.load(open(rel_ranker_config))["metadata"]["variables"]
+root_path = config_metadata["ROOT_PATH"]
+model_path = config_metadata["MODEL_PATH"].replace("{ROOT_PATH}", root_path)
+rels_path = os.path.expanduser(f"{model_path}/rel_groups.pickle")
 with open(rels_path, "rb") as fl:
     rel_groups_list = pickle.load(fl)
-
-try:
-    generative_ie = build_model(t5_config, download=True)
-    rel_ranker = build_model(rel_ranker_config, download=True)
-    logger.info("property extraction model is loaded.")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
 
 
 def sentrewrite(sentence, init_answer):
