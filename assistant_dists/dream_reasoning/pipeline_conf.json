@@ -272,7 +272,7 @@
     "metadata": {
         "display_name": "Dream Reasoning",
         "author": "DeepPavlov",
-        "description": "Version of DeepPavlov Dream Socialbot that uses resasoning and APIs to handle requests",
+        "description": "Version of DeepPavlov Dream Socialbot that uses reasoning and APIs to handle requests",
         "version": "0.1.0",
         "date_created": "2022-05-16T12:12:00",
         "ram_usage": "50 GB",
