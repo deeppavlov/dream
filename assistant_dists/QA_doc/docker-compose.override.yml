@@ -43,9 +43,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3.5G
+          memory: 5G
         reservations:
-          memory: 3.5G
+          memory: 5G
 
   combined-classification:
     env_file: [ .env ]
