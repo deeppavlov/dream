@@ -9,7 +9,7 @@ from common.utils import yes_templates
 logger = logging.getLogger(__name__)
 
 
-def is_last_utt_approval(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+def is_last_utt_approval_question(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     bot_uttr = int_ctx.get_last_bot_utterance(ctx, actor).get("text", "")
     if "Do you approve?" in bot_uttr:
         return True

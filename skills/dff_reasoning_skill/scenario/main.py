@@ -61,8 +61,8 @@ flows = {
             RESPONSE: loc_rsp.response_with_chosen_api,
             PROCESSING: {"set_is_final_answer_flag": is_final_answer.set_is_final_answer_flag(True)},
             TRANSITIONS: {
-                "api_usage_approved": cnd.all([loc_cnd.is_last_utt_approval, int_cnd.is_yes_vars]),
-                "api_usage_not_approved": cnd.all([loc_cnd.is_last_utt_approval, int_cnd.is_no_vars]),
+                "api_usage_approved": cnd.all([loc_cnd.is_last_utt_approval_question, int_cnd.is_yes_vars]),
+                "api_usage_not_approved": cnd.all([loc_cnd.is_last_utt_approval_question, int_cnd.is_no_vars]),
                 "thought_node": cnd.true(),
             },
         },

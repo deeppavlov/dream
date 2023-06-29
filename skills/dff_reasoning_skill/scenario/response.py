@@ -323,7 +323,7 @@ AVAILABLE TOOLS:
 {top_n_apis}
 Choose the best tool to use to complete your task. \
 Return the name of the best tool to use exactly as it is written in the dictionary. \
-DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.x. google_api"""
+DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
         dialog_context = compose_data_for_model(ctx, actor)
         try:
             best_api = requests.post(

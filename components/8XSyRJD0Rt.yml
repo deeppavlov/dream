@@ -5,7 +5,7 @@ model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
 description: This skill utilizes several APIs to handle user requests.
-    Skill uses ChatGPT to think which API is best to use and to form an input for it.
+    Skill uses ChatGPT to decide which API is best to use and to form an input for it.
 ram_usage: 1.5G
 gpu_usage: null
 group: skills
@@ -23,5 +23,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_book_sfc_skill/service_configs/dff-reasoning-skill
+service: skills/dff_reasoning_skill/service_configs/dff-reasoning-skill
 date_created: '2023-03-16T09:45:32'
