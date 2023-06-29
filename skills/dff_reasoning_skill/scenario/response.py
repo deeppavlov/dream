@@ -160,10 +160,14 @@ def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def wolframalpha_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    api_input = compose_input_for_API(ctx, actor)
-    client = wolframalpha.Client(sending_variables["WOLFRAMALPHA_APP_ID"])
-    res = client.query(api_input)
-    answer = next(res.results).text
+    try:
+        api_input = compose_input_for_API(ctx, actor)
+        client = wolframalpha.Client(sending_variables["WOLFRAMALPHA_APP_ID"])
+        res = client.query(api_input)
+        answer = next(res.results).text
+    except StopIteration:
+        answer = "Unfortunately, something went wrong and I couldn't handle \
+your request using WolframAlpha API."
     return answer
 
 
