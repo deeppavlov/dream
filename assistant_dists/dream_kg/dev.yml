@@ -76,7 +76,7 @@ services:
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"
-    #  - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8136:8136
   custom-entity-linking:
