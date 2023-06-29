@@ -212,7 +212,7 @@
             "dff_reasoning_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 30.0,
+                    "timeout": 150.0,
                     "url": "http://dff-reasoning-skill:8169/respond"
                 },
                 "dialog_formatter": {

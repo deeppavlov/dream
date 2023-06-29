@@ -2,7 +2,7 @@ dff-reasoning-skill:
 - group: skills
   connector:
     protocol: http
-    timeout: 30.0
+    timeout: 150.0
     url: http://dff-reasoning-skill:8169/respond
   dialog_formatter:
     name: state_formatters.dp_formatters:dff_prompted_skill_formatter
