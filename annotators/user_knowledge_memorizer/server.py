@@ -323,7 +323,7 @@ def upper_case_input(annotations: List[dict]) -> List[dict]:
     for annotation in annotations:
         annotation["triplets"] = [
             {"subject": triplet["subject"], "relation": triplet["relation"].upper(), "object": triplet["object"]}
-            for triplet in annotation["triplets"]
+            for triplet in annotation["triplets"] if "relation" in triplet
         ]
     return annotations
 
