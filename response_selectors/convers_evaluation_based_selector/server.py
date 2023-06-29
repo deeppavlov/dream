@@ -47,7 +47,7 @@ TAG_BASED_SELECTION = getenv("TAG_BASED_SELECTION", False)
 LANGUAGE = getenv("LANGUAGE", "EN")
 GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
 FALLBACK_FILE = getenv("FALLBACK_FILE", "fallbacks_dream_en.json")
-DUMMY_DONTKNOW_RESPONSES = json.load(open(f"common/{FALLBACK_FILE}", "r"))
+DUMMY_DONTKNOW_RESPONSES = json.load(open(f"common/fallbacks/{FALLBACK_FILE}", "r"))
 
 
 @app.route("/respond", methods=["POST"])

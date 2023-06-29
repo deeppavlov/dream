@@ -42,7 +42,7 @@ ASK_QUESTION_PROB = 0.7
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 FALLBACK_FILE = getenv("FALLBACK_FILE", "fallbacks_dream_en.json")
-DUMMY_DONTKNOW_RESPONSES = json.load(open(f"dp-agent/common/{FALLBACK_FILE}", "r"))
+DUMMY_DONTKNOW_RESPONSES = json.load(open(f"common/fallbacks/{FALLBACK_FILE}", "r"))
 LANGUAGE = getenv("LANGUAGE", "EN")
 
 with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
