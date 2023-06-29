@@ -7,6 +7,7 @@ from os import getenv
 from typing import Any
 import time
 import wolframalpha
+import arxiv
 
 from langchain.agents import Tool
 from langchain.memory import ConversationBufferMemory
@@ -167,12 +168,27 @@ def wolframalpha_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return answer
 
 
+def arxiv_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    api_input = compose_input_for_API(ctx, actor)
+    search = arxiv.Search(
+        query = api_input,
+        max_results = 3,
+        sort_by = arxiv.SortCriterion.SubmittedDate
+        )
+    
+    response = ""
+    for result in search.results():
+        response += f"TITLE: {result.title}.\nSUMMARY: {result.summary}\LINK: {result}\n\n"
+    
+    return response
+
 api_func_mapping = {
     "google_api": google_api_response,
     "generative_lm": generative_response,
     "weather_api": weather_api_response,
     "news_api": news_api_response,
     "wolframalpha_api": wolframalpha_response,
+    "arxiv_api": arxiv_response
 }
 
 

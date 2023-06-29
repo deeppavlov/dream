@@ -23,5 +23,10 @@
         "description": "The WolframAlpha API can perform calculations and do math.",
         "needs_approval": "False",
         "input_template": "Equation that needs to be solved. DON'T RETURN ANY TEXT. Examples: '5 + 2', '7 + 2x = 12 - 3x'"
+    },
+    "arxiv_api": {
+        "description": "arxiv API can search for latest articles on requested keyword.",
+        "needs_approval": "False",
+        "input_template": "Return only the keyword that is needed to be searched for. E.g., 'ChatGPT', 'dialog systems'."
     }
 }
