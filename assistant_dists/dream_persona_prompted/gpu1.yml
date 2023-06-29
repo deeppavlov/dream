@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=1
-  transformers-lm-oasst12b:
+  transformers-lm-gptjt:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=0

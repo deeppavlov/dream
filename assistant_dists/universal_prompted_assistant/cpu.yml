@@ -8,7 +8,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
-  transformers-lm-vicuna13b:
+  transformers-lm-gptjt:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""

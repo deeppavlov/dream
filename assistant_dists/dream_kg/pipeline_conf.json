@@ -463,7 +463,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/6lLhP7zuoiI0bxJEDLWUg.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-oasst12b-prompted-skill"
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-gpt-jt-prompted-skill"
                 }
             },
             "dummy_skill": {
