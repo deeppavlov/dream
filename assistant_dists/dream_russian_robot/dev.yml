@@ -34,7 +34,7 @@ services:
       - "./skills/dff_command_selector_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8016:8016
+      - 8148:8148
   intent-catcher-commands-ru:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"
@@ -118,18 +118,18 @@ services:
       - "./services/robot_command_sender:/src"
       - "./common:/src/common"
     ports:
-      - 8135:8135
+      - 8035:8035
   robot-notifications:
     volumes:
       - "./services/robot_notifications:/src"
       - "./common:/src/common"
     ports:
-      - 8136:8136
+      - 8036:8036
   robot-fake-server:
     volumes:
       - "./services/robot_fake_server:/src"
       - "./common:/src/common"
     ports:
-      - 8137:8137
+      - 8038:8038
 
 version: "3.7"
