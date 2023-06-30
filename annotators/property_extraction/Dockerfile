@@ -1,4 +1,4 @@
-FROM deeppavlov/deeppavlov:1.1.1-gpu
+FROM deeppavlov/deeppavlov:1.2.0-gpu
 
 RUN apt-get update && apt-get install git -y
 
