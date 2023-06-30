@@ -10,6 +10,7 @@ compose:
     RESTRICTION_FOR_SENSITIVE_CASE: 1
     ALWAYS_TURN_ON_ALL_SKILLS: 0
     LANGUAGE: RU
+    FALLBACK_FILE: fallbacks_dream_ru.json
   volumes:
   - .:/dp-agent
   ports:
