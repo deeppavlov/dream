@@ -80,13 +80,4 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8103
       - PORT=8103
 
-  # intent-catcher-commands:
-  #   command: [ "nginx", "-g", "daemon off;" ]
-  #   build:
-  #     context: dp/proxy/
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - PROXY_PASS=proxy.deeppavlov.ai:8014
-  #     - PORT=8014
-
 version: '3.7'
