@@ -1,11 +1,6 @@
-deeppavlov==1.2.0
-Flask==2.2.3
 gunicorn==19.9.0
 sentry-sdk[flask]==0.14.1
 pytorch-lightning==1.2.2
-itsdangerous==2.0.1
-jinja2<=3.0.3
-Werkzeug>=2.2.2
 pyOpenSSL==22.0.0
 faiss-cpu==1.7.0
 rusenttokenize==0.0.5
