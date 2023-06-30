@@ -36,8 +36,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/last_chance_service",
-                "container": "agent"
+                "component": "components/dshfg283fbkA2J3GE.yml",
+                "service": "services/agent_services/service_configs/dream_russian_robot"
             }
         },
         "timeout_service": {
@@ -64,8 +64,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/timeout_service",
-                "container": "agent"
+                "component": "components/o11NkX9o26nr.yml",
+                "service": "services/agent_services/service_configs/dream_russian_robot"
             }
         },
         "annotators": {
@@ -77,7 +77,13 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "update_attributes"
+                "previous_services": [],
+                "state_manager_method": "update_attributes",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/dfmgnoie4wrn34r98.yml",
+                    "service": "services/robot_notifications/service_configs/robot-notifications"
+                }
             },
             "spelling_preprocessing": {
                 "connector": {
@@ -87,12 +93,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spelling_preprocessing_dp",
-                    "container": "spelling-preprocessing-ru",
-                    "endpoint": "respond"
+                    "component": "components/OOF0PmuxswPuZintDoAlXw.yml",
+                    "service": "annotators/spelling_preprocessing_dp/service_configs/spelling-preprocessing-ru"
                 }
             },
             "spacy_annotator": {
@@ -106,9 +112,8 @@
                 "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_annotator",
-                    "container": "spacy-annotator-ru",
-                    "endpoint": "respond"
+                    "component": "components/2U9da1Fyq1KvANddliIN5g.yml",
+                    "service": "annotators/spacy_annotator/service_configs/spacy-annotator-ru"
                 }
             },
             "sentseg": {
@@ -125,9 +130,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/sentseg_ru",
-                    "container": "sentseg-ru",
-                    "endpoint": "sentseg"
+                    "component": "components/Nw2SnrS4DGoALg6Cu58Zw.yml",
+                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
                 }
             },
             "badlisted_words": {
@@ -145,16 +149,15 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector_ru",
-                    "container": "badlisted-words-ru",
-                    "endpoint": "badlisted_words"
+                    "component": "components/WzIX0HJ0Xyo4V8ItwLew.yml",
+                    "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
                 }
             },
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8126/respond"
+                    "url": "http://toxic-classification-ru:8118/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -164,9 +167,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/toxic_classification_ru",
-                    "container": "toxic-classification-ru",
-                    "endpoint": "respond"
+                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
+                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
             "intent_catcher": {
@@ -184,9 +186,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/IntentCatcherTransformers",
-                    "container": "intent-catcher-commands-ru",
-                    "endpoint": "detect"
+                    "component": "components/sdfjksdnfoius9e4r.yml",
+                    "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher-commands-ru"
                 }
             },
             "ner": {
@@ -204,9 +205,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/NER_deeppavlov",
-                    "container": "ner-ru",
-                    "endpoint": "ner"
+                    "component": "components/Jlk28u7nVCSNqrT1YpLAQ.yml",
+                    "service": "annotators/NER_deeppavlov/service_configs/ner-ru"
                 }
             },
             "entity_detection": {
@@ -224,9 +224,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection_rus",
-                    "container": "entity-detection-ru",
-                    "endpoint": "respond"
+                    "component": "components/1VPCe8n0dmU8o2hC0NeeWQ.yml",
+                    "service": "annotators/entity_detection_rus/service_configs/entity-detection-ru"
                 }
             }
         },
@@ -245,9 +244,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/sentseg_ru",
-                    "container": "sentseg-ru",
-                    "endpoint": "sentseg"
+                    "component": "components/4SJxJlf3E8TTM94Uiqt5Xg.yml",
+                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
                 }
             },
             "ner": {
@@ -265,9 +263,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/NER_deeppavlov",
-                    "container": "ner-ru",
-                    "endpoint": "ner"
+                    "component": "components/Jlk28u7nVCSNqrT1YpLAQ.yml",
+                    "service": "annotators/NER_deeppavlov/service_configs/ner-ru"
                 }
             }
         },
@@ -286,8 +283,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "directory": "services/response_annotator_selectors",
-                "container": "agent"
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "candidate_annotators": {
@@ -305,9 +302,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/spacy_annotator",
-                    "container": "spacy-annotator-ru",
-                    "endpoint": "respond_batch"
+                    "component": "components/2U9da1Fyq1KvANddliIN5g.yml",
+                    "service": "annotators/spacy_annotator/service_configs/spacy-annotator-ru"
                 }
             },
             "badlisted_words": {
@@ -324,16 +320,15 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/BadlistedWordsDetector",
-                    "container": "badlisted-words-ru",
-                    "endpoint": "badlisted_words_batch"
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
                 }
             },
             "toxic_classification": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8126/respond_batch"
+                    "url": "http://toxic-classification-ru:8118/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -343,9 +338,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/toxic_classification_ru",
-                    "container": "toxic-classification-ru",
-                    "endpoint": "respond_batch"
+                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
+                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
             "entity_detection": {
@@ -362,9 +356,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/entity_detection",
-                    "container": "entity-detection-ru",
-                    "endpoint": "respond_batch"
+                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
+                    "service": "annotators/entity_detection/service_configs/entity-detection-ru"
                 }
             },
             "dialogrpt": {
@@ -381,9 +374,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "services/dialogrpt_ru",
-                    "container": "dialogrpt-ru",
-                    "endpoint": "respond"
+                    "component": "components/DUW2u7FwPMyhBOWrK1HTg.yml",
+                    "service": "services/dialogrpt_ru/service_configs/dialogrpt-ru"
                 }
             }
         },
@@ -403,8 +395,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "directory": "skill_selectors/rule_based_selector",
-                    "container": "agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
@@ -423,9 +415,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_program_y_skill",
-                    "container": "dff-program-y-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/rJL2LobMLcELiot0Fy9w.yml",
+                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-ru-skill"
                 }
             },
             "dff_intent_responder_skill": {
@@ -442,9 +433,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_intent_responder_skill",
-                    "container": "dff-intent-responder-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/qJPPqfjKviUyvDTCn2Xw.yml",
+                    "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-ru-skill"
                 }
             },
             "dff_command_selector_skill": {
@@ -461,9 +451,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_command_selector_skill",
-                    "container": "dff-command-selector-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/fsdkjgh34itn9dfgh23.yml",
+                    "service": "skills/dff_command_selector_skill/service_configs/dff-command-selector-ru-skill"
                 }
             },
             "dummy_skill": {
@@ -479,8 +468,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dummy_skill",
-                    "container": "agent"
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
             "personal_info_skill": {
@@ -497,9 +486,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/personal_info_skill",
-                    "container": "personal-info-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/RJuoKZw7krAuB4LrP5fQ.yml",
+                    "service": "skills/personal_info_skill/service_configs/personal-info-ru-skill"
                 }
             },
             "dff_friendship_skill": {
@@ -516,9 +504,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_friendship_skill",
-                    "container": "dff-friendship-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/cyCwlcQF9mAtDNcxOS6CA.yml",
+                    "service": "skills/dff_friendship_skill/service_configs/dff-friendship-ru-skill"
                 }
             },
             "dff_generative_skill": {
@@ -535,9 +522,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_generative_skill",
-                    "container": "dff-generative-ru-skill",
-                    "endpoint": "respond"
+                    "component": "components/FJpakzPR4IC8F1sos7FSg.yml",
+                    "service": "skills/dff_generative_skill/service_configs/dff-generative-ru-skill"
                 }
             }
         },
@@ -556,9 +542,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/convers_evaluation_based_selector",
-                    "container": "convers-evaluation-selector-ru",
-                    "endpoint": "respond"
+                    "component": "components/SFiPofc4cGq6IRlit38e8A.yml",
+                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector-ru"
                 }
             }
         },
@@ -577,9 +562,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "response_selectors/robot_command_sender",
-                    "container": "robot-command-sender",
-                    "endpoint": "respond"
+                    "component": "components/iigrietu2934i2nh34e0.yml",
+                    "service": "services/robot_command_sender/service_configs/robot-command-sender"
                 }
             }
         }

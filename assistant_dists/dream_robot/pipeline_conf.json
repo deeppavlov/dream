@@ -146,7 +146,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/dfgdfmgjo3489odrty.yml",
+                    "component": "components/SDfkwjh90ugj3l.yml",
                     "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher-commands"
                 }
             },
