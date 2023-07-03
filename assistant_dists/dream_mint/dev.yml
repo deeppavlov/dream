@@ -91,7 +91,7 @@ services:
       - 5000:5000
   mint-status:
     volumes:
-      - "./services/mint_status:/src"
+      - "./annotators/mint_status:/src"
       - "./common:/src/common"
     ports:
       - 8340:8340

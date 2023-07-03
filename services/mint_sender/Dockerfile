@@ -7,10 +7,10 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 
 RUN mkdir /src
 
-COPY ./services/robot_command_sender/requirements.txt /src/requirements.txt
+COPY ./services/mint_sender/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-COPY ./services/robot_command_sender /src/
+COPY ./services/mint_sender /src/
 COPY ./common/ /src/common/
 WORKDIR /src
 

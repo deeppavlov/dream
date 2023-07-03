@@ -7,10 +7,10 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 
 RUN mkdir /src
 
-COPY ./services/mint_status/requirements.txt /src/requirements.txt
+COPY ./annotators/mint_status/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
-COPY ./services/mint_status /src/
+COPY ./annotators/mint_status /src/
 COPY ./common/ /src/common/
 WORKDIR /src
 
