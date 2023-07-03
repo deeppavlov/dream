@@ -5,8 +5,8 @@ model_type: ML-based
 is_customizable: true
 author: publisher@deeppavlov.ai
 description: Trains the model used in relevant documents retrieval and uploads it to file server.
-ram_usage: 1.7G
-gpu_usage: 2.4G
+ram_usage: 5G
+gpu_usage: 5G
 group: annotators
 connector:
   protocol: http

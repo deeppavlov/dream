@@ -7,6 +7,7 @@ import requests
 import time
 import shutil
 import pypdfium2 as pdfium
+from pathlib import PurePath
 from bs4 import BeautifulSoup
 from deeppavlov import build_model
 from flask import Flask, jsonify, request
@@ -21,9 +22,10 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
 
-PARAGRAPHS_NUM = 5
+PARAGRAPHS_NUM = int(os.environ.get("PARAGRAPHS_NUM", 5))
+FILE_SERVER_TIMEOUT = int(os.environ.get("FILE_SERVER_TIMEOUT", 30))
 DOC_PATH_OR_LINK = os.environ.get("DOC_PATH_OR_LINK", "")
-if DOC_PATH_OR_LINK:
+if DOC_PATH_OR_LINK and type(DOC_PATH_OR_LINK) != list:
     DOC_PATH_OR_LINK = DOC_PATH_OR_LINK.split(",")  # we may have multiple files
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
 SERVICE_PORT = os.environ.get("SERVICE_PORT", None)
@@ -35,13 +37,11 @@ MODEL_CONFIG["dataset_reader"]["data_path"] = "/data/temporary_dataset/"
 
 
 def get_extension(filepath):
-    _, file_extension = os.path.splitext(filepath)
-    return file_extension
+    return PurePath(filepath).suffix
 
 
 def get_filename(filepath):
-    filename, _ = os.path.splitext(filepath)
-    return filename
+    return PurePath(filepath).stem
 
 
 def pdf_to_text(file):
@@ -95,7 +95,7 @@ def download_file_to_data(filepath: str) -> str:
     file_id = generate_random_string(10)
     file_extension = get_extension(filepath)
     filepath_in_container = f"/data/documents/{file_id}.txt"
-    orig_file = requests.get(filepath, timeout=30)
+    orig_file = requests.get(filepath, timeout=FILE_SERVER_TIMEOUT)
     orig_file_text = get_text_from_fileobject(orig_file, file_extension)
     with open(filepath_in_container, "w") as f:
         f.write(orig_file_text)
@@ -113,7 +113,7 @@ def return_candidates():
         try:
             logger.info(f"Started downloading files from server (db_link: {db_link}, matrix_link: {matrix_link}).")
             db_file = requests.get(db_link)
-            matrix_file = requests.get(matrix_link, timeout=30)
+            matrix_file = requests.get(matrix_link, timeout=FILE_SERVER_TIMEOUT)
             with open("/data/odqa/userfile.db", "wb") as f:
                 f.write(db_file.content)
             with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
@@ -162,7 +162,7 @@ def train_and_upload_model():
                         # we download all incoming files to /data and save paths
                         docs_and_links.append(
                             {
-                                "document_id": get_filename(link).split("/")[-1],
+                                "document_id": get_filename(link),
                                 "initial_path_or_link": link,
                             }
                         )
@@ -181,7 +181,7 @@ def train_and_upload_model():
                     # download all files to data
                     docs_and_links.append(
                         {
-                            "document_id": get_filename(filepath_in_container).split("/")[-1],
+                            "document_id": get_filename(filepath_in_container),
                             "initial_path_or_link": filepath,
                         }
                     )
@@ -198,7 +198,7 @@ def train_and_upload_model():
                     # move all the files to /data (for uniformness all files are always stored there)
                     docs_and_links.append(
                         {
-                            "document_id": get_filename(filepath_in_container).split("/")[-1],
+                            "document_id": get_filename(filepath_in_container),
                             "initial_path_or_link": filepath,
                         }
                     )  # linking ids and initial filenames

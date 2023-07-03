@@ -21,18 +21,24 @@ from df_engine.core import Context, Actor
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
+DOCUMENT_PROMPT_FILE = getenv("DOCUMENT_PROMPT_FILE")
+assert GENERATIVE_SERVICE_URL, logger.error("Error: GENERATIVE_SERVICE_URL is not specified in env")
+assert DOCUMENT_PROMPT_FILE, logger.error("Error: DOCUMENT_PROMPT_FILE is not specified in env")
+
+GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")  # add env!!!
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
+FILE_SERVER_TIMEOUT = int(getenv("FILE_SERVER_TIMEOUT", 30))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
+DEFAULT_SYSTEM_PROMPT = "Answer questions based on part of a text."
+ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+with open(DOCUMENT_PROMPT_FILE, "r") as f:
+    DOCUMENT_PROMPT_TEXT = json.load(f)["prompt"]
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
-DEFAULT_PROMPT = "Answer questions based on part of a text."
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
-assert GENERATIVE_SERVICE_URL
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 FIND_ID = re.compile(r"file=([0-9a-zA-Z]*).txt")
@@ -66,7 +72,7 @@ def compose_data_for_model(ctx: Context, actor: Actor) -> str:
         for filepath in filepaths_on_server:
             file_id = re.search(FIND_ID, filepath).group(1)
             filepath_container = f"/data/documents/{file_id}.txt"
-            orig_file = requests.get(filepath, timeout=30)
+            orig_file = requests.get(filepath, timeout=FILE_SERVER_TIMEOUT)
             with open(filepath_container, "wb") as f:
                 f.write(orig_file.content)
             filepaths_in_container.append(filepath_container)
@@ -81,15 +87,7 @@ filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}""
         logger.info("Dataset built successfully")
         final_candidates = get_text_for_candidates(dataset_path, raw_candidates)
         request = utterance_texts[-1]
-        utterance_texts[
-            -1
-        ] = f"""Text: ### {final_candidates} ###
-USER: {request}
-Reply to USER. If USER asks a question, answer based on Text that contains some information about the subject.
-If necessary, structure your answer as bullet points. You may also present information in tables.
-If text does not contain the answer, apologize and say that you cannot answer based on the given text.
-Only answer the question asked, do not include additional information. Text may contain unrelated information.
-Do not provide sources. """
+        utterance_texts[-1] = f"""Text: ### {final_candidates} ###\nUSER: {request}\n{DOCUMENT_PROMPT_TEXT}"""
     return utterance_texts
 
 
@@ -127,7 +125,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         try:
             hypotheses = send_request_to_prompted_generative_service(
                 dialog_context,
-                DEFAULT_PROMPT,
+                DEFAULT_SYSTEM_PROMPT,
                 GENERATIVE_SERVICE_URL,
                 GENERATIVE_SERVICE_CONFIG,
                 GENERATIVE_TIMEOUT,

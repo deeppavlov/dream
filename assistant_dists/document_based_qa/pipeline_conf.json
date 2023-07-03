@@ -129,7 +129,7 @@
       "doc_retriever": {
         "connector": {
           "protocol": "http",
-          "timeout": 20,
+          "timeout": 30,
           "url": "http://doc-retriever:8165/return_candidates"
         },
         "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",

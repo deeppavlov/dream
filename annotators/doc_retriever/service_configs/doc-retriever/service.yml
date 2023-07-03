@@ -11,6 +11,8 @@ compose:
       SERVICE_NAME: doc_retriever
       CONFIG_PATH: ./doc_retriever_config.json
       DOC_PATH_OR_LINK: http://files.deeppavlov.ai/dream_data/documents_for_qa/the_little_prince_book.txt,http://files.deeppavlov.ai/dream_data/documents_for_qa/alphabet_financial_report.txt,http://files.deeppavlov.ai/dream_data/documents_for_qa/apple_financial_report.txt
+      PARAGRAPHS_NUM: 5
+      FILE_SERVER_TIMEOUT: 30
     context: ./annotators/doc_retriever/
   command: flask run -h 0.0.0.0 -p 8165
   environment:
@@ -19,9 +21,9 @@ compose:
   deploy:
     resources:
       limits:
-        memory: 3.5G
+        memory: 5G
       reservations:
-        memory: 3.5G
+        memory: 5G
   volumes:
     - "./annotators/doc_retriever:/src"
     - "./common:/src/common"
