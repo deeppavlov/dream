@@ -28,7 +28,7 @@
       ],
       "source": {
         "component": "components/jHBkaLTk5Skn.yml",
-        "service": "services/agent_services/service_configs/QA_doc"
+        "service": "services/agent_services/service_configs/document_based_qa"
       }
     },
     "timeout_service": {
@@ -52,7 +52,7 @@
       ],
       "source": {
         "component": "components/mgQsWnZUXVg3.yml",
-        "service": "services/agent_services/service_configs/QA_doc"
+        "service": "services/agent_services/service_configs/document_based_qa"
       }
     },
     "response_annotator_selectors": {
