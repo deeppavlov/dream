@@ -33,14 +33,3 @@ compose:
   - ~/.deeppavlov/cache:/root/.cache
   ports:
   - 8140:8140
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8140
-  - PORT=8140
