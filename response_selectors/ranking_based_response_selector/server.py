@@ -96,7 +96,7 @@ def respond():
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
-        hypotheses_texts = '\n'.join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
+        hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(dialog_context, hypotheses)
