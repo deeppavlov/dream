@@ -1,5 +1,5 @@
 name: dff_document_qa_llm_skill
-display_name: DFF QA LLM-based Skill
+display_name: LLM-based Q&A on Documents Skill
 component_type: Generative
 model_type: NN-based
 is_customizable: false
