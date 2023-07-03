@@ -1,15 +1,15 @@
-# Пререквизиты для запуска:
+# Prerequisites:
 
-1. Убедиться, что все сервисы верно определены в `dev.yml`, `proxy.yml`, `pipeline_conf.json`;
-2. Убедиться, что порты для сервисов и скиллов уникальны, что порты, на которые ссылаются сервисы и скиллы — коррекнты;
-3. Убедиться, что в docker-compose.override.yml установлено: `agent.channel=telegram agent.telegram_token=$TG_TOKEN`;
-4. Убедиться, что в переменных среды установлен токен бота в телеграме с названием `$TG_TOKEN`.
+1. Make sure that all services are correctly defined in dev.yml, proxy.yml, pipeline_conf.json.
+2. Ensure that the ports for services and skills are unique and that the ports referenced by services and skills are correct.
+3. Verify that in docker-compose.override.yml, the following is set: agent.channel=telegram agent.telegram_token=$TG_TOKEN.
+4. Ensure that the Telegram bot token is set in the environment variables as $TG_TOKEN.
 
-# Команда для запуска:
+# Launch command:
 
 ```
 docker-compose -f docker-compose.yml -f assistant_dists/dream_mint/docker-compose.override.yml -f \
 assistant_dists/dream_mint/dev.yml -f assistant_dists/dream_mint/proxy.yml up --build --force-recreate; docker stop $(docker ps -aq)
 ```
 
-Внимание! Последняя часть команды останавливает все запущенные на машине контейнеры. Если это не нужно, следует убрать часть команды после точки с запятой или отредактировать её так, чтобы она останавливала только некоторые контейнеры, если заранее известны их названия.
+Attention! The last part of the command stops all running containers on the machine. If this is not required, remove the part of the command after the semicolon or edit it to stop only specific containers if their names are known in advance.
