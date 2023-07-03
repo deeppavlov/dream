@@ -767,12 +767,10 @@ def generate_hypothesis(payload: List) -> Dict:
 
 def skill_with_attributes_formatter_service(payload: List):
     """
-    Formatter should use `"state_manager_method": "add_hypothesis"` in config!!!
-    Because it returns list of hypothesis even if the payload is returned for one sample!
     Args:
         payload: if one sample, list of the following structure:
             (text, confidence, ^human_attributes, ^bot_attributes, attributes) [by ^ marked optional elements]
-                if several hypothesis, list of lists of the above structure
+                if several hypotheses, list of lists of the above structure
     Returns:
         list of dictionaries of the following structure:
             {"text": text, "confidence": confidence_value,
@@ -873,3 +871,20 @@ def wp_formatter_dialog(dialog: Dict):
         }
     ]
 
+def personality_catcher_formatter_service(payload: List):
+    # Used by: personality_catcher_formatter
+    return [
+        {
+            "text": payload[0],
+            "confidence": payload[1],
+            "personality": payload[2],
+            "bot_attributes": {"persona": payload[2]},
+        }
+    ]
+
+
+def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+    last_human_utterances = [dialog["human_utterances"][-1]["text"] for h in hypotheses]
+    return [{"sentences": hypots, "last_human_utterances": last_human_utterances}]
