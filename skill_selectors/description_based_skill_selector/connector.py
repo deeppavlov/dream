@@ -51,9 +51,8 @@ class DescriptionBasedSkillSelectorConnector:
             all_skill_names = dialog.get("attributes", {}).get("pipeline", [])
             all_skill_names = [el.split(".")[1] for el in all_skill_names if "skills" in el]
             prompted_skills = [skill for skill in all_skill_names if "prompted_skill" in skill]
-            not_prompted_skills = list(
-                set(all_skill_names).difference(set(prompted_skills) | set("dff_document_qa_llm_skill"))
-            )
+            not_prompted_skills = list(set(all_skill_names).difference(set(prompted_skills)))
+            not_prompted_skills = not_prompted_skills.remove("dff_document_qa_llm_skill")
 
             if dialog.get("bot", {}).get("attributes", {}).get("db_link", ""):
                 # adding dff_document_qa_llm_skill only if we have trained model files in this dialog
