@@ -128,8 +128,8 @@ def process_entity_info(
             # - Exclude entities marked as "Abstract" in db if they are not considered
             # abstract according to is_abstract.
             for entity_id, conf, entity_id_tag in zip(entity_ids, confs, entity_id_tags):
-                if entity_id_tag.startswith("Abstract") and not is_abstract:
-                    pass
+                if entity_id_tag == "Abstract" and not is_abstract:
+                    logger.info(f"Contradiction between the entity_kind 'Abstract' and relationship '{curr_rel}'")
                 else:
                     filtered_entity_ids.append(entity_id)
                     filtered_confs.append(conf)

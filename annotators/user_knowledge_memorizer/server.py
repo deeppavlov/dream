@@ -18,6 +18,9 @@ app = Flask(__name__)
 with open("rel_list.json") as file:
     rel_kinds_dict = json.load(file)
 
+with open("abstract_rels.txt", "r") as file:
+    abstract_rels = [line.strip() for line in file.readlines()]
+
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified in env"
@@ -75,7 +78,19 @@ def get_entity_type(attributes):
     return "Misc"
 
 
-def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list) -> Tuple[dict, list]:
+def is_abstract_relationship(relationship_kind, entity_substr, text):
+    """Returns true if the relationship kind is abstract according to 'abstract_rels.txt' file and if there's no
+    article before the entity substring in the text, that would indicate non-abstraction. Otherwise, returns false.
+    """
+    if relationship_kind.lower() in abstract_rels and not any(
+        [f" {word} {entity_substr}" in text for word in ["the", "my", "his", "her"]]
+    ):
+        return True
+    else:
+        return False
+
+
+def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list, text: str) -> Tuple[dict, list]:
     """Checks if the entities returned by property extraction are present in the index.
 
     Returns:
@@ -84,11 +99,20 @@ def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list)
       entities_in_index, entities_not_in_index --  {('dog', 'Animal'):
         'Animal/ed8f16ae-56fb-46dc-b542-20987056fd00'}, [('dog', 'Animal'))]
     """
+    def check_abstraction_in_index(relationship, entity_info, text):
+        """Returns true if kind in index is 'Abstract' and the relationship in prop_ex is abstract, or if both aren't
+        abstract. Otherwise, returns false."""
+        return is_abstract_relationship(
+            relationship, entity_info["entity_substr"], text) == ("Abstract" in entity_info["entity_id_tags"]
+        )
+
     entities_in_index, entities_not_in_index = {}, []
     for triplet in prop_ex_triplets:
         in_index = False
         for entity_info in custom_el_annotations:
-            if triplet["object"] == entity_info["entity_substr"]:
+            if triplet["object"] == entity_info["entity_substr"] and check_abstraction_in_index(
+                triplet["relation"], entity_info, text
+            ):
                 in_index = True
                 entities_in_index[(entity_info["entity_substr"], entity_info["entity_id_tags"][0])] = entity_info[
                     "entity_ids"
@@ -222,12 +246,14 @@ def prepare_triplets_to_add_to_dbs(
     prop_ex_rel_triplets: list,
     entities_in_kg_not_in_index: list,
     new_entities: dict,
+    abstract_triplets: List[tuple],
     user_id: str,
 ):
     """Prepares each of these triplets to be added to dbs:
     [triplets not in kg but in index,
     triplets between user and entities, that're in kg but not in index,
-    triplets between user and new created entities]
+    triplets between user and new created entities,
+    new triplets, that have abstract relationships]
 
     Output example:
       triplets_to_kg -- {
@@ -268,6 +294,15 @@ def prepare_triplets_to_add_to_dbs(
         triplets_to_index["substr_list"] += new_entities["substr_list"]
         triplets_to_index["tags_list"] += new_entities["tags_list"]
         triplets_to_index["entity_ids"] += new_entities["entity_ids"]
+
+    for id_a, rel, id_b in abstract_triplets:
+        triplets_to_kg["ids_a"].append(id_a)
+        triplets_to_kg["relationship_kinds"].append(rel)
+        triplets_to_kg["ids_b"].append(id_b)
+
+        triplets_to_index["substr_list"].append(id_b.split("/")[-1])
+        triplets_to_index["tags_list"].append("Abstract")
+        triplets_to_index["entity_ids"].append(id_b)
 
     return triplets_to_kg, triplets_to_index
 
@@ -328,6 +363,44 @@ def upper_case_input(annotations: List[dict]) -> List[dict]:
     return annotations
 
 
+def check_abstract_triplets(
+    graph,entities: List[tuple], prop_ex_rel_triplets: List[dict], text: str, user_id: str
+) -> Tuple[list, list]:
+    abstract_triplets = []
+    non_abstract_triplets = []
+    kinds_to_add = []
+    parents = []
+    for entity in entities:
+        entity_substr = entity[0]
+        entity_kind = entity[1]
+        relationship_kind = [
+            triplet["relation"] for triplet in prop_ex_rel_triplets if triplet["object"] == entity_substr
+        ][0]
+        if is_abstract_relationship(relationship_kind, entity_substr, text):
+            substr2kind = entity_substr.capitalize()
+            kinds_to_add.append(substr2kind)
+            parents.append(entity_kind)
+            abstract_entity_id = "/".join(["Abstract", substr2kind])
+            abstract_triplets.append((user_id, relationship_kind, abstract_entity_id))
+        else:
+            non_abstract_triplets.append(entity)
+
+    logger.debug(f"abstract_kinds_to_add -- {kinds_to_add}")
+
+    if kinds_to_add:
+        try:
+            graph.ontology.create_entity_kinds(kinds_to_add, parents)
+        except ValueError:
+            logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
+        except Exception: #TODO: replace with Terminusdb DatabaseError
+            graph.ontology.create_entity_kinds(parents)
+            try:
+                graph.ontology.create_entity_kinds(kinds_to_add, parents)
+            except ValueError:
+                logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
+    return abstract_triplets, non_abstract_triplets
+
+
 def get_result(request, graph):
     uttrs = request.json.get("utterances", [])
     utt = uttrs[0]
@@ -349,11 +422,15 @@ def get_result(request, graph):
     prop_ex_rel_triplets, prop_triplets = check_property_vs_relationship(prop_ex_annotations)
     logger.info(f"rel_triplets, prop_triplets --  {prop_ex_rel_triplets, prop_triplets}")
 
-    entities_in_index, entities_not_in_index = check_entities_in_index(custom_el_annotations, prop_ex_rel_triplets)
+    entities_in_index, entities_not_in_index = check_entities_in_index(custom_el_annotations, prop_ex_rel_triplets, last_utt)
     logger.info(f"entities_in_index, entities_not_in_index --  {entities_in_index, entities_not_in_index}")
 
     if entities_not_in_index:
-        entities_in_kg_not_in_index, entities_not_in_kg = check_entities_in_kg(graph, entities_not_in_index)
+        abstract_triplets, non_abstract_triplets =  check_abstract_triplets(graph, entities_not_in_index, prop_ex_rel_triplets, last_utt, user_id)
+        logger.info(f"abstract_triplets -- {abstract_triplets}")
+        logger.info(f"non_abstract_triplets -- {non_abstract_triplets}")
+
+        entities_in_kg_not_in_index, entities_not_in_kg = check_entities_in_kg(graph, non_abstract_triplets)
         logger.debug(f"entities_not_in_kg -- {entities_not_in_kg}")
 
         if entities_not_in_kg:
@@ -361,6 +438,7 @@ def get_result(request, graph):
         else:
             new_entities = {}
     else:
+        abstract_triplets = []
         entities_in_kg_not_in_index = []
         new_entities = {}
     logger.info(f"new_entities -- {new_entities}")
@@ -379,9 +457,9 @@ def get_result(request, graph):
         }
     logger.info(f"triplets_already_in_kg -- {triplets_already_in_kg}\ntriplets_not_in_kg -- {triplets_not_in_kg}")
 
-    if triplets_not_in_kg["ids_b"] or new_entities or entities_in_kg_not_in_index:
+    if triplets_not_in_kg["ids_b"] or new_entities or entities_in_kg_not_in_index or abstract_triplets:
         triplets_to_kg, triplets_to_index = prepare_triplets_to_add_to_dbs(
-            triplets_not_in_kg, prop_ex_rel_triplets, entities_in_kg_not_in_index, new_entities, user_id
+            triplets_not_in_kg, prop_ex_rel_triplets, entities_in_kg_not_in_index, new_entities, abstract_triplets, user_id
         )
         logger.debug(f"triplets_to_kg -- {triplets_to_kg}\n triplets_to_index -- {triplets_to_index}")
         triplets_added_to_kg = add_triplets_to_dbs(graph, user_id, triplets_to_kg, triplets_to_index)
