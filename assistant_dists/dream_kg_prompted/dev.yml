@@ -123,11 +123,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
-  dff-kg-prompted-skill:
+  dff-knowledge-prompted-skill:
     volumes:
-      - "./skills/dff_template_prompted_skill:/src"
+      - "./skills/dff_knowledge_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8133:8133
+      - 8137:8137
 
 version: "3.7"

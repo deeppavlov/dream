@@ -505,15 +505,15 @@
             }
         },
         "skills": {
-            "dff_kg_prompted_skill": {
+            "dff_knowledge_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 120,
-                    "url": "http://dff-kg-prompted-skill:8133/respond"
+                    "url": "http://dff-knowledge-prompted-skill:8137/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_kg_prompted_skill"
+                    "skill_name": "dff_knowledge_prompted_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
@@ -523,7 +523,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/JFUD8JiweWNIFGPtY562.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-kg-prompted-skill"
+                    "service": "skills/dff_knowledge_prompted_skill/service_configs/dff-knowledge-prompted-skill"
                 }
             },
             "dummy_skill": {

@@ -1,4 +1,4 @@
-name: dff-kg-prompted-skill
+name: dff-knowledge-prompted-skill
 endpoints:
 - respond
 compose:
@@ -7,8 +7,8 @@ compose:
   - .env_secret
   build:
     args:
-      SERVICE_PORT: 8133
-      SERVICE_NAME: dff_kg_prompted_skill
+      SERVICE_PORT: 8137
+      SERVICE_NAME: dff_knowledge_prompted_skill
       PROMPT_FILE: common/prompts/dream_persona.json
       GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
       GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
@@ -17,7 +17,7 @@ compose:
       USER_KG_SERVICE_URL: http://user-knowledge-graph:8129/respond
       ENVVARS_TO_SEND: OPENAI_API_KEY
     context: .
-    dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    dockerfile: ./skills/dff_knowledge_prompted_skill/Dockerfile
   deploy:
     resources:
       limits:
@@ -25,8 +25,8 @@ compose:
       reservations:
         memory: 128M
   volumes:
-  - ./skills/dff_template_prompted_skill:/src
+  - ./skills/dff_knowledge_prompted_skill:/src
   - ./common:/src/common
   ports:
-  - 8133:8133
+  - 8137:8137
 proxy: null
