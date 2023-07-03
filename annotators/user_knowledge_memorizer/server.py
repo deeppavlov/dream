@@ -136,7 +136,7 @@ def check_entities_in_kg(graph, entities: list) -> Tuple[list, list]:
     Returns:
       A tuple containing two lists: entities_in_kg and entities_not_in_kg.
     Output example:
-      entities_in_kg --
+      entities_in_kg -- [{'@id': 'Animal/L83', '@type': 'Animal', 'substr': 'dog'}]
       entities_not_in_kg -- [('park', 'Place')]
     """
     entities_in_kg, entities_not_in_kg = [], []
