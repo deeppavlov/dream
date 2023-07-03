@@ -112,7 +112,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
     for container in sentseg llm-based-response-selector combined-classification \
                      sentence-ranker prompt-selector \
-                     dff-dream-persona-davinci3-prompted-skill \
+                     dff-dream-persona-chatgpt-prompted-skill \
                      dff-casual-email-prompted-skill \
                      dff-meeting-notes-prompted-skill \
                      dff-official-email-prompted-skill \

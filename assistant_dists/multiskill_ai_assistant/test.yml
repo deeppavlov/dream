@@ -34,7 +34,7 @@ services:
     volumes:
       - "./services/openai_api_lm:/src"
       - "./common:/src/common"
-  dff-dream-persona-davinci3-prompted-skill:
+  dff-dream-persona-chatgpt-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

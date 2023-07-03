@@ -1,4 +1,4 @@
-name: dff-dream-persona-davinci3-prompted-skill
+name: dff-dream-persona-chatgpt-prompted-skill
 endpoints:
 - respond
 compose:

@@ -105,6 +105,30 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
+  prompt-selector:
+    volumes:
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8135:8135
+  openai-api-davinci3:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8131:8131
+  dff-dream-persona-chatgpt-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8137:8137
+  dff-google-api-skill:
+    volumes:
+      - "./skills/dff_google_api_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8162:8162
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"
