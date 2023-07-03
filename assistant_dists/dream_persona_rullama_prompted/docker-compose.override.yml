@@ -10,6 +10,7 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 0
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: RU
+      FALLBACK_FILE: fallbacks_dream_ru.json
 
   ranking-based-response-selector-ru:
     env_file: [ .env_ru ]

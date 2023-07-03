@@ -12,6 +12,7 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   ranking-based-response-selector:
     env_file: [ .env ]
@@ -25,6 +26,7 @@ services:
         SENTENCE_RANKER_TIMEOUT: 3
         N_UTTERANCES_CONTEXT: 5
         FILTER_TOXIC_OR_BADLISTED: 1
+        FALLBACK_FILE: fallbacks_dream_en.json
       context: .
       dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8002
