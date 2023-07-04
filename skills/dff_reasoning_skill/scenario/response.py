@@ -65,7 +65,8 @@ if "google_api" in api_conf.keys():
         Tool(
             name="Current Search",
             func=search.run,
-            description="useful when you need to answer questions about current events or the current state of the world",
+            description="useful when you need to answer questions about current \
+events or the current state of the world",
         ),
     ]
     memory = ConversationBufferMemory(memory_key="chat_history")
@@ -415,7 +416,8 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
                     else:
                         api2use = hypotheses[0]
                         int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                        response = f"""I need to use {api_conf[api2use]['display_name']} to handle your request. Do you approve?"""
+                        response = f"""I need to use {api_conf[api2use]['display_name']} \
+to handle your request. Do you approve?"""
                 except KeyError:
                     for key in api_conf.keys():
                         if key in hypotheses[0]:
