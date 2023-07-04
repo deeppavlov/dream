@@ -2,7 +2,7 @@ summarization-annotator:
 - group: annotators
   connector:
     protocol: http
-    timeout: 2.0
+    timeout: 10.0
     url: http://summarization-annotator:8155/respond
   dialog_formatter: state_formatters.dp_formatters:summarization_annotator_formatter
   response_formatter: state_formatters.dp_formatters:simple_formatter_service

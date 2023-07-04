@@ -31,7 +31,7 @@ def get_summary(dialog):
     logger.info(dialog)
 
     try:
-        summary = requests.post(SUMMARIZATION_SERVICE_URL, json={"sentences": dialog}, timeout=3).json()[0]['batch']
+        summary = requests.post(SUMMARIZATION_SERVICE_URL, json={"sentences": dialog}, timeout=10).json()[0]['batch']
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
