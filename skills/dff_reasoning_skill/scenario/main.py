@@ -6,7 +6,7 @@ import df_engine.conditions as cnd
 
 import common.dff.integration.processing as int_prs
 import common.dff.integration.condition as int_cnd
-import common.set_is_final_answer as is_final_answer
+import common.dff.integration.set_is_final_answer as is_final_answer
 
 from . import response as loc_rsp
 from . import condition as loc_cnd
@@ -18,11 +18,6 @@ logger = logging.getLogger(__name__)
 
 flows = {
     "api": {
-        LOCAL: {
-            PROCESSING: {
-                "set_confidence": int_prs.set_confidence(1.0),
-            },
-        },
         "start_node": {
             RESPONSE: "",
             TRANSITIONS: {"thought_node": cnd.true()},

@@ -19,14 +19,6 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
     restart: unless-stopped
-  convers-evaluation-selector:
-    restart: unless-stopped
-  spelling-preprocessing:
-    restart: unless-stopped
-  convers-evaluator-annotator:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=6
   dff-reasoning-skill:
     restart: unless-stopped
 

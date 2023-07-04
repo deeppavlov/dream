@@ -14,11 +14,5 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
-  spelling-preprocessing:
-  convers-evaluator-annotator:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
   dff-reasoning-skill:
 version: '3.7'

@@ -1,12 +1,4 @@
 services:
-  convers-evaluator-annotator:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8004
-      - PORT=8004
 
   sentseg:
     command: ["nginx", "-g", "daemon off;"]
@@ -17,15 +9,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8011
       - PORT=8011
 
-  spelling-preprocessing:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8074
-      - PORT=8074
-
   combined-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -35,13 +18,13 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8087
       - PORT=8087
 
-  convers-evaluation-selector:
+  sentence-ranker:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8009
-      - PORT=8009
+      - PROXY_PASS=proxy.deeppavlov.ai:8128
+      - PORT=8128
       
 version: '3.7'

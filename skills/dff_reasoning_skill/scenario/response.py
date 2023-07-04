@@ -18,12 +18,10 @@ from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 
 from tools.city_slot import OWMCitySlot
 from tools.weather_service import weather_forecast_now
-
-with open("api_conf.json", "r") as f:
-    top_n_apis = json.load(f)
 
 CITY_SLOT = OWMCitySlot()
 
@@ -34,8 +32,12 @@ logger = logging.getLogger(__name__)
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
+API_CONFIG = getenv("API_CONFIG", "api_conf.json")
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
@@ -43,30 +45,33 @@ LOW_CONFIDENCE = 0.7
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
-# check if at least one of the env variables is not None
-if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
-    raise NotImplementedError(
-        "ERROR: All environmental variables have None values. At least one of the variables must have not None value"
-    )
+available_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
 
-assert sending_variables["OPENAI_API_KEY"], logger.info("Type in OpenAI API key to `.env_scret`")
-assert sending_variables["GOOGLE_CSE_ID"], logger.info("Type in GOOGLE CSE ID to `.env_scret`")
-assert sending_variables["GOOGLE_API_KEY"], logger.info("Type in GOOGLE API key to `.env_scret`")
-assert sending_variables["NEWS_API_KEY"], logger.info("Type in NEWS API key to `.env_scret`")
-assert sending_variables["WOLFRAMALPHA_APP_ID"], logger.info("Type in WOLFRAMALPHA APPID key to `.env_scret`")
+with open(f"api_configs/{API_CONFIG}", "r") as f:
+    api_conf = json.load(f)
 
-search = GoogleSearchAPIWrapper()
-tools = [
-    Tool(
-        name="Current Search",
-        func=search.run,
-        description="useful when you need to answer questions about current events or the current state of the world",
-    ),
-]
-memory = ConversationBufferMemory(memory_key="chat_history")
-llm = OpenAI(temperature=0)
-agent_chain = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, memory=memory)
+for key, value in api_conf.copy().items():
+    for api_key in value["keys"]:
+        if not available_variables[api_key]:
+            del api_conf[key]
+            break
+
+logger.info(f"Available APIs: {', '.join([api['display_name'] for api in api_conf.values()])}")
+
+
+if "google_api" in api_conf.keys():
+    search = GoogleSearchAPIWrapper()
+    tools = [
+        Tool(
+            name="Current Search",
+            func=search.run,
+            description="useful when you need to answer questions about current events or the current state of the world",
+        ),
+    ]
+    memory = ConversationBufferMemory(memory_key="chat_history")
+    llm = OpenAI(temperature=0)
+    agent_chain = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, memory=memory)
+
 
 
 def google_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -105,19 +110,30 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_attrs += [attr]
 
     dialog_context = compose_data_for_model(ctx, actor)
+    human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
+        **human_uttr_attributes,
+    )
     prompt = compose_input_for_API(ctx, actor)
     if len(dialog_context) > 0:
-        response = requests.post(
-            GENERATIVE_SERVICE_URL,
-            json={
-                "dialog_contexts": [dialog_context],
-                "prompts": [prompt],
-                "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
-                "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-            },
-            timeout=GENERATIVE_TIMEOUT,
-        )
-        hypotheses = response.json()[0]
+        try:
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                prompt,
+                GENERATIVE_SERVICE_URL,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
+            )
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            hypotheses = []
     else:
         hypotheses = []
     for hyp in hypotheses:
@@ -190,19 +206,31 @@ Think about what do you need to do to handle this request. \
 Return your thought in one sentence"""
 
         dialog_context = compose_data_for_model(ctx, actor)
-        try:
-            response = requests.post(
-                GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt],
-                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
-                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                },
-                timeout=GENERATIVE_TIMEOUT,
-            )
-            thought = response.json()[0][0]
-        except KeyError:
+        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **human_uttr_attributes,
+        )
+        if len(dialog_context) > 0:
+            try:
+                hypotheses = send_request_to_prompted_generative_service(
+                    dialog_context,
+                    prompt,
+                    GENERATIVE_SERVICE_URL,
+                    GENERATIVE_SERVICE_CONFIG,
+                    GENERATIVE_TIMEOUT,
+                    sending_variables,
+                )
+                thought = hypotheses[0]
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                thought = None
+        else:
             thought = None
         int_ctx.save_to_shared_memory(ctx, actor, thought=thought)
         logger.info(f"THOUGHT: {thought}")
@@ -220,21 +248,32 @@ def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 Do you need to clarify any details with the user? \
 ANSWER ONLY YES/NO"""
         dialog_context = compose_data_for_model(ctx, actor)
-        try:
-            response = requests.post(
-                GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt],
-                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
-                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                },
-                timeout=GENERATIVE_TIMEOUT,
-            )
-            answer = response.json()[0][0]
-        except KeyError:
+        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **human_uttr_attributes,
+        )
+        if len(dialog_context) > 0:
+            try:
+                hypotheses = send_request_to_prompted_generative_service(
+                    dialog_context,
+                    prompt,
+                    GENERATIVE_SERVICE_URL,
+                    GENERATIVE_SERVICE_CONFIG,
+                    GENERATIVE_TIMEOUT,
+                    sending_variables,
+                )
+                answer = hypotheses[0]
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                answer = None
+        else:
             answer = None
-
         logger.info(f"NEEDS_CLARIFICATION: {answer}")
         int_ctx.save_to_shared_memory(ctx, actor, needs_details=answer)
         return answer
@@ -250,19 +289,31 @@ def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 Formulate a clarifying question to the user to get necessary information \
 to complete the task"""
         dialog_context = compose_data_for_model(ctx, actor)
-        try:
-            response = requests.post(
-                GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt],
-                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
-                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                },
-                timeout=GENERATIVE_TIMEOUT,
-            )
-            question = response.json()[0][0]
-        except KeyError:
+        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **human_uttr_attributes,
+        )     
+        if len(dialog_context) > 0:
+            try:
+                hypotheses = send_request_to_prompted_generative_service(
+                    dialog_context,
+                    prompt,
+                    GENERATIVE_SERVICE_URL,
+                    GENERATIVE_SERVICE_CONFIG,
+                    GENERATIVE_TIMEOUT,
+                    sending_variables,
+                )
+                question = hypotheses[0]
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                question = None
+        else:
             question = None
         int_ctx.save_to_shared_memory(ctx, actor, question=question)
         logger.info(f"CLARIFYING QUESTION: {question}")
@@ -277,7 +328,7 @@ def compose_input_for_API(ctx: Context, actor: Actor, *args, **kwargs):
         question = shared_memory.get("question", None)
         answer = ctx.misc.get("slots", {}).get("details_answer", None)
         api2use = shared_memory.get("api2use", "generative_lm")
-        input_template = top_n_apis[api2use]["input_template"]
+        input_template = api_conf[api2use]["input_template"]
         dialog_context = compose_data_for_model(ctx, actor)
         if question and answer:
             prompt = f"""YOUR GOAL: {thought}
@@ -289,22 +340,32 @@ Input format: {input_template}"""
             prompt = f"""YOUR GOAL: {thought}
 Form an input to the {api2use} tool to achieve the goal. \
 Input format: {input_template}"""
-
-        try:
-            response = requests.post(
-                GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt],
-                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
-                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                },
-                timeout=GENERATIVE_TIMEOUT,
-            )
-            api_input = response.json()[0][0]
-        except KeyError:
+        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **human_uttr_attributes,
+        )
+        if len(dialog_context) > 0:
+            try:
+                hypotheses = send_request_to_prompted_generative_service(
+                    dialog_context,
+                    prompt,
+                    GENERATIVE_SERVICE_URL,
+                    GENERATIVE_SERVICE_CONFIG,
+                    GENERATIVE_TIMEOUT,
+                    sending_variables,
+                )
+                api_input = hypotheses[0]
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                api_input = None
+        else:
             api_input = None
-
         logger.info(f"API INPUT: {api_input}")
         int_ctx.save_to_shared_memory(ctx, actor, api_input=api_input)
         int_ctx.save_to_shared_memory(ctx, actor, question=None)
@@ -317,52 +378,64 @@ def response_with_chosen_api(ctx: Context, actor: Actor, *args, **kwargs) -> str
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         thought = shared_memory.get("thought", None)
         api2use = shared_memory.get("api2use", None)
+        api_desc = {}
+        for key, value in api_conf.items():
+            api_desc[key] = value["description"]
         prompt = f"""YOUR GOAL:
 {thought}
 AVAILABLE TOOLS:
-{top_n_apis}
+{api_desc}
 Choose the best tool to use to complete your task. \
 Return the name of the best tool to use exactly as it is written in the dictionary. \
 DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
         dialog_context = compose_data_for_model(ctx, actor)
-        try:
-            best_api = requests.post(
-                GENERATIVE_SERVICE_URL,
-                json={
-                    "dialog_contexts": [dialog_context],
-                    "prompts": [prompt],
-                    "configs": [json.load(open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r"))],
-                    "openai_api_keys": [sending_variables["OPENAI_API_KEY"]],
-                },
-                timeout=GENERATIVE_TIMEOUT,
-            )
-            hypotheses = best_api.json()[0]
+        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **human_uttr_attributes,
+        )
+        if len(dialog_context) > 0:
             try:
-                if top_n_apis[hypotheses[0]]["needs_approval"] == "False":
-                    api2use = hypotheses[0]
-                    int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                    response = api_func_mapping[api2use](ctx, actor)
-                else:
-                    api2use = hypotheses[0]
-                    int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                    response = f"""I need to use {api2use} to handle your request. Do you approve?"""
-            except KeyError:
-                for key in top_n_apis.keys():
-                    if key in hypotheses[0]:
-                        if top_n_apis[key]["needs_approval"] == "False":
-                            api2use = key
-                            int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                            response = api_func_mapping[api2use](ctx, actor)
-                        else:
-                            api2use = key
-                            int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                            response = f"""I need to use {api2use} to handle your request. Do you approve?"""
-                        break
+                hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                prompt,
+                GENERATIVE_SERVICE_URL,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
+            )
+                try:
+                    if api_conf[hypotheses[0]]["needs_approval"] == "False":
+                        api2use = hypotheses[0]
+                        int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+                        response = api_func_mapping[api2use](ctx, actor)
+                    else:
+                        api2use = hypotheses[0]
+                        int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+                        response = f"""I need to use {api_conf[api2use]['display_name']} to handle your request. Do you approve?"""
+                except KeyError:
+                    for key in api_conf.keys():
+                        if key in hypotheses[0]:
+                            if api_conf[key]["needs_approval"] == "False":
+                                api2use = key
+                                int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+                                response = api_func_mapping[api2use](ctx, actor)
+                            else:
+                                api2use = key
+                                int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+                                response = f"""I need to use {api2use} to handle your request. Do you approve?"""
+                            break
 
-        except KeyError:
-            api2use = "generative_lm"
-            int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-            response = api_func_mapping[api2use](ctx, actor)
+            except KeyError:
+                api2use = "generative_lm"
+                int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
+                response = api_func_mapping[api2use](ctx, actor)
+        else:
+            response = None
 
         try:
             return response

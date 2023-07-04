@@ -5,34 +5,23 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  convers-evaluator-annotator:
-    volumes:
-      - "./annotators/ConversationEvaluator:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8004:8004
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
+      - 8002:8002
   mongo:
     ports:
       - 27017:27017
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -55,5 +44,11 @@ services:
       - "./skills/dff_weather_skill/data:/src/data"
     ports:
       - 8169:8169
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
 
 version: "3.7"

@@ -3,7 +3,6 @@ services:
   combined-classification:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  convers-evaluator-annotator:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
