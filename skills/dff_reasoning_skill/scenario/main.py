@@ -4,7 +4,6 @@ from df_engine.core.keywords import TRANSITIONS, RESPONSE, PROCESSING
 from df_engine.core import Actor
 import df_engine.conditions as cnd
 
-import common.dff.integration.processing as int_prs
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.set_is_final_answer as is_final_answer
 
