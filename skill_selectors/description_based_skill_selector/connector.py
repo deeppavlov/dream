@@ -62,6 +62,8 @@ class DescriptionBasedSkillSelectorConnector:
 
             not_prompted_skills = list(not_prompted_skills)
 
+            is_factoid = "is_factoid" in get_factoid(user_uttr, probs=False)
+
             if user_uttr_text == "/get_dialog_id":
                 skills_for_uttr = ["dummy_skill"]
             else:
@@ -82,10 +84,10 @@ class DescriptionBasedSkillSelectorConnector:
                     skills_for_uttr.extend(prompted_skills)
                     logger.info("Adding all prompted skills as prompt selector did not select anything.")
 
-                if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]):
+                if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]) and is_factoid:
                     skills_for_uttr.append("dff_google_api_skill")
 
-                if "is_factoid" in get_factoid(user_uttr, probs=False):
+                if is_factoid:
                     skills_for_uttr.append("factoid_qa")
 
                 # turn on all other skills from pipeline that are not prompted
