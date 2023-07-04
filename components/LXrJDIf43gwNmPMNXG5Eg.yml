@@ -1,0 +1,25 @@
+name: response_annotator_selectors
+display_name: Response Annotator Selectors
+component_type: null
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Response Annotator Selectors
+ram_usage: 100M
+gpu_usage: null
+group: response_annotator_selectors
+connector:
+  protocol: python
+  class_name: skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector
+  annotator_names:
+  - sentseg
+dialog_formatter: null
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags:
+- selector
+endpoint: null
+service: services/response_annotator_selectors/service_configs/agent
+date_created: '2023-03-04T19:27:44'

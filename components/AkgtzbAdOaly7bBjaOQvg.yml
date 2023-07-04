@@ -1,0 +1,25 @@
+name: personality_catcher
+display_name: Personality Catcher
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: the skill is to change the system's personality description via chatting
+  interface, it works as a system command, the response is system-like message
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://personality-catcher:8010/personality_catcher
+dialog_formatter: state_formatters.dp_formatters:personality_catcher_formatter_dialog
+response_formatter: state_formatters.dp_formatters:personality_catcher_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: personality_catcher
+service: skills/personality_catcher/service_configs/personality-catcher
+date_created: '2023-03-16T09:45:32'

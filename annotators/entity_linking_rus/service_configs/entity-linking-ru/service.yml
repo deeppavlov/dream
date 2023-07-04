@@ -1,0 +1,30 @@
+name: entity-linking-ru
+endpoints:
+- model
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      SERVICE_PORT: 8075
+      SERVICE_NAME: entity_linking
+      CONFIG: entity_linking_rus.json
+      SRC_DIR: annotators/entity_linking_rus
+      LANGUAGE: RU
+      CUDA_VISIBLE_DEVICES: '0'
+    context: ./
+    dockerfile: annotators/entity_linking_rus/Dockerfile
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    resources:
+      limits:
+        memory: 700M
+      reservations:
+        memory: 700M
+  volumes:
+  - ./annotators/entity_linking_rus:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8075:8075
+proxy: null

@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import time
@@ -9,6 +10,7 @@ from peft import PeftModel, PeftConfig
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
+from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
 
@@ -27,6 +29,12 @@ NAMING = {
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
+
+DEFAULT_CONFIGS = {
+    "transformers-lm-bloomz7b": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "transformers-lm-gptj": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "transformers-lm-oasst12b": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+}
 
 
 def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
@@ -55,8 +63,7 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
-        result_cut = GENERATIVE_ROBOT_TEMPLATE.sub("\n", result_cut).strip()
-        result_cut = result_cut.split("\n")[0]
+        result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
@@ -126,4 +133,29 @@ def respond():
     logger.info(f"transformers_peft_lm output: {responses}")
     total_time = time.time() - st_time
     logger.info(f"transformers_peft_lm exec time: {total_time:.3f}s")
+    return jsonify(responses)
+
+
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    st_time = time.time()
+
+    prompts = request.json.get("prompts", None)
+    prompts = [] if prompts is None else prompts
+
+    try:
+        responses = []
+        for prompt in prompts:
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            goals_for_prompt = generate_responses(context, model, tokenizer, "")[0]
+            logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
+            responses += [goals_for_prompt]
+
+    except Exception as exc:
+        logger.info(exc)
+        sentry_sdk.capture_exception(exc)
+        responses = [""] * len(prompts)
+
+    total_time = time.time() - st_time
+    logger.info(f"openai-api generate_goals exec time: {total_time:.3f}s")
     return jsonify(responses)

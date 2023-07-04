@@ -10,23 +10,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-no-scripts-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
+      - 8002:8002
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -57,5 +46,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8137:8137
+  dff-google-api-skill:
+    volumes:
+      - "./skills/dff_google_api_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8162:8162
 
 version: "3.7"

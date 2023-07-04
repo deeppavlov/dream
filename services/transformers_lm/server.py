@@ -1,16 +1,19 @@
+import json
 import logging
 import os
 import time
 
 import sentry_sdk
 import torch
-from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+from common.prompts import META_GOALS_PROMPT
+from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,6 +31,15 @@ NAMING = {
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
+DEFAULT_CONFIGS = {
+    "EleutherAI/gpt-j-6B": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "OpenAssistant/pythia-12b-sft-v8-7k-steps": json.load(
+        open("common/generative_configs/default_generative_config.json", "r")
+    ),
+    "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "lmsys/vicuna-13b-v1.3": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+}
+
 
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
     outputs = []
@@ -41,9 +53,6 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
-    max_length = generation_params.get("max_length", 50)
-    generation_params.pop("max_length", None)
-
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
     with torch.no_grad():
@@ -51,7 +60,6 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
             bot_input_ids,
-            max_length=len(tokenizer(dialog_context)["input_ids"]) + max_length,
             pad_token_id=tokenizer.eos_token_id,
             **generation_params,
         )
@@ -60,8 +68,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
-        result_cut = GENERATIVE_ROBOT_TEMPLATE.sub("\n", result_cut).strip()
-        result_cut = result_cut.split("\n")[0]
+        result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
 
@@ -77,16 +84,13 @@ try:
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
-    default_config = {
-        "max_length": 60,
-        "min_length": 8,
-        "top_p": 0.9,
-        "temperature": 0.9,
-        "do_sample": True,
-        "num_return_sequences": 1,
-    }
+    config = DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
+        ["What is the goal of SpaceX?"],
+        model,
+        tokenizer,
+        "You are a SpaceX Assistant.",
+        config,
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -106,7 +110,9 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    configs = request.json.get("configs", [])
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
@@ -130,4 +136,32 @@ def respond():
     logger.info(f"transformers_lm output: {responses}")
     total_time = time.time() - st_time
     logger.info(f"transformers_lm exec time: {total_time:.3f}s")
+    return jsonify(responses)
+
+
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    st_time = time.time()
+
+    prompts = request.json.get("prompts", None)
+    prompts = [] if prompts is None else prompts
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+
+    try:
+        responses = []
+        for prompt, config in zip(prompts, configs):
+            context = ["hi", META_GOALS_PROMPT + f"\nPrompt: '''{prompt}'''\nResult:"]
+            goals_for_prompt = generate_responses(context, model, tokenizer, "", config)[0]
+            logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
+            responses += [goals_for_prompt]
+
+    except Exception as exc:
+        logger.info(exc)
+        sentry_sdk.capture_exception(exc)
+        responses = [""] * len(prompts)
+
+    total_time = time.time() - st_time
+    logger.info(f"openai-api generate_goals exec time: {total_time:.3f}s")
     return jsonify(responses)

@@ -1,0 +1,5 @@
+SERVICE_PORT: 8024
+SERVICE_NAME: sentiment_classification
+PRETRAINED_MODEL_NAME_OR_PATH: cardiffnlp/twitter-xlm-roberta-base-sentiment
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

@@ -26,6 +26,7 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   convers-evaluator-annotator:
     env_file: [ .env ]
@@ -149,6 +150,7 @@ services:
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
         LANGUAGE: EN
+        FALLBACK_FILE: fallbacks_dream_en.json
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -787,6 +789,7 @@ services:
         CONFIG: combined_classifier.json
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8087 --timeout 600
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
@@ -1355,9 +1358,9 @@ services:
     build:
       context: ./services/infilling/
       args:
-        SERVICE_PORT: 8139
+        SERVICE_PORT: 8106
         SERVICE_NAME: infilling
-    command: flask run -h 0.0.0.0 -p 8139
+    command: flask run -h 0.0.0.0 -p 8106
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -1373,10 +1376,10 @@ services:
     build:
       context: ./services/masked_lm/
       args:
-        SERVICE_PORT: 8141
+        SERVICE_PORT: 8102
         SERVICE_NAME: masked_lm
         PRETRAINED_MODEL_NAME_OR_PATH: "bert-base-uncased"
-    command: flask run -h 0.0.0.0 -p 8141
+    command: flask run -h 0.0.0.0 -p 8102
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server

@@ -1,0 +1,26 @@
+name: transformers_lm_oasst12b
+display_name: Open-Assistant Pythia 12B
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: An open-source English-only instruction-based large language model which
+  is NOT good at answering math and coding questions. For more details, refer to 
+  [HuggingFace Model Page](https://huggingface.co/OpenAssistant/pythia-12b-sft-v8-7k-steps). 
+  Free of charge. This model is up and running on our servers and can be used for free.
+ram_usage: 50G
+gpu_usage: 26G
+group: services
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://transformers-lm-oasst12b:8158/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/transformers_lm/service_configs/transformers-lm-oasst12b
+date_created: '2023-04-16T09:45:32'

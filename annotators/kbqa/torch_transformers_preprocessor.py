@@ -41,7 +41,6 @@ class RelRankingPreprocessor(Component):
         self.add_special_tokens = add_special_tokens
 
     def __call__(self, questions_batch: List[List[str]], rels_batch: List[List[str]] = None) -> Dict[str, torch.tensor]:
-
         lengths = []
         for question, rels_list in zip(questions_batch, rels_batch):
             if isinstance(rels_list, list):

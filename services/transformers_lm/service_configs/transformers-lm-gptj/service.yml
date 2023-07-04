@@ -1,0 +1,44 @@
+name: transformers-lm-gptj
+endpoints:
+- respond
+- generate_goals
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8130
+      SERVICE_NAME: transformers_lm_gptj
+      PRETRAINED_MODEL_NAME_OR_PATH: EleutherAI/gpt-j-6B
+      HALF_PRECISION: 0
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8130
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 40G
+      reservations:
+        memory: 40G
+  volumes:
+  - ./services/transformers_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8130:8130
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8130
+  - PORT=8130
