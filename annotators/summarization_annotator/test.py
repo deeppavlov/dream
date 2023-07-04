@@ -6,9 +6,9 @@ SUMMARIZATION_SERVICE_URL = getenv("SUMMARIZATION_SERVICE_URL")
 
 
 def test_skill():
-    url = "http://0.0.0.0:8155/respond"
+    url = "http://0.0.0.0:8171/respond"
 
-    if SUMMARIZATION_SERVICE_URL == "http://brio-summarizer:8153/respond_batch":
+    if SUMMARIZATION_SERVICE_URL == "http://brio-summarizer:8169/respond_batch":
         input_data = {"dialog": ["Good morning!",
                                  "Hi, this is a Dream Socialbot! How is the day going so far for you?",
                                  "Good! Can you tell me something about cooking and baking?",

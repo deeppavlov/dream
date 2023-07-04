@@ -141,10 +141,10 @@ services:
     volumes:
       - "./services/ruT5_summarizer:/src"
     ports:
-      - 8154:8154
+      - 8170:8170
   summarization-annotator:
     volumes:
       - "./annotators/summarization_annotator:/src"
     ports:
-      - 8155:8155
+      - 8171:8171
 version: "3.7"

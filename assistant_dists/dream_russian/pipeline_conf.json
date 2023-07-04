@@ -271,7 +271,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 10.0,
-                    "url": "http://summarization-annotator:8155/respond"
+                    "url": "http://summarization-annotator:8171/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:summarization_annotator_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

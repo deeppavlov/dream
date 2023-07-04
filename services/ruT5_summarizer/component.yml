@@ -9,7 +9,7 @@ rut5-summarizer:
   description: Abstractive summarization model for russian texts, based on ruT5-base model
   ram_usage: 4G
   gpu_usage: null
-  port: 8154
+  port: 8170
   endpoints:
   - group: services
     endpoint: respond_batch

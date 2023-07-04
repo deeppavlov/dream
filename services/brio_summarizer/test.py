@@ -2,7 +2,7 @@ import requests
 
 
 def test_skill():
-    url = "http://0.0.0.0:8153/respond_batch"
+    url = "http://0.0.0.0:8169/respond_batch"
 
     input_data = {"sentences": ["Generative pre-trained transformers (GPT) are a family of large language models (LLMs)"
                                 ", which was introduced in 2018 by the American artificial intelligence organization "

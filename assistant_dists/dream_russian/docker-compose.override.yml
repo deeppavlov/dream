@@ -451,7 +451,7 @@ services:
       args:
         PRETRAINED_MODEL_NAME: "IlyaGusev/rut5_base_sum_gazeta"
       context: ./services/ruT5_summarizer/
-    command: flask run -h 0.0.0.0 -p 8154
+    command: flask run -h 0.0.0.0 -p 8170
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -466,7 +466,7 @@ services:
     env_file: [ .env ]
     build:
       context: ./annotators/summarization_annotator/
-    command: flask run -h 0.0.0.0 -p 8155
+    command: flask run -h 0.0.0.0 -p 8171
     environment:
       - FLASK_APP=server
     deploy:

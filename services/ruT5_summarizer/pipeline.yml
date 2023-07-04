@@ -3,7 +3,7 @@ rut5-summarizer:
   connector:
     protocol: http
     timeout: 10.0
-    url: http://brio-summarizer:8154/respond_batch
+    url: http://brio-summarizer:8170/respond_batch
   dialog_formatter: state_formatters.dp_formatters:hypotheses_list
   response_formatter: state_formatters.dp_formatters:simple_formatter_service
   state_manager_method: add_hypothesis

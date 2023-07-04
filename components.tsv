@@ -170,3 +170,6 @@
 8166
 8167	openai-api-chatgpt-16k
 8168	transformers-lm-vicuna13b
+8169	brio-summarizer
+8170	rut5-summarizer
+8171	summarization-annotator

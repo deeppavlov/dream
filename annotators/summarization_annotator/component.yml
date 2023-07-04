@@ -9,7 +9,7 @@ summarization-annotator:
   description: Annotator that accesses summarization services
   ram_usage: 256G
   gpu_usage: null
-  port: 8155
+  port: 8171
   endpoints:
   - group: annotators
     endpoint: respond

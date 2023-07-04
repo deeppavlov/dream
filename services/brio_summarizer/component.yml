@@ -9,7 +9,7 @@ brio-summarizer:
   description: Abstractive summarization model for english texts, based on BRIO model
   ram_usage: 4G
   gpu_usage: null
-  port: 8153
+  port: 8169
   endpoints:
   - group: services
     endpoint: respond_batch
