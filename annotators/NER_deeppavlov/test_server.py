@@ -12,6 +12,7 @@ def main():
             ["I have heard about Justin. He is in Sahara Desert"],
             ["can john smith move forward for 15 meters, then for fifteen meters, and get back to las vegas then"],
             ["я бы проехала на 30 метров вперед, а потом повернула на сорок пять градусов по часовой стрелке"],
+            [""],
         ]
     }
 
@@ -48,6 +49,7 @@ def main():
                 {"confidence": 1, "end_pos": 20, "start_pos": 18, "text": "las vegas", "type": "LOC"},
             ]
         ],
+        [[]],
         [[]],
     ]
 
