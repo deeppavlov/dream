@@ -458,12 +458,12 @@ services:
     volumes:
       - "./services/brio_summarizer:/src"
     ports:
-      - 8153:8153
+      - 8169:8169
   summarization-annotator:
     volumes:
       - "./annotators/summarization_annotator:/src"
     ports:
-      - 8155:8155
+      - 8171:8171
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
