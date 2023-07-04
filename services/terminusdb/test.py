@@ -8,7 +8,7 @@ load_dotenv("./.env_secret")
 
 
 def main():
-    TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
+    TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
     TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
     assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified in env"
     TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
