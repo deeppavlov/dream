@@ -7,6 +7,8 @@ from typing import Dict, Callable
 import sentry_sdk
 
 from common.link import get_previously_active_skill
+from common.universal_templates import is_any_question_sentence_in_utterance
+from common.utils import get_factoid
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -51,7 +53,14 @@ class DescriptionBasedSkillSelectorConnector:
             all_skill_names = dialog.get("attributes", {}).get("pipeline", [])
             all_skill_names = [el.split(".")[1] for el in all_skill_names if "skills" in el]
             prompted_skills = [skill for skill in all_skill_names if "prompted_skill" in skill]
-            not_prompted_skills = list(set(all_skill_names).difference(set(prompted_skills)))
+
+            not_prompted_skills = set(all_skill_names).difference(set(prompted_skills))
+
+            # remove some skills as it will be added in specific cases
+            not_prompted_skills.discard("factoid_qa")
+            not_prompted_skills.discard("dff_google_api_skill")
+
+            not_prompted_skills = list(not_prompted_skills)
 
             if user_uttr_text == "/get_dialog_id":
                 skills_for_uttr = ["dummy_skill"]
@@ -72,6 +81,12 @@ class DescriptionBasedSkillSelectorConnector:
                 else:
                     skills_for_uttr.extend(prompted_skills)
                     logger.info("Adding all prompted skills as prompt selector did not select anything.")
+
+                if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]):
+                    skills_for_uttr.append("dff_google_api_skill")
+
+                if "is_factoid" in get_factoid(user_uttr, probs=False):
+                    skills_for_uttr.append("factoid_qa")
 
                 # turn on all other skills from pipeline that are not prompted
                 skills_for_uttr.extend(not_prompted_skills)
