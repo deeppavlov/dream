@@ -177,7 +177,7 @@ def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 def wolframalpha_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     try:
         api_input = compose_input_for_API(ctx, actor)
-        client = wolframalpha.Client(sending_variables["WOLFRAMALPHA_APP_ID"])
+        client = wolframalpha.Client(available_variables["WOLFRAMALPHA_APP_ID"])
         res = client.query(api_input)
         answer = next(res.results).text
     except StopIteration:
