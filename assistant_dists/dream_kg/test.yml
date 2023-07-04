@@ -1,0 +1,46 @@
+services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+    ports:
+      - ${AGENT_PORT}:4242
+  combined-classification:
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  spacy-nounphrases:
+  sentseg:
+  convers-evaluation-selector:
+  badlisted-words:
+  ner:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  entity-linking:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+  spelling-preprocessing:
+  entity-detection:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  convers-evaluator-annotator:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+  dff-template-skill:
+  property-extraction:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  custom-entity-linking:
+version: '3.7'

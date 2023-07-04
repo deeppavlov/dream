@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu:1.0.0rc1
+FROM deeppavlov/deeppavlov:1.2.0-gpu
 
 ARG CONFIG
 ARG SERVICE_PORT

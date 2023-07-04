@@ -1,4 +1,4 @@
-name: anthropic-api-claudev1
+name: anthropic-api-claude-v1
 endpoints:
 - respond
 - generate_goals
@@ -8,15 +8,13 @@ compose:
   build:
     args:
       SERVICE_PORT: 8164
-      SERVICE_NAME: anthropic_api_claudev1
-      PRETRAINED_MODEL_NAME_OR_PATH: claude-v1
-      CUDA_VISIBLE_DEVICES: '0'
+      SERVICE_NAME: anthropic_api_claude_v1
+      PRETRAINED_MODEL_NAME_OR_PATH: claude-1
       FLASK_APP: server
     context: .
     dockerfile: ./services/anthropic_api_lm/Dockerfile
   command: flask run -h 0.0.0.0 -p 8164
   environment:
-  - CUDA_VISIBLE_DEVICES=0
   - FLASK_APP=server
   deploy:
     resources:

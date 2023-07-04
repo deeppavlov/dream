@@ -1,10 +1,10 @@
-3000    files
+3000	files
 3662	harvesters-maintenance-skill
 3772	faq-skill
 3882	harvesters-maintenance-gobot-skill
-4242    agent
+4242	agent
 8002	ranking-based-response-selector,ranking-based-response-selector-ru
-8003    llm-based-response-selector
+8003	llm-based-response-selector
 8004	convers-evaluator-annotator
 8005	confidence-based-response-selector
 8006	spacy-nounphrases
@@ -103,15 +103,15 @@
 8099	dff-music-skill
 8100	fact-retrieval
 8101	dff-science-skill
-8102    masked-lm
+8102	masked-lm
 8103	entity-detection-ru,entity-detection
 8104	dff-funfact-skill
 8105	dff-bot-persona-skill
-8106    infilling
+8106	infilling
 8107	speech-function-predictor
 8108	speech-function-classifier
 8109	dff-gossip-skill
-8110    fact-retrieval-ru
+8110	fact-retrieval-ru
 8111	dff-wiki-skill
 8112	news-api-annotator
 8113	topic-recommendation
@@ -119,13 +119,13 @@
 8115	dff-gaming-skill
 8116	wiki-facts
 8117	dff-art-skill
-8118    toxic-classification-ru
+8118	toxic-classification-ru
 8119	fact-random
 8120	dff-template-skill
 8121	midas-predictor
 8122	dialogrpt-ru
 8123	image-captioning
-8124    dff-image-skill
+8124	dff-image-skill
 8125	dialogpt,dialogpt-ru
 8126	storygpt
 8127	prompt-storygpt
@@ -154,7 +154,7 @@
 8150	combined-classification-lightweight
 8151	dff-dream-persona-llama7bru-prompted-skill
 8152	dff-deepy-prompted-skill
-8153
+8153    custom-entity-linking
 8154	dff-casual-email-prompted-skill
 8155	dff-meeting-notes-prompted-skill
 8156	dff-official-email-prompted-skill
@@ -164,8 +164,8 @@
 8160	openai-api-gpt4-32k
 8161
 8162	dff-google-api-skill
-8163	anthropic-api-claudev13
-8164	anthropic-api-claudev1
+8163	anthropic-api-claude-instant-v1
+8164	anthropic-api-claude-v1
 8165
 8166
 8167    openai-api-chatgpt-16k

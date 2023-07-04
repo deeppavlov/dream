@@ -25,20 +25,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 GENERATIVE_ROBOT_TEMPLATE = re.compile(
     r"(?:AI:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:|Чат-?бот:)\s?"
 )
-DUMMY_DONTKNOW_RESPONSES = {
-    "EN": [
-        "What do you want to talk about?",
-        "I am a bit confused. What would you like to chat about?",
-        "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
-        "Sorry, I didn't catch that. What would you like to chat about?",
-    ],
-    "RU": [
-        "О чем ты хочешь поговорить?",
-        "Кажется, я немного потерялась. О чем ты хочешь поговорить?",
-        "Извини, возможно я не совсем поняла, что ты имеешь в виду. О чем ты хочешь поговорить?",
-        "Извини, я не уловила информацию. О чем ты хочешь поболтать?",
-    ],
-}
+
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
 UNIVERSAL_OPINION_REQUESTS = [
     "This is interesting, isn't it?",
