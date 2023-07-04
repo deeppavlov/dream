@@ -12,6 +12,7 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   sentseg:
     env_file: [ .env ]
@@ -126,7 +127,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 100M
+          memory: 500M
         reservations:
           memory: 100M
 
