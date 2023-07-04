@@ -148,7 +148,7 @@ def train_and_upload_model():
             not DOC_PATH_OR_LINK
         ):  # if empty, then it's the dreambuilder option - file is already on files:3000; url comes in human_attributes
             if dialog.get("human_attributes", []):
-                if dialog.get("human_attributes", [])[-1].get("documents", []) != attributes.get(
+                if dialog.get("human_attributes", [{}])[-1].get("documents", []) != attributes.get(
                     "document_links", []
                 ):  # if in dreambuilder the list of docs changed compared to previous step
                     model_needs_train = True  # if list of files changed, then we need to retrain the model
