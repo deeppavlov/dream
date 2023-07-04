@@ -169,5 +169,5 @@
 8165
 8166
 8167    openai-api-chatgpt-16k
-8168
+8168    transformers-lm-vicuna13b
 8169    dff-reasoning-skill
