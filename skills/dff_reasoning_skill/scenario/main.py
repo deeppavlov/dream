@@ -1,6 +1,6 @@
 import logging
 
-from df_engine.core.keywords import TRANSITIONS, RESPONSE, LOCAL, PROCESSING
+from df_engine.core.keywords import TRANSITIONS, RESPONSE, PROCESSING
 from df_engine.core import Actor
 import df_engine.conditions as cnd
 

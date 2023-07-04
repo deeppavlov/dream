@@ -73,7 +73,6 @@ if "google_api" in api_conf.keys():
     agent_chain = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, memory=memory)
 
 
-
 def google_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
         api_input = compose_input_for_API(ctx, actor)
@@ -163,7 +162,7 @@ def weather_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 
 def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    query_params = {"source": "bbc-news", "sortBy": "top", "apiKey": sending_variables["NEWS_API_KEY"]}
+    query_params = {"source": "bbc-news", "sortBy": "top", "apiKey": available_variables["NEWS_API_KEY"]}
     main_url = " https://newsapi.org/v1/articles"
     res = requests.get(main_url, params=query_params)
     open_bbc_page = res.json()
@@ -297,7 +296,7 @@ to complete the task"""
             lm_service_kwargs,
             envvars_to_send,
             **human_uttr_attributes,
-        )     
+        )
         if len(dialog_context) > 0:
             try:
                 hypotheses = send_request_to_prompted_generative_service(
@@ -401,13 +400,13 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
         if len(dialog_context) > 0:
             try:
                 hypotheses = send_request_to_prompted_generative_service(
-                dialog_context,
-                prompt,
-                GENERATIVE_SERVICE_URL,
-                GENERATIVE_SERVICE_CONFIG,
-                GENERATIVE_TIMEOUT,
-                sending_variables,
-            )
+                    dialog_context,
+                    prompt,
+                    GENERATIVE_SERVICE_URL,
+                    GENERATIVE_SERVICE_CONFIG,
+                    GENERATIVE_TIMEOUT,
+                    sending_variables,
+                )
                 try:
                     if api_conf[hypotheses[0]]["needs_approval"] == "False":
                         api2use = hypotheses[0]
