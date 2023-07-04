@@ -7,7 +7,7 @@ summarization-annotator:
   is_customizable: false
   author: DeepPavlov
   description: Annotator that accesses summarization services
-  ram_usage: 1G
+  ram_usage: 256G
   gpu_usage: null
   port: 8155
   endpoints:
