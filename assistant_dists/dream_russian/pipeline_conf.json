@@ -278,7 +278,7 @@
                 "previous_services": [
                     "annotators.spelling_preprocessing"
                 ],
-                "state_manager_method": "add_annotation",
+                "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/summarization_annotator",

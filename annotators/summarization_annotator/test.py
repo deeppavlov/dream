@@ -46,7 +46,7 @@ def test_skill():
                           "собираю кулинарные рецепты, собираю кулинарные рецепты, собираю кулинарные рецепты."]
 
     result = requests.post(url, json=input_data).json()
-    assert result == desired_output
+    assert result == [{"bot_attributes": {"summarized_dialog": desired_output[0]}}]
     print("SUCCESS!")
 
 

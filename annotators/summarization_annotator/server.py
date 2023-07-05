@@ -33,7 +33,7 @@ def get_summary(dialog):
     logger.info(f"summarization-annotator will summarize this: {dialog}")
 
     try:
-        summary = requests.post(SUMMARIZATION_SERVICE_URL, json={"sentences": dialog}, timeout=10).json()[0]['batch']
+        summary = requests.post(SUMMARIZATION_SERVICE_URL, json={"sentences": dialog}, timeout=10).json()[0]['batch'][0]
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -48,11 +48,12 @@ def respond():
 
     logger.info(f"summarization-annotator received dialog: {dialog}")
     result = get_summary(dialog)
+    summarization_attribute = [{"bot_attributes": {"summarized_dialog": result}}]
+    logger.info(f"summarization-annotator output: {summarization_attribute}")
 
     total_time = time.time() - start_time
     logger.info(f"summarization-annotator exec time: {round(total_time, 2)} sec")
-    logger.info(result)
-    return jsonify(result)
+    return jsonify(summarization_attribute)
 
 
 if __name__ == "__main__":
