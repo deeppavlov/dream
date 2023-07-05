@@ -19,8 +19,10 @@ logger.info(f"summarization-annotator considered summarizer: {SUMMARIZATION_SERV
 def get_summary(dialog):
     summary = []
     if len(dialog) != 11:
+        logger.info(f"summarization-annotator is not ready to summarize dialog as the length of unsummarized dialog is {len(dialog)} != 11")
         return summary
 
+    logger.info(f"summarization-annotator is ready to summarize dialog as the length of unsummarized dialog is 11")
     dialog = dialog[:6]
     for i in range(len(dialog)):
         if i % 2 == 0:
@@ -28,7 +30,7 @@ def get_summary(dialog):
         else:
             dialog[i] = 'Bot: ' + dialog[i]
     dialog = ['\n'.join(dialog)]
-    logger.info(dialog)
+    logger.info(f"summarization-annotator will summarize this: {dialog}")
 
     try:
         summary = requests.post(SUMMARIZATION_SERVICE_URL, json={"sentences": dialog}, timeout=10).json()[0]['batch']
@@ -43,6 +45,8 @@ def get_summary(dialog):
 def respond():
     start_time = time.time()
     dialog = request.json.get('dialog', [])
+
+    logger.info(f"summarization-annotator received dialog: {dialog}")
     result = get_summary(dialog)
 
     total_time = time.time() - start_time
