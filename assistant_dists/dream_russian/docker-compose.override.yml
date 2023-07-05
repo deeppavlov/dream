@@ -387,7 +387,7 @@ services:
           memory: 4G
 
   dff-template-skill:
-    env_file: [ .env_ru ]
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8120
