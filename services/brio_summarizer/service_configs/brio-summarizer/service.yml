@@ -22,7 +22,6 @@ compose:
         memory: 4G
   volumes:
   - ./services/brio_summarizer:/src
-  - ./common:/src/common
   ports:
   - 8169:8169
 proxy: null

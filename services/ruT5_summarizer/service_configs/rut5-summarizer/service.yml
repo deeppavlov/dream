@@ -22,7 +22,6 @@ compose:
         memory: 4G
   volumes:
   - ./services/ruT5_summarizer:/src
-  - ./common:/src/common
   ports:
   - 8170:8170
 proxy: null

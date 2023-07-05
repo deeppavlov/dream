@@ -1416,7 +1416,6 @@ services:
         SERVICE_PORT: 8171
         SERVICE_NAME: summarization_annotator
       context: ./annotators/summarization_annotator/
-      dockerfile: ./annotators/summarization_annotator/Dockerfile
     command: flask run -h 0.0.0.0 -p 8171
     environment:
       - FLASK_APP=server

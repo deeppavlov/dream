@@ -9,7 +9,6 @@ compose:
       SERVICE_PORT: 8171
       SERVICE_NAME: summarization_annotator
     context: ./annotators/summarization_annotator/
-    dockerfile: ./annotators/summarization_annotator/Dockerfile
   command: flask run -h 0.0.0.0 -p 8171
   environment:
   - FLASK_APP=server
@@ -21,7 +20,6 @@ compose:
         memory: 256M
   volumes:
   - ./annotators/summarization_annotator:/src
-  - ./common:/src/common
   ports:
   - 8171:8171
 proxy: null
