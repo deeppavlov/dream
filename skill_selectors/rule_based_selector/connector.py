@@ -279,7 +279,7 @@ class RuleBasedSkillSelectorConnector:
                         skills_for_uttr.append("dff_short_story_skill")
 
             skills_for_uttr.append("dff_universal_prompted_skill")
-            if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]):
+            if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]) and is_factoid:
                 skills_for_uttr.append("dff_google_api_skill")
             # turn on skills if prompts are selected by prompt_selector
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
