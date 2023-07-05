@@ -1,4 +1,13 @@
-﻿This model is based on the transformer-agnostic multitask neural architecture. It can solve several tasks similtaneously, almost as good as single-task models. 
+﻿
+# Combined_classification 
+
+## Description
+component_type: multitask model, NN-based
+is_customizable: true
+CPU memory use: 2909 Mb. 
+
+
+This model is based on the transformer-agnostic multitask neural architecture. It can solve several tasks similtaneously, almost as good as single-task models. 
 
 The models were trained on the following datasets:
 
@@ -20,6 +29,12 @@ The models (multitask and comparative single task) were trained with initial lea
 
 This model(with a distilbert-base-uncased backbone) takes only 2439 Mb for 9 tasks, whereas single-task models with the same backbone for every of these tasks take up almost the same memory(~2437 Mb for every of these 9 tasks).
 
-CPU memory use of this model is 2909 Mb. 
+## I/O
+text here if i/o specified
 
+## Dependencies
 
+Configuration settings specified in the .yaml files at [service_configs](service_configs)
+Required Python packages specified in [requirements.txt](requirements.txt) and [requirements_load_test](requirements_load_test.txt)
+
+For more details please refer to [this script](server.py)
