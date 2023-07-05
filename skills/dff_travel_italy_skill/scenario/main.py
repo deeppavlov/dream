@@ -36,7 +36,7 @@ flows = {
             ("travel_italy_general", "like_italy"): loc_cnd.is_proposed_skill,
             ("italian_food_flow_restart", "tell_more"): cnd.all(
                 [
-                    loc_cnd.has_entity_in_graph("LIKE_FOOD/AbstractFood"),
+                    loc_cnd.has_entity_in_graph("LIKE FOOD/Food"),
                     loc_cnd.uttr_about_favorite_food,
                 ]
             ),
@@ -254,7 +254,7 @@ flows = {
     },
     "italian_food_flow_restart": {
         "tell_more": {
-            RESPONSE: "Aha, so was it {LIKE_FOOD}? If so, where and how did you first try it?",
+            RESPONSE: "Aha, so was it {LIKE FOOD}? If so, where and how did you first try it?",
             PROCESSING: {
                 "fill_responses_by_slots": loc_prs.fill_responses_by_slots_from_graph(),
                 "set_confidence": int_prs.set_confidence(HIGH_CONFIDENCE),

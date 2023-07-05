@@ -44,11 +44,11 @@ def fill_responses_by_slots_from_graph():
         user_id = get_current_user_id(ctx, actor)
         current_user_id = "User/" + user_id
         user_existing_entities = graph.get_properties_of_entity(entity_id=current_user_id)
-        entity = "LIKE_FOOD"
-        entity_type = entity + "/AbstractFood"
+        entity = "LIKE FOOD"
+        entity_type = entity + "/Food"
         entity_with_id = user_existing_entities[entity_type][-1]
         logger.info(f"entity_with_id -- {entity_with_id}")
-        slot_value = graph.get_properties_of_entity(entity_with_id)["Name"]
+        slot_value = graph.get_properties_of_entity(entity_with_id)["substr"]
         logger.info(f"slot_value -- {slot_value}")
         processed_node.response = processed_node.response.replace("{" f"{entity}" "}", slot_value)
         ctx.a_s["processed_node"] = processed_node
