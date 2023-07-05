@@ -387,7 +387,7 @@ services:
           memory: 4G
 
   dff-template-skill:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8120
@@ -403,7 +403,7 @@ services:
           memory: 128M
 
   fact-retrieval-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         CONFIG: fact_retrieval_rus.json
@@ -425,7 +425,7 @@ services:
           memory: 10G
 
   text-qa-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8078
