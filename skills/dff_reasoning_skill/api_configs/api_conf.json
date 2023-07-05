@@ -4,7 +4,7 @@
         "description": "Google API utilizes Google to respond to a wide variety of questions.",
         "keys": ["GOOGLE_CSE_ID", "GOOGLE_API_KEY", "OPENAI_API_KEY"],
         "needs_approval": "True",
-        "timeout": 30.0,
+        "timeout": 30,
         "input_template": "Just the request in a string format"
     },
     "generative_lm": {
@@ -12,7 +12,7 @@
         "description": "This service uses language models to generate responses.",
         "keys": ["OPENAI_API_KEY"],
         "needs_approval": "False",
-        "timeout": 30.0,
+        "timeout": 30,
         "input_template": "Just the request in a string format"
     },
     "weather_api": {
@@ -20,7 +20,7 @@
         "description": "The Weather API can provide current weather information for a given location.",
         "keys": ["OPENWEATHERMAP_API_KEY"],
         "needs_approval": "False",
-        "timeout": 30.0,
+        "timeout": 30,
         "input_template": "Just the request in a string format"
     },
     "news_api": {
@@ -28,7 +28,7 @@
         "description": "The News API can provide trending news.",
         "keys": ["NEWS_API_KEY"],
         "needs_approval": "False",
-        "timeout": 30.0,
+        "timeout": 30,
         "input_template": "Just the request in a string format"
     },
     "wolframalpha_api": {
@@ -36,7 +36,7 @@
         "description": "The WolframAlpha API can perform calculations and do math.",
         "keys": ["WOLFRAMALPHA_APP_ID"],
         "needs_approval": "False",
-        "timeout": 30.0,
+        "timeout": 30,
         "input_template": "Equation that needs to be solved. DON'T RETURN ANY TEXT. Examples: '5 + 2', '7 + 2x = 12 - 3x'"
     }
 }

@@ -7,6 +7,7 @@ from os import getenv
 from typing import Any
 import time
 import wolframalpha
+import signal
 
 from langchain.agents import Tool
 from langchain.memory import ConversationBufferMemory
@@ -72,6 +73,10 @@ events or the current state of the world",
     memory = ConversationBufferMemory(memory_key="chat_history")
     llm = OpenAI(temperature=0)
     agent_chain = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, memory=memory)
+
+
+def timeout_handler():
+    raise Exception("API timeout")
 
 
 def google_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -412,7 +417,14 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
                     if api_conf[hypotheses[0]]["needs_approval"] == "False":
                         api2use = hypotheses[0]
                         int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                        response = api_func_mapping[api2use](ctx, actor)
+                        timeout = api_conf[api2use]["timeout"]
+                        signal.signal(signal.SIGALRM, timeout_handler)
+                        signal.alarm(timeout)
+                        try:
+                            response = api_func_mapping[api2use](ctx, actor)
+                        except Exception:
+                            response = "Unfortunately, somthing went wrong with API"
+                        signal.alarm(0)
                     else:
                         api2use = hypotheses[0]
                         int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
@@ -424,7 +436,14 @@ to handle your request. Do you approve?"""
                             if api_conf[key]["needs_approval"] == "False":
                                 api2use = key
                                 int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                                response = api_func_mapping[api2use](ctx, actor)
+                                timeout = api_conf[api2use]["timeout"]
+                                signal.signal(signal.SIGALRM, timeout_handler)
+                                signal.alarm(timeout)
+                                try:
+                                    response = api_func_mapping[api2use](ctx, actor)
+                                except Exception:
+                                    response = "Unfortunately, somthing went wrong with API"
+                                signal.alarm(0)
                             else:
                                 api2use = key
                                 int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
@@ -451,5 +470,12 @@ def response_with_approved_api(ctx: Context, actor: Actor, *args, **kwargs) -> s
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         api2use = shared_memory.get("api2use", None)
-        response = api_func_mapping[api2use](ctx, actor)
+        timeout = api_conf[api2use]["timeout"]
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(timeout)
+        try:
+            response = api_func_mapping[api2use](ctx, actor)
+        except Exception:
+            response = "Unfortunately, somthing went wrong with API"
+        signal.alarm(0)
         return response
