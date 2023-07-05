@@ -2,6 +2,12 @@
 # Combined_classification_lightweight
 
 ## Description
+<<<<<<< HEAD
+=======
+component_type: multitask model, NN-based
+is_customizable: true
+CPU memory use: 2909 Mb
+>>>>>>> first batch of readmes to the key services, TBC
 
 This model is based on the transformer-agnostic multitask neural architecture. It can solve several tasks similtaneously, almost as good as single-task models. 
 
@@ -66,3 +72,4 @@ Required Python packages specified in [requirements.txt](requirements.txt) and [
 
 ## Dependencies
 
+For more details please refer to [this script](server.py)
