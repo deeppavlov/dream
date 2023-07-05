@@ -68,7 +68,6 @@ class DescriptionBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_document_qa_llm_skill")
             is_factoid = "is_factoid" in get_factoid(user_uttr, probs=False)
 
-
             if user_uttr_text == "/get_dialog_id":
                 skills_for_uttr = ["dummy_skill"]
             else:
