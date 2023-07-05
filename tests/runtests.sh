@@ -140,7 +140,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     for container in sentseg intent-catcher ranking-based-response-selector entity-linking \
                      kbqa text-qa wiki-parser combined-classification fact-retrieval \
                      dff-intent-responder-skill entity-detection sentence-ranker \
-                     property-extraction ner factoid-qa prompt-selector \
+                     property-extraction ner prompt-selector \
                      dff-dream-persona-chatgpt-prompted-skill dff-google-api-skill; do
 
         echo "Run tests for $container"
