@@ -6,7 +6,14 @@ from deeppavlov import build_model
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov.core.common.file import read_json
-from utils import create_folders_if_not_exist, find_and_download_docs_if_needed, download_files_and_save_links, move_files_and_save_paths, train_upload_return_attributes, remove_files_and_folders
+from utils import (
+    create_folders_if_not_exist,
+    find_and_download_docs_if_needed,
+    download_files_and_save_links,
+    move_files_and_save_paths,
+    train_upload_return_attributes,
+    remove_files_and_folders,
+)
 
 # logging here because it conflicts with tf
 
@@ -61,14 +68,16 @@ def return_candidates():
 @app.route("/train_and_upload_model", methods=["POST"])
 def train_and_upload_model():
     attributes_to_add = []
-    dialogs = request.json["dialogs"] 
+    dialogs = request.json["dialogs"]
     create_folders_if_not_exist(["/data/documents", "/data/odqa"])
     for dialog in dialogs:
         filepaths_in_container, document_links, docs_and_links = [], [], []
         model_needs_train, doc_needs_upload = False, False
-        if not DOC_PATH_OR_LINK:  
-            document_links, model_needs_train = find_and_download_docs_if_needed(model_needs_train, filepaths_in_container, docs_and_links)
-        elif "document_links" not in dialog.get("bot", {}).get("attributes", {}):  
+        if not DOC_PATH_OR_LINK:
+            document_links, model_needs_train = find_and_download_docs_if_needed(
+                model_needs_train, filepaths_in_container, docs_and_links
+            )
+        elif "document_links" not in dialog.get("bot", {}).get("attributes", {}):
             model_needs_train, doc_needs_upload = True, True
             if "http" in DOC_PATH_OR_LINK[0]:
                 download_files_and_save_links(DOC_PATH_OR_LINK, filepaths_in_container, docs_and_links)
@@ -77,8 +86,17 @@ def train_and_upload_model():
         logger.info(f"filepaths_in_container: {filepaths_in_container}")
         if model_needs_train:
             try:
-                bot_and_human_atts = train_upload_return_attributes(MODEL_CONFIG, filepaths_in_container, document_links, docs_and_links, doc_needs_upload=doc_needs_upload)
-                files_to_remove = filepaths_in_container + ["/data/odqa/userfile.db", "/data/odqa/userfile_tfidf_matrix.npz"]
+                bot_and_human_atts = train_upload_return_attributes(
+                    MODEL_CONFIG,
+                    filepaths_in_container,
+                    document_links,
+                    docs_and_links,
+                    doc_needs_upload=doc_needs_upload,
+                )
+                files_to_remove = filepaths_in_container + [
+                    "/data/odqa/userfile.db",
+                    "/data/odqa/userfile_tfidf_matrix.npz",
+                ]
                 remove_files_and_folders(files_to_remove, ["/data/temporary_dataset/"])
                 attributes_to_add.append(bot_and_human_atts)
                 logger.info(f"Attributes in save_model: {attributes_to_add}")
