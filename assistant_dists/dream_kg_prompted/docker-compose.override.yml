@@ -5,10 +5,15 @@ services:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
           spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, convers-evaluation-selector:8009, 
           badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075, combined-classification:8087,
-          entity-detection:8103, dff-template-skill:8120, terminusdb:6363, user-knowledge-graph:8129, 
+          entity-detection:8103, terminusdb:6363, user-knowledge-graph:8129, 
           property-extraction:8136, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
           sentence-ranker:8128, prompt-selector:8135"
-      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+      
   convers-evaluator-annotator:
     env_file: [.env]
     build:
@@ -223,22 +228,6 @@ services:
           memory: 2.5G
         reservations:
           memory: 2.5G
-
-  dff-template-skill:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8120
-        SERVICE_NAME: dff_template_skill
-      context: .
-      dockerfile: ./skills/dff_template_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
   
   terminusdb:
     image: terminusdb/terminusdb-server:dev-7022f970fe5605ec8048c258ea0219ac9039315e
@@ -311,7 +300,7 @@ services:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
         N_SENTENCES_TO_RETURN: 3
-        PROMPTS_TO_CONSIDER: dream_persona,pizza
+        PROMPTS_TO_CONSIDER: dream_persona
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
@@ -320,9 +309,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   sentence-ranker:
     env_file: [ .env ]
@@ -376,22 +365,6 @@ services:
         ENVVARS_TO_SEND: OPENAI_API_KEY
       context: .
       dockerfile: ./skills/dff_knowledge_prompted_skill/Dockerfile
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-
-  dff-google-api-skill:
-    env_file: [ .env,.env_secret ]
-    build:
-      args:
-        SERVICE_PORT: 8162
-        SERVICE_NAME: dff_google_api_skill
-        ENVVARS_TO_SEND: OPENAI_API_KEY,GOOGLE_CSE_ID,GOOGLE_API_KEY
-      context: .
-      dockerfile: ./skills/dff_google_api_skill/Dockerfile
     deploy:
       resources:
         limits:
