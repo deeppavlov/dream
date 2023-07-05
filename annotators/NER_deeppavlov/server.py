@@ -118,7 +118,7 @@ def get_result(request):
         dialog_ids = []
         for i, utterance_sents in enumerate(last_utterances):
             for sent in utterance_sents:
-                samples.append(sent)
+                samples.append(sent if len(sent) else " ")
                 dialog_ids.append(i)
         if len(samples):
             tokens_batch, tags_batch = ner_model(samples)

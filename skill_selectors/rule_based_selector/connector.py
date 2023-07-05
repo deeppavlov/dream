@@ -18,6 +18,7 @@ from common.universal_templates import (
     if_chat_about_particular_topic,
     if_choose_topic,
     GREETING_QUESTIONS_TEXTS,
+    is_any_question_sentence_in_utterance,
 )
 from common.utils import (
     high_priority_intents,
@@ -278,7 +279,8 @@ class RuleBasedSkillSelectorConnector:
                         skills_for_uttr.append("dff_short_story_skill")
 
             skills_for_uttr.append("dff_universal_prompted_skill")
-            skills_for_uttr.append("dff_google_api_skill")
+            if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]) and is_factoid:
+                skills_for_uttr.append("dff_google_api_skill")
             # turn on skills if prompts are selected by prompt_selector
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
             if ranged_prompts:
