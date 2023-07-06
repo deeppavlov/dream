@@ -36,10 +36,9 @@
       },
       "download": [
         {
-          "url": "http://files.deeppavlov.ai/tmp/raushan/rel_ranking.tar.gz",
+          "url": "http://files.deeppavlov.ai/deeppavlov_data/generative_ie/rel_ranking_files.tar.gz",
           "subdir": "{MODEL_PATH}"
         }
       ]
     }
-  }
-  
+}

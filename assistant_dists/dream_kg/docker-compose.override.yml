@@ -8,7 +8,7 @@ services:
           combined-classification:8087, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153,
           transformers-lm-gptjt:8161, dff-dream-persona-gpt-jt-prompted-skill:8134,
-          dff-template-skill:8120"
+          dff-template-skill:8120, terminusdb-server:6363"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -223,7 +223,8 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: t5_generative_ie_lite_infer.json
+        CONFIG_T5: t5_generative_ie_lite_infer.json
+        CONFIG_REL_RANKER: rel_ranking_roberta.json
         SERVICE_PORT: 8136
         SRC_DIR: annotators/property_extraction/
         SERVICE_NAME: property_extraction
@@ -232,6 +233,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8136
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -311,4 +313,7 @@ services:
           memory: 128M
         reservations:
           memory: 128M
+
+  terminusdb-server:
+    image: terminusdb/terminusdb-server:latest
 version: '3.7'
