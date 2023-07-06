@@ -48,7 +48,7 @@ def handler(requested_data, random_seed=None):
             while True:
                 ctx = actor(ctx)
                 is_final_answer = ctx.misc["agent"]["response"]["is_final_answer"]
-                if is_final_answer:
+                if is_final_answer == "true":
                     break
 
             responses.append(get_response(ctx, actor))
