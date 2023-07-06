@@ -5,6 +5,11 @@ services:
     ports:
       - ${AGENT_PORT}:4242
   combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=7
   mongo:
@@ -14,5 +19,17 @@ services:
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+  sentence-ranker:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   dff-reasoning-skill:
+    volumes:
+      - "./skills/dff_reasoning_skill:/src"
+      - "./common:/src/common"
+      - "./skills/dff_weather_skill/tools:/src/tools"
+      - "./skills/dff_weather_skill/data:/src/data"
 version: '3.7'
