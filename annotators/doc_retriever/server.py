@@ -80,6 +80,7 @@ def train_and_upload_model():
         elif "document_links" not in dialog.get("bot", {}).get("attributes", {}):
             model_needs_train, doc_needs_upload = True, True
             if "http" in DOC_PATH_OR_LINK[0]:
+                logger.info(f"DOC_PATH_OR_LINK: {DOC_PATH_OR_LINK}")
                 download_files_and_save_links(DOC_PATH_OR_LINK, filepaths_in_container, docs_and_links)
             else:
                 move_files_and_save_paths(DOC_PATH_OR_LINK, filepaths_in_container, docs_and_links)
