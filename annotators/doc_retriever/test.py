@@ -34,9 +34,7 @@ def main():
             ]
         },
     ).json()[0]
-    assert (
-        result_return.get("candidate_files", []) == ['1.txt', '2.txt']
-    ), f"Got\n{result_return}\n, something is wrong"
+    assert result_return.get("candidate_files", []) == ["1.txt", "2.txt"], f"Got\n{result_return}\n, something is wrong"
     print("return_candidates endpoint: success!")
 
 
