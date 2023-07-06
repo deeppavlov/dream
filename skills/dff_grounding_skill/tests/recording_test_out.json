@@ -97,7 +97,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement"
                                         ]
@@ -119,7 +118,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
@@ -240,7 +238,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement"
                                         ]
@@ -262,7 +259,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
