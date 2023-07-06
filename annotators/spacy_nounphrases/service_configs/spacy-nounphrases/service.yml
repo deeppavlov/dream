@@ -26,14 +26,3 @@ compose:
   - ./common:/src/common
   ports:
   - 8006:8006
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8006
-  - PORT=8006

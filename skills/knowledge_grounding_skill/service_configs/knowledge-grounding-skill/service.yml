@@ -27,14 +27,3 @@ compose:
   - ./skills/knowledge_grounding_skill:/src
   ports:
   - 8085:8085
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8085
-  - PORT=8085
