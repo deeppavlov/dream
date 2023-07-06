@@ -73,9 +73,9 @@ def train_and_upload_model():
     for dialog in dialogs:
         filepaths_in_container, document_links, docs_and_links = [], [], []
         model_needs_train, doc_needs_upload = False, False
-        if not DOC_PATH_OR_LINK:
+        if dialog.get("human_attributes", [{}])[-1].get("documents", []):
             document_links, model_needs_train = find_and_download_docs_if_needed(
-                model_needs_train, filepaths_in_container, docs_and_links
+                dialog, model_needs_train, filepaths_in_container, docs_and_links
             )
         elif "document_links" not in dialog.get("bot", {}).get("attributes", {}):
             model_needs_train, doc_needs_upload = True, True
