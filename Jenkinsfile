@@ -405,7 +405,7 @@ pipeline {
       }
     }
 // ------------------------------------------- Test dream dist------------------------------------------------
-    stage('Build') {
+    stage('Build-Docs') {
       steps {
         script{
           startTime = currentBuild.duration
@@ -439,7 +439,7 @@ pipeline {
       }
     }
 
-    stage('Start') {
+    stage('Start-Docs') {
       steps {
         script {
           startTime = currentBuild.duration
@@ -470,7 +470,7 @@ pipeline {
       }
     }
 
-    stage('Test skills') {
+    stage('Test skills-Docs') {
       steps {
         script {
           startTime = currentBuild.duration
