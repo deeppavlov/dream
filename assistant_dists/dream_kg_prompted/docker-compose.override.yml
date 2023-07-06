@@ -6,7 +6,7 @@ services:
           spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, convers-evaluation-selector:8009, 
           badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075, combined-classification:8087,
           entity-detection:8103, terminusdb:6363, user-knowledge-graph:8129, 
-          property-extraction:8136, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
+          property-extraction:8131, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
           sentence-ranker:8128, prompt-selector:8135"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
@@ -256,7 +256,7 @@ services:
       args:
         CONFIG_T5: t5_generative_ie_infer.json
         CONFIG_REL_RANKER: rel_ranking_roberta.json
-        SERVICE_PORT: 8136
+        SERVICE_PORT: 8131
         SRC_DIR: annotators/property_extraction/
       context: ./
       dockerfile: annotators/property_extraction/Dockerfile
