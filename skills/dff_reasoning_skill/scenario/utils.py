@@ -9,9 +9,13 @@ import common.dff.integration.context as int_ctx
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 
 
-API_CONFIG = getenv("API_CONFIG", "api_conf.json")
-with open(f"api_configs/{API_CONFIG}", "r") as f:
-    api_conf = json.load(f)
+API_CONFIGS = getenv("API_CONFIGS", None)
+API_CONFIGS = [] if API_CONFIGS is None else API_CONFIGS.split(",")
+api_conf = {}
+for config in API_CONFIGS:
+    with open(f"api_configs/{config}", "r") as f:
+        conf = json.load(f)
+        api_conf.update(conf)
 
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")

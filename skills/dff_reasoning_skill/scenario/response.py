@@ -45,9 +45,14 @@ ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 available_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
 
-API_CONFIG = getenv("API_CONFIG", "api_conf.json")
-with open(f"api_configs/{API_CONFIG}", "r") as f:
-    api_conf = json.load(f)
+API_CONFIGS = getenv("API_CONFIGS", None)
+API_CONFIGS = [] if API_CONFIGS is None else API_CONFIGS.split(",")
+api_conf = {}
+for config in API_CONFIGS:
+    with open(f"api_configs/{config}", "r") as f:
+        conf = json.load(f)
+        api_conf.update(conf)
+
 
 for key, value in api_conf.copy().items():
     for api_key in value["keys"]:
