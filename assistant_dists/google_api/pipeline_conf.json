@@ -217,8 +217,8 @@
         "description": "LangChain-based Assistant utilizing Google Search API. This is a generative-based chatbot that uses Google Search API (via LangChain).",
         "version": "0.0.1",
         "date_created": "2023-04-12T02:00:00",
-        "ram_usage": "1 GB",
-        "gpu_usage": "0 GB",
-        "disk_usage": "50 GB"
+        "ram_usage": "4 GB",
+        "gpu_usage": "3 GB",
+        "disk_usage": "10 GB"
     }
 }
