@@ -1,4 +1,10 @@
-# How to get API keys
+# DFF Reasoning Skill
+
+## Description
+
+This skill utilizes OpenAI ChatGPT to think of actions required to handle user requests and to choose the relevant API.
+
+## How to get API keys
 
 ### OPENAI_API_KEY
 
