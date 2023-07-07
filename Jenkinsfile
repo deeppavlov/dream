@@ -498,7 +498,7 @@ pipeline {
       }
     }
 // ------------------------------------------- Test dream dist------------------------------------------------
-    stage('Build') {
+    stage('Build-Docs') {
       steps {
         script{
           startTime = currentBuild.duration
@@ -508,6 +508,101 @@ pipeline {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env
                 tests/runtests_nutrition_oasst.sh MODE=clean
+                tests/runtests_document_based.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_document_based.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+
+    stage('Start-Docs') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_document_based.sh MODE=clean && tests/runtests_document_based.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_document_based.sh MODE=clean'
+          }
+        }
+      }
+    }
+
+    stage('Test skills-Docs') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_document_based.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_document_based.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test dream dist------------------------------------------------
+    stage('Build') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env
+                tests/runtests_document_based.sh MODE=clean
                 tests/runtests.sh MODE=build
               '''
             }
