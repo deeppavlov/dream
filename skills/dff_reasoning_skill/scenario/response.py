@@ -191,6 +191,7 @@ def wolframalpha_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
 your request using WolframAlpha API."
     return answer
 
+
 def thought(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
