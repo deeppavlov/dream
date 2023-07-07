@@ -96,7 +96,7 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
-def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
+def generative_lm_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
         [],
         [],
@@ -180,7 +180,7 @@ def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     return "\n".join(results)
 
 
-def wolframalpha_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def wolframalpha_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     try:
         api_input = compose_input_for_API(ctx, actor)
         client = wolframalpha.Client(available_variables["WOLFRAMALPHA_APP_ID"])
@@ -190,16 +190,6 @@ def wolframalpha_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         answer = "Unfortunately, something went wrong and I couldn't handle \
 your request using WolframAlpha API."
     return answer
-
-
-api_func_mapping = {
-    "google_api": google_api_response,
-    "generative_lm": generative_response,
-    "weather_api": weather_api_response,
-    "news_api": news_api_response,
-    "wolframalpha_api": wolframalpha_response,
-}
-
 
 def thought(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
@@ -421,7 +411,7 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
                         signal.signal(signal.SIGALRM, timeout_handler)
                         signal.alarm(timeout)
                         try:
-                            response = api_func_mapping[api2use](ctx, actor)
+                            response = globals()[f"{api2use}_response"](ctx, actor)
                         except Exception:
                             response = "Unfortunately, somthing went wrong with API"
                         signal.alarm(0)
@@ -440,7 +430,7 @@ to handle your request. Do you approve?"""
                                 signal.signal(signal.SIGALRM, timeout_handler)
                                 signal.alarm(timeout)
                                 try:
-                                    response = api_func_mapping[api2use](ctx, actor)
+                                    response = globals()[f"{api2use}_response"](ctx, actor)
                                 except Exception:
                                     response = "Unfortunately, somthing went wrong with API"
                                 signal.alarm(0)
@@ -453,7 +443,7 @@ to handle your request. Do you approve?"""
             except KeyError:
                 api2use = "generative_lm"
                 int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-                response = api_func_mapping[api2use](ctx, actor)
+                response = globals()[f"{api2use}_response"](ctx, actor)
         else:
             response = None
 
@@ -462,7 +452,7 @@ to handle your request. Do you approve?"""
         except UnboundLocalError:
             api2use = "generative_lm"
             int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
-            response = api_func_mapping[api2use](ctx, actor)
+            response = globals()[f"{api2use}_response"](ctx, actor)
             return response
 
 
@@ -474,7 +464,7 @@ def response_with_approved_api(ctx: Context, actor: Actor, *args, **kwargs) -> s
         signal.signal(signal.SIGALRM, timeout_handler)
         signal.alarm(timeout)
         try:
-            response = api_func_mapping[api2use](ctx, actor)
+            response = globals()[f"{api2use}_response"](ctx, actor)
         except Exception:
             response = "Unfortunately, somthing went wrong with API"
         signal.alarm(0)
