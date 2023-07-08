@@ -38,4 +38,46 @@ FALLBACK_FILE: a file name with fallbacks from `dream/common/fallbacks/`
 
 ## Dependencies
 
+<<<<<<< HEAD
 
+=======
+For this context you may type 0,3 hypots:
+```
+Type best hypot num(s), separated by comma: 0,3
+```
+
+When dialog ends it saves it into labeled_data folder.
+
+### Measuring quality
+
+It takes `--data_dir` as an input (the same as save_dir from data labelling script).
+Outputs overall accuracy.
+
+Example of usage:
+
+```
+python response_selectors/convers_evaluation_based_selector/measure_quality.py \
+                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/
+
+Overall accuracy: 0.5185185185185185
+```
+
+### How to run conversation evaluator locally
+
+`docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml up toxic_classification badlisted_words convers_evaluation_selector`
+
+Then use `--url`.
+
+Example of usage with url:
+
+```
+python response_selectors/convers_evaluation_based_selector/measure_quality.py \
+                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/  \
+                   --url http://0.0.0.0:8009/respond
+```
+## Dependencies
+
+Configuration settings specified in the .yaml files at [service_configs](service_configs)
+Required Python packages specified in [requirements.txt](requirements.txt).
+For more details please refer to [this script](server.py)        "
+>>>>>>> main distribution readmes upd, TBC
