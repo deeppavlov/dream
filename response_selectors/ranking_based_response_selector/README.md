@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Ranking-based Response Selector
 
 ## Description
@@ -29,6 +28,9 @@ Parameter `FILTER_TOXIC_OR_BADLISTED` defines whether it filers out toxic hypoth
 text here
 
 **Output:** Ranking_based_response_selector service returns
+- the selected skill’s name,
+- the response text (which can be overwritten)
+- the confidence level
 - the selected skill name,
 - the response text (which can be overwritten)
 - the confidence level
@@ -38,4 +40,4 @@ text here
 ```
 
 ## Dependencies
->>>>>>> readmes for dream multilingual dist
+none
