@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ranking-based Response Selector
 
 ## Description
@@ -16,3 +17,25 @@ Parameter `FILTER_TOXIC_OR_BADLISTED` defines whether it filers out toxic hypoth
 ## Dependencies
 
 - either candidate annotations by `SENTENCE_RANKER_ANNOTATION_NAME` or service `SENTENCE_RANKER_SERVICE_URL`.
+=======
+# Ranking_based_response_selector
+
+## Description
+component_type: response selector
+is_customizable: false
+
+## Input/Output
+
+**Input:**
+text here
+
+**Output:** Ranking_based_response_selector service returns
+- the selected skill’s name,
+- the response text (which can be overwritten)
+- the confidence level
+```
+
+```
+
+## Dependencies
+>>>>>>> readmes for dream multilingual dist
