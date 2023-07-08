@@ -79,5 +79,9 @@ python response_selectors/convers_evaluation_based_selector/measure_quality.py \
 
 Configuration settings specified in the .yaml files at [service_configs](service_configs)
 Required Python packages specified in [requirements.txt](requirements.txt).
+<<<<<<< HEAD
+For more details please refer to [this script](server.py)        "
+>>>>>>> main distribution readmes upd, TBC
+=======
 For more details please refer to [this script](server.py)        "
 >>>>>>> main distribution readmes upd, TBC
