@@ -4,6 +4,24 @@
 
 This skill utilizes OpenAI ChatGPT to think of actions required to handle user requests and to choose the relevant API.
 
+### Parameters
+
+```
+API_CONFIGS: configuration files of APIs to consider splitted by comma, files stored in `dream/skills/dff_reasoning_skill/api_configs`
+GENERATIVE_SERVICE_URL: LLM to utilize
+GENERATIVE_SERVICE_CONFIG: configuration file with generative parameters to utilize
+GENERATIVE_TIMEOUT: timeout for request to LLM
+N_UTTERANCES_CONTEXT: number of last utterances to consider as a dialog context
+ENVVARS_TO_SEND: API keys splitted by comma to get as env variables
+```
+
+## Dependencies
+
+- LLM `GENERATIVE_SERVICE_URL`
+- available APIs to consider
+- API keys in environmental variables for key-required LLMs (OpenAI API, Anthropic API)
+
+
 ## How to get API keys
 
 ### OPENAI_API_KEY
