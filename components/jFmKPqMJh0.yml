@@ -1,4 +1,4 @@
-name: dff_drean_faq_prompted_skill
+name: dff_dream_faq_prompted_skill
 display_name: dream FAQ Skill
 component_type: Generative
 model_type: NN-based
