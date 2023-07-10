@@ -2,7 +2,7 @@
 
 ## Description
 
-LLM-based Q&A on Documents Skill answers questions about long documents provided by the usere. It passes on document chunks most relevant to the user's question alongside with an instruction and the dialog context as a prompt to ChatGPT.
+LLM-based Q&A on Documents Skill answers questions about long documents provided by the user. It passes on document chunks most relevant to the user's question alongside with an instruction and the dialog context as a prompt to ChatGPT.
 
 ## Parameters
 
