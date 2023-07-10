@@ -10,12 +10,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  ranking-based-response-selector:
+  llm-based-response-selector:
     volumes:
-      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./response_selectors/llm_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8002:8002
+      - 8003:8003
   combined-classification:
     volumes:
       - "./common:/src/common"
