@@ -1,8 +1,7 @@
 # Ranking_based_response_selector
 
 ## Description
-component_type: response selector
-is_customizable: false
+
 
 ## Input/Output
 
@@ -10,9 +9,10 @@ is_customizable: false
 text here
 
 **Output:** Ranking_based_response_selector service returns
-- the selected skill’s name,
+- the selected skill name,
 - the response text (which can be overwritten)
 - the confidence level
+  
 ```
 
 ```
