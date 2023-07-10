@@ -1,5 +1,7 @@
 # Google API Skill
 
+## Description
+
 Google API Skill utilizes Google API to the given dialog context. 
 Sometimes, when user did not imply any requests to the system, responses from Google API may be not suitable.
 
@@ -14,3 +16,9 @@ Sometimes, when user did not imply any requests to the system, responses from Go
 4. Create a new Custom Search Engine at https://cse.google.com/cse/all
 
 5. Add your API Key and your Custom Search Engine ID to your .env_secret file.
+
+# I/O
+**Input**
+**Output**
+
+## Dependencies

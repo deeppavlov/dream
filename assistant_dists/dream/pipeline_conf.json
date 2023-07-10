@@ -397,7 +397,7 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "component": "components/dfsw4bji8bgjq2.yml",
                     "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
                 }
             }
@@ -497,6 +497,27 @@
                     "component": "components/qx0j5QHAzog0b39nRnuA.yml",
                     "service": "skills/factoid_qa/service_configs/factoid-qa"
                 }
+            },
+            "dff_dream_faq_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-faq-prompted-skill:8170/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_faq_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jFmKPqMJh0.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-faq-prompted-skill"
+                }
             }
         },
         "response_selectors": {
@@ -526,8 +547,8 @@
         "description": "Main version of DeepPavlov Dream Socialbot",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
-        "ram_usage": "50 GB",
-        "gpu_usage": "50 GB",
-        "disk_usage": "50 GB"
+        "ram_usage": "20 GB",
+        "gpu_usage": "20 GB",
+        "disk_usage": "20 GB"
     }
 }

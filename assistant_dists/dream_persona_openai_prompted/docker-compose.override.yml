@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
                    sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145,
-                   dff-dream-persona-chatgpt-prompted-skill:8137, dff-google-api-skill:8162"
+                   dff-dream-persona-chatgpt-prompted-skill:8137"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
