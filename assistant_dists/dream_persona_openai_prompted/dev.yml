@@ -52,5 +52,16 @@ services:
       - "./common:/src/common"
     ports:
       - 8162:8162
-
+  dff-dream-faq-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8170:8170
+  openai-api-chatgpt-16k:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8167:8167
 version: "3.7"
