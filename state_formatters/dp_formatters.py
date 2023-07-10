@@ -410,17 +410,14 @@ def fromage_formatter(dialog: Dict) -> List:
     # Used by: fromage
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    try:
-        previous_image_path = [uttr.get("attributes", {}).get("image") for uttr in dialog["human_utterances"]][-2]
-    except Exception as e:
-        previous_image_path = []
-    return [
-        {
-            "sentences": [dialog["human_utterances"][-1]["text"]],
-            "image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")],
-            "prev_img_path": previous_image_path
-        }
-    ]
+    logger.info(f'dialog state {dialog}')
+    d = {}
+    if dialog["human_utterances"][-1]["text"]:
+        d.update({'text': [dialog["human_utterances"][-1]["text"]]})
+    if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
+        d.update({'image_paths': dialog["human_utterances"][-1].get("attributes", {}).get("image")})
+    logger.info(f'formatter results {d}')
+    return [d]
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
@@ -1013,6 +1010,10 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
+
+
+def dff_fromage_image_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_fromage_image_skill")
 
 
 def dff_ai_faq_prompted_skill_formatter(dialog):

@@ -33,6 +33,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8012:8012
+  dff-fromage-image-skill:
+    volumes:
+      - "./skills/dff_fromage_image_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8192:8192
   intent-catcher:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"
@@ -60,7 +66,7 @@ services:
       - 8125:8125
   fromage:
     volumes:
-      - "./services/fromage:/src"
+      - "./annotators/fromage:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
