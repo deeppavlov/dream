@@ -63,7 +63,7 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses, human_uttr_attributes):
     try:
-        ie_types = ["external" if hyp["skilL_name"] in EXTERNAL_SKILLS else "internal" for hyp in hypotheses]
+        ie_types = ["external" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal" for hyp in hypotheses]
         if "transformers" in GENERATIVE_SERVICE_URL:
             curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]'
                                                        for hyp, ie in zip(hypotheses, ie_types)]) + "\n" + PROMPT
