@@ -19,5 +19,5 @@ required_previous_services: null
 state_manager_method: update_attributes
 tags: null
 endpoint: train_and_upload_model
-service: annotators/doc_retriever/service_configs/doc-retriver
+service: annotators/doc_retriever/service_configs/doc-retriever
 date_created: "2023-06-14T11:46:20"
