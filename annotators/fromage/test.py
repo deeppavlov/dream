@@ -9,7 +9,7 @@ def test_respond():
 
     image_paths = ['https://s0.rbk.ru/v6_top_pics/media/img/7/26/346832135841267.jpg']
     print(image_paths)
-    sentences = ["What colour is the car?"]
+    sentences = [""]
     print(sentences)
 
     request_data = {"image_paths": image_paths, "text": sentences}

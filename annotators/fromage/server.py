@@ -52,7 +52,7 @@ def generate_responses(image_path, prompt):
     ret_scale_factor = 0
     inp_image = utils.get_image_from_url(image_path)
     input_prompts = ['What is the image?']
-    if prompt != []:
+    if prompt[0] != '':
         input_prompts = prompt[0]
     
     logger.info(f'input_prompts {input_prompts}')
@@ -85,20 +85,15 @@ def respond():
         #     sentence = request.json.get("text", [])
         logger.info(f'sentence {sentence}')
         image_path = image_path[0]
-        if image_path is not None and sentence is not None:
+        if image_path is not None and sentence != '':
             outputs = generate_responses(image_path, sentence)
             frmg_answers += outputs
             logging.info(f'frmg_answers here {frmg_answers}')
         else:
-            if image_path == previous_image_path:
-                outputs = generate_responses(image_path, sentence)
-                frmg_answers += outputs
-            else:
-                previous_image_path = update_image_path(image_path)
-                outputs = generate_responses(previous_image_path, sentence)
-                frmg_answers += outputs
-
-                logging.info(f'response not here here {responses}')
+            image_path = update_image_path(image_path)
+            outputs = generate_responses(image_path, sentence)
+            frmg_answers += outputs
+            logging.info(f'response not here here {responses}')
 
     except Exception as exc:
         logger.exception(exc)

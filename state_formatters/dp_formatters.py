@@ -414,8 +414,10 @@ def fromage_formatter(dialog: Dict) -> List:
     d = {}
     if dialog["human_utterances"][-1]["text"]:
         d.update({'text': [dialog["human_utterances"][-1]["text"]]})
+        d.update({'image_paths': ''})
     if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
         d.update({'image_paths': dialog["human_utterances"][-1].get("attributes", {}).get("image")})
+        d.update({'text': ''})
     logger.info(f'formatter results {d}')
     return [d]
 

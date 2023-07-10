@@ -4,7 +4,8 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, fromage:8189, dff-fromage-image-skill:8192"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, 
+          image-captioning:8123, dff-image-skill:8188, fromage:8189, dff-fromage-image-skill:8192"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -184,7 +185,7 @@ services:
       dockerfile: ./annotators/fromage/Dockerfile
     command: flask run -h 0.0.0.0 -p 8189
     environment:
-      - CUDA_VISIBLE_DEVICES=1,2,3
+      - CUDA_VISIBLE_DEVICES=0,1,2,3
       - FLASK_APP=server
     deploy:
       resources:
@@ -221,7 +222,7 @@ services:
       context: ./services/image_captioning/
     command: flask run -h 0.0.0.0 -p 8123
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0,1
       - FLASK_APP=server
     deploy:
       resources:
