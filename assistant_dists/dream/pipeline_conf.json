@@ -497,6 +497,27 @@
                     "component": "components/qx0j5QHAzog0b39nRnuA.yml",
                     "service": "skills/factoid_qa/service_configs/factoid-qa"
                 }
+            },
+            "dff_dream_faq_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-faq-prompted-skill:8170/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_faq_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jFmKPqMJh0.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-faq-prompted-skill"
+                }
             }
         },
         "response_selectors": {
