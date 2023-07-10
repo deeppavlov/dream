@@ -1,4 +1,12 @@
-# Labeled Data
+# Convers_evaluation_based_selector
+
+## Description
+
+## Description
+component_type: response_selector
+is_customizable: false
+
+### Labeled Data
 
 Labeled data is located in `response_selectors/convers_evaluation_based_selector/labeled_data/`.
 
@@ -34,8 +42,7 @@ Type best hypot num(s), separated by comma: 0,3
 
 When dialog ends it saves it into labeled_data folder.
 
-
-# Measuring quality
+### Measuring quality
 
 It takes `--data_dir` as an input (the same as save_dir from data labelling script).
 Outputs overall accuracy.
@@ -49,7 +56,7 @@ python response_selectors/convers_evaluation_based_selector/measure_quality.py \
 Overall accuracy: 0.5185185185185185
 ```
 
-## How to run conversation evaluator locally
+### How to run conversation evaluator locally
 
 `docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml up toxic_classification badlisted_words convers_evaluation_selector`
 
@@ -62,3 +69,8 @@ python response_selectors/convers_evaluation_based_selector/measure_quality.py \
                    --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/  \
                    --url http://0.0.0.0:8009/respond
 ```
+## Dependencies
+
+Configuration settings specified in the .yaml files at [service_configs](service_configs)
+Required Python packages specified in [requirements.txt](requirements.txt).
+For more details please refer to [this script](server.py)        "
