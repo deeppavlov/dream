@@ -225,6 +225,27 @@
                     "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
                     "service": "skills/dummy_skill/service_configs/agent"
                 }
+            },
+            "dff_dream_faq_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-faq-prompted-skill:8170/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_faq_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jFmKPqMJh0.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-faq-prompted-skill"
+                }
             }
         },
         "candidate_annotators": {
@@ -269,8 +290,8 @@
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://ranking-based-response-selector:8002/respond"
+                    "timeout": 120.0,
+                    "url": "http://llm-based-response-selector:8003/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -281,7 +302,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
-                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
+                    "service": "response_selectors/llm_based_response_selector/service_configs/llm-based-response-selector"
                 }
             }
         }
