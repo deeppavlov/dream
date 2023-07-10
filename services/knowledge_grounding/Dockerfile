@@ -1,4 +1,4 @@
-FROM deeppavlov/deeppavlov
+FROM deeppavlov/deeppavlov:1.2.0
 
 ARG MODEL_CKPT
 

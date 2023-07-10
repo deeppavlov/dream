@@ -37,6 +37,7 @@ DEFAULT_CONFIGS = {
         open("common/generative_configs/default_generative_config.json", "r")
     ),
     "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "lmsys/vicuna-13b-v1.3": json.load(open("common/generative_configs/default_generative_config.json", "r")),
 }
 
 

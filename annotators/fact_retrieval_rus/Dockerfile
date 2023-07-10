@@ -1,4 +1,4 @@
-FROM deeppavlov/base-gpu:0.17.6
+FROM deeppavlov/deeppavlov:1.2.0
 
 RUN apt-get update && apt-get install git -y
 
@@ -23,3 +23,4 @@ COPY $SRC_DIR /src
 WORKDIR /src
 
 CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8130
+
