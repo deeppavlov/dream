@@ -31,10 +31,15 @@ N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 CRITERION = getenv("CRITERION", "the most appropriate, relevant and non-toxic")
 PROMPT = (
     f"""Select {CRITERION} response among the hypotheses to the given dialog context. """
-    """Return only the selected response without extra explanations."""
+    """Return only the selected response without extra explanations. """
+    """Take into account that some of the questions may require going to the outside services """
+    """so if you think that you as an AI language model cannot adequately answer user's question, """
+    """prioritize responses coming from the external services:
+    """
 )
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
 
 assert GENERATIVE_SERVICE_URL
 
@@ -58,10 +63,13 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses, human_uttr_attributes):
     try:
+        ie_types = ["external" if hyp["skilL_name"] else "internal" in EXTERNAL_SKILLS for hyp in hypotheses]
         if "transformers" in GENERATIVE_SERVICE_URL:
-            curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses]) + "\n" + PROMPT
+            curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]'
+                                                       for hyp, ie in zip(hypotheses, ie_types)]) + "\n" + PROMPT
         else:
-            curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses])
+            curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]'
+                                                                  for hyp, ie in zip(hypotheses, ie_types)])
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
