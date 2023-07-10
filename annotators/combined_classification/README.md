@@ -2,10 +2,6 @@
 # Combined_classification 
 
 ## Description
-component_type: multitask model, NN-based
-is_customizable: true
-CPU memory use: 2909 Mb. 
-
 
 This model is based on the transformer-agnostic multitask neural architecture. It can solve several tasks similtaneously, almost as good as single-task models. 
 
@@ -34,7 +30,3 @@ text here if i/o specified
 
 ## Dependencies
 
-Configuration settings specified in the .yaml files at [service_configs](service_configs)
-Required Python packages specified in [requirements.txt](requirements.txt) and [requirements_load_test](requirements_load_test.txt)
-
-For more details please refer to [this script](server.py)

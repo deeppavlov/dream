@@ -1,8 +1,6 @@
 # COMeT
 
 ## Description
-component_type: annotator
-is_customizable: true/false
 
 COMeT is a Commonsense Transformers for Automatic Knowledge Graph Construction service based
 on [comet-commonsense](https://github.com/atcbosselut/comet-commonsense) framework written in Python 3.
@@ -41,7 +39,3 @@ docker-compose -f docker-compose.yml -f local.yml exec comet-conceptnet bash tes
 
 
 ## Dependencies
-
-Configuration settings specified in the .yaml files at [service_configs](service_configs)
-Required Python packages specified in [requirements.txt](requirements.txt).
-For more details please refer to [this script](server.py)
