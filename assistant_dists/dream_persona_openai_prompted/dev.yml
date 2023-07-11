@@ -10,23 +10,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-no-scripts-selector:
+  llm-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/llm_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
+      - 8003:8003
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -45,17 +34,34 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  openai-api-davinci3:
+  openai-api-chatgpt:
     volumes:
       - "./services/openai_api_lm:/src"
       - "./common:/src/common"
     ports:
-      - 8131:8131
-  dff-dream-persona-davinci3-prompted-skill:
+      - 8145:8145
+  dff-dream-persona-chatgpt-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
       - 8137:8137
-
+  dff-google-api-skill:
+    volumes:
+      - "./skills/dff_google_api_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8162:8162
+  dff-dream-faq-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8170:8170
+  openai-api-chatgpt-16k:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8167:8167
 version: "3.7"

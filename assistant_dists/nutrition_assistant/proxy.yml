@@ -6,26 +6,8 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8011
+      - PROXY_PASS=proxy.deeppavlov.ai:8011
       - PORT=8011
-
-  badlisted-words:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8018
-      - PORT=8018
-
-  spelling-preprocessing:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8074
-      - PORT=8074
 
   combined-classification:
     command: ["nginx", "-g", "daemon off;"]
@@ -33,7 +15,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8087
+      - PROXY_PASS=proxy.deeppavlov.ai:8087
       - PORT=8087
 
   sentence-ranker:
@@ -42,16 +24,16 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8128
+      - PROXY_PASS=proxy.deeppavlov.ai:8128
       - PORT=8128
 
-  transformers-lm-bloomz7b:
+  transformers-lm-oasst12b:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=dream.deeppavlov.ai:8146
-      - PORT=8146
+      - PROXY_PASS=proxy.deeppavlov.ai:8158
+      - PORT=8158
 
 version: '3.7'

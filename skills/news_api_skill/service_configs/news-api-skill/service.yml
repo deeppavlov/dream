@@ -1,0 +1,27 @@
+name: news-api-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8066
+      SERVICE_NAME: news_api_skill
+      FLASK_APP: server
+    context: .
+    dockerfile: ./skills/news_api_skill/Dockerfile
+  environment:
+  - FLASK_APP=server
+  command: flask run -h 0.0.0.0 -p 8066
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/news_api_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8066:8066

@@ -1,0 +1,29 @@
+name: knowledge-grounding-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8085
+      SERVICE_NAME: knowledge_grounding_skill
+      CUDA_VISIBLE_DEVICES: ''''''
+      FLASK_APP: server
+    context: .
+    dockerfile: ./skills/knowledge_grounding_skill/Dockerfile
+  command: python -m flask run -h 0.0.0.0 -p 8085
+  environment:
+  - CUDA_VISIBLE_DEVICES=''
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 200M
+      reservations:
+        memory: 200M
+  volumes:
+  - ./common:/src/common
+  - ./skills/knowledge_grounding_skill:/src
+  ports:
+  - 8085:8085

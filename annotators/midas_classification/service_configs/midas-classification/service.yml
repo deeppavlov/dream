@@ -1,0 +1,31 @@
+name: midas-classification
+endpoints:
+- model
+- respond
+- batch_model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8090
+      SERVICE_NAME: midas_classification
+      CONFIG: midas_conv_bert.json
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./annotators/midas_classification
+  command: flask run -h 0.0.0.0 -p 8090
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 3G
+      reservations:
+        memory: 3G
+  volumes:
+  - ./annotators/midas_classification:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8090:8090

@@ -1,0 +1,26 @@
+name: dff-short-story-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8057
+      SERVICE_NAME: dff_short_story_skill
+      STORY_TYPE: generated
+    context: .
+    dockerfile: ./skills/dff_short_story_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8057 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_short_story_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8057:8057
+

@@ -235,7 +235,6 @@ class TorchTransformersSequenceTagger(TorchModel):
         device: str = "cpu",
         **kwargs,
     ) -> None:
-
         self.n_classes = n_tags
         self.return_probas = return_probas
         self.attention_probs_keep_prob = attention_probs_keep_prob

@@ -1,0 +1,24 @@
+name: factoid_qa
+display_name: Factoid QA
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: answers factoid questions
+ram_usage: 170M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://factoid-qa:8071/respond
+dialog_formatter: state_formatters.dp_formatters:utt_sentseg_punct_dialog
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/factoid_qa/service_configs/factoid-qa
+date_created: '2023-03-16T09:45:32'

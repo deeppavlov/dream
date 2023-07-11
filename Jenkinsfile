@@ -33,7 +33,566 @@ pipeline {
         }
       }
     }
+// ------------------------------------------- Test prompted dists------------------------------------------------
+    stage('Build-Reason') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env_secret
+                tests/runtests_reasoning.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_reasoning.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+    stage('Start-Reason') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_reasoning.sh MODE=clean && tests/runtests_reasoning.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_reasoning.sh MODE=clean'
+          }
+        }
+      }
+    }
+    stage('Test skills-Reason') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_reasoning.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_reasoning.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test prompted dists------------------------------------------------
+    stage('Build-MGPT35') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env_secret
+                tests/runtests_reasoning.sh MODE=clean
+                tests/runtests_multiskill_davinci3.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_multiskill_davinci3.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+    stage('Start-MGPT35') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_multiskill_davinci3.sh MODE=clean && tests/runtests_multiskill_davinci3.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_multiskill_davinci3.sh MODE=clean'
+          }
+        }
+      }
+    }
+    stage('Test skills-MGPT35') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_multiskill_davinci3.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_multiskill_davinci3.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test prompted dists------------------------------------------------
+    stage('Build-MGPTJT') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env_secret
+                tests/runtests_multiskill_davinci3.sh MODE=clean
+                tests/runtests_marketing_gptjt.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+    stage('Start-MGPTJT') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_marketing_gptjt.sh MODE=clean && tests/runtests_marketing_gptjt.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
+          }
+        }
+      }
+    }
+    stage('Test skills-MGPTJT') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_marketing_gptjt.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_marketing_gptjt.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test prompted dists------------------------------------------------
+    stage('Build-DCGPT') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env_secret
+                tests/runtests_marketing_gptjt.sh MODE=clean
+                tests/runtests_deeppavlov_chatgpt.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+    stage('Start-DCGPT') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_deeppavlov_chatgpt.sh MODE=clean && tests/runtests_deeppavlov_chatgpt.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
+          }
+        }
+      }
+    }
+    stage('Test skills-DCGPT') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_deeppavlov_chatgpt.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test prompted dists------------------------------------------------
+    stage('Build-NOASST') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env_secret
+                tests/runtests_deeppavlov_chatgpt.sh MODE=clean
+                tests/runtests_nutrition_oasst.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+    stage('Start-NOASST') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_nutrition_oasst.sh MODE=clean && tests/runtests_nutrition_oasst.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
+          }
+        }
+      }
+    }
+    stage('Test skills-NOASST') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_nutrition_oasst.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test dream dist------------------------------------------------
+    stage('Build-Docs') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env
+                tests/runtests_nutrition_oasst.sh MODE=clean
+                tests/runtests_document_based.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_document_based.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
 
+    stage('Start-Docs') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_document_based.sh MODE=clean && tests/runtests_document_based.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_document_based.sh MODE=clean'
+          }
+        }
+      }
+    }
+
+    stage('Test skills-Docs') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_document_based.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_document_based.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test dream dist------------------------------------------------
     stage('Build') {
       steps {
         script{
@@ -43,6 +602,7 @@ pipeline {
             try {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env
+                tests/runtests_document_based.sh MODE=clean
                 tests/runtests.sh MODE=build
               '''
             }
@@ -54,7 +614,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests.sh MODE=clean'
           }
@@ -84,11 +644,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
@@ -158,6 +713,7 @@ pipeline {
       }
     }
 
+// ------------------------------------------- Test Ru dream dist------------------------------------------------
     stage('Build-RU') {
       steps {
         script{
@@ -166,6 +722,7 @@ pipeline {
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
               sh '''
+                cat /home/ignatov/secrets.txt >> .env_ru
                 tests/runtests.sh MODE=clean
                 tests/runtests_russian.sh MODE=build
               '''
@@ -178,7 +735,7 @@ pipeline {
         }
       }
       post {
-        failure {
+        aborted {
           script {
             sh 'tests/runtests_russian.sh MODE=clean'
           }
@@ -208,11 +765,6 @@ pipeline {
         }
       }
       post {
-        failure {
-          script {
-            sh 'tests/runtests_russian.sh MODE=clean'
-          }
-        }
         success {
           script {
             started = true
@@ -257,104 +809,7 @@ pipeline {
       }
     }
 
-    stage('Build-ML') {
-      steps {
-        script{
-          startTime = currentBuild.duration
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh '''
-                tests/runtests_russian.sh MODE=clean
-                tests/runtests_multilingual.sh MODE=build
-              '''
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              throw e
-            }
-          }
-        }
-      }
-      post {
-        failure {
-          script {
-            sh 'tests/runtests_multilingual.sh MODE=clean'
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-          }
-        }
-      }
-    }
 
-    stage('Start-ML') {
-      steps {
-        script {
-          startTime = currentBuild.duration
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh 'tests/runtests_multilingual.sh MODE=clean && tests/runtests_multilingual.sh MODE=start'
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              throw e
-            }
-          }
-        }
-      }
-      post {
-        failure {
-          script {
-            sh 'tests/runtests_multilingual.sh MODE=clean'
-          }
-        }
-        success {
-          script {
-            started = true
-            int duration = (currentBuild.duration - startTime) / 1000
-          }
-        }
-        aborted {
-          script {
-            sh 'tests/runtests_multilingual.sh MODE=clean'
-          }
-        }
-      }
-    }
-
-    stage('Test skills-ML') {
-      steps {
-        script {
-          startTime = currentBuild.duration
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh label: 'test skills', script: 'tests/runtests_multilingual.sh MODE=test_skills'
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              throw e
-            }
-          }
-        }
-      }
-      post {
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-          }
-        }
-        aborted {
-          script {
-            sh 'tests/runtests_multilingual.sh MODE=clean'
-          }
-        }
-      }
-    }
   }
   post {
     aborted {
@@ -365,6 +820,10 @@ pipeline {
     cleanup {
       script {
         if (started) {
+          sh './tests/runtests_multiskill_davinci3.sh MODE=clean'
+          sh './tests/runtests_marketing_gptjt.sh MODE=clean'
+          sh './tests/runtests_nutrition_oasst.sh MODE=clean'
+          sh './tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
           sh './tests/runtests.sh MODE=clean'
           sh './tests/runtests_russian.sh MODE=clean'
           sh './tests/runtests_multilingual.sh MODE=clean'

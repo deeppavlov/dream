@@ -406,6 +406,7 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
         }
     ]
 
+
 def fromage_formatter(dialog: Dict) -> List:
     # Used by: fromage
     dialog = utils.get_last_n_turns(dialog)
@@ -414,21 +415,18 @@ def fromage_formatter(dialog: Dict) -> List:
     image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
     amount_utterances_history = 5
     image_paths = image_paths[-amount_utterances_history:]
-    logger.info(f'image_paths results {image_paths}')
-
     d = {}
     if dialog["human_utterances"][-1]["text"]:
-        d.update({'text': [dialog["human_utterances"][-1]["text"]]})
+        d.update({"text": [dialog["human_utterances"][-1]["text"]]})
         for item in reversed(image_paths):
-            if item is not None and item.startswith('http'):
+            if item is not None and item.startswith("http"):
                 last_url = item
                 break
         if last_url:
-            d.update({'image_paths': last_url})
+            d.update({"image_paths": last_url})
     if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
-        d.update({'image_paths': dialog["human_utterances"][-1].get("attributes", {}).get("image")})
-        d.update({'text': ''})
-    logger.info(f'formatter results {d}')
+        d.update({"image_paths": dialog["human_utterances"][-1].get("attributes", {}).get("image")})
+        d.update({"text": ""})
     return [d]
 
 
@@ -544,6 +542,13 @@ def persona_bot_formatter(dialog: Dict):
             "last_annotated_utterances": [last_uttr],
         }
     ]
+
+
+def cropped_dialog(dialog: Dict):
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    return [{"dialogs": [dialog]}]
 
 
 def full_dialog(dialog: Dict):
@@ -696,8 +701,7 @@ def wp_formatter_dialog(dialog: Dict):
     ]
 
 
-def el_formatter_dialog(dialog: Dict):
-    # Used by: entity_linking annotator
+def prepare_el_input(dialog: Dict):
     num_last_utterances = 2
     entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
     entity_substr_list, entity_tags_list = [], []
@@ -711,21 +715,31 @@ def el_formatter_dialog(dialog: Dict):
                 entity_tags_list.append([[entity["label"].lower(), 1.0]])
             else:
                 entity_tags_list.append([["misc", 1.0]])
-    triplets = dialog["human_utterances"][-1]["annotations"].get("property_extraction", [{}])
-    for triplet in triplets:
-        object_entity_substr = triplet.get("object", "")
-        if object_entity_substr and object_entity_substr not in entity_substr_list:
-            entity_substr_list.append(object_entity_substr)
-            entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
+    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
 
+    return entity_substr_list, entity_tags_list, context
+
+
+def el_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
+    return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": [context]}]
+
+
+def custom_el_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
+    property_extraction = dialog["human_utterances"][-1]["annotations"].get("property_extraction", {})
+    user_id = str(dialog["human_utterances"][-1].get("user", {}).get("id", ""))
     return [
         {
+            "user_id": [user_id],
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
-            "context": context,
+            "context": [context],
+            "property_extraction": [property_extraction],
         }
     ]
 
@@ -1096,14 +1110,17 @@ def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
         skill_name,
+        bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
 
 
 def dff_universal_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
-        skill_name,
+        "dff_universal_prompted_skill",
+        bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
         wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
     )
@@ -1234,8 +1251,19 @@ def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     num_last_utterances = 4
     dialog = utils.get_last_n_turns(dialog, total_last_turns=num_last_utterances)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    contexts = [[uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]]
-    return [{"contexts": contexts}]
+    contexts = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
+    prompts_goals = dialog["human"]["attributes"].get("prompts_goals", {})
+    return [{"contexts": [contexts], "prompts_goals": [prompts_goals]}]
+
+
+def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
+    prompts_goals = {}
+    if len(dialog["human_utterances"]) > 1:
+        hypotheses = dialog["human_utterances"][-2].get("hypotheses", [])
+        for prompts_goals_dict in [hyp.get("prompts_goals", None) for hyp in hypotheses]:
+            if prompts_goals_dict:
+                prompts_goals.update(deepcopy(prompts_goals_dict))
+    return [{"prompts_goals": [prompts_goals], "human_attributes": [dialog["human"]["attributes"]]}]
 
 
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:

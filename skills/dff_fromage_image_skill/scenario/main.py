@@ -12,9 +12,20 @@ from . import response as loc_rsp
 logger = logging.getLogger(__name__)
 
 flows = {
+    GLOBAL: {
+        TRANSITIONS: {
+            ("caption_response", "general_node"): loc_cnd.caption_condition,
+        }
+    },
+    "caption_response": {
+        "general_node": {
+            RESPONSE: loc_rsp.generic_response,
+            TRANSITIONS: {},
+        },
+    },
     "global_flow": {
         "start": {
-            RESPONSE: loc_rsp.generic_response,
+            RESPONSE: "",
             TRANSITIONS: {},
         },
         "fallback": {
@@ -23,7 +34,6 @@ flows = {
         },
     },
 }
-
 actor = Actor(
     flows,
     start_label=("global_flow", "start"),

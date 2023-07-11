@@ -1,4 +1,11 @@
-from typing import List, TypedDict
+import sys
+
+if sys.version_info[0] == 3 and sys.version_info[1] >= 8:
+    from typing import List, TypedDict
+else:
+    from typing_extensions import TypedDict
+    from typing import List
+
 from dataclasses import dataclass
 from itertools import chain
 
@@ -89,7 +96,6 @@ class H2Seq2SeqInferencePersonaSampleV1:
         return items
 
     def get_sample(self) -> H2Seq2SeqInferenceSampleDictV1:
-
         dialog_history = self.dataset_sample["history"]
         dialog_history = dialog_history[-self.hyperparameters.chat_history_pair_length * 2 - 1 :]
         dialog_history = self.add_sep_beetween(dialog_history)

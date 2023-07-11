@@ -53,72 +53,56 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-# def generate_response(context, model, tokenizer):
-#     text = "\n".join(
-#         list(map(lambda x: NEW_UTTERANCE.join(x), zip(cycle(["", ""]), context[-MAX_HISTORY_DEPTH:] + [""])))
-#     )
-#     bot_input_ids = tokenizer.encode(text, return_tensors="pt")
-#     with torch.no_grad():
-#         if torch.cuda.is_available():
-#             bot_input_ids = bot_input_ids.to("cuda")
+def generate_response(context, model, tokenizer):
+    text = "\n".join(
+        list(map(lambda x: NEW_UTTERANCE.join(x), zip(cycle(["", ""]), context[-MAX_HISTORY_DEPTH:] + [""])))
+    )
+    bot_input_ids = tokenizer.encode(text, return_tensors="pt")
+    with torch.no_grad():
+        if torch.cuda.is_available():
+            bot_input_ids = bot_input_ids.to("cuda")
 
-#         chat_history_ids = model.generate(bot_input_ids, pad_token_id=tokenizer.eos_token_id, **generation_params)
-#         if torch.cuda.is_available():
-#             chat_history_ids = chat_history_ids.cpu()
+        chat_history_ids = model.generate(bot_input_ids, pad_token_id=tokenizer.eos_token_id, **generation_params)
+        if torch.cuda.is_available():
+            chat_history_ids = chat_history_ids.cpu()
 
-#     outputs = [
-#         tokenizer.decode(x, skip_special_tokens=True)[len(text) :].lstrip().split("\n")[0] for x in chat_history_ids
-#     ]
-#     outputs = [re.sub(NICK_COMPILED, "", response) for response in outputs]
-#     outputs = [re.sub(URLS_COMPILED, "", response) for response in outputs]
-#     outputs = [re.sub(SPECIFIC_WORDS_COMPILED, "", response) for response in outputs]
-#     outputs = [ANYTHING_EXCEPT_OF_LETTERS_SPACE_AND_PUNCT_COMPILED.sub("", response).strip() for response in outputs]
-#     return outputs
+    outputs = [
+        tokenizer.decode(x, skip_special_tokens=True)[len(text) :].lstrip().split("\n")[0] for x in chat_history_ids
+    ]
+    outputs = [re.sub(NICK_COMPILED, "", response) for response in outputs]
+    outputs = [re.sub(URLS_COMPILED, "", response) for response in outputs]
+    outputs = [re.sub(SPECIFIC_WORDS_COMPILED, "", response) for response in outputs]
+    outputs = [ANYTHING_EXCEPT_OF_LETTERS_SPACE_AND_PUNCT_COMPILED.sub("", response).strip() for response in outputs]
+    return outputs
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     contexts = request.json.get("utterances_histories", [])
-    img_paths = request.json.get("image_paths", [])
-
     if len(contexts) == 0:
         contexts = request.json.get("dialog_contexts", [])
 
     try:
         responses = []
         confidences = []
-        text = ''
         for context in contexts:
             curr_responses = []
             curr_confidences = []
-            # preds = generate_response(context, model, tokenizer)
-            text += 'Q: ' + context + '\nA:'
-            model_prompt = input_context + [text]
-            model_outputs = model.generate_for_images_and_texts(model_prompt, num_words=32, ret_scale_factor=ret_scale_factor, max_num_rets=3)
-            text += ' '.join([s for s in model_outputs if type(s) == str]) + '\n'
-    
-    # Format outputs.
-            if type(model_outputs[0]) == str:
-                model_outputs[0] = 'FROMAGe:  ' + model_outputs[0]
-            else:
-                model_outputs = ['FROMAGe:  '] + model_outputs[0]
-            all_outputs.append('Input:     ' + p)
-            all_outputs.extend(model_outputs)
+            preds = generate_response(context, model, tokenizer)
+            for response in preds:
+                response = re.sub(NICK_COMPILED, "", response).strip()
 
-            # for response in preds:
-            #     response = re.sub(NICK_COMPILED, "", response).strip()
-
-            #     if len(response) > 3:
-            #         # drop too short responses
-            #         curr_responses += [response]
-            #         curr_confidences += [DEFAULT_CONFIDENCE]
-            #     else:
-            #         curr_responses += [""]
-            #         curr_confidences += [ZERO_CONFIDENCE]
-            # logger.info(f"fromage-generator for context: `{context}`\n returns: {curr_responses}")
-            # responses += [curr_responses]
-            # confidences += [curr_confidences]
+                if len(response) > 3:
+                    # drop too short responses
+                    curr_responses += [response]
+                    curr_confidences += [DEFAULT_CONFIDENCE]
+                else:
+                    curr_responses += [""]
+                    curr_confidences += [ZERO_CONFIDENCE]
+            logger.info(f"gpt2-generator for context: `{context}`\n returns: {curr_responses}")
+            responses += [curr_responses]
+            confidences += [curr_confidences]
 
     except Exception as exc:
         logger.exception(exc)

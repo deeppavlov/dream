@@ -1,0 +1,24 @@
+name: meta-script-skill
+endpoints:
+- meta_script
+- comet_dialog
+compose:
+  env_file:
+  - .env
+  build:
+    context: .
+    dockerfile: skills/meta_script_skill/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8054
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./skills/meta_script_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8054:8054

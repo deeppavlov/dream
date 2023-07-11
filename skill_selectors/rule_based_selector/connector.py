@@ -18,6 +18,7 @@ from common.universal_templates import (
     if_chat_about_particular_topic,
     if_choose_topic,
     GREETING_QUESTIONS_TEXTS,
+    is_any_question_sentence_in_utterance,
 )
 from common.utils import (
     high_priority_intents,
@@ -95,7 +96,7 @@ class RuleBasedSkillSelectorConnector:
             if user_uttr.get("attributes", {}).get("image") is not None:
                 skills_for_uttr.append("dff_image_skill")
                 skills_for_uttr.append("dff_fromage_image_skill")
-            
+
             exit_cond = "exit" in intent_catcher_intents and (
                 dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)
             )
@@ -185,6 +186,8 @@ class RuleBasedSkillSelectorConnector:
                 # we have only russian version of dff_generative_skill
                 skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("gpt2_generator")
+                skills_for_uttr.append("faq_skill_deepy")
+                skills_for_uttr.append("dff_reasoning_skill")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -280,6 +283,8 @@ class RuleBasedSkillSelectorConnector:
                         skills_for_uttr.append("dff_short_story_skill")
 
             skills_for_uttr.append("dff_universal_prompted_skill")
+            if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]) and is_factoid:
+                skills_for_uttr.append("dff_google_api_skill")
             # turn on skills if prompts are selected by prompt_selector
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
             if ranged_prompts:

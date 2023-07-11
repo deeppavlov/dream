@@ -1,0 +1,26 @@
+name: dummy-skill-dialog
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_NAME: dummy_skill_dialog
+      SERVICE_PORT: 8052
+      DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
+      FLASK_APP: server
+    context: ./skills/dummy_skill_dialog/
+  command: flask run -h 0.0.0.0 -p 8052 --without-threads
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 768M
+      reservations:
+        memory: 768M
+  volumes:
+  - ./skills/dummy_skill_dialog:/app
+  ports:
+  - 8052:8052

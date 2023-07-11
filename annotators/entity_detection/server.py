@@ -70,6 +70,7 @@ def get_result(request, what_to_annotate):
     utts_list = []
     utts_list_init = []
     utts_nums = []
+    uttr_offsets = []
     for n, hist_utt in enumerate(last_utts):
         if isinstance(hist_utt, str):
             hist_utt = [hist_utt]
@@ -81,12 +82,15 @@ def get_result(request, what_to_annotate):
                 prev_utt = hist_utt[-2]
                 if prev_utt and prev_utt[-1] not in {".", "!", "?"}:
                     prev_utt = f"{prev_utt}."
+                offset = len(prev_utt)
                 concat_utt = f"{prev_utt} {last_utt}"
             else:
+                offset = 0
                 concat_utt = last_utt
             utts_list.append(concat_utt)
             utts_list_init.append(concat_utt)
             utts_nums.append(n)
+            uttr_offsets.append(offset)
 
     utt_entities_batch = [{} for _ in last_utts]
     utt_entities = {}
@@ -103,13 +107,14 @@ def get_result(request, what_to_annotate):
                 probas_batch,
             ) = entity_detection(utts_list)
             logger.info(f"entity_substr_batch {entity_substr_batch} tags_batch {tags_batch}")
-            for (entity_substr_list, tags_list, probas_list, entity_offsets_list, uttr, num,) in zip(
+            for (entity_substr_list, tags_list, probas_list, entity_offsets_list, uttr, num, uttr_offset,) in zip(
                 entity_substr_batch,
                 tags_batch,
                 probas_batch,
                 entity_offsets_batch,
                 utts_list_init,
                 utts_nums,
+                uttr_offsets,
             ):
                 utt_entities = {}
                 for entity, tag, proba, (start_offset, end_offset) in zip(
@@ -122,7 +127,10 @@ def get_result(request, what_to_annotate):
                         entity.lower() not in stopwords
                         and len(entity) > 2
                         and not (len(entity.split()) == 1 and nlp(entity)[0].pos_ == "PRON")
+                        and start_offset >= uttr_offset
                     ):
+                        start_offset -= uttr_offset
+                        end_offset -= uttr_offset
                         entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                         entity = DOUBLE_SPACES.sub(" ", entity).strip()
                         finegrained_tag = replace_tag_dict.get(tag.lower(), tag.lower())

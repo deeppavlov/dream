@@ -1,0 +1,25 @@
+name: sentseg
+display_name: Sentence Segmentation
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: allows us to handle long and complex user's utterances by splitting them
+  into sentences and recovering punctuation
+ram_usage: 1G
+gpu_usage: null
+group: response_annotators
+connector:
+  protocol: http
+  timeout: 1.5
+  url: http://sentseg:8011/sentseg
+dialog_formatter: state_formatters.dp_formatters:last_bot_utt_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- response_annotator_selectors
+required_previous_services: null
+state_manager_method: add_annotation_prev_bot_utt
+tags: null
+endpoint: sentseg
+service: annotators/SentSeg/service_configs/sentseg
+date_created: '2023-03-16T09:45:32'

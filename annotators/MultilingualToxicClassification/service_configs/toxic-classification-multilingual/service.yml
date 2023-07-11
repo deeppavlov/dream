@@ -1,0 +1,31 @@
+name: toxic-classification-multilingual
+endpoints:
+- respond
+- respond_batch
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8013
+      SERVICE_NAME: toxic_classification
+      PRETRAINED_MODEL_NAME_OR_PATH: https://github.com/unitaryai/detoxify/releases/download/v0.4-alpha/multilingual_debiased-0b549669.ckpt
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: ./annotators/MultilingualToxicClassification/
+  command: flask run -h 0.0.0.0 -p 8013
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 3.5G
+      reservations:
+        memory: 3.5G
+  volumes:
+  - ./annotators/MultilingualToxicClassification:/src
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8013:8013
+proxy: null
