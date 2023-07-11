@@ -2,37 +2,15 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, convers-evaluation-selector:8009, 
-          badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075, combined-classification:8087,
-          entity-detection:8103, terminusdb:6363, user-knowledge-graph:8129, 
-          property-extraction:8131, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
+      WAIT_HOSTS: "spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, 
+          ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb:6363, 
+          user-knowledge-graph:8129, property-extraction:8131, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
           sentence-ranker:8128, prompt-selector:8135"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
-      
-  convers-evaluator-annotator:
-    env_file: [.env]
-    build:
-      args:
-        CONFIG: conveval.json
-        PORT: 8004
-        DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
-      context: .
-      dockerfile: ./annotators/ConversationEvaluator/Dockerfile
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
-    deploy:
-      mode: replicated
-      replicas: 1
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
 
   spacy-nounphrases:
     env_file: [.env]
@@ -87,54 +65,6 @@ services:
         reservations:
           memory: 100M
 
-  convers-evaluation-selector:
-    env_file: [ .env ]
-    build:
-      args:
-        TAG_BASED_SELECTION: 1
-        CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.1
-        ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 0
-        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
-        IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 1
-        RESTRICTION_FOR_SENSITIVE_CASE: 1
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
-        MAX_TURNS_WITHOUT_SCRIPTS: 7
-        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
-        PRIORITIZE_SCRIPTED_SKILLS: 0
-        CONFIDENCE_STRENGTH: 0.8
-        CONV_EVAL_STRENGTH: 0.4
-        PRIORITIZE_HUMAN_INITIATIVE: 1
-        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
-      context: .
-      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8009
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
-
-  badlisted-words:
-    env_file: [.env]
-    build:
-      context: annotators/BadlistedWordsDetector/
-    command: flask run -h 0.0.0.0 -p 8018
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
-
   ner:
     env_file: [ .env ]
     build:
@@ -174,20 +104,6 @@ services:
           memory: 1.5G
         reservations:
           memory: 1.5G
-
-  spelling-preprocessing:
-    env_file: [.env]
-    build:
-      context: ./annotators/spelling_preprocessing/
-    command: flask run -h 0.0.0.0 -p 8074
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 50M
 
   combined-classification:
     env_file: [.env]
@@ -232,7 +148,7 @@ services:
   terminusdb:
     image: terminusdb/terminusdb-server:dev-7022f970fe5605ec8048c258ea0219ac9039315e
     ports:
-      - 6363:6363
+      - 7363:6363
 
   custom-entity-linking:
     env_file: [.env]
@@ -300,7 +216,7 @@ services:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
         N_SENTENCES_TO_RETURN: 3
-        PROMPTS_TO_CONSIDER: dream_persona
+        PROMPTS_TO_CONSIDER: knowledge
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
@@ -356,7 +272,7 @@ services:
       args:
         SERVICE_PORT: 8137
         SERVICE_NAME: dff_knowledge_prompted_skill
-        PROMPT_FILE: common/prompts/dream_persona.json
+        PROMPT_FILE: common/prompts/knowledge.json
         GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
