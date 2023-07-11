@@ -185,7 +185,7 @@ services:
       dockerfile: ./annotators/fromage/Dockerfile
     command: flask run -h 0.0.0.0 -p 8189
     environment:
-      - CUDA_VISIBLE_DEVICES=0,1,2,3
+      - CUDA_VISIBLE_DEVICES=1,2,3
       - FLASK_APP=server
     deploy:
       resources:

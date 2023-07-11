@@ -410,11 +410,21 @@ def fromage_formatter(dialog: Dict) -> List:
     # Used by: fromage
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
-    logger.info(f'dialog state {dialog}')
+
+    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
+    amount_utterances_history = 5
+    image_paths = image_paths[-amount_utterances_history:]
+    logger.info(f'image_paths results {image_paths}')
+
     d = {}
     if dialog["human_utterances"][-1]["text"]:
         d.update({'text': [dialog["human_utterances"][-1]["text"]]})
-        d.update({'image_paths': ''})
+        for item in reversed(image_paths):
+            if item is not None and item.startswith('http'):
+                last_url = item
+                break
+        if last_url:
+            d.update({'image_paths': last_url})
     if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
         d.update({'image_paths': dialog["human_utterances"][-1].get("attributes", {}).get("image")})
         d.update({'text': ''})

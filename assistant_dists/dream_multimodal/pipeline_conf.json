@@ -152,11 +152,11 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 10.0,
-                    "url": "http://annotators:8189/respond"
+                    "url": "http://fromage:8189/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "update_attributes",
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "directory": "annotators/fromage",

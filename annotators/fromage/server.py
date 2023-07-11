@@ -52,8 +52,8 @@ def generate_responses(image_path, prompt):
     ret_scale_factor = 0
     inp_image = utils.get_image_from_url(image_path)
     input_prompts = ['What is the image?']
-    if prompt[0] != '':
-        input_prompts = prompt[0]
+    if prompt != '':
+        input_prompts = prompt
     
     logger.info(f'input_prompts {input_prompts}')
     input_context = [inp_image] 
@@ -66,43 +66,28 @@ def generate_responses(image_path, prompt):
         # model_outputs[0] = model_outputs[0]
     return model_outputs
 
-def update_image_path(image_path):
-    previous_image_path = image_path
-    return previous_image_path
 
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
     responses = []
-
     try:
         frmg_answers = []
         image_path = request.json.get("image_paths", [])
         sentence = request.json.get("text", [])
-        # if request.json.get("image_paths", []) and request.json.get("text", []):
-        #     image_path = request.json.get("image_paths", [])
         logger.info(f'img path {image_path}')
-        #     sentence = request.json.get("text", [])
         logger.info(f'sentence {sentence}')
-        image_path = image_path[0]
-        if image_path is not None and sentence != '':
-            outputs = generate_responses(image_path, sentence)
-            frmg_answers += outputs
-            logging.info(f'frmg_answers here {frmg_answers}')
-        else:
-            image_path = update_image_path(image_path)
-            outputs = generate_responses(image_path, sentence)
-            frmg_answers += outputs
-            logging.info(f'response not here here {responses}')
+        
+        outputs = generate_responses(image_path, sentence)
+        frmg_answers += outputs
+        logging.info(f'frmg_answers here {frmg_answers}')
 
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
         frmg_answers = [[""]] * len(sentence)
-        #responses = 
 
     responses += [{"fromage": frmg_answers}]
     total_time = time.time() - st_time
     logger.info(f"fromage exec time: {total_time:.3f}s")
-    # logger.info(f"fromage results: {jsonify(responses)}")
     return jsonify(responses)
