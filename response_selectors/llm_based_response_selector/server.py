@@ -32,7 +32,8 @@ CRITERION = getenv("CRITERION", "the most appropriate, relevant and non-toxic")
 PROMPT = (
     f"""Select {CRITERION} response among the hypotheses to the given dialog context. """
     """Return only the selected response without extra explanations. """
-    """Always prioritize responses coming from the external services:
+    """Always give the lowest priority to responses that contain 'As an AI language model'/'As a chatbot' """
+    """and give the highest priority to responses coming from the external services:
     """
 )
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
@@ -43,7 +44,7 @@ assert GENERATIVE_SERVICE_URL
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
-    clean_hypotheses = []
+    clean_hypotheses = []  
     for hyp in hypotheses:
         is_toxic = is_toxic_or_badlisted_utterance(hyp)
         if not is_toxic:
