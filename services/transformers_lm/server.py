@@ -23,6 +23,7 @@ HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 LANGUAGE = os.getenv("LANGUAGE", "EN")
+HF_ACCESS_TOKEN = os.environ.get("HF_ACCESS_TOKEN", None)
 NAMING = {
     "EN": ["AI", "Human"],
     "RU": ["Чат-бот", "Человек"],
@@ -38,6 +39,7 @@ DEFAULT_CONFIGS = {
     ),
     "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
     "lmsys/vicuna-13b-v1.3": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "dim/xglm-4.5B_ru_v10_epoch_6_step_41141": json.load(open("common/generative_configs/default_generative_config.json", "r")),
 }
 
 
@@ -76,11 +78,14 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 
 
 try:
-    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    additional_kwargs = {}
+    if HF_ACCESS_TOKEN:
+        additional_kwargs["token"] = HF_ACCESS_TOKEN
+
+    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
     if HALF_PRECISION:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
-    else:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+        additional_kwargs["torch_dtype"] = "torch.float16"
+    model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
