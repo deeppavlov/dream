@@ -37,6 +37,7 @@ ENVVARS_TO_SEND = {
     "http://transformers-lm-gptjt:8161/respond": [],
     "http://anthropic-api-claude-v1:8164/respond": ["ANTHROPIC_API_KEY"],
     "http://anthropic-api-claude-instant-v1:8163/respond": ["ANTHROPIC_API_KEY"],
+    "http://transformers-lm-vicuna13b:8168/respond": [],
 }
 
 

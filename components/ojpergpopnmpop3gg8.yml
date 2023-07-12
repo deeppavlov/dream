@@ -1,0 +1,28 @@
+name: transformers-lm-vicuna13b
+display_name: Vicuna 13B
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: An instruction-based large language model fine-tuned on LLaMa that achieves
+  [more than 90%* quality of OpenAI ChatGPT and Google Bard](https://lmsys.org/blog/2023-03-30-vicuna/).
+  The model performs best in English and is NOT good at answering math, reasoning, and coding questions.
+  For more details, refer to [HuggingFace Model Page](https://huggingface.co/lmsys/vicuna-13b-v1.3). 
+  Free of charge. This model is up and running on our servers and can be used for free.
+  Important! Vicuna cannot be used for commercial purposes (license restriction).
+ram_usage: 50G
+gpu_usage: 29G
+group: services
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://transformers-lm-vicuna13b:8168/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/transformers_lm/service_configs/transformers-lm-vicuna13b
+date_created: '2023-04-16T09:45:32'

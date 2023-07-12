@@ -1,0 +1,8 @@
+SERVICE_PORT: 8169
+SERVICE_NAME: dff_reasoning_skill
+API_CONFIGS: generative_lm.json,google_api.json,news_api.json,weather_api.json,wolframalpha_api.json
+GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+GENERATIVE_TIMEOUT: 120
+N_UTTERANCES_CONTEXT: 1
+ENVVARS_TO_SEND: OPENAI_API_KEY,GOOGLE_CSE_ID,GOOGLE_API_KEY,OPENWEATHERMAP_API_KEY,NEWS_API_KEY,WOLFRAMALPHA_APP_ID

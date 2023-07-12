@@ -19,14 +19,3 @@ compose:
   - ./skills/eliza:/src
   ports:
   - 8047:8047
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8047
-  - PORT=8047

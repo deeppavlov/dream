@@ -18,6 +18,7 @@ from common.universal_templates import (
     if_chat_about_particular_topic,
     if_choose_topic,
     GREETING_QUESTIONS_TEXTS,
+    is_any_question_sentence_in_utterance,
 )
 from common.utils import (
     high_priority_intents,
@@ -183,6 +184,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("gpt2_generator")
                 skills_for_uttr.append("faq_skill_deepy")
+                skills_for_uttr.append("dff_reasoning_skill")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -280,7 +282,8 @@ class RuleBasedSkillSelectorConnector:
                         skills_for_uttr.append("dff_short_story_skill")
 
             skills_for_uttr.append("dff_universal_prompted_skill")
-            skills_for_uttr.append("dff_google_api_skill")
+            if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]) and is_factoid:
+                skills_for_uttr.append("dff_google_api_skill")
             # turn on skills if prompts are selected by prompt_selector
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
             if ranged_prompts:
