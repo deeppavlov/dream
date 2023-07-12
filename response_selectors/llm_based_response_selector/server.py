@@ -32,9 +32,7 @@ CRITERION = getenv("CRITERION", "the most appropriate, relevant and non-toxic")
 PROMPT = (
     f"""Select {CRITERION} response among the hypotheses to the given dialog context. """
     """Return only the selected response without extra explanations. """
-    """Take into account that some of the questions may require going to the outside services """
-    """so if you think that you as an AI language model cannot adequately answer user's question, """
-    """prioritize responses coming from the external services:
+    """Always prioritize responses coming from the external services:
     """
 )
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
@@ -63,7 +61,7 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses, human_uttr_attributes):
     try:
-        ie_types = ["external" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal" for hyp in hypotheses]
+        ie_types = ["external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses]
         if "transformers" in GENERATIVE_SERVICE_URL:
             curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]'
                                                        for hyp, ie in zip(hypotheses, ie_types)]) + "\n" + PROMPT
