@@ -26,8 +26,11 @@ LANGUAGE = os.getenv("LANGUAGE", "EN")
 HF_ACCESS_TOKEN = os.environ.get("HF_ACCESS_TOKEN", None)
 NAMING = {
     "EN": ["AI", "Human"],
-    "RU": ["Чат-бот", "Человек"],
+    "RU": ["Assistant", "Human"],
 }
+EOS_TOKENS = os.environ.get("EOS_TOKENS", None)  # for RuXGLM: "<|endoftext|>,Human:"
+if EOS_TOKENS:
+    EOS_TOKENS = EOS_TOKENS.split(",")
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -39,8 +42,24 @@ DEFAULT_CONFIGS = {
     ),
     "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
     "lmsys/vicuna-13b-v1.3": json.load(open("common/generative_configs/default_generative_config.json", "r")),
-    "dim/xglm-4.5B_ru_v10_epoch_6_step_41141": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "dim/xglm-4.5B_ru_v10_epoch_6_step_41141": json.load(open("common/generative_configs/ruxglm_config.json", "r")),
 }
+
+
+def add_replacement_tokens(string):
+    for pair in replacement:
+        string = string.replace(pair[0], pair[1])
+    return string
+
+
+def remove_replacement_tokens(string):
+    for pair in replacement:
+        string = string.replace(pair[1], pair[0])
+
+    string = string.replace("\n ", "\n")
+    for token in EOS_TOKENS:
+        string = string.replace(token, "")
+    return string
 
 
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
@@ -63,6 +82,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         chat_history_ids = model.generate(
             bot_input_ids,
             pad_token_id=tokenizer.eos_token_id,
+            eos_token_id=EOS_TOKENS,
             **generation_params,
         )
     if torch.cuda.is_available():
@@ -83,6 +103,8 @@ try:
         additional_kwargs["token"] = HF_ACCESS_TOKEN
 
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
+    EOS_TOKENS.append(tokenizer.eos_token)
+    logger.info(f"Considered EOS tokens: {EOS_TOKENS}")
     if HALF_PRECISION:
         additional_kwargs["torch_dtype"] = "torch.float16"
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
@@ -90,6 +112,8 @@ try:
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
     config = DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]
+    replacement = config.pop("replacement", [])
+
     example_response = generate_responses(
         ["What is the goal of SpaceX?"],
         model,

@@ -172,3 +172,5 @@
 8168	transformers-lm-vicuna13b
 8169    dff-reasoning-skill
 8170    dff-dream-faq-prompted-skill
+8171    transformers-lm-ruxglm
+8172    dff-dream-persona-ruxglm-prompted-skill
