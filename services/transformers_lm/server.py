@@ -107,6 +107,7 @@ try:
         additional_kwargs["use_auth_token"] = HF_ACCESS_TOKEN
 
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
+    EOS_TOKENS += [tokenizer.eos_token]
     EOS_TOKENS = tokenizer.encode(EOS_TOKENS)
 
     if HALF_PRECISION:
