@@ -63,7 +63,9 @@ def remove_replacement_tokens(text):
 
 
 def cut_predictions_by_additional_eos(text):
-    return re.split(ADDITIONAL_EOS_TOKENS, text)[0]
+    if ADDITIONAL_EOS_TOKENS:
+        return re.split(ADDITIONAL_EOS_TOKENS, text)[0]
+    return text
 
 
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
