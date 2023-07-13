@@ -124,9 +124,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50G
+          memory: 60G
         reservations:
-          memory: 50G
+          memory: 60G
 
   dff-dream-persona-ruxglm-prompted-skill:
     env_file: [ .env ]

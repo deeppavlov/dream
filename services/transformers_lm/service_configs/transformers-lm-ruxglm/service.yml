@@ -23,9 +23,9 @@ compose:
   deploy:
     resources:
       limits:
-        memory: 40G
+        memory: 60G
       reservations:
-        memory: 40G
+        memory: 60G
   volumes:
   - ./services/transformers_lm:/src
   - ./common:/src/common
