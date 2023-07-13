@@ -78,6 +78,8 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
+    generation_params["eos_token_id"] = EOS_TOKENS + generation_params.pop("eos_token_id", [])
+
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
@@ -105,8 +107,8 @@ try:
         additional_kwargs["use_auth_token"] = HF_ACCESS_TOKEN
 
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
-    EOS_TOKENS.append(tokenizer.eos_token)
-    logger.info(f"Considered EOS tokens: {EOS_TOKENS}")
+    EOS_TOKENS = tokenizer.encode(EOS_TOKENS)
+
     if HALF_PRECISION:
         additional_kwargs["torch_dtype"] = "torch.float16"
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
@@ -115,6 +117,8 @@ try:
         logger.info("transformers_lm is set to run on cuda")
     config = DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]
     replacement = config.pop("replacement", [])
+    config["eos_token_id"] = EOS_TOKENS + config.pop("eos_token_id", [])
+    logger.info("Test: considered  EOS tokens ids: {config['eos_token_id']}")
 
     example_response = generate_responses(
         ["What is the goal of SpaceX?"],
