@@ -31,6 +31,8 @@ NAMING = {
 EOS_TOKENS = os.environ.get("EOS_TOKENS", None)  # for RuXGLM: "<|endoftext|>,Human:"
 if EOS_TOKENS:
     EOS_TOKENS = EOS_TOKENS.split(",")
+else:
+    EOS_TOKENS = []
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
