@@ -100,7 +100,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 try:
     additional_kwargs = {}
     if HF_ACCESS_TOKEN:
-        additional_kwargs["token"] = HF_ACCESS_TOKEN
+        additional_kwargs["use_auth_token"] = HF_ACCESS_TOKEN
 
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
     EOS_TOKENS.append(tokenizer.eos_token)
