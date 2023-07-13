@@ -82,7 +82,14 @@ def process_entity_info(
       list: Processed entity information batch.
     """
     entity_info_batch = []
-    for (entity_substr_list, entity_ids_list, conf_list, entity_id_tags_list, prex_info, context,) in zip(
+    for (
+        entity_substr_list,
+        entity_ids_list,
+        conf_list,
+        entity_id_tags_list,
+        prex_info,
+        context,
+    ) in zip(
         entity_substr_batch,
         entity_ids_batch,
         conf_batch,
