@@ -108,7 +108,7 @@ services:
           memory: 3G
 
   transformers-lm-ruxglm:
-    env_file: [ .env ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8171
