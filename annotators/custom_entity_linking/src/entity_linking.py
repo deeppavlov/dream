@@ -69,7 +69,9 @@ class EntityLinker(Component, Serializable):
     def load(self) -> None:
         if not os.path.exists(self.load_path):
             os.makedirs(self.load_path)
-        self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
+        self.conn = sqlite3.connect(
+            str(self.load_path / "custom_database.db"), check_same_thread=False
+        )
         self.cur = self.conn.cursor()
         self.cur.execute(
             "CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
@@ -79,24 +81,38 @@ class EntityLinker(Component, Serializable):
     def save(self) -> None:
         pass
 
-    def add_custom_entities(self, user_id, entity_substr_list, entity_ids_list, tags_list):
+    def add_custom_entities(
+        self, user_id, entity_substr_list, entity_ids_list, tags_list
+    ):
         if self.conn is None:
             if not os.path.exists(self.load_path):
                 os.makedirs(self.load_path)
-            self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
+            self.conn = sqlite3.connect(
+                str(self.load_path / "custom_database.db"),
+                check_same_thread=False,
+            )
             self.cur = self.conn.cursor()
             self.cur.execute(
                 "CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
                 "UNINDEXED, tag, user_id, tokenize = 'porter ascii');"
             )
 
-        for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
+        for entity_substr, entity_id, tag in zip(
+            entity_substr_list, entity_ids_list, tags_list
+        ):
             entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")
-            query_str = f"title:{entity_substr} AND tag:{tag} AND user_id:{user_id}"
+            query_str = (
+                f"title:{entity_substr} AND tag:{tag} AND user_id:{user_id}"
+            )
 
             query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
             res = self.cur.execute(query, (query_str,)).fetchall()
-            if res and res[0][3] == "name" and res[0][1] == entity_id and tag == "name":
+            if (
+                res
+                and res[0][3] == "name"
+                and res[0][1] == entity_id
+                and tag == "name"
+            ):
                 query = "DELETE FROM inverted_index WHERE entity_id=? AND tag=? AND user_id=?;"
                 self.cur.execute(query, (entity_id, tag, user_id))
                 self.cur.execute(
@@ -118,17 +134,31 @@ class EntityLinker(Component, Serializable):
         entity_tags_batch: List[List[str]] = None,
     ):
         entity_ids_batch, entity_conf_batch, entity_id_tags_batch = [], [], []
-        for user_id, entity_substr_list, entity_tags_list in zip(user_ids, entity_substr_batch, entity_tags_batch):
-            entity_ids_list, entity_conf_list, entity_id_tags_list = self.link_entities(
+        for user_id, entity_substr_list, entity_tags_list in zip(
+            user_ids, entity_substr_batch, entity_tags_batch
+        ):
+            (
+                entity_ids_list,
+                entity_conf_list,
+                entity_id_tags_list,
+            ) = self.link_entities(
                 user_id,
                 entity_substr_list,
                 entity_tags_list,
             )
-            log.info(f"user_id: {user_id} entity_ids_list: {entity_ids_list} entity_conf_list: {entity_conf_list}")
+            log.info(
+                f"user_id: {user_id} entity_ids_list: {entity_ids_list} entity_conf_list: {entity_conf_list}"
+            )
 
-            entity_ids_batch.append(entity_ids_list[: self.num_entities_to_return])
-            entity_conf_batch.append(entity_conf_list[: self.num_entities_to_return])
-            entity_id_tags_batch.append(entity_id_tags_list[: self.num_entities_to_return])
+            entity_ids_batch.append(
+                entity_ids_list[: self.num_entities_to_return]
+            )
+            entity_conf_batch.append(
+                entity_conf_list[: self.num_entities_to_return]
+            )
+            entity_id_tags_batch.append(
+                entity_id_tags_list[: self.num_entities_to_return]
+            )
         return entity_ids_batch, entity_conf_batch, entity_id_tags_batch
 
     def link_entities(
@@ -137,10 +167,14 @@ class EntityLinker(Component, Serializable):
         entity_substr_list: List[str],
         entity_tags_list: List[str],
     ) -> List[List[str]]:
-        log.info(f"entity_substr_list {entity_substr_list} entity_tags_list {entity_tags_list} ")
+        log.info(
+            f"entity_substr_list {entity_substr_list} entity_tags_list {entity_tags_list} "
+        )
         entity_ids_list, conf_list, entity_id_tags_list = [], [], []
         if entity_substr_list:
-            for entity_substr, tags in zip(entity_substr_list, entity_tags_list):
+            for entity_substr, tags in zip(
+                entity_substr_list, entity_tags_list
+            ):
                 for symb_old, symb_new in [
                     ("'", "''"),
                     ("-", " "),
@@ -154,39 +188,69 @@ class EntityLinker(Component, Serializable):
                     for start in ["a ", "the ", "my ", "his ", "her "]:
                         if entity_substr.startswith(start):
                             entity_substr = entity_substr[len(start) :]
-                    cand_ent_init = self.find_exact_match(user_id, entity_substr, tags)
+                    cand_ent_init = self.find_exact_match(
+                        user_id, entity_substr, tags
+                    )
                     entity_substr_split = [
-                        word for word in entity_substr.split(" ") if word not in self.stopwords and len(word) > 0
+                        word
+                        for word in entity_substr.split(" ")
+                        if word not in self.stopwords and len(word) > 0
                     ]
-                    if len(entity_substr_split) == 1 and self.stemmer.stem(entity_substr) != entity_substr:
+                    if (
+                        len(entity_substr_split) == 1
+                        and self.stemmer.stem(entity_substr) != entity_substr
+                    ):
                         entity_substr_stemmed = self.stemmer.stem(entity_substr)
-                        stem_cand_ent_init = self.find_exact_match(user_id, entity_substr_stemmed, tags)
+                        stem_cand_ent_init = self.find_exact_match(
+                            user_id, entity_substr_stemmed, tags
+                        )
                         cand_ent_init = {**cand_ent_init, **stem_cand_ent_init}
                     if not cand_ent_init and len(entity_substr_split) > 1:
-                        cand_ent_init = self.find_fuzzy_match(user_id, entity_substr_split, tags)
+                        cand_ent_init = self.find_fuzzy_match(
+                            user_id, entity_substr_split, tags
+                        )
                     if not cand_ent_init:
-                        cand_ent_init = self.find_exact_match(user_id, entity_substr)
+                        cand_ent_init = self.find_exact_match(
+                            user_id, entity_substr
+                        )
                     if not cand_ent_init:
-                        cand_ent_init = self.find_fuzzy_match(user_id, entity_substr_split)
+                        cand_ent_init = self.find_fuzzy_match(
+                            user_id, entity_substr_split
+                        )
 
                 cand_ent_scores = []
                 for entity in cand_ent_init:
                     entities_scores = list(cand_ent_init[entity])
-                    entities_scores = sorted(entities_scores, key=lambda x: (x[0], x[2], x[1]), reverse=True)
-                    cand_ent_scores.append(([entity] + list(entities_scores[0])))
+                    entities_scores = sorted(
+                        entities_scores,
+                        key=lambda x: (x[0], x[2], x[1]),
+                        reverse=True,
+                    )
+                    cand_ent_scores.append(
+                        ([entity] + list(entities_scores[0]))
+                    )
 
-                cand_ent_scores = sorted(cand_ent_scores, key=lambda x: (x[1], x[3], x[2]), reverse=True)
+                cand_ent_scores = sorted(
+                    cand_ent_scores,
+                    key=lambda x: (x[1], x[3], x[2]),
+                    reverse=True,
+                )
                 entity_ids = [elem[0] for elem in cand_ent_scores]
                 confs = [elem[1:4] for elem in cand_ent_scores]
                 entity_id_tags = [elem[4] for elem in cand_ent_scores]
-                entity_ids = [entity_id.replace("slash", "/").replace("hyphen", "-") for entity_id in entity_ids]
+                entity_ids = [
+                    entity_id.replace("slash", "/").replace("hyphen", "-")
+                    for entity_id in entity_ids
+                ]
                 entity_ids_list.append(entity_ids)
                 conf_list.append(confs)
                 entity_id_tags_list.append(entity_id_tags)
 
         return entity_ids_list, conf_list, entity_id_tags_list
 
-    def process_cand_ent(self, cand_ent_init, entities_and_ids, entity_substr_split, tags):
+    def process_cand_ent(
+        self, cand_ent_init, entities_and_ids, entity_substr_split, tags
+    ):
         if tags:
             for (
                 entity_title,
@@ -197,8 +261,12 @@ class EntityLinker(Component, Serializable):
             ) in entities_and_ids:
                 for tag, tag_conf in tags:
                     if tag == f_tag:
-                        substr_score = self.calc_substr_score(entity_title, entity_substr_split)
-                        cand_ent_init[entity_id].add((substr_score, entity_rels, tag_conf, f_tag))
+                        substr_score = self.calc_substr_score(
+                            entity_title, entity_substr_split
+                        )
+                        cand_ent_init[entity_id].add(
+                            (substr_score, entity_rels, tag_conf, f_tag)
+                        )
         else:
             for (
                 entity_title,
@@ -207,8 +275,12 @@ class EntityLinker(Component, Serializable):
                 f_tag,
                 user_id,
             ) in entities_and_ids:
-                substr_score = self.calc_substr_score(entity_title, entity_substr_split)
-                cand_ent_init[entity_id].add((substr_score, entity_rels, 1.0, f_tag))
+                substr_score = self.calc_substr_score(
+                    entity_title, entity_substr_split
+                )
+                cand_ent_init[entity_id].add(
+                    (substr_score, entity_rels, 1.0, f_tag)
+                )
         return cand_ent_init
 
     def find_exact_match(self, user_id, entity_substr, tags=None):
@@ -222,7 +294,9 @@ class EntityLinker(Component, Serializable):
         entities_and_ids = res.fetchall()
 
         if entities_and_ids:
-            cand_ent_init = self.process_cand_ent(cand_ent_init, entities_and_ids, entity_substr_split, tags)
+            cand_ent_init = self.process_cand_ent(
+                cand_ent_init, entities_and_ids, entity_substr_split, tags
+            )
         return cand_ent_init
 
     def find_fuzzy_match(self, user_id, entity_substr_split, tags=None):
@@ -233,7 +307,9 @@ class EntityLinker(Component, Serializable):
             query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
             res = self.cur.execute(query, (query_str,))
             part_entities_and_ids = res.fetchall()
-            cand_ent_init = self.process_cand_ent(cand_ent_init, part_entities_and_ids, entity_substr_split, tags)
+            cand_ent_init = self.process_cand_ent(
+                cand_ent_init, part_entities_and_ids, entity_substr_split, tags
+            )
         return cand_ent_init
 
     def calc_substr_score(self, entity_title, entity_substr_split):
@@ -254,7 +330,9 @@ class EntityLinker(Component, Serializable):
                         if fuzz_score >= 80.0 and not found:
                             cnt += fuzz_score * 0.01
                             break
-        substr_score = round(cnt / max(len(label_tokens), len(entity_substr_split)), 3)
+        substr_score = round(
+            cnt / max(len(label_tokens), len(entity_substr_split)), 3
+        )
         if len(label_tokens) == 2 and len(entity_substr_split) == 1:
             if entity_substr_split[0] == label_tokens[1]:
                 substr_score = 0.5

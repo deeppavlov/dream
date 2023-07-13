@@ -5,7 +5,10 @@ from flask import Flask, request, jsonify
 import sentry_sdk
 from deeppavlov import build_model
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
 logger = logging.getLogger(__name__)
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
@@ -28,7 +31,11 @@ def respond():
     inp = request.json
     entity_substr_batch = inp.get("entity_substr", [[""]])
     entity_tags_batch = inp.get(
-        "entity_tags", [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
+        "entity_tags",
+        [
+            ["" for _ in entity_substr_list]
+            for entity_substr_list in entity_substr_batch
+        ],
     )
     context_batch = inp.get("context", [[""]])
     opt_context_batch = []
@@ -46,11 +53,20 @@ def respond():
 
     entity_info_batch = [[{}] for _ in entity_substr_batch]
     try:
-        entity_substr_batch, entity_ids_batch, conf_batch, entity_pages_batch = el(
-            entity_substr_batch, entity_tags_batch, opt_context_batch
-        )
+        (
+            entity_substr_batch,
+            entity_ids_batch,
+            conf_batch,
+            entity_pages_batch,
+        ) = el(entity_substr_batch, entity_tags_batch, opt_context_batch)
         entity_info_batch = []
-        for entity_substr_list, entity_ids_list, entity_tags_list, conf_list, entity_pages_list in zip(
+        for (
+            entity_substr_list,
+            entity_ids_list,
+            entity_tags_list,
+            conf_list,
+            entity_pages_list,
+        ) in zip(
             entity_substr_batch,
             entity_ids_batch,
             entity_tags_batch,
@@ -58,15 +74,27 @@ def respond():
             entity_pages_batch,
         ):
             entity_info_list = []
-            for entity_substr, entity_ids, entity_tags, confs, entity_pages in zip(
-                entity_substr_list, entity_ids_list, entity_tags_list, conf_list, entity_pages_list
+            for (
+                entity_substr,
+                entity_ids,
+                entity_tags,
+                confs,
+                entity_pages,
+            ) in zip(
+                entity_substr_list,
+                entity_ids_list,
+                entity_tags_list,
+                conf_list,
+                entity_pages_list,
             ):
                 entity_info = {}
                 entity_info["entity_substr"] = entity_substr
                 entity_info["entity_ids"] = entity_ids
                 entity_info["entity_tags"] = entity_tags
                 entity_info["confidences"] = [float(elem[2]) for elem in confs]
-                entity_info["tokens_match_conf"] = [float(elem[0]) for elem in confs]
+                entity_info["tokens_match_conf"] = [
+                    float(elem[0]) for elem in confs
+                ]
                 entity_info["entity_pages"] = entity_pages
                 entity_info_list.append(entity_info)
             entity_info_batch.append(entity_info_list)

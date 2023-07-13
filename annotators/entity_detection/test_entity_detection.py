@@ -14,7 +14,12 @@ def main():
             {
                 "entities": ["capital", "russia"],
                 "labelled_entities": [
-                    {"finegrained_label": [["misc", 0.871]], "label": "misc", "offsets": [12, 19], "text": "capital"},
+                    {
+                        "finegrained_label": [["misc", 0.871]],
+                        "label": "misc",
+                        "offsets": [12, 19],
+                        "text": "capital",
+                    },
                     {
                         "finegrained_label": [["loc", 0.9927]],
                         "label": "location",
@@ -28,7 +33,12 @@ def main():
             {
                 "entities": ["politics"],
                 "labelled_entities": [
-                    {"finegrained_label": [["misc", 0.9984]], "label": "misc", "offsets": [17, 25], "text": "politics"}
+                    {
+                        "finegrained_label": [["misc", 0.9984]],
+                        "label": "misc",
+                        "offsets": [17, 25],
+                        "text": "politics",
+                    }
                 ],
             }
         ],
