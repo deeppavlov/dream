@@ -41,22 +41,14 @@ class TorchTransformersEntityRankerPreprocessor(Component):
         self.return_tokens = return_tokens
         if Path(vocab_file).is_file():
             vocab_file = str(expand_path(vocab_file))
-            self.tokenizer = AutoTokenizer(
-                vocab_file=vocab_file, do_lower_case=do_lower_case
-            )
+            self.tokenizer = AutoTokenizer(vocab_file=vocab_file, do_lower_case=do_lower_case)
         else:
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                vocab_file, do_lower_case=do_lower_case
-            )
+            self.tokenizer = AutoTokenizer.from_pretrained(vocab_file, do_lower_case=do_lower_case)
         if special_tokens is not None:
             special_tokens_dict = {"additional_special_tokens": special_tokens}
             self.tokenizer.add_special_tokens(special_tokens_dict)
 
-    def __call__(
-        self, texts_a: List[str]
-    ) -> Union[
-        List[InputFeatures], Tuple[List[InputFeatures], List[List[str]]]
-    ]:
+    def __call__(self, texts_a: List[str]) -> Union[List[InputFeatures], Tuple[List[InputFeatures], List[List[str]]]]:
         # in case of iterator's strange behaviour
         if isinstance(texts_a, tuple):
             texts_a = list(texts_a)

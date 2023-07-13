@@ -12,10 +12,7 @@ from deeppavlov import build_model
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=logging.INFO,
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
@@ -68,9 +65,7 @@ replace_tag_dict = {
 def get_result(request, what_to_annotate):
     st_time = time.time()
     last_utts = request.json.get("sentences", [])
-    logger.info(
-        f"annotating: {what_to_annotate}, input (the last utterances): {last_utts}"
-    )
+    logger.info(f"annotating: {what_to_annotate}, input (the last utterances): {last_utts}")
 
     utts_list = []
     utts_list_init = []
@@ -111,18 +106,8 @@ def get_result(request, what_to_annotate):
                 sentences_batch,
                 probas_batch,
             ) = entity_detection(utts_list)
-            logger.info(
-                f"entity_substr_batch {entity_substr_batch} tags_batch {tags_batch}"
-            )
-            for (
-                entity_substr_list,
-                tags_list,
-                probas_list,
-                entity_offsets_list,
-                uttr,
-                num,
-                uttr_offset,
-            ) in zip(
+            logger.info(f"entity_substr_batch {entity_substr_batch} tags_batch {tags_batch}")
+            for (entity_substr_list, tags_list, probas_list, entity_offsets_list, uttr, num, uttr_offset,) in zip(
                 entity_substr_batch,
                 tags_batch,
                 probas_batch,
@@ -133,10 +118,7 @@ def get_result(request, what_to_annotate):
             ):
                 utt_entities = {}
                 for entity, tag, proba, (start_offset, end_offset) in zip(
-                    entity_substr_list,
-                    tags_list,
-                    probas_list,
-                    entity_offsets_list,
+                    entity_substr_list, tags_list, probas_list, entity_offsets_list
                 ):
                     entity_init = uttr[start_offset:end_offset]
                     if entity_init.lower() == entity:
@@ -144,23 +126,14 @@ def get_result(request, what_to_annotate):
                     if (
                         entity.lower() not in stopwords
                         and len(entity) > 2
-                        and not (
-                            len(entity.split()) == 1
-                            and nlp(entity)[0].pos_ == "PRON"
-                        )
+                        and not (len(entity.split()) == 1 and nlp(entity)[0].pos_ == "PRON")
                         and start_offset >= uttr_offset
                     ):
                         start_offset -= uttr_offset
                         end_offset -= uttr_offset
-                        entity = (
-                            EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(
-                                " ", entity
-                            )
-                        )
+                        entity = EVERYTHING_EXCEPT_LETTERS_DIGITALS_AND_SPACE.sub(" ", entity)
                         entity = DOUBLE_SPACES.sub(" ", entity).strip()
-                        finegrained_tag = replace_tag_dict.get(
-                            tag.lower(), tag.lower()
-                        )
+                        finegrained_tag = replace_tag_dict.get(tag.lower(), tag.lower())
                         if finegrained_tag == "black":
                             continue
                         if "entities" in utt_entities:
@@ -169,9 +142,7 @@ def get_result(request, what_to_annotate):
                                 {
                                     "text": entity,
                                     "label": tag.lower(),
-                                    "finegrained_label": [
-                                        (finegrained_tag, proba)
-                                    ],
+                                    "finegrained_label": [(finegrained_tag, proba)],
                                     "offsets": (start_offset, end_offset),
                                 }
                             )
@@ -181,9 +152,7 @@ def get_result(request, what_to_annotate):
                                 {
                                     "text": entity,
                                     "label": tag.lower(),
-                                    "finegrained_label": [
-                                        (finegrained_tag, proba)
-                                    ],
+                                    "finegrained_label": [(finegrained_tag, proba)],
                                     "offsets": (start_offset, end_offset),
                                 }
                             ]
@@ -197,9 +166,7 @@ def get_result(request, what_to_annotate):
 
     total_time = time.time() - st_time
     logger.info(f"entity detection exec time: {total_time: .3f}s")
-    logger.info(
-        f"entity_detection, input {last_utts}, output {utt_entities_batch}"
-    )
+    logger.info(f"entity_detection, input {last_utts}, output {utt_entities_batch}")
     return utt_entities_batch
 
 
