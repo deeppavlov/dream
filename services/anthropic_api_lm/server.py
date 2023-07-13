@@ -24,8 +24,8 @@ NAMING = ["Assistant", "Human"]
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "claudev1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
-    "claudev13": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "claude-1": json.load(open("common/generative_configs/empty_generative_config.json", "r")),
+    "claude-instant-1": json.load(open("common/generative_configs/empty_generative_config.json", "r")),
 }
 
 

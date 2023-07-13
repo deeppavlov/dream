@@ -21,14 +21,3 @@ compose:
   - ./common:/src/common
   ports:
   - 8033:8033
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8033
-  - PORT=8033

@@ -58,7 +58,10 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses, human_uttr_attributes):
     try:
-        curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses])
+        if "transformers" in GENERATIVE_SERVICE_URL:
+            curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses]) + "\n" + PROMPT
+        else:
+            curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}"' for hyp in hypotheses])
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
@@ -117,7 +120,8 @@ def respond():
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
-
+        hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
+        logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(
             dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {})
