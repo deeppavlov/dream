@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import time
 
 import sentry_sdk
@@ -28,11 +29,10 @@ NAMING = {
     "EN": ["AI", "Human"],
     "RU": ["Assistant", "Human"],
 }
-EOS_TOKENS = os.environ.get("EOS_TOKENS", None)  # for RuXGLM: "<|endoftext|>,Human:"
-if EOS_TOKENS:
-    EOS_TOKENS = EOS_TOKENS.split(",")
-else:
-    EOS_TOKENS = []
+ADDITIONAL_EOS_TOKENS = os.environ.get("ADDITIONAL_EOS_TOKENS", None)  # for RuXGLM: "<|endoftext|>,Human:"
+if ADDITIONAL_EOS_TOKENS:
+    ADDITIONAL_EOS_TOKENS = ADDITIONAL_EOS_TOKENS.split(",")
+    ADDITIONAL_EOS_TOKENS = re.compile(r"(" + r"|".join([r"\b%s\b" % token for token in ADDITIONAL_EOS_TOKENS]) + r")")
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -48,20 +48,22 @@ DEFAULT_CONFIGS = {
 }
 
 
-def add_replacement_tokens(string):
+def add_replacement_tokens(text):
     for pair in replacement:
-        string = string.replace(pair[0], pair[1])
-    return string
+        text = text.replace(pair[0], pair[1])
+    return text
 
 
-def remove_replacement_tokens(string):
+def remove_replacement_tokens(text):
     for pair in replacement:
-        string = string.replace(pair[1], pair[0])
+        text = text.replace(pair[1], pair[0])
 
-    string = string.replace("\n ", "\n")
-    for token in EOS_TOKENS:
-        string = string.replace(token, "")
-    return string
+    text = text.replace("\n ", "\n")
+    return text
+
+
+def cut_predictions_by_additional_eos(text):
+    return re.split(ADDITIONAL_EOS_TOKENS, text)[0]
 
 
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
@@ -76,9 +78,9 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
+    dialog_context = add_replacement_tokens(dialog_context)
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
-    generation_params["eos_token_id"] = EOS_TOKENS + generation_params.pop("eos_token_id", [])
 
     with torch.no_grad():
         if torch.cuda.is_available():
@@ -86,7 +88,6 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         chat_history_ids = model.generate(
             bot_input_ids,
             pad_token_id=tokenizer.eos_token_id,
-            eos_token_id=EOS_TOKENS,
             **generation_params,
         )
     if torch.cuda.is_available():
@@ -94,6 +95,8 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     for result in chat_history_ids:
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
+        result_cut = cut_predictions_by_additional_eos(result_cut)
+        result_cut = remove_replacement_tokens(result_cut)
         result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
@@ -107,8 +110,6 @@ try:
         additional_kwargs["use_auth_token"] = HF_ACCESS_TOKEN
 
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
-    EOS_TOKENS += [tokenizer.eos_token]
-    EOS_TOKENS = tokenizer.encode(EOS_TOKENS)
 
     if HALF_PRECISION:
         additional_kwargs["torch_dtype"] = "torch.float16"
@@ -118,8 +119,6 @@ try:
         logger.info("transformers_lm is set to run on cuda")
     config = DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]
     replacement = config.pop("replacement", [])
-    config["eos_token_id"] = EOS_TOKENS + config.pop("eos_token_id", [])
-    logger.info("Test: considered  EOS tokens ids: {config['eos_token_id']}")
 
     example_response = generate_responses(
         ["What is the goal of SpaceX?"],
