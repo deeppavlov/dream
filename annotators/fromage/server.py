@@ -5,7 +5,6 @@ from fromage import models
 from fromage import utils
 import torch
 import sentry_sdk
-import torch
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 

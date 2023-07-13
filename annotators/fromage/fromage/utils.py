@@ -57,7 +57,8 @@ def pad_to_size(x, size=256):
 class RandCropResize(object):
 
     """
-    Randomly crops, then randomly resizes, then randomly crops again, an image. Mirroring the augmentations from https://arxiv.org/abs/2102.12092
+    Randomly crops, then randomly resizes, then randomly crops again, an image. \
+    Mirroring the augmentations from https://arxiv.org/abs/2102.12092
     """
 
     def __init__(self, target_size):
@@ -135,7 +136,7 @@ def accuracy(output, target, padding, topk=(1,)):
             print(f"[WARNING] Less than {maxk} predictions available. Using {output.shape[-1]} for topk.")
 
         maxk = min(maxk, output.shape[-1])
-        batch_size = target.size(0)
+        # batch_size = target.size(0)
 
         # Take topk along the last dimension.
         _, pred = output.topk(maxk, -1, True, True)  # (N, T, topk)

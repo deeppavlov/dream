@@ -1,22 +1,19 @@
-from typing import Callable, List, Optional, Tuple, Union
+from typing import List, Optional
 from collections import namedtuple
 import json
 import glob
-import math
 import numpy as np
 import os
 import torch
 from torch import Tensor
 import torch.nn as nn
 import torch.nn.functional as F
-from einops import rearrange
-from functools import partial
 import pickle as pkl
 from PIL import Image, UnidentifiedImageError
 
-from transformers import AutoConfig, AutoModel, AutoModelForCausalLM
+from transformers import AutoModel
 from transformers import OPTForCausalLM, GPT2Tokenizer
-from transformers import CLIPVisionModel, CLIPVisionConfig
+from transformers import CLIPVisionModel
 
 from fromage import utils
 
@@ -110,7 +107,8 @@ class FromageModel(nn.Module):
                     and (self.lm.config.word_embed_proj_dim != self.lm.config.hidden_size)
                 ):
                     raise ValueError(
-                        "No projection dim specified but model uses last output layer and an intermediate one (which have different dims)."
+                        "No projection dim specified but model uses last output layer \
+                        and an intermediate one (which have different dims)."
                     )
                 else:
                     out_dim = self.lm.config.hidden_size
@@ -132,7 +130,8 @@ class FromageModel(nn.Module):
                     self.text_hidden_fcs.append(nn.Sequential(*text_fc))
                 else:
                     raise ValueError(
-                        f"Embedding of layer {layer_idx} was requested but model only has {self.lm.config.num_hidden_layers} layers."
+                        f"Embedding of layer {layer_idx} was requested \
+                        but model only has {self.lm.config.num_hidden_layers} layers."
                     )
 
         self.visual_embeddings = nn.Linear(hidden_size, embedding_dim)
@@ -359,9 +358,11 @@ class FromageModel(nn.Module):
           embeddings: Input condition that the model uses for autoregressive generation.
           max_len: Maximum number of tokens to generate.
           temperature: Used to modulate logit distribution.
-          top_p: If set to < 1, the smallest set of tokens with highest probabilities that add up to top_p or higher are kept for generation.
+          top_p: If set to < 1, the smallest set of tokens with highest probabilities \
+          that add up to top_p or higher are kept for generation.
           min_word_tokens: Minimum number of words to generate before allowing a [RET] output.
-          ret_scale_factor: Proportion to scale [RET] token logits by. A higher value may increase the probability of the model generating [RET] outputs.
+          ret_scale_factor: Proportion to scale [RET] token logits by. \
+          A higher value may increase the probability of the model generating [RET] outputs.
           filter_value: Value to assign to tokens that should never be generated.
         Outputs:
           out: (N, T) int32 sequence of output tokens.
@@ -528,14 +529,18 @@ class Fromage(nn.Module):
 
         Args:
           prompts: List of interleaved PIL.Image.Image and strings representing input to the model.
-          num_words: Maximum number of words to generate for. If num_words = 0, the model will run its forward pass and return the outputs.
-          ret_scale_factor: Proportion to scale [RET] token logits by. A higher value may increase the probability of the model generating [RET] outputs.
-          top_p: If set to < 1, the smallest set of tokens with highest probabilities that add up to top_p or higher are kept for generation.
+          num_words: Maximum number of words to generate for. \
+          If num_words = 0, the model will run its forward pass and return the outputs.
+          ret_scale_factor: Proportion to scale [RET] token logits by. \
+          A higher value may increase the probability of the model generating [RET] outputs.
+          top_p: If set to < 1, the smallest set of tokens with highest probabilities \
+          that add up to top_p or higher are kept for generation.
           temperature: Used to modulate logit distribution.
           max_num_rets: Maximum number of images to return in one generation pass.
           max_img_per_ret: Maximum number of images to return for each [RET] token.
         Returns:
-          return_outputs: List consisting of either str or List[PIL.Image.Image] objects, representing image-text interleaved model outputs.
+          return_outputs: List consisting of either str or List[PIL.Image.Image] objects, \
+          representing image-text interleaved model outputs.
         """
         input_embs = []
         input_ids = []

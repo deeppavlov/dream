@@ -1,15 +1,10 @@
 """Modified from https://github.com/mlfoundations/open_clip"""
 
-from typing import Optional, Tuple
-
-import collections
 import logging
 import os
 import numpy as np
 import pandas as pd
 import torch
-import torchvision.datasets as datasets
-from torchvision import transforms as T
 from PIL import Image, ImageFont
 from torch.utils.data import Dataset
 

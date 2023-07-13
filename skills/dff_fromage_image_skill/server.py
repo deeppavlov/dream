@@ -15,7 +15,7 @@ from common.dff.integration.actor import load_ctxs, get_response
 
 from scenario.main import actor
 
-import test_server
+# import test_server
 
 
 ignore_logger("root")
@@ -67,17 +67,17 @@ except Exception as exc:
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 
-import pathlib
-import json
+# import pathlib
+# import json
 
-for in_file in pathlib.Path("tests").glob("./*_in.json"):
-    logger.error(in_file)
-    test_in = json.load(in_file.open())
-    responses = handler(test_in, RANDOM_SEED)
-    out_file = str(in_file).replace("in.json", "out.json")
-    import common.test_utils as t_utils
+# for in_file in pathlib.Path("tests").glob("./*_in.json"):
+#     logger.error(in_file)
+#     test_in = json.load(in_file.open())
+#     responses = handler(test_in, RANDOM_SEED)
+#     out_file = str(in_file).replace("in.json", "out.json")
+#     import common.test_utils as t_utils
 
-    t_utils.save_to_test(responses, out_file, indent=4)  # TEST
+#     t_utils.save_to_test(responses, out_file, indent=4)  # TEST
 
 
 @app.route("/respond", methods=["POST"])

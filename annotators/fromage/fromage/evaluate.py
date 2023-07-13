@@ -1,8 +1,5 @@
 import collections
-import json
-import os
 from PIL import Image
-import numpy as np
 import time
 import tqdm
 import torch
@@ -313,21 +310,21 @@ def validate(val_loader, model, tokenizer, criterion, epoch, args):
         top1_image.all_reduce()
         top5_image.all_reduce()
 
-    if args.distributed and (len(val_loader.sampler) * args.world_size < len(val_loader.dataset)):
-        aux_val_dataset = Subset(
-            val_loader.dataset, range(len(val_loader.sampler) * args.world_size, len(val_loader.dataset))
-        )
-        aux_val_loader = torch.utils.data.DataLoader(
-            aux_val_dataset,
-            batch_size=(args.val_batch_size or args.batch_size),
-            shuffle=False,
-            num_workers=args.workers,
-            pin_memory=True,
-            collate_fn=data.collate_fn,
-        )
-        run_validate(aux_val_loader, len(val_loader))
+    # if args.distributed and (len(val_loader.sampler) * args.world_size < len(val_loader.dataset)):
+    # aux_val_dataset = Subset(
+    #     val_loader.dataset, range(len(val_loader.sampler) * args.world_size, len(val_loader.dataset))
+    # )
+    #     aux_val_loader = torch.utils.data.DataLoader(
+    #         aux_val_dataset,
+    #         batch_size=(args.val_batch_size or args.batch_size),
+    #         shuffle=False,
+    #         num_workers=args.workers,
+    #         pin_memory=True,
+    #         collate_fn=data.collate_fn,
+    #     )
+    #     run_validate(aux_val_loader, len(val_loader))
 
-    progress.display_summary()
+    # progress.display_summary()
 
     writer.add_scalar("val/total_secs_per_batch", batch_time.avg, actual_step)
     writer.add_scalar("val/seq_top1_acc", top1.avg, actual_step)

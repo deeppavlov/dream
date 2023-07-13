@@ -11,7 +11,7 @@ def test_respond():
     print(result)
 
     obligatory_word = "SUV"
-    assert obligatory_word in result, f"Expected the word '{obligatory_word}' to present in caption"
+    assert obligatory_word in result[0], f"Expected the word '{obligatory_word}' to present in caption"
     print("\n", "Success!!!")
 
 
