@@ -22,6 +22,7 @@ PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME")
 REQUEST_TIMEOUT = getenv("REQUEST_TIMEOUT")
 if not REQUEST_TIMEOUT:
     REQUEST_TIMEOUT = 15
+REQUEST_TIMEOUT = int(REQUEST_TIMEOUT)
 if not ARGUMENTS_TO_SEND:
     ARGUMENTS_TO_SEND = ["user_id"]
 else:
@@ -35,12 +36,13 @@ assert "EXTERNAL_SKILL_URL", logger.info("You need to provide the external skill
 
 @app.route("/respond", methods=["POST"])
 def respond():
+    responses = []
+    confidences = []
     sentences = request.json.get("sentences", [])
-    user_ids = request.json.get("dialog_ids", [])
-    dialog_ids = request.json.get("user_ids", [])
+    user_ids = request.json.get("user_ids", [])
+    dialog_ids = request.json.get("dialog_ids", [])
+    logger.info(f"Got sentences: {sentences}, user_ids: {user_ids}, dialog_ids: {dialog_ids}")
     for n_dialog, message_text in enumerate(sentences):
-        responses = []
-        confidences = []
         try:
             payload = {
                 PAYLOAD_ARGUMENT_NAME: message_text,
@@ -62,7 +64,7 @@ def respond():
             confidence = 0.0
         responses.append(response)
         confidences.append(confidence)
-    logger.info(f"Responses: {str(responses)}, confidences: {str(confidences)}")
+        logger.info(f"Responses: {str(responses)}, confidences: {str(confidences)}")
     return jsonify(list(zip(responses, confidences)))
 
 

@@ -9,7 +9,7 @@ To do so, add the following files to the distribution you want to use for testin
 
 __docker-compose.override.yml (add to WAIT_HOSTS)__
 ```
-external-integration-skill:8168, external-fake-server:8169
+external-integration-skill:8171, external-fake-server:8172
 ```
 
 __docker-compose.override.yml__
@@ -18,14 +18,15 @@ __docker-compose.override.yml__
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8168
         SERVICE_NAME: external_integration_skill
-        EXTERNAL_SKILL_URL: http://external-fake-server:8169/return_response
-        ARGUMENT_TO_SEND: payload
+        EXTERNAL_SKILL_URL: http://external-fake-server:8172/return_response
+        ARGUMENTS_TO_SEND: dialog_id
+        PAYLOAD_ARGUMENT_NAME: payload
         RESPONSE_KEY: response
+        REQUEST_TIMEOUT: 10
       context: .
       dockerfile: ./skills/external_integration_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8168 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8171 --reload
     deploy:
       resources:
         limits:
@@ -37,11 +38,11 @@ __docker-compose.override.yml__
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8169
+        SERVICE_PORT: 8172
         SERVICE_NAME: external_fake_server
       context: .
       dockerfile: ./services/external_fake_server/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8169
+    command: flask run -h 0.0.0.0 -p 8172
     environment:
       - FLASK_APP=server
     deploy:
@@ -59,14 +60,14 @@ __dev.yml__
       - "./skills/external_integration_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8168:8168
+      - 8171:8171
 
   external-fake-server:
     volumes:
       - "./services/external_fake_server:/src"
       - "./common:/src/common"
     ports:
-      - 8169:8169
+      - 8172:8172
 ```
 
 __pipeline_conf.json (add to skills)__ 
@@ -75,9 +76,9 @@ __pipeline_conf.json (add to skills)__
     "connector": {
         "protocol": "http",
         "timeout": 2,
-        "url": "http://external-integration-skill:8168/respond"
+        "url": "http://external-integration-skill:8171/respond"
     },
-    "dialog_formatter": "state_formatters.dp_formatters:full_dialog",
+    "dialog_formatter": "state_formatters.dp_formatters:external_integration_skill_formatter",
     "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
     "previous_services": [
         "skill_selectors"
@@ -100,4 +101,4 @@ asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skill
 
 ## Integrating real external services
 
-Do the same, but leave out external-fake-server component. Also, pay attention to ```EXTERNAL_SKILL_URL```, ```ARGUMENT_TO_SEND```, ```RESPONSE_KEY```. ```EXTERNAL_SKILL_URL``` is the link to the external service. ```ARGUMENT_TO_SEND``` and ```RESPONSE_KEY``` both depend on the input and output format of the external service. ```ARGUMENT_TO_SEND``` is the key of the input json in which the external skill is expecting to receive the text of the message to reply to ("payload" by default); ```RESPONSE_KEY``` is the key in which the output json of the external skills contains the text of the reply we want to get ("response" by default).
+Do the same, but leave out external-fake-server component. Also, pay attention to ```EXTERNAL_SKILL_URL```, ```PAYLOAD_ARGUMENT_NAME```, ```RESPONSE_KEY```, ```ARGUMENTS_TO_SEND```. ```EXTERNAL_SKILL_URL``` is the link to the external service. ```PAYLOAD_ARGUMENT_NAME```, ```RESPONSE_KEY``` and ```ARGUMENTS_TO_SEND``` all depend on the input and output format of the external service. ```PAYLOAD_ARGUMENT_NAME``` is the key of the input json in which the external skill is expecting to receive the text of the message to reply to ("payload" by default); ```RESPONSE_KEY``` is the key in which the output json of the external skills contains the text of the reply we want to get (None by default); ```ARGUMENTS_TO_SEND``` are the arguments that the external servers needs to receive alongside with the message text, e.g. dialog_id or user_id.
