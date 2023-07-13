@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from typing import Dict, List, Any
 
 from common.utils import get_entities
@@ -894,3 +895,13 @@ def hypotheses_list_last_uttr(dialog: Dict) -> List[Dict]:
     hypots = [h["text"] for h in hypotheses]
     last_human_utterances = [dialog["human_utterances"][-1]["text"] for _ in hypotheses]
     return [{"sentences": hypots, "last_human_utterances": last_human_utterances}]
+
+
+def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
+    prompts_goals = {}
+    if len(dialog["human_utterances"]) > 1:
+        hypotheses = dialog["human_utterances"][-2].get("hypotheses", [])
+        for prompts_goals_dict in [hyp.get("prompts_goals", None) for hyp in hypotheses]:
+            if prompts_goals_dict:
+                prompts_goals.update(deepcopy(prompts_goals_dict))
+    return [{"prompts_goals": [prompts_goals], "human_attributes": [dialog["human"]["attributes"]]}]
