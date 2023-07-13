@@ -1,5 +1,7 @@
-SERVICE_PORT: 8168
+SERVICE_PORT: 8171
 SERVICE_NAME: external_integration_skill
-EXTERNAL_SKILL_URL: http://external-fake-server:8169/return_response
-ARGUMENT_TO_SEND: payload
+EXTERNAL_SKILL_URL: http://external-fake-server:8171/return_response
+ARGUMENTS_TO_SEND: dialog_id
+PAYLOAD_ARGUMENT_NAME: payload
 RESPONSE_KEY: response
+REQUEST_TIMEOUT: 10

@@ -19,13 +19,16 @@ app = Flask(__name__)
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
 ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND")
 PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME")
+REQUEST_TIMEOUT = getenv("REQUEST_TIMEOUT")
+if not REQUEST_TIMEOUT:
+    REQUEST_TIMEOUT = 15
 if not ARGUMENTS_TO_SEND:
     ARGUMENTS_TO_SEND = ["user_id"]
+else:
+    ARGUMENTS_TO_SEND = ARGUMENTS_TO_SEND.split(',')
 if not PAYLOAD_ARGUMENT_NAME:
     PAYLOAD_ARGUMENT_NAME = "payload"
 RESPONSE_KEY = getenv("RESPONSE_KEY")
-if not RESPONSE_KEY:
-    RESPONSE_KEY = "response"
 
 assert "EXTERNAL_SKILL_URL", logger.info("You need to provide the external skill url to get its responses.")
 
@@ -48,10 +51,10 @@ def respond():
             if "dialog_id" in ARGUMENTS_TO_SEND:
                 dialog_id = dialog_ids[n_dialog]
                 payload["dialog_id"] = dialog_id
-            result = requests.post(EXTERNAL_SKILL_URL, json=payload).json()
-            response = result.get(RESPONSE_KEY, "")
+            result = requests.post(EXTERNAL_SKILL_URL, json=payload, timeout=REQUEST_TIMEOUT).json()
+            if RESPONSE_KEY:
+                response = result.get(RESPONSE_KEY, "")
             confidence = result.get("confidence", 0.9)
-            logger.info(f"Response: {str(response)}, confidence: {str(confidence)}")
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
