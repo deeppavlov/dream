@@ -17,9 +17,12 @@ logger.setLevel(gunicorn_logger.level)
 app = Flask(__name__)
 
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
-ARGUMENT_TO_SEND = getenv("ARGUMENT_TO_SEND")
-if not ARGUMENT_TO_SEND:
-    ARGUMENT_TO_SEND = "payload"
+ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND")
+PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME")
+if not ARGUMENTS_TO_SEND:
+    ARGUMENTS_TO_SEND = ["user_id"]
+if not PAYLOAD_ARGUMENT_NAME:
+    PAYLOAD_ARGUMENT_NAME = "payload"
 RESPONSE_KEY = getenv("RESPONSE_KEY")
 if not RESPONSE_KEY:
     RESPONSE_KEY = "response"
@@ -29,20 +32,25 @@ assert "EXTERNAL_SKILL_URL", logger.info("You need to provide the external skill
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    dialogs = request.json["dialogs"]
-    for dialog in dialogs:
+    sentences = request.json.get("sentences", [])
+    user_ids = request.json.get("dialog_ids", [])
+    dialog_ids = request.json.get("user_ids", [])
+    for n_dialog, message_text in enumerate(sentences):
         responses = []
         confidences = []
         try:
-            dialog_id = dialog.get("dialog_id", None)
-            message_text = dialog.get("human_utterances", [{}])[-1].get("text", "")
             payload = {
-                "dialog_id": dialog_id,
-                ARGUMENT_TO_SEND: message_text,
+                PAYLOAD_ARGUMENT_NAME: message_text,
             }
+            if "user_id" in ARGUMENTS_TO_SEND:
+                user_id = user_ids[n_dialog]
+                payload["user_id"] = user_id
+            if "dialog_id" in ARGUMENTS_TO_SEND:
+                dialog_id = dialog_ids[n_dialog]
+                payload["dialog_id"] = dialog_id
             result = requests.post(EXTERNAL_SKILL_URL, json=payload).json()
             response = result.get(RESPONSE_KEY, "")
-            confidence = result.get("confidence", 0.0)
+            confidence = result.get("confidence", 0.9)
             logger.info(f"Response: {str(response)}, confidence: {str(confidence)}")
         except Exception as e:
             sentry_sdk.capture_exception(e)

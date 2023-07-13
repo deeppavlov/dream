@@ -12,12 +12,16 @@ def test_respond():
                 {
                     "dialog_id": "11b8940f99738c4d92d54076daab4bb6",
                     "human_utterances": [{"text": "hi"}],
+                },
+                {
+                    "dialog_id": None,
+                    "human_utterances": [{"text": ""}],
                 }
             ]
         },
     ).json()
     print(result)
-    assert result == [["Success!", 0.9]], print(f"Got result: {result}, something is wrong.")
+    assert result == [["", 0.8], ["Success!", 0.9]], print(f"Got result: {result}, something is wrong.")
     print("Success!")
 
 
