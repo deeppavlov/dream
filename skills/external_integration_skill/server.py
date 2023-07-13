@@ -19,10 +19,10 @@ app = Flask(__name__)
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
 ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND")
 PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME")
-REQUEST_TIMEOUT = getenv("REQUEST_TIMEOUT")
-if not REQUEST_TIMEOUT:
-    REQUEST_TIMEOUT = 15
-REQUEST_TIMEOUT = int(REQUEST_TIMEOUT)
+EXTERNAL_TIMEOUT = getenv("EXTERNAL_TIMEOUT")
+if not EXTERNAL_TIMEOUT:
+    EXTERNAL_TIMEOUT = 2
+EXTERNAL_TIMEOUT = int(EXTERNAL_TIMEOUT)
 if not ARGUMENTS_TO_SEND:
     ARGUMENTS_TO_SEND = ["user_id"]
 else:
@@ -53,7 +53,7 @@ def respond():
             if "dialog_id" in ARGUMENTS_TO_SEND:
                 dialog_id = dialog_ids[n_dialog]
                 payload["dialog_id"] = dialog_id
-            result = requests.post(EXTERNAL_SKILL_URL, json=payload, timeout=REQUEST_TIMEOUT).json()
+            result = requests.post(EXTERNAL_SKILL_URL, json=payload, timeout=EXTERNAL_TIMEOUT).json()
             if RESPONSE_KEY:
                 response = result.get(RESPONSE_KEY, "")
             confidence = result.get("confidence", 0.9)

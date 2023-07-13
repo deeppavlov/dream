@@ -4,4 +4,4 @@ EXTERNAL_SKILL_URL: http://external-fake-server:8172/return_response
 ARGUMENTS_TO_SEND: dialog_id
 PAYLOAD_ARGUMENT_NAME: payload
 RESPONSE_KEY: response
-REQUEST_TIMEOUT: 10
+EXTERNAL_TIMEOUT: 2
