@@ -44,7 +44,7 @@ assert GENERATIVE_SERVICE_URL
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
-    clean_hypotheses = []  
+    clean_hypotheses = []
     for hyp in hypotheses:
         is_toxic = is_toxic_or_badlisted_utterance(hyp)
         if not is_toxic:
@@ -62,13 +62,22 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog_context, hypotheses, human_uttr_attributes):
     try:
-        ie_types = ["external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses]
+        ie_types = [
+            "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
+        ]
         if "transformers" in GENERATIVE_SERVICE_URL:
-            curr_prompt = "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]'
-                                                       for hyp, ie in zip(hypotheses, ie_types)]) + "\n" + PROMPT
+            curr_prompt = (
+                "Hypotheses:\n"
+                + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
+                + "\n"
+                + PROMPT
+            )
         else:
-            curr_prompt = PROMPT + "\nHypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]'
-                                                                  for hyp, ie in zip(hypotheses, ie_types)])
+            curr_prompt = (
+                PROMPT
+                + "\nHypotheses:\n"
+                + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
+            )
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
