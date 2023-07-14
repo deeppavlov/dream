@@ -143,7 +143,7 @@ try:
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
 
     if HALF_PRECISION:
-        additional_kwargs["torch_dtype"] = "torch.float16"
+        additional_kwargs["torch_dtype"] = torch.float16
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
     if torch.cuda.is_available():
         model.to("cuda")
