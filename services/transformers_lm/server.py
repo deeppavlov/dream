@@ -32,7 +32,6 @@ NAMING = {
 ADDITIONAL_EOS_TOKENS = os.environ.get("ADDITIONAL_EOS_TOKENS", None)  # for RuXGLM: "<|endoftext|>,Human:"
 if ADDITIONAL_EOS_TOKENS:
     ADDITIONAL_EOS_TOKENS = ADDITIONAL_EOS_TOKENS.split(",")
-    ADDITIONAL_EOS_TOKENS = re.compile(r"(" + r"|".join([r"\b%s\b" % token for token in ADDITIONAL_EOS_TOKENS]) + r")")
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -64,7 +63,8 @@ def remove_replacement_tokens(text, replacement):
 
 def cut_predictions_by_additional_eos(text):
     if ADDITIONAL_EOS_TOKENS:
-        return re.split(ADDITIONAL_EOS_TOKENS, text)[0]
+        for token in ADDITIONAL_EOS_TOKENS:
+            text = text.split(token)[0]
     return text
 
 
