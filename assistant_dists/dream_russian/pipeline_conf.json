@@ -137,11 +137,11 @@
                     "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
                 }
             },
-            "toxic_classification": {
+            "combined_classification_ru": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8118/respond"
+                    "url": "http://combined-classification-ru:8198/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -151,8 +151,9 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
-                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
+                    "directory": "annotators/combined_classification_ru",
+                    "container": "combined-classification-ru",
+                    "endpoint": "model"
                 }
             },
             "intent_catcher": {
@@ -363,13 +364,13 @@
                     "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
                 }
             },
-            "toxic_classification": {
+            "combined_classification_ru": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8118/respond_batch"
+                    "timeout": 2.0,
+                    "url": "http://combined-classification-ru:8087/batch_model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"
@@ -377,8 +378,9 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
-                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
+                    "directory": "annotators/combined_classification_ru",
+                    "container": "combined-classification-ru",
+                    "endpoint": "batch_model"
                 }
             },
             "entity_detection": {

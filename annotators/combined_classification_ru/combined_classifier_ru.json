@@ -1,0 +1,132 @@
+{
+  "metadata": {
+    "variables": {
+      "BACKBONE": "DeepPavlov/rubert-base-cased-conversational",
+      "MODELS_PATH": "~/.deeppavlov/models",
+      "SINGLE_SENTENCE_LEN": 32,
+      "MULTI_SENTENCE_LEN": 128,
+      "NUM_TRAIN_EPOCHS": 5,
+      "GRADIENT_ACC_STEPS": 8
+    },
+    "download":[{
+        "url": "http://files.deeppavlov.ai/dream_data/distilru_v1/model.tar.gz",
+        "subdir": "{MODELS_PATH}"
+      }]
+  },
+   "dataset_reader":{
+      "class_name":"multitask_reader",
+      "task_defaults":{"class_name":"basic_classification_reader", 
+                       "path": "null",
+                       "x":"text",
+                       "y":"label_id",
+                       "train":"train.csv",
+                       "valid":"val.csv",
+                       "test":"test.csv",
+                       "header":0,
+                       "sep":"\t",
+                       "label_type":"int"},
+      "tasks":{"emo":{"data_path":"data/emotion_ru_dialog"},
+               "sentiment":{"data_path":"data/sentiment_ru_dialog"},
+               "toxic":{"data_path":"data/toxic"},
+               "factoid":{"data_path":"data/Yahoo"},
+               "midas":{"data_path":"data/midas_ru"},
+               "topics":{"data_path":"data/topics"}
+              }
+      },
+    "dataset_iterator": {
+        "class_name": "multitask_iterator",
+        "num_train_epochs": "{NUM_TRAIN_EPOCHS}",
+        "gradient_accumulation_steps": "{GRADIENT_ACC_STEPS}",
+        "task_defaults": {
+            "class_name": "basic_classification_iterator",
+            "seed": 42},
+        "tasks": {"emo":{},"sentiment":{},"toxic":{},"factoid":{},"midas":{},"topics":{}}
+    },
+  "chainer": {
+    "in": [
+      "x"
+    ],
+    "pipe": [
+      {
+        "class_name": "torch_transformers_preprocessor",
+        "vocab_file": "{BACKBONE}",
+        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
+        "in": [
+          "x"
+        ],
+        "out": [
+          "bert_features"
+        ]
+      },
+      {
+        "id": "multitask_transformer",
+        "class_name": "multitask_transformer",
+        "optimizer_parameters": {
+          "lr": 2e-5
+        },
+        "learning_rate_drop_patience": 2,
+        "learning_rate_drop_div": 2.0,
+        "return_probas": true,
+        "backbone_model": "{BACKBONE}",
+        "save_path": "{MODELS_PATH}/model",
+        "load_path": "{MODELS_PATH}/model",
+        "tasks": {
+          "emo": {
+            "type": "classification",
+            "options": 7,
+            "type_to_cache": 0
+          },
+          "sentiment": {
+            "type": "classification",
+            "options": 3,
+            "type_to_cache": 0
+          },
+          "toxic": {
+            "type": "classification",
+            "options": 2,
+            "type_to_cache": 0
+          },
+          "factoid": {
+            "type": "classification",
+            "options": 2,
+            "type_to_cache": 0
+          },
+          "midas": {
+            "type": "classification",
+            "options": 15,
+            "type_to_cache": 0
+          },
+          "topics": {
+            "type": "classification",
+            "options": 76,
+            "type_to_cache": 0
+          }
+        },
+        "in": [
+          "bert_features_x",
+          "bert_features_x",          
+          "bert_features_x",
+          "bert_features_x",
+          "bert_features_x",
+          "bert_features_x"
+        ],
+        "out": [
+          "y_emo_pred_probas",
+          "y_sentiment_pred_probas",
+          "y_toxic_pred_probas",
+          "y_factoid_pred_probas",
+          "y_midas_pred_probas",
+          "y_topics_pred_probas"
+        ]
+      }
+    ],
+    "out": [
+      "y_emo_pred_probas",
+      "y_sentiment_pred_probas",
+      "y_toxic_pred_probas",
+      "y_factoid_pred_probas",
+      "y_midas_pred_probas",
+      "y_topics_pred_probas"      
+    ]
+  }
+}
