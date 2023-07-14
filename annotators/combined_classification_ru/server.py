@@ -9,7 +9,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 from common.utils import combined_classes
 
-combined_classes['toxicity_classification']= ['toxic', 'not_toxic']  # to support 2class classification
+combined_classes['toxicity_classification']= ['toxic', 'not_toxic']  # As Russian toxic supports only TWO classes
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
@@ -32,13 +32,8 @@ def get_result(sentences, sentences_with_history, postannotations=False):
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
             for i in range(len(prob_list)):
-                if prob_list[i] is not None and len(prob_list[i]):
-                    is_toxic = "toxic" in task_name and prob_list[i][-1] < 0.5
-                    if is_toxic:  # sum of probs of all toxic classes >0.5
-                        prob_list[i][-1] = 0
-                        prob_list[i] = [k / sum(prob_list[i]) for k in prob_list[i]]
-                    ans[i][task_name] = {
-                        class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                ans[i][task_name] = {
+                    class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
                     }
     except Exception as e:
         sentry_sdk.capture_exception(e)

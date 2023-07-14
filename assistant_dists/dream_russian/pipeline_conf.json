@@ -162,7 +162,7 @@
                     "timeout": 1.0,
                     "url": "http://intent-catcher-ru:8014/detect"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.spelling_preprocessing",
