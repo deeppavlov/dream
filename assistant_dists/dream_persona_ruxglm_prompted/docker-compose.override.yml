@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_ruxglm_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
-        sentence-ranker:8128, prompt-selector:8135, transformers-lm-ruxglm:8171,
+        sentence-ranker:8128, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
         dff-dream-persona-ruxglm-prompted-skill:8172"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1

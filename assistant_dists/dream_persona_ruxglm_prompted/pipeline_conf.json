@@ -78,7 +78,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://prompt-selector:8135/collect_goals"
+                    "url": "http://prompt-selector-ru:8135/collect_goals"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -94,7 +94,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://prompt-selector:8135/respond"
+                    "url": "http://prompt-selector-ru:8135/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

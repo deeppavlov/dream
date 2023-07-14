@@ -28,7 +28,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  prompt-selector:
+  prompt-selector-ru:
     volumes:
       - "./annotators/prompt_selector:/src"
       - "./common:/src/common"
