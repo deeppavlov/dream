@@ -1,23 +1,16 @@
 {
-    "connectors": {
-        "sentseg": {
-            "protocol": "http",
-            "timeout": 1.5,
-            "url": "http://sentseg:8011/sentseg"
-        }
-    },
     "services": {
         "last_chance_service": {
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                         "segments": [
-                            "Sorry, something went wrong inside.",
-                            "Please tell me, what did you say."
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
                         ]
                     }
                 }
@@ -36,13 +29,13 @@
             "connector": {
                 "protocol": "python",
                 "class_name": "PredefinedTextConnector",
-                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
                     "sentseg": {
-                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                         "segments": [
-                            "Sorry, I need to think more on that.",
-                            "Let's talk about something else."
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
                         ]
                     }
                 }
@@ -58,22 +51,6 @@
             }
         },
         "annotators": {
-            "sentseg": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://sentseg:8011/sentseg"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
-                    "service": "annotators/SentSeg/service_configs/sentseg"
-                }
-            },
             "prompt_goals_collector": {
                 "connector": {
                     "protocol": "http",
@@ -86,8 +63,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/jkzdgfjhsdlfmgte436t2qrf.yml",
-                    "service": "annotators/prompt_selector/service_configs/dream_persona_ruxglm_prompted"
+                    "component": "components/k3j2h498hvflekdfdfbfgh34r.yml",
+                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
                 }
             },
             "prompt_selector": {
@@ -104,31 +81,32 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/jkzdgfjhsdlfmgte436t2qrf.yml",
-                    "service": "annotators/prompt_selector/service_configs/dream_persona_ruxglm_prompted"
+                    "component": "components/5jR1Tq88W5OckWnTV8VIYL.yml",
+                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
                 }
             }
         },
-        "response_annotators": {
-            "sentseg": {
+        "candidate_annotators": {
+            "dialogrpt": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://sentseg:8011/sentseg"
+                    "timeout": 1.0,
+                    "url": "http://dialogrpt-ru:8122/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_with_context_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "response_annotator_selectors"
+                    "skills"
                 ],
-                "state_manager_method": "add_annotation_prev_bot_utt",
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
-                    "service": "annotators/SentSeg/service_configs/sentseg"
+                    "component": "components/DUW2u7FwPMyhBOWrK1HTg.yml",
+                    "service": "services/dialogrpt_ru/service_configs/dialogrpt-ru"
                 }
             }
         },
+        "response_annotators": {},
         "response_annotator_selectors": {
             "connector": {
                 "protocol": "python",
@@ -145,44 +123,6 @@
             "source": {
                 "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
                 "service": "services/response_annotator_selectors/service_configs/agent"
-            }
-        },
-        "candidate_annotators": {
-            "combined_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://combined-classification:8087/batch_model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
-                    "service": "annotators/combined_classification/service_configs/combined-classification"
-                }
-            },
-            "sentence_ranker": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://sentence-ranker:8128/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
-                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
-                }
             }
         },
         "skill_selectors": {
@@ -251,7 +191,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://ranking-based-response-selector:8002/respond"
+                    "url": "http://ranking-based-response-selector-ru:8002/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -261,16 +201,16 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
-                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
+                    "component": "components/hE12LfxAkX3K9gU0nU4yE2.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector-ru"
                 }
             }
         }
     },
     "metadata": {
-        "display_name": "Persona-based Prompted Dream",
+        "display_name": "Russian Dream Persona-based Chatbot",
         "author": "DeepPavlov",
-        "description": "This is a simple dialog system that can chat with you on any topic. It has a pre-defined 'personality' and uses `GPT-JT 6B` model to generate responses.",
+        "description": "Russian Dream Persona-based Chatbot that utilizes Russian XGLM 4.5B (in a half-precision mode) by Dmitry Kosenko to generate responses based on the text of personality description.",
         "version": "0.0.1",
         "date_created": "2023-01-10T02:00:00",
         "ram_usage": "50 GB",

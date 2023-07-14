@@ -5,7 +5,7 @@ model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
 description: Prompt-based skill that utilizes Russian LLaMA to generate
-    responses based on the given Dream persona description.
+  responses based on the given Dream persona description.
 ram_usage: 150M
 gpu_usage: null
 group: skills
