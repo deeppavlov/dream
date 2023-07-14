@@ -210,7 +210,7 @@
             "dff_dream_persona_ru_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 20.0,
+                    "timeout": 120.0,
                     "url": "http://dff-dream-persona-ruxglm-prompted-skill:8172/respond"
                 },
                 "dialog_formatter": {
