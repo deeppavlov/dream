@@ -48,13 +48,13 @@ DEFAULT_CONFIGS = {
 }
 
 
-def add_replacement_tokens(text):
+def add_replacement_tokens(text, replacement):
     for pair in replacement:
         text = text.replace(pair[0], pair[1])
     return text
 
 
-def remove_replacement_tokens(text):
+def remove_replacement_tokens(text, replacement):
     for pair in replacement:
         text = text.replace(pair[1], pair[0])
 
@@ -80,7 +80,8 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
-    dialog_context = add_replacement_tokens(dialog_context)
+    replacement = config.pop("replacement", [])
+    dialog_context = add_replacement_tokens(dialog_context, replacement)
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
 
@@ -98,7 +99,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         output = tokenizer.decode(result, skip_special_tokens=True)
         result_cut = output.replace(dialog_context + " ", "")
         result_cut = cut_predictions_by_additional_eos(result_cut)
-        result_cut = remove_replacement_tokens(result_cut)
+        result_cut = remove_replacement_tokens(result_cut, replacement)
         result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
@@ -120,7 +121,6 @@ try:
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
     config = DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]
-    replacement = config.pop("replacement", [])
 
     example_response = generate_responses(
         ["What is the goal of SpaceX?"],
