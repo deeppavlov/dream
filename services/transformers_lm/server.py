@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import time
 
 import sentry_sdk
@@ -96,6 +97,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         dialog_context += "\n".join(context)
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
+    dialog_context = re.sub("  +", " ", dialog_context)
 
     replacement = generation_params.pop("replacement", [])
     dialog_context = add_replacement_tokens(dialog_context, replacement)
