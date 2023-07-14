@@ -73,22 +73,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "update_attributes"
             },
-            "spelling_preprocessing": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spelling-preprocessing:8074/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
-                "is_enabled": true,
-                "source": {
-                    "directory": "annotators/spelling_preprocessing",
-                    "container": "spelling-preprocessing",
-                    "endpoint": "respond"
-                }
-            },
             "sentseg": {
                 "connector": {
                     "protocol": "http",
