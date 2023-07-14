@@ -50,7 +50,7 @@ DEFAULT_CONFIGS = {
 
 def add_replacement_tokens(text, replacement):
     for pair in replacement:
-        text = text.replace(pair[0], pair[1])
+        text = text.replace(pair[0], f"{pair[1]} ")
     return text
 
 
@@ -96,7 +96,8 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
-        output = tokenizer.decode(result, skip_special_tokens=True)
+        skip_special_tokens = False if replacement else True
+        output = tokenizer.decode(result, skip_special_tokens=skip_special_tokens)
         result_cut = output.replace(dialog_context + " ", "")
         result_cut = cut_predictions_by_additional_eos(result_cut)
         result_cut = remove_replacement_tokens(result_cut, replacement)
