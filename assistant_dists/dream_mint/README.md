@@ -1,3 +1,14 @@
+# dream_mint distribution
+
+![Architecture](architecture.png)
+
+Basically the way this distro is supposed to function is as following:
+1. recieve user input from the dp-agent of choice (e.g. Telegram);
+2. process the recieved input in a way that results in a command (e.g. move forward 4 meters -> `move_forward_4`);
+3. send the command to the ROS server (in order to make interacting with real robots possible);
+4. process the message from inside ROS server and access local connector (e.g. real robot ROS-API, minecraft-interface);
+5. (while not done in dream-side, it is useful to know that) the local connector then executes a command that usually corresponds with the message we recieved in step 2.
+
 # Prerequisites:
 
 1. Make sure that all services are correctly defined in dev.yml, proxy.yml, pipeline_conf.json.
