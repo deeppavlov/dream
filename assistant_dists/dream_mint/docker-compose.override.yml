@@ -2,9 +2,8 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_mint/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
-          intent-catcher-commands:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, 
+      WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+          intent-catcher-commands:8014, badlisted-words:8018, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, 
           dff-mint-skill:8337, mint-sender:8338, ros-flask-server:5000, mint-status:8340"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
@@ -12,25 +11,48 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
 
-  convers-evaluator-annotator:
+  ranking-based-response-selector:
     env_file: [ .env ]
     build:
       args:
-        CONFIG: conveval.json
-        PORT: 8004
-        DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        LANGUAGE: EN
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
       context: .
-      dockerfile: ./annotators/ConversationEvaluator/Dockerfile
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
-          memory: 2G
+          memory: 100M
         reservations:
-          memory: 2G
+          memory: 100M
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
 
   spacy-nounphrases:
     env_file: [ .env ]

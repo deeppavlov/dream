@@ -5,12 +5,18 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  convers-evaluator-annotator:
+  ranking-based-response-selector:
     volumes:
-      - "./annotators/ConversationEvaluator:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
     ports:
-      - 8004:8004
+      - 8002:8002
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
   spacy-nounphrases:
     volumes:
       - "./annotators/spacy_nounphrases:/src"
