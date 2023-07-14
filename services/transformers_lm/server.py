@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import re
 import time
 
 import sentry_sdk
@@ -9,6 +8,7 @@ import torch
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import StoppingCriteria, StoppingCriteriaList
 
 from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
@@ -68,6 +68,23 @@ def cut_predictions_by_additional_eos(text):
     return text
 
 
+class StoppingCriteriaSub(StoppingCriteria):
+    def __init__(self, stops, tokenizer, prompt, replacement):
+        super().__init__()
+        self.stops = stops
+        self.tokenizer = tokenizer
+        self.prompt = add_replacement_tokens(prompt, replacement)
+        self.prompt = tokenizer.decode(tokenizer.encode(self.prompt))
+
+    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor):
+        for stop in self.stops:
+            generated_temp_ids = input_ids.tolist()[0]
+            if stop in tokenizer.decode(generated_temp_ids)[len(self.prompt) :]:
+                return True
+
+        return False
+
+
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
     outputs = []
     dialog_context = ""
@@ -84,13 +101,23 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     dialog_context = add_replacement_tokens(dialog_context, replacement)
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
-
+    stopping_criteria = StoppingCriteriaList(
+        [
+            StoppingCriteriaSub(
+                stops=ADDITIONAL_EOS_TOKENS,
+                tokenizer=tokenizer,
+                prompt=dialog_context,
+                replacement=replacement,
+            )
+        ]
+    )
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
             bot_input_ids,
             pad_token_id=tokenizer.eos_token_id,
+            stopping_criteria=stopping_criteria,
             **generation_params,
         )
     if torch.cuda.is_available():
