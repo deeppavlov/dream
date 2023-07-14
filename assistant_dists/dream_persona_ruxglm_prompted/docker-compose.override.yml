@@ -68,7 +68,7 @@ services:
         reservations:
           memory: 100M
 
-  prompt-selector:
+  prompt-selector-ru:
     env_file: [ .env ]
     build:
       args:

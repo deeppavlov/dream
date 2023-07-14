@@ -1,4 +1,4 @@
-name: prompt-selector
+name: prompt-selector-ru
 endpoints:
 - respond
 - collect_goals
