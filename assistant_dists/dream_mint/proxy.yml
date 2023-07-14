@@ -1,14 +1,5 @@
 services:
 
-  dff-program-y-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8008
-      - PORT=8008
-
   sentseg:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -35,24 +26,6 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8021
       - PORT=8021
-
-  badlisted-words:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8018
-      - PORT=8018
-
-  dialogpt:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8125
-      - PORT=8125
 
   entity-detection:
     command: [ "nginx", "-g", "daemon off;" ]

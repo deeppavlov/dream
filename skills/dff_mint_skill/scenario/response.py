@@ -34,7 +34,7 @@ def mint_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             response = response[: response.rfind(" #+#")]
         logger.info(f"Response: {response}; intent_name: {intention}")
         try:
-            response += " #+#{}".format(intention)
+            _ = response + " #+#{}".format(intention)
         except TypeError:
             logger.error(f"TypeError intent_name: {intention} response: {response};")
             response = "Hmmm... #+#{}".format(intention)

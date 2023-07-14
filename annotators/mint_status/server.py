@@ -45,7 +45,7 @@ def respond():
                 ]
             else:
                 # command is not completed, so do not update human attributes
-                results += [{"human_attributes": {}}]
+                results += [{"human_attributes": dialog["human"]["attributes"]}]
             logger.info(f"mint_status: status of command `{command}` performance: `{result}`")
         else:
             logger.info("mint_status: NO command found in human attributes")
