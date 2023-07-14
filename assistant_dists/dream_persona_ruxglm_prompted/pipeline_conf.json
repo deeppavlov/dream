@@ -207,7 +207,7 @@
             }
         },
         "skills": {
-            "dff_dream_persona_prompted_skill": {
+            "dff_dream_persona_ru_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
@@ -215,7 +215,7 @@
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_dream_persona_prompted_skill"
+                    "skill_name": "dff_dream_persona_ru_prompted_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
