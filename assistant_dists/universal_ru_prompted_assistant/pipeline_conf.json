@@ -51,40 +51,6 @@
             }
         },
         "annotators": {
-            "prompt_goals_collector": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://prompt-selector-ru:8135/collect_goals"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "update_attributes",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/k3j2h498hvflekdfdfbfgh34r.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
-                }
-            },
-            "prompt_selector": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://prompt-selector-ru:8135/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.prompt_goals_collector"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/5jR1Tq88W5OckWnTV8VIYL.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
-                }
-            }
         },
         "candidate_annotators": {
             "dialogrpt": {
@@ -147,7 +113,7 @@
             }
         },
         "skills": {
-            "dff_universal_ru_prompted_skill": {
+            "dff_universal_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 120.0,
@@ -155,7 +121,7 @@
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_universal_ru_prompted_skill"
+                    "skill_name": "dff_universal_prompted_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [

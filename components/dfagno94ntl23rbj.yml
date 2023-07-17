@@ -1,4 +1,4 @@
-name: dff_universal_ru_prompted_skill
+name: dff_universal_prompted_skill
 display_name: Universal Russian Prompted Skill
 component_type: Generative
 model_type: NN-based
@@ -15,7 +15,7 @@ connector:
   url: http://dff-universal-ru-prompted-skill:8148/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
-  skill_name: dff_universal_ru_prompted_skill
+  skill_name: dff_universal_prompted_skill
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors

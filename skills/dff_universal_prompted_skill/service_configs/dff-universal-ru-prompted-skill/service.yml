@@ -7,7 +7,7 @@ compose:
   build:
     args:
       SERVICE_PORT: 8148
-      SERVICE_NAME: dff_universal_ru_prompted_skill
+      SERVICE_NAME: dff_universal_prompted_skill
       GENERATIVE_TIMEOUT: 120
       N_UTTERANCES_CONTEXT: 7
     context: .
