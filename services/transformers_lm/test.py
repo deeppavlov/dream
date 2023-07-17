@@ -21,11 +21,11 @@ def test_respond():
             "Hi Marcus! I am fine. How are you?",
             "I am great. What are your plans for today?",
         ],
-        ["Hi Marcus! I am fine. How are you?", "I am great. What are your plans for today?"],
+        ["Привет, Маркус! Я в порядке. Как дела?", "Я отлично. Какие у тебя планы на сегодня?"],
     ]
     prompts = [
         "Respond like a friendly chatbot.",
-        "Respond like a friendly chatbot.",
+        "Отвечай как дружелюбный бот.",
     ]
     result = requests.post(
         url,
