@@ -4,7 +4,8 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, sentence-ranker:8128, fromage:8189, dff-fromage-image-skill:8192"
+          spelling-preprocessing:8074, sentence-ranker:8128, dialogpt:8125,
+          image-captioning:8123, dff-image-skill:8124, fromage:8189, dff-fromage-image-skill:8192"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -154,6 +155,29 @@ services:
         reservations:
           memory: 100M
 
+  dialogpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8125
+        SERVICE_NAME: dialogpt
+        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
+        N_HYPOTHESES_TO_GENERATE: 5
+        CONFIG_NAME: dialogpt_en.json
+        MAX_HISTORY_DEPTH: 2
+      context: .
+      dockerfile: ./services/dialogpt/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8125
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
   sentence-ranker:
     env_file: [ .env ]
     build:
@@ -172,7 +196,42 @@ services:
           memory: 3G
         reservations:
           memory: 3G
-  
+
+  image-captioning:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8123
+        SERVICE_NAME: image_captioning
+      context: ./services/image_captioning/
+    command: flask run -h 0.0.0.0 -p 8123
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+        reservations:
+          memory: 5G
+
+  dff-image-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8124
+        SERVICE_NAME: dff_image_skill
+        LANGUAGE: EN
+      context: .
+      dockerfile: ./skills/dff_image_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8124 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 1024M
+
   fromage:
     env_file: [ .env ]
     build:
@@ -183,7 +242,7 @@ services:
       dockerfile: ./annotators/fromage/Dockerfile
     command: flask run -h 0.0.0.0 -p 8189
     environment:
-      - CUDA_VISIBLE_DEVICES=1,2,3
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:

@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("caption_response", "general_node"): loc_cnd.caption_condition,
+            ("fromage_caption_response", "general_node"): loc_cnd.caption_condition,
         }
     },
-    "caption_response": {
+    "fromage_caption_response": {
         "general_node": {
             RESPONSE: loc_rsp.generic_response,
             TRANSITIONS: {},
@@ -29,11 +29,12 @@ flows = {
             TRANSITIONS: {},
         },
         "fallback": {
-            RESPONSE: "Nice picture!",
+            RESPONSE: "Okay. Why did you send me this picture?",
             TRANSITIONS: {},
         },
     },
 }
+
 actor = Actor(
     flows,
     start_label=("global_flow", "start"),

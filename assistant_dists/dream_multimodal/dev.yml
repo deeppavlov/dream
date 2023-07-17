@@ -57,6 +57,13 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
+  dialogpt:
+    volumes:
+      - "./services/dialogpt:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8125:8125
   fromage:
     volumes:
       - "./annotators/fromage:/src"
@@ -70,5 +77,16 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-
+  image-captioning:
+    volumes:
+      - "./services/image_captioning:/src"
+      - "~/.deeppavlov/file_server:/tmp"
+    ports:
+      - 8123:8123
+  dff-image-skill:
+    volumes:
+      - "./skills/dff_image_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8124:8124
 version: "3.7"
