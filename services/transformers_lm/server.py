@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import time
+from copy import deepcopy
 
 import sentry_sdk
 import torch
@@ -156,7 +157,7 @@ try:
         model,
         tokenizer,
         "You are a SpaceX Assistant.",
-        DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH],
+        deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]),
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -178,7 +179,7 @@ def respond():
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
-    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    configs = [deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]) if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
@@ -213,7 +214,7 @@ def generate_goals():
     prompts = [] if prompts is None else prompts
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
-    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    configs = [deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]) if el is None else el for el in configs]
 
     try:
         responses = []
