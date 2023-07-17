@@ -14,14 +14,18 @@ import sentry_sdk
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-talker = rospy.Publisher('talker', String, queue_size=1)
+talker = rospy.Publisher("talker", String, queue_size=1)
 
-threading.Thread(target=lambda: rospy.init_node('listener', disable_signals=True)).start()
+threading.Thread(
+    target=lambda: rospy.init_node("listener", disable_signals=True)
+).start()
 
 VALID_COMMANDS = []
 COMMAND_QUEUE = []
@@ -37,8 +41,10 @@ def respond_set_commands():
     st_time = time.perf_counter()
     VALID_COMMANDS = list(map(lambda i: i.lower(), request.json.get("commands", [])))
     if not VALID_COMMANDS:
-        logger.info("mint-server user did not send valid commands list,"
-                    + "resetting to default")
+        logger.info(
+            "mint-server user did not send valid commands list,"
+            + "resetting to default"
+        )
     logger.info(f"mint-server `VALID_COMMANDS` set: {VALID_COMMANDS}")
 
     total_time = time.perf_counter() - st_time
@@ -73,7 +79,9 @@ def respond_perform_command():
     logger.info("Successfully returned from ROS!")
     results = {"result": command in VALID_COMMANDS}
     COMMAND_QUEUE.append(command)
-    logger.info(f"mint-server `perform_command` {command} appended to queue?: {results}")
+    logger.info(
+        f"mint-server `perform_command` {command} appended to queue?: {results}"
+    )
 
     total_time = time.perf_counter() - st_time
 
@@ -130,5 +138,5 @@ def respond_command_is_performed():
     return jsonify(results)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)

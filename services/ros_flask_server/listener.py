@@ -9,12 +9,12 @@ def callback(data):
 
 
 def listener():
-    rospy.init_node('listener', anonymous=True)
+    rospy.init_node("listener", anonymous=True)
 
     rospy.Subscriber("talker", String, callback)
 
     rospy.spin()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     listener()
