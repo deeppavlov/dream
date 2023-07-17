@@ -1,12 +1,12 @@
+import pytest
 import requests
 
 use_context = True
 
 
-def main():
-    url = "http://0.0.0.0:8075/model"
-
-    request_data = [
+@pytest.mark.parametrize(
+    "request_data", "gold_results",
+    [
         {
             "entity_substr": [["форрест гамп"]],
             "entity_tags": [["film"]],
@@ -17,10 +17,10 @@ def main():
             "entity_tags": [["per"]],
             "context": [["за какую команду играет роберт левандовский?"]],
         },
-    ]
-
-    gold_results = [["Q134773"], ["Q151269"]]
-
+    ],
+    [["Q134773"], ["Q151269"]]
+)
+def test_entity_linking(url: str, request_data, gold_results):
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()

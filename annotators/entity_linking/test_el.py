@@ -1,12 +1,11 @@
+import pytest
 import requests
 
 use_context = True
 
-
-def main():
-    url = "http://0.0.0.0:8075/model"
-
-    request_data = [
+@pytest.mark.parametrize(
+    "request_data", "gold_results",
+    [
         {
             "entity_substr": [["forrest gump"]],
             "entity_tags": [[[("film", 0.9)]]],
@@ -17,10 +16,10 @@ def main():
             "entity_tags": [[[("per", 0.9)]]],
             "context": [["what team does robert lewandowski play for?"]],
         },
-    ]
-
-    gold_results = [["Q134773", "Q552213"], ["Q151269", "Q215925"]]
-
+    ],
+    [["Q134773", "Q552213"], ["Q151269", "Q215925"]]
+)
+def test_entity_linking(url: str, request_data, gold_results):
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(url, json=data).json()
@@ -31,8 +30,3 @@ def main():
             print(f"Got {result}, but expected: {gold_result}")
 
     assert count == len(request_data)
-    print("Success")
-
-
-if __name__ == "__main__":
-    main()

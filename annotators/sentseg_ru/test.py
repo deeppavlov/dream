@@ -1,15 +1,13 @@
+import pytest
 import requests
 
 
-url = "http://0.0.0.0:8011/sentseg"
-sentences = {"sentences": ["привет как дела"]}
+@pytest.mark.parametrize(
+    "sentences", "gold", "segments_gold",
+    {"sentences": ["привет как дела"]}, "привет. как дела?", ["привет.", "как дела?"]
+)
+def test_sentseg(url: str, sentences: dict, gold: str, segments_gold: list):
+    response = requests.post(url, json=sentences).json()
 
-gold = "привет. как дела?"
-segments_gold = ["привет.", "как дела?"]
-
-response = requests.post(url, json=sentences).json()
-
-assert response[0]["punct_sent"] == gold, print(response)
-assert response[0]["segments"] == segments_gold, print(response)
-
-print("SUCCESS!")
+    assert response[0]["punct_sent"] == gold, print(response)
+    assert response[0]["segments"] == segments_gold, print(response)

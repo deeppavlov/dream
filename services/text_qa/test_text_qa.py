@@ -1,14 +1,15 @@
 import os
 import requests
 
+import pytest
+
 
 language = os.getenv("LANGUAGE", "EN")
 
 
-def main():
-    url = "http://0.0.0.0:8078/model"
-
-    request_data = {
+@pytest.mark.parametrize(
+    "request_data", "gold_results",
+    {
         "RU": [
             {
                 "question_raw": ["Где живут кенгуру?"],
@@ -45,8 +46,10 @@ def main():
                 ],
             },
         ],
-    }
-    gold_results = {"RU": ["Австралии", "Яном Лекуном"], "EN": ["Yuri Gagarin", "Jim Parsons"]}
+    },
+    {"RU": ["Австралии", "Яном Лекуном"], "EN": ["Yuri Gagarin", "Jim Parsons"]}
+)
+def test_text_qa(url: str, request_data, gold_results):
     count = 0
     for data, gold_ans in zip(request_data[language], gold_results[language]):
         result = requests.post(url, json=data).json()
@@ -57,8 +60,3 @@ def main():
             print(f"Got {result}, but expected: {gold_ans}")
 
     assert count == len(request_data)
-    print("Success")
-
-
-if __name__ == "__main__":
-    main()

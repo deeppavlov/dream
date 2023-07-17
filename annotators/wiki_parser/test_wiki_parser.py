@@ -1,28 +1,28 @@
 import os
 import requests
 
+import pytest
+
 if os.getenv("LANGUAGE", "EN") == "RU":
     lang = "@ru"
 else:
     lang = "@en"
 
-
-def main():
-    url = "http://0.0.0.0:8077/model"
-
-    request_data_en = [
+@pytest.mark.parametrize(
+    "request_data_en", "request_data_ru", "gold_results_en", "gold_results_ru",
+    [
         {
             "parser_info": ["find_top_triplets"],
             "query": [[{"entity_substr": "Jurgen Schmidhuber", "entity_ids": ["Q92735"]}]],
         }
-    ]
-    request_data_ru = [
+    ],
+    [
         {
             "parser_info": ["find_top_triplets"],
             "query": [[{"entity_substr": "Юрген Шмидхубер", "entity_ids": ["Q92735"]}]],
         }
-    ]
-    gold_results_en = [
+    ],
+    [
         [
             {
                 "animals_skill_entities_info": {},
@@ -68,8 +68,8 @@ def main():
                 "wiki_skill_entities_info": {},
             }
         ]
-    ]
-    gold_results_ru = [
+    ],
+    [
         [
             {
                 "animals_skill_entities_info": {},
@@ -115,7 +115,8 @@ def main():
             }
         ]
     ]
-
+)
+def test_wiki_parser(url: str, request_data_en, request_data_ru, gold_results_en, gold_results_ru):
     count = 0
     if lang == "@ru":
         for data, gold_result in zip(request_data_ru, gold_results_ru):
@@ -123,17 +124,9 @@ def main():
             if result == gold_result:
                 count += 1
         assert count == len(request_data_ru), print(f"Got {result}, but expected: {gold_result}")
-
-        print("Success")
     elif lang == "@en":
         for data, gold_result in zip(request_data_en, gold_results_en):
             result = requests.post(url, json=data).json()
             if result == gold_result:
                 count += 1
         assert count == len(request_data_en), print(f"Got {result}, but expected: {gold_result}")
-
-        print("Success")
-
-
-if __name__ == "__main__":
-    main()
