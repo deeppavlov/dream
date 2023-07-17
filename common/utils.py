@@ -4,9 +4,6 @@ from os import getenv
 from copy import deepcopy
 from random import choice
 
-from common.custom_requests import request_triples_wikidata
-from common.factoid import FACTOID_THRESHOLD
-
 from common.food import FOOD_COMPILED_PATTERN as FOOD_PATTERN
 from common.books import BOOK_PATTERN
 from common.music import MUSIC_COMPILED_PATTERN as MUSIC_PATTERN
