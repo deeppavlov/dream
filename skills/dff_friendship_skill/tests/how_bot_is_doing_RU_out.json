@@ -1,7 +1,7 @@
 [
     [
         "Спасибо, у меня как всегда все прекрасно! Я слышала, что у людей бывают отпуска и выходные. Не мой выбор! Я могу без устали говорить день и ночь! Что главное произошло с тобой сегодня?",
-        1.0,
+        0.95,
         {
             "dff_friendship_skill_state": {
                 "shared_memory": {
@@ -51,11 +51,13 @@
             },
             "used_links": {},
             "age_group": "",
-            "disliked_skills": []
-        },
+                "disliked_skills": [],
+                "prompts_goals": {}
+            },
         {},
         {
-            "can_continue": "must"
+            "can_continue": "must",
+            "is_final_answer": "true"
         }
     ]
 ]

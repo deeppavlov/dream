@@ -4,12 +4,13 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188"
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8124"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   files:
     image: julienmeerschart/simple-file-upload-download-server
@@ -69,6 +70,7 @@ services:
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
         LANGUAGE: EN
+        FALLBACK_FILE: fallbacks_dream_en.json
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -216,12 +218,12 @@ services:
     env_file: [.env]
     build:
       args:
-        SERVICE_PORT: 8188
+        SERVICE_PORT: 8124
         SERVICE_NAME: dff_image_skill
         LANGUAGE: EN
       context: .
       dockerfile: ./skills/dff_image_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8188 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8124 --reload
     deploy:
       resources:
         limits:

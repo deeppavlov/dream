@@ -81,8 +81,7 @@
                             "income_per_year": null
                         },
                         "attributes": {
-                            "disliked_skills": [],
-                            "age_group": "",
+                            "prompts_goals": {},
                             "dff_dream_persona_prompted_skill_state": {
                                 "context": {
                                     "actor_state": {},
@@ -105,7 +104,8 @@
                                                 {},
                                                 {},
                                                 {
-                                                    "can_continue": "no"
+                                                    "can_continue": "no",
+                                                    "is_final_answer": "true"
                                                 }
                                             ]
                                         ]
@@ -125,8 +125,7 @@
                             "dff_shared_state": {
                                 "cross_links": {},
                                 "cross_states": {}
-                            },
-                            "used_links": {}
+                            }
                         },
                         "user_type": "human"
                     }
@@ -253,6 +252,7 @@
                         "attributes": {
                             "disliked_skills": [],
                             "age_group": "",
+                            "prompts_goals": {},
                             "dff_dream_persona_prompted_skill_state": {
                                 "context": {
                                     "actor_state": {},
@@ -275,7 +275,8 @@
                                                 {},
                                                 {},
                                                 {
-                                                    "can_continue": "no"
+                                                    "can_continue": "no",
+                                                    "is_final_answer": "true"
                                                 }
                                             ]
                                         ]
@@ -327,7 +328,8 @@
                             {},
                             {},
                             {
-                                "can_continue": "no"
+                                "can_continue": "no",
+                                "is_final_answer": "true"
                             }
                         ]
                     ]
@@ -362,6 +364,9 @@
     ],
     "disliked_skills_batch": [
         []
+    ],
+    "prompts_goals_batch": [
+        {}
     ],
     "clarification_request_flag_batch": [
         false

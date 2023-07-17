@@ -1,0 +1,316 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "convers-evaluator-annotator:8004,
+          spacy-nounphrases:8006, sentseg:8011, convers-evaluation-selector:8009,
+          badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075,
+          combined-classification:8087, entity-detection:8103,
+          property-extraction:8136, custom-entity-linking:8153,
+          transformers-lm-gptjt:8161, dff-dream-persona-gpt-jt-prompted-skill:8134,
+          dff-template-skill:8120"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
+
+  convers-evaluator-annotator:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: conveval.json
+        SERVICE_PORT: 8004
+        DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
+      context: .
+      dockerfile: ./annotators/ConversationEvaluator/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  spacy-nounphrases:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8006
+        SERVICE_NAME: spacy_nounphrases
+      context: .
+      dockerfile: ./annotators/spacy_nounphrases/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8006
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  sentseg:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+  convers-evaluation-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        TAG_BASED_SELECTION: 1
+        CALL_BY_NAME_PROBABILITY: 0.5
+        PROMPT_PROBA: 0.1
+        ACKNOWLEDGEMENT_PROBA: 0.3
+        PRIORITIZE_WITH_REQUIRED_ACT: 0
+        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
+        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
+        IGNORE_DISLIKED_SKILLS: 0
+        GREETING_FIRST: 1
+        RESTRICTION_FOR_SENSITIVE_CASE: 1
+        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
+        MAX_TURNS_WITHOUT_SCRIPTS: 7
+        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
+        PRIORITIZE_SCRIPTED_SKILLS: 0
+        CONFIDENCE_STRENGTH: 0.8
+        CONV_EVAL_STRENGTH: 0.4
+        PRIORITIZE_HUMAN_INITIATIVE: 1
+        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: EN
+        FALLBACK_FILE: fallbacks_dream_en.json
+      context: .
+      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8009
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  badlisted-words:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8018
+        SERVICE_NAME: badlisted_words
+      context: annotators/BadlistedWordsDetector/
+    command: flask run -h 0.0.0.0 -p 8018
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  ner:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+        SERVICE_PORT: 8021
+        SRC_DIR: annotators/NER_deeppavlov
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+      context: ./
+      dockerfile: annotators/NER_deeppavlov/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8021
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  entity-linking:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8075
+        SERVICE_NAME: entity_linking
+        CONFIG: entity_linking_eng.json
+        SRC_DIR: annotators/entity_linking
+      context: ./
+      dockerfile: annotators/entity_linking/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 2.5G
+
+  spelling-preprocessing:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8074
+        SERVICE_NAME: spelling_preprocessing
+      context: ./annotators/spelling_preprocessing/
+    command: flask run -h 0.0.0.0 -p 8074
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  combined-classification:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8087
+        SERVICE_NAME: combined_classification
+        CONFIG: combined_classifier.json
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  entity-detection:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_NAME: entity_detection
+        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
+        CONFIG: entity_detection_eng.json
+        LOWERCASE: 1
+        SERVICE_PORT: 8103
+        SRC_DIR: annotators/entity_detection/
+        FINEGRAINED: 0
+      context: ./
+      dockerfile: annotators/entity_detection/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8103
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 2.5G
+
+  property-extraction:
+    env_file: [.env]
+    build:
+      args:
+        CONFIG: t5_generative_ie_lite_infer.json
+        SERVICE_PORT: 8136
+        SRC_DIR: annotators/property_extraction/
+        SERVICE_NAME: property_extraction
+      context: ./
+      dockerfile: annotators/property_extraction/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8136
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 7G
+        reservations:
+          memory: 7G
+
+  custom-entity-linking:
+    env_file: [.env]
+    build:
+      args:
+        CONFIG: custom_entity_linking.json
+        PORT: 8153
+        SRC_DIR: annotators/custom_entity_linking
+      context: ./
+      dockerfile: annotators/custom_entity_linking/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  
+  transformers-lm-gptjt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8161
+        SERVICE_NAME: transformers_lm_gptjt
+        PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8161
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50G
+        reservations:
+          memory: 50G
+
+  dff-dream-persona-gpt-jt-prompted-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8134
+        SERVICE_NAME: dff_dream_persona_prompted_skill
+        PROMPT_FILE: common/prompts/dream_persona.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-gptjt:8161/respond
+        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
+        GENERATIVE_TIMEOUT: 120
+        N_UTTERANCES_CONTEXT: 7
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dff-template-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8120
+        SERVICE_NAME: dff_template_skill
+      context: .
+      dockerfile: ./skills/dff_template_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+version: '3.7'

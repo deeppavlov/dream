@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.9.16
 
 WORKDIR /src
 
@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /root/.cache
 
 COPY ./skills/game_cooperative_skill/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \

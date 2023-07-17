@@ -1,12 +1,10 @@
-FROM python:3.9.1
+FROM python:3.9.16
 
-RUN mkdir /src
-COPY . /src/
 WORKDIR /src
 
-RUN apt update
-
 COPY ./requirements.txt /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN apt install -y curl && pip install -r /src/requirements.txt
 
-CMD gunicorn --workers=2 server:app --timeout 1200
+COPY . /src/
+
+CMD gunicorn --workers=2 server:app

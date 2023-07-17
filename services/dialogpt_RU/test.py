@@ -2,7 +2,7 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:8091/respond"
+    url = "http://0.0.0.0:8125/respond"
 
     dialog_contexts = [
         [

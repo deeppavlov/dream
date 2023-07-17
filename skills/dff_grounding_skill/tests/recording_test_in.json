@@ -643,7 +643,8 @@
                             {},
                             {},
                             {
-                                "can_continue": "must"
+                                "can_continue": "must",
+                                "is_final_answer": "true"
                             }
                         ],
                         [
@@ -718,6 +719,9 @@
     ],
     "disliked_skills_batch": [
         []
+    ],
+    "prompts_goals_batch": [
+        {}
     ],
     "clarification_request_flag_batch": [
         false
