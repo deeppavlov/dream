@@ -44,6 +44,10 @@ LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()]
 FALLBACK_FILE = getenv("FALLBACK_FILE", "fallbacks_dream_en.json")
 DUMMY_DONTKNOW_RESPONSES = json.load(open(f"common/fallbacks/{FALLBACK_FILE}", "r"))
 LANGUAGE = getenv("LANGUAGE", "EN")
+ENABLE_NP_QUESTIONS = getenv("ENABLE_NP_QUESTIONS", False)
+ENABLE_SWITCH_TOPIC = getenv("ENABLE_SWITCH_TOPIC", False)
+ENABLE_LINK_QUESTIONS = getenv("ENABLE_LINK_QUESTIONS", False)
+ENABLE_NP_FACTS = getenv("ENABLE_NP_FACTS", False)
 
 with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
     TOP_FREQUENT_UNIGRAMS = f.read().splitlines()[:1000]
@@ -76,7 +80,7 @@ with open("skills/dummy_skill/russian_random_questions.txt", "r") as f:
 RUSSIAN_RANDOM_QUESTIONS = [q.strip() for q in RUSSIAN_RANDOM_QUESTIONS]
 
 
-class RandomTopicResponder:
+class RandomTopicResponder: #оно вообще нужно?
     def __init__(self, filename, topic, text):
         self.topic_phrases = defaultdict(list)
         with open(filename, "r") as f:
@@ -161,7 +165,7 @@ def get_link_to_question(dialog, all_prev_active_skills):
     return linked_question, human_attr
 
 
-def generate_question_not_from_last_responses(dialog, all_prev_active_skills):
+def generate_question_not_from_last_responses(dialog, all_prev_active_skills): # а это?
     linked_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
 
     if len(linked_question) > 0:
@@ -221,119 +225,123 @@ class DummySkillConnector:
             attrs += [{"type": "dummy"}]
             human_attrs += [{}]
             bot_attrs += [{}]
+            if ENABLE_NP_QUESTIONS:
+                if len(dialog["utterances"]) > 14 and not is_sensitive_case and LANGUAGE == "EN":
+                    questions_same_nps = []
+                    for i, nphrase in enumerate(curr_nounphrases):
+                        for q_id in NP_QUESTIONS.get(nphrase, []):
+                            questions_same_nps += [QUESTIONS_MAP[str(q_id)]]
 
-            if len(dialog["utterances"]) > 14 and not is_sensitive_case and LANGUAGE == "EN":
-                questions_same_nps = []
-                for i, nphrase in enumerate(curr_nounphrases):
-                    for q_id in NP_QUESTIONS.get(nphrase, []):
-                        questions_same_nps += [QUESTIONS_MAP[str(q_id)]]
-
-                if len(questions_same_nps) > 0:
-                    logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
-                    cands += [choice(questions_same_nps)]
-                    confs += [0.5]
-                    attrs += [{"type": "nounphrase_question", "response_parts": ["prompt"]}]
-                    human_attrs += [{}]
-                    bot_attrs += [{}]
+                    if len(questions_same_nps) > 0:
+                        logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
+                        cands += [choice(questions_same_nps)]
+                        confs += [0.5]
+                        attrs += [{"type": "nounphrase_question", "response_parts": ["prompt"]}]
+                        human_attrs += [{}]
+                        bot_attrs += [{}]
 
             link_to_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
 
-            if no_initiative(dialog) and LANGUAGE == "EN":
-                last_utt = dialog["human_utterances"][-1]
-                user = last_utt["user"].get("attributes", {})
-                entities = user.get("entities", {})
-                entities = {ent: val for ent, val in entities.items() if len(val["human_encounters"])}
-                response = ""
-                if entities:
-                    selected_entity = ""
-                    # reverse so it uses recent entities first
-                    sorted_entities = sorted(
-                        entities.values(),
-                        key=lambda d: d["human_encounters"][-1]["human_utterance_index"],
-                        reverse=True,
+            if ENABLE_SWITCH_TOPIC:
+                if no_initiative(dialog) and LANGUAGE == "EN":
+                    last_utt = dialog["human_utterances"][-1]
+                    user = last_utt["user"].get("attributes", {})
+                    entities = user.get("entities", {})
+                    entities = {ent: val for ent, val in entities.items() if len(val["human_encounters"])}
+                    response = ""
+                    if entities:
+                        selected_entity = ""
+                        # reverse so it uses recent entities first
+                        sorted_entities = sorted(
+                            entities.values(),
+                            key=lambda d: d["human_encounters"][-1]["human_utterance_index"],
+                            reverse=True,
+                        )
+                        for entity_dict in sorted_entities:
+                            if entity_dict["human_attitude"] == "like" and not entity_dict["mentioned_by_bot"]:
+                                selected_entity = entity_dict["name"]
+                                break
+                        if selected_entity:
+                            response = f"Previously, you have mentioned {selected_entity}, maybe you want to discuss it?"
+                            logger.info(f"dummy_skill hypothesis no_initiative: {response}")
+                        cands += [response]
+                        confs += [0.5]
+                        attrs += [{"type": "entity_recap", "response_parts": ["prompt"]}]
+                        human_attrs += [{}]
+                        bot_attrs += [{}]
+
+            if ENABLE_LINK_QUESTIONS:
+                if link_to_question and LANGUAGE == "EN":
+                    _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
+                    _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
+                    _prev_active_skill = (
+                        dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
                     )
-                    for entity_dict in sorted_entities:
-                        if entity_dict["human_attitude"] == "like" and not entity_dict["mentioned_by_bot"]:
-                            selected_entity = entity_dict["name"]
-                            break
-                    if selected_entity:
-                        response = f"Previously, you have mentioned {selected_entity}, maybe you want to discuss it?"
-                        logger.info(f"dummy_skill hypothesis no_initiative: {response}")
-                    cands += [response]
-                    confs += [0.5]
-                    attrs += [{"type": "entity_recap", "response_parts": ["prompt"]}]
+
+                    _no_to_first_linkto = any([phrase in _bot_uttr for phrase in LINK_TO_PHRASES])
+                    _no_to_first_linkto = _no_to_first_linkto and all(
+                        [phrase not in _prev_bot_uttr for phrase in LINK_TO_PHRASES]
+                    )
+                    _no_to_first_linkto = _no_to_first_linkto and is_no(dialog["human_utterances"][-1])
+                    _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
+
+                    _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
+                    bot_uttr_dict = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
+                    _if_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr_dict)
+                    _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
+
+                    if len(dialog["human_utterances"]) > 1:
+                        _was_cant_do = "cant_do" in get_intents(dialog["human_utterances"][-2]) and (
+                            len(curr_nounphrases) == 0 or is_yes(dialog["human_utterances"][-1])
+                        )
+                        _was_cant_do_stop_it = "cant_do" in get_intents(dialog["human_utterances"][-2]) and is_no(
+                            dialog["human_utterances"][-1]
+                        )
+                    else:
+                        _was_cant_do = False
+                        _was_cant_do_stop_it = False
+
+                    if _was_cant_do_stop_it:
+                        link_to_question = "Sorry, bye! #+#exit"
+                        confs += [1.0]  # finish dialog request
+                    elif _no_to_first_linkto:
+                        confs += [0.99]
+                    elif _is_ask_me_something or _if_switch_topic or _was_cant_do or _if_choose_topic:
+                        confs += [1.0]  # Use it only as response selector retrieve skill output modifier
+                    else:
+                        confs += [0.05]  # Use it only as response selector retrieve skill output modifier
+                    cands += [link_to_question]
+                    attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
+                    human_attrs += [human_attr]
+                    bot_attrs += [{}]
+
+                elif LANGUAGE == "RU":
+                    cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
+                    confs += [0.8]
+                    attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
                     human_attrs += [{}]
                     bot_attrs += [{}]
 
-            if link_to_question and LANGUAGE == "EN":
-                _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
-                _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
-                _prev_active_skill = (
-                    dialog["bot_utterances"][-1]["active_skill"] if len(dialog["bot_utterances"]) > 0 else ""
-                )
-
-                _no_to_first_linkto = any([phrase in _bot_uttr for phrase in LINK_TO_PHRASES])
-                _no_to_first_linkto = _no_to_first_linkto and all(
-                    [phrase not in _prev_bot_uttr for phrase in LINK_TO_PHRASES]
-                )
-                _no_to_first_linkto = _no_to_first_linkto and is_no(dialog["human_utterances"][-1])
-                _no_to_first_linkto = _no_to_first_linkto and _prev_active_skill != "dff_friendship_skill"
-
-                _if_switch_topic = is_switch_topic(dialog["human_utterances"][-1])
-                bot_uttr_dict = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) > 0 else {}
-                _if_choose_topic = if_choose_topic(dialog["human_utterances"][-1], bot_uttr_dict)
-                _is_ask_me_something = ASK_ME_QUESTION_PATTERN.search(dialog["human_utterances"][-1]["text"])
-
-                if len(dialog["human_utterances"]) > 1:
-                    _was_cant_do = "cant_do" in get_intents(dialog["human_utterances"][-2]) and (
-                        len(curr_nounphrases) == 0 or is_yes(dialog["human_utterances"][-1])
-                    )
-                    _was_cant_do_stop_it = "cant_do" in get_intents(dialog["human_utterances"][-2]) and is_no(
-                        dialog["human_utterances"][-1]
-                    )
+            if ENABLE_NP_FACTS:
+                if LANGUAGE == "EN":
+                    facts_same_nps = []
+                    for i, nphrase in enumerate(curr_nounphrases):
+                        for fact_id in NP_FACTS.get(nphrase, []):
+                            facts_same_nps += [
+                                f"Well, now that you've mentioned {nphrase}, I've remembered this. "
+                                f"{FACTS_MAP[str(fact_id)]}. "
+                                f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
+                            ]
                 else:
-                    _was_cant_do = False
-                    _was_cant_do_stop_it = False
+                    facts_same_nps = []
 
-                if _was_cant_do_stop_it:
-                    link_to_question = "Sorry, bye! #+#exit"
-                    confs += [1.0]  # finish dialog request
-                elif _no_to_first_linkto:
-                    confs += [0.99]
-                elif _is_ask_me_something or _if_switch_topic or _was_cant_do or _if_choose_topic:
-                    confs += [1.0]  # Use it only as response selector retrieve skill output modifier
-                else:
-                    confs += [0.05]  # Use it only as response selector retrieve skill output modifier
-                cands += [link_to_question]
-                attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
-                human_attrs += [human_attr]
-                bot_attrs += [{}]
-            elif LANGUAGE == "RU":
-                cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
-                confs += [0.8]
-                attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
-                human_attrs += [{}]
-                bot_attrs += [{}]
-
-            if LANGUAGE == "EN":
-                facts_same_nps = []
-                for i, nphrase in enumerate(curr_nounphrases):
-                    for fact_id in NP_FACTS.get(nphrase, []):
-                        facts_same_nps += [
-                            f"Well, now that you've mentioned {nphrase}, I've remembered this. "
-                            f"{FACTS_MAP[str(fact_id)]}. "
-                            f"{(opinion_request_question() if random.random() < ASK_QUESTION_PROB else '')}"
-                        ]
-            else:
-                facts_same_nps = []
-
-            if len(facts_same_nps) > 0 and not is_sensitive_case and LANGUAGE == "EN":
-                logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
-                cands += [choice(facts_same_nps)]
-                confs += [0.5]
-                attrs += [{"type": "nounphrase_fact", "response_parts": ["body"]}]
-                human_attrs += [{}]
-                bot_attrs += [{}]
+                if len(facts_same_nps) > 0 and not is_sensitive_case and LANGUAGE == "EN":
+                    logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
+                    cands += [choice(facts_same_nps)]
+                    confs += [0.5]
+                    attrs += [{"type": "nounphrase_fact", "response_parts": ["body"]}]
+                    human_attrs += [{}]
+                    bot_attrs += [{}]
 
             total_time = time.time() - st_time
             logger.info(f"dummy_skill exec time: {total_time:.3f}s")
