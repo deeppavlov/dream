@@ -123,13 +123,13 @@ high_priority_intents = {
 low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
 
-class Topic():
+class Topic:
     def __init__(self, topic_group, detecting_regexp=None, detecting_function=None):
         self.topic_group = topic_group
         self.detecting_regexp = detecting_regexp
         self.detecting_function = detecting_function
 
-    def detect(self, annotated_utterance, only_one_topic=True, threshold=0.1, which='all'):
+    def detect(self, annotated_utterance, only_one_topic=True, threshold=0.1, which="all"):
         if only_one_topic:
             found_topics = get_topics(annotated_utterance, probs=False, which=which)
         else:
@@ -262,42 +262,106 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "Opinion_RequestIntent",
         "Multiple_GoalsIntent",
     ],
-    "ru_topics": ["музыка", "еда, напитки и кулинария", "новости", "транспорт", "погода", "медиа и коммуникации",
-                  "автомобили", "общественный транспорт", "литература", "чтение", "гаджеты", "смартфоны",
-                  "планшеты", "электроника", "кино", "сериалы", "тв", "телевидение", "красота и уход",
-                  "косметология", "одежда", "путешествия", "туризм", "искусство", "искусство и культура",
-                  "видеоигры", "работа", "карьера", "дом", "дизайн", "депрессия", "знаменитости", "политика",
-                  "игрушки", "настольные игры", "животные", "домашние животные", "садоводство", "растениеводство",
-                  "семья", "отношения", "медицина", "религия", "искусственный интеллект", "машинное обучение",
-                  "финансы", "космос", "стихийные бедствия", "наука", "технологии", "психология", "образование",
-                  "мода и стиль", "история", "налоги", "любовь", "война", "деньги", "физика", "иностранные языки",
-                  "юриспруденция", "самолёты", "покупки", "криминал", "кошки", "собаки", "философия",
-                  "бизнес и менеджмент", "математика", "предпринимательство", "спорт", "фитнес", "секспросвет",
-                  "феминизм", "секс", "еда"]
+    "ru_topics": [
+        "музыка",
+        "еда, напитки и кулинария",
+        "новости",
+        "транспорт",
+        "погода",
+        "медиа и коммуникации",
+        "автомобили",
+        "общественный транспорт",
+        "литература",
+        "чтение",
+        "гаджеты",
+        "смартфоны",
+        "планшеты",
+        "электроника",
+        "кино",
+        "сериалы",
+        "тв",
+        "телевидение",
+        "красота и уход",
+        "косметология",
+        "одежда",
+        "путешествия",
+        "туризм",
+        "искусство",
+        "искусство и культура",
+        "видеоигры",
+        "работа",
+        "карьера",
+        "дом",
+        "дизайн",
+        "депрессия",
+        "знаменитости",
+        "политика",
+        "игрушки",
+        "настольные игры",
+        "животные",
+        "домашние животные",
+        "садоводство",
+        "растениеводство",
+        "семья",
+        "отношения",
+        "медицина",
+        "религия",
+        "искусственный интеллект",
+        "машинное обучение",
+        "финансы",
+        "космос",
+        "стихийные бедствия",
+        "наука",
+        "технологии",
+        "психология",
+        "образование",
+        "мода и стиль",
+        "история",
+        "налоги",
+        "любовь",
+        "война",
+        "деньги",
+        "физика",
+        "иностранные языки",
+        "юриспруденция",
+        "самолёты",
+        "покупки",
+        "криминал",
+        "кошки",
+        "собаки",
+        "философия",
+        "бизнес и менеджмент",
+        "математика",
+        "предпринимательство",
+        "спорт",
+        "фитнес",
+        "секспросвет",
+        "феминизм",
+        "секс",
+        "еда",
+    ],
 }
 
-TOPICS = {"food": Topic(["Food", "Food_Drink", "еда, напитки и кулинария", "еда"], FOOD_PATTERN),
-          "books": Topic(["Entertainment_Books", "Literature", "Books&Literature", "литература", "чтение"],
-                         BOOK_PATTERN),
-          "music": Topic(["Music", "Entertainment_Music", "музыка"], MUSIC_PATTERN),
-          "news": Topic(["News", "новости"], NEWS_PATTERN),
-          "politics": Topic(["Politics", "политика"]),
-          "sports": Topic(["Sports", "спорт", "фитнес"], detecting_function=about_sport),
-          "religion": Topic(["Religion"]),
-          "movies": Topic(["Entertainment_Movies", "Movies_TV", "Movies&Tv", "сериалы", "тв", "телевидение"],
-                          MOVIE_PATTERN),
-          "fashion": Topic(["Clothes", "Fashion", "одежда", "мода и стиль"]),
-          "travel": Topic(["Travel", "Travel_Geo", "путешествия", "туризм"], TRAVEL_PATTERN),
-          "celebrities": Topic(["Celebrities", "Celebrities&Events", "знаменитости"], CELEBRITIES_PATTERN),
-          "art": Topic(["Art_Event", "Art&Hobbies", "искусство"], ART_PATTERN),
-          "science": Topic(["Science_and_Technology", "SciTech", "наука", "технологии"], SCIENCE_PATTERN),
-          "entertainment": Topic(["Entertainment", "Entertainment_General"]),
-          "games": Topic(["Games", "Toys&Games", "Videogames", "видеоигры", "игрушки", "настольные игры"],
-                         GAME_PATTERN),
-          "animals": Topic(["Pets_Animals", "Animals&Pets", "кошки", "собаки"], ANIMALS_PATTERN),
-          "sex": Topic(["Sex_Profanity", "секс", "секспросвет"]),
-          "weather": Topic(["Weather_Time", "погода"])
-          }  # The list can be expanded according to the topic list supported
+TOPICS = {
+    "food": Topic(["Food", "Food_Drink", "еда, напитки и кулинария", "еда"], FOOD_PATTERN),
+    "books": Topic(["Entertainment_Books", "Literature", "Books&Literature", "литература", "чтение"], BOOK_PATTERN),
+    "music": Topic(["Music", "Entertainment_Music", "музыка"], MUSIC_PATTERN),
+    "news": Topic(["News", "новости"], NEWS_PATTERN),
+    "politics": Topic(["Politics", "политика"]),
+    "sports": Topic(["Sports", "спорт", "фитнес"], detecting_function=about_sport),
+    "religion": Topic(["Religion"]),
+    "movies": Topic(["Entertainment_Movies", "Movies_TV", "Movies&Tv", "сериалы", "тв", "телевидение"], MOVIE_PATTERN),
+    "fashion": Topic(["Clothes", "Fashion", "одежда", "мода и стиль"]),
+    "travel": Topic(["Travel", "Travel_Geo", "путешествия", "туризм"], TRAVEL_PATTERN),
+    "celebrities": Topic(["Celebrities", "Celebrities&Events", "знаменитости"], CELEBRITIES_PATTERN),
+    "art": Topic(["Art_Event", "Art&Hobbies", "искусство"], ART_PATTERN),
+    "science": Topic(["Science_and_Technology", "SciTech", "наука", "технологии"], SCIENCE_PATTERN),
+    "entertainment": Topic(["Entertainment", "Entertainment_General"]),
+    "games": Topic(["Games", "Toys&Games", "Videogames", "видеоигры", "игрушки", "настольные игры"], GAME_PATTERN),
+    "animals": Topic(["Pets_Animals", "Animals&Pets", "кошки", "собаки"], ANIMALS_PATTERN),
+    "sex": Topic(["Sex_Profanity", "секс", "секспросвет"]),
+    "weather": Topic(["Weather_Time", "погода"]),
+}  # The list can be expanded according to the topic list supported
 
 
 def is_about(topic_name, annotated_utterance, **kwargs):
@@ -1378,7 +1442,7 @@ def is_special_factoid_question(annotated_utterance):
     found = FACTOID_PATTERNS.search(uttr_text)
     if found and not COUNTER_FACTOID_PATTERNS.search(uttr_text):
         # remove first question like part
-        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]):].strip()
+        rest_string = uttr_text[uttr_text.find(found[0]) + len(found[0]) :].strip()
         if PERSONAL_PRONOUNS.search(rest_string):
             # if any personal pronouns - not our case
             return False
