@@ -37,8 +37,8 @@ def respond_set_commands():
     st_time = time.perf_counter()
     VALID_COMMANDS = list(map(lambda i: i.lower(), request.json.get("commands", [])))
     if not VALID_COMMANDS:
-        logger.info("mint-server user did not send valid commands list," + \
-                    "resetting to default")
+        logger.info("mint-server user did not send valid commands list,"
+                    + "resetting to default")
     logger.info(f"mint-server `VALID_COMMANDS` set: {VALID_COMMANDS}")
 
     total_time = time.perf_counter() - st_time
@@ -51,8 +51,8 @@ def respond_set_commands():
 @app.route("/is_command_valid", methods=["POST"])
 def respond_is_command_valid():
     st_time = time.perf_counter()
-                                                                                  
-    command = request.json.get("command", None)                                   
+
+    command = request.json.get("command", None)
     results = {"result": any(item in command for item in VALID_COMMANDS)}
     logger.info(f"mint-server `is_command_valid` results: {results}")
 
