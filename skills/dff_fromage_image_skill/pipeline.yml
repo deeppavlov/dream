@@ -3,7 +3,7 @@ dff-fromage-image-skill:
   connector:
     protocol: http
     timeout: 2.0
-    url: http://dff-fromage-image-skill:8192/respond
+    url: http://dff-fromage-image-skill:8070/respond
   dialog_formatter: state_formatters.dp_formatters:dff_fromage_image_skill_formatter
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:

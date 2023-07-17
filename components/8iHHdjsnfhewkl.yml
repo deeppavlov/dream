@@ -1,0 +1,24 @@
+name: fromage
+display_name: Fromage
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: fromage model but annotator
+ram_usage: 32G
+gpu_usage: 16G
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://fromage:8069/respond
+dialog_formatter: state_formatters.dp_formatters:fromage_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: respond
+service: annotators/fromage/service_configs/fromage
+date_created: '2023-03-16T09:45:32'

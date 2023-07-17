@@ -11,12 +11,12 @@ dff-fromage-image-skill:
     and default responses otherwise
   ram_usage: 100M
   gpu_usage: null
-  port: 8192
+  port: 8070
   endpoints:
   - group: skills
     endpoint: respond
   build_args:
-    SERVICE_PORT: 8192
+    SERVICE_PORT: 8070
     SERVICE_NAME: dff_fromage_image_skill
     LANGUAGE: EN
   date_created: '2023-03-16T09:45:32'

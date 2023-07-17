@@ -7,12 +7,12 @@ fromage:
   is_customizable: false
   author: DeepPavlov
   description: generative service based on fromage generative model
-  port: 8189
+  port: 8069
   endpoints:
   - group: annotators
     endpoint: respond
   build_args:
-    SERVICE_PORT: 8189
+    SERVICE_PORT: 8069
     SERVICE_NAME: fromage
     MAX_RESPONCES_ABOUT_PICS: 5
     MAX_HISTORY_DEPTH: 5

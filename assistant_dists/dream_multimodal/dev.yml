@@ -38,7 +38,7 @@ services:
       - "./skills/dff_fromage_image_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8192:8192
+      - 8070:8070
   intent-catcher:
     volumes:
       - "./annotators/IntentCatcherTransformers:/src"
@@ -70,7 +70,7 @@ services:
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8189:8189
+      - 8069:8069
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"

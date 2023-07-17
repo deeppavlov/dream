@@ -3,7 +3,7 @@ fromage:
   connector:
     protocol: http
     timeout: 3.0
-    url: http://fromage:8189/respond
+    url: http://fromage:8069/respond
   dialog_formatter: state_formatters.dp_formatters:fromage_formatter
   response_formatter: state_formatters.dp_formatters:simple_formatter_service
   state_manager_method: update_attributes

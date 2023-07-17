@@ -2,7 +2,7 @@ import requests
 
 
 def test_respond():
-    url = "http://0.0.0.0:8189/respond"
+    url = "http://0.0.0.0:8069/respond"
 
     image_paths = "https://s0.rbk.ru/v6_top_pics/media/img/7/26/346832135841267.jpg"
     sentences = "What is the make of the car?"
