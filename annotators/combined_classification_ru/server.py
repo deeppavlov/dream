@@ -9,7 +9,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 from common.utils import combined_classes
 
-combined_classes['toxicity_classification']= ['toxic', 'not_toxic']  # As Russian toxic supports only TWO classes
+combined_classes['toxicity_classification'] = ['toxic', 'not_toxic']  # As Russian toxic supports only TWO classes
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
@@ -24,16 +24,17 @@ def get_result(sentences, sentences_with_history, postannotations=False):
     if not sentences:
         logger.exception("Input sentences not received")
         sentences = [" "]
-    if not sentences_with_history:
-        logger.exception("Input sentences with history not received")
-        sentences_with_history = sentences
+    # if not sentences_with_history:
+    #    logger.exception("Input sentences with history not received")
+    #    sentences_with_history = sentences
     data = [sentences for _ in range(len(combined_classes))]
     try:
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
             for i in range(len(prob_list)):
                 ans[i][task_name] = {
-                    class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                    class_: round(float(prob), 2)
+                    for class_, prob in zip(combined_classes[task_name], prob_list[i])
                     }
     except Exception as e:
         sentry_sdk.capture_exception(e)
