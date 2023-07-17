@@ -2,16 +2,17 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini_persona_based/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, midas-classification:8090,
-          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, relative-persona-extractor:8133, 
-          seq2seq-persona-based:8140"
+      WAIT_HOSTS: "sentseg:8011, convers-evaluation-selector:8009, midas-classification:8090, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018, spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, relative-persona-extractor:8133, seq2seq-persona-based:8140"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
+      ENABLE_NP_QUESTIONS: 0
+      ENABLE_SWITCH_TOPIC: 0
+      ENABLE_LINK_QUESTIONS: 0
+      ENABLE_NP_FACTS: 0
 
   midas-classification:
     env_file: [ .env ]

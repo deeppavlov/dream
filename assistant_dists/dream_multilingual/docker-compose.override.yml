@@ -2,15 +2,17 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_multilingual/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluation-selector:8009, 
-          gpt2-multilingual:8132, toxic-classification-multilingual:8013,
-          sentiment-classification-multilingual:8024, sentence-ranker-multilingual:8128"
+      WAIT_HOSTS: "convers-evaluation-selector:8009, gpt2-multilingual:8132, toxic-classification-multilingual:8013, sentiment-classification-multilingual:8024, sentence-ranker-multilingual:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
+      ENABLE_NP_QUESTIONS: 0
+      ENABLE_SWITCH_TOPIC: 0
+      ENABLE_LINK_QUESTIONS: 0
+      ENABLE_NP_FACTS: 0
 
   convers-evaluation-selector:
     env_file: [ .env ]

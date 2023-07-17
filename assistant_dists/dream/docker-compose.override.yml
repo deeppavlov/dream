@@ -2,19 +2,17 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002,
-          dff-intent-responder-skill:8012, intent-catcher:8014, ner:8021,
-          factoid-qa:8071, kbqa:8072, entity-linking:8075, wiki-parser:8077, text-qa:8078,
-          combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
-          sentence-ranker:8128, property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
-          dff-dream-persona-chatgpt-prompted-skill:8137, dff-dream-faq-prompted-skill:8170,
-          openai-api-chatgpt-16k:8167"
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, dff-intent-responder-skill:8012, intent-catcher:8014, ner:8021, factoid-qa:8071, kbqa:8072, entity-linking:8075, wiki-parser:8077, text-qa:8078, combined-classification:8087, fact-retrieval:8100, entity-detection:8103, sentence-ranker:8128, property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145, dff-dream-persona-chatgpt-prompted-skill:8137, dff-dream-faq-prompted-skill:8170, openai-api-chatgpt-16k:8167"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
+      ENABLE_NP_QUESTIONS: 0
+      ENABLE_SWITCH_TOPIC: 0
+      ENABLE_LINK_QUESTIONS: 0
+      ENABLE_NP_FACTS: 0
 
   ranking-based-response-selector:
     env_file: [ .env ]
@@ -348,7 +346,7 @@ services:
           memory: 100M
 
   dff-dream-persona-chatgpt-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8137
@@ -369,7 +367,7 @@ services:
           memory: 128M
 
   dff-google-api-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8162
@@ -385,7 +383,7 @@ services:
           memory: 128M
 
   property-extraction:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       args:
         CONFIG: t5_generative_ie_lite_infer.json
@@ -405,7 +403,7 @@ services:
           memory: 7G
 
   dff-dream-faq-prompted-skill:
-    env_file: [ .env,.env_secret ]
+    env_file: [ .env, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8170

@@ -2,15 +2,17 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_persona_rullama_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
-          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, 
-          dff-dream-persona-llama7bru-prompted-skill:8151"
+      WAIT_HOSTS: "ranking-based-response-selector-ru:8002, dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-llama7bru:8149, dff-dream-persona-llama7bru-prompted-skill:8151"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: RU
       FALLBACK_FILE: fallbacks_dream_ru.json
+      ENABLE_NP_QUESTIONS: 0
+      ENABLE_SWITCH_TOPIC: 0
+      ENABLE_LINK_QUESTIONS: 0
+      ENABLE_NP_FACTS: 0
 
   ranking-based-response-selector-ru:
     env_file: [ .env_ru ]

@@ -2,14 +2,17 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_light/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "dff-program-y-skill:8008, badlisted-words:8018, dff-friendship-skill:8086,
-          dff-template-skill:8120, spelling-preprocessing:8074, combined-classification-lightweight:8150"
+      WAIT_HOSTS: "dff-program-y-skill:8008, badlisted-words:8018, dff-friendship-skill:8086, dff-template-skill:8120, spelling-preprocessing:8074, combined-classification-lightweight:8150"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
+      ENABLE_NP_QUESTIONS: 0
+      ENABLE_SWITCH_TOPIC: 0
+      ENABLE_LINK_QUESTIONS: 0
+      ENABLE_NP_FACTS: 0
 
   spelling-preprocessing:
     env_file: [ .env ]
@@ -24,16 +27,16 @@ services:
           memory: 50M
         reservations:
           memory: 50M
-  
+
   confidence-based-response-selector:
     build:
-      args: 
+      args:
         BADLIST_URL: http://badlisted-words:8018/badlisted_words
         FILTER_BADLISTED_WORDS: 1
       context: response_selectors/confidence_based_response_selector
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8005
     volumes: []
-  
+
   dff-program-y-skill:
     env_file: [ .env ]
     build:

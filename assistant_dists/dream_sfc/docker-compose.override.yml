@@ -2,30 +2,17 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_sfc/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, scripts-priority-selector:8009, personality-catcher:8010,
-          intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
-          sentrewrite:8017, ner:8021, dff-program-y-dangerous:8022, dff-movie-skill:8023,
-          convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
-          eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
-          dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, dff-program-y-wide:8064,
-          comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072,
-          spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078,
-          knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085,
-          dff-friendship-skill:8086, entity-storer:8089,
-          dff-book-sfc-skill:8034, dff-grounding-skill:8080,
-          dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101,
-          fact-random:8119, fact-retrieval:8100,
-          dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112,
-          dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113,
-          user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117,
-          dff-template-skill:8120, speech-function-predictor:8107, speech-function-classifier:8108"
+      WAIT_HOSTS: "convers-evaluator-annotator:8004, spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, scripts-priority-selector:8009, personality-catcher:8010, intent-responder:8012, intent-catcher:8014, badlisted-words:8018, sentrewrite:8017, ner:8021, dff-program-y-dangerous:8022, dff-movie-skill:8023, convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037, eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054, dff-coronavirus-skill:8061, small-talk-skill:8062, game-cooperative-skill:8068, dff-program-y-wide:8064, comet-conceptnet:8065, news-api-skill:8066, dff-short-story-skill:8057, factoid-qa:8071, kbqa:8072, spelling-preprocessing:8074, entity-linking:8075, wiki-parser:8077, text-qa:8078, knowledge-grounding:8083, combined-classification:8087, knowledge-grounding-skill:8085, dff-friendship-skill:8086, entity-storer:8089, dff-book-sfc-skill:8034, dff-grounding-skill:8080, dff-animals-skill:8094, dff-travel-skill:8096, dff-food-skill:8097, dff-sport-skill:8098, dff-science-skill:8101, fact-random:8119, fact-retrieval:8100, dff-funfact-skill:8104, dff-bot-persona-skill:8105, news-api-annotator:8112, dff-gossip-skill:8109, dff-wiki-skill:8111, dff-gaming-skill:8115, topic-recommendation:8113, user-persona-extractor:8114, wiki-facts:8116, dff-music-skill:8099, entity-detection:8103, dff-art-skill:8117, dff-template-skill:8120, speech-function-predictor:8107, speech-function-classifier:8108"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
+      ENABLE_NP_QUESTIONS: 0
+      ENABLE_SWITCH_TOPIC: 0
+      ENABLE_LINK_QUESTIONS: 0
+      ENABLE_NP_FACTS: 0
 
   convers-evaluator-annotator:
     env_file: [ .env ]
