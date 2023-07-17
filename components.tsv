@@ -149,7 +149,7 @@
 8145	openai-api-chatgpt
 8146	dff-deeppavlov-prompted-skill
 8147	dff-universal-prompted-skill
-8148
+8148    dff-universal-ru-prompted-skill
 8149	transformers-lm-llama7bru
 8150	combined-classification-lightweight
 8151	dff-dream-persona-llama7bru-prompted-skill

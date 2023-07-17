@@ -23,7 +23,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 
 GENERATIVE_ROBOT_TEMPLATE = re.compile(
-    r"(?:AI:|Assistant:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:|Чат-?бот:)\s?"
+    r"(?:AI:|Assistant:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:|Человек:|Чат-?бот:)\s?"
 )
 
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
