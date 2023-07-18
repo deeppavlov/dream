@@ -15,7 +15,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/sbDcAqiNqxFz.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "service": "services/agent_services/service_configs/dream_light"
             }
         },
         "timeout_service": {
@@ -32,7 +32,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/rFC0YJOoDFvS.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "service": "services/agent_services/service_configs/dream_light"
             }
         },
         "response_annotator_selectors": {
