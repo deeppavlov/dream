@@ -1,0 +1,19 @@
+name: mint_sender
+display_name: Mint sender
+component_type: Script-based w/o NNs
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: sends the preprocessed command to ros_flask_server
+ram_usage: 1.5G
+gpu_usage: 3.2G
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://mint-sender:8338/send
+previous_services:
+- null
+required_previous_services: mint_status
+tags: null
+service: services/mint_sender
+date_created: '2023-06-01T12:12:12'

@@ -1,0 +1,19 @@
+name: mint_status
+display_name: Mint status
+component_type: Script-based w/o NNs
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: checks whether there is a command being performed attribute in human attributes.
+ram_usage: 1.5G
+gpu_usage: 3.2G
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://mint-status:8340/check
+previous_services:
+- null
+required_previous_services: mint_status
+tags: null
+service: annotators/mint_status
+date_created: '2023-06-01T12:12:12'
