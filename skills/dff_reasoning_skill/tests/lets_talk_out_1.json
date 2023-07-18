@@ -1,0 +1,59 @@
+[
+    [
+        "I need to use Google API to handle your request. Do you approve?",
+        0.85,
+        {
+            "dff_reasoning_skill_state": {
+                "shared_memory": {
+                    "thought": "To handle this request, I need to search for the current president of the United Arab Emirates and provide the information to the user.",
+                    "needs_details": "No",
+                    "api2use": "google_api"
+                },
+                "previous_human_utter_index": 0,
+                "history": {
+                    "0": [
+                        "api",
+                        "api_response_node"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "6c526108-eeff-4a60-a3e9-43b26b5c1ad5",
+                    "labels": {
+                        "1": [
+                            "api",
+                            "check_if_needs_details"
+                        ],
+                        "2": [
+                            "api",
+                            "api_response_node"
+                        ]
+                    },
+                    "requests": {
+                        "0": "who is the president of UAE?"
+                    },
+                    "responses": {
+                        "1": "No",
+                        "2": "I need to use Google API to handle your request. Do you approve?"
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_states": {},
+                "cross_links": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": {},
+            "prompts_goals": {}
+        },
+        {},
+        {
+            "can_continue": "can",
+            "is_final_answer": "true"
+        }
+    ]
+]

@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import time
 
 import sentry_sdk
@@ -52,6 +53,7 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         dialog_context += "\n".join(context)
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
+    dialog_context = re.sub("  +", " ", dialog_context)
 
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
@@ -84,13 +86,13 @@ try:
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
-    config = DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]
+
     example_response = generate_responses(
         ["What is the goal of SpaceX?"],
         model,
         tokenizer,
         "You are a SpaceX Assistant.",
-        config,
+        DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH],
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")

@@ -56,12 +56,16 @@ class DescriptionBasedSkillSelectorConnector:
 
             not_prompted_skills = set(all_skill_names).difference(set(prompted_skills))
 
-            # remove some skills as it will be added in specific cases
+            # remove some skills as they will be added in specific cases
             not_prompted_skills.discard("factoid_qa")
             not_prompted_skills.discard("dff_google_api_skill")
+            not_prompted_skills.discard("dff_document_qa_llm_skill")
 
             not_prompted_skills = list(not_prompted_skills)
-
+            if dialog.get("bot", {}).get("attributes", {}).get("db_link", ""):
+                # adding dff_document_qa_llm_skill only if we have trained model files in this dialog
+                # (thus checking bot attributes)
+                skills_for_uttr.append("dff_document_qa_llm_skill")
             is_factoid = "is_factoid" in get_factoid(user_uttr, probs=False)
 
             if user_uttr_text == "/get_dialog_id":
@@ -84,7 +88,7 @@ class DescriptionBasedSkillSelectorConnector:
                     skills_for_uttr.extend(prompted_skills)
                     logger.info("Adding all prompted skills as prompt selector did not select anything.")
 
-                if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]) and is_factoid:
+                if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]):
                     skills_for_uttr.append("dff_google_api_skill")
 
                 if is_factoid:

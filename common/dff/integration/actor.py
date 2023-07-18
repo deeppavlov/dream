@@ -140,6 +140,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     confidence = ctx.misc["agent"]["response"].get("confidence", 0.85)
     can_continue = CAN_CONTINUE_SCENARIO if confidence else CAN_NOT_CONTINUE
     can_continue = ctx.misc["agent"]["response"].get("can_continue", can_continue)
+    is_final_answer = ctx.misc["agent"]["response"].get("is_final_answer", "true")
     ctx.clear(2, ["requests", "responses", "labels"])
     del ctx.misc["agent"]
     state["context"] = json.loads(ctx.json())
@@ -152,7 +153,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "disliked_skills": disliked_skills,
         "prompts_goals": prompts_goals,
     }
-    hype_attr = {"can_continue": can_continue}
+    hype_attr = {"can_continue": can_continue, "is_final_answer": is_final_answer}
     if response_parts:
         hype_attr["response_parts"] = response_parts
     response = ctx.last_response
