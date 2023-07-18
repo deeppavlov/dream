@@ -1,4 +1,6 @@
 name: mint-sender
+endpoints:
+- send
 compose:
   env_file:
   - .env

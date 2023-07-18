@@ -1,4 +1,6 @@
 name: dff-mint-skill
+endpoints:
+- respond
 compose:
   env_file:
   - .env

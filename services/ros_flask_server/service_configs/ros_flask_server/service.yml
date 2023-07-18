@@ -1,4 +1,8 @@
 name: ros-flask-server
+endpoints:
+- is_command_valid
+- perform_command
+- is_command_performed
 compose:
   env_file:
   - .env

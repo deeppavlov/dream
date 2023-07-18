@@ -1,4 +1,6 @@
 name: mint-status
+endpoints:
+- check
 compose:
   env_file:
   - .env
