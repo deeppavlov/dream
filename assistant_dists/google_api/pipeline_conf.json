@@ -1,5 +1,6 @@
 {
-    "connectors": {},
+    "connectors": {
+    },
     "services": {
         "last_chance_service": {
             "connector": {
@@ -69,7 +70,8 @@
                 "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
-        "response_annotators": {},
+        "response_annotators": {
+        },
         "annotators": {
             "combined_classification": {
                 "connector": {
@@ -79,7 +81,8 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
+                "previous_services": [
+                ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
