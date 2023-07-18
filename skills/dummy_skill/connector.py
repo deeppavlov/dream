@@ -215,9 +215,8 @@ def get_hyp_np_questions(dialog):
         human_attrs = {}
         bot_attrs = {}
         return cands, confs, attrs, human_attrs, bot_attrs
-    
-    return []
 
+    return []
 
 
 def get_hyp_topic_switch(dialog):
