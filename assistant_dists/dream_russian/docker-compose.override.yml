@@ -2,17 +2,19 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_russian/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "dff-program-y-ru-skill:8008, convers-evaluation-selector-ru:8009, dff-intent-responder-ru-skill:8012, intent-catcher-ru:8014, badlisted-words-ru:8018, ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011, spelling-preprocessing-ru:8074, entity-linking-ru:8075, wiki-parser-ru:8077, dff-generative-ru-skill:8092, dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125, dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118, fact-retrieval-ru:8110, text-qa-ru:8078"
+      WAIT_HOSTS: "dff-program-y-ru-skill:8008, convers-evaluation-selector-ru:8009, 
+          dff-intent-responder-ru-skill:8012, intent-catcher-ru:8014, badlisted-words-ru:8018,
+          ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011,
+          spelling-preprocessing-ru:8074, entity-linking-ru:8075, wiki-parser-ru:8077, dff-generative-ru-skill:8092,
+          dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
+          dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118,
+          fact-retrieval-ru:8110, text-qa-ru:8078"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: RU
       FALLBACK_FILE: fallbacks_dream_ru.json
-      ENABLE_NP_QUESTIONS: 0
-      ENABLE_SWITCH_TOPIC: 0
-      ENABLE_LINK_QUESTIONS: 0
-      ENABLE_NP_FACTS: 0
 
   dff-program-y-ru-skill:
     env_file: [ .env_ru ]
@@ -179,7 +181,7 @@ services:
           memory: 2G
         reservations:
           memory: 2G
-
+  
   entity-detection-ru:
     env_file: [ .env_ru ]
     build:

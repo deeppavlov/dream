@@ -200,7 +200,7 @@ def get_link_questions(payload, dialog):
     return link_to_question, human_attr
 
 
-def add_hyp_np_questions(dialog):
+def get_hyp_np_questions(dialog):
     curr_nounphrases = get_nounphrases(dialog)
     questions_same_nps = []
     for _, nphrase in enumerate(curr_nounphrases):
@@ -220,7 +220,7 @@ def add_hyp_np_questions(dialog):
 
 
 
-def add_hyp_topic_switch(dialog):
+def get_hyp_topic_switch(dialog):
     last_utt = dialog["human_utterances"][-1]
     user = last_utt["user"].get("attributes", {})
     entities = user.get("entities", {})
@@ -250,7 +250,7 @@ def add_hyp_topic_switch(dialog):
     return []
 
 
-def add_hyp_link_question(dialog, link_to_question, human_attr):
+def get_hyp_link_question(dialog, link_to_question, human_attr):
     curr_nounphrases = get_nounphrases(dialog)
     _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
     _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
@@ -293,7 +293,7 @@ def add_hyp_link_question(dialog, link_to_question, human_attr):
     return cands, confs, attrs, human_attrs, bot_attrs
 
 
-def add_hyp_russ_link_question():
+def get_hyp_russ_link_question():
     cands = random.choice(RUSSIAN_RANDOM_QUESTIONS)
     confs = 0.8
     attrs = {"type": "link_to_for_response_selector", "response_parts": ["prompt"]}
@@ -302,7 +302,7 @@ def add_hyp_russ_link_question():
     return cands, confs, attrs, human_attrs, bot_attrs
 
 
-def add_hyp_np_facts(dialog):
+def get_hyp_np_facts(dialog):
     curr_nounphrases = get_nounphrases(dialog)
     facts_same_nps = []
     for _, nphrase in enumerate(curr_nounphrases):
@@ -324,7 +324,7 @@ def add_hyp_np_facts(dialog):
     return []
 
 
-def update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs):
+def add_hypotheses(cands, confs, attrs, human_attrs, bot_attrs, set_attrs):
     cand, conf, attr, human_attr, bot_attr = set_attrs
     cands.append(cand)
     confs.append(conf)
@@ -352,30 +352,30 @@ class DummySkillConnector:
             # always append at least basic dummy response
 
             if ENABLE_NP_QUESTIONS and is_long_dialog and not is_sensitive_case and LANGUAGE == "EN":
-                set_attrs = add_hyp_np_questions(dialog)
+                set_attrs = get_hyp_np_questions(dialog)
                 if set_attrs:
-                    update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
+                    add_hypotheses(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             if ENABLE_SWITCH_TOPIC and is_no_initiative and LANGUAGE == "EN":
-                set_attrs = add_hyp_topic_switch(dialog)
+                set_attrs = get_hyp_topic_switch(dialog)
                 if set_attrs:
-                    update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
+                    add_hypotheses(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             if ENABLE_LINK_QUESTIONS:
                 link_to_question, human_attr_q = get_link_questions(payload, dialog)
                 if link_to_question and LANGUAGE == "EN":
-                    set_attrs = add_hyp_link_question(dialog, link_to_question, human_attr_q)
+                    set_attrs = get_hyp_link_question(dialog, link_to_question, human_attr_q)
                     if set_attrs:
-                        update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
+                        add_hypotheses(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
                 elif LANGUAGE == "RU":
-                    set_attrs = add_hyp_russ_link_question()
+                    set_attrs = get_hyp_russ_link_question()
                     if set_attrs:
-                        update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
+                        add_hypotheses(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             if ENABLE_NP_FACTS and not is_sensitive_case and LANGUAGE == "EN":
-                set_attrs = add_hyp_np_facts(dialog)
+                set_attrs = get_hyp_np_facts(dialog)
                 if set_attrs:
-                    update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
+                    add_hypotheses(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             total_time = time.time() - st_time
             logger.info(f"dummy_skill exec time: {total_time:.3f}s")

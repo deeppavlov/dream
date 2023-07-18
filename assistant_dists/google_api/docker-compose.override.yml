@@ -2,17 +2,14 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/google_api/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "ranking-based-response-selector:8002, combined-classification:8087, sentence-ranker:8128, dff-google-api-skill:8162"
+      WAIT_HOSTS: "ranking-based-response-selector:8002, combined-classification:8087, 
+        sentence-ranker:8128, dff-google-api-skill:8162"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
-      ENABLE_NP_QUESTIONS: 0
-      ENABLE_SWITCH_TOPIC: 0
-      ENABLE_LINK_QUESTIONS: 0
-      ENABLE_NP_FACTS: 0
 
   combined-classification:
     env_file: [ .env ]
@@ -75,7 +72,7 @@ services:
           memory: 3G
 
   dff-google-api-skill:
-    env_file: [ .env, .env_secret ]
+    env_file: [ .env,.env_secret ]
     build:
       args:
         SERVICE_PORT: 8162

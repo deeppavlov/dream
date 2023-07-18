@@ -2,17 +2,19 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004, spacy-nounphrases:8006, sentseg:8011, convers-evaluation-selector:8009, badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075, combined-classification:8087, entity-detection:8103, property-extraction:8136, custom-entity-linking:8153, transformers-lm-gptjt:8161, dff-dream-persona-gpt-jt-prompted-skill:8134, dff-template-skill:8120"
+      WAIT_HOSTS: "convers-evaluator-annotator:8004,
+          spacy-nounphrases:8006, sentseg:8011, convers-evaluation-selector:8009,
+          badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075,
+          combined-classification:8087, entity-detection:8103,
+          property-extraction:8136, custom-entity-linking:8153,
+          transformers-lm-gptjt:8161, dff-dream-persona-gpt-jt-prompted-skill:8134,
+          dff-template-skill:8120, terminusdb-server:6363"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
-      ENABLE_NP_QUESTIONS: 0
-      ENABLE_SWITCH_TOPIC: 0
-      ENABLE_LINK_QUESTIONS: 0
-      ENABLE_NP_FACTS: 0
 
   convers-evaluator-annotator:
     env_file: [ .env ]
@@ -220,7 +222,7 @@ services:
           memory: 2.5G
 
   property-extraction:
-    env_file: [ .env ]
+    env_file: [.env]
     build:
       args:
         CONFIG: t5_generative_ie_lite_infer.json
@@ -240,7 +242,7 @@ services:
           memory: 7G
 
   custom-entity-linking:
-    env_file: [ .env ]
+    env_file: [.env]
     build:
       args:
         CONFIG: custom_entity_linking.json
@@ -254,7 +256,7 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
+  
   transformers-lm-gptjt:
     env_file: [ .env ]
     build:
@@ -311,4 +313,7 @@ services:
           memory: 128M
         reservations:
           memory: 128M
+
+  terminusdb-server:
+    image: terminusdb/terminusdb-server:v10.1.10
 version: '3.7'

@@ -2,17 +2,15 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/marketing_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptjt:8161, dff-marketing-prompted-skill:8138"
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
+        sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptjt:8161, 
+        dff-marketing-prompted-skill:8138"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
-      ENABLE_NP_QUESTIONS: 0
-      ENABLE_SWITCH_TOPIC: 0
-      ENABLE_LINK_QUESTIONS: 0
-      ENABLE_NP_FACTS: 0
 
   sentseg:
     env_file: [ .env ]

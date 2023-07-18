@@ -2,20 +2,18 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_mini/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018, spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128"
+      WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
+          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
+          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
-      ENABLE_NP_QUESTIONS: 0
-      ENABLE_SWITCH_TOPIC: 0
-      ENABLE_LINK_QUESTIONS: 0
-      ENABLE_NP_FACTS: 0
 
   dff-program-y-skill:
-    env_file: [ .env ]
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8008
@@ -31,8 +29,9 @@ services:
         reservations:
           memory: 1024M
 
+
   sentseg:
-    env_file: [ .env ]
+    env_file: [.env]
     build:
       context: ./annotators/SentSeg/
     command: flask run -h 0.0.0.0 -p 8011
@@ -99,7 +98,7 @@ services:
           memory: 128M
 
   intent-catcher:
-    env_file: [ .env ]
+    env_file: [.env]
     build:
       context: .
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
@@ -107,7 +106,7 @@ services:
         SERVICE_PORT: 8014
         CONFIG_NAME: intents_model_dp_config.json
         INTENT_PHRASES_PATH: intent_phrases.json
-    command: python -m flask run -h 0.0.0.0 -p 8014
+    command:  python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=0
@@ -119,7 +118,7 @@ services:
           memory: 3.5G
 
   badlisted-words:
-    env_file: [ .env ]
+    env_file: [.env]
     build:
       args:
         SERVICE_PORT: 8018
