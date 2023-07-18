@@ -14,7 +14,7 @@ connector:
 previous_services:
 - mint_status
 - ros_flask_server
-required_previous_services: mint_status
+required_previous_services: [mint_status]
 tags: null
 service: skills/dff_mint_skill
 date_created: '2023-06-01T12:12:12'

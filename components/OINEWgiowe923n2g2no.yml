@@ -19,7 +19,7 @@ connector:
   - http://ros-flask-server:5000/command_is_performed
 previous_services:
 - skills
-required_previous_services: mint_status
+required_previous_services: [mint_status]
 tags: null
 service: services/ros_flask_server
 date_created: '2023-06-01T12:12:12'

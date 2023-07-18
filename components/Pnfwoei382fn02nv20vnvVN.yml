@@ -11,9 +11,8 @@ connector:
   protocol: http
   timeout: 1.0
   url: http://mint-status:8340/check
-previous_services:
-- null
-required_previous_services: mint_status
+previous_services: null
+required_previous_services: null
 tags: null
 service: annotators/mint_status
 date_created: '2023-06-01T12:12:12'
