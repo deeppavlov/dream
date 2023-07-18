@@ -200,7 +200,7 @@ def get_link_questions(payload, dialog):
     return link_to_question, human_attr
 
 
-def add_hyp_np_questions(dialog, cands, confs, attrs, human_attrs, bot_attrs):
+def add_hyp_np_questions(dialog):
     curr_nounphrases = get_nounphrases(dialog)
     questions_same_nps = []
     for _, nphrase in enumerate(curr_nounphrases):
@@ -209,14 +209,18 @@ def add_hyp_np_questions(dialog, cands, confs, attrs, human_attrs, bot_attrs):
 
     if len(questions_same_nps) > 0:
         logger.info("Found special nounphrases for questions. Return question with the same nounphrase.")
-        cands += [choice(questions_same_nps)]
-        confs += [0.5]
-        attrs += [{"type": "nounphrase_question", "response_parts": ["prompt"]}]
-        human_attrs += [{}]
-        bot_attrs += [{}]
+        cands = choice(questions_same_nps)
+        confs = 0.5
+        attrs = {"type": "nounphrase_question", "response_parts": ["prompt"]}
+        human_attrs = {}
+        bot_attrs = {}
+        return cands, confs, attrs, human_attrs, bot_attrs
+    
+    return []
 
 
-def add_hyp_topic_switch(dialog, cands, confs, attrs, human_attrs, bot_attrs):
+
+def add_hyp_topic_switch(dialog):
     last_utt = dialog["human_utterances"][-1]
     user = last_utt["user"].get("attributes", {})
     entities = user.get("entities", {})
@@ -237,14 +241,16 @@ def add_hyp_topic_switch(dialog, cands, confs, attrs, human_attrs, bot_attrs):
         if selected_entity:
             response = f"Previously, you have mentioned {selected_entity}, maybe you want to discuss it?"
             logger.info(f"dummy_skill hypothesis no_initiative: {response}")
-        cands += [response]
-        confs += [0.5]
-        attrs += [{"type": "entity_recap", "response_parts": ["prompt"]}]
-        human_attrs += [{}]
-        bot_attrs += [{}]
+        cands = response
+        confs = 0.5
+        attrs = {"type": "entity_recap", "response_parts": ["prompt"]}
+        human_attrs = {}
+        bot_attrs = {}
+        return cands, confs, attrs, human_attrs, bot_attrs
+    return []
 
 
-def add_hyp_link_question(dialog, link_to_question, human_attr, cands, confs, attrs, human_attrs, bot_attrs):
+def add_hyp_link_question(dialog, link_to_question, human_attr):
     curr_nounphrases = get_nounphrases(dialog)
     _prev_bot_uttr = dialog["bot_utterances"][-2]["text"] if len(dialog["bot_utterances"]) > 1 else ""
     _bot_uttr = dialog["bot_utterances"][-1]["text"] if len(dialog["bot_utterances"]) > 0 else ""
@@ -273,28 +279,30 @@ def add_hyp_link_question(dialog, link_to_question, human_attr, cands, confs, at
 
     if _was_cant_do_stop_it:
         link_to_question = "Sorry, bye! #+#exit"
-        confs += [1.0]  # finish dialog request
+        confs = 1.0  # finish dialog request
     elif _no_to_first_linkto:
-        confs += [0.99]
+        confs = 0.99
     elif _is_ask_me_something or _if_switch_topic or _was_cant_do or _if_choose_topic:
-        confs += [1.0]  # Use it only as response selector retrieve skill output modifier
+        confs = 1.0  # Use it only as response selector retrieve skill output modifier
     else:
-        confs += [0.05]  # Use it only as response selector retrieve skill output modifier
-    cands += [link_to_question]
-    attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
-    human_attrs += [human_attr]
-    bot_attrs += [{}]
+        confs = 0.05  # Use it only as response selector retrieve skill output modifier
+    cands = link_to_question
+    attrs = {"type": "link_to_for_response_selector", "response_parts": ["prompt"]}
+    human_attrs = human_attr
+    bot_attrs = {}
+    return cands, confs, attrs, human_attrs, bot_attrs
 
 
-def add_hyp_russ_link_question(cands, confs, attrs, human_attrs, bot_attrs):
-    cands += [random.choice(RUSSIAN_RANDOM_QUESTIONS)]
-    confs += [0.8]
-    attrs += [{"type": "link_to_for_response_selector", "response_parts": ["prompt"]}]
-    human_attrs += [{}]
-    bot_attrs += [{}]
+def add_hyp_russ_link_question():
+    cands = random.choice(RUSSIAN_RANDOM_QUESTIONS)
+    confs = 0.8
+    attrs = {"type": "link_to_for_response_selector", "response_parts": ["prompt"]}
+    human_attrs = {}
+    bot_attrs = {}
+    return cands, confs, attrs, human_attrs, bot_attrs
 
 
-def add_hyp_np_facts(dialog, cands, confs, attrs, human_attrs, bot_attrs):
+def add_hyp_np_facts(dialog):
     curr_nounphrases = get_nounphrases(dialog)
     facts_same_nps = []
     for _, nphrase in enumerate(curr_nounphrases):
@@ -307,11 +315,22 @@ def add_hyp_np_facts(dialog, cands, confs, attrs, human_attrs, bot_attrs):
 
     if len(facts_same_nps) > 0:
         logger.info("Found special nounphrases for facts. Return fact with the same nounphrase.")
-        cands += [choice(facts_same_nps)]
-        confs += [0.5]
-        attrs += [{"type": "nounphrase_fact", "response_parts": ["body"]}]
-        human_attrs += [{}]
-        bot_attrs += [{}]
+        cands = choice(facts_same_nps)
+        confs = 0.5
+        attrs = {"type": "nounphrase_fact", "response_parts": ["body"]}
+        human_attrs = {}
+        bot_attrs = {}
+        return cands, confs, attrs, human_attrs, bot_attrs
+    return []
+
+
+def update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs):
+    cand, conf, attr, human_attr, bot_attr = set_attrs
+    cands.append(cand)
+    confs.append(conf)
+    attrs.append(attr)
+    human_attrs.append(human_attr)
+    bot_attrs.append(bot_attr)
 
 
 class DummySkillConnector:
@@ -333,22 +352,30 @@ class DummySkillConnector:
             # always append at least basic dummy response
 
             if ENABLE_NP_QUESTIONS and is_long_dialog and not is_sensitive_case and LANGUAGE == "EN":
-                add_hyp_np_questions(dialog, cands, confs, attrs, human_attrs, bot_attrs)
+                set_attrs = add_hyp_np_questions(dialog)
+                if set_attrs:
+                    update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             if ENABLE_SWITCH_TOPIC and is_no_initiative and LANGUAGE == "EN":
-                add_hyp_topic_switch(dialog, cands, confs, attrs, human_attrs, bot_attrs)
+                set_attrs = add_hyp_topic_switch(dialog)
+                if set_attrs:
+                    update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             if ENABLE_LINK_QUESTIONS:
-                link_to_question, human_attr = get_link_questions(payload, dialog)
+                link_to_question, human_attr_q = get_link_questions(payload, dialog)
                 if link_to_question and LANGUAGE == "EN":
-                    add_hyp_link_question(
-                        dialog, link_to_question, human_attr, cands, confs, attrs, human_attrs, bot_attrs
-                    )
+                    set_attrs = add_hyp_link_question(dialog, link_to_question, human_attr_q)
+                    if set_attrs:
+                        update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
                 elif LANGUAGE == "RU":
-                    add_hyp_russ_link_question(cands, confs, attrs, human_attrs, bot_attrs)
+                    set_attrs = add_hyp_russ_link_question()
+                    if set_attrs:
+                        update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             if ENABLE_NP_FACTS and not is_sensitive_case and LANGUAGE == "EN":
-                add_hyp_np_facts(dialog, cands, confs, attrs, human_attrs, bot_attrs)
+                set_attrs = add_hyp_np_facts(dialog)
+                if set_attrs:
+                    update_hypotheses_info(cands, confs, attrs, human_attrs, bot_attrs, set_attrs)
 
             total_time = time.time() - st_time
             logger.info(f"dummy_skill exec time: {total_time:.3f}s")
