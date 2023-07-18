@@ -266,7 +266,7 @@ services:
         SERVICE_PORT: 8161
         SERVICE_NAME: transformers_lm_gptjt
         PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
-        HALF_PRECISION: 0
+        HALF_PRECISION: 1
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8161
