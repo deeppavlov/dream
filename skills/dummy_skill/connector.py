@@ -165,16 +165,6 @@ def get_link_to_question(dialog, all_prev_active_skills):
     return linked_question, human_attr
 
 
-def generate_question_not_from_last_responses(dialog, all_prev_active_skills):  # а это?
-    linked_question, human_attr = get_link_to_question(dialog, all_prev_active_skills)
-
-    if len(linked_question) > 0:
-        result = linked_question
-    else:
-        result = ""
-    return result, human_attr
-
-
 def no_initiative(dialog):
     utts = dialog["human_utterances"]
     if len(utts) <= 2:
