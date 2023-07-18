@@ -323,14 +323,15 @@ def get_hyp_np_facts(dialog):
     return []
 
 
-def add_hypotheses(hyps_with_attrs, new_hyp_with_attrs):
-    cand, conf, attr, human_attr, bot_attr = new_hyp_with_attrs
-    cands, confs, attrs, human_attrs, bot_attrs = hyps_with_attrs
-    cands.append(cand)
-    confs.append(conf)
-    attrs.append(attr)
-    human_attrs.append(human_attr)
-    bot_attrs.append(bot_attr)
+def add_hypothesis(hyps_with_attrs, new_hyp_with_attrs):
+    if new_hyp_with_attrs:
+        cand, conf, attr, human_attr, bot_attr = new_hyp_with_attrs
+        cands, confs, attrs, human_attrs, bot_attrs = hyps_with_attrs
+        cands.append(cand)
+        confs.append(conf)
+        attrs.append(attr)
+        human_attrs.append(human_attr)
+        bot_attrs.append(bot_attr)
 
 
 class DummySkillConnector:
@@ -342,46 +343,33 @@ class DummySkillConnector:
             is_no_initiative = no_initiative(dialog)
             is_long_dialog = len(dialog["utterances"]) > 14
 
-            hyps_with_attrs = [
-                [choice(DUMMY_DONTKNOW_RESPONSES)],
-                [0.5],
-                [{"type": "dummy"}],
-                [{}],
-                [{}]
-            ]
+            hyps_with_attrs = [[choice(DUMMY_DONTKNOW_RESPONSES)], [0.5], [{"type": "dummy"}], [{}], [{}]]
             # always append at least basic dummy response
 
             if ENABLE_NP_QUESTIONS and is_long_dialog and not is_sensitive_case and LANGUAGE == "EN":
                 new_hyp_with_attrs = get_hyp_np_questions(dialog)
-                if new_hyp_with_attrs:
-                    add_hypotheses(hyps_with_attrs, new_hyp_with_attrs)
+                add_hypothesis(hyps_with_attrs, new_hyp_with_attrs)
 
             if ENABLE_SWITCH_TOPIC and is_no_initiative and LANGUAGE == "EN":
                 new_hyp_with_attrs = get_hyp_topic_switch(dialog)
-                if new_hyp_with_attrs:
-                    add_hypotheses(hyps_with_attrs, new_hyp_with_attrs)
+                add_hypothesis(hyps_with_attrs, new_hyp_with_attrs)
 
             if ENABLE_LINK_QUESTIONS:
                 link_to_question, human_attr_q = get_link_questions(payload, dialog)
                 if link_to_question and LANGUAGE == "EN":
                     new_hyp_with_attrs = get_hyp_link_question(dialog, link_to_question, human_attr_q)
-                    if new_hyp_with_attrs:
-                        add_hypotheses(hyps_with_attrs, new_hyp_with_attrs)
+                    add_hypothesis(hyps_with_attrs, new_hyp_with_attrs)
                 elif LANGUAGE == "RU":
                     new_hyp_with_attrs = get_hyp_russ_link_question()
-                    if new_hyp_with_attrs:
-                        add_hypotheses(hyps_with_attrs, new_hyp_with_attrs)
+                    add_hypothesis(hyps_with_attrs, new_hyp_with_attrs)
 
             if ENABLE_NP_FACTS and not is_sensitive_case and LANGUAGE == "EN":
                 new_hyp_with_attrs = get_hyp_np_facts(dialog)
-                if new_hyp_with_attrs:
-                    add_hypotheses(hyps_with_attrs, new_hyp_with_attrs)
+                add_hypothesis(hyps_with_attrs, new_hyp_with_attrs)
 
             total_time = time.time() - st_time
             logger.info(f"dummy_skill exec time: {total_time:.3f}s")
-            asyncio.create_task(
-                callback(task_id=payload["task_id"], response=hyps_with_attrs)
-            )
+            asyncio.create_task(callback(task_id=payload["task_id"], response=hyps_with_attrs))
         except Exception as e:
             logger.exception(e)
             sentry_sdk.capture_exception(e)
