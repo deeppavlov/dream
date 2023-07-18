@@ -14,5 +14,6 @@ connector:
 previous_services: null
 required_previous_services: null
 tags: null
+endpoint: check
 service: annotators/mint_status/service_configs/mint_status
 date_created: '2023-06-01T12:12:12'
