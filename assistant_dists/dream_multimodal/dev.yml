@@ -82,11 +82,4 @@ services:
       - "./common:/src/common"
     ports:
       - 8124:8124
-  transformers-lm-gptjt:
-    volumes:
-      - "./services/transformers_lm:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8161:8161
 version: "3.7"

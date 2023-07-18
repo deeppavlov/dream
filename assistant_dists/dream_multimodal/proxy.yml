@@ -35,13 +35,4 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8128
       - PORT=8128
-
-  transformers-lm-gptjt:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8161
-      - PORT=8161
 version: '3.7'
