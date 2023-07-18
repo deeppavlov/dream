@@ -26,5 +26,5 @@ state_manager_method: add_bot_utterance_last_chance
 tags:
 - timeout
 endpoint: null
-service: services/timeout_service/service_configs/agent_russian
+service: services/agent_services/service_configs/dream_russian
 date_created: '2023-03-04T19:27:44'
