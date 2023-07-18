@@ -21,5 +21,5 @@ previous_services:
 - skills
 required_previous_services: [mint_status]
 tags: null
-service: services/ros_flask_server
+service: services/ros_flask_server/service_configs/ros_flask_server
 date_created: '2023-06-01T12:12:12'
