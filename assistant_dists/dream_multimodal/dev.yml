@@ -57,13 +57,6 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
-  dialogpt:
-    volumes:
-      - "./services/dialogpt:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8125:8125
   fromage:
     volumes:
       - "./annotators/fromage:/src"
@@ -89,4 +82,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8124:8124
+  transformers-lm-gptjt:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8161:8161
 version: "3.7"

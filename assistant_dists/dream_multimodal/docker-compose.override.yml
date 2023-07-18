@@ -4,8 +4,8 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, sentence-ranker:8128, dialogpt:8125,
-          image-captioning:8123, dff-image-skill:8124, fromage:8069, dff-fromage-image-skill:8070"
+          spelling-preprocessing:8074, sentence-ranker:8128, image-captioning:8123,
+          dff-image-skill:8124, fromage:8069, dff-fromage-image-skill:8070, transformers-lm-gptjt:8161"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -155,29 +155,6 @@ services:
         reservations:
           memory: 100M
 
-  dialogpt:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8125
-        SERVICE_NAME: dialogpt
-        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
-        N_HYPOTHESES_TO_GENERATE: 5
-        CONFIG_NAME: dialogpt_en.json
-        MAX_HISTORY_DEPTH: 2
-      context: .
-      dockerfile: ./services/dialogpt/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8125
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
-
   sentence-ranker:
     env_file: [ .env ]
     build:
@@ -266,5 +243,26 @@ services:
         limits:
           memory: 1024M
         reservations:
-          memory: 1024M          
+          memory: 1024M
+
+  transformers-lm-gptjt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8161
+        SERVICE_NAME: transformers_lm_gptjt
+        PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8161
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 50G
+        reservations:
+          memory: 50G
 version: '3.7'

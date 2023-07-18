@@ -155,9 +155,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/fromage",
-                    "container": "fromage",
-                    "endpoint": "respond"
+                    "component": "components/8iHHdjsnfhewkl.yml",
+                    "service": "services/fromage/service_configs/fromage"
                 }
             }
         },
@@ -326,26 +325,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "directory": "skills/dff_fromage_image_skill",
-                    "container": "dff-fromage-image-skill"
-                }
-            },
-            "dialogpt": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 3.0,
-                    "url": "http://dialogpt:8125/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/7Dxjy1ZpQEAoPcEeABGBLg.yml",
-                    "service": "services/dialogpt/service_configs/dialogpt"
+                    "component": "components/8jfFjmYnbdeH.yml",
+                    "service": "services/dff_fromage_image_skill/service_configs/dff-fromage-image-skill"
                 }
             },
             "dff_image_skill": {
