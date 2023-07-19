@@ -91,7 +91,8 @@
         [
             {
                 "can_continue": "can",
-                "command_to_perform": "track_object_car"
+                "command_to_perform": "track_object_car",
+                "is_final_answer": "true"
             }
         ]
     ]

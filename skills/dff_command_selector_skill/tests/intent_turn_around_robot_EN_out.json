@@ -83,7 +83,8 @@
         [
             {
                 "can_continue": "can",
-                "command_to_perform": "turn_clockwise_180"
+                "command_to_perform": "turn_clockwise_180",
+                "is_final_answer": "true"
             }
         ]
     ]

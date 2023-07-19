@@ -63,7 +63,8 @@
         [
             {
                 "can_continue": "can",
-                "command_to_perform": "move_forward_10"
+                "command_to_perform": "move_forward_10",
+                "is_final_answer": "true"
             }
         ]
     ]

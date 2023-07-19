@@ -87,7 +87,8 @@
         [
             {
                 "can_continue": "can",
-                "command_to_perform": "move_backward"
+                "command_to_perform": "move_backward",
+                "is_final_answer": "true"
             }
         ]
     ]
