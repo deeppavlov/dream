@@ -19,13 +19,13 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=5
   badlisted-words-ru:
   ner-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
-      - CUDA_VISIBLE_DEVICES=8
+      - CUDA_VISIBLE_DEVICES=6
   personal-info-ru-skill:
   dff-friendship-ru-skill:
   entity-detection-ru:
@@ -35,10 +35,10 @@ services:
     volumes:
       - "~/.deeppavlov/cache:/root/.cache"
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=7
   dialogrpt-ru:
     volumes:
       - "~/.deeppavlov/cache:/root/.cache"
     environment:
-      - CUDA_VISIBLE_DEVICES=6
+      - CUDA_VISIBLE_DEVICES=8
 version: '3.7'
