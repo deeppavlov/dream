@@ -84,6 +84,7 @@ def respond():
 
     # t_utils.save_to_test(responses, "tests/lets_talk_out.json", indent=4)  # TEST
     responses = handler(request.json)
+    logger.info(f"RESPONSES: {responses}")
     return jsonify(responses)
 
 

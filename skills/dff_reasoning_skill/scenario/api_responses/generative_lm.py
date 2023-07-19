@@ -72,21 +72,9 @@ def generative_lm_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             hypotheses = []
     else:
         hypotheses = []
-    for hyp in hypotheses:
-        confidence = DEFAULT_CONFIDENCE
-        hyp_text = " ".join(hyp.split())
-        if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-            hyp_text += "."
-            confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
 
-    if len(curr_responses) == 0:
+    if len(hypotheses) == 0:
         return ""
 
-    return int_rsp.multi_response(
-        replies=curr_responses,
-        confidences=curr_confidences,
-        human_attr=curr_human_attrs,
-        bot_attr=curr_bot_attrs,
-        hype_attr=curr_attrs,
-    )(ctx, actor, *args, **kwargs)
+    logger.info(f"hypotheses: {hypotheses[0]}")
+    return hypotheses[0]
