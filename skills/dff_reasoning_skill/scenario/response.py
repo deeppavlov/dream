@@ -209,6 +209,10 @@ def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         plan = shared_memory.get("plan", [])
         step = shared_memory.get("step", 0)
         subtask_results = shared_memory.get("subtask_results", {})
+        for key in api_conf.keys():
+            if key in plan[step]:
+                int_ctx.save_to_shared_memory(ctx, actor, api2use=key)
+                return key
         api_desc = {}
         for key, value in api_conf.items():
             api_desc[key] = value["description"]
