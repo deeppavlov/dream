@@ -33,6 +33,8 @@ def load_ctxs(requested_data):
         "clarification_request_flag_batch",
         [False] * len(dialog_batch),
     )
+    dialog_id_batch = requested_data.get("dialog_id_batch", [0] * len(dialog_batch))
+
     ctxs = []
     for (
         human_utter_index,
@@ -45,6 +47,7 @@ def load_ctxs(requested_data):
         disliked_skills,
         prompts_goals,
         clarification_request_flag,
+        dialog_id,
     ) in zip(
         human_utter_index_batch,
         dialog_batch,
@@ -56,6 +59,7 @@ def load_ctxs(requested_data):
         disliked_skills_batch,
         prompts_goals_batch,
         clarification_request_flag_batch,
+        dialog_id_batch,
     ):
         ctx = get_ctx(
             human_utter_index,
@@ -68,6 +72,7 @@ def load_ctxs(requested_data):
             disliked_skills,
             prompts_goals,
             clarification_request_flag,
+            dialog_id,
         )
         ctxs += [ctx]
     return ctxs
@@ -84,6 +89,7 @@ def get_ctx(
     disliked_skills,
     prompts_goals,
     clarification_request_flag,
+    dialog_id,
 ):
     context = state.get("context", {})
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
@@ -105,6 +111,7 @@ def get_ctx(
         "disliked_skills": disliked_skills,
         "prompts_goals": prompts_goals,
         "clarification_request_flag": clarification_request_flag,
+        "dialog_id": dialog_id,
     }
     ctx = Context.cast(context)
     ctx.misc["agent"] = agent

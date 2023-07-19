@@ -1,0 +1,442 @@
+{
+    "human_utter_index_batch": [
+        1
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "hi.",
+                    "annotations": {
+                        "spelling_preprocessing": "hi",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "hi.",
+                            "segments": [
+                                "hi."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "entity_detection": {},
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_backward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_forward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_to_point": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "open_door": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "track_object": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "turn_around": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        }
+                    },
+                    "user": {
+                        "id": "dad57a6edd3b4c12a0d79d73627239da",
+                        "user_external_id": "hi",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "move forward for 10 meters.",
+                    "annotations": {
+                        "spelling_preprocessing": "move forward for 10 meters",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "move forward for 10 meters.",
+                            "segments": [
+                                "move forward for 10 meters."
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_backward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_forward": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "move_to_point": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "open_door": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "track_object": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "turn_around": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 5,
+                                    "start_pos": 3,
+                                    "text": "10 meters",
+                                    "type": "QUANTITY"
+                                }
+                            ]
+                        ],
+                        "entity_detection": {}
+                    },
+                    "user": {
+                        "id": "6427f12041f6a1c87a304159",
+                        "user_external_id": "hi",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_program_y_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "4a87a1c6-2723-4152-bd82-ab97e85a0a6d",
+                                    "labels": {
+                                        "0": [
+                                            "story_flow",
+                                            "start_node"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": "hi."
+                                    },
+                                    "responses": {
+                                        "0": "Hi there! How are things?"
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "story_flow",
+                                        "start_node"
+                                    ]
+                                },
+                                "previous_human_utter_index": 0,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Hi, this is a Dream Socialbot! Hi there! How are things?",
+                    "annotations": {
+                        "ner": [
+                            [
+                                {
+                                    "confidence": 1,
+                                    "end_pos": 7,
+                                    "start_pos": 4,
+                                    "text": "a Dream Socialbot",
+                                    "type": "ORG"
+                                }
+                            ]
+                        ]
+                    },
+                    "active_skill": "dff_program_y_skill",
+                    "user": {
+                        "id": "b0e2a9d7902a49fc80e539f4d7c2ae15",
+                        "persona": {},
+                        "attributes": {},
+                        "user_type": "bot"
+                    }
+                }
+            ],
+            "called_intents": {
+                "cant_do": false,
+                "choose_topic": false,
+                "doing_well": false,
+                "dont_understand": false,
+                "exit": false,
+                "lets_chat_about": false,
+                "move_backward": false,
+                "move_forward": false,
+                "move_to_point": false,
+                "no": false,
+                "open_door": false,
+                "opinion_request": false,
+                "repeat": false,
+                "stupid": false,
+                "tell_me_a_story": false,
+                "tell_me_more": false,
+                "topic_switching": false,
+                "track_object": false,
+                "turn_around": false,
+                "weather_forecast_intent": false,
+                "what_are_you_talking_about": false,
+                "what_can_you_do": false,
+                "what_is_your_job": false,
+                "what_is_your_name": false,
+                "what_time": false,
+                "where_are_you_from": false,
+                "who_made_you": false,
+                "yes": false
+            },
+            "dialog_id": "a1402c4dd8ab220076bc559fd0810abf"
+        }
+    ],
+    "dff_command_selector_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "prompts_goals_batch": [
+        {}
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "dialog_id_batch": [
+        "a1402c4dd8ab220076bc559fd0810abf"
+    ]
+}
