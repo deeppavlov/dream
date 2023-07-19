@@ -63,3 +63,14 @@ def is_last_step(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
         if int(step) == len(plan):
             return True
     return False
+
+
+def is_tries_left(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        tries = shared_memory.get("tries", 1)
+        if tries <= 3:
+            tries += 1
+            int_ctx.save_to_shared_memory(ctx, actor, tries=tries)
+            return True
+    return False

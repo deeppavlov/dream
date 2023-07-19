@@ -79,16 +79,21 @@ flows = {
             TRANSITIONS: {
                 "check_if_needs_details": cnd.all([loc_cnd.is_self_reflection_ok, cnd.neg(loc_cnd.is_last_step)]),
                 "final_response": cnd.all([loc_cnd.is_self_reflection_ok, loc_cnd.is_last_step]),
-                "fallback": cnd.neg(loc_cnd.is_self_reflection_ok),
+                "recomplete_task": cnd.all([cnd.neg(loc_cnd.is_self_reflection_ok), loc_cnd.is_tries_left]),
             },
         },
         "final_response": {
             RESPONSE: loc_rsp.final_answer,
             PROCESSING: {"set_is_final_answer_flag": int_prs.set_is_final_answer_flag("true")},
-            TRANSITIONS: {},
+            TRANSITIONS: {"plan": cnd.true()},
         },
-        "fallback": {
-            RESPONSE: "Sorry, I didn't manage to complete the task",
+        "recomplete_task": {
+            RESPONSE: loc_rsp.recomplete_task,
+            PROCESSING: {"set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false")},
+            TRANSITIONS: {"check_if_needs_details": cnd.true()}, 
+        },
+        "fallback_node": {
+            RESPONSE: "Ooops, something went wrong!",
             PROCESSING: {"set_is_final_answer_flag": int_prs.set_is_final_answer_flag("true")},
             TRANSITIONS: {}, 
         },
@@ -98,5 +103,5 @@ flows = {
 actor = Actor(
     flows,
     start_label=("api", "start_node"),
-    fallback_node_label=("api", "fallback"),
+    fallback_node_label=("api", "fallback_node"),
 )

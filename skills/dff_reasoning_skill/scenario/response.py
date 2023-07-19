@@ -115,7 +115,6 @@ def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         plan = shared_memory.get("plan", [])
         step = shared_memory.get("step", 0)
-        logger.info(f"step: {step}")
         subtask_results = shared_memory.get("subtask_results", {})
         if plan:
             if subtask_results:
@@ -164,9 +163,6 @@ def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         step = shared_memory.get("step", 0)
         subtask_results = shared_memory.get("subtask_results", {})
         if subtask_results:
-#             tasks_history = f"""Here is the story of completed tasks and results:
-# {subtask_results}
-# """
             tasks_history = f"""CONTEXT:
 {"---".join(list(subtask_results.values()))}
 """
@@ -218,9 +214,6 @@ def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             api_desc[key] = value["description"]
 
         if subtask_results:
-#             tasks_history = f"""Here is the story of completed tasks and results:
-# {subtask_results}
-# """
             tasks_history = f"""CONTEXT:
 {"---".join(list(subtask_results.values()))}
 """
@@ -306,7 +299,6 @@ def self_reflexion(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         subtask_results = shared_memory.get("subtask_results", {})
-        logger.info(f"subtask_results: {subtask_results}")
         plan = shared_memory.get("plan", [])
         step = shared_memory.get("step", 0)
         prompt = f"""YOUR TASK: {plan[step]}
@@ -377,5 +369,27 @@ YOUR TASK: given the information in the context, form a final answer to the user
             sentry_sdk.capture_exception(e)
             logger.exception(e)
             response = None
+
+        subtask_results = {}
+        plan = []
+        step = 0
+        int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
+        int_ctx.save_to_shared_memory(ctx, actor, plan=plan)
+        int_ctx.save_to_shared_memory(ctx, actor, step=step)
         logger.info(f"final answer: {response}")
         return response
+    
+
+def recomplete_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        subtask_results = shared_memory.get("subtask_results", {})
+        plan = shared_memory.get("plan", [])
+        step = shared_memory.get("step", 0)
+        step -= 1
+        del subtask_results[str(step)]
+        int_ctx.save_to_shared_memory(ctx, actor, step=step)
+        int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
+        response = f"""I didn't manage to complete subtask:\n{plan[step]}\nI will try again."""
+        return response
+
