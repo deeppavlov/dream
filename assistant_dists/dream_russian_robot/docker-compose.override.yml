@@ -7,13 +7,14 @@ services:
           ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011,
           spelling-preprocessing-ru:8074, dff-generative-ru-skill:8092,
           dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
-          spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8126,
+          spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118,
           dff-command-selector-ru-skill:8148, robot-command-sender:8035, robot-notifications:8036, robot-fake-server:8038"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: RU
+      FALLBACK_FILE: fallbacks_dream_ru.json
 
   dff-program-y-ru-skill:
     env_file: [ .env_ru ]
@@ -28,9 +29,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 1024M
         reservations:
-          memory: 128M
+          memory: 1024M
 
   convers-evaluation-selector-ru:
     env_file: [ .env_ru ]
@@ -55,6 +56,7 @@ services:
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
         LANGUAGE: RU
+        FALLBACK_FILE: fallbacks_dream_ru.json
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -162,10 +164,10 @@ services:
     build:
       context: ./annotators/toxic_classification_ru/
       args:
-        SERVICE_PORT: 8126
+        SERVICE_PORT: 8118
         PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
         LANGUAGE: RU
-    command: flask run -h 0.0.0.0 -p 8126
+    command: flask run -h 0.0.0.0 -p 8118
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
