@@ -4,10 +4,9 @@ services:
     environment:
       WAIT_HOSTS: "dff-program-y-ru-skill:8008, convers-evaluation-selector-ru:8009, 
           dff-intent-responder-ru-skill:8012, intent-catcher-commands-ru:8014, badlisted-words-ru:8018,
-          ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011,
-          spelling-preprocessing-ru:8074, dff-generative-ru-skill:8092,
+          ner-ru:8021, personal-info-ru-skill:8030, dff-generative-ru-skill:8092,
           dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
-          spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118,
+          spacy-annotator-ru:8129, dialogrpt-ru:8122,
           dff-command-selector-ru-skill:8148, robot-command-sender:8035, robot-notifications:8036, robot-fake-server:8038"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
@@ -87,23 +86,6 @@ services:
         reservations:
           memory: 128M
 
-  sentseg-ru:
-    env_file: [ .env_ru ]
-    build:
-      args:
-        CONFIG: sentseg_ru_bert_torch.json
-      context: ./annotators/sentseg_ru
-    command: flask run -h 0.0.0.0 -p 8011
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
-
   dff-command-selector-ru-skill:
     env_file: [ .env_ru ]
     build:
@@ -158,25 +140,6 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
-  toxic-classification-ru:
-    env_file: [ .env_ru ]
-    build:
-      context: ./annotators/toxic_classification_ru/
-      args:
-        SERVICE_PORT: 8118
-        PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
-        LANGUAGE: RU
-    command: flask run -h 0.0.0.0 -p 8118
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-        reservations:
-          memory: 3G
 
   ner-ru:
     env_file: [ .env_ru ]
@@ -237,27 +200,6 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
-  spelling-preprocessing-ru:
-    env_file: [ .env_ru ]
-    build:
-      args:
-        CONFIG: levenshtein_corrector_ru.json
-        SERVICE_PORT: 8074
-        SRC_DIR: annotators/spelling_preprocessing_dp
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-        LANGUAGE: RU
-      context: ./
-      dockerfile: annotators/spelling_preprocessing_dp/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8074
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 8G
-        reservations:
-          memory: 8G
 
   spacy-annotator-ru:
     env_file: [ .env_ru ]

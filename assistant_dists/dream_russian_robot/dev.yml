@@ -23,12 +23,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8012:8012
-  sentseg-ru:
-    volumes:
-      - "./annotators/sentseg_ru:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8011:8011
   dff-command-selector-ru-skill:
     volumes:
       - "./skills/dff_command_selector_skill:/src"
@@ -48,12 +42,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  toxic-classification-ru:
-    volumes:
-      - "./annotators/toxic_classification_ru:/src"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8118:8118
   ner-ru:
     volumes:
       - './annotators/NER_deeppavlov:/src'
@@ -72,12 +60,6 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  spelling-preprocessing-ru:
-    volumes:
-      - "./annotators/spelling_preprocessing_dp:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8074:8074
   spacy-annotator-ru:
     volumes:
       - "./annotators/spacy_annotator:/src"

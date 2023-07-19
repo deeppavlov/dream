@@ -21,29 +21,16 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=8
   badlisted-words-ru:
-  toxic-classification-ru:
-    volumes:
-      - "~/.deeppavlov/cache:/root/.cache"
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   ner-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=8
   personal-info-ru-skill:
-  spelling-preprocessing-ru:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
   dff-friendship-ru-skill:
   entity-detection-ru:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
-  sentseg-ru:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
   dialogpt-ru:
     volumes:
       - "~/.deeppavlov/cache:/root/.cache"
