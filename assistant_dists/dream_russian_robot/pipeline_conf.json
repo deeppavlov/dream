@@ -1,10 +1,5 @@
 {
     "connectors": {
-        "sentseg": {
-            "protocol": "http",
-            "timeout": 1.5,
-            "url": "http://sentseg-ru:8011/sentseg"
-        },
         "ner": {
             "protocol": "http",
             "timeout": 1.5,
@@ -18,13 +13,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
-                        "segments": [
-                            "Извини, что-то пошло не так в моем мозгу.",
-                            "Пожалуйста, повтори предыдущую реплику."
-                        ]
-                    },
                     "ner": [
                         []
                     ]
@@ -46,13 +34,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
-                        "segments": [
-                            "Извини, что-то пошло не так в моем мозгу.",
-                            "Пожалуйста, повтори предыдущую реплику."
-                        ]
-                    },
                     "ner": [
                         []
                     ]
@@ -85,22 +66,6 @@
                     "service": "services/robot_notifications/service_configs/robot-notifications"
                 }
             },
-            "spelling_preprocessing": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spelling-preprocessing-ru:8074/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/OOF0PmuxswPuZintDoAlXw.yml",
-                    "service": "annotators/spelling_preprocessing_dp/service_configs/spelling-preprocessing-ru"
-                }
-            },
             "spacy_annotator": {
                 "connector": {
                     "protocol": "http",
@@ -116,24 +81,6 @@
                     "service": "annotators/spacy_annotator/service_configs/spacy-annotator-ru"
                 }
             },
-            "sentseg": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://sentseg-ru:8011/sentseg"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/Nw2SnrS4DGoALg6Cu58Zw.yml",
-                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
-                }
-            },
             "badlisted_words": {
                 "connector": {
                     "protocol": "http",
@@ -143,7 +90,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_and_tokenized_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
                     "annotators.spacy_annotator"
                 ],
                 "state_manager_method": "add_annotation",
@@ -151,24 +97,6 @@
                 "source": {
                     "component": "components/WzIX0HJ0Xyo4V8ItwLew.yml",
                     "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
-                }
-            },
-            "toxic_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8118/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
-                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
             "intent_catcher": {
@@ -180,8 +108,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
@@ -199,8 +125,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
@@ -218,8 +142,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
@@ -230,24 +152,6 @@
             }
         },
         "response_annotators": {
-            "sentseg": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://sentseg-ru:8011/sentseg"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_annotator_selectors"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/4SJxJlf3E8TTM94Uiqt5Xg.yml",
-                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
-                }
-            },
             "ner": {
                 "connector": {
                     "protocol": "http",
@@ -257,8 +161,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "response_annotator_selectors",
-                    "response_annotators.sentseg"
+                    "response_annotator_selectors"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
@@ -273,7 +176,6 @@
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
                 "annotator_names": [
-                    "sentseg",
                     "ner"
                 ]
             },
@@ -322,24 +224,6 @@
                 "source": {
                     "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
                     "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
-                }
-            },
-            "toxic_classification": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://toxic-classification-ru:8118/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/3DTP1sVdmFIBYrC8OjRYA.yml",
-                    "service": "annotators/toxic_classification_ru/service_configs/toxic-classification-ru"
                 }
             },
             "entity_detection": {
