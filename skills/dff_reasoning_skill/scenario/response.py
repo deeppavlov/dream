@@ -307,7 +307,7 @@ def self_reflexion(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         step = shared_memory.get("step", 0)
         prompt = f"""YOUR TASK: {plan[step]}
 RESULT: {subtask_results[str(step)]}
-Do you think that you completed the task? Return 'Yes', if positive, \
+Do you think that you completed the task and the result is good and relevant? Return 'Yes', if positive, \
 and 'No' and the reason if negative."""
         dialog_context = []
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
