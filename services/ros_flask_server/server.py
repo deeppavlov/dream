@@ -30,7 +30,7 @@ EXECUTING_COMMAND = None
 # WARNING: naive implementation: only 1 client supported
 
 
-@app.route("/set_commands", methods=["POST"]) # this endpoint should not be accessed from within dream
+@app.route("/set_commands", methods=["POST"])  # this endpoint should not be accessed from within dream
 def respond_set_commands():
     global VALID_COMMANDS
 
@@ -81,7 +81,7 @@ def respond_perform_command():
     return jsonify(results)
 
 
-@app.route("/recieve_command", methods=["POST"]) # this endpoint should not be accessed from within dream
+@app.route("/recieve_command", methods=["POST"])  # this endpoint should not be accessed from within dream
 def respond_recieve_command():
     global EXECUTING_COMMAND
 
@@ -112,7 +112,7 @@ def respond_is_command_performed():
     return jsonify(results)
 
 
-@app.route("/command_is_performed", methods=["POST"]) # this endpoint should not be accessed from within dream
+@app.route("/command_is_performed", methods=["POST"])  # this endpoint should not be accessed from within dream
 def respond_command_is_performed():
     global EXECUTING_COMMAND
 
