@@ -11,15 +11,15 @@ group: last_chance_service
 connector:
   protocol: python
   class_name: PredefinedTextConnector
-  response_text: Sorry, something went wrong inside. Please tell me, what did you
-    say.
+  response_text: Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую
+    реплику.
   annotations:
     sentseg:
-      punct_sent: Sorry, something went wrong inside. Please tell me, what did you
-        say.
+      punct_sent: Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую
+        реплику.
       segments:
-      - Sorry, something went wrong inside.
-      - Please tell me, what did you say.
+      - Извини, что-то пошло не так в моем мозгу.
+      - Пожалуйста, повтори предыдущую реплику.
 dialog_formatter: null
 response_formatter: null
 previous_services: null
