@@ -431,7 +431,7 @@ def summarization_annotator_formatter(dialog: Dict):
     dialog = [utt["text"] for utt in dialog["utterances"]]
     pointer = (len(dialog) + 1) % 6 if (len(dialog) + 1) % 6 != 0 else 6
     dialog = dialog[-(pointer + 5):]
-    return [{"dialog": dialog}]
+    return [{"dialogs": [dialog]}]
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
