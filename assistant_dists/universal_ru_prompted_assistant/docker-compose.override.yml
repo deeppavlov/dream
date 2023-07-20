@@ -6,7 +6,7 @@ services:
         dialogrpt-ru:8122, transformers-lm-ruxglm:8171, 
         openai-api-chatgpt:8145, openai-api-davinci3:8131,
         openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167,
-        dff-universal-ru-prompted-skill:8148"
+        dff-universal-ru-prompted-skill:8161"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
@@ -177,7 +177,7 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8148
+        SERVICE_PORT: 8161
         SERVICE_NAME: dff_universal_prompted_skill
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7

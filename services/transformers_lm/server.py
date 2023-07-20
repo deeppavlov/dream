@@ -98,7 +98,6 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         dialog_context += "\n".join(context)
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
-    dialog_context = re.sub("  +", " ", dialog_context)
 
     replacement = generation_params.pop("replacement", [])
     logger.info(f"replacement: {replacement}")
@@ -129,13 +128,12 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
         skip_special_tokens = False if replacement else True
-        logger.info(f"skip_special_tokens: {skip_special_tokens}")
         output = tokenizer.decode(result, skip_special_tokens=skip_special_tokens)
-        logger.info(f"output: {output}")
+        # preprocess dialog context to correctly remove it from output
+        dialog_context = re.sub(r"  +", " ", dialog_context)
+        dialog_context = dialog_context.replace("\n ", "\n")
         result_cut = output.replace(dialog_context + " ", "")
-        logger.info(f"output 1: {result_cut}")
         result_cut = cut_predictions_by_additional_eos(result_cut)
-        logger.info(f"output 2: {result_cut}")
         result_cut = remove_replacement_tokens(result_cut, replacement)
         result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
