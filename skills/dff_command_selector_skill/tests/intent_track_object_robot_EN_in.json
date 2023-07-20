@@ -1,0 +1,671 @@
+{
+    "human_utter_index_batch": [
+        4
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "move backward.",
+                    "annotations": {
+                        "spelling_preprocessing": "move backward",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "move backward.",
+                            "segments": [
+                                "move backward."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_backward": {
+                                "confidence": 0.998,
+                                "detected": 1
+                            },
+                            "move_forward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_to_point": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "open_door": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "track_object": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "turn_around": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {}
+                    },
+                    "user": {
+                        "id": "6427f12041f6a1c87a304159",
+                        "user_external_id": "hi",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_program_y_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "4a87a1c6-2723-4152-bd82-ab97e85a0a6d",
+                                    "labels": {
+                                        "0": [
+                                            "story_flow",
+                                            "start_node"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": "hi."
+                                    },
+                                    "responses": {
+                                        "0": "Hi there! How are things?"
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "story_flow",
+                                        "start_node"
+                                    ]
+                                },
+                                "previous_human_utter_index": 0,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {},
+                            "dff_command_selector_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "29b53c71-8e7c-4891-8ebc-da3fafe059a1",
+                                    "labels": {
+                                        "1": [
+                                            "context_driven_response",
+                                            "command_selector"
+                                        ],
+                                        "2": [
+                                            "context_driven_response",
+                                            "command_selector"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "1": "turn clockwise for 180 degrees.",
+                                        "2": "move backward."
+                                    },
+                                    "responses": {
+                                        "1": [
+                                            [
+                                                "Turning around clockwise by 180 degrees. #+#turn_around",
+                                                1.0,
+                                                {},
+                                                {},
+                                                {
+                                                    "command_to_perform": "turn_clockwise_180"
+                                                }
+                                            ]
+                                        ],
+                                        "2": [
+                                            [
+                                                "Moving backward. #+#move_backward",
+                                                1.0,
+                                                {},
+                                                {},
+                                                {
+                                                    "command_to_perform": "move_backward"
+                                                }
+                                            ]
+                                        ]
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "1": [
+                                        "context_driven_response",
+                                        "command_selector"
+                                    ],
+                                    "2": [
+                                        "context_driven_response",
+                                        "command_selector"
+                                    ],
+                                    "3": [
+                                        "context_driven_response",
+                                        "command_selector"
+                                    ]
+                                },
+                                "previous_human_utter_index": 3,
+                                "shared_memory": {}
+                            }
+                        },
+                        "user_type": "human"
+                    }
+                },
+                {
+                    "text": "please track a car.",
+                    "annotations": {
+                        "spelling_preprocessing": "please track a car",
+                        "badlisted_words": {
+                            "bad_words": false
+                        },
+                        "sentseg": {
+                            "punct_sent": "please track a car.",
+                            "segments": [
+                                "please track a car."
+                            ]
+                        },
+                        "ner": [
+                            []
+                        ],
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_backward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_forward": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "move_to_point": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "open_door": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "track_object": {
+                                "confidence": 1.0,
+                                "detected": 1
+                            },
+                            "turn_around": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "entity_detection": {
+                            "entities": [
+                                "car"
+                            ],
+                            "labelled_entities": [
+                                {
+                                    "finegrained_label": [
+                                        [
+                                            "misc",
+                                            0.6463
+                                        ]
+                                    ],
+                                    "label": "misc",
+                                    "offsets": [
+                                        32,
+                                        35
+                                    ],
+                                    "text": "car"
+                                }
+                            ]
+                        }
+                    },
+                    "user": {
+                        "id": "6427f12041f6a1c87a304159",
+                        "user_external_id": "hi",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_program_y_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "4a87a1c6-2723-4152-bd82-ab97e85a0a6d",
+                                    "labels": {
+                                        "0": [
+                                            "story_flow",
+                                            "start_node"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "0": "hi."
+                                    },
+                                    "responses": {
+                                        "0": "Hi there! How are things?"
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "0": [
+                                        "story_flow",
+                                        "start_node"
+                                    ]
+                                },
+                                "previous_human_utter_index": 0,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {},
+                            "dff_command_selector_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "29b53c71-8e7c-4891-8ebc-da3fafe059a1",
+                                    "labels": {
+                                        "1": [
+                                            "context_driven_response",
+                                            "command_selector"
+                                        ],
+                                        "2": [
+                                            "context_driven_response",
+                                            "command_selector"
+                                        ]
+                                    },
+                                    "misc": {},
+                                    "requests": {
+                                        "1": "turn clockwise for 180 degrees.",
+                                        "2": "move backward."
+                                    },
+                                    "responses": {
+                                        "1": [
+                                            [
+                                                "Turning around clockwise by 180 degrees. #+#turn_around",
+                                                1.0,
+                                                {},
+                                                {},
+                                                {
+                                                    "command_to_perform": "turn_clockwise_180"
+                                                }
+                                            ]
+                                        ],
+                                        "2": [
+                                            [
+                                                "Moving backward. #+#move_backward",
+                                                1.0,
+                                                {},
+                                                {},
+                                                {
+                                                    "command_to_perform": "move_backward"
+                                                }
+                                            ]
+                                        ]
+                                    },
+                                    "validation": false
+                                },
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "1": [
+                                        "context_driven_response",
+                                        "command_selector"
+                                    ],
+                                    "2": [
+                                        "context_driven_response",
+                                        "command_selector"
+                                    ],
+                                    "3": [
+                                        "context_driven_response",
+                                        "command_selector"
+                                    ]
+                                },
+                                "previous_human_utter_index": 3,
+                                "shared_memory": {}
+                            }
+                        },
+                        "user_type": "human"
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Moving backward.",
+                    "annotations": {
+                        "ner": [
+                            []
+                        ]
+                    },
+                    "active_skill": "dff_command_selector_skill",
+                    "user": {
+                        "id": "6427f12041f6a1c87a30415a",
+                        "persona": {},
+                        "attributes": {},
+                        "user_type": "bot"
+                    }
+                }
+            ],
+            "called_intents": {
+                "cant_do": false,
+                "choose_topic": false,
+                "doing_well": false,
+                "dont_understand": false,
+                "exit": false,
+                "lets_chat_about": false,
+                "move_backward": true,
+                "move_forward": true,
+                "move_to_point": false,
+                "no": false,
+                "open_door": false,
+                "opinion_request": false,
+                "repeat": false,
+                "stupid": false,
+                "tell_me_a_story": false,
+                "tell_me_more": false,
+                "topic_switching": false,
+                "track_object": false,
+                "turn_around": true,
+                "weather_forecast_intent": false,
+                "what_are_you_talking_about": false,
+                "what_can_you_do": false,
+                "what_is_your_job": false,
+                "what_is_your_name": false,
+                "what_time": false,
+                "where_are_you_from": false,
+                "who_made_you": false,
+                "yes": false
+            },
+            "dialog_id": "a1402c4dd8ab220076bc559fd0810abf"
+        }
+    ],
+    "dff_command_selector_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "29b53c71-8e7c-4891-8ebc-da3fafe059a1",
+                "labels": {
+                    "1": [
+                        "context_driven_response",
+                        "command_selector"
+                    ],
+                    "2": [
+                        "context_driven_response",
+                        "command_selector"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "1": "turn clockwise for 180 degrees.",
+                    "2": "move backward."
+                },
+                "responses": {
+                    "1": [
+                        [
+                            "Turning around clockwise by 180 degrees. #+#turn_around",
+                            1.0,
+                            {},
+                            {},
+                            {
+                                "command_to_perform": "turn_clockwise_180"
+                            }
+                        ]
+                    ],
+                    "2": [
+                        [
+                            "Moving backward. #+#move_backward",
+                            1.0,
+                            {},
+                            {},
+                            {
+                                "command_to_perform": "move_backward"
+                            }
+                        ]
+                    ]
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "1": [
+                    "context_driven_response",
+                    "command_selector"
+                ],
+                "2": [
+                    "context_driven_response",
+                    "command_selector"
+                ],
+                "3": [
+                    "context_driven_response",
+                    "command_selector"
+                ]
+            },
+            "previous_human_utter_index": 3,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "prompts_goals_batch": [
+        {}
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "dialog_id_batch": [
+        "a1402c4dd8ab220076bc559fd0810abf"
+    ]
+}
