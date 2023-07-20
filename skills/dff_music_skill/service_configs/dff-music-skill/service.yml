@@ -22,14 +22,3 @@ compose:
   - ./common:/src/common
   ports:
   - 8099:8099
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8099
-  - PORT=8099

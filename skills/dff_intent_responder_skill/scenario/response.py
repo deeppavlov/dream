@@ -1,9 +1,10 @@
 import logging
+
 import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
 
+from common.utils import high_priority_intents, get_intents
 from df_engine.core import Actor, Context
-from common.utils import high_priority_intents
 
 
 logger = logging.getLogger(__name__)
@@ -36,14 +37,16 @@ def intent_catcher_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.debug("Intent is not defined")
 
     if response == "":
-        logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
-
+        intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
+        logger.error(f"response is empty for intents: {intents}")
     return response
 
 
 def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
-    logger.error(f"response is empty for intents: {get_intents(annotated_utterance).items()}")
+
+    intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
+    logger.error(f"response is empty for intents: {intents}")
     return ""
 
 
@@ -56,18 +59,13 @@ def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Co
     return ctx
 
 
-def get_intents(annotated_utterance):
-    annotations = annotated_utterance.get("annotations", {})
-    return annotations.get("intent_catcher", {})
-
-
 def get_detected_intents(annotated_utterance):
-    intents = get_intents(annotated_utterance)
+    intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
     intent, confidence = None, 0.0
-    for key, value in intents.items():
-        if value.get("detected", 0) == 1 and key in response_funcs.get_respond_funcs():
-            confidence_current = value.get("confidence", 0.0)
+    for intent_name, intent_conf in intents.items():
+        if intent_conf > 0 and intent_name in response_funcs.get_respond_funcs():
+            confidence_current = intent_conf
             if confidence_current > confidence:
-                intent, confidence = key, confidence_current
+                intent, confidence = intent_name, float(confidence_current)
 
     return intent, confidence

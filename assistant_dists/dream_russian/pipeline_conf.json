@@ -404,7 +404,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://entity-detection:8103/respond_batch"
+                    "url": "http://entity-detection-ru:8103/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -415,7 +415,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
-                    "service": "annotators/entity_detection/service_configs/entity-detection"
+                    "service": "annotators/entity_detection/service_configs/entity-detection-ru"
                 }
             },
             "dialogrpt": {

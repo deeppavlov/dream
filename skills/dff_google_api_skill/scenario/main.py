@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 flows = {
     "generative_google_api": {
-        LOCAL: {PROCESSING: {"set_confidence": int_prs.set_confidence(1.0)}},
+        LOCAL: {PROCESSING: {"set_confidence": int_prs.set_confidence(0.9)}},
         "start_node": {
             RESPONSE: "",
             TRANSITIONS: {"google_api_response_node": cnd.true()},

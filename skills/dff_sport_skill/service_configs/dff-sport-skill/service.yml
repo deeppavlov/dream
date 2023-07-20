@@ -22,14 +22,4 @@ compose:
   - ./common:/src/common
   ports:
   - 8098:8098
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8098
-  - PORT=8098
+

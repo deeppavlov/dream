@@ -15,9 +15,9 @@
 8011	sentseg,sentseg-ru
 8012	dff-intent-responder-skill,dff-intent-responder-ru-skill
 8013	toxic-classification-multilingual
-8014	intent-catcher,intent-catcher-ru
+8014	intent-catcher,intent-catcher-ru,intent-catcher-commands,intent-catcher-commands-ru
 8015	emotion-classification-deepy
-8016
+8016    dff-command-selector-skill,dff-command-selector-ru-skill
 8017	sentrewrite
 8018	badlisted-words,badlisted-words-ru
 8019
@@ -36,10 +36,10 @@
 8032	dff-book-skill
 8033	misheard-asr
 8034	dff-book-sfc-skill
-8035
-8036
+8035    robot-command-sender
+8036    robot-notifications
 8037	dff-weather-skill
-8038
+8038    robot-fake-server
 8039
 8040
 8041
@@ -138,7 +138,7 @@
 8134	dff-dream-persona-gpt-j-prompted-skill
 8135	prompt-selector,prompt-selector-ru
 8136	property-extraction
-8137	dff-dream-persona-davinci3-prompted-skill
+8137	dff-dream-persona-chatgpt-prompted-skill
 8138	dff-marketing-prompted-skill
 8139	dff-fairytale-prompted-skill
 8140	seq2seq-persona-based
@@ -149,7 +149,7 @@
 8145	openai-api-chatgpt
 8146	dff-deeppavlov-prompted-skill
 8147	dff-universal-prompted-skill
-8148
+8148    dff-command-selector-skill,dff-command-selector-ru-skill
 8149	transformers-lm-llama7bru
 8150	combined-classification-lightweight
 8151	dff-dream-persona-llama7bru-prompted-skill
@@ -166,10 +166,12 @@
 8162	dff-google-api-skill
 8163	anthropic-api-claude-instant-v1
 8164	anthropic-api-claude-v1
-8165
-8166
+8165	doc-retriever
+8166	dff-document-qa-llm-skill
 8167	openai-api-chatgpt-16k
 8168	transformers-lm-vicuna13b
-8169	brio-summarizer
-8170	rut5-summarizer
+8169    dff-reasoning-skill
+8170    dff-dream-faq-prompted-skill
 8171	summarization-annotator
+8172	brio-summarizer
+8173	rut5-summarizer

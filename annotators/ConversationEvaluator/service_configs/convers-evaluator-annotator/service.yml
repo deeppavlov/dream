@@ -27,14 +27,3 @@ compose:
   - ~/.deeppavlov:/root/.deeppavlov
   ports:
   - 8004:8004
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8004
-  - PORT=8004
