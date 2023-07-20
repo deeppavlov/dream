@@ -12,6 +12,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
+SUMMARIZATION_REQUEST_TIMEOUT = int(getenv("SUMMARIZATION_REQUEST_TIMEOUT"))
 SUMMARIZATION_SERVICE_URL = getenv("SUMMARIZATION_SERVICE_URL")
 logger.info(f"summarization-annotator considered summarizer: {SUMMARIZATION_SERVICE_URL}")
 
@@ -33,7 +34,7 @@ def get_summary(dialog):
     logger.info(f"summarization-annotator will summarize this: {dialog}")
 
     try:
-        summary = requests.post(SUMMARIZATION_SERVICE_URL, json={"sentences": dialog}, timeout=10).json()[0]['batch'][0]
+        summary = requests.post(SUMMARIZATION_SERVICE_URL, json={"sentences": dialog}, timeout=SUMMARIZATION_REQUEST_TIMEOUT).json()[0]['batch'][0]
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
@@ -52,7 +53,7 @@ def respond():
     logger.info(f"summarization-annotator output: {summarization_attribute}")
 
     total_time = time.time() - start_time
-    logger.info(f"summarization-annotator exec time: {round(total_time, 2)} sec")
+    logger.info(f"summarization-annotator exec time: {total_time:.2f}s")
     return jsonify(summarization_attribute)
 
 
