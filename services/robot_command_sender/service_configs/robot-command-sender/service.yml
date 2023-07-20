@@ -1,0 +1,29 @@
+name: robot-command-sender
+endpoints:
+- send
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8035
+      SERVICE_NAME: robot_command_sender
+      ROS_FSM_SERVER: http://robot-fake-server:8038
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/robot_command_sender/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8035
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./services/robot_command_sender:/src
+  - ./common:/src/common
+  ports:
+  - 8035:8035
+proxy: null
