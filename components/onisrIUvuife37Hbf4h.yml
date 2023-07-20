@@ -1,10 +1,10 @@
-name: dff_storyteller_ru_prompted_skill
-display_name: Рассказчик Остросюжетных Историй (Навык)
+name: dff_journalist_helper_ru_prompted_skill
+display_name: Помощник Журналиста (Навык)
 component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: Этот навык рассказывает остросюжетные истории для взрослых, основываясь на запросе пользователя. 
+description: Этот навык придумывает пять идей для статьи на заданную тематику. 
   Ответы генерируются с помощью модели Russian XGLM 4.5B с использованием промпта-инструкции и предыдущего контекста диалога.
 ram_usage: 128M
 gpu_usage: null
@@ -12,10 +12,10 @@ group: skills
 connector:
   protocol: http
   timeout: 20.0
-  url: http://dff-storyteller-ruxglm-prompted-skill:8173/respond
+  url: http://dff-journalist-helper-ruxglm-prompted-skill:8177/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
-  skill_name: dff_storyteller_ru_prompted_skill
+  skill_name: dff_journalist_helper_ru_prompted_skill
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors
@@ -23,5 +23,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_template_prompted_skill/service_configs/dff-storyteller-ru-prompted-skill
+service: skills/dff_template_prompted_skill/service_configs/dff-journalist-helper-ru-prompted-skill
 date_created: '2023-03-16T09:45:32'
