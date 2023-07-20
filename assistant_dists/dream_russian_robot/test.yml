@@ -1,0 +1,44 @@
+services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+    ports:
+      - ${AGENT_PORT}:4242
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  dff-program-y-ru-skill:
+  convers-evaluation-selector-ru:
+  dff-intent-responder-ru-skill:
+  dff-command-selector-ru-skill:
+  dff-generative-ru-skill:
+  intent-catcher-commands-ru:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=5
+  badlisted-words-ru:
+  ner-ru:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
+  personal-info-ru-skill:
+  dff-friendship-ru-skill:
+  entity-detection-ru:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  dialogpt-ru:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  dialogrpt-ru:
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=8
+version: '3.7'
