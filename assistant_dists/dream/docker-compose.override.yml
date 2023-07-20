@@ -444,31 +444,13 @@ services:
         reservations:
           memory: 100M
 
-  brio-summarizer:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8169
-        SERVICE_NAME: brio_summarizer
-        PRETRAINED_MODEL_NAME: "Yale-LILY/brio-cnndm-uncased"
-      context: ./services/brio_summarizer/
-    command: flask run -h 0.0.0.0 -p 8169
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 4G
-        reservations:
-          memory: 4G
-
   summarization-annotator:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8171
         SERVICE_NAME: summarization_annotator
+        SUMMARIZATION_REQUEST_TIMEOUT: 10
       context: ./annotators/summarization_annotator/
     command: flask run -h 0.0.0.0 -p 8171
     environment:
@@ -479,5 +461,24 @@ services:
           memory: 256M
         reservations:
           memory: 256M
+
+  brio-summarizer:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8172
+        SERVICE_NAME: brio_summarizer
+        PRETRAINED_MODEL_NAME: "Yale-LILY/brio-cnndm-uncased"
+      context: ./services/brio_summarizer/
+    command: flask run -h 0.0.0.0 -p 8172
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
 
 version: '3.7'

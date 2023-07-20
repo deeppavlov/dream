@@ -281,9 +281,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/summarization_annotator",
-                    "container": "summarization-annotator",
-                    "endpoint": "respond"
+                    "component": "components/riRfdGz86P51B9bL7fO6JR.yml",
+                    "service": "annotators/summarization_annotator/service_configs/summarization-annotator"
                 }
             }
         },

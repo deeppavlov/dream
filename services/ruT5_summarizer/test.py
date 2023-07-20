@@ -2,7 +2,7 @@ import requests
 
 
 def test_skill():
-    url = "http://0.0.0.0:8170/respond_batch"
+    url = "http://0.0.0.0:8173/respond_batch"
 
     input_data = {"sentences": ["ChatGPT (Generative Pre-trained Transformer или генеративный предварительно обученный "
                                 "трансформер) — чат-бот с искусственным интеллектом, разработанный компанией OpenAI и "

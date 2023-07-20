@@ -141,7 +141,7 @@ services:
     volumes:
       - "./services/ruT5_summarizer:/src"
     ports:
-      - 8170:8170
+      - 8173:8173
   summarization-annotator:
     volumes:
       - "./annotators/summarization_annotator:/src"

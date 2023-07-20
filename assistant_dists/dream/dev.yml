@@ -141,16 +141,16 @@ services:
       - "./common:/src/common"
     ports:
       - 8170:8170
-  brio-summarizer:
-    volumes:
-      - "./services/brio_summarizer:/src"
-    ports:
-      - 8169:8169
   summarization-annotator:
     volumes:
       - "./annotators/summarization_annotator:/src"
     ports:
       - 8171:8171
+  brio-summarizer:
+    volumes:
+      - "./services/brio_summarizer:/src"
+    ports:
+      - 8172:8172
   openai-api-chatgpt-16k:
     volumes:
       - "./services/openai_api_lm:/src"
