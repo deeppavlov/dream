@@ -104,4 +104,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8120:8120
+  terminusdb-server:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 6363:6363
 version: "3.7"
