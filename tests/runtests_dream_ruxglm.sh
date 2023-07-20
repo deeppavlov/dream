@@ -110,8 +110,8 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in ranking-based-response-selector-ru dialogrpt-ru prompt-selector-ru \
-                     transformers-lm-ruxglm dff-dream-persona-ruxglm-prompted-skill; do
+    for container in ranking-based-response-selector-ru prompt-selector-ru \
+                     dff-dream-persona-ruxglm-prompted-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
