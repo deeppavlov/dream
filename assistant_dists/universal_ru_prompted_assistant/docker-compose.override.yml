@@ -78,6 +78,27 @@ services:
         reservations:
           memory: 60G
 
+  transformers-lm-rugpt35:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8173
+        SERVICE_NAME: transformers_lm_rugpt35
+        PRETRAINED_MODEL_NAME_OR_PATH: ai-forever/ruGPT-3.5-13B
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8173
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 60G
+        reservations:
+          memory: 60G
+
   openai-api-chatgpt:
     env_file: [ .env ]
     build:
