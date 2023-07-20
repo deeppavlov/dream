@@ -5,14 +5,20 @@ import json
 from os import getenv
 
 INTENT_PHRASES_PATH = getenv("INTENT_PHRASES_PATH")
+SERVICE_PORT = getenv("SERVICE_PORT")
 
 
 def main_test():
-    url = "http://0.0.0.0:8014/detect"
-    if "RU" in INTENT_PHRASES_PATH:
+    url = f"http://0.0.0.0:{SERVICE_PORT}/detect"
+    if "RU" in INTENT_PHRASES_PATH and "commands" in INTENT_PHRASES_PATH:
+        tests = json.load(open("tests_commands_RU.json"))
+    elif "RU" in INTENT_PHRASES_PATH:
         tests = json.load(open("tests_RU.json"))
+    elif "commands" in INTENT_PHRASES_PATH:
+        tests = json.load(open("tests_commands.json"))
     else:
         tests = json.load(open("tests.json"))
+
     for test in tests:
         r = requests.post(url=url, json={"sentences": [[test["sentence"]]]})
         assert r.ok

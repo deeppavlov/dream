@@ -16,7 +16,7 @@
         "intent": "yes"
     },
     {
-        "sentence": "однозначно нет.",
+        "sentence": "точно нет.",
         "intent": "no"
     },
     {
