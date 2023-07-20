@@ -46,10 +46,7 @@ flows = {
             PROCESSING: {
                 "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
             },
-            TRANSITIONS: {
-                "ask4approval": loc_cnd.is_tool_needs_approval,
-                "complete_subtask": cnd.true()
-            },
+            TRANSITIONS: {"ask4approval": loc_cnd.is_tool_needs_approval, "complete_subtask": cnd.true()},
         },
         "ask4approval": {
             RESPONSE: loc_rsp.ask4approval,
@@ -58,7 +55,7 @@ flows = {
             },
             TRANSITIONS: {
                 "complete_subtask": cnd.all([loc_cnd.is_last_utt_approval_question, int_cnd.is_yes_vars]),
-                "api_usage_not_approved": cnd.all([loc_cnd.is_last_utt_approval_question, int_cnd.is_no_vars])
+                "api_usage_not_approved": cnd.all([loc_cnd.is_last_utt_approval_question, int_cnd.is_no_vars]),
             },
         },
         "complete_subtask": {
@@ -67,7 +64,7 @@ flows = {
                 "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
                 "save_approves_tool": loc_prc.save_approved_api(),
             },
-            TRANSITIONS: {"self_reflexion": cnd.true()}
+            TRANSITIONS: {"self_reflexion": cnd.true()},
         },
         "api_usage_not_approved": {
             RESPONSE: "Sorry, I'm afraid I don't know what I can do then.",
@@ -92,14 +89,14 @@ flows = {
             RESPONSE: loc_rsp.recomplete_task,
             PROCESSING: {
                 "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
-                "save_tries": loc_prc.save_tries()
+                "save_tries": loc_prc.save_tries(),
             },
-            TRANSITIONS: {"check_if_needs_details": cnd.true()}, 
+            TRANSITIONS: {"check_if_needs_details": cnd.true()},
         },
         "fallback_node": {
             RESPONSE: "Ooops, something went wrong!",
             PROCESSING: {"set_is_final_answer_flag": int_prs.set_is_final_answer_flag("true")},
-            TRANSITIONS: {}, 
+            TRANSITIONS: {},
         },
     },
 }

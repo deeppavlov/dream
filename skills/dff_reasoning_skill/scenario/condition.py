@@ -58,7 +58,7 @@ def is_self_reflection_ok(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
         if self_reflexion and re.search(yes_templates, self_reflexion.lower()):
             return True
     return False
-    
+
 
 def is_last_step(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if not ctx.validation:

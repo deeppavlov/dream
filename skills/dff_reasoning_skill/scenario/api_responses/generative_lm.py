@@ -6,8 +6,6 @@ from common.prompts import send_request_to_prompted_generative_service, compose_
 from scenario.utils import compose_input_for_API, compose_data_for_model
 from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
-import common.dff.integration.response as int_rsp
-from common.constants import CAN_NOT_CONTINUE
 from typing import Any
 
 sentry_sdk.init(getenv("SENTRY_DSN"))

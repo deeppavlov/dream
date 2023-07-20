@@ -123,15 +123,20 @@ def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 """
             else:
                 tasks_history = ""
-            prompt = tasks_history + f"""Here is your current task:
+            prompt = (
+                tasks_history
+                + f"""Here is your current task:
 {plan[step]}
 Do you need to clarify any details with the user related to your current task? \
 ANSWER ONLY YES/NO"""
+            )
             dialog_context = []
             human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
             lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
             lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-            envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+            envvars_to_send = (
+                ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+            )
             sending_variables = compose_sending_variables(
                 lm_service_kwargs,
                 envvars_to_send,
@@ -168,11 +173,14 @@ def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 """
         else:
             tasks_history = ""
-        
-        prompt = tasks_history + f"""Here is your current task:
+
+        prompt = (
+            tasks_history
+            + f"""Here is your current task:
 {plan[step]}
 Formulate a clarifying question to the user to get necessary information \
 to complete the current task"""
+        )
         dialog_context = []
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
@@ -201,7 +209,7 @@ to complete the current task"""
         logger.info(f"CLARIFYING QUESTION: {question}")
         time.sleep(5)
         return question
-    
+
 
 def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
@@ -223,13 +231,16 @@ def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 """
         else:
             tasks_history = ""
-        prompt = tasks_history + f"""YOUR CURRENT TASK:
+        prompt = (
+            tasks_history
+            + f"""YOUR CURRENT TASK:
 {plan[step]}
 AVAILABLE TOOLS:
 {api_desc}
 Choose the best tool to use to complete your current task. \
 Return the name of the best tool to use exactly as it is written in the dictionary. \
 DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
+        )
         dialog_context = []
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
@@ -249,13 +260,13 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
                 GENERATIVE_TIMEOUT,
                 sending_variables,
             )
-            if  hypotheses[0] in api_conf.keys():
-                api2use =  hypotheses[0]
+            if hypotheses[0] in api_conf.keys():
+                api2use = hypotheses[0]
             else:
                 for key in api_conf.keys():
-                    if key in  hypotheses[0]:
+                    if key in hypotheses[0]:
                         api2use = key
-            
+
             assert api2use
         except Exception as e:
             sentry_sdk.capture_exception(e)
@@ -297,7 +308,7 @@ def complete_subtask(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         logger.info(f"subtask result: {subtask_results}")
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
         return response
-            
+
 
 def self_reflexion(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
@@ -382,7 +393,7 @@ YOUR TASK: given the information in the context, form a final answer to the user
         int_ctx.save_to_shared_memory(ctx, actor, step=step)
         logger.info(f"final answer: {response}")
         return response
-    
+
 
 def recomplete_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
@@ -396,4 +407,3 @@ def recomplete_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
         response = f"""I didn't manage to complete subtask:\n{plan[step]}\nI will try again."""
         return response
-

@@ -58,19 +58,25 @@ def compose_input_for_API(ctx: Context, actor: Actor, *args, **kwargs):
         if subtask_results:
             tasks_history = f"""Here is the story of completed tasks and results:
 {subtask_results}
-""" 
+"""
         else:
             tasks_history = ""
         if question and answer:
-            prompt = tasks_history + f"""YOUR CURRENT TASK: {plan[step]}
+            prompt = (
+                tasks_history
+                + f"""YOUR CURRENT TASK: {plan[step]}
 CLARIFYING QUESTION TO THE USER: {question}
 ANSWER TO THE QUESTION: {answer}
 Form an input to the {api2use} tool, taking all info above into account. \
 Input format: {input_template}"""
+            )
         else:
-            prompt = tasks_history + f"""YOUR GOAL: {plan[step]}
+            prompt = (
+                tasks_history
+                + f"""YOUR GOAL: {plan[step]}
 Form an input to the {api2use} tool to achieve the goal. \
 Input format: {input_template}"""
+            )
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
