@@ -117,7 +117,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 120.0,
-                    "url": "http://dff-universal-ru-prompted-skill:8148/respond"
+                    "url": "http://dff-universal-ru-prompted-skill:8161/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
