@@ -45,12 +45,19 @@ def get_summary(dialog):
 @app.route("/respond", methods=["POST"])
 def respond():
     start_time = time.time()
-    dialogs_batch = request.json.get('dialogs', [])
+    dialogs_batch = request.json.get("dialogs", [])
+    summaries_batch = request.json.get("previous_summaries", [])
     summarization_attribute = []
 
-    for dialog in dialogs_batch:
+    for dialog, prev_summary in zip(dialogs_batch, summaries_batch):
         logger.info(f"summarization-annotator received dialog: {dialog}")
-        result = get_summary(dialog)
+        logger.info(f"summarization-annotator received previous summary: {[prev_summary]}")
+        result = ""
+        result += prev_summary
+        new_summary = get_summary(dialog)
+        if new_summary:
+            result += " " + new_summary
+        result = result.strip()
         summarization_attribute.append({"bot_attributes": {"summarized_dialog": result}})
         logger.info(f"summarization-annotator output: {summarization_attribute}")
 

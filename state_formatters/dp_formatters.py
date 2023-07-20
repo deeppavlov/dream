@@ -428,10 +428,13 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
 
 def summarization_annotator_formatter(dialog: Dict):
     # Used by: summarization annotator
-    dialog = [utt["text"] for utt in dialog["utterances"]]
-    pointer = (len(dialog) + 1) % 6 if (len(dialog) + 1) % 6 != 0 else 6
-    dialog = dialog[-(pointer + 5):]
-    return [{"dialogs": [dialog]}]
+    sents = [utt["text"] for utt in dialog["utterances"]]
+    pointer = (len(sents) + 1) % 6 if (len(sents) + 1) % 6 != 0 else 6
+    sents = sents[-(pointer + 5):]
+    bot_attributes = dialog["bot_utterances"][-1]["user"]["attributes"] if len(dialog["bot_utterances"]) else {}
+    previous_summary = bot_attributes["summarized_dialog"] if "summarized_dialog" in bot_attributes.keys() else []
+    previous_summary = previous_summary if previous_summary else ""
+    return [{"dialogs": [sents], "previous_summaries": [previous_summary]}]
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
