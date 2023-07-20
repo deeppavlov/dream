@@ -1,4 +1,5 @@
-WAIT_HOSTS: ''
+WAIT_HOSTS: mint-status:8340, sentseg:8011, ner:8021, dff-mint-skill:8337, ranking-based-response-selector:8002,
+  ros-flask-server:5000, mint-sender:8338, sentence-ranker:8128
 WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 HIGH_PRIORITY_INTENTS: 1
 RESTRICTION_FOR_SENSITIVE_CASE: 1

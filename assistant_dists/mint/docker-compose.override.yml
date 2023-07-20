@@ -1,0 +1,207 @@
+services:
+  agent:
+    build:
+      args:
+        WAIT_HOSTS: mint-status:8340, sentseg:8011, ner:8021, dff-mint-skill:8337,
+          ranking-based-response-selector:8002, ros-flask-server:5000, mint-sender:8338,
+          sentence-ranker:8128
+        WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+        HIGH_PRIORITY_INTENTS: 1
+        RESTRICTION_FOR_SENSITIVE_CASE: 1
+        ALWAYS_TURN_ON_ALL_SKILLS: 0
+        LANGUAGE: EN
+        FALLBACK_FILE: fallbacks_dream_en.json
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/ai_faq_assistant/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: mint-status:8340, sentseg:8011, ner:8021, dff-mint-skill:8337, ranking-based-response-selector:8002,
+        ros-flask-server:5000, mint-sender:8338, sentence-ranker:8128
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
+  mint-status:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8340
+        SERVICE_NAME: mint_status
+        CUDA_VISIBLE_DEVICES: '0'
+      context: .
+      dockerfile: annotators\mint_status\Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8340 --timeout 600
+    environment:
+      SERVICE_PORT: 8340
+      SERVICE_NAME: mint_status
+      CUDA_VISIBLE_DEVICES: '0'
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+  sentseg:
+    env_file:
+    - .env
+    build:
+      args:
+        FLASK_APP: server
+      context: annotators\SentSeg
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      FLASK_APP: server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+  ner:
+    env_file:
+    - .env
+    build:
+      args:
+        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+        SERVICE_PORT: 8021
+        SRC_DIR: annotators/NER_deeppavlov
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+        FLASK_APP: server
+        CUDA_VISIBLE_DEVICES: '0'
+      context: .
+      dockerfile: annotators\NER_deeppavlov\Dockerfile
+    command: flask run -h 0.0.0.0 -p 8021
+    environment:
+      CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+      SERVICE_PORT: 8021
+      SRC_DIR: annotators/NER_deeppavlov
+      COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+      FLASK_APP: server
+      CUDA_VISIBLE_DEVICES: '0'
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+    tty: true
+  dff-mint-skill:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8337
+        SERVICE_NAME: dff_mint_skill
+        CUDA_VISIBLE_DEVICES: '0'
+      context: .
+      dockerfile: skills\dff_mint_skill\Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8337 --timeout 600
+    environment:
+      SERVICE_PORT: 8337
+      SERVICE_NAME: dff_mint_skill
+      CUDA_VISIBLE_DEVICES: '0'
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+  ranking-based-response-selector:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+        FLASK_APP: server
+      context: .
+      dockerfile: response_selectors\ranking_based_response_selector\Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      SERVICE_PORT: 8002
+      SERVICE_NAME: response_selector
+      SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+      SENTENCE_RANKER_TIMEOUT: 3
+      N_UTTERANCES_CONTEXT: 5
+      FILTER_TOXIC_OR_BADLISTED: 1
+      FLASK_APP: server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+  ros-flask-server:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 5000
+        SERVICE_NAME: ros_flask_server
+        CUDA_VISIBLE_DEVICES: '0'
+      context: .
+      dockerfile: services\ros_flask_server\Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:5000 --timeout 600
+    environment:
+      SERVICE_PORT: 5000
+      SERVICE_NAME: ros_flask_server
+      CUDA_VISIBLE_DEVICES: '0'
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+  mint-sender:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8338
+        SERVICE_NAME: mint_sender
+        CUDA_VISIBLE_DEVICES: '0'
+      context: .
+      dockerfile: services\mint_sender\Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8338 --timeout 600
+    environment:
+      SERVICE_PORT: 8338
+      SERVICE_NAME: mint_sender
+      CUDA_VISIBLE_DEVICES: '0'
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+  sentence-ranker:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+        CUDA_VISIBLE_DEVICES: '0'
+        FLASK_APP: server
+      context: services\sentence_ranker
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      SERVICE_PORT: 8128
+      SERVICE_NAME: sentence_ranker
+      PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+version: '3.7'
