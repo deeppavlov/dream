@@ -41,8 +41,13 @@ def is_tool_needs_approval(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         api2use = shared_memory.get("api2use", None)
+        approved_tools = ctx.misc.get("slots", {}).get("approved_tools", [])
         if api_conf[api2use]["needs_approval"] == "True":
-            return True
+            if api_conf[api2use]["approve_once"] == "True":
+                if api2use not in approved_tools:
+                    return True
+            else:
+                return True
     return False
 
 
@@ -67,10 +72,7 @@ def is_last_step(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
 
 def is_tries_left(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if not ctx.validation:
-        shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        tries = shared_memory.get("tries", 1)
+        tries = ctx.misc.get("slots", {}).get("tries", 1)
         if tries <= 3:
-            tries += 1
-            int_ctx.save_to_shared_memory(ctx, actor, tries=tries)
             return True
     return False

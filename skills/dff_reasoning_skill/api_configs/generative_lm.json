@@ -4,6 +4,7 @@
         "description": "This service uses language models to generate responses.",
         "keys": ["OPENAI_API_KEY"],
         "needs_approval": "False",
+        "approve_once": "False",
         "timeout": 30,
         "input_template": "Just the request in a string format"
     }

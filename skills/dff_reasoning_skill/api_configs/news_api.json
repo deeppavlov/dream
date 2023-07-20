@@ -4,6 +4,7 @@
         "description": "The News API can provide the list of latest trending news.",
         "keys": ["NEWS_API_KEY"],
         "needs_approval": "False",
+        "approve_once": "False",
         "timeout": 30,
         "input_template": "Just the request in a string format"
     }

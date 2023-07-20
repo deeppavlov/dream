@@ -65,6 +65,7 @@ flows = {
             RESPONSE: loc_rsp.complete_subtask,
             PROCESSING: {
                 "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
+                "save_approves_tool": loc_prc.save_approved_api(),
             },
             TRANSITIONS: {"self_reflexion": cnd.true()}
         },
@@ -89,7 +90,10 @@ flows = {
         },
         "recomplete_task": {
             RESPONSE: loc_rsp.recomplete_task,
-            PROCESSING: {"set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false")},
+            PROCESSING: {
+                "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
+                "save_tries": loc_prc.save_tries()
+            },
             TRANSITIONS: {"check_if_needs_details": cnd.true()}, 
         },
         "fallback_node": {
