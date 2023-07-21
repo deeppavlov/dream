@@ -7,7 +7,7 @@ services:
       #     spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188"
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-          spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128,
+          dialogpt:8125, sentence-ranker:8128,
           voice-service:8333, dff-voice-skill:8444"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
@@ -137,23 +137,6 @@ services:
           memory: 256M
         reservations:
           memory: 256M
-
-  spelling-preprocessing:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8074
-        SERVICE_NAME: spelling_preprocessing
-      context: ./annotators/spelling_preprocessing/
-    command: flask run -h 0.0.0.0 -p 8074
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 50M
 
   dialogpt:
     env_file: [ .env ]
