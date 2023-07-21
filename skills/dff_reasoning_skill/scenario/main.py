@@ -78,6 +78,7 @@ flows = {
                 "check_if_needs_details": cnd.all([loc_cnd.is_self_reflection_ok, cnd.neg(loc_cnd.is_last_step)]),
                 "final_response": cnd.all([loc_cnd.is_self_reflection_ok, loc_cnd.is_last_step]),
                 "recomplete_task": cnd.all([cnd.neg(loc_cnd.is_self_reflection_ok), loc_cnd.is_tries_left]),
+                "revise_plan": cnd.all([cnd.neg(loc_cnd.is_self_reflection_ok), cnd.neg(loc_cnd.is_tries_left)])
             },
         },
         "final_response": {
@@ -90,6 +91,13 @@ flows = {
             PROCESSING: {
                 "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
                 "save_tries": loc_prc.save_tries(),
+            },
+            TRANSITIONS: {"check_if_needs_details": cnd.true()},
+        },
+        "revise_plan": {
+            RESPONSE: loc_rsp.revise_plan,
+            PROCESSING: {
+                "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
             },
             TRANSITIONS: {"check_if_needs_details": cnd.true()},
         },

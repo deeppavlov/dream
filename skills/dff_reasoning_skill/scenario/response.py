@@ -407,3 +407,70 @@ def recomplete_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
         response = f"""I didn't manage to complete subtask:\n{plan[step]}\nI will try again."""
         return response
+
+
+def revise_plan(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    if not ctx.validation:
+        shared_memory = int_ctx.get_shared_memory(ctx, actor)
+        subtask_results = shared_memory.get("subtask_results", {})
+        plan = shared_memory.get("plan", [])
+        step = shared_memory.get("step", 0)
+        step -= 1
+        user_request = shared_memory.get("user_request", "")
+        self_reflexion = shared_memory.get("self_reflexion", "")
+        prompt = f"""USER REQUEST: {user_request}
+PLAN YOU HAD TO COMPLETE IT: {plan}
+RESULTS OF EACH SUBTASK IN A PLAN: {"---".join(list(subtask_results.values()))}
+DID YOU MANAGE TO COMPLETE {plan[step]}? -- {self_reflexion}
+YOUR TASK: revise the plan and fix it. Don't change those subtasks that don't have to be changed. \
+Return only the revised plan in the following format: 'PLAN:\n1. Subtask 1\n2. Subtask 2\n...'"""
+        dialog_context = []
+        human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+            **human_uttr_attributes,
+        )
+        try:
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                prompt,
+                GENERATIVE_SERVICE_URL,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
+            )
+            revised_plan = hypotheses[0]
+            revised_plan = revised_plan.split("\n")[1:]
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            revised_plan = None
+            
+        logger.info(f"REVISED PLAN: {revised_plan}")
+        for i, subtask in enumerate(revised_plan):
+            try:
+                if subtask != plan[i]:
+                    step = i
+                    break
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+        
+        if len(subtask_results) > 0:
+            for i in range(step, len(subtask_results)):
+                del subtask_results[str(step)]
+        
+        int_ctx.save_to_shared_memory(ctx, actor, step=step)
+        int_ctx.save_to_shared_memory(ctx, actor, plan=revised_plan)
+        int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
+        return f"""Original plan: {plan}\nRevised plan: {revised_plan}"""
+
+                
+
+
+
+
