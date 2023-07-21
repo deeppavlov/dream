@@ -462,14 +462,14 @@ services:
         reservations:
           memory: 256M
 
-  brio-summarizer:
+  dialog-summarizer:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8172
-        SERVICE_NAME: brio_summarizer
-        PRETRAINED_MODEL_NAME: "Yale-LILY/brio-cnndm-uncased"
-      context: ./services/brio_summarizer/
+        SERVICE_NAME: dialog_summarizer
+        PRETRAINED_MODEL_NAME: "knkarthick/MEETING_SUMMARY"
+      context: ./services/dialog_summarizer/
     command: flask run -h 0.0.0.0 -p 8172
     environment:
       - CUDA_VISIBLE_DEVICES=0

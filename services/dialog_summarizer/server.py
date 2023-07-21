@@ -33,7 +33,7 @@ def respond_batch():
     summary = model.generate(tokenized_text['input_ids'])
     summary = tokenizer.batch_decode(summary, skip_special_tokens=True)
     total_time = time.time() - start_time
-    logger.info(f"brio-summarizer exec time: {round(total_time, 2)} sec")
+    logger.info(f"dialog-summarizer exec time: {round(total_time, 2)} sec")
     return jsonify([{"batch": summary}])
 
 

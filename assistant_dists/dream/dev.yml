@@ -146,9 +146,9 @@ services:
       - "./annotators/summarization_annotator:/src"
     ports:
       - 8171:8171
-  brio-summarizer:
+  dialog-summarizer:
     volumes:
-      - "./services/brio_summarizer:/src"
+      - "./services/dialog_summarizer:/src"
     ports:
       - 8172:8172
   openai-api-chatgpt-16k:

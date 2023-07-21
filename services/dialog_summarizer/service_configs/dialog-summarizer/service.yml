@@ -1,4 +1,4 @@
-name: brio-summarizer
+name: dialog-summarizer
 endpoints:
 - respond_batch
 compose:
@@ -7,9 +7,9 @@ compose:
   build:
     args:
       SERVICE_PORT: 8172
-      SERVICE_NAME: brio_summarizer
-      PRETRAINED_MODEL_NAME: "Yale-LILY/brio-cnndm-uncased"
-    context: ./services/brio_summarizer/
+      SERVICE_NAME: dialog_summarizer
+      PRETRAINED_MODEL_NAME: "knkarthick/MEETING_SUMMARY"
+    context: ./services/dialog_summarizer/
   command: flask run -h 0.0.0.0 -p 8172
   environment:
   - CUDA_VISIBLE_DEVICES=0
@@ -21,7 +21,7 @@ compose:
       reservations:
         memory: 4G
   volumes:
-  - ./services/brio_summarizer:/src
+  - ./services/dialog_summarizer:/src
   ports:
   - 8172:8172
 proxy: null
