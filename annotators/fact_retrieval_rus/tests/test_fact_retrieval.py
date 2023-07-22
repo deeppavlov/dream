@@ -3,30 +3,25 @@ import requests
 
 
 @pytest.mark.parametrize(
-    "request_data", "gold_results",
+    "request_data, gold_results",
     [
-        {
-            "dialog_history": [["Какая столица России?"]],
-            "entity_substr": [["россии"]],
-            "entity_tags": [["loc"]],
-            "entity_pages": [[["Россия"]]],
-        }
-    ],
-    [
+        (
+            {
+                "dialog_history": [["Какая столица России?"]],
+                "entity_substr": [["россии"]],
+                "entity_tags": [["loc"]],
+                "entity_pages": [[["Россия"]]],
+            },
         "Росси́я или Росси́йская Федера́ция (РФ), — государство в Восточной Европе и Северной Азии. Территория России"
         " в её конституционных границах составляет км²; население страны (в пределах её заявленной территории) "
         "составляет чел. (). Занимает первое место в мире по территории, шестое — по объёму ВВП по ППС, и девятое "
         "— по численности населения. Столица — Москва. Государственный язык — русский. Денежная единица — "
         "российский рубль."
+        )
     ]
 )
-def main(url: str, request_data, gold_results):
-    count = 0
-    for data, gold_result in zip(request_data, gold_results):
-        result = requests.post(url, json=data).json()
-        if result[0] and result[0][0] and result[0][0][0] == gold_result:
-            count += 1
-        else:
-            print(f"Got {result}, but expected: {gold_result}")
-
-    assert count == len(request_data)
+def main(url: str, request_data: dict, gold_results: str):
+    response = requests.post(url, data=request_data)
+    result = response.json()
+    assert response.status_code == 200
+    assert result[0][0][0] == gold_results

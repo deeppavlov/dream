@@ -3,8 +3,8 @@ import pytest
 
 def pytest_addoption(parser):
     parser.addoption('--uri', action='store', default="http://0.0.0.0")
-    parser.addoption('--port', action='store', default=8077)
-    parser.addoption('--handle', action='store', default="model")
+    parser.addoption('--port', action='store', default="8078")
+    parser.addoption('--handle', action='store', default="/model")
 
 
 @pytest.fixture

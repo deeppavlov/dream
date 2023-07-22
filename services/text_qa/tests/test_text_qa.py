@@ -8,8 +8,8 @@ language = os.getenv("LANGUAGE", "EN")
 
 
 @pytest.mark.parametrize(
-    "request_data", "gold_results",
-    {
+    "request_data, gold_results",
+    [({
         "RU": [
             {
                 "question_raw": ["Где живут кенгуру?"],
@@ -25,7 +25,8 @@ language = os.getenv("LANGUAGE", "EN")
                 ],
             },
         ],
-        "EN": [
+    }, {"RU": ["Австралии", "Яном Лекуном"]}),
+    ({"EN": [
             {
                 "question_raw": ["Who was the first man in space?"],
                 "top_facts": [
@@ -46,8 +47,7 @@ language = os.getenv("LANGUAGE", "EN")
                 ],
             },
         ],
-    },
-    {"RU": ["Австралии", "Яном Лекуном"], "EN": ["Yuri Gagarin", "Jim Parsons"]}
+    }, {"EN": ["Yuri Gagarin", "Jim Parsons"]})]
 )
 def test_text_qa(url: str, request_data, gold_results):
     count = 0

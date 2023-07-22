@@ -3,40 +3,42 @@ import requests
 
 
 @pytest.mark.parametrize(
-    "request_data", "gold_results",
-    request_data=[
-        {"sentences": [["what is the capital of russia?"]]},
-        {"sentences": [["let's talk about politics."]]},
-    ],
-    gold_results=[
-        [
-            {
+    "request_data, gold_results",
+    [
+        (
+            {"sentences": [["what is the capital of russia?"]]},
+            [{
                 "entities": ["capital", "russia"],
                 "labelled_entities": [
                     {"finegrained_label": [["misc", 0.871]], "label": "misc", "offsets": [12, 19], "text": "capital"},
-                    {
-                        "finegrained_label": [["loc", 0.9927]],
-                        "label": "location",
-                        "offsets": [23, 29],
-                        "text": "russia",
-                    },
-                ],
-            }
-        ],
-        [
-            {
+                        {
+                             "finegrained_label": [["loc", 0.9927]],
+                             "label": "location",
+                             "offsets": [23, 29],
+                             "text": "russia",
+                        },
+                    ],
+            }]
+        ),
+        (
+            {"sentences": [["let's talk about politics."]]},
+            [{
                 "entities": ["politics"],
                 "labelled_entities": [
-                    {"finegrained_label": [["misc", 0.9984]], "label": "misc", "offsets": [17, 25], "text": "politics"}
+                    {
+                        "finegrained_label": [["misc", 0.9984]],
+                        "label": "misc", "offsets": [17, 25],
+                        "text": "politics"
+                    }
                 ],
-            }
-        ],
+            }]
+        )
     ]
 )
-def test_entity_detection(url: str, request_data, gold_results):
-    count = 0
-    for data, gold_result in zip(request_data, gold_results):
-        result = requests.post(url, json=data).json()
-        if result == gold_result:
-            count += 1
-    assert count == len(request_data)
+def test_entity_detection(url: str, request_data: dict[str, list], gold_results: list[dict]):
+    response = requests.post(url, json=request_data)
+    result = response.json()
+    assert response.status_code == 200
+    assert "entities" in result[0]
+    assert "labelled_entities" in result[0]
+    assert result == gold_results
