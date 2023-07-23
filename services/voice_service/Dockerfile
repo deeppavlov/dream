@@ -26,7 +26,7 @@ WORKDIR /src
 
 RUN pip install -e /src/aux_files/AudioCaption
 
-RUN gdown https://drive.google.com/uc?id=1xXbn5nlgc1F8fuhj5bAZbu86OCmX2Uks -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
+RUN gdown https://drive.google.com/file/d/11Gnme5XM-WcQ8C2vcbZ0m2ngmkvgGWwx/view?usp=share_link -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
 RUN unzip /src/aux_files/AudioCaption/experiments.zip -d /src/aux_files/AudioCaption
 RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2
 RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val
