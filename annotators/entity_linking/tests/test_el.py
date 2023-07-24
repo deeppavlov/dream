@@ -1,8 +1,10 @@
+import allure
 import pytest
 import requests
 
 use_context = True
 
+@allure.description("""Test linking entities to tags, context""")
 @pytest.mark.parametrize(
     "request_data, gold_results",
     [

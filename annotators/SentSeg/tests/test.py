@@ -1,8 +1,10 @@
+import allure
 import pytest
 import requests
 
 
 
+@allure.description("""Base response test""")
 def test_response(url):
     data = {"sentences": ["Hello how are you", "I am fine", "Alexa what is the weather today"]}
     response = requests.post(url, json=data)
@@ -13,12 +15,14 @@ def test_response(url):
     assert 'segments' in response_data[0]
 
 
+@allure.description("""Base response test: pass wrong json""")
 def test_response_wrong_structure(url: str):
     data = {"wrong": ["Hello how are you", "I am fine", "Alexa what is the weather today"]}
     response = requests.post(url, json=data)
     assert response.status_code == 500
 
 
+@allure.description("""Test punctuation""")
 @pytest.mark.parametrize(
     "sentences, gold",
     [
@@ -33,6 +37,7 @@ def test_sentseg_punctuation(url: str, sentences: dict, gold: str):
     assert data[0]["punct_sent"] == gold
 
 
+@allure.description("""Test sentence split""")
 @pytest.mark.parametrize(
     "sentences, gold",
     [
@@ -48,6 +53,7 @@ def test_sentseg_split(url: str, sentences: dict, gold: list[str]):
     assert data[0]["segments"] == gold
 
 
+@allure.description("""Test preprocessing""")
 @pytest.mark.parametrize(
     "sentences, gold",
     [

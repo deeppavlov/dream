@@ -1,4 +1,6 @@
 import os
+
+import allure
 import pytest
 import requests
 
@@ -8,6 +10,8 @@ if os.getenv("LANGUAGE", "EN") == "RU":
 else:
     lang = "@en"
 
+
+@allure.description("""Test parsing en wiki""")
 @pytest.mark.parametrize(
     "request_data, gold_results",
     [
@@ -72,6 +76,7 @@ def test_wiki_parser_en(url: str, request_data: dict, gold_results: list[dict]):
     assert result == gold_results
 
 
+@allure.description("""Test parsing ru wiki""")
 @pytest.mark.parametrize(
     "request_data, gold_results",
     [

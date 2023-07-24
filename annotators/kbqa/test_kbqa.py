@@ -1,7 +1,9 @@
+import allure
 import pytest
 import requests
 
 
+@allure.description("""Test kbqa""")
 @pytest.mark.parametrize(
     "request_data", "gold_answers",
     [

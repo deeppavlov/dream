@@ -1,7 +1,9 @@
+import allure
 import pytest
 import requests
 
 
+@allure.description("""Test fact retrieval""")
 @pytest.mark.parametrize(
     "request_data, gold_results",
     [
