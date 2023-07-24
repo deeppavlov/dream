@@ -23,7 +23,7 @@ RUN mkdir /fromage && \
 
 RUN mkdir -p /annotators/fromage/fromage_model
 RUN gdown 1wMojZNqEwApNlsCZVvSgQVtZLgbeLoKi -O /annotators/fromage/fromage_model/cc3m_embeddings.pkl
-RUN gdown 1D4WwQIrCUevlrydvVoEmV6O9FDFJcgJ2 -O /annotators/fromage/fromage_model/model_args.json
+RUN gdown 1qyDiUw6uMA4nijLaNpr3J-2pigdIANYE -O /annotators/fromage/fromage_model/model_args.json
 RUN gdown 1oG_fWDje3M6XBoU2GtrOlrqaffJEhxyN -O /annotators/fromage/fromage_model/pretrained_ckpt.pth.tar
 
 COPY ./annotators/fromage/ /src/
