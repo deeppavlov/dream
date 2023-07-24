@@ -8,17 +8,13 @@ from flask import Flask, jsonify, request
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 SUMMARIZATION_REQUEST_TIMEOUT = int(getenv("SUMMARIZATION_REQUEST_TIMEOUT"))
 SUMMARIZATION_SERVICE_URL = getenv("SUMMARIZATION_SERVICE_URL")
-logger.info(
-    f"summarization-annotator considered summarizer: {SUMMARIZATION_SERVICE_URL}"
-)
+logger.info(f"summarization-annotator considered summarizer: {SUMMARIZATION_SERVICE_URL}")
 
 
 def get_summary(dialog):
@@ -30,9 +26,7 @@ def get_summary(dialog):
         )
         return summary
 
-    logger.info(
-        "summarization-annotator is ready to summarize dialog as the length of unsummarized dialog is 11"
-    )
+    logger.info("summarization-annotator is ready to summarize dialog as the length of unsummarized dialog is 11")
     dialog = dialog[:6]
     for i in range(len(dialog)):
         if i % 2 == 0:
@@ -64,16 +58,12 @@ def respond():
 
     for dialog, prev_summary in zip(dialogs_batch, summaries_batch):
         logger.info(f"summarization-annotator received dialog: {dialog}")
-        logger.info(
-            f"summarization-annotator received previous summary: {[prev_summary]}"
-        )
+        logger.info(f"summarization-annotator received previous summary: {[prev_summary]}")
         result = prev_summary
         new_summary = get_summary(dialog)
         if new_summary:
             result = f"{result} {new_summary}".strip()
-        summarization_attribute.append(
-            {"bot_attributes": {"summarized_dialog": result}}
-        )
+        summarization_attribute.append({"bot_attributes": {"summarized_dialog": result}})
         logger.info(f"summarization-annotator output: {summarization_attribute}")
 
     total_time = time.time() - start_time

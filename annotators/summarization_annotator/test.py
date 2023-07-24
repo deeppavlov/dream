@@ -15,10 +15,8 @@ def test_skill():
                     "Hi, my name is Mark!",
                     "Good morning, Mark! How can I assist you today?",
                     "Let's talk about cooking.",
-                    "Sure! What is your favourite type of cuisine to cook or experiment with in the "
-                    "kitchen?",
-                    "I like a wide range of cooking styles, such as Italian, Chinese, French and many "
-                    "more.",
+                    "Sure! What is your favourite type of cuisine to cook or experiment with in the " "kitchen?",
+                    "I like a wide range of cooking styles, such as Italian, Chinese, French and many " "more.",
                     "May I recommend you any Italian dish?",
                     "No. Better tell me what do you have in mind?",
                     "I've recently found a couple easy and healthy meals. How about cooking quinoa with "
@@ -27,8 +25,7 @@ def test_skill():
                     "when paired with lean turkey and broccoli, it's a well-rounded and balanced meal.",
                     "I am glad for you! I listened to my favorite music all day. "
                     "Such a great thing you know! Has anything extraordinary happened today?",
-                    "I can tell you more about what made your day great or we can just chat?"
-                    "I'm happy to listen!",
+                    "I can tell you more about what made your day great or we can just chat?" "I'm happy to listen!",
                 ]
             ],
             "previous_summaries": [""],

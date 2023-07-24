@@ -10,9 +10,7 @@ from flask import Flask, jsonify, request
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 device = "cuda" if torch.cuda.is_available() else "cpu"
 PRETRAINED_MODEL_NAME = os.environ.get("PRETRAINED_MODEL_NAME")
