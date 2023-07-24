@@ -2,7 +2,7 @@ import logging
 from copy import deepcopy
 from typing import Dict, List, Any
 
-from common.utils import get_entities
+from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
 logger = logging.getLogger(__name__)
@@ -165,12 +165,7 @@ def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
 
 
 def generate_hypotheses_list(dialog: Dict, include_last_utterance: bool = False) -> List[Dict]:
-    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
-    hypots = [h["text"] for h in hypotheses]
-
     if include_last_utterance:
-        last_human_utterances = [dialog["human_utterances"][-1]["text"] for h in hypotheses]
-        # return [{"sentences": hypots, "last_human_utterances": last_human_utterances}]
         return utils.dream_formatter(dialog, result_keys=["sentences", "last_human_utterances"])
     return utils.dream_formatter(dialog, result_keys=["sentences"])
 
@@ -871,6 +866,7 @@ def wp_formatter_dialog(dialog: Dict):
             "utt_num": utt_index,
         }
     ]
+
 
 def personality_catcher_formatter_service(payload: List):
     # Used by: personality_catcher_formatter
