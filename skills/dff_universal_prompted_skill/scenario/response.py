@@ -30,10 +30,14 @@ ENVVARS_TO_SEND = {
     "http://transformers-lm-bloomz7b:8146/respond": [],
     "http://transformers-lm-oasst12b:8158/respond": [],
     "http://openai-api-chatgpt:8145/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-chatgpt-16k:8167/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     "http://openai-api-davinci3:8131/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     "http://openai-api-gpt4:8159/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     "http://openai-api-gpt4-32k:8160/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
     "http://transformers-lm-gptjt:8161/respond": [],
+    "http://anthropic-api-claude-v1:8164/respond": ["ANTHROPIC_API_KEY"],
+    "http://anthropic-api-claude-instant-v1:8163/respond": ["ANTHROPIC_API_KEY"],
+    "http://transformers-lm-vicuna13b:8168/respond": [],
 }
 
 

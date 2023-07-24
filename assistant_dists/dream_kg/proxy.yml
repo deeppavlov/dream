@@ -1,21 +1,4 @@
 services:
-  convers-evaluator-annotator:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8004
-      - PORT=8004
-
-  dff-program-y-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8008
-      - PORT=8008
 
   sentseg:
     command: ["nginx", "-g", "daemon off;"]
@@ -26,15 +9,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8011
       - PORT=8011
 
-  badlisted-words:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8018
-      - PORT=8018
-
   ner:
     command: ["nginx", "-g", "daemon off;"]
     build:
@@ -44,15 +18,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8021
       - PORT=8021
 
-  spelling-preprocessing:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8074
-      - PORT=8074
-
   entity-linking:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -61,15 +26,6 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8075
       - PORT=8075
-
-  dff-friendship-skill:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8086
-      - PORT=8086
 
   combined-classification:
     command: ["nginx", "-g", "daemon off;"]
@@ -89,23 +45,14 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8103
       - PORT=8103
 
-  spacy-nounphrases:
-    command: [ "nginx", "-g", "daemon off;" ]
+  transformers-lm-gptjt:
+    command: ["nginx", "-g", "daemon off;"]
     build:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8006
-      - PORT=8006
-
-  convers-evaluation-selector:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8009
-      - PORT=8009
+      - PROXY_PASS=proxy.deeppavlov.ai:8161
+      - PORT=8161
 
   dff-template-skill:
     command: [ "nginx", "-g", "daemon off;" ]
@@ -116,14 +63,14 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8120
       - PORT=8120
 
-  # property-extraction:
-  #   command: [ "nginx", "-g", "daemon off;" ]
-  #   build:
-  #     context: dp/proxy/
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - PROXY_PASS=proxy.deeppavlov.ai:8136
-  #     - PORT=8136
+  property-extraction:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8136
+      - PORT=8136
 
   terminusdb-server:
     command: [ "nginx", "-g", "daemon off;" ]

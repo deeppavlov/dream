@@ -14,6 +14,7 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: RU
+      FALLBACK_FILE: fallbacks_dream_ru.json
 
   dff-program-y-ru-skill:
     env_file: [ .env_ru ]
@@ -28,9 +29,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 1024M
         reservations:
-          memory: 128M
+          memory: 1024M
 
   convers-evaluation-selector-ru:
     env_file: [ .env_ru ]
@@ -55,6 +56,7 @@ services:
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
         LANGUAGE: RU
+        FALLBACK_FILE: fallbacks_dream_ru.json
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -401,7 +403,7 @@ services:
           memory: 128M
 
   fact-retrieval-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         CONFIG: fact_retrieval_rus.json
@@ -423,7 +425,7 @@ services:
           memory: 10G
 
   text-qa-ru:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8078

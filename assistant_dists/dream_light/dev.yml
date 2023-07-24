@@ -52,4 +52,14 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
+
+  combined-classification-lightweight:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification_lightweight:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8150:8150
+
 version: "3.7"
