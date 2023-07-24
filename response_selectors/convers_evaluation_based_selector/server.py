@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import logging
-
-# import pprint
+import json
 import random
-
 import re
 import time
 from collections import Counter
@@ -15,7 +13,7 @@ from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec, HI_THIS_IS_DREAM
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic, DUMMY_DONTKNOW_RESPONSES
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import (
     get_intent_name,
     low_priority_intents,
@@ -46,12 +44,10 @@ app = Flask(__name__)
 
 CALL_BY_NAME_PROBABILITY = float(getenv("CALL_BY_NAME_PROBABILITY", 0.5))  # if name is already known
 TAG_BASED_SELECTION = getenv("TAG_BASED_SELECTION", False)
-MOST_DUMMY_RESPONSES = [
-    "I really do not know what to answer.",
-    "Sorry, probably, I didn't get what you mean.",
-    "I didn't get it. Sorry",
-]
 LANGUAGE = getenv("LANGUAGE", "EN")
+GREETING_FIRST = int(getenv("GREETING_FIRST", 1))
+FALLBACK_FILE = getenv("FALLBACK_FILE", "fallbacks_dream_en.json")
+DUMMY_DONTKNOW_RESPONSES = json.load(open(f"common/fallbacks/{FALLBACK_FILE}", "r"))
 
 
 @app.route("/respond", methods=["POST"])
@@ -129,7 +125,7 @@ def respond():
             else:
                 logger.info("Response Selector Error: randomly choosing response among dummy responses.")
                 best_cand = {
-                    "text": random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]),
+                    "text": random.choice(DUMMY_DONTKNOW_RESPONSES),
                     "confidence": 0.1,
                     "human_attributes": {},
                     "bot_attributes": {},
@@ -355,7 +351,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     n_toxic_candidates, scores, confidences = downscore_toxic_badlisted_responses(scores, confidences, is_toxics)
     if n_toxic_candidates == len(candidates):
         # the most dummy заглушка на случай, когда все абсолютно скиллы вернули токсичные ответы
-        return None, np.random.choice(DUMMY_DONTKNOW_RESPONSES[LANGUAGE]), 1.0, {}, {}
+        return None, np.random.choice(DUMMY_DONTKNOW_RESPONSES), 1.0, {}, {}
 
     # REPEAT checks
     bot_utterances = [sent_tokenize(uttr["text"].lower()) for uttr in dialog["bot_utterances"]]

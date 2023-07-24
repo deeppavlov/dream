@@ -17,12 +17,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8006:8006
-  dff-program-y-skill:
-    volumes:
-      - "./skills/dff_program_y_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8008:8008
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
@@ -64,12 +58,6 @@ services:
       - "./annotators/spelling_preprocessing:/src"
     ports:
       - 8074:8074
-  dff-friendship-skill:
-    volumes:
-      - "./skills/dff_friendship_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8086:8086
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -97,6 +85,19 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8153:8153
+  transformers-lm-gptjt:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8161:8161
+  dff-dream-persona-gpt-jt-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8134:8134
   dff-template-skill:
     volumes:
       - "./skills/dff_template_skill:/src"
@@ -108,9 +109,9 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 6363:6363
-  user-knowledge-graph:
+  user-knowledge-memorizer:
     volumes:
-      - "./annotators/user_knowledge_graph:/src"
+      - "./annotators/user_knowledge_memorizer:/src"
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:

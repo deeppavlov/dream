@@ -103,7 +103,8 @@
             },
         {},
         {
-            "can_continue": "can"
+            "can_continue": "can",
+            "is_final_answer": "true"
         }
     ]
 ]
