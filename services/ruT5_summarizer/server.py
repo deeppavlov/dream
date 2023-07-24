@@ -28,7 +28,7 @@ def respond_batch():
     start_time = time.time()
     sentences = request.json.get("sentences", [])
     logger.debug(f"Sentences: {sentences}")
-    tokenized_text = tokenizer(sentences, max_length=512, add_special_tokens=True, return_tensors="pt",
+    tokenized_text = tokenizer(sentences, add_special_tokens=True, return_tensors="pt",
                                truncation=True, padding='max_length').to(device)
     summary = model.generate(tokenized_text['input_ids'])
     summary = tokenizer.batch_decode(summary, skip_special_tokens=True)

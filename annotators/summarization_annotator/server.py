@@ -52,12 +52,10 @@ def respond():
     for dialog, prev_summary in zip(dialogs_batch, summaries_batch):
         logger.info(f"summarization-annotator received dialog: {dialog}")
         logger.info(f"summarization-annotator received previous summary: {[prev_summary]}")
-        result = ""
-        result += prev_summary
+        result = prev_summary
         new_summary = get_summary(dialog)
         if new_summary:
-            result += " " + new_summary
-        result = result.strip()
+            result = f"{result} {new_summary}".strip()
         summarization_attribute.append({"bot_attributes": {"summarized_dialog": result}})
         logger.info(f"summarization-annotator output: {summarization_attribute}")
 
