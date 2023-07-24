@@ -26,7 +26,7 @@ WORKDIR /src
 
 RUN pip install -e /src/aux_files/AudioCaption
 
-RUN gdown https://drive.google.com/file/d/11Gnme5XM-WcQ8C2vcbZ0m2ngmkvgGWwx/view?usp=share_link -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
+RUN gdown https://drive.google.com/uc?id=11Gnme5XM-WcQ8C2vcbZ0m2ngmkvgGWwx -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
 RUN unzip /src/aux_files/AudioCaption/experiments.zip -d /src/aux_files/AudioCaption
 RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2
 RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val
@@ -39,7 +39,7 @@ RUN sed -i "s|/home/ilia/projects/audio-captioning/pretrained_weights/Cnn14_mAP=
 RUN cat /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 # PATH
 RUN mkdir /src/aux_files/pretrained_weights
-RUN gdown https://drive.google.com/uc?id=1v0vzLzNQTzA-0LsrSA7QRX_mu8BvM07S -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
+RUN gdown https://drive.google.com/file/d/17vYnh4_PapKlM7AcLfr85q0UUGfEVPQX/view?usp=sharing -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
 
 # SWA
 # RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
