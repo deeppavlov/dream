@@ -1,14 +1,10 @@
-from dotenv import load_dotenv
 from deeppavlov_kg import TerminusdbKnowledgeGraph
-
-load_dotenv("./.env")
-load_dotenv("./.env_secret")
 
 
 def main():
     TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
     TERMINUSDB_SERVER_TEAM = "admin"
-    TERMINUSDB_SERVER_DB = "user_knowledge_db"
+    TERMINUSDB_SERVER_DB = "test_terminusdb_db"
     TERMINUSDB_SERVER_PASSWORD = "root"
 
     graph = TerminusdbKnowledgeGraph(
