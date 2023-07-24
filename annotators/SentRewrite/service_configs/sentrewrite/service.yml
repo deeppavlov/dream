@@ -19,14 +19,3 @@ compose:
   - ./annotators/SentRewrite:/src
   ports:
   - 8017:8017
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8017
-  - PORT=8017

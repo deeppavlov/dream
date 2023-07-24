@@ -1,0 +1,24 @@
+name: robot_notifications
+display_name: Robot Notifications Annotator
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: annotator to check notifications from robot about 
+  performed commands
+ram_usage: 150M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://robot-notifications:8036/check
+dialog_formatter: state_formatters.dp_formatters:utt_non_punct_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: check
+service: services/robot_notifications/service_configs/robot-notifications
+date_created: '2023-03-16T09:45:32'
