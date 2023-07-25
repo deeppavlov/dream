@@ -12,12 +12,14 @@ from common.gossip import check_is_celebrity_mentioned
 from common.link import get_linked_to_skills, get_previously_active_skill
 from common.movies import extract_movies_names_from_annotations
 from common.response_selection import UNPREDICTABLE_SKILLS
+from common.robot import command_intents
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import (
     if_chat_about_particular_topic,
     if_choose_topic,
     GREETING_QUESTIONS_TEXTS,
+    is_any_question_sentence_in_utterance,
 )
 from common.utils import (
     high_priority_intents,
@@ -82,6 +84,7 @@ class RuleBasedSkillSelectorConnector:
                 [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
             )
             low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
+            command_detected = any([k for k in intent_catcher_intents if k in command_intents])
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
@@ -123,6 +126,10 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
+            elif command_detected:
+                skills_for_uttr.append("dummy_skill")
+                # process intents with Command Selector
+                skills_for_uttr.append("dff_command_selector_skill")
             elif is_sensitive_topic_and_request(user_uttr) and RESTRICTION_FOR_SENSITIVE_CASE:
                 # process user utterance with sensitive content, "safe mode"
 
@@ -183,6 +190,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_generative_skill")
                 skills_for_uttr.append("gpt2_generator")
                 skills_for_uttr.append("faq_skill_deepy")
+                skills_for_uttr.append("dff_reasoning_skill")
 
                 # adding friendship only in the beginning of the dialog
                 if len(dialog["utterances"]) < 20:
@@ -278,7 +286,8 @@ class RuleBasedSkillSelectorConnector:
                         skills_for_uttr.append("dff_short_story_skill")
 
             skills_for_uttr.append("dff_universal_prompted_skill")
-            skills_for_uttr.append("dff_google_api_skill")
+            if is_any_question_sentence_in_utterance(dialog["human_utterances"][-1]) and is_factoid:
+                skills_for_uttr.append("dff_google_api_skill")
             # turn on skills if prompts are selected by prompt_selector
             ranged_prompts = user_uttr_annotations.get("prompt_selector", {}).get("prompts", [])
             if ranged_prompts:

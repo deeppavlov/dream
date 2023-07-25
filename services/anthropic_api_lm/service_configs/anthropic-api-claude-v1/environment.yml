@@ -1,0 +1,4 @@
+SERVICE_PORT: 8164
+SERVICE_NAME: anthropic_api_claude_v1
+PRETRAINED_MODEL_NAME_OR_PATH: claude-1
+FLASK_APP: server

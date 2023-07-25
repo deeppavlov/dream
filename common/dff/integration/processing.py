@@ -104,3 +104,12 @@ def set_can_continue(continue_flag: str = common_constants.CAN_CONTINUE_SCENARIO
         return ctx
 
     return set_can_continue_processing
+
+
+def set_is_final_answer_flag(is_final_answer_flag):
+    def update_is_final_answer(ctx: Context, actor: Actor):
+        if not ctx.validation:
+            ctx.misc["agent"]["response"].update({"is_final_answer": is_final_answer_flag})
+        return ctx
+
+    return update_is_final_answer
