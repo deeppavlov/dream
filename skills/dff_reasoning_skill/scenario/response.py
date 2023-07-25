@@ -62,7 +62,9 @@ for key, value in api_conf.copy().items():
 logger.info(f"Available APIs: {', '.join([api['display_name'] for api in api_conf.values()])}")
 
 
-def timeout_handler():
+def timeout_handler(signum, frame):
+    assert signum
+    assert frame
     raise Exception("API timeout")
 
 
@@ -72,11 +74,21 @@ def plan(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         for key, value in api_conf.items():
             api_desc[key] = value["description"]
         prompt = f"""You received the following user request: {ctx.last_request}
+
 You have the following tools available:
 {api_desc}
-Think about what do you need to do to handle this request. \
-Break the request into subtasks. Return the list of subtasks in the following format:
-PLAN:\n1. Subtask 1\n2. Subtask 2\n..."""
+
+Your Task:
+Think about how to handle this user request and split the request into subtasks.
+
+Return the list of subtasks in the following format:
+
+PLAN:
+1. Subtask 1
+2. Subtask 2
+3. Subtask 3
+...
+"""
         dialog_context = []
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
@@ -407,3 +419,10 @@ def recomplete_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
         response = f"""I didn't manage to complete subtask:\n{plan[step]}\nI will try again."""
         return response
+
+
+                
+
+
+
+
