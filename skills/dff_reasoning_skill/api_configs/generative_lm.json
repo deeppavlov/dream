@@ -1,7 +1,7 @@
 {
     "generative_lm": {
         "display_name": "Generative LM",
-        "description": "This service uses language models to generate responses.",
+        "description": "This service uses language models to generate responses. IT DOESN'T KNOW WHAT IS THE CURRENT DATE.",
         "keys": ["OPENAI_API_KEY"],
         "needs_approval": "False",
         "approve_once": "False",

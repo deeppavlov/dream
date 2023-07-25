@@ -135,13 +135,10 @@ def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 """
             else:
                 tasks_history = ""
-            prompt = (
-                tasks_history
-                + f"""Here is your current task:
+            prompt = f"""{tasks_history}Here is your current task:
 {plan[step]}
 Do you need to clarify any details with the user related to your current task? \
 ANSWER ONLY YES/NO"""
-            )
             dialog_context = []
             human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
             lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
@@ -186,13 +183,10 @@ def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         else:
             tasks_history = ""
 
-        prompt = (
-            tasks_history
-            + f"""Here is your current task:
+        prompt = f"""{tasks_history}Here is your current task:
 {plan[step]}
 Formulate a clarifying question to the user to get necessary information \
 to complete the current task"""
-        )
         dialog_context = []
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
@@ -243,16 +237,13 @@ def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 """
         else:
             tasks_history = ""
-        prompt = (
-            tasks_history
-            + f"""YOUR CURRENT TASK:
+        prompt = f"""{tasks_history}YOUR CURRENT TASK:
 {plan[step]}
 AVAILABLE TOOLS:
 {api_desc}
 Choose the best tool to use to complete your current task. \
 Return the name of the best tool to use exactly as it is written in the dictionary. \
 DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
-        )
         dialog_context = []
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
@@ -275,9 +266,8 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
             if hypotheses[0] in api_conf.keys():
                 api2use = hypotheses[0]
             else:
-                for key in api_conf.keys():
-                    if key in hypotheses[0]:
-                        api2use = key
+                if any(key in hypotheses[0] for key in api_conf.keys()):
+                    api2use = key
 
             assert api2use
         except Exception as e:
@@ -407,7 +397,7 @@ YOUR TASK: given the information in the context, form a final answer to the user
         return response
 
 
-def recomplete_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def retry_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         subtask_results = shared_memory.get("subtask_results", {})
@@ -419,10 +409,3 @@ def recomplete_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
         response = f"""I didn't manage to complete subtask:\n{plan[step]}\nI will try again."""
         return response
-
-
-                
-
-
-
-
