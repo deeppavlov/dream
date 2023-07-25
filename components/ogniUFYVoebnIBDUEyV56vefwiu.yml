@@ -1,0 +1,29 @@
+name: dff_document_qa_llm_skill
+display_name: LLM-based Q&A on Documents Skill
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description:
+  ChatGPT-based generative skill that answers the user's questions about a given document.
+  Uses doc_retriever to select the most relevant parts of the document and ChatGPT
+  to generate the response based on the context, the question, and the selected parts.
+ram_usage: 150M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://dff-document-qa-llm-skill:8166/respond
+dialog_formatter:
+  name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+  skill_name: dff_document_qa_llm_skill
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+  - skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_document_qa_llm_skill/service_configs/dff-document-qa-llm-skill
+date_created: "2023-03-16T09:45:32"

@@ -1,0 +1,67 @@
+[
+    [
+        "Sheikh Mohamed bin Zayed Al Nahyan is the current president of the United Arab Emirates.",
+        0.85,
+        {
+            "dff_reasoning_skill_state": {
+                "shared_memory": {
+                    "api2use": "google_api",
+                    "needs_details": "No.",
+                    "thought": "To handle this request, I need to provide the name of the current president of the United Arab Emirates (UAE).",
+                    "api_input": "current president of United Arab Emirates (UAE)",
+                    "question": null,
+                    "answer": null
+                },
+                "previous_human_utter_index": 1,
+                "history": {
+                    "0": [
+                        "api",
+                        "api_response_node"
+                    ],
+                    "1": [
+                        "api",
+                        "api_usage_approved"
+                    ]
+                },
+                "current_turn_dff_suspended": false,
+                "context": {
+                    "id": "8a11863f-0cbf-4faa-8bb6-0c4c4e31ec21",
+                    "labels": {
+                        "2": [
+                            "api",
+                            "api_response_node"
+                        ],
+                        "3": [
+                            "api",
+                            "api_usage_approved"
+                        ]
+                    },
+                    "requests": {
+                        "0": "who is the president of UAE?",
+                        "1": "yes."
+                    },
+                    "responses": {
+                        "2": "I need to use Google API to handle your request. Do you approve?",
+                        "3": "Sheikh Mohamed bin Zayed Al Nahyan is the current president of the United Arab Emirates."
+                    },
+                    "misc": {},
+                    "validation": false,
+                    "actor_state": {}
+                }
+            },
+            "dff_shared_state": {
+                "cross_links": {},
+                "cross_states": {}
+            },
+            "used_links": {},
+            "age_group": "",
+            "disliked_skills": {},
+            "prompts_goals": {}
+        },
+        {},
+        {
+            "can_continue": "can",
+            "is_final_answer": "true"
+        }
+    ]
+]
