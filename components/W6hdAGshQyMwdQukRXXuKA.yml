@@ -12,7 +12,7 @@ group: skills
 connector:
   protocol: http
   timeout: 120.0
-  url: http://dff-dream-persona-chatgpt-prompted-skill:8137/respond
+  url: http://dff-dream-persona-davinci3-prompted-skill:8137/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
   skill_name: dff_dream_persona_prompted_skill
@@ -23,5 +23,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_template_prompted_skill/service_configs/dff-dream-persona-chatgpt-prompted-skill
+service: skills/dff_template_prompted_skill/service_configs/dff-dream-persona-davinci3-prompted-skill
 date_created: '2023-03-16T09:45:32'

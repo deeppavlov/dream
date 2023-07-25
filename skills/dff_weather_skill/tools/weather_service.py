@@ -7,6 +7,8 @@ import requests
 
 WEATHER_SERVICE_TIMEOUT = 2
 OPENWEATHERMAP_API_KEY = getenv("OPENWEATHERMAP_API_KEY")
+if OPENWEATHERMAP_API_KEY is None:
+    raise RuntimeError("OPENWEATHERMAP_API_KEY environment variable is not set")
 OPENWEATHERMAP_URL = "http://api.openweathermap.org/data/2.5/weather?q=%s&appid=%s"
 SORRY_TEMPLATE = "Sorry, we have a problem with the weather service. Try again a little bit later."
 # Temperature conversion constants

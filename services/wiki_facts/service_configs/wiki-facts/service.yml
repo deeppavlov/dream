@@ -29,3 +29,14 @@ compose:
   - ~/.deeppavlov:/root/.deeppavlov
   ports:
   - 8116:8116
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8116
+  - PORT=8116

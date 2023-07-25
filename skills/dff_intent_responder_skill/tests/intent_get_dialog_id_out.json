@@ -69,8 +69,7 @@
             },
         {},
         {
-            "can_continue": "can",
-            "is_final_answer": "true"
+            "can_continue": "can"
         }
     ]
 ]

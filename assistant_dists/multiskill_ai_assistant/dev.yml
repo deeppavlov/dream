@@ -34,13 +34,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  openai-api-chatgpt:
+  openai-api-davinci3:
     volumes:
       - "./services/openai_api_lm:/src"
       - "./common:/src/common"
     ports:
-      - 8145:8145
-  dff-dream-persona-chatgpt-prompted-skill:
+      - 8131:8131
+  dff-dream-persona-davinci3-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

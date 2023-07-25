@@ -22,3 +22,14 @@ compose:
   - ./common:/src/common
   ports:
   - 8109:8109
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8109
+  - PORT=8109

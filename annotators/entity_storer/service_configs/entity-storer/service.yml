@@ -26,3 +26,14 @@ compose:
   - ./annotators/entity_storer:/src
   ports:
   - 8089:8089
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8089
+  - PORT=8089

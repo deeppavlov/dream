@@ -28,6 +28,7 @@ from common.universal_templates import (
     opinion_request_question,
     is_switch_topic,
     if_choose_topic,
+    DUMMY_DONTKNOW_RESPONSES,
     is_any_question_sentence_in_utterance,
 )
 from common.utils import get_topics, get_entities, is_no, get_intents, is_yes
@@ -41,8 +42,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 ASK_QUESTION_PROB = 0.7
 LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
-FALLBACK_FILE = getenv("FALLBACK_FILE", "fallbacks_dream_en.json")
-DUMMY_DONTKNOW_RESPONSES = json.load(open(f"common/fallbacks/{FALLBACK_FILE}", "r"))
+
 LANGUAGE = getenv("LANGUAGE", "EN")
 
 with open("skills/dummy_skill/google-english-no-swears.txt", "r") as f:
@@ -216,7 +216,10 @@ class DummySkillConnector:
             bot_attrs = []
             attrs = []
 
-            cands += [choice(DUMMY_DONTKNOW_RESPONSES)]
+            if LANGUAGE == "RU":
+                cands += [choice(DUMMY_DONTKNOW_RESPONSES["RU"])]
+            else:
+                cands += [choice(DUMMY_DONTKNOW_RESPONSES["EN"])]
             confs += [0.5]
             attrs += [{"type": "dummy"}]
             human_attrs += [{}]

@@ -1,9 +1,4 @@
-﻿
-# Combined_classification_lightweight
-
-## Description
-
-This model is based on the transformer-agnostic multitask neural architecture. It can solve several tasks similtaneously, almost as good as single-task models. 
+﻿This model is based on the transformer-agnostic multitask neural architecture. It can solve several tasks similtaneously, almost as good as single-task models. 
 
 The models were trained on the following datasets:
 
@@ -25,9 +20,4 @@ The models (multitask and comparative single task) were trained with initial lea
 
 This model(with a huawei-noah/TinyBERT_General_4L_312D backbone) on a CPU-only inference takes 42% less time than combined_classification, while using only ~1.5 Gb of the CPU instead of the 2909 Mb for combined_classification. The average accuracy and average F1 at the same time are for this model only ~1.5% lower than for the combined_classification, and this dropdown is consistent for all tasks.
 
-
-## I/O
-
-
-## Dependencies
 

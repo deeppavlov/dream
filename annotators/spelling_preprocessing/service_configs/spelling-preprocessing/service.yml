@@ -23,3 +23,14 @@ compose:
   - ./annotators/spelling_preprocessing:/src
   ports:
   - 8074:8074
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8074
+  - PORT=8074

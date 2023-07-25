@@ -9,8 +9,7 @@ compose:
     HIGH_PRIORITY_INTENTS: 1
     RESTRICTION_FOR_SENSITIVE_CASE: 1
     ALWAYS_TURN_ON_ALL_SKILLS: 0
-    LANGUAGE: RU
-    FALLBACK_FILE: fallbacks_dream_ru.json
+    LANGUAGE: EN
   volumes:
   - .:/dp-agent
   ports:

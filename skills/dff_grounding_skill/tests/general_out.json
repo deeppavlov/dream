@@ -92,8 +92,7 @@
                                     {},
                                     {},
                                     {
-                                        "can_continue": "must",
-                                        "is_final_answer": "true"
+                                        "can_continue": "must"
                                     }
                                 ],
                                 [
@@ -103,7 +102,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement"
                                         ]
@@ -129,7 +127,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
@@ -292,8 +289,7 @@
                                     {},
                                     {},
                                     {
-                                        "can_continue": "must",
-                                        "is_final_answer": "true"
+                                        "can_continue": "must"
                                     }
                                 ],
                                 [
@@ -303,7 +299,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement"
                                         ]
@@ -329,7 +324,6 @@
                                     {},
                                     {
                                         "can_continue": "no",
-                                        "is_final_answer": "true",
                                         "response_parts": [
                                             "acknowledgement",
                                             "body"
@@ -430,14 +424,12 @@
         [
             {
                 "can_continue": "no",
-                "is_final_answer": "true",
                 "response_parts": [
                     "acknowledgement"
                 ]
             },
             {
                 "can_continue": "no",
-                "is_final_answer": "true",
                 "response_parts": [
                     "acknowledgement",
                     "body"

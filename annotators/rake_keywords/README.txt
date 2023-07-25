@@ -1,0 +1,1 @@
+Rake keywords annotator extracts keywords from utterances with the help of RAKE algorithm.

@@ -23,3 +23,14 @@ compose:
   - ./annotators/topic_recommendation:/src
   ports:
   - 8113:8113
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8113
+  - PORT=8113

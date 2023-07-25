@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.7.4
 
 RUN mkdir /src
 COPY ./requirements.txt /src/requirements.txt

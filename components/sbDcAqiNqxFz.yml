@@ -28,5 +28,5 @@ state_manager_method: add_bot_utterance_last_chance
 tags:
 - last_chance
 endpoint: respond
-service: services/agent_services/service_configs/dream_light
+service: services/agent_services/service_configs/dream
 date_created: '2023-03-04T19:27:44'

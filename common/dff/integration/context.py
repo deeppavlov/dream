@@ -332,7 +332,3 @@ def get_last_state(ctx: Context, actor: Actor) -> str:
         history_sorted = sorted(history, key=lambda x: x[0])
         last_state = history_sorted[-1][1]
     return last_state
-
-
-def get_dialog_id(ctx: Context, actor: Actor) -> dict:
-    return "unknown" if ctx.validation else ctx.misc["agent"]["dialog_id"]

@@ -10,7 +10,6 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
-      FALLBACK_FILE: fallbacks_dream_en.json
 
   files:
     image: julienmeerschart/simple-file-upload-download-server
@@ -70,7 +69,6 @@ services:
         PRIORITIZE_HUMAN_INITIATIVE: 1
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
         LANGUAGE: EN
-        FALLBACK_FILE: fallbacks_dream_en.json
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009

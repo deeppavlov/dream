@@ -10,7 +10,6 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
-      FALLBACK_FILE: fallbacks_dream_en.json
 
   sentseg:
     env_file: [ .env ]
@@ -114,7 +113,7 @@ services:
         SERVICE_PORT: 8161
         SERVICE_NAME: transformers_lm_gptjt
         PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
-        HALF_PRECISION: 1
+        HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8161

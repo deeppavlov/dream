@@ -43,8 +43,7 @@
             },
         {},
         {
-            "can_continue": "no",
-            "is_final_answer": "true"
+            "can_continue": "no"
         }
     ]
 ]

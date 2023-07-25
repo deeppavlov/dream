@@ -3,8 +3,8 @@ import requests
 
 
 DEFAULT_CONFIG = {
-    "max_new_tokens": 60,
-    "min_new_tokens": 8,
+    "max_length": 60,
+    "min_length": 8,
     "top_p": 0.9,
     "temperature": 0.9,
     "do_sample": True,
@@ -21,11 +21,11 @@ def test_respond():
             "Hi Marcus! I am fine. How are you?",
             "I am great. What are your plans for today?",
         ],
-        ["Привет, Маркус! Я в порядке. Как дела?", "Я отлично. Какие у тебя планы на сегодня?"],
+        ["Hi Marcus! I am fine. How are you?", "I am great. What are your plans for today?"],
     ]
     prompts = [
         "Respond like a friendly chatbot.",
-        "Отвечай как дружелюбный бот.",
+        "Respond like a friendly chatbot.",
     ]
     result = requests.post(
         url,

@@ -29,3 +29,14 @@ compose:
   - ./services/knowledge_grounding:/src
   ports:
   - 8083:8083
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8083
+  - PORT=8083

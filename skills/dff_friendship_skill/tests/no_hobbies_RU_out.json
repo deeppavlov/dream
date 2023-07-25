@@ -65,7 +65,6 @@
         {},
         {
             "can_continue": "must",
-            "is_final_answer": "true",
             "response_parts": [
                 "acknowledgement",
                 "body"

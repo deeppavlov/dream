@@ -1,41 +1,64 @@
-# Tag- and Evaluation-based Response Selector
+# Labeled Data
 
-## Description
+Labeled data is located in `response_selectors/convers_evaluation_based_selector/labeled_data/`.
 
-Response Selector is a component selecting final response among the given hypotheses by different skills.
-The Tag- and Evaluation--based Response Selector utilizes a complicated approach which aims to
-prioritize scripted skills while having an opportunity to provide a system-initiative via so called linking questions
-that bring conversation to the scripts. A final hypotheses could be a combination of a hypotheses and linking question.
-The approach is most suitable for distributions where the most of the responses are implied to be by scripts.
+To label more data you can use data_labelling.py script.
+It takes `dialog_id` from http://ec2-3-90-214-142.compute-1.amazonaws.com/admin/conversation/
+and `save_dir` (should be labeled_data/ folder) as an input.
+It provides console interface to label the data for quality measuring for response selector.
 
-### Parameters
+Example: `python response_selectors/convers_evaluation_based_selector/data_labelling.py --dialog_id 5e4822a81506f4f91a8aaf5e --save_dir response_selectors/convers_evaluation_based_selector/labeled_data/`
 
-The algorithm contains a large number of parameters which control the filtration and prioritization rules. 
-The algorithm filers out toxic hypotheses.
+Example output:
 
 ```
-TAG_BASED_SELECTION: whether to use tag-based prioritization or simply utilize an empirical formula
-CALL_BY_NAME_PROBABILITY: probability to add user's name if known
-PROMPT_PROBA: probability to add linking question to a selected hypothesis
-ACKNOWLEDGEMENT_PROBA: probability to add acknowledgement to a selected hypothesis
-PRIORITIZE_WITH_REQUIRED_ACT: whether to prioritize hypotheses with a required dialog act (e.g., statement in response to user's question)
-PRIORITIZE_NO_DIALOG_BREAKDOWN: whether to prioritize hypotheses classified as no-dialog-breakdown
-PRIORITIZE_WITH_SAME_TOPIC_ENTITY: whether to prioritize hypotheses containing entities from the user's last utterance
-IGNORE_DISLIKED_SKILLS: whether to ignore hypotheses by disliked skills (if user answers negatively to linking question to a skill, we add this skill to disliked ones)
-GREETING_FIRST: whether to add greeting to the first bot's utterance
-RESTRICTION_FOR_SENSITIVE_CASE: whether to avoid generative skills when sensitive case 
-PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: whether to prioritize hypotheses tagged by `prompt` tag when no responses by scripted skills
-MAX_TURNS_WITHOUT_SCRIPTS: maximum number of turns in a dialog without responses by scripted skills
-ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: whether to add acknowledgement to a selected hypothesis
-PRIORITIZE_SCRIPTED_SKILLS: whether to prioritize scripted skills
-CONFIDENCE_STRENGTH: confidence coefficient in a formula to compute a final score
-CONV_EVAL_STRENGTH: annotator evaluation coefficient in a formula to compute a final score
-PRIORITIZE_HUMAN_INITIATIVE: whether to prioritize human initiative (downscore scores of questions when user asked question)
-QUESTION_TO_QUESTION_DOWNSCORE_COEF: coefficient to multiply scores of qustions when user asked question
-LANGUAGE: language to consider
-FALLBACK_FILE: a file name with fallbacks from `dream/common/fallbacks/`
+human: turn off how do you talk about british
+bot: Hi, this is an Alexa Prize Socialbot!
+human: hi there
+0 hypot: Could you, please, help and explain to me. Yesterday I was browsing photos on the Internet. And seen a lot of people in very, very strange poses. It was called yoga. Have you ever tried to tie yourself in a knot?; skill: meta_script_skill; conf: 0.99
+1 hypot: Good Evening, this is an Alexa Prize Socialbot! How are you?; skill: program_y; conf: 0.98
+2 hypot: Hi there!; skill: alice; conf: 0.65
+3 hypot: how are you doing today?; skill: dummy_skill; conf: 0.6
+4 hypot: Let's talk about something else.; skill: dummy_skill; conf: 0.5
+Type best hypot num(s), separated by comma:
 ```
 
-## Dependencies
+It shows context with latest user sentence (`human: hi there`) and list of hypotheses for this user response.
+In `Type best hypot num(s), separated by comma:` hypots nums expected.
+If no hypot num provided this sample will be skipped.
+
+For this context you may type 0,3 hypots:
+```
+Type best hypot num(s), separated by comma: 0,3
+```
+
+When dialog ends it saves it into labeled_data folder.
 
 
+# Measuring quality
+
+It takes `--data_dir` as an input (the same as save_dir from data labelling script).
+Outputs overall accuracy.
+
+Example of usage:
+
+```
+python response_selectors/convers_evaluation_based_selector/measure_quality.py \
+                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/
+
+Overall accuracy: 0.5185185185185185
+```
+
+## How to run conversation evaluator locally
+
+`docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml up toxic_classification badlisted_words convers_evaluation_selector`
+
+Then use `--url`.
+
+Example of usage with url:
+
+```
+python response_selectors/convers_evaluation_based_selector/measure_quality.py \
+                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/  \
+                   --url http://0.0.0.0:8009/respond
+```

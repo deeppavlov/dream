@@ -91,7 +91,7 @@ services:
         SERVICE_PORT: 8161
         SERVICE_NAME: transformers_lm_gptjt
         PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
-        HALF_PRECISION: 1
+        HALF_PRECISION: 0
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8161
@@ -137,11 +137,12 @@ services:
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8145
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 500M
+          memory: 100M
         reservations:
           memory: 100M
 
@@ -156,11 +157,12 @@ services:
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8131
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 500M
+          memory: 100M
         reservations:
           memory: 100M
 
@@ -175,11 +177,12 @@ services:
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8159
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 500M
+          memory: 100M
         reservations:
           memory: 100M
 
@@ -194,11 +197,12 @@ services:
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8160
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 500M
+          memory: 100M
         reservations:
           memory: 100M
 
@@ -213,44 +217,7 @@ services:
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8167
     environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 500M
-        reservations:
-          memory: 100M
-
-  anthropic-api-claude-v1:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8164
-        SERVICE_NAME: anthropic_api_claude_v1
-        PRETRAINED_MODEL_NAME_OR_PATH: claude-1
-      context: .
-      dockerfile: ./services/anthropic_api_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8164
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
-
-  anthropic-api-claude-instant-v1:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8163
-        SERVICE_NAME: anthropic_api_claude_instant_v1
-        PRETRAINED_MODEL_NAME_OR_PATH: claude-instant-1
-      context: .
-      dockerfile: ./services/anthropic_api_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8163
-    environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:

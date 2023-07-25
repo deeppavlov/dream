@@ -24,3 +24,14 @@ compose:
   - ./annotators/rake_keywords:/src
   ports:
   - 8007:8007
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8007
+  - PORT=8007

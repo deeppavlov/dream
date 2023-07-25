@@ -24,3 +24,14 @@ compose:
   - ./skills/dff_movie_skill:/src
   ports:
   - 8023:8023
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8023
+  - PORT=8023

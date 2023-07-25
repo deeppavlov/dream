@@ -25,7 +25,6 @@ compose:
       PRIORITIZE_HUMAN_INITIATIVE: 1
       QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
       LANGUAGE: RU
-      FALLBACK_FILE: fallbacks_dream_ru.json
       FLASK_APP: server
     context: .
     dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile

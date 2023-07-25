@@ -37,7 +37,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/sbDcAqiNqxFz.yml",
-                "service": "services/agent_services/service_configs/dream_kg"
+                "service": "services/agent_services/service_configs/dream"
             }
         },
         "timeout_service": {
@@ -65,7 +65,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/rFC0YJOoDFvS.yml",
-                "service": "services/agent_services/service_configs/dream_kg"
+                "service": "services/agent_services/service_configs/dream"
             }
         },
         "annotators": {

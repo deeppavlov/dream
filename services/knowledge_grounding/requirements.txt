@@ -1,3 +1,11 @@
 git+https://github.com/Saraharas/ParlAI@v0.9.4-kg-batch-2models#egg=ParlAI
+flask==2.1.0
+itsdangerous==2.0.1
 gunicorn==19.9.0
+requests==2.22.0
+jinja2<=3.0.3
 sentry-sdk[flask]==0.14.1
+jinja2<=3.0.3
+Werkzeug<=2.0.3
+markupsafe==2.0.1
+nltk==3.2.5
