@@ -2,6 +2,10 @@ from pathlib import Path
 import os
 import requests
 from deeppavlov_kg import TerminusdbKnowledgeGraph
+from dotenv import load_dotenv
+
+load_dotenv("./.env")
+load_dotenv("./.env_secret")
 
 
 def formulate_utt_annotations(dog_id=None, park_id=None):
@@ -69,10 +73,11 @@ def compare_results(results, golden_results) -> bool:
 
 
 def main():
-    TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
-    TERMINUSDB_SERVER_TEAM = "admin"
-    TERMINUSDB_SERVER_DB = "user_knowledge_db"
-    TERMINUSDB_SERVER_PASSWORD = "root"
+    TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
+    TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
+    assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified in env"
+    TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
+    TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
     INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_memorizer"))
     USER_KG_PORT = 8027
 
