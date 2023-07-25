@@ -6,19 +6,19 @@ RUN : \
 	&& apt-get update \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 	software-properties-common \
-	&& add-apt-repository -y ppa:deadsnakes \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-	python3.10 \
+	&& add-apt-repository -y ppa:deadsnakes/ppa \
+	&& DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3.10\
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& :
 
 RUN apt-get update && \
 	apt-get upgrade -y && \
-	apt-get install -y git libsqlite3-dev python3.10-venv
+	apt-get install -y git libsqlite3-dev
 
-RUN python3.10 -m venv /venv
+RUN python3 -m venv /venv
 ENV PATH=/venv/bin:$PATH
+RUN python3 --version
 WORKDIR /src
 
 ARG SERVICE_PORT
@@ -35,8 +35,8 @@ ARG GENERATION_PARAMS_CONFIG
 ENV GENERATION_PARAMS_CONFIG ${GENERATION_PARAMS_CONFIG}
 
 COPY ./services/seq2seq_persona_based/requirements.txt /src/requirements.txt
-# RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt 
-RUN pip install -r /src/requirements.txt 
+# RUN --mount=type=cache,target=/root/.cache pip install -r /src/requirements.txt
+RUN pip install --upgrade pip && pip install -r /src/requirements.txt
 
 COPY ./common/ /src/common/
 

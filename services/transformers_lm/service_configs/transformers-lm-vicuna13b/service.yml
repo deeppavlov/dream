@@ -1,0 +1,44 @@
+name: transformers-lm-vicuna13b
+endpoints:
+- respond
+- generate_goals
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8168
+      SERVICE_NAME: transformers_lm_vicuna13b
+      PRETRAINED_MODEL_NAME_OR_PATH: lmsys/vicuna-13b-v1.3
+      HALF_PRECISION: 1
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8168
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 50G
+      reservations:
+        memory: 50G
+  volumes:
+  - ./services/transformers_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8168:8168
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8168
+  - PORT=8168

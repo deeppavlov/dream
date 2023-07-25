@@ -28,7 +28,6 @@ from deeppavlov.core.models.component import Component
 from deeppavlov.core.models.serializable import Serializable
 
 log = getLogger(__name__)
-nltk.download("stopwords")
 
 
 @register("entity_linker")

@@ -1,0 +1,26 @@
+name: dff-travel-italy-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  - .env_secret
+  build:
+    args:
+      SERVICE_PORT: 8139
+      SERVICE_NAME: dff_travel_italy_skill
+    context: .
+    dockerfile: ./skills/dff_travel_italy_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8139 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_travel_italy_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8139:8139
+proxy: null

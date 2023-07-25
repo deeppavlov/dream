@@ -24,14 +24,3 @@ compose:
   - ./skills/dummy_skill_dialog:/app
   ports:
   - 8052:8052
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8052
-  - PORT=8052

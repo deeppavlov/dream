@@ -37,7 +37,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/sbDcAqiNqxFz.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "service": "services/agent_services/service_configs/dream_kg"
             }
         },
         "timeout_service": {
@@ -65,7 +65,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/rFC0YJOoDFvS.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "service": "services/agent_services/service_configs/dream_kg"
             }
         },
         "annotators": {
@@ -211,7 +211,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "component": "components/7v330b9odypuiugqeiuqij.yml",
                     "service": "annotators/property_extraction/service_configs/property-extraction"
                 }
             },
@@ -422,12 +422,12 @@
                     "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             },
-            "user_knowledge_graph": {
+            "user_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://user-knowledge-graph:8027/respond"
+                    "url": "http://user-knowledge-memorizer:8027/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_memorizer_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.property_extraction",
@@ -437,7 +437,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/74p4006d17yappr7ji7dtf.yml",
-                    "service": "annotators/user_knowledge_graph/service_configs/user-knowledge-graph"
+                    "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer"
                 }
             }
         },
@@ -463,13 +463,16 @@
             }
         },
         "skills": {
-            "dff_program_y_skill": {
+            "dff_dream_persona_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://dff-program-y-skill:8008/respond"
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-persona-gpt-j-prompted-skill:8134/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -477,8 +480,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
-                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
+                    "component": "components/6lLhP7zuoiI0bxJEDLWUg.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-gpt-jt-prompted-skill"
                 }
             },
             "dummy_skill": {
@@ -498,24 +501,6 @@
                     "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
-            "dff_friendship_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://dff-friendship-skill:8086/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_friendship_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/haBUc1rsCitGmBzndrKl5w.yml",
-                    "service": "skills/dff_friendship_skill/service_configs/dff-friendship-skill"
-                }
-            },
             "dff_template_skill": {
                 "connector": {
                     "protocol": "http",
@@ -532,10 +517,12 @@
                 "source": {
                     "component": "components/pC342KBWtheQNnXjIni6A.yml",
                     "service": "skills/dff_template_skill/service_configs/dff-template-skill"
+                }
             },
             "dff_user_kg_skill": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2.0,
                     "url": "http://dff-user-kg-skill:8132/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_user_kg_skill_formatter",
@@ -543,11 +530,17 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pmXHLkbPWpFqq37vtWCuS.yml",
+                    "service": "skills/dff_user_kg_skill/service_configs/dff-user-kg-skill"
+                }
             },
             "dff_travel_italy_skill": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2.0,
                     "url": "http://dff-travel-italy-skill:8139/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_travel_italy_skill_formatter",
@@ -555,7 +548,11 @@
                 "previous_services": [
                     "skill_selectors"
                 ],
-                "state_manager_method": "add_hypothesis"
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/FahT3rhiav1Bg2Q17wvE.yml",
+                    "service": "skills/dff_travel_italy_skill/service_configs/dff-travel-italy-skill"
                 }
             }
         },
@@ -581,9 +578,9 @@
         }
     },
     "metadata": {
-        "display_name": "Dream",
+        "display_name": "Dream KG",
         "author": "DeepPavlov",
-        "description": "Full version of DeepPavlov Dream Socialbot",
+        "description": "Distribution that utilizes Knowledge Graph",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
         "ram_usage": "50 GB",

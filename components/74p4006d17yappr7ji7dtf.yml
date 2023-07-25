@@ -1,4 +1,4 @@
-name: user_knowledge_graph
+name: user_knowledge_memorizer
 display_name: User Knowledge Graph
 component_type: null
 model_type: null
@@ -10,8 +10,8 @@ gpu_usage: null
 group: annotators
 connector:
   protocol: http
-  url: http://user-knowledge-graph:8127/respond
-dialog_formatter: state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog
+  url: http://user-knowledge-memorizer:8127/respond
+dialog_formatter: state_formatters.dp_formatters:user_knowledge_memorizer_formatter_dialog
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services:
 - annotators.property_extraction
@@ -20,5 +20,5 @@ required_previous_services: null
 state_manager_method: add_annotation
 tags: null
 endpoint: respond
-service: annotators/user_knowledge_graph/service_configs/user-knowledge-graph
+service: annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer
 date_created: '2023-06-07T12:42:33'

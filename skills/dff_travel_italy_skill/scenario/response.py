@@ -1,14 +1,12 @@
 import logging
 from typing import Callable, List
 import datetime
-import json
-import random
 
 from df_engine.core import Context, Actor
 import df_engine.conditions as cnd
 
-import common.travel as templates
-from common.travel_italy import SWITCH_ITALY_TRAVEL_SKILL_PHRASE, QUESTIONS_ABOUT_ITALY
+
+from common.travel_italy import QUESTIONS_ABOUT_ITALY
 
 
 logger = logging.getLogger(__name__)
@@ -41,7 +39,7 @@ DID_NOT_EXIST = [
     "I'm a bit too young to remember those times though.",
 ]
 
-WHAT_DID_DAY = "What did you do during the day?" 
+WHAT_DID_DAY = "What did you do during the day?"
 
 HAVE_YOU_BEEN_PLACE = "Have you been there?"
 ASK_ABOUT_OFFERED_LOC = "It's a real wonder. Have you been there?"
@@ -64,7 +62,6 @@ def append_unused(initial: str, phrases: List[str], exit_on_exhaust: bool = Fals
     """
 
     def unused_handler(ctx: Context, actor: Actor) -> str:
-
         used = ctx.misc.get("used_phrases", [])
         confidences = [1] * len(phrases)
 
@@ -74,7 +71,7 @@ def append_unused(initial: str, phrases: List[str], exit_on_exhaust: bool = Fals
                 used.append(id(phrase))
                 ctx.misc["used_phrases"] = used
                 return initial + phrase
-            confidences[idx] *= 0.4 ** times
+            confidences[idx] *= 0.4**times
 
         if exit_on_exhaust:
             label = ctx.last_label
@@ -88,4 +85,3 @@ def append_unused(initial: str, phrases: List[str], exit_on_exhaust: bool = Fals
         return initial + target_phrase
 
     return unused_handler
-

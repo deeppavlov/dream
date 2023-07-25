@@ -1,0 +1,23 @@
+name: train_and_upload_model
+display_name: Training Model for Relevant Documents Retrieval
+component_type: null
+model_type: ML-based
+is_customizable: true
+author: publisher@deeppavlov.ai
+description: Trains the model used in relevant documents retrieval and uploads it to file server.
+ram_usage: 5G
+gpu_usage: 5G
+group: annotators
+connector:
+  protocol: http
+  timeout: 50.0
+  url: http://doc-retriever:8165/train_and_upload_model
+dialog_formatter: state_formatters.dp_formatters:utt_non_punct_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: update_attributes
+tags: null
+endpoint: train_and_upload_model
+service: annotators/doc_retriever/service_configs/doc-retriever
+date_created: "2023-06-14T11:46:20"

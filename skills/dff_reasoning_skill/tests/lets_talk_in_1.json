@@ -1,0 +1,363 @@
+{
+    "human_utter_index_batch": [
+        0
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "who is the president of UAE?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "who is the president of UAE?",
+                            "segments": [
+                                "who is the president of UAE?"
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "ClarificationIntent": 0.02,
+                                "General_ChatIntent": 0.0,
+                                "Information_DeliveryIntent": 0.07,
+                                "Information_RequestIntent": 0.81,
+                                "InteractiveIntent": 0.0,
+                                "Multiple_GoalsIntent": 0.01,
+                                "Opinion_ExpressionIntent": 0.02,
+                                "Opinion_RequestIntent": 0.01,
+                                "OtherIntent": 0.0,
+                                "Topic_SwitchIntent": 0.06,
+                                "User_InstructionIntent": 0.0
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.0,
+                                "Entertainment_General": 0.0,
+                                "Entertainment_Movies": 0.0,
+                                "Entertainment_Music": 0.0,
+                                "Inappropriate_Content": 0.0,
+                                "Interactive": 0.0,
+                                "Other": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 0.98,
+                                "Science_and_Technology": 0.0,
+                                "Sports": 0.0
+                            },
+                            "cobot_topics": {
+                                "Art_Event": 0.0,
+                                "Celebrities": 0.0,
+                                "Entertainment": 0.0,
+                                "Fashion": 0.0,
+                                "Food_Drink": 0.0,
+                                "Games": 0.0,
+                                "Literature": 0.0,
+                                "Math": 0.0,
+                                "Movies_TV": 0.0,
+                                "Music": 0.0,
+                                "News": 0.0,
+                                "Other": 0.0,
+                                "Pets_Animals": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 1.0,
+                                "Psychology": 0.0,
+                                "Religion": 0.0,
+                                "SciTech": 0.0,
+                                "Sex_Profanity": 0.0,
+                                "Sports": 0.0,
+                                "Travel_Geo": 0.0,
+                                "Weather_Time": 0.0
+                            },
+                            "deeppavlov_topics": {
+                                "Animals&Pets": 0.0,
+                                "Art&Hobbies": 0.0,
+                                "ArtificialIntelligence": 0.0,
+                                "Beauty": 0.0,
+                                "Books&Literature": 0.0,
+                                "Celebrities&Events": 0.0,
+                                "Clothes": 0.0,
+                                "Depression": 0.0,
+                                "Disasters": 0.0,
+                                "Education": 0.0,
+                                "Family&Relationships": 0.0,
+                                "Finance": 0.04,
+                                "Food": 0.0,
+                                "Gadgets": 0.0,
+                                "Garden": 0.0,
+                                "Health&Medicine": 0.0,
+                                "Home&Design": 0.0,
+                                "Job": 0.0,
+                                "Leisure": 0.0,
+                                "MassTransit": 0.0,
+                                "Movies&Tv": 0.0,
+                                "Music": 0.0,
+                                "News": 0.18,
+                                "PersonalTransport": 0.0,
+                                "Politics": 0.74,
+                                "Psychology": 0.0,
+                                "Religion": 0.0,
+                                "Science&Technology": 0.0,
+                                "Space": 0.02,
+                                "Sports": 0.0,
+                                "Toys&Games": 0.0,
+                                "Travel": 0.0,
+                                "Videogames": 0.0
+                            },
+                            "emotion_classification": {
+                                "anger": 0.01,
+                                "disgust": 0.0,
+                                "fear": 0.0,
+                                "joy": 0.0,
+                                "neutral": 0.06,
+                                "sadness": 0.0,
+                                "surprise": 0.93
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.35,
+                                "is_factoid": 0.65
+                            },
+                            "midas_classification": {
+                                "appreciation": 0.01,
+                                "clarifying_question": 0.0,
+                                "command": 0.02,
+                                "comment": 0.01,
+                                "complaint": 0.01,
+                                "dev_command": 0.0,
+                                "neg_answer": 0.05,
+                                "open_question_factual": 0.49,
+                                "open_question_opinion": 0.18,
+                                "open_question_personal": 0.0,
+                                "opinion": 0.01,
+                                "other_answers": 0.05,
+                                "pos_answer": 0.03,
+                                "statement": 0.05,
+                                "yes_no_question": 0.08
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.14,
+                                "neutral": 0.83,
+                                "positive": 0.03
+                            },
+                            "toxic_classification": {
+                                "identity_hate": 0.0,
+                                "insult": 0.0,
+                                "not_toxic": 1.0,
+                                "obscene": 0.0,
+                                "severe_toxic": 0.0,
+                                "sexual_explicit": 0.0,
+                                "threat": 0.0,
+                                "toxic": 0.0
+                            }
+                        }
+                    },
+                    "user": {
+                        "id": "2b41cbdebbcd4fb7862a6bd5d5927061",
+                        "user_external_id": "jsdvbjvbjdvbjdfv",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    },
+                    "attributes": {}
+                }
+            ],
+            "bot_utterances": [],
+            "utterances": [
+                {
+                    "text": "who is the president of UAE?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "who is the president of UAE?",
+                            "segments": [
+                                "who is the president of UAE?"
+                            ]
+                        },
+                        "combined_classification": {
+                            "cobot_dialogact_intents": {
+                                "ClarificationIntent": 0.02,
+                                "General_ChatIntent": 0.0,
+                                "Information_DeliveryIntent": 0.07,
+                                "Information_RequestIntent": 0.81,
+                                "InteractiveIntent": 0.0,
+                                "Multiple_GoalsIntent": 0.01,
+                                "Opinion_ExpressionIntent": 0.02,
+                                "Opinion_RequestIntent": 0.01,
+                                "OtherIntent": 0.0,
+                                "Topic_SwitchIntent": 0.06,
+                                "User_InstructionIntent": 0.0
+                            },
+                            "cobot_dialogact_topics": {
+                                "Entertainment_Books": 0.0,
+                                "Entertainment_General": 0.0,
+                                "Entertainment_Movies": 0.0,
+                                "Entertainment_Music": 0.0,
+                                "Inappropriate_Content": 0.0,
+                                "Interactive": 0.0,
+                                "Other": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 0.98,
+                                "Science_and_Technology": 0.0,
+                                "Sports": 0.0
+                            },
+                            "cobot_topics": {
+                                "Art_Event": 0.0,
+                                "Celebrities": 0.0,
+                                "Entertainment": 0.0,
+                                "Fashion": 0.0,
+                                "Food_Drink": 0.0,
+                                "Games": 0.0,
+                                "Literature": 0.0,
+                                "Math": 0.0,
+                                "Movies_TV": 0.0,
+                                "Music": 0.0,
+                                "News": 0.0,
+                                "Other": 0.0,
+                                "Pets_Animals": 0.0,
+                                "Phatic": 0.0,
+                                "Politics": 1.0,
+                                "Psychology": 0.0,
+                                "Religion": 0.0,
+                                "SciTech": 0.0,
+                                "Sex_Profanity": 0.0,
+                                "Sports": 0.0,
+                                "Travel_Geo": 0.0,
+                                "Weather_Time": 0.0
+                            },
+                            "deeppavlov_topics": {
+                                "Animals&Pets": 0.0,
+                                "Art&Hobbies": 0.0,
+                                "ArtificialIntelligence": 0.0,
+                                "Beauty": 0.0,
+                                "Books&Literature": 0.0,
+                                "Celebrities&Events": 0.0,
+                                "Clothes": 0.0,
+                                "Depression": 0.0,
+                                "Disasters": 0.0,
+                                "Education": 0.0,
+                                "Family&Relationships": 0.0,
+                                "Finance": 0.04,
+                                "Food": 0.0,
+                                "Gadgets": 0.0,
+                                "Garden": 0.0,
+                                "Health&Medicine": 0.0,
+                                "Home&Design": 0.0,
+                                "Job": 0.0,
+                                "Leisure": 0.0,
+                                "MassTransit": 0.0,
+                                "Movies&Tv": 0.0,
+                                "Music": 0.0,
+                                "News": 0.18,
+                                "PersonalTransport": 0.0,
+                                "Politics": 0.74,
+                                "Psychology": 0.0,
+                                "Religion": 0.0,
+                                "Science&Technology": 0.0,
+                                "Space": 0.02,
+                                "Sports": 0.0,
+                                "Toys&Games": 0.0,
+                                "Travel": 0.0,
+                                "Videogames": 0.0
+                            },
+                            "emotion_classification": {
+                                "anger": 0.01,
+                                "disgust": 0.0,
+                                "fear": 0.0,
+                                "joy": 0.0,
+                                "neutral": 0.06,
+                                "sadness": 0.0,
+                                "surprise": 0.93
+                            },
+                            "factoid_classification": {
+                                "is_conversational": 0.35,
+                                "is_factoid": 0.65
+                            },
+                            "midas_classification": {
+                                "appreciation": 0.01,
+                                "clarifying_question": 0.0,
+                                "command": 0.02,
+                                "comment": 0.01,
+                                "complaint": 0.01,
+                                "dev_command": 0.0,
+                                "neg_answer": 0.05,
+                                "open_question_factual": 0.49,
+                                "open_question_opinion": 0.18,
+                                "open_question_personal": 0.0,
+                                "opinion": 0.01,
+                                "other_answers": 0.05,
+                                "pos_answer": 0.03,
+                                "statement": 0.05,
+                                "yes_no_question": 0.08
+                            },
+                            "sentiment_classification": {
+                                "negative": 0.14,
+                                "neutral": 0.83,
+                                "positive": 0.03
+                            },
+                            "toxic_classification": {
+                                "identity_hate": 0.0,
+                                "insult": 0.0,
+                                "not_toxic": 1.0,
+                                "obscene": 0.0,
+                                "severe_toxic": 0.0,
+                                "sexual_explicit": 0.0,
+                                "threat": 0.0,
+                                "toxic": 0.0
+                            }
+                        }
+                    },
+                    "user": {
+                        "id": "2b41cbdebbcd4fb7862a6bd5d5927061",
+                        "user_external_id": "jsdvbjvbjdvbjdfv",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
+                        },
+                        "attributes": {},
+                        "user_type": "human"
+                    },
+                    "attributes": {}
+                }
+            ]
+        }
+    ],
+    "dff_reasoning_skill_state_batch": [
+        {}
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_states": {},
+            "cross_links": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        {}
+    ],
+    "prompts_goals_batch": [
+        {}
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ]
+}

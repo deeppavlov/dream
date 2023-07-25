@@ -1,0 +1,24 @@
+name: dff_travel_italy_skill
+display_name: Travel Italy Skill
+component_type: Script-based w/o NNs
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Looks up entities detected by Entity Detection in Knowledge Graph and uses these entities in bot's responses
+ram_usage: 128M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://dff-travel-italy-skill:8139/respond
+dialog_formatter: state_formatters.dp_formatters:dff_travel_italy_skill_formatter
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_travel_italy_skill/service_configs/dff-travel-italy-skill
+date_created: '2023-06-22T09:45:32'

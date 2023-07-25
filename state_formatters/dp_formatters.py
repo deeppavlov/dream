@@ -328,6 +328,25 @@ def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
         return [{"sentences": [""]}]
 
 
+def last_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
+            "dialog_ids": [dialog.get("dialog_id", "unknown")],
+        }
+    ]
+
+
+def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "last_human_utterances": [dialog["human_utterances"][-1]],
+            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
+            "dialog_ids": [dialog.get("dialog_id", "unknown")],
+        }
+    ]
+
+
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
     entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
@@ -1189,9 +1208,30 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
-def user_knowledge_graph_formatter_dialog(dialog: Dict) -> List[Dict]:
+def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
     return [
         {
             "utterances": [dialog["human_utterances"][-1]],
         }
     ]
+
+
+def robot_formatter(dialog: Dict) -> Dict:
+    """This formatter currently provides the JSON as is, without modifying it.
+    Either edit it later or choose one of the existing formatters"""
+    detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
+    return [{"detected": detected}]
+
+
+def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
+    intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
+    called_intents = {intent: False for intent in intents}
+    for utt in dialog["human_utterances"][-5:-1]:
+        called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
+        for intent in called:
+            called_intents[intent] = True
+
+    batches = utils.dff_formatter(dialog, "dff_command_selector_skill")
+    batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
+    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
+    return batches
