@@ -20,10 +20,11 @@ Relation examples:
 ## I/O
 
 **Inpunt**
-
+user_id, entity substring, entity_tags
 
 **Output:** 
-the annotator returns:
+the annotator returns the processed entity information about:
+
 - entities
 - entity_id (ids for multiple entities)
 - entity_confidence score

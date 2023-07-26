@@ -36,6 +36,20 @@ docker-compose -f docker-compose.yml -f local.yml exec comet-conceptnet bash tes
 | Average starting time          | 4s      | 3s         |
 | Average request execution time | 0.4s    | 0.2s       |
 
+## Input/Output
+
+**Input** 
+- hypotheses: possible assistant's replies (?)
+- currentUtterance: latest reply from a user
+- pastResponses: a list of user utterances 
+
+**Output**
+a list of probabilities about the utterance:
+- isResponseComprehensible
+- isResponseErroneous
+- isResponseInteresting
+- isResponseOnTopic
+- responseEngagesUser 
 
 
 ## Dependencies
