@@ -45,24 +45,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8103
       - PORT=8103
 
-  transformers-lm-gptjt:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8161
-      - PORT=8161
-
-  dff-template-skill:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8120
-      - PORT=8120
-
   property-extraction:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
@@ -71,13 +53,4 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8136
       - PORT=8136
-
-  terminusdb-server:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy2/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=7063.deeppavlov.ai
-      - PORT=6363
 version: '3.7'
