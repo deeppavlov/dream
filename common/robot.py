@@ -1,6 +1,9 @@
 import requests
 
 
+command_intents = {"track_object", "turn_around", "move_forward", "move_backward", "open_door", "move_to_point"}
+
+
 def check_if_valid_robot_command(command, service_url, dialog_id, timeout=1.0):
     result = requests.post(
         f"{service_url}/is_command_valid", json={"command": command, "dialog_id": dialog_id}, timeout=timeout

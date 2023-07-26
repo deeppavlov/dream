@@ -22,7 +22,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/H1bbLiJ4B8Fg77NPDgGjA.yml",
-                "service": "services/last_chance_service/service_configs/agent"
+                "service": "services/agent_services/service_configs/dream_persona_rullama_prompted"
             }
         },
         "timeout_service": {
@@ -47,7 +47,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/nbRgFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/timeout_service/service_configs/agent"
+                "service": "services/agent_services/service_configs/dream_persona_rullama_prompted"
             }
         },
         "annotators": {

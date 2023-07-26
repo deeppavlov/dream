@@ -1,0 +1,345 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002,
+          dff-intent-responder-skill:8012, intent-catcher-commands:8014, ner:8021,
+          combined-classification:8087, entity-detection:8103, dff-command-selector-skill:8148,
+          sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145,
+          dff-dream-persona-chatgpt-prompted-skill:8137,
+          openai-api-chatgpt-16k:8167"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
+
+  ranking-based-response-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        LANGUAGE: EN
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+        FALLBACK_FILE: fallbacks_dream_en.json
+      context: .
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  sentseg:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+  dff-intent-responder-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8012
+        SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
+      context: .
+      dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dff-command-selector-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8148
+        SERVICE_NAME: dff_command_selector_skill
+        LANGUAGE: EN
+        ROS_FSM_SERVER: http://robot-fake-server:8038
+      context: .
+      dockerfile: ./skills/dff_command_selector_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8148 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  intent-catcher-commands:
+    env_file: [ .env ]
+    build:
+      context: .
+      dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
+      args:
+        SERVICE_PORT: 8014
+        CONFIG_NAME: intents_model_dp_config_commands.json
+        INTENT_PHRASES_PATH: intent_phrases_commands.json
+    command: python -m flask run -h 0.0.0.0 -p 8014
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
+
+  ner:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+        SERVICE_PORT: 8021
+        SRC_DIR: annotators/NER_deeppavlov
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+      context: ./
+      dockerfile: annotators/NER_deeppavlov/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8021
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  combined-classification:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8087
+        SERVICE_NAME: combined_classification
+        CONFIG: combined_classifier.json
+      context: .
+      dockerfile: ./annotators/combined_classification/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8087 --timeout 600
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  entity-detection:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_NAME: entity_detection
+        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
+        CONFIG: entity_detection_eng.json
+        LOWERCASE: 1
+        SERVICE_PORT: 8103
+        SRC_DIR: annotators/entity_detection/
+        FINEGRAINED: 0
+      context: ./
+      dockerfile: annotators/entity_detection/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8103
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 2.5G
+
+  prompt-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8135
+        SERVICE_NAME: prompt_selector
+        N_SENTENCES_TO_RETURN: 3
+        PROMPTS_TO_CONSIDER: dream_persona,dream_faq
+      context: .
+      dockerfile: ./annotators/prompt_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8135
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
+  openai-api-chatgpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8145
+        SERVICE_NAME: openai_api_chatgpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8145
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  dff-dream-persona-chatgpt-prompted-skill:
+    env_file: [ .env,.env_secret ]
+    build:
+      args:
+        SERVICE_PORT: 8137
+        SERVICE_NAME: dff_dream_persona_prompted_skill
+        PROMPT_FILE: common/prompts/dream_persona.json
+        GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+        GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+        GENERATIVE_TIMEOUT: 120
+        N_UTTERANCES_CONTEXT: 7
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dff-google-api-skill:
+    env_file: [ .env,.env_secret ]
+    build:
+      args:
+        SERVICE_PORT: 8162
+        SERVICE_NAME: dff_google_api_skill
+        ENVVARS_TO_SEND: OPENAI_API_KEY,GOOGLE_CSE_ID,GOOGLE_API_KEY
+      context: .
+      dockerfile: ./skills/dff_google_api_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  openai-api-chatgpt-16k:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8167
+        SERVICE_NAME: openai_api_chatgpt_16k
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo-16k
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8167
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  robot-command-sender:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8035
+        ROS_FSM_SERVER: http://robot-fake-server:8038
+      context: .
+      dockerfile: ./services/robot_command_sender/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8035
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  robot-notifications:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8036
+        ROS_FSM_SERVER: http://robot-fake-server:8038
+      context: .
+      dockerfile: ./services/robot_notifications/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8036
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  robot-fake-server:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8038
+      context: .
+      dockerfile: ./services/robot_fake_server/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8038
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+version: '3.7'

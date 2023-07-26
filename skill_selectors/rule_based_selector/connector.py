@@ -12,6 +12,7 @@ from common.gossip import check_is_celebrity_mentioned
 from common.link import get_linked_to_skills, get_previously_active_skill
 from common.movies import extract_movies_names_from_annotations
 from common.response_selection import UNPREDICTABLE_SKILLS
+from common.robot import command_intents
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import (
@@ -85,6 +86,7 @@ class RuleBasedSkillSelectorConnector:
             )
             low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
             mint_cmd_detected = any([k for k in intent_catcher_intents if k in mint_intents])
+            command_detected = any([k for k in intent_catcher_intents if k in command_intents])
 
             detected_topics = set(get_topics(user_uttr, which="all"))
 
@@ -129,6 +131,11 @@ class RuleBasedSkillSelectorConnector:
             elif mint_cmd_detected:
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dff_mint_skill")
+                skills_for_uttr.append("dff_intent_responder_skill")
+            elif command_detected:
+                skills_for_uttr.append("dummy_skill")
+                # process intents with Command Selector
+                skills_for_uttr.append("dff_command_selector_skill")
             elif is_sensitive_topic_and_request(user_uttr) and RESTRICTION_FOR_SENSITIVE_CASE:
                 # process user utterance with sensitive content, "safe mode"
 
