@@ -299,9 +299,6 @@ services:
         reservations:
           memory: 128M
 
-  terminusdb-server:
-    image: terminusdb/terminusdb-server:latest
-
   user-knowledge-memorizer:
     env_file: [ .env ]
     build:
