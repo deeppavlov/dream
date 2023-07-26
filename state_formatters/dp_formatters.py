@@ -1199,8 +1199,6 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
-<<<<<<< HEAD
-=======
 def robot_formatter(dialog: Dict) -> Dict:
     """This formatter currently provides the JSON as is, without modifying it.
     Either edit it later or choose one of the existing formatters"""
@@ -1208,7 +1206,6 @@ def robot_formatter(dialog: Dict) -> Dict:
     return [{"detected": detected}]
 
 
->>>>>>> origin/dev
 def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
     called_intents = {intent: False for intent in intents}
