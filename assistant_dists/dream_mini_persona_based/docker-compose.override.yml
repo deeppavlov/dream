@@ -225,6 +225,7 @@ services:
       args:
         SERVICE_PORT: 8133
         SERVICE_NAME: relative_persona_extractor
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
         N_SENTENCES_TO_RETURN: 3
       context: .
       dockerfile: ./annotators/relative_persona_extractor/Dockerfile

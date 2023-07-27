@@ -46,7 +46,6 @@ DEFAULT_CONFIGS = {
     "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
     "lmsys/vicuna-13b-v1.3": json.load(open("common/generative_configs/default_generative_config.json", "r")),
     "dim/xglm-4.5B_ru_v10_epoch_6_step_41141": json.load(open("common/generative_configs/ruxglm_config.json", "r")),
-    "ai-forever/ruGPT-3.5-13B": json.load(open("common/generative_configs/rugpt35_config.json", "r")),
 }
 
 

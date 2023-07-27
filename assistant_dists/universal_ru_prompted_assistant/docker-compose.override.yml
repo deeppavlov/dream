@@ -202,8 +202,8 @@ services:
         SERVICE_NAME: dff_universal_prompted_skill
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        DEFAULT_LM_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
-        DEFAULT_LM_SERVICE_CONFIG: default_generative_config.json
+        DEFAULT_LM_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
+        DEFAULT_LM_SERVICE_CONFIG: ruxglm_config.json
       context: .
       dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
     deploy:
