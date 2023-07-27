@@ -43,7 +43,12 @@ def main():
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(f"{url}/model", json=data).json()
         print(result)
-        entity_ids = result[0][0]["entity_ids"]
+
+        entity_ids = []
+        for entity_info_list in result:
+            for entity_info in entity_info_list:
+                entity_ids = entity_info.get("entity_ids")
+
         if entity_ids == gold_result:
             count += 1
         else:

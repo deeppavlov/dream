@@ -25,6 +25,18 @@ except Exception as e:
     raise e
 
 
+@app.route("/add_entities", methods=["POST"])
+def add_entities():
+    user_id = request.json.get("user_id", "")
+    entity_info = request.json.get("entity_info", {})
+    entity_substr_list = entity_info.get("entity_substr", [])
+    entity_ids_list = entity_info.get("entity_ids", [])
+    tags_list = entity_info.get("tags", [])
+    el[0].add_custom_entities(user_id, entity_substr_list, entity_ids_list, tags_list)
+    logger.info(f"added entities {entity_info}")
+    return {}
+
+
 def preprocess_context(context_batch):
     """Preprocesses the context batch by combining previous and current utterances.
 
