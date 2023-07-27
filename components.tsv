@@ -162,7 +162,7 @@
 8158	transformers-lm-oasst12b
 8159	openai-api-gpt4
 8160	openai-api-gpt4-32k
-8161
+8161    dff-universal-ru-prompted-skill
 8162	dff-google-api-skill
 8163	anthropic-api-claude-instant-v1
 8164	anthropic-api-claude-v1
@@ -172,3 +172,5 @@
 8168	transformers-lm-vicuna13b
 8169    dff-reasoning-skill
 8170    dff-dream-faq-prompted-skill
+8171    transformers-lm-ruxglm
+8172    dff-dream-persona-ruxglm-prompted-skill
