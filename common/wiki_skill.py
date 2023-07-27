@@ -617,6 +617,7 @@ def check_nounphr(annotations, nounphr_to_find):
             return nounphr_text
     return ""
 
+
 def find_entity_prex(annotations, prop):
     prop = prop.replace("_", " ")
     prex_info_batch = annotations.get("property_extraction", [])
