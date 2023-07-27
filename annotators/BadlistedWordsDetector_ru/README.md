@@ -1,4 +1,4 @@
-# BadlistedWordsDetector
+# BadlistedWordsDetector for Russian
 
 ## Description
 
