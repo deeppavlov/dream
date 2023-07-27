@@ -617,6 +617,24 @@ def check_nounphr(annotations, nounphr_to_find):
             return nounphr_text
     return ""
 
+def find_entity_prex(annotations, prop):
+    prop = prop.replace("_", " ")
+    prex_info_batch = annotations.get("property_extraction", [])
+    for prex_info in prex_info_batch:
+        if isinstance(prex_info, list) and prex_info:
+            prex_info = prex_info[0]
+        if prex_info:
+            triplets = prex_info.get("triplets", [])
+            for triplet in triplets:
+                if "relation" in triplet:
+                    rel = triplet["relation"]
+                elif "property" in triplet:
+                    rel = triplet["property"]
+                obj = triplet["object"]
+                if rel.replace("_", " ").lower() == prop.replace("_", " ").lower():
+                    return obj
+    return ""
+
 
 def extract_entity(ctx, entity_type):
     user_uttr: dict = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1]
@@ -636,6 +654,10 @@ def extract_entity(ctx, entity_type):
         found_entity, *_ = find_entity_by_types(annotations, [wp_type])
         if found_entity:
             return found_entity
+    elif entity_type.startswith("prop:"):
+        user_property = entity_type.split("prop:")[1]
+        obj = find_entity_prex(annotations, user_property)
+        return obj
     elif entity_type == "any_entity":
         entities = annotations.get("entity_detection", {}).get("entities", [])
         if entities:
