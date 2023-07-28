@@ -1,8 +1,4 @@
-from dotenv import load_dotenv
 from deeppavlov_kg import TerminusdbKnowledgeGraph
-
-load_dotenv("./.env")
-load_dotenv("./.env_secret")
 
 
 def main():
