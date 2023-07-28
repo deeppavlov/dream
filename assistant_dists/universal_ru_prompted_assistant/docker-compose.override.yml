@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_ru_prompted_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
-        dialogrpt-ru:8122, transformers-lm-ruxglm:8171, 
+        dialogrpt-ru:8122, transformers-lm-ruxglm:8171, transformers-lm-rugpt35:8178, 
         openai-api-chatgpt:8145, openai-api-davinci3:8131,
         openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167,
         dff-universal-ru-prompted-skill:8161"
@@ -68,6 +68,27 @@ services:
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8171
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 60G
+        reservations:
+          memory: 60G
+
+  transformers-lm-rugpt35:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8178
+        SERVICE_NAME: transformers_lm_rugpt35
+        PRETRAINED_MODEL_NAME_OR_PATH: ai-forever/ruGPT-3.5-13B
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8178
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server

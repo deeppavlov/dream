@@ -24,6 +24,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8171:8171
+  transformers-lm-rugpt35:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8178:8178
   openai-api-chatgpt:
     volumes:
       - "./services/openai_api_lm:/src"
