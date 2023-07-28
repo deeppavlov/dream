@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/storyteller_ruxglm_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
-          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
+        dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
         dff-storyteller-ruxglm-prompted-skill:8173, dff-fairytale-ruxglm-prompted-skill:8174"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
