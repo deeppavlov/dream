@@ -74,9 +74,9 @@ def main():
     TERMINUSDB_SERVER_DB = "user_knowledge_db"
     TERMINUSDB_SERVER_PASSWORD = "root"
     INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_memorizer"))
-    USER_KG_PORT = 8027
+    USER_KNOWLEDGE_MEMORIZER_PORT = 8027
 
-    USER_KG_URL = f"http://0.0.0.0:{USER_KG_PORT}/respond"
+    USER_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{USER_KNOWLEDGE_MEMORIZER_PORT}/respond"
 
     graph = TerminusdbKnowledgeGraph(
         db_name=TERMINUSDB_SERVER_DB,
@@ -125,7 +125,7 @@ def main():
 
     count = 0
     for data, golden_result in zip(request_data, golden_results):
-        result = requests.post(USER_KG_URL, json=data).json()
+        result = requests.post(USER_KNOWLEDGE_MEMORIZER_URL, json=data).json()
         print(result)
         result = prepare_for_comparison(result)
         if compare_results(result, golden_result):
