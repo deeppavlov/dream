@@ -34,6 +34,98 @@ pipeline {
       }
     }
 // ------------------------------------------- Test prompted dists------------------------------------------------
+    stage('Build-DRUXGLM') {
+      steps {
+        script{
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh '''
+                cat /home/ignatov/secrets.txt >> .env_secret
+                tests/runtests_dream_ruxglm.sh MODE=build
+              '''
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        aborted {
+          script {
+            sh 'tests/runtests_dream_ruxglm.sh MODE=clean'
+          }
+        }
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+      }
+    }
+    stage('Start-DRUXGLM') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh 'tests/runtests_dream_ruxglm.sh MODE=clean && tests/runtests_dream_ruxglm.sh MODE=start'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            started = true
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_dream_ruxglm.sh MODE=clean'
+          }
+        }
+      }
+    }
+    stage('Test skills-DRUXGLM') {
+      steps {
+        script {
+          startTime = currentBuild.duration
+          Exception ex = null
+          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+            try {
+              sh label: 'test skills', script: 'tests/runtests_dream_ruxglm.sh MODE=test_skills'
+            }
+            catch (Exception e) {
+              int duration = (currentBuild.duration - startTime) / 1000
+              throw e
+            }
+          }
+        }
+      }
+      post {
+        success {
+          script {
+            int duration = (currentBuild.duration - startTime) / 1000
+          }
+        }
+        aborted {
+          script {
+            sh 'tests/runtests_dream_ruxglm.sh MODE=clean'
+          }
+        }
+      }
+    }
+// ------------------------------------------- Test prompted dists------------------------------------------------
     stage('Build-Reason') {
       steps {
         script{
@@ -43,6 +135,7 @@ pipeline {
             try {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env_secret
+                tests/runtests_dream_ruxglm.sh MODE=clean
                 tests/runtests_reasoning.sh MODE=build
               '''
             }
