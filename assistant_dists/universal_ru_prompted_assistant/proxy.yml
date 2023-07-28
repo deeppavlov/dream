@@ -18,4 +18,13 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8171
       - PORT=8171
 
+  transformers-lm-rugpt35:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8178
+      - PORT=8178
+
 version: "3.7"
