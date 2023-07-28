@@ -1,8 +1,10 @@
 import logging
 import re
 from typing import Callable
-import sentry_sdk
 from os import getenv
+import time
+import sentry_sdk
+
 
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 from scenario.config import (
@@ -49,13 +51,20 @@ SIDE_INTENTS = {
     "who_made_you",
 }
 
-graph = TerminusdbKnowledgeGraph(
-    db_name=TERMINUSDB_SERVER_DB,
-    team=TERMINUSDB_SERVER_TEAM,
-    server=TERMINUSDB_SERVER_URL,
-    password=TERMINUSDB_SERVER_PASSWORD,
-)
-
+while True:
+    try:
+        graph = TerminusdbKnowledgeGraph(
+            db_name=TERMINUSDB_SERVER_DB,
+            team=TERMINUSDB_SERVER_TEAM,
+            server=TERMINUSDB_SERVER_URL,
+            password=TERMINUSDB_SERVER_PASSWORD,
+        )
+        logger.info(f"TERMINUSDB_SERVER_URL: {TERMINUSDB_SERVER_URL} is ready")
+        break
+    except Exception as exc:
+        print(exc)
+        time.sleep(5)
+        continue
 
 def check_flag(prop: str) -> Callable:
     def check_flag_handler(ctx: Context, actor: Actor) -> bool:
