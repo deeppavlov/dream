@@ -30,7 +30,7 @@ services:
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8173:8173
+      - 8178:8178
   openai-api-chatgpt:
     volumes:
       - "./services/openai_api_lm:/src"

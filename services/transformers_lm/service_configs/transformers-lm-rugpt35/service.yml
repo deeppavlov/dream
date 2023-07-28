@@ -7,7 +7,7 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8173
+      SERVICE_PORT: 8178
       SERVICE_NAME: transformers_lm_rugpt35
       PRETRAINED_MODEL_NAME_OR_PATH: ai-forever/ruGPT-3.5-13B
       HALF_PRECISION: 1
@@ -15,7 +15,7 @@ compose:
       FLASK_APP: server
     context: .
     dockerfile: ./services/transformers_lm/Dockerfile
-  command: flask run -h 0.0.0.0 -p 8173
+  command: flask run -h 0.0.0.0 -p 8178
   environment:
   - CUDA_VISIBLE_DEVICES=0
   - FLASK_APP=server
@@ -30,7 +30,7 @@ compose:
   - ./common:/src/common
   - ~/.deeppavlov/cache:/root/.cache
   ports:
-  - 8173:8173
+  - 8178:8178
 proxy:
   command:
   - nginx
@@ -40,5 +40,5 @@ proxy:
     context: dp/proxy/
     dockerfile: Dockerfile
   environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8173
-  - PORT=8173
+  - PROXY_PASS=dream.deeppavlov.ai:8178
+  - PORT=8178

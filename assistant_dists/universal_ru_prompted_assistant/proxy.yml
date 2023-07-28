@@ -24,7 +24,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8173
-      - PORT=8173
+      - PROXY_PASS=proxy.deeppavlov.ai:8178
+      - PORT=8178
 
 version: "3.7"

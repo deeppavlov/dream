@@ -14,7 +14,7 @@ group: services
 connector:
   protocol: http
   timeout: 20.0
-  url: http://transformers-lm-rugpt35:8173/respond
+  url: http://transformers-lm-rugpt35:8178/respond
 dialog_formatter: null
 response_formatter: null
 previous_services: null
