@@ -3,9 +3,11 @@
 ## Description
 
 Response Selector is a component selecting final response among the given hypotheses by different skills.
+
 The Tag- and Evaluation--based Response Selector utilizes a complicated approach which aims to
-prioritize scripted skills while having an opportunity to provide a system-initiative via so called linking questions
-that bring conversation to the scripts. A final hypotheses could be a combination of a hypotheses and linking question.
+prioritize scripted skills while having an opportunity to provide a system-initiative via so-called linking questions that bring conversation to the scripts. 
+A final hypothesis could be a combination of a hypothesis and linking question.
+
 The approach is most suitable for distributions where the most of the responses are implied to be by scripts.
 
 ### Parameters
@@ -36,52 +38,9 @@ LANGUAGE: language to consider
 FALLBACK_FILE: a file name with fallbacks from `dream/common/fallbacks/`
 ```
 
+## Input/Output
+**Input:** a list of hypotheses with their scores and metadata
+**Output:** a list of selected hypotheses with their scores and metadata
+
 ## Dependencies
-
-<<<<<<< HEAD
-
-=======
-For this context you may type 0,3 hypots:
-```
-Type best hypot num(s), separated by comma: 0,3
-```
-
-When dialog ends it saves it into labeled_data folder.
-
-### Measuring quality
-
-It takes `--data_dir` as an input (the same as save_dir from data labelling script).
-Outputs overall accuracy.
-
-Example of usage:
-
-```
-python response_selectors/convers_evaluation_based_selector/measure_quality.py \
-                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/
-
-Overall accuracy: 0.5185185185185185
-```
-
-### How to run conversation evaluator locally
-
-`docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml up toxic_classification badlisted_words convers_evaluation_selector`
-
-Then use `--url`.
-
-Example of usage with url:
-
-```
-python response_selectors/convers_evaluation_based_selector/measure_quality.py \
-                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/  \
-                   --url http://0.0.0.0:8009/respond
-```
-## Dependencies
-
-Configuration settings specified in the .yaml files at [service_configs](service_configs)
-Required Python packages specified in [requirements.txt](requirements.txt).
-<<<<<<< HEAD
-For more details please refer to [this script](server.py)        "
->>>>>>> main distribution readmes upd, TBC
-=======
-For more details please refer to [this script](server.py)        "
->>>>>>> main distribution readmes upd, TBC
+none
