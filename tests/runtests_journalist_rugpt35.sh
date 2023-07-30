@@ -56,7 +56,7 @@ function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
     #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
     # else
-        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p test -f docker-compose.yml -f assistant_dists/nutrition_assistant/docker-compose.override.yml -f assistant_dists/nutrition_assistant/test.yml -f assistant_dists/nutrition_assistant/proxy.yml"
+        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p test -f docker-compose.yml -f assistant_dists/journalist_helper_assistant/docker-compose.override.yml -f assistant_dists/journalist_helper_assistant/test.yml -f assistant_dists/journalist_helper_assistant/proxy.yml"
     # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
@@ -110,7 +110,9 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in ranking-based-response-selector prompt-selector dff-nutrition-prompted-skill; do
+    for container in ranking-based-response-selector-ru prompt-selector-ru \
+                     dff-journalist-helper-ruxglm-prompted-skill dff-informal-letter-ruxglm-prompted-skill \
+                     dff-official-letter-ruxglm-prompted-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
