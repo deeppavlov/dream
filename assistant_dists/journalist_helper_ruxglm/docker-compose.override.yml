@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/journalist_helper_ruxglm/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
-          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
+          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-rugpt35:8178,
           dff-journalist-helper-ruxglm-prompted-skill:8177"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
@@ -75,18 +75,17 @@ services:
         reservations:
           memory: 100M
 
-  transformers-lm-ruxglm:
-    env_file: [ .env_ru,.env_secret ]
+  transformers-lm-rugpt35:
+    env_file: [ .env_ru ]
     build:
       args:
-        SERVICE_PORT: 8171
-        SERVICE_NAME: transformers_lm_ruxglm
-        PRETRAINED_MODEL_NAME_OR_PATH: dim/xglm-4.5B_ru_v10_epoch_6_step_41141
+        SERVICE_PORT: 8178
+        SERVICE_NAME: transformers_lm_rugpt35
+        PRETRAINED_MODEL_NAME_OR_PATH: ai-forever/ruGPT-3.5-13B
         HALF_PRECISION: 1
-        ADDITIONAL_EOS_TOKENS: <|endoftext|>,Human
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8171
+    command: flask run -h 0.0.0.0 -p 8178
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -104,8 +103,8 @@ services:
         SERVICE_PORT: 8175
         SERVICE_NAME: dff_official_letter_ru_prompted_skill
         PROMPT_FILE: common/prompts/official_letter_ru.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
-        GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-rugpt35:8178/respond
+        GENERATIVE_SERVICE_CONFIG: rugpt35_config.json
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 3
       context: .
@@ -124,7 +123,7 @@ services:
         SERVICE_PORT: 8176
         SERVICE_NAME: dff_informal_letter_ru_prompted_skill
         PROMPT_FILE: common/prompts/informal_letter_ru.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
+        GENERATIVE_SERVICE_URL: http://transformers-lm-rugpt35:8178/respond
         GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 3
@@ -144,7 +143,7 @@ services:
         SERVICE_PORT: 8177
         SERVICE_NAME: dff_journalist_helper_ru_prompted_skill
         PROMPT_FILE: common/prompts/journalist_helper_ru.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
+        GENERATIVE_SERVICE_URL: http://transformers-lm-rugpt35:8178/respond
         GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 3
