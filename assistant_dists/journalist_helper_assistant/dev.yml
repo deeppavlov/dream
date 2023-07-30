@@ -23,25 +23,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm-ruxglm:
+  transformers-lm-rugpt35:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8171:8171
-  dff-official-letter-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8175:8175
-  dff-informal-letter-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8176:8176
+      - 8178:8178
   dff-journalist-helper-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"

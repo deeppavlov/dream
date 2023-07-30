@@ -4,8 +4,8 @@ services:
     environment:
       WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
           dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
-          dff-official-letter-ruxglm-prompted-skill:8175, dff-informal-letter-ruxglm-prompted-skill:8176,
-          dff-journalist-helper-ruxglm-prompted-skill:8177"
+          dff-official-letter-prompted-skill:8175, dff-informal-letter-prompted-skill:8176,
+          dff-journalist-helper-prompted-skill:8177"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
@@ -98,7 +98,7 @@ services:
         reservations:
           memory: 60G
 
-  dff-official-letter-ruxglm-prompted-skill:
+  dff-official-letter-prompted-skill:
     env_file: [ .env ]
     build:
       args:
@@ -118,7 +118,7 @@ services:
         reservations:
           memory: 128M
 
-  dff-informal-letter-ruxglm-prompted-skill:
+  dff-informal-letter-prompted-skill:
     env_file: [ .env ]
     build:
       args:
@@ -138,7 +138,7 @@ services:
         reservations:
           memory: 128M
 
-  dff-journalist-helper-ruxglm-prompted-skill:
+  dff-journalist-helper-prompted-skill:
     env_file: [ .env ]
     build:
       args:
