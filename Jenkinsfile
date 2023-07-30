@@ -498,7 +498,7 @@ pipeline {
       }
     }
 // ------------------------------------------- Test prompted dists------------------------------------------------
-    stage('Build-NOASST') {
+    stage('Build-JRUGPT') {
       steps {
         script{
           startTime = currentBuild.duration
@@ -531,7 +531,7 @@ pipeline {
         }
       }
     }
-    stage('Start-NOASST') {
+    stage('Start-JRUGPT') {
       steps {
         script {
           startTime = currentBuild.duration
@@ -561,7 +561,7 @@ pipeline {
         }
       }
     }
-    stage('Test skills-NOASST') {
+    stage('Test skills-JRUGPT') {
       steps {
         script {
           startTime = currentBuild.duration

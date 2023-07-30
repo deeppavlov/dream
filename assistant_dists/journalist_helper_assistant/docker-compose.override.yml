@@ -4,7 +4,8 @@ services:
     environment:
       WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
           dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-rugpt35:8178,
-          dff-journalist-helper-ruxglm-prompted-skill:8177"
+          dff-official-letter-prompted-skill:8175, dff-informal-letter-prompted-skill:8176,
+          dff-journalist-helper-prompted-skill:8177"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
@@ -96,7 +97,7 @@ services:
         reservations:
           memory: 60G
 
-  dff-official-letter-ruxglm-prompted-skill:
+  dff-official-letter-prompted-skill:
     env_file: [ .env ]
     build:
       args:
@@ -116,7 +117,7 @@ services:
         reservations:
           memory: 128M
 
-  dff-informal-letter-ruxglm-prompted-skill:
+  dff-informal-letter-prompted-skill:
     env_file: [ .env ]
     build:
       args:
@@ -124,7 +125,7 @@ services:
         SERVICE_NAME: dff_informal_letter_ru_prompted_skill
         PROMPT_FILE: common/prompts/informal_letter_ru.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-rugpt35:8178/respond
-        GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
+        GENERATIVE_SERVICE_CONFIG: rugpt35_config.json
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 3
       context: .
@@ -136,7 +137,7 @@ services:
         reservations:
           memory: 128M
 
-  dff-journalist-helper-ruxglm-prompted-skill:
+  dff-journalist-helper-prompted-skill:
     env_file: [ .env ]
     build:
       args:
@@ -144,7 +145,7 @@ services:
         SERVICE_NAME: dff_journalist_helper_ru_prompted_skill
         PROMPT_FILE: common/prompts/journalist_helper_ru.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-rugpt35:8178/respond
-        GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
+        GENERATIVE_SERVICE_CONFIG: rugpt35_config.json
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 3
       context: .
