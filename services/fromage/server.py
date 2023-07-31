@@ -14,17 +14,13 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 FILE_SERVER_URL = os.getenv("FILE_SERVER_URL")
-
-DEFAULT_CONFIDENCE = 1
-ZERO_CONFIDENCE = 0.0
-
+RET_SCALE_FACTOR = 0
 
 try:
     model_dir = "/services/fromage/fromage_model"
     model = models.load_fromage(model_dir)
 
     if torch.cuda.is_available():
-        # model.to("cpu")
         logger.info("fromage is set to run on cuda")
 
     logger.info("fromage is ready")
@@ -37,9 +33,8 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(image_path, prompt):
+def generate_responses(image_path, prompt, RET_SCALE_FACTOR):
     logger.info(f"prompt generate responses {prompt}")
-    ret_scale_factor = 0
     inp_image = [utils.get_image_from_url(image_path)]
     if prompt == "":
         prompt = ["What is the image?"]
@@ -50,9 +45,9 @@ def generate_responses(image_path, prompt):
         text += f"Q: {p}\nA:"
         model_prompt = inp_image + [text]
         model_outputs = model.generate_for_images_and_texts(
-            model_prompt, num_words=32, ret_scale_factor=ret_scale_factor, max_num_rets=0
+            model_prompt, num_words=32, ret_scale_factor=RET_SCALE_FACTOR, max_num_rets=0
         )
-        text += " ".join([s for s in model_outputs if type(s) == str]) + "\n"
+        text += " ".join([s for s in model_outputs if isinstance(s, str)]) + "\n"
     return model_outputs
 
 
@@ -69,7 +64,7 @@ def respond():
         frmg_answers = []
         for image_path in image_paths:
             for sentence in sentences:
-                outputs = generate_responses(image_path, sentence)
+                outputs = generate_responses(image_path, sentence, RET_SCALE_FACTOR)
                 frmg_answers += outputs
         logging.info(f"frmg_answers here {frmg_answers}")
 
