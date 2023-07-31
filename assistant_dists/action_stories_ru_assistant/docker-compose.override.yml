@@ -2,7 +2,9 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/action_stories_ru_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "ranking-based-response-selector-ru:8002, dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171, dff-storyteller-ru-prompted-skill:8173"
+      WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
+          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
+          dff-storyteller-ru-prompted-skill:8173"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
