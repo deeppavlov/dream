@@ -8,4 +8,4 @@ dff-fromage-image-skill:
   response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
   previous_services:
   - skill_selectors
-  state_manager_method: add_hypothesis
+  state_manager_method: add_annotation

@@ -59,7 +59,7 @@ services:
       - 8074:8074
   fromage:
     volumes:
-      - "./annotators/fromage:/src"
+      - "./services/fromage:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:

@@ -183,7 +183,7 @@ services:
       context: ./services/image_captioning/
     command: flask run -h 0.0.0.0 -p 8123
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
@@ -216,10 +216,10 @@ services:
         SERVICE_PORT: 8069
         SERVICE_NAME: fromage
       context: .
-      dockerfile: ./annotators/fromage/Dockerfile
+      dockerfile: ./services/fromage/Dockerfile
     command: flask run -h 0.0.0.0 -p 8069
     environment:
-      - CUDA_VISIBLE_DEVICES=1
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
@@ -234,7 +234,6 @@ services:
       args:
         SERVICE_PORT: 8070
         SERVICE_NAME: dff_fromage_image_skill
-        LANGUAGE: EN
       context: .
       dockerfile: ./skills/dff_fromage_image_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --reload

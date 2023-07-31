@@ -14,9 +14,9 @@ compose:
   deploy:
     resources:
       limits:
-        memory: 256M
+        memory: 1024M
       reservations:
-        memory: 256M
+        memory: 1024M
   volumes:
   - ./skills/dff_fromage_image_skill:/src
   - ./common:/src/common

@@ -1,15 +1,13 @@
 dff-fromage-image-skill:
   name: dff_fromage_image_skill
-  display_name: Image Skill
+  display_name: FROMAGe-based Image Skill
   container_name: dff_fromage_image_skill
   component_type: Script-based w/o NNs
   model_type: Dictionary/Pattern-based
   is_customizable: false
   author: DeepPavlov
-  description: Scripted skill that based on the sent image captioning (from annotations)
-    responses with specified responses in case of food, animals or people detected,
-    and default responses otherwise
-  ram_usage: 100M
+  description: This skill is used to discuss images. Its responses are based on the usage of the FROMAGe model. 
+  ram_usage: 1024M
   gpu_usage: null
   port: 8070
   endpoints:

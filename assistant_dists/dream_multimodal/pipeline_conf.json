@@ -143,21 +143,6 @@
                     "component": "components/f2hECzXDTTfljm5mweoMFA.yml",
                     "service": "services/image_captioning/service_configs/image-captioning"
                 }
-            },
-            "fromage": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 10.0,
-                    "url": "http://fromage:8069/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/8iHHdjsnfhewkl.yml",
-                    "service": "services/fromage/service_configs/fromage"
-                }
             }
         },
         "response_annotators": {
@@ -309,6 +294,21 @@
                 "source": {
                     "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
                     "service": "skills/dummy_skill/service_configs/agent"
+                }
+            },
+            "fromage": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 3.0,
+                    "url": "http://fromage:8069/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/8iHHdjsnfhewkl.yml",
+                    "service": "services/fromage/service_configs/fromage"
                 }
             },
             "dff_fromage_image_skill": {

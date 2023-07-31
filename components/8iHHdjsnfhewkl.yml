@@ -1,17 +1,16 @@
 name: fromage
-display_name: Fromage
+display_name: FROMAGe Service
 component_type: null
 model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: fromage model but annotator
-ram_usage: 32G
-gpu_usage: 16G
-gpu_usage: null
-group: annotators
+description: The service is built using the FROMAGe model, which is able to produce meaningful conversations with users about different images.
+ram_usage: 5G
+gpu_usage: 5G
+group: skills
 connector:
   protocol: http
-  timeout: 1.0
+  timeout: 3.0
   url: http://fromage:8069/respond
 dialog_formatter: state_formatters.dp_formatters:fromage_formatter
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
@@ -20,5 +19,5 @@ required_previous_services: null
 state_manager_method: add_annotation
 tags: null
 endpoint: respond
-service: annotators/fromage/service_configs/fromage
+service: services/fromage/service_configs/fromage
 date_created: '2023-03-16T09:45:32'

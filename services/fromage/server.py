@@ -18,12 +18,9 @@ FILE_SERVER_URL = os.getenv("FILE_SERVER_URL")
 DEFAULT_CONFIDENCE = 1
 ZERO_CONFIDENCE = 0.0
 
-MAX_RESPONCES_ABOUT_PICS = os.environ.get("MAX_RESPONCES_ABOUT_PICS")
-MAX_RESPONCES_ABOUT_PICS = int(MAX_RESPONCES_ABOUT_PICS) if MAX_RESPONCES_ABOUT_PICS else MAX_RESPONCES_ABOUT_PICS
-
 
 try:
-    model_dir = "/annotators/fromage/fromage_model"
+    model_dir = "/services/fromage/fromage_model"
     model = models.load_fromage(model_dir)
 
     if torch.cuda.is_available():
@@ -43,17 +40,15 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def generate_responses(image_path, prompt):
     logger.info(f"prompt generate responses {prompt}")
     ret_scale_factor = 0
-    inp_image = utils.get_image_from_url(image_path)
-    input_prompts = ["What is the image?"]
-    if prompt != "":
-        input_prompts = prompt
+    inp_image = [utils.get_image_from_url(image_path)]
+    if prompt == "": 
+        prompt = ["What is the image?"]
 
-    logger.info(f"input_prompts {input_prompts}")
-    input_context = [inp_image]
+    logger.info(f"prompts {prompt}")
     text = ""
-    for p in input_prompts:
-        text += "Q: " + p + "\nA:"
-        model_prompt = input_context + [text]
+    for p in prompt:
+        text += f"Q: {p}\nA:"
+        model_prompt = inp_image + [text]
         model_outputs = model.generate_for_images_and_texts(
             model_prompt, num_words=32, ret_scale_factor=ret_scale_factor, max_num_rets=0
         )
@@ -65,14 +60,18 @@ def generate_responses(image_path, prompt):
 def respond():
     st_time = time.time()
     responses = []
+    image_paths = request.json.get("image_paths", [])
+    sentences = request.json.get("sentences", [])
+
+    logger.info(f"img path {image_paths}")
+    logger.info(f"sentence {sentences}")
+
     try:
         frmg_answers = []
-        image_path = request.json.get("image_paths", [])
-        sentence = request.json.get("text", [])
-        logger.info(f"img path {image_path}")
-        logger.info(f"sentence {sentence}")
-        outputs = generate_responses(image_path, sentence)
-        frmg_answers += outputs
+        for image_path in image_paths:
+            for sentence in sentences:
+                outputs = generate_responses(image_path, sentence)
+                frmg_answers += outputs
         logging.info(f"frmg_answers here {frmg_answers}")
 
     except Exception as exc:
@@ -80,7 +79,7 @@ def respond():
         sentry_sdk.capture_exception(exc)
         frmg_answers = [[""]] * len(sentence)
 
-    responses += [frmg_answers[-1]]
+    # responses += [frmg_answers]
     total_time = time.time() - st_time
     logger.info(f"fromage exec time: {total_time:.3f}s")
-    return jsonify(responses)
+    return jsonify(frmg_answers)

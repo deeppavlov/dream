@@ -1,11 +1,3 @@
-# To run FROMAGe service you need to download embeddings and pretrained checkpoint
-
-The visual embeddings for Conceptual Captions images with valid URLs are precomputed and stored at this [URL](https://drive.google.com/file/d/1wMojZNqEwApNlsCZVvSgQVtZLgbeLoKi/view). These are used to enable the model to retrieve images. The embeddings take up around 3GB, and are compatible with both model configs we provide. Download the files and place `cc3m_embeddings.pkl` into the `fromage_model/` directory.
-
-Pretrained checkpoint [here](https://github.com/kohjingyu/fromage/blob/main/fromage_model/pretrained_ckpt.pth.tar). Download the file and place it into the `fromage_model/` directory.
-
-U will need A100 GPU or something like this
-
 # DeepPavlov Dream
 
 **DeepPavlov Dream** is a platform for creating multi-skill chatbots.

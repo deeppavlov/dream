@@ -328,6 +328,25 @@ def last_bot_utt_dialog(dialog: Dict) -> List[Dict]:
         return [{"sentences": [""]}]
 
 
+def last_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
+            "dialog_ids": [dialog.get("dialog_id", "unknown")],
+        }
+    ]
+
+
+def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "last_human_utterances": [dialog["human_utterances"][-1]],
+            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
+            "dialog_ids": [dialog.get("dialog_id", "unknown")],
+        }
+    ]
+
+
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
     entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
@@ -405,29 +424,6 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
             "utterances_histories": [[utt["text"] for utt in dialog["utterances"]]],
         }
     ]
-
-
-def fromage_formatter(dialog: Dict) -> List:
-    # Used by: fromage
-    dialog = utils.get_last_n_turns(dialog)
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
-
-    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
-    amount_utterances_history = 5
-    image_paths = image_paths[-amount_utterances_history:]
-    d = {}
-    if dialog["human_utterances"][-1]["text"]:
-        d.update({"text": [dialog["human_utterances"][-1]["text"]]})
-        for item in reversed(image_paths):
-            if item is not None and item.startswith("http"):
-                last_url = item
-                break
-        if last_url:
-            d.update({"image_paths": last_url})
-    if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
-        d.update({"image_paths": dialog["human_utterances"][-1].get("attributes", {}).get("image")})
-        d.update({"text": ""})
-    return [d]
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
@@ -1042,70 +1038,6 @@ def dff_fromage_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_fromage_image_skill")
 
 
-def dff_ai_faq_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_ai_faq_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_da_costa_clothes_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_da_costa_clothes_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_dream_persona_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_dream_persona_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_empathetic_marketing_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_empathetic_marketing_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_fairytale_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_fairytale_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_nutrition_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_nutrition_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_rhodes_coaching_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_rhodes_coaching_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
-def dff_deepy_prompted_skill_formatter(dialog):
-    return utils.dff_formatter(
-        dialog,
-        "dff_deepy_prompted_skill",
-        types_utterances=["human_utterances", "bot_utterances", "utterances"],
-    )
-
-
 def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
@@ -1269,3 +1201,45 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
+
+
+def fromage_formatter(dialog: Dict) -> List:
+    # Used by: fromage
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+
+    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
+    utterances_history = 5
+    image_paths = image_paths[-utterances_history:]
+    d = {}
+    if dialog["human_utterances"][-1]["text"]:
+        d.update({"sentences": [dialog["human_utterances"][-1]["text"]]})
+        for url in reversed(image_paths):
+            if url is not None and url.startswith("http"):
+                d.update({"image_paths": [url]})
+                break
+    if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
+        d.update({"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]})
+        d.update({"sentences": [""]})
+    return [d]
+
+
+def robot_formatter(dialog: Dict) -> Dict:
+    """This formatter currently provides the JSON as is, without modifying it.
+    Either edit it later or choose one of the existing formatters"""
+    detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
+    return [{"detected": detected}]
+
+
+def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
+    intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
+    called_intents = {intent: False for intent in intents}
+    for utt in dialog["human_utterances"][-5:-1]:
+        called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
+        for intent in called:
+            called_intents[intent] = True
+
+    batches = utils.dff_formatter(dialog, "dff_command_selector_skill")
+    batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
+    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
+    return batches

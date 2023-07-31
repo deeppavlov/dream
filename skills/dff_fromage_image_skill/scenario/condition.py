@@ -9,6 +9,6 @@ logger.setLevel(logging.NOTSET)
 
 def caption_condition(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     caption = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("fromage", {})
-    if caption != "" and caption is not None:
+    if caption:
         return True
     return False
