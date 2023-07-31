@@ -30,7 +30,7 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8171:8171
-  dff-storyteller-ruxglm-prompted-skill:
+  dff-storyteller-ru-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

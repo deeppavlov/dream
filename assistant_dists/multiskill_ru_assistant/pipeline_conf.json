@@ -151,7 +151,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
-                    "url": "http://dff-official-letter-prompted-skill:8175/respond"
+                    "url": "http://dff-official-letter-ru-prompted-skill:8175/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
@@ -165,14 +165,14 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/npoidf8549ibuVIUfver89.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-official-letter-prompted-skill"
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-official-letter-ru-prompted-skill"
                 }
             },
             "dff_informal_letter_ru_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
-                    "url": "http://dff-informal-letter-prompted-skill:8176/respond"
+                    "url": "http://dff-informal-letter-ru-prompted-skill:8176/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
@@ -186,14 +186,14 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/fnp74878Buiwbkjz8vbw.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-informal-letter-prompted-skill"
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-informal-letter-ru-prompted-skill"
                 }
             },
             "dff_journalist_helper_ru_prompted_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
-                    "url": "http://dff-journalist-helper-prompted-skill:8177/respond"
+                    "url": "http://dff-journalist-helper-ru-prompted-skill:8177/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
@@ -207,7 +207,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/onisrIUvuife37Hbf4h.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-journalist-helper-prompted-skill"
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-journalist-helper-ru-prompted-skill"
                 }
             },
             "dummy_skill": {

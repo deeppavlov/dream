@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
         dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
-        dff-storyteller-ruxglm-prompted-skill:8173, dff-fairytale-ruxglm-prompted-skill:8174"
+        dff-storyteller-ru-prompted-skill:8173, dff-fairytale-ru-prompted-skill:8174"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
@@ -97,7 +97,7 @@ services:
         reservations:
           memory: 60G
 
-  dff-storyteller-ruxglm-prompted-skill:
+  dff-storyteller-ru-prompted-skill:
     env_file: [ .env ]
     build:
       args:
@@ -117,7 +117,7 @@ services:
         reservations:
           memory: 128M
 
-  dff-fairytale-ruxglm-prompted-skill:
+  dff-fairytale-ru-prompted-skill:
     env_file: [ .env ]
     build:
       args:
