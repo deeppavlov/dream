@@ -22,7 +22,7 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 DEFAULT_PROMPT = "Respond like a friendly chatbot."
-DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-oasst12b:8158/respond")
+DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-gptjt:8161/respond")
 DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
 ENVVARS_TO_SEND = {
@@ -38,6 +38,8 @@ ENVVARS_TO_SEND = {
     "http://anthropic-api-claude-v1:8164/respond": ["ANTHROPIC_API_KEY"],
     "http://anthropic-api-claude-instant-v1:8163/respond": ["ANTHROPIC_API_KEY"],
     "http://transformers-lm-vicuna13b:8168/respond": [],
+    "http://transformers-lm-ruxglm:8171/respond": [],
+    "http://transformers-lm-rugpt35:8178/respond": [],
 }
 
 
