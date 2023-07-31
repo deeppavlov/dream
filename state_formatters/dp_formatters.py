@@ -1203,27 +1203,6 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
-def robot_formatter(dialog: Dict) -> Dict:
-    """This formatter currently provides the JSON as is, without modifying it.
-    Either edit it later or choose one of the existing formatters"""
-    detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
-    return [{"detected": detected}]
-
-
-def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
-    intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
-    called_intents = {intent: False for intent in intents}
-    for utt in dialog["human_utterances"][-5:-1]:
-        called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
-        for intent in called:
-            called_intents[intent] = True
-
-    batches = utils.dff_formatter(dialog, "dff_command_selector_skill")
-    batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
-    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
-    return batches
-
-
 def fromage_formatter(dialog: Dict) -> List:
     # Used by: fromage
     dialog = utils.get_last_n_turns(dialog)
@@ -1243,3 +1222,24 @@ def fromage_formatter(dialog: Dict) -> List:
         d.update({"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]})
         d.update({"sentences": [""]})
     return [d]
+
+
+def robot_formatter(dialog: Dict) -> Dict:
+    """This formatter currently provides the JSON as is, without modifying it.
+    Either edit it later or choose one of the existing formatters"""
+    detected = get_intents(dialog["human_utterances"][-1], probs=True, which="intent_catcher")
+    return [{"detected": detected}]
+
+
+def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
+    intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
+    called_intents = {intent: False for intent in intents}
+    for utt in dialog["human_utterances"][-5:-1]:
+        called = [intent for intent, value in utt["annotations"].get("intent_catcher", {}).items() if value["detected"]]
+        for intent in called:
+            called_intents[intent] = True
+
+    batches = utils.dff_formatter(dialog, "dff_command_selector_skill")
+    batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
+    batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
+    return batches
