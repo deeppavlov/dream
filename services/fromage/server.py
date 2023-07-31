@@ -41,7 +41,7 @@ def generate_responses(image_path, prompt):
     logger.info(f"prompt generate responses {prompt}")
     ret_scale_factor = 0
     inp_image = [utils.get_image_from_url(image_path)]
-    if prompt == "": 
+    if prompt == "":
         prompt = ["What is the image?"]
 
     logger.info(f"prompts {prompt}")
@@ -59,7 +59,6 @@ def generate_responses(image_path, prompt):
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    responses = []
     image_paths = request.json.get("image_paths", [])
     sentences = request.json.get("sentences", [])
 
@@ -79,7 +78,6 @@ def respond():
         sentry_sdk.capture_exception(exc)
         frmg_answers = [[""]] * len(sentence)
 
-    # responses += [frmg_answers]
     total_time = time.time() - st_time
     logger.info(f"fromage exec time: {total_time:.3f}s")
     return jsonify(frmg_answers)

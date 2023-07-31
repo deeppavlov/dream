@@ -347,25 +347,6 @@ def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
     ]
 
 
-def last_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
-    return [
-        {
-            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
-            "dialog_ids": [dialog.get("dialog_id", "unknown")],
-        }
-    ]
-
-
-def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
-    return [
-        {
-            "last_human_utterances": [dialog["human_utterances"][-1]],
-            "bot_utterances": [dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}],
-            "dialog_ids": [dialog.get("dialog_id", "unknown")],
-        }
-    ]
-
-
 def last_human_utt_nounphrases(dialog: Dict) -> List[Dict]:
     # Used by: comet_conceptnet_annotator
     entities = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
@@ -1057,6 +1038,27 @@ def dff_fromage_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_fromage_image_skill")
 
 
+def fromage_formatter(dialog: Dict) -> List:
+    # Used by: fromage
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+
+    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
+    utterances_history = 5
+    image_paths = image_paths[-utterances_history:]
+    d = {}
+    if dialog["human_utterances"][-1]["text"]:
+        d.update({"sentences": [dialog["human_utterances"][-1]["text"]]})
+        for url in reversed(image_paths):
+            if url is not None and url.startswith("http"):
+                d.update({"image_paths": [url]})
+                break
+    if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
+        d.update({"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]})
+        d.update({"sentences": [""]})
+    return [d]
+
+
 def dff_prompted_skill_formatter(dialog, skill_name=None):
     return utils.dff_formatter(
         dialog,
@@ -1220,27 +1222,6 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
-
-
-def fromage_formatter(dialog: Dict) -> List:
-    # Used by: fromage
-    dialog = utils.get_last_n_turns(dialog)
-    dialog = utils.remove_clarification_turns_from_dialog(dialog)
-
-    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
-    utterances_history = 5
-    image_paths = image_paths[-utterances_history:]
-    d = {}
-    if dialog["human_utterances"][-1]["text"]:
-        d.update({"sentences": [dialog["human_utterances"][-1]["text"]]})
-        for url in reversed(image_paths):
-            if url is not None and url.startswith("http"):
-                d.update({"image_paths": [url]})
-                break
-    if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
-        d.update({"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]})
-        d.update({"sentences": [""]})
-    return [d]
 
 
 def robot_formatter(dialog: Dict) -> Dict:
