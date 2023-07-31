@@ -122,7 +122,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8174
-        SERVICE_NAME: dff_fairytale_ru_assistant_skill
+        SERVICE_NAME: dff_fairytale_ru_prompted_skill
         PROMPT_FILE: common/prompts/fairytale_ru.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
         GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
