@@ -1,10 +1,8 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/fairytale_ru_prompted/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/storyteller_ruxglm_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
-          dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171,
-          dff-fairytale-ru-prompted-skill:8174"
+      WAIT_HOSTS: "ranking-based-response-selector-ru:8002, dialogrpt-ru:8122, prompt-selector-ru:8135, transformers-lm-ruxglm:8171, dff-storyteller-ru-prompted-skill:8173, dff-fairytale-ru-prompted-skill:8174"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
       HIGH_PRIORITY_INTENTS: 0
       RESTRICTION_FOR_SENSITIVE_CASE: 0
@@ -62,7 +60,7 @@ services:
         SERVICE_NAME: prompt_selector
         SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
         N_SENTENCES_TO_RETURN: 3
-        PROMPTS_TO_CONSIDER: fairytale_ru
+        PROMPTS_TO_CONSIDER: storyteller_ru,fairytale_ru
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135
@@ -76,7 +74,7 @@ services:
           memory: 100M
 
   transformers-lm-ruxglm:
-    env_file: [ .env_ru,.env_secret ]
+    env_file: [ .env_ru, .env_secret ]
     build:
       args:
         SERVICE_PORT: 8171
@@ -97,12 +95,32 @@ services:
         reservations:
           memory: 60G
 
+  dff-storyteller-ru-prompted-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8173
+        SERVICE_NAME: dff_storyteller_ru_prompted_skill
+        PROMPT_FILE: common/prompts/storyteller_ru.json
+        GENERATIVE_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
+        GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
+        GENERATIVE_TIMEOUT: 20
+        N_UTTERANCES_CONTEXT: 3
+      context: .
+      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
   dff-fairytale-ru-prompted-skill:
     env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8174
-        SERVICE_NAME: dff_fairytale_ru_prompted_skill
+        SERVICE_NAME: dff_fairytale_ru_assistant_skill
         PROMPT_FILE: common/prompts/fairytale_ru.json
         GENERATIVE_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
         GENERATIVE_SERVICE_CONFIG: ruxglm_config.json

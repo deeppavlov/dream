@@ -26,15 +26,15 @@ services:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
-  dff-official-letter-prompted-skill:
+  dff-official-letter-ru-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
-  dff-informal-letter-prompted-skill:
+  dff-informal-letter-ru-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
-  dff-journalist-helper-prompted-skill:
+  dff-journalist-helper-ru-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

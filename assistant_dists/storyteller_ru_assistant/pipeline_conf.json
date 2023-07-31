@@ -22,7 +22,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/nbRgFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/agent_services/service_configs/storyteller_ru_prompted"
+                "service": "services/agent_services/service_configs/storyteller_ru_assistant"
             }
         },
         "timeout_service": {
@@ -47,7 +47,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/nbRgFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/agent_services/service_configs/storyteller_ru_prompted"
+                "service": "services/agent_services/service_configs/storyteller_ru_assistant"
             }
         },
         "annotators": {
