@@ -63,8 +63,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/k3j2h498hvflekdfdfbfgh34r.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
+                    "component": "components/hcvu69iIYUGFirefuib8.yml",
+                    "service": "annotators/prompt_selector/service_configs/storyteller_ru_assistant"
                 }
             },
             "prompt_selector": {
@@ -81,8 +81,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/5jR1Tq88W5OckWnTV8VIYL.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
+                    "component": "components/kldfnbnrtiopwGVIguver8.yml",
+                    "service": "annotators/prompt_selector/service_configs/storyteller_ru_assistant"
                 }
             }
         },
