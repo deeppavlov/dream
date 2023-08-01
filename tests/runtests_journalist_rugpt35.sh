@@ -111,8 +111,8 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
 
 
     for container in ranking-based-response-selector-ru prompt-selector-ru \
-                     dff-journalist-helper-prompted-skill dff-informal-letter-prompted-skill \
-                     dff-official-letter-prompted-skill; do
+                     dff-journalist-helper-ru-prompted-skill dff-informal-letter-ru-prompted-skill \
+                     dff-official-letter-ru-prompted-skill; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
