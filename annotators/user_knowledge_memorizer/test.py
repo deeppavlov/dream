@@ -6,12 +6,14 @@ from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 def formulate_utt_annotations(dog_id=None, park_id=None):
     utt_annotations = {
-        "property_extraction": [{
-            "triplets": [
-                {"subject": "user", "relation": "HAVE PET", "object": "dog"},
-                {"subject": "user", "relation": "LIKE GOTO", "object": "park"},
-            ]
-        }],
+        "property_extraction": [
+            {
+                "triplets": [
+                    {"subject": "user", "relation": "HAVE PET", "object": "dog"},
+                    {"subject": "user", "relation": "LIKE GOTO", "object": "park"},
+                ]
+            }
+        ],
         "custom_entity_linking": [],
     }
 
