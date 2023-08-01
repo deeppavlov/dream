@@ -34,13 +34,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8135:8135
-  transformers-lm-oasst12b:
+  transformers-lm-gptjt:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8158:8158
+      - 8161:8161
   dff-ai-faq-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"

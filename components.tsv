@@ -59,9 +59,9 @@
 8055
 8056
 8057	dff-short-story-skill
-8058
-8059
-8060
+8058	summarization-annotator
+8059	dialog-summarizer
+8060	rut5-summarizer
 8061	dff-coronavirus-skill
 8062	small-talk-skill
 8063
@@ -162,7 +162,7 @@
 8158	transformers-lm-oasst12b
 8159	openai-api-gpt4
 8160	openai-api-gpt4-32k
-8161
+8161    dff-universal-ru-prompted-skill
 8162	dff-google-api-skill
 8163	anthropic-api-claude-instant-v1
 8164	anthropic-api-claude-v1
@@ -172,6 +172,11 @@
 8168	transformers-lm-vicuna13b
 8169    dff-reasoning-skill
 8170    dff-dream-faq-prompted-skill
-8171	summarization-annotator
-8172	dialog-summarizer
-8173	rut5-summarizer
+8171    transformers-lm-ruxglm
+8172    dff-dream-persona-ruxglm-prompted-skill
+8173	dff-storyteller-ruxglm-prompted-skill
+8174	dff-fairytale-ruxglm-prompted-skill
+8175	dff-official-letter-prompted-skill
+8176	dff-informal-letter-prompted-skill
+8177	dff-journalist-helper-prompted-skill
+8178    transformers-lm-rugpt35
