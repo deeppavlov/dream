@@ -2,7 +2,7 @@ name: agent
 endpoints:
 - respond
 compose:
-  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/journalist_helper_assistant/pipeline_conf.json'
+  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/journalist_helper_ru_assistant/pipeline_conf.json'
   environment:
     WAIT_HOSTS: ''
     WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
