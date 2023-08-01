@@ -12,7 +12,7 @@ group: annotators
 connector:
   protocol: http
   timeout: 2.0
-  url: http://prompt-selector:8135/respond
+  url: http://prompt-selector-ru:8135/respond
   class_name: null
   response_text: null
   annotations: null
