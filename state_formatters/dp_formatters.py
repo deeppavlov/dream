@@ -1,4 +1,5 @@
 import logging
+# import json # comment out if saving dialog content is planned
 from copy import deepcopy
 from typing import Dict, List
 
@@ -255,19 +256,15 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="segments")
     if dialog["bot_utterances"]:
-        dialog_history = [dialog["bot_utterances"][-1]["text"]]
+        dialog_history = dialog["bot_utterances"][-1]["text"]
     else:
         dialog_history = [""]
-    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
-    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
-    named_entities = dialog["human_utterances"][-1]["annotations"].get("ner", [{}])
     return [
         {
-            "utterances": [dialog_history],
-            "entities_with_labels": [entities_with_labels],
-            "named_entities": [named_entities],
-            "entity_info": [entity_info_list],
+            "utterances": [dialog_history]
         }
     ]
 
@@ -1223,6 +1220,18 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
 
 
 def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
+    # comment out the next two lines to save dialog data to see its contents
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    # if dialog["bot_utterances"]:
+    #     dialog_history = [dialog["bot_utterances"][-1]]
+    # else:
+    #     dialog_history = [""]
+    # return [
+    #     {
+    #         "utterances": [dialog_history],
+    #     }
+    # ]
     return [
         {
             "utterances": [dialog["human_utterances"][-1]],
