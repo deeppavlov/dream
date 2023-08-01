@@ -264,7 +264,7 @@ def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
         dialog_history = [""]
     return [
         {
-            "utterances": [dialog_history]
+            "utterances": [dialog_history],
         }
     ]
 
@@ -1220,21 +1220,24 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
 
 
 def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
-    # comment out the next two lines to save dialog data to see its contents
-    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
-    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
-    # if dialog["bot_utterances"]:
-    #     dialog_history = [dialog["bot_utterances"][-1]]
-    # else:
-    #     dialog_history = [""]
-    # return [
-    #     {
-    #         "utterances": [dialog_history],
-    #     }
-    # ]
     return [
         {
             "utterances": [dialog["human_utterances"][-1]],
+        }
+    ]
+
+
+def user_knowledge_memorizer_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    # comment out the next two lines to save dialog data to see its contents
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    if dialog["bot_utterances"]:
+        dialog_history = [dialog["bot_utterances"][-1]]
+    else:
+        dialog_history = [""]
+    return [
+        {
+            "utterances": [dialog_history],
         }
     ]
 
