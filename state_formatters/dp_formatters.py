@@ -1202,7 +1202,7 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
 def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
     return [
         {
-            "utterances": [dialog["human_utterances"][-1]],
+            "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
         }
     ]
 

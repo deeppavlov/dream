@@ -435,7 +435,7 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
 
 
 def get_result(request, graph):
-    uttrs = request.json.get("utterances", [])
+    uttrs = request.json.get("last_human_annotated_utterance", [])
     utt = uttrs[0]
 
     user_id = "/".join(["User", str(utt.get("user", {}).get("id", ""))])
