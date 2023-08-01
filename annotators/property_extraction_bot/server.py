@@ -161,11 +161,21 @@ def get_result(request):
         f"init_uttrs {init_uttrs} entities_with_labels: {entities_with_labels_batch} entity_info: {entity_info_batch}"
     )
 
-    logger.info(f"input utterances: {uttrs}")
-    relations_pred = get_relations(uttrs)
-    triplets_batch = generate_triplets(uttrs, relations_pred)
-    logger.info(f"triplets_batch {triplets_batch}")
+    uttrs = [" ".join(utt_list) for utt_list in init_uttrs]
+    if not init_uttrs:
+        triplets_batch = [[""]]
+    elif isinstance(init_uttrs[0], str):
+        relations_pred = get_relations(init_uttrs)
+        triplets_batch = generate_triplets(init_uttrs, relations_pred)
+    else:
+        triplets_batch = []
+        for uttrs_list in init_uttrs:
+            relations_pred = get_relations(uttrs_list)
+            curr_triplets_batch = generate_triplets(uttrs_list, relations_pred)
+            flattened_triplets = list(itertools.chain(*curr_triplets_batch))
+            triplets_batch.append(flattened_triplets)
 
+    logger.info(f"triplets_batch {triplets_batch}")
     triplets_info_batch = []
     for triplets, uttr, named_entities, entities_with_labels, entity_info_list in zip(
         triplets_batch, uttrs, named_entities_batch, entities_with_labels_batch, entity_info_batch
