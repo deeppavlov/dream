@@ -9,5 +9,6 @@
   config_keys:
 #    SERVICE_PORT: int
     SERVICE_NAME: str
+    SENTENCE_RANKER_SERVICE_URL: str
     N_SENTENCES_TO_RETURN: int
     PROMPTS_TO_CONSIDER: list
