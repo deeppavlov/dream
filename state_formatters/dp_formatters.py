@@ -1232,7 +1232,7 @@ def user_knowledge_memorizer_formatter_last_bot_dialog(dialog: Dict) -> List[Dic
     # with open('test_formatters.json', 'w', encoding='utf-8') as f:
     #     json.dump(dialog, f, ensure_ascii=False, indent=4)
     if dialog["bot_utterances"]:
-        dialog_history = [dialog["bot_utterances"][-1]]
+        dialog_history = dialog["bot_utterances"][-1]
     else:
         dialog_history = [""]
     return [
