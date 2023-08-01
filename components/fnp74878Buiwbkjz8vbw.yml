@@ -12,7 +12,7 @@ group: skills
 connector:
   protocol: http
   timeout: 20.0
-  url: http://dff-informal-letter-prompted-skill:8176/respond
+  url: http://dff-informal-letter-ru-prompted-skill:8176/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
   skill_name: dff_informal_letter_ru_prompted_skill
