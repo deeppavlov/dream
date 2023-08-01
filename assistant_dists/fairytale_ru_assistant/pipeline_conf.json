@@ -64,7 +64,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/OIHFE8hfnv9304klf.yml",
-                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
+                    "service": "annotators/prompt_selector/service_configs/fairytale_ru_assistant"
                 }
             },
             "prompt_selector": {
