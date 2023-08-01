@@ -2,7 +2,7 @@ import requests
 
 
 def test_skill():
-    url = "http://0.0.0.0:8172/respond_batch"
+    url = "http://0.0.0.0:8059/respond_batch"
 
     input_data = {
         "sentences": [

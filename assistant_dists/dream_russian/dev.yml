@@ -137,14 +137,14 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8078:8078
-  rut5-summarizer:
-    volumes:
-      - "./services/ruT5_summarizer:/src"
-    ports:
-      - 8173:8173
   summarization-annotator:
     volumes:
       - "./annotators/summarization_annotator:/src"
     ports:
-      - 8171:8171
+      - 8058:8058
+  rut5-summarizer:
+    volumes:
+      - "./services/ruT5_summarizer:/src"
+    ports:
+      - 8060:8060
 version: "3.7"

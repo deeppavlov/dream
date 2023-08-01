@@ -6,9 +6,9 @@ SUMMARIZATION_SERVICE_URL = getenv("SUMMARIZATION_SERVICE_URL")
 
 
 def test_skill():
-    url = "http://0.0.0.0:8171/respond"
+    url = "http://0.0.0.0:8058/respond"
 
-    if SUMMARIZATION_SERVICE_URL == "http://dialog-summarizer:8172/respond_batch":
+    if SUMMARIZATION_SERVICE_URL == "http://dialog-summarizer:8059/respond_batch":
         input_data = {
             "dialogs": [
                 [
