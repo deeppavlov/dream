@@ -405,7 +405,7 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
     properties_to_add_to_kg, properties_already_in_kg = [], []
     try:
         user_properties = graph.get_properties_of_entity(user_id)
-    except:
+    except Exception:
         user_properties = []  # new user
     for triplet in prop_triplets:
         if triplet["property"] in user_properties and triplet["object"] == user_properties[triplet["property"]]:
@@ -422,7 +422,8 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
         properties_families = [triplet["property_family"] for triplet in properties_to_add_to_kg]
         objects = [triplet["object"] for triplet in properties_to_add_to_kg]
         logger.info(
-            f"property_kinds -- {property_kinds}\nproperties_families -- {properties_families}\nproperties_to_add_to_kg -- {properties_to_add_to_kg}"
+            f"property_kinds -- {property_kinds}\nproperties_families -- {properties_families}\n"
+            f"properties_to_add_to_kg -- {properties_to_add_to_kg}"
         )
         graph.ontology.create_property_kinds_of_entity_kind(
             "User",
