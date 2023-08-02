@@ -5,6 +5,7 @@ import re
 from os import getenv
 import time
 import signal
+from datetime import date
 
 from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
@@ -28,6 +29,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+today = date.today()
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 if GENERATIVE_SERVICE_CONFIG:
@@ -73,7 +75,7 @@ def plan(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         api_desc = {}
         for key, value in api_conf.items():
             api_desc[key] = value["description"]
-        prompt = f"""You received the following user request: {ctx.last_request}
+        prompt = f"""Today date is: {today}. You received the following user request: {ctx.last_request}
 
 You have the following tools available:
 {api_desc}
@@ -237,7 +239,7 @@ def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 """
         else:
             tasks_history = ""
-        prompt = f"""{tasks_history}YOUR CURRENT TASK:
+        prompt = f"""Today date is: {today}. {tasks_history}YOUR CURRENT TASK:
 {plan[step]}
 AVAILABLE TOOLS:
 {api_desc}
@@ -318,7 +320,7 @@ def self_reflexion(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         subtask_results = shared_memory.get("subtask_results", {})
         plan = shared_memory.get("plan", [])
         step = shared_memory.get("step", 0)
-        prompt = f"""YOUR TASK: {plan[step]}
+        prompt = f"""Today date is: {today}. YOUR TASK: {plan[step]}
 RESULT: {subtask_results[str(step)]}
 Do you think that you completed the task and the result is good and relevant? Return 'Yes', if positive, \
 and 'No' and the reason if negative."""
@@ -358,7 +360,7 @@ def final_answer(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         subtask_results = shared_memory.get("subtask_results", {})
         user_request = shared_memory.get("user_request", "")
-        prompt = f"""USER REQUEST: {user_request}
+        prompt = f"""Today date is: {today}. USER REQUEST: {user_request}
 CONTEXT:
 {"---".join(list(subtask_results.values()))}
 YOUR TASK: given the information in the context, form a final answer to the user request"""
