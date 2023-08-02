@@ -58,22 +58,6 @@
             }
         },
         "annotators": {
-            "spelling_preprocessing": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spelling-preprocessing:8074/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
-                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
-                }
-            },
             "sentseg": {
                 "connector": {
                     "protocol": "http",
@@ -142,6 +126,21 @@
                 "source": {
                     "component": "components/f2hECzXDTTfljm5mweoMFA.yml",
                     "service": "services/image_captioning/service_configs/image-captioning"
+                }
+            },
+            "fromage": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 90.0,
+                    "url": "http://fromage:8069/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/8iHHdjsnfhewkl.yml",
+                    "service": "services/fromage/service_configs/fromage"
                 }
             }
         },
@@ -222,10 +221,10 @@
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "description_based_skill_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -237,8 +236,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
-                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                    "component": "components/dfsw4bji8bgjq2.yml",
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
                 }
             }
         },
@@ -296,21 +295,6 @@
                     "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
-            "fromage": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 3.0,
-                    "url": "http://fromage:8069/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/8iHHdjsnfhewkl.yml",
-                    "service": "services/fromage/service_configs/fromage"
-                }
-            },
             "dff_fromage_image_skill": {
                 "connector": {
                     "protocol": "http",
@@ -353,9 +337,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://ranking-based-response-selector:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
@@ -363,8 +347,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ly2AVNtIcJpTWz1qJ1mvKQ.yml",
-                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }
