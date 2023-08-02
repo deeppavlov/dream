@@ -30,23 +30,11 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8171:8171
-  dff-official-letter-ru-prompted-skill:
+  dff-storyteller-ru-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8175:8175
-  dff-informal-letter-ru-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8176:8176
-  dff-journalist-helper-ru-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8177:8177
+      - 8173:8173
 
 version: "3.7"

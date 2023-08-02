@@ -174,9 +174,9 @@
 8170    dff-dream-faq-prompted-skill
 8171    transformers-lm-ruxglm
 8172    dff-dream-persona-ruxglm-prompted-skill
-8173	dff-storyteller-ruxglm-prompted-skill
-8174	dff-fairytale-ruxglm-prompted-skill
-8175	dff-official-letter-prompted-skill
-8176	dff-informal-letter-prompted-skill
-8177	dff-journalist-helper-prompted-skill
+8173	dff-storyteller-ru-prompted-skill
+8174	dff-fairytale-ru-prompted-skill
+8175	dff-official-letter-ru-prompted-skill
+8176	dff-informal-letter-ru-prompted-skill
+8177	dff-journalist-helper-ru-prompted-skill
 8178    transformers-lm-rugpt35
