@@ -1,0 +1,10 @@
+{
+  "max_new_tokens": 2048,
+  "min_new_tokens": 8,
+  "num_return_sequences": 1,
+  "repetition_penalty": 1.1,
+  "eos_token_id": [400],
+  "replacement": [
+    ["\n", "</s>"]
+  ]
+}

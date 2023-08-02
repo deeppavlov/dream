@@ -1,0 +1,27 @@
+name: dff-universal-ru-prompted-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8161
+      SERVICE_NAME: dff_universal_prompted_skill
+      GENERATIVE_TIMEOUT: 120
+      N_UTTERANCES_CONTEXT: 7
+    context: .
+    dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8161 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_universal_prompted_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8161:8161
+proxy: null

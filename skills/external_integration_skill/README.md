@@ -9,7 +9,7 @@ To do so, add the following files to the distribution you want to use for testin
 
 __docker-compose.override.yml (add to WAIT_HOSTS)__
 ```
-external-integration-skill:8171, external-fake-server:8172
+external-integration-skill:8183, external-fake-server:8184
 ```
 
 __docker-compose.override.yml__
@@ -19,14 +19,14 @@ __docker-compose.override.yml__
     build:
       args:
         SERVICE_NAME: external_integration_skill
-        EXTERNAL_SKILL_URL: http://external-fake-server:8172/return_response
+        EXTERNAL_SKILL_URL: http://external-fake-server:8184/return_response
         ARGUMENTS_TO_SEND: dialog_id
         PAYLOAD_ARGUMENT_NAME: payload
         RESPONSE_KEY: response
-        REQUEST_TIMEOUT: 10
+        EXTERNAL_TIMEOUT: 10
       context: .
       dockerfile: ./skills/external_integration_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8171 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8183 --reload
     deploy:
       resources:
         limits:
@@ -38,7 +38,7 @@ __docker-compose.override.yml__
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8172
+        SERVICE_PORT: 8184
         SERVICE_NAME: external_fake_server
       context: .
       dockerfile: ./services/external_fake_server/Dockerfile
@@ -60,14 +60,14 @@ __dev.yml__
       - "./skills/external_integration_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8171:8171
+      - 8183:8183
 
   external-fake-server:
     volumes:
       - "./services/external_fake_server:/src"
       - "./common:/src/common"
     ports:
-      - 8172:8172
+      - 8184:8184
 ```
 
 __pipeline_conf.json (add to skills)__ 
@@ -76,7 +76,7 @@ __pipeline_conf.json (add to skills)__
     "connector": {
         "protocol": "http",
         "timeout": 2,
-        "url": "http://external-integration-skill:8171/respond"
+        "url": "http://external-integration-skill:8183/respond"
     },
     "dialog_formatter": "state_formatters.dp_formatters:external_integration_skill_formatter",
     "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

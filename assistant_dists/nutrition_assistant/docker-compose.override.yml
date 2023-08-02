@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/nutrition_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
-        sentence-ranker:8128, prompt-selector:8135, transformers-lm-oasst12b:8158, 
+        sentence-ranker:8128, prompt-selector:8135, transformers-lm-gptjt:8161, 
         dff-nutrition-prompted-skill:8141"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
@@ -74,6 +74,7 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
         N_SENTENCES_TO_RETURN: 3
         PROMPTS_TO_CONSIDER: nutrition
       context: .
@@ -107,26 +108,26 @@ services:
         reservations:
           memory: 3G
 
-  transformers-lm-oasst12b:
+  transformers-lm-gptjt:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8158
-        SERVICE_NAME: transformers_lm_oasst12b
-        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/pythia-12b-sft-v8-7k-steps
+        SERVICE_PORT: 8161
+        SERVICE_NAME: transformers_lm_gptjt
+        PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
         HALF_PRECISION: 1
       context: .
       dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8158
+    command: flask run -h 0.0.0.0 -p 8161
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 60G
+          memory: 50G
         reservations:
-          memory: 60G
+          memory: 50G
 
   dff-nutrition-prompted-skill:
     env_file: [ .env ]
@@ -135,7 +136,7 @@ services:
         SERVICE_PORT: 8141
         SERVICE_NAME: dff_nutrition_prompted_skill
         PROMPT_FILE: common/prompts/nutrition.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
+        GENERATIVE_SERVICE_URL: http://transformers-lm-gptjt:8161/respond
         GENERATIVE_SERVICE_CONFIG: default_generative_config.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7

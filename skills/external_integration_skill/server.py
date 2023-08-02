@@ -17,19 +17,22 @@ logger.setLevel(gunicorn_logger.level)
 app = Flask(__name__)
 
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
-ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND")
 PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME")
+if not PAYLOAD_ARGUMENT_NAME:
+    PAYLOAD_ARGUMENT_NAME = "payload"
 EXTERNAL_TIMEOUT = getenv("EXTERNAL_TIMEOUT")
 if not EXTERNAL_TIMEOUT:
     EXTERNAL_TIMEOUT = 2
-EXTERNAL_TIMEOUT = int(EXTERNAL_TIMEOUT)
+else:
+    EXTERNAL_TIMEOUT = int(EXTERNAL_TIMEOUT)
+ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND")
 if not ARGUMENTS_TO_SEND:
     ARGUMENTS_TO_SEND = ["user_id"]
 else:
     ARGUMENTS_TO_SEND = ARGUMENTS_TO_SEND.split(",")
-if not PAYLOAD_ARGUMENT_NAME:
-    PAYLOAD_ARGUMENT_NAME = "payload"
 RESPONSE_KEY = getenv("RESPONSE_KEY")
+if not RESPONSE_KEY:
+    RESPONSE_KEY = "response"
 
 assert "EXTERNAL_SKILL_URL", logger.info("You need to provide the external skill url to get its responses.")
 

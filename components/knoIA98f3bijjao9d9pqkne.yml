@@ -11,7 +11,7 @@ group: skills
 connector:
   protocol: http
   timeout: 2.0
-  url: http://external-integration-skill:8168/respond
+  url: http://external-integration-skill:8183/respond
 dialog_formatter: state_formatters.dp_formatters:external_integration_skill_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
