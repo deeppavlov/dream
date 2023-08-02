@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  dialogrpt-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  transformers-lm-ruxglm:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
+  transformers-lm-rugpt35:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""

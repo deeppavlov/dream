@@ -7,8 +7,9 @@ from typing import Dict, Callable
 import sentry_sdk
 
 from common.link import get_previously_active_skill
+from common.robot import command_intents
 from common.universal_templates import is_any_question_sentence_in_utterance
-from common.utils import get_factoid
+from common.utils import get_factoid, get_intents, high_priority_intents
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -29,6 +30,12 @@ class DescriptionBasedSkillSelectorConnector:
             skills_for_uttr = []
             user_uttr = dialog["human_utterances"][-1]
 
+            intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
+            high_priority_intent_detected = any(
+                [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
+            )
+            command_detected = any([k for k in intent_catcher_intents if k in command_intents])
+
             if ALWAYS_TURN_ON_ALL_SKILLS or user_uttr["attributes"].get("selected_skills", None) in ["all", []]:
                 logger.info("Selected skills: ALL")
                 total_time = time.time() - st_time
@@ -44,6 +51,18 @@ class DescriptionBasedSkillSelectorConnector:
                 logger.info(f"Selected skills: {skills_for_uttr}")
                 total_time = time.time() - st_time
                 logger.info(f"description_based_skill_selector exec time = {total_time:.3f}s")
+                asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+                return
+            elif high_priority_intent_detected and HIGH_PRIORITY_INTENTS:
+                skills_for_uttr.append("dummy_skill")
+                # process intent with corresponding IntentResponder
+                skills_for_uttr.append("dff_intent_responder_skill")
+                asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+                return
+            elif command_detected and HIGH_PRIORITY_INTENTS:
+                skills_for_uttr.append("dummy_skill")
+                # process intent with corresponding IntentResponder
+                skills_for_uttr.append("dff_command_selector_skill")
                 asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
                 return
 
