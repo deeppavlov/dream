@@ -77,7 +77,8 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
+                "previous_services": [
+                ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
@@ -256,7 +257,8 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
+                "previous_services": [
+                ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {

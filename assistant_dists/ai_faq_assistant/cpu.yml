@@ -6,6 +6,6 @@ services:
   sentence-ranker:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  transformers-lm-gptjt:
+  transformers-lm-oasst12b:
     environment:
       CUDA_VISIBLE_DEVICES: ""

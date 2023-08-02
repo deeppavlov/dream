@@ -30,7 +30,7 @@ services:
     volumes:
       - "./annotators/prompt_selector:/src"
       - "./common:/src/common"
-  transformers-lm-gptjt:
+  transformers-lm-oasst12b:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"

@@ -1224,6 +1224,27 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
+def fromage_formatter(dialog: Dict) -> List:
+    # Used by: fromage
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+
+    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
+    utterances_history = 5
+    image_paths = image_paths[-utterances_history:]
+    d = {}
+    if dialog["human_utterances"][-1]["text"]:
+        d.update({"sentences": [dialog["human_utterances"][-1]["text"]]})
+        for url in reversed(image_paths):
+            if url is not None and url.startswith("http"):
+                d.update({"image_paths": [url]})
+                break
+    if dialog["human_utterances"][-1].get("attributes", {}).get("image"):
+        d.update({"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]})
+        d.update({"sentences": [""]})
+    return [d]
+
+
 def robot_formatter(dialog: Dict) -> Dict:
     """This formatter currently provides the JSON as is, without modifying it.
     Either edit it later or choose one of the existing formatters"""

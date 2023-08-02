@@ -284,7 +284,6 @@ def dff_formatter(
             "disliked_skills_batch": [disliked_skills],
             "prompts_goals_batch": [prompts_goals],
             "clarification_request_flag_batch": [clarification_request_flag],
-            "dialog_id_batch": [dialog["dialog_id"]],
         }
     ]
 

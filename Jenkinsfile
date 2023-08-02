@@ -34,98 +34,6 @@ pipeline {
       }
     }
 // ------------------------------------------- Test prompted dists------------------------------------------------
-    stage('Build-DRUXGLM') {
-      steps {
-        script{
-          startTime = currentBuild.duration
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh '''
-                cat /home/ignatov/secrets.txt >> .env_secret
-                tests/runtests_dream_ruxglm.sh MODE=build
-              '''
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              throw e
-            }
-          }
-        }
-      }
-      post {
-        aborted {
-          script {
-            sh 'tests/runtests_dream_ruxglm.sh MODE=clean'
-          }
-        }
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-          }
-        }
-      }
-    }
-    stage('Start-DRUXGLM') {
-      steps {
-        script {
-          startTime = currentBuild.duration
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh 'tests/runtests_dream_ruxglm.sh MODE=clean && tests/runtests_dream_ruxglm.sh MODE=start'
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              throw e
-            }
-          }
-        }
-      }
-      post {
-        success {
-          script {
-            started = true
-            int duration = (currentBuild.duration - startTime) / 1000
-          }
-        }
-        aborted {
-          script {
-            sh 'tests/runtests_dream_ruxglm.sh MODE=clean'
-          }
-        }
-      }
-    }
-    stage('Test skills-DRUXGLM') {
-      steps {
-        script {
-          startTime = currentBuild.duration
-          Exception ex = null
-          catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            try {
-              sh label: 'test skills', script: 'tests/runtests_dream_ruxglm.sh MODE=test_skills'
-            }
-            catch (Exception e) {
-              int duration = (currentBuild.duration - startTime) / 1000
-              throw e
-            }
-          }
-        }
-      }
-      post {
-        success {
-          script {
-            int duration = (currentBuild.duration - startTime) / 1000
-          }
-        }
-        aborted {
-          script {
-            sh 'tests/runtests_dream_ruxglm.sh MODE=clean'
-          }
-        }
-      }
-    }
-// ------------------------------------------- Test prompted dists------------------------------------------------
     stage('Build-Reason') {
       steps {
         script{
@@ -135,7 +43,6 @@ pipeline {
             try {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env_secret
-                tests/runtests_dream_ruxglm.sh MODE=clean
                 tests/runtests_reasoning.sh MODE=build
               '''
             }
@@ -498,7 +405,7 @@ pipeline {
       }
     }
 // ------------------------------------------- Test prompted dists------------------------------------------------
-    stage('Build-JRUGPT') {
+    stage('Build-NOASST') {
       steps {
         script{
           startTime = currentBuild.duration
@@ -508,7 +415,7 @@ pipeline {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env_secret
                 tests/runtests_deeppavlov_chatgpt.sh MODE=clean
-                tests/runtests_journalist_rugpt35.sh MODE=build
+                tests/runtests_nutrition_oasst.sh MODE=build
               '''
             }
             catch (Exception e) {
@@ -521,7 +428,7 @@ pipeline {
       post {
         aborted {
           script {
-            sh 'tests/runtests_journalist_rugpt35.sh MODE=clean'
+            sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
           }
         }
         success {
@@ -531,14 +438,14 @@ pipeline {
         }
       }
     }
-    stage('Start-JRUGPT') {
+    stage('Start-NOASST') {
       steps {
         script {
           startTime = currentBuild.duration
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh 'tests/runtests_journalist_rugpt35.sh MODE=clean && tests/runtests_journalist_rugpt35.sh MODE=start'
+              sh 'tests/runtests_nutrition_oasst.sh MODE=clean && tests/runtests_nutrition_oasst.sh MODE=start'
             }
             catch (Exception e) {
               int duration = (currentBuild.duration - startTime) / 1000
@@ -556,19 +463,19 @@ pipeline {
         }
         aborted {
           script {
-            sh 'tests/runtests_journalist_rugpt35.sh MODE=clean'
+            sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
           }
         }
       }
     }
-    stage('Test skills-JRUGPT') {
+    stage('Test skills-NOASST') {
       steps {
         script {
           startTime = currentBuild.duration
           Exception ex = null
           catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             try {
-              sh label: 'test skills', script: 'tests/runtests_journalist_rugpt35.sh MODE=test_skills'
+              sh label: 'test skills', script: 'tests/runtests_nutrition_oasst.sh MODE=test_skills'
             }
             catch (Exception e) {
               int duration = (currentBuild.duration - startTime) / 1000
@@ -585,7 +492,7 @@ pipeline {
         }
         aborted {
           script {
-            sh 'tests/runtests_journalist_rugpt35.sh MODE=clean'
+            sh 'tests/runtests_nutrition_oasst.sh MODE=clean'
           }
         }
       }
@@ -600,7 +507,7 @@ pipeline {
             try {
               sh '''
                 cat /home/ignatov/secrets.txt >> .env
-                tests/runtests_journalist_rugpt35.sh MODE=clean
+                tests/runtests_nutrition_oasst.sh MODE=clean
                 tests/runtests_document_based.sh MODE=build
               '''
             }
@@ -915,7 +822,7 @@ pipeline {
         if (started) {
           sh './tests/runtests_multiskill_davinci3.sh MODE=clean'
           sh './tests/runtests_marketing_gptjt.sh MODE=clean'
-          sh './tests/runtests_journalist_rugpt35.sh MODE=clean'
+          sh './tests/runtests_nutrition_oasst.sh MODE=clean'
           sh './tests/runtests_deeppavlov_chatgpt.sh MODE=clean'
           sh './tests/runtests.sh MODE=clean'
           sh './tests/runtests_russian.sh MODE=clean'
