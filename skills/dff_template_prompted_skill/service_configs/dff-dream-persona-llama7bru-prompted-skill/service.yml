@@ -3,7 +3,7 @@ endpoints:
 - respond
 compose:
   env_file:
-  - .env
+  - .env_ru
   build:
     args:
       SERVICE_PORT: 8151
