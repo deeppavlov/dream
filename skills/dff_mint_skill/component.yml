@@ -6,16 +6,15 @@ dff-mint-skill:
   model_type: Dictionary/Pattern-based
   is_customizable: true
   author: DeepPavlov
-  description: provides template-based replies for some of the commands detected by
-    Intent Catcher annotator
+  description: Provides template-based replies for some of the commands detected by Intent Catcher annotator.
   ram_usage: 100M
   gpu_usage: null
-  port: 8337
+  port: 8171
   endpoints:
   - group: skills
     endpoint: respond
   build_args:
-    SERVICE_PORT: 8337
+    SERVICE_PORT: 8171
     SERVICE_NAME: dff_mint_skill
     LANGUAGE: EN
     ROS_FLASK_SERVER: http://ros-flask-server:5000

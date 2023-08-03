@@ -27,8 +27,6 @@ VALID_COMMANDS = []
 COMMAND_QUEUE = []
 EXECUTING_COMMAND = None
 
-# WARNING: naive implementation: only 1 client supported
-
 
 @app.route("/set_commands", methods=["POST"])  # this endpoint should not be accessed from within dream
 def respond_set_commands():
@@ -37,14 +35,14 @@ def respond_set_commands():
     st_time = time.perf_counter()
     VALID_COMMANDS = list(map(lambda i: i.lower(), request.json.get("commands", [])))
     if not VALID_COMMANDS:
-        logger.info("mint-server user did not send valid commands list," + "resetting to default")
+        logger.info("mint-server user did not send valid commands list")
     logger.info(f"mint-server `VALID_COMMANDS` set: {VALID_COMMANDS}")
 
     total_time = time.perf_counter() - st_time
 
     logger.info(f"mint-server `is_command_valid` exec time: {total_time:.3f}s")
 
-    return {"result": True}
+    return {"result": bool(VALID_COMMANDS)}
 
 
 @app.route("/is_command_valid", methods=["POST"])
@@ -67,11 +65,13 @@ def respond_perform_command():
     st_time = time.perf_counter()
 
     command = request.json.get("command", None)
-    logger.info("Sending command to ROS...")
-    talker.publish(command)
-    logger.info("Successfully returned from ROS!")
-    results = {"result": command in VALID_COMMANDS}
-    COMMAND_QUEUE.append(command)
+    cmd_valid = command in VALID_COMMANDS
+    if cmd_valid:
+        logger.info("Sending command to ROS...")
+        talker.publish(command)
+        logger.info("Successfully returned from ROS!")
+        COMMAND_QUEUE.append(command)
+    results = {"result": cmd_valid}
     logger.info(f"mint-server `perform_command` {command} appended to queue?: {results}")
 
     total_time = time.perf_counter() - st_time
@@ -81,19 +81,19 @@ def respond_perform_command():
     return jsonify(results)
 
 
-@app.route("/recieve_command", methods=["POST"])  # this endpoint should not be accessed from within dream
-def respond_recieve_command():
+@app.route("/receive_command", methods=["POST"])  # this endpoint should not be accessed from within dream
+def respond_receive_command():
     global EXECUTING_COMMAND
 
     st_time = time.perf_counter()
 
     command = COMMAND_QUEUE.pop(0) if COMMAND_QUEUE else None
     results = {"command": command}
-    logger.info(f"mint-server `recieve_command` results: {results}")
+    logger.info(f"mint-server `receive_command` results: {results}")
 
     total_time = time.perf_counter() - st_time
 
-    logger.info(f"mint-server `recieve_command` exec time: {total_time:.3f}s")
+    logger.info(f"mint-server `receive_command` exec time: {total_time:.3f}s")
 
     return jsonify(results)
 

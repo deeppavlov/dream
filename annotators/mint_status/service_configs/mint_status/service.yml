@@ -6,24 +6,22 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8340
+      SERVICE_PORT: 8173
       SERVICE_NAME: mint_status
       CUDA_VISIBLE_DEVICES: '0'
     context: .
     dockerfile: ./annotators/mint_status/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:8340 --timeout 600
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8173 --timeout 600
   environment:
   - CUDA_VISIBLE_DEVICES=0
   deploy:
     resources:
       limits:
-        memory: 2G
+        memory: 60M
       reservations:
-        memory: 2G
+        memory: 60M
   volumes:
   - ./common:/src/common
   - ./annotators/mint_status:/src
-  - ~/.deeppavlov:/root/.deeppavlov
-  - ~/.deeppavlov/cache:/root/.cache
   ports:
-  - 8340:8340
+  - 8173:8173

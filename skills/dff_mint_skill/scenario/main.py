@@ -20,19 +20,12 @@ flows = {
     GLOBAL: {
         TRANSITIONS: {
             ("context_driven_response", "command_selector"): loc_cnd.command_exists_condition,
-            ("simple", "default"): cnd.true(),
         },
     },
     "context_driven_response": {
         "command_selector": {
             RESPONSE: rsp.mint_response,
             PROCESSING: {"set_confidence": rsp.set_confidence_from_input},
-        },
-    },
-    "simple": {
-        "default": {
-            RESPONSE: rsp.default_response,
-            PROCESSING: {"set_confidence": int_prs.set_confidence(ZERO_CONFIDENCE)},
         },
     },
 }

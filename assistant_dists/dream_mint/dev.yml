@@ -78,13 +78,13 @@ services:
       - "./skills/dff_mint_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8337:8337
+      - 8171:8171
   mint-sender:
     volumes:
       - "./services/mint_sender:/src"
       - "./common:/src/common"
     ports:
-      - 8338:8338
+      - 8172:8172
   ros-flask-server:
     volumes:
       - "./services/ros_flask_server:/home/dkr/"
@@ -96,6 +96,6 @@ services:
       - "./annotators/mint_status:/src"
       - "./common:/src/common"
     ports:
-      - 8340:8340
+      - 8173:8173
 
 version: "3.7"

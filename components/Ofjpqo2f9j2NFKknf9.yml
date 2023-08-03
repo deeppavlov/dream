@@ -4,13 +4,13 @@ component_type: Script-based w/o NNs
 model_type: null
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: a skill that interacts with ros_flask_server and mint_status
-ram_usage: 1.5G
-gpu_usage: 3.2G
+description: A dff skill that interacts with ros_flask_server and mint_status. It allows Dream to answer to embodied intents.
+ram_usage: 150M
+gpu_usage: null
 connector:
   protocol: http
   timeout: 1.0
-  url: http://dff-mint-skill:8337/respond
+  url: http://dff-mint-skill:8171/respond
 previous_services:
 - mint_status
 - ros_flask_server

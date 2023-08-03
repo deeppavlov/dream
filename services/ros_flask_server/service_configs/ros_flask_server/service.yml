@@ -19,13 +19,11 @@ compose:
   deploy:
     resources:
       limits:
-        memory: 2G
+        memory: 250M
       reservations:
-        memory: 2G
+        memory: 250M
   volumes:
   - ./common:/src/common
   - ./services/ros_flask_server:/src
-  - ~/.deeppavlov:/root/.deeppavlov
-  - ~/.deeppavlov/cache:/root/.cache
   ports:
   - 5000:5000

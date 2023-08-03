@@ -30,12 +30,9 @@ def mint_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             attr = deepcopy(response[4])
             response = deepcopy(response[0])
         # Special formatter which used in AWS Lambda to identify what was the intent
-        while "#+#" in response:
-            response = response[: response.rfind(" #+#")]
+        response = response.split("#+#")[0].strip()
         logger.info(f"Response: {response}; intent_name: {intention}")
-        try:
-            _ = response + " #+#{}".format(intention)
-        except TypeError:
+        if not isinstance(response, str):
             logger.error(f"TypeError intent_name: {intention} response: {response};")
             response = "Hmmm... #+#{}".format(intention)
         # todo: we need to know what intent was called

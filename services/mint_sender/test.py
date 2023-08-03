@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8338/send"
+    url = "http://0.0.0.0:8172/send"
 
     request_data = {
         "last_human_utterances": [

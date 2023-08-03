@@ -4,13 +4,13 @@ component_type: Script-based w/o NNs
 model_type: null
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: sends the preprocessed command to ros_flask_server
-ram_usage: 1.5G
-gpu_usage: 3.2G
+description: Sends the preprocessed embodied intent to ros_flask_server, the command is later passsed to the client.
+ram_usage: 100M
+gpu_usage: null
 connector:
   protocol: http
   timeout: 1.0
-  url: http://mint-sender:8338/send
+  url: http://mint-sender:8172/send
 previous_services: [mint_status]
 required_previous_services: [mint_status]
 tags: null
