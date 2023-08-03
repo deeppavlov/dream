@@ -22,7 +22,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/H1bbLiJ4B8Fg77NPDgGjA.yml",
-                "service": "services/last_chance_service/service_configs/agent"
+                "service": "services/agent_services/service_configs/dream_persona_rullama_prompted"
             }
         },
         "timeout_service": {
@@ -47,7 +47,7 @@
             "is_enabled": true,
             "source": {
                 "component": "components/nbRgFzod7Qx6M7GL6oiPg.yml",
-                "service": "services/timeout_service/service_configs/agent"
+                "service": "services/agent_services/service_configs/dream_persona_rullama_prompted"
             }
         },
         "annotators": {
@@ -55,7 +55,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://prompt-selector:8135/collect_goals"
+                    "url": "http://prompt-selector-ru:8135/collect_goals"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -63,7 +63,7 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/5jR1Tq88W5OckWnTV8VIYL.yml",
+                    "component": "components/k3j2h498hvflekdfdfbfgh34r.yml",
                     "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
                 }
             },
@@ -126,10 +126,10 @@
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "description_based_skill_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -141,8 +141,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
-                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                    "component": "components/dfsw4bji8bgjq2.yml",
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
                 }
             }
         },

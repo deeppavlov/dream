@@ -1,0 +1,31 @@
+name: robot-fake-server
+endpoints:
+- ping
+- is_command_valid
+- perform_command
+- is_command_performed
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8038
+      SERVICE_NAME: robot_fake_server
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/robot_fake_server/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8038
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./services/robot_fake_server:/src
+  - ./common:/src/common
+  ports:
+  - 8038:8038
+proxy: null

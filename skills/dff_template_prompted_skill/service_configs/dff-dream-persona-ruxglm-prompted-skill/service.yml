@@ -1,0 +1,29 @@
+name: dff-dream-persona-ruxglm-prompted-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env_ru
+  build:
+    args:
+      SERVICE_PORT: 8172
+      SERVICE_NAME: dff_dream_persona_ru_prompted_skill
+      PROMPT_FILE: common/prompts/dream_persona_ru.json
+      GENERATIVE_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
+      GENERATIVE_SERVICE_CONFIG: ruxglm_config.json
+      GENERATIVE_TIMEOUT: 20
+      N_UTTERANCES_CONTEXT: 3
+    context: .
+    dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_template_prompted_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8172:8172
+proxy: null

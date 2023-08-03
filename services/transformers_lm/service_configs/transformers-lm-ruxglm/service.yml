@@ -1,0 +1,46 @@
+name: transformers-lm-ruxglm
+endpoints:
+- respond
+- generate_goals
+compose:
+  env_file:
+  - .env
+  - .env_secret
+  build:
+    args:
+      SERVICE_PORT: 8171
+      SERVICE_NAME: transformers_lm_ruxglm
+      PRETRAINED_MODEL_NAME_OR_PATH: dim/xglm-4.5B_ru_v10_epoch_6_step_41141
+      HALF_PRECISION: 0
+      EOS_TOKENS: <|endoftext|>,Human
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8171
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 60G
+      reservations:
+        memory: 60G
+  volumes:
+  - ./services/transformers_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8171:8171
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8171
+  - PORT=8171

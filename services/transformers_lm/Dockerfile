@@ -10,6 +10,9 @@ ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 ARG HALF_PRECISION
 ENV HALF_PRECISION ${HALF_PRECISION}
+ARG ADDITIONAL_EOS_TOKENS
+ENV ADDITIONAL_EOS_TOKENS ${ADDITIONAL_EOS_TOKENS}
+
 
 COPY ./services/transformers_lm/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

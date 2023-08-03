@@ -29,7 +29,7 @@
     },
      {
          "sentence": "end the chat.",
-	 "intent": "exit"
+	    "intent": "exit"
     },
     {
         "sentence": "leave me alone",
@@ -76,8 +76,8 @@
         "intent": "repeat"
     },
     {
-      "sentence": "can you say the question again please",
-      "intent": "repeat"
+        "sentence": "can you say the question again please",
+        "intent": "repeat"
     },
     {
         "sentence": "yeah sure",
@@ -516,8 +516,8 @@
         "intent": "cant_do"
     },
     {
-	"sentence": "can you stop music while we chat?",
-	"intent": "cant_do"
+        "sentence": "can you stop music while we chat?",
+        "intent": "cant_do"
     },
     {
         "sentence": "turn off light.",
