@@ -15,6 +15,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
+  ranking-based-response-selector:
+    volumes:
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8002:8002
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"

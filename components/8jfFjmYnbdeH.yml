@@ -5,7 +5,7 @@ model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
 description: A skill that utilizes information from the FROMAGe service and engages in a dialogue with the user about an image.
-ram_usage: 1024M
+ram_usage: 100M
 gpu_usage: null
 group: skills
 connector:

@@ -14,7 +14,9 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 FILE_SERVER_URL = os.getenv("FILE_SERVER_URL")
-RET_SCALE_FACTOR = 0
+RET_SCALE_FACTOR = int(os.getenv("RET_SCALE_FACTOR"))
+logger.info(f"{RET_SCALE_FACTOR} and RET_SCALE_FACTOR type {type(RET_SCALE_FACTOR)}")
+
 
 try:
     model_dir = "/services/fromage/fromage_model"
@@ -33,7 +35,7 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-def generate_responses(image_path, prompt, RET_SCALE_FACTOR):
+def generate_responses(image_path, prompt):
     logger.info(f"prompt generate responses {prompt}")
     inp_image = [utils.get_image_from_url(image_path)]
     if prompt == "":
@@ -62,10 +64,9 @@ def respond():
 
     try:
         frmg_answers = []
-        for image_path in image_paths:
-            for sentence in sentences:
-                outputs = generate_responses(image_path, sentence, RET_SCALE_FACTOR)
-                frmg_answers += outputs
+        for image_path, sentence in zip(image_paths, sentences):
+            outputs = generate_responses(image_path, sentence)
+            frmg_answers += outputs
         logging.info(f"frmg_answers here {frmg_answers}")
 
     except Exception as exc:

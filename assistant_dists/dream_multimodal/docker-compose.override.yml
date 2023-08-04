@@ -195,9 +195,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 5G
+          memory: 18G
         reservations:
-          memory: 5G
+          memory: 18G
 
   dff-fromage-image-skill:
     env_file: [.env]
@@ -211,7 +211,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 100M
         reservations:
-          memory: 1024M
+          memory: 100M
 version: '3.7'
