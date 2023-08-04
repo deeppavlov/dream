@@ -1,0 +1,27 @@
+name: rut5-summarizer
+endpoints:
+- respond_batch
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8060
+      SERVICE_NAME: ruT5_summarizer
+      PRETRAINED_MODEL_NAME: "IlyaGusev/rut5_base_sum_gazeta"
+    context: ./services/ruT5_summarizer/
+  command: flask run -h 0.0.0.0 -p 8060
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 4G
+      reservations:
+        memory: 4G
+  volumes:
+  - ./services/ruT5_summarizer:/src
+  ports:
+  - 8060:8060
+proxy: null

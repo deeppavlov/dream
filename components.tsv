@@ -59,9 +59,9 @@
 8055
 8056
 8057	dff-short-story-skill
-8058
-8059
-8060
+8058	summarization-annotator
+8059	dialog-summarizer
+8060	rut5-summarizer
 8061	dff-coronavirus-skill
 8062	small-talk-skill
 8063
