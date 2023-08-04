@@ -70,7 +70,7 @@ services:
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8129:8129
+      - 8027:8027
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"

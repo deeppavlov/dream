@@ -10,7 +10,7 @@ gpu_usage: null
 group: annotators
 connector:
   protocol: http
-  url: http://user-knowledge-memorizer:8127/respond
+  url: http://user-knowledge-memorizer:8027/respond
 dialog_formatter: state_formatters.dp_formatters:user_knowledge_memorizer_formatter_dialog
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services:
