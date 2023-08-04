@@ -40,9 +40,9 @@ docker-compose -f docker-compose.yml -f local.yml exec comet-conceptnet bash tes
 ## Input/Output
 
 **Input** 
-- hypotheses: possible assistant's replies (?)
+- hypotheses: possible assistant's replies
 - currentUtterance: latest reply from a user
-- pastResponses: a list of user utterances 
+- pastResponses: a list of user's utterances 
 
 **Output**
 a list of probabilities about the utterance:
@@ -54,3 +54,5 @@ a list of probabilities about the utterance:
 
 
 ## Dependencies
+
+none

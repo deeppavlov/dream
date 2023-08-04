@@ -21,11 +21,14 @@ The models were trained on the following datasets:
 
 The model also contains 3 replacement models for Amazon services.
 
-The models (multitask and comparative single task) were trained with initial learning rate 2e-5(with validation patience 2 it could be dropped 2 times), batch size 32,optimizer adamW(betas (0.9,0.99) and early stop on 3 epochs. The criteria on early stopping was average accuracy for all tasks for multitask models, or the single-task accuracy for singletask models.
+The models (multitask and comparative single task) were trained with initial learning rate 2e-5(with validation patience 2 it could be dropped 2 times), batch size 32,optimizer adamW(betas (0.9,0.99)) and early stop on 3 epochs. The criteria on early stopping was average accuracy for all tasks for multitask models, or the single-task accuracy for singletask models.
 
 This model(with a distilbert-base-uncased backbone) takes only 2439 Mb for 9 tasks, whereas single-task models with the same backbone for every of these tasks take up almost the same memory(~2437 Mb for every of these 9 tasks).
 
 ## I/O
-text here if i/o specified
+**Input:** immediate user utterances  (+ optional history of previous utterances)
+**Output:** tags for each utterance  (based on toxic/topic/emotion/sentiment/factoid/midas classification)
 
 ## Dependencies
+none
+
