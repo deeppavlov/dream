@@ -3,11 +3,11 @@
 ![Architecture](architecture.png)
 
 This distribution functions the following way:
-1. Recieves user input from the dp-agent of choice (e.g. Telegram);
-2. Processes the recieved input in a way that results in a command (e.g. move forward 4 meters -> `move_forward_4`);
+1. Receives user input from the dp-agent of choice (e.g. Telegram);
+2. Processes the received input in a way that results in a command (e.g. move forward 4 meters -> `move_forward_4`);
 3. Sends the command to the ROS server (in order to make interacting with real robots possible);
 4. Processes the message from inside ROS server and accesses a local connector (e.g. real robot ROS-API, minecraft-interface);
-5. (While not done in dream-side, it is useful to know that) the local connector then executes a command that usually corresponds with the message we recieved in step 2.
+5. (While not done in dream-side, it is useful to know that) the local connector then executes a command that usually corresponds with the message we received in step 2.
 
 # Prerequisites:
 

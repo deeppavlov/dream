@@ -67,7 +67,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 10,
-                    "url": "http://mint-status:8173/check"
+                    "url": "http://mint-status:8043/check"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -293,7 +293,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-mint-skill:8171/respond"
+                    "url": "http://dff-mint-skill:8041/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -368,7 +368,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://mint-sender:8172/send"
+                    "url": "http://mint-sender:8042/send"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_bot_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

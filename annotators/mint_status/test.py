@@ -2,7 +2,7 @@ import requests
 
 
 def main():
-    url = "http://0.0.0.0:8173/check"
+    url = "http://0.0.0.0:8043/check"
 
     request_data = {
         "dialogs": [

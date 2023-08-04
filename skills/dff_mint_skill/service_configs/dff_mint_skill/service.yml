@@ -6,24 +6,24 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8171
+      SERVICE_PORT: 8041
       SERVICE_NAME: dff_mint_skill
       CUDA_VISIBLE_DEVICES: '0'
     context: .
     dockerfile: ./skills/dff_mint_skill/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:8171 --timeout 600
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8041 --timeout 600
   environment:
   - CUDA_VISIBLE_DEVICES=0
   deploy:
     resources:
       limits:
-        memory: 2G
+        memory: 100M
       reservations:
-        memory: 2G
+        memory: 100M
   volumes:
   - ./common:/src/common
   - ./skills/dff_mint_skill:/src
   - ~/.deeppavlov:/root/.deeppavlov
   - ~/.deeppavlov/cache:/root/.cache
   ports:
-  - 8171:8171
+  - 8041:8041

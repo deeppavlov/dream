@@ -10,7 +10,7 @@ gpu_usage: null
 connector:
   protocol: http
   timeout: 1.0
-  url: http://mint-sender:8172/send
+  url: http://mint-sender:8042/send
 previous_services: [mint_status]
 required_previous_services: [mint_status]
 tags: null

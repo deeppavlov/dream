@@ -43,9 +43,9 @@
 8038    robot-fake-server
 8039
 8040
-8041
-8042
-8043
+8041    dff-mint-skill
+8042    mint-sender
+8043    mint-status
 8044
 8045
 8046
@@ -173,6 +173,3 @@
 8168	transformers-lm-vicuna13b
 8169    dff-reasoning-skill
 8170    dff-dream-faq-prompted-skill
-8337    dff-mint-skill
-8338    mint-sender
-8340    mint-status

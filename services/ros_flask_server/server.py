@@ -68,9 +68,12 @@ def respond_perform_command():
     cmd_valid = command in VALID_COMMANDS
     if cmd_valid:
         logger.info("Sending command to ROS...")
-        talker.publish(command)
-        logger.info("Successfully returned from ROS!")
-        COMMAND_QUEUE.append(command)
+        try:
+            talker.publish(command)
+            logger.info("Successfully returned from ROS!")
+            COMMAND_QUEUE.append(command)
+        except Exception as e:
+            logger.info(f"Error inside ROS: {e}")
     results = {"result": cmd_valid}
     logger.info(f"mint-server `perform_command` {command} appended to queue?: {results}")
 
