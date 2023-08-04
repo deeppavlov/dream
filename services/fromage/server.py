@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 FILE_SERVER_URL = os.getenv("FILE_SERVER_URL")
 RET_SCALE_FACTOR = int(os.getenv("RET_SCALE_FACTOR"))
-logger.info(f"{RET_SCALE_FACTOR} and RET_SCALE_FACTOR type {type(RET_SCALE_FACTOR)}")
 
 
 try:
