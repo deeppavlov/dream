@@ -119,8 +119,6 @@ high_priority_intents = {
 }
 
 low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
-command_intents = {"track_object", "turn_around", "move_forward", "move_backward", "open_door", "move_to_point"}
-mint_intents = {"move_forward", "move_backward"}
 
 combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
     "emotion_classification": ["anger", "fear", "joy", "disgust", "sadness", "surprise", "neutral"],

@@ -12,8 +12,7 @@ connector:
   timeout: 1.0
   url: http://dff-mint-skill:8041/respond
 previous_services:
-- mint_status
-- ros_flask_server
+- skill_selectors
 required_previous_services: [mint_status]
 tags: null
 endpoint: respond

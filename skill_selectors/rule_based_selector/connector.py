@@ -12,7 +12,7 @@ from common.gossip import check_is_celebrity_mentioned
 from common.link import get_linked_to_skills, get_previously_active_skill
 from common.movies import extract_movies_names_from_annotations
 from common.response_selection import UNPREDICTABLE_SKILLS
-from common.robot import command_intents
+from common.robot import command_intents, mint_intents
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
 from common.universal_templates import (
@@ -24,7 +24,6 @@ from common.universal_templates import (
 from common.utils import (
     high_priority_intents,
     low_priority_intents,
-    mint_intents,
     get_topics,
     get_intents,
     get_named_locations,
