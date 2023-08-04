@@ -17,54 +17,36 @@ services:
   sentseg:
   dff-intent-responder-skill:
     volumes:
-      - "./skills/dff_intent_responder_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8012:8012
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
   dff-fromage-image-skill:
     volumes:
-      - "./skills/dff_fromage_image_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8070:8070
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
   intent-catcher:
     volumes:
-      - "./annotators/IntentCatcherTransformers:/src"
-      - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8014:8014
+      - "~/.deeppavlov/cache:/root/.cache"
   badlisted-words:
     volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
   fromage:
     volumes:
-      - "./services/fromage:/src"
-      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=0,1,2,3
-    ports:
-      - 8069:8069
   sentence-ranker:
     volumes:
-      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8128:8128
   image-captioning:
     volumes:
-      - "./services/image_captioning:/src"
-      - "~/.deeppavlov/file_server:/tmp"
-    ports:
-      - 8123:8123
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
   dff-image-skill:
     volumes:
-      - "./skills/dff_image_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8124:8124
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
 version: "3.7"

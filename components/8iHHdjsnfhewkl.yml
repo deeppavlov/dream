@@ -5,8 +5,8 @@ model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
 description: The service is built using the FROMAGe model, which is able to produce meaningful conversations with users about different images.
-ram_usage: 5G
-gpu_usage: 18G
+ram_usage: 45G
+gpu_usage: 20G
 group: skills
 connector:
   protocol: http

@@ -7,6 +7,7 @@ import torch
 import sentry_sdk
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
+from common.universal_templates import is_any_question_sentence_in_utterance
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -14,7 +15,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 FILE_SERVER_URL = os.getenv("FILE_SERVER_URL")
-RET_SCALE_FACTOR = int(os.getenv("RET_SCALE_FACTOR"))
+RET_SCALE_FACTOR = int(os.environ.get("RET_SCALE_FACTOR"))
 
 
 try:
@@ -35,12 +36,9 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 def generate_responses(image_path, prompt):
-    logger.info(f"prompt generate responses {prompt}")
     inp_image = [utils.get_image_from_url(image_path)]
     if prompt == "":
         prompt = ["What is the image?"]
-
-    logger.info(f"prompts {prompt}")
     text = ""
     for p in prompt:
         text += f"Q: {p}\nA:"
@@ -58,21 +56,17 @@ def respond():
     image_paths = request.json.get("image_paths", [])
     sentences = request.json.get("sentences", [])
 
-    logger.info(f"img path {image_paths}")
-    logger.info(f"sentence {sentences}")
-
     try:
         frmg_answers = []
         for image_path, sentence in zip(image_paths, sentences):
             outputs = generate_responses(image_path, sentence)
             frmg_answers += outputs
-        logging.info(f"frmg_answers here {frmg_answers}")
-
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        frmg_answers = [[""]] * len(sentence)
+        frmg_answers = [[""]] * len(sentences)
 
     total_time = time.time() - st_time
+    logger.info(f"fromage results: {frmg_answers}")
     logger.info(f"fromage exec time: {total_time:.3f}s")
     return jsonify(frmg_answers)

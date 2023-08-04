@@ -9,6 +9,7 @@ compose:
       SERVICE_PORT: 8069
       SERVICE_NAME: fromage
       FLASK_APP: server
+      RET_SCALE_FACTOR: 0
     context: .
     dockerfile: ./services/fromage/Dockerfile
   command: flask run -h 0.0.0.0 -p 8069
@@ -17,9 +18,9 @@ compose:
   deploy:
     resources:
       limits:
-        memory: 5G
+        memory: 45G
       reservations:
-        memory: 5G
+        memory: 45G
   volumes:
   - ./services/fromage:/src
   - ./common:/src/common
