@@ -18,15 +18,15 @@ logger.info(f"summarization-annotator considered summarizer: {SUMMARIZATION_SERV
 
 
 def get_summary(dialog):
-    summary = []
+    summary = ""
     if len(dialog) != 11:
-        logger.info(
+        logger.debug(
             f"summarization-annotator is not ready to summarize dialog as the length of unsummarized dialog is "
             f"{len(dialog)} != 11"
         )
         return summary
 
-    logger.info("summarization-annotator is ready to summarize dialog as the length of unsummarized dialog is 11")
+    logger.debug("summarization-annotator is ready to summarize dialog as the length of unsummarized dialog is 11")
     dialog = dialog[:6]
     for i in range(len(dialog)):
         if i % 2 == 0:
@@ -34,7 +34,7 @@ def get_summary(dialog):
         else:
             dialog[i] = "Bot: " + dialog[i]
     dialog = ["\n".join(dialog)]
-    logger.info(f"summarization-annotator will summarize this: {dialog}")
+    logger.debug(f"summarization-annotator will summarize this: {dialog}")
 
     try:
         summary = requests.post(
@@ -57,8 +57,8 @@ def respond():
     summarization_attribute = []
 
     for dialog, prev_summary in zip(dialogs_batch, summaries_batch):
-        logger.info(f"summarization-annotator received dialog: {dialog}")
-        logger.info(f"summarization-annotator received previous summary: {[prev_summary]}")
+        logger.debug(f"summarization-annotator received dialog: {dialog}")
+        logger.debug(f"summarization-annotator received previous summary: {[prev_summary]}")
         result = prev_summary
         new_summary = get_summary(dialog)
         if new_summary:
