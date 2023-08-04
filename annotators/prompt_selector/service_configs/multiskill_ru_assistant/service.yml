@@ -1,0 +1,32 @@
+name: prompt-selector-ru
+endpoints:
+- respond
+- collect_goals
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8135
+      SERVICE_NAME: prompt_selector
+      SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+      N_SENTENCES_TO_RETURN: 3
+      PROMPTS_TO_CONSIDER: official_letter_ru,informal_letter_ru,journalist_helper_ru
+      FLASK_APP: server
+    context: .
+    dockerfile: ./annotators/prompt_selector/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8135
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./annotators/prompt_selector:/src
+  - ./common:/src/common
+  ports:
+  - 8135:8135
+proxy: null

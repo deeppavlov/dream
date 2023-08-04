@@ -1,0 +1,34 @@
+services:
+  agent:
+    volumes:
+      - "/cephfs/home/ignatov/artifacts:/output"
+    ports:
+      - ${AGENT_PORT}:4242
+  mongo:
+    command: mongod
+    image: mongo:4.0.0
+  ranking-based-response-selector-ru:
+    volumes:
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
+  dialogrpt-ru:
+    volumes:
+      - "./services/dialogrpt_ru:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  prompt-selector-ru:
+    volumes:
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
+  transformers-lm-rugpt35:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+  dff-journalist-helper-ru-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+
+version: "3.7"

@@ -1,0 +1,26 @@
+name: transformers_lm_rugpt35
+display_name: ruGPT-3.5-13B
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: A large language model for the Russian language which was used for trainig GigaChat. 
+  For more details, refer to 
+  [HuggingFace Model Page](https://huggingface.co/ai-forever/ruGPT-3.5-13B).
+  This model is up and running on our servers and can be used for free.
+ram_usage: 60G
+gpu_usage: 35G
+group: services
+connector:
+  protocol: http
+  timeout: 20.0
+  url: http://transformers-lm-rugpt35:8178/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/transformers_lm/service_configs/transformers-lm-rugpt35
+date_created: '2023-04-16T09:45:32'
