@@ -14,6 +14,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 other_skills = {
     "dff_mint_skill",
+    "dff_intent_responder_skill",
     "dff_program_y_dangerous_skill",
     "misheard_asr",
     "christmas_new_year_skill",
@@ -95,6 +96,16 @@ service_intents = {
 
 high_priority_intents = {
     "dff_mint_skill": {
+        "cant_do",
+        "exit",
+        "repeat",
+        "what_can_you_do",
+        "what_is_your_job",
+        "what_is_your_name",
+        "where_are_you_from",
+        "who_made_you",
+    },
+    "dff_intent_responder_skill": {
         "cant_do",
         "exit",
         "repeat",
