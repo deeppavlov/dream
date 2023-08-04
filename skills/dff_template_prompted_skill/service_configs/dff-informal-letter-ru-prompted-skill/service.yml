@@ -3,7 +3,7 @@ endpoints:
 - respond
 compose:
   env_file:
-  - .env
+  - .env_ru
   - .env_secret
   build:
     args:
