@@ -1,5 +1,5 @@
 import logging
-# import json # comment out if saving dialog content is planned
+import json # comment out if saving dialog content is planned
 from copy import deepcopy
 from typing import Dict, List
 
@@ -1220,6 +1220,8 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
 
 
 def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
     return [
         {
             "utterances": [dialog["human_utterances"][-1]],
@@ -1229,8 +1231,8 @@ def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def user_knowledge_memorizer_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
     # comment out the next two lines to save dialog data to see its contents
-    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
-    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    with open('test_formatters.json', 'w', encoding='utf-8') as f:
+        json.dump(dialog, f, ensure_ascii=False, indent=4)
     if dialog["bot_utterances"]:
         dialog_history = dialog["bot_utterances"][-1]
     else:

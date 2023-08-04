@@ -1,0 +1,121 @@
+{
+    "_id": "None",
+    "dialog_id": "180b94a614d1b2ac6b5f2106c9e8d0f2",
+    "utterances": [
+        {
+            "utt_id": "a4d5f152f070b9fdf55c7c4a8cc15f1c",
+            "text": "Recommend me some fantasy book to read",
+            "user": {
+                "id": "9cd464fdeb23490199e53b867ca426f5",
+                "user_external_id": "jniuhiuhmnkjhn",
+                "persona": {},
+                "profile": {
+                    "name": null,
+                    "gender": null,
+                    "birthdate": null,
+                    "location": null,
+                    "home_coordinates": null,
+                    "work_coordinates": null,
+                    "occupation": null,
+                    "income_per_year": null
+                },
+                "attributes": {
+                    "prompts_goals": {}
+                },
+                "user_type": "human"
+            },
+            "annotations": {},
+            "hypotheses": [],
+            "date_time": "2023-08-04 16:12:48.363509",
+            "attributes": {}
+        }
+    ],
+    "human_utterances": [
+        {
+            "utt_id": "a4d5f152f070b9fdf55c7c4a8cc15f1c",
+            "text": "Recommend me some fantasy book to read",
+            "user": {
+                "id": "9cd464fdeb23490199e53b867ca426f5",
+                "user_external_id": "jniuhiuhmnkjhn",
+                "persona": {},
+                "profile": {
+                    "name": null,
+                    "gender": null,
+                    "birthdate": null,
+                    "location": null,
+                    "home_coordinates": null,
+                    "work_coordinates": null,
+                    "occupation": null,
+                    "income_per_year": null
+                },
+                "attributes": {
+                    "prompts_goals": {}
+                },
+                "user_type": "human"
+            },
+            "annotations": {},
+            "hypotheses": [],
+            "date_time": "2023-08-04 16:12:48.363509",
+            "attributes": {}
+        }
+    ],
+    "bot_utterances": [],
+    "human": {
+        "id": "9cd464fdeb23490199e53b867ca426f5",
+        "user_external_id": "jniuhiuhmnkjhn",
+        "persona": {},
+        "profile": {
+            "name": null,
+            "gender": null,
+            "birthdate": null,
+            "location": null,
+            "home_coordinates": null,
+            "work_coordinates": null,
+            "occupation": null,
+            "income_per_year": null
+        },
+        "attributes": {
+            "prompts_goals": {}
+        },
+        "user_type": "human"
+    },
+    "bot": {
+        "id": "f7ad25c22f494e378bc5d36635111046",
+        "persona": {},
+        "attributes": {},
+        "user_type": "bot"
+    },
+    "channel_type": "cmd_client",
+    "date_start": "None",
+    "date_finish": "None",
+    "_active": "True",
+    "attributes": {
+        "pipeline": [
+            "response_annotator_selectors",
+            "response_annotators.sentseg",
+            "response_annotators.ner",
+            "response_annotators.spacy_nounphrases",
+            "response_annotators.property_extraction",
+            "response_annotators.user_knowledge_memorizer",
+            "annotators.sentseg",
+            "annotators.spacy_nounphrases",
+            "annotators.ner",
+            "annotators.entity_detection",
+            "annotators.entity_linking",
+            "annotators.custom_entity_linking",
+            "annotators.combined_classification",
+            "annotators.prompt_goals_collector",
+            "annotators.prompt_selector",
+            "skill_selectors.description_based_skill_selector",
+            "skills.dff_knowledge_prompted_skill",
+            "skills.dummy_skill",
+            "candidate_annotators.spacy_nounphrases",
+            "candidate_annotators.entity_detection",
+            "candidate_annotators.combined_classification",
+            "candidate_annotators.sentence_ranker",
+            "response_selectors.response_selector",
+            "input",
+            "responder"
+        ]
+    }
+}
