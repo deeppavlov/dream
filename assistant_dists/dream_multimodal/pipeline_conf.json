@@ -216,10 +216,10 @@
             }
         },
         "skill_selectors": {
-            "description_based_skill_selector": {
+            "rule_based_selector": {
                 "connector": {
                     "protocol": "python",
-                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -231,8 +231,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/dfsw4bji8bgjq2.yml",
-                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
                 }
             }
         },
