@@ -1,0 +1,3 @@
+prev_count: 5
+light_model_path: model_light.pt
+top_k_count: 5
