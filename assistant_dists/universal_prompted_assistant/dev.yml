@@ -35,13 +35,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8161:8161
-  transformers-lm-oasst12b:
-    volumes:
-      - "./services/transformers_lm:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8158:8158
   openai-api-chatgpt:
     volumes:
       - "./services/openai_api_lm:/src"

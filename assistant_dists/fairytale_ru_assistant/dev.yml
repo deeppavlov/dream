@@ -1,0 +1,40 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  ranking-based-response-selector-ru:
+    volumes:
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8002:8002
+  dialogrpt-ru:
+    volumes:
+      - "./services/dialogrpt_ru:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8122:8122
+  prompt-selector-ru:
+    volumes:
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8135:8135
+  transformers-lm-ruxglm:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8171:8171
+  dff-fairytale-ru-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8174:8174
+
+version: "3.7"

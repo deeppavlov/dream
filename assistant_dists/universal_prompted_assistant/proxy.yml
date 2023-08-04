@@ -36,13 +36,4 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8161
       - PORT=8161
 
-  transformers-lm-oasst12b:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8158
-      - PORT=8158
-
 version: '3.7'
