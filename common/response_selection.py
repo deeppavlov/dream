@@ -47,7 +47,7 @@ NOT_ADD_PROMPT_SKILLS = [
     "dff_mint_skill",
     "dff_intent_responder_skill",
     "misheard_asr",
-    "dff_program_y_dangerous_skill"
+    "dff_program_y_dangerous_skill",
 ]
 
 COMPLETELY_CHANGING_THE_SUBJECT_PHRASES = [
