@@ -7,7 +7,6 @@ import torch
 import sentry_sdk
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
-from common.universal_templates import is_any_question_sentence_in_utterance
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
