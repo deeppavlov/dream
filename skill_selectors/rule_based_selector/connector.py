@@ -24,7 +24,6 @@ from common.universal_templates import (
 from common.utils import (
     high_priority_intents,
     low_priority_intents,
-    command_intents,
     mint_intents,
     get_topics,
     get_intents,

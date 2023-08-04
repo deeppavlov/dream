@@ -4,7 +4,7 @@ from copy import deepcopy
 import common.dff.integration.context as int_ctx
 import scenario.response_funcs as response_funcs
 
-from common.utils import command_intents, get_intents
+from common.utils import mint_intents, get_intents
 from df_engine.core import Actor, Context
 
 
@@ -59,7 +59,7 @@ def default_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
 def set_confidence_from_input(ctx: Context, actor: Actor, *args, **kwargs) -> Context:
     intent, confidence = get_detected_intents(int_ctx.get_last_human_utterance(ctx, actor))
-    if intent in command_intents:
+    if intent in mint_intents:
         int_ctx.set_confidence(ctx, actor, 1.0)
     else:
         int_ctx.set_confidence(ctx, actor, confidence)
