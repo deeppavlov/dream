@@ -438,30 +438,16 @@ def get_result(request, graph):
     uttrs = request.json.get("utterances", [])
     logger.info(f"uttrs (idx?) --{uttrs}")
     utt = uttrs[0]
-    # content = utt.items()
-    # logger.info(f"content -- {content}")
-    # try:
-    #     keys = utt["user"]["attributes"]["dff_knowledge_prompted_skill_state"]["responses"].keys()
-    #     logger.info(f"keys -- {keys}")
-    # except Exception as exc:
-    #     logger.exception(exc)
-
-    # dialogs = request.json.get("dialog_contexts", [])
-    # logger.info(f"dialogs -- {dialogs}")
-    # human_utter_indexes = request.json.get("human_utter_indexes", [0] * len(dialogs))
-    # responses = []
-    # for dialog, human_utter_index in zip(dialogs, human_utter_indexes):
-    #     bot_utts = dialog.get("bot_utterances", [])
-    #     last_bot_utt_text = bot_utts[-1].get("text", "") if len(bot_utts) > 0 else ""
-    #     logger.info(f"last_bot_utt_text -- {last_bot_utt_text}")
-
+    logger.info(f"utt -- {uttrs}")
+    # if utt:
+    last_utt = utt["text"]
+    logger.info(f"last_utt --  {last_utt}")
+    
     # user_id = "/".join(["User", str(utt.get("user", {}).get("id", ""))]) # bot has no id in dialogue context
     user_id = "/".join(["Bot", ""])
     # Should be created bot_id from graph?
     # user_external_id = str(utt.get("user", {}).get("user_external_id", "")) # bot has no external id, this step to be omitted?
     user_external_id = ""
-    last_utt = utt["text"]
-    logger.info(f"last_utt --  {last_utt}")
     annotations = utt.get("annotations", {})
     custom_el_annotations = annotations.get("custom_entity_linking", [])
     logger.info(f"custom_el_annotations --  {custom_el_annotations}")

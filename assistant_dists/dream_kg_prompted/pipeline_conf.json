@@ -70,7 +70,9 @@
                 "annotator_names": [
                     "sentseg",
                     "ner",
-                    "spacy_nounphrases"
+                    "spacy_nounphrases",
+                    "property_extraction",
+                    "user_knowledge_memorizer"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
