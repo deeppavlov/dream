@@ -257,7 +257,7 @@ def prepare_triplets_to_add_to_dbs(
 
     Output example:
       triplets_to_kg -- {
-        'ids_a': ['User/b75d2700259bdc44sdsdf85e7f530ed'],
+        'ids_a': ['Bot/b75d2700259bdc44sdsdf85e7f530ed'],
         'relationship_kinds': ['HAVE_PET'],
         'ids_b': ['Animal/6e224463-e9a9-4e43-b548-a3c52f30de66']
       }
@@ -327,7 +327,7 @@ def add_triplets_to_dbs(graph, bot_id: str, triplets_to_kg: dict, triplets_to_in
 
     if len(triplets_to_kg["ids_a"]):
         graph.ontology.create_relationship_kinds(
-            ["User"] * len(triplets_to_kg["ids_a"]), triplets_to_kg["relationship_kinds"], kinds_b
+            ["Bot"] * len(triplets_to_kg["ids_a"]), triplets_to_kg["relationship_kinds"], kinds_b
         )
         logger.debug(
             f"""to be added to kg\n
@@ -424,7 +424,7 @@ def check_and_add_properties(graph, prop_triplets: List[dict], bot_id: str) -> T
         objects = [triplet["object"] for triplet in properties_to_add_to_kg]
         logger.info(f"property_kinds -- {property_kinds}\nproperties_families -- {properties_families}\nproperties_to_add_to_kg -- {properties_to_add_to_kg}")
         graph.ontology.create_property_kinds_of_entity_kind(
-            "User",
+            "Bot",
             property_kinds,
             properties_type_families=properties_families,
         )
