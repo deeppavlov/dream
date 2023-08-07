@@ -64,9 +64,9 @@ else:
                     "utt_num": 0,
                     "wiki_skill_entities_info": {},
                 }
-            ]
+            ],
         )
-    ]
+    ],
 )
 @pytest.mark.skipif(lang="@ru")
 def test_wiki_parser_en(url: str, request_data: dict, gold_results: list[dict]):
@@ -128,9 +128,9 @@ def test_wiki_parser_en(url: str, request_data: dict, gold_results: list[dict]):
                     "utt_num": 0,
                     "wiki_skill_entities_info": {},
                 }
-            ]
+            ],
         )
-    ]
+    ],
 )
 @pytest.mark.skipif(lang="@en")
 def test_wiki_parser_ru(url: str, request_data: dict, gold_results: list[dict]):

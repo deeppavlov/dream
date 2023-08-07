@@ -13,7 +13,7 @@ use_context = True
                 "entity_tags": [["film"]],
                 "context": [["кто снял фильм форрест гамп?"]],
             },
-            ["Q134773"]
+            ["Q134773"],
         ),
         (
             {
@@ -21,9 +21,9 @@ use_context = True
                 "entity_tags": [["per"]],
                 "context": [["за какую команду играет роберт левандовский?"]],
             },
-            ["Q151269"]
-        )
-    ]
+            ["Q151269"],
+        ),
+    ],
 )
 def test_entity_linking(url: str, request_data: dict[str, list], gold_results: list[str]):
     response = requests.post(url, json=request_data)

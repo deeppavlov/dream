@@ -9,33 +9,43 @@ import requests
     [
         (
             {"sentences": [["what is the capital of russia?"]]},
-            [{
-                "entities": ["capital", "russia"],
-                "labelled_entities": [
-                    {"finegrained_label": [["misc", 0.871]], "label": "misc", "offsets": [12, 19], "text": "capital"},
+            [
+                {
+                    "entities": ["capital", "russia"],
+                    "labelled_entities": [
                         {
-                             "finegrained_label": [["loc", 0.9927]],
-                             "label": "location",
-                             "offsets": [23, 29],
-                             "text": "russia",
+                            "finegrained_label": [["misc", 0.871]],
+                            "label": "misc",
+                            "offsets": [12, 19],
+                            "text": "capital",
+                        },
+                        {
+                            "finegrained_label": [["loc", 0.9927]],
+                            "label": "location",
+                            "offsets": [23, 29],
+                            "text": "russia",
                         },
                     ],
-            }]
+                }
+            ],
         ),
         (
             {"sentences": [["let's talk about politics."]]},
-            [{
-                "entities": ["politics"],
-                "labelled_entities": [
-                    {
-                        "finegrained_label": [["misc", 0.9984]],
-                        "label": "misc", "offsets": [17, 25],
-                        "text": "politics"
-                    }
-                ],
-            }]
-        )
-    ]
+            [
+                {
+                    "entities": ["politics"],
+                    "labelled_entities": [
+                        {
+                            "finegrained_label": [["misc", 0.9984]],
+                            "label": "misc",
+                            "offsets": [17, 25],
+                            "text": "politics",
+                        }
+                    ],
+                }
+            ],
+        ),
+    ],
 )
 def test_entity_detection(url: str, request_data: dict[str, list], gold_results: list[dict]):
     response = requests.post(url, json=request_data)

@@ -2,9 +2,9 @@ import pytest
 
 
 def pytest_addoption(parser):
-    parser.addoption("--uri", action="store", default="http://0.0.0.0")
-    parser.addoption("--port", action="store", default="8103")
-    parser.addoption("--handle", action="store", default="respond")
+    parser.addoption("--uri", action="store", default="http://proxy.deeppavlov.ai")
+    parser.addoption("--port", action="store", default=8021)
+    parser.addoption("--handle", action="store", default="/ner")
 
 
 @pytest.fixture
@@ -13,7 +13,7 @@ def uri(request) -> str:
 
 
 @pytest.fixture
-def port(request) -> str:
+def port(request) -> int:
     return request.config.getoption("--port")
 
 

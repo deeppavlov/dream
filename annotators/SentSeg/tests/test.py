@@ -3,7 +3,6 @@ import pytest
 import requests
 
 
-
 @allure.description("""Base response test""")
 def test_response(url):
     data = {"sentences": ["Hello how are you", "I am fine", "Alexa what is the weather today"]}
@@ -11,8 +10,8 @@ def test_response(url):
     response_data = response.json()
     assert response.status_code == 200
     assert len(response_data) == 3
-    assert 'punct_sent' in response_data[0]
-    assert 'segments' in response_data[0]
+    assert "punct_sent" in response_data[0]
+    assert "segments" in response_data[0]
 
 
 @allure.description("""Base response test: pass wrong json""")
@@ -43,7 +42,7 @@ def test_sentseg_punctuation(url: str, sentences: dict, gold: str):
     [
         ({"sentences": ["hey alexa how are you"]}, ["hey alexa.", "how are you?"]),
         ({"sentences": [""]}, [""]),
-        ({ "sentences": ["Hello. How are you? I am fine!"]}, ["Hello.", "How are you?", "I am fine!"])
+        ({"sentences": ["Hello. How are you? I am fine!"]}, ["Hello.", "How are you?", "I am fine!"]),
     ],
 )
 def test_sentseg_split(url: str, sentences: dict, gold: list[str]):
@@ -70,8 +69,8 @@ def test_sentseg_split(url: str, sentences: dict, gold: list[str]):
         ({"sentences": ["yall come back now."]}, "you all come back now."),
         ({"sentences": ["I'd like a coffee."]}, "I would like a coffee."),
         ({"sentences": ["I'm gon na study."]}, "I am going to study."),
-        ({"sentences": ["I wan na play."]}, "I want to play.")
-    ]
+        ({"sentences": ["I wan na play."]}, "I want to play."),
+    ],
 )
 def test_sentseg_preprocessing(url: str, sentences: dict, gold: str):
     response = requests.post(url, json=sentences)
