@@ -1,12 +1,14 @@
 import os
 import requests
 
+import allure
 import pytest
 
 
 language = os.getenv("LANGUAGE", "EN")
 
 
+@allure.description("""Base text_qa answer test""")
 @pytest.mark.parametrize(
     "request_data, gold_results",
     [

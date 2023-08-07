@@ -1,7 +1,9 @@
+import allure
 import pytest
 import requests
 
 
+@allure.description("""Knowledge grounding multi-language test""")
 @pytest.mark.parametrize(
     "checked_sentence, knowledge, text, expected",
     [
