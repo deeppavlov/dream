@@ -47,14 +47,14 @@ def compose_data_for_model(ctx, actor):
 def compose_input_for_API(ctx: Context, actor: Actor, *args, **kwargs):
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        plan = shared_memory.get("plan", None)
+        plan = shared_memory.get("plan", list())
         step = shared_memory.get("step", 0)
         subtask_results = shared_memory.get("subtask_results", {})
-        question = shared_memory.get("question", None)
+        question = shared_memory.get("question", "")
         answer = ctx.misc.get("slots", {}).get("details_answer", None)
         api2use = shared_memory.get("api2use", "generative_lm")
         input_template = api_conf[api2use]["input_template"]
-        dialog_context = []
+        dialog_context = list()
         if subtask_results:
             tasks_history = f"""Here is the story of completed tasks and results:
 {subtask_results}
@@ -99,9 +99,9 @@ Input format: {input_template}"""
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            api_input = None
+            api_input = ""
         logger.info(f"API INPUT: {api_input}")
         int_ctx.save_to_shared_memory(ctx, actor, api_input=api_input)
-        int_ctx.save_to_shared_memory(ctx, actor, question=None)
-        int_ctx.save_to_shared_memory(ctx, actor, answer=None)
+        int_ctx.save_to_shared_memory(ctx, actor, question="")
+        int_ctx.save_to_shared_memory(ctx, actor, answer="")
         return api_input

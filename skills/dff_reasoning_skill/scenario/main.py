@@ -22,7 +22,7 @@ flows = {
             TRANSITIONS: {"plan": cnd.true()},
         },
         "plan": {
-            RESPONSE: loc_rsp.plan,
+            RESPONSE: loc_rsp.planning,
             PROCESSING: {
                 "set_is_final_answer_flag": int_prs.set_is_final_answer_flag("false"),
             },

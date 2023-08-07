@@ -29,14 +29,15 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-today = date.today()
+
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 120))
+GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
+TIME_SLEEP = int(getenv("TIME_SLEEP", 0))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
@@ -70,8 +71,10 @@ def timeout_handler(signum, frame):
     raise Exception("API timeout")
 
 
-def plan(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+def planning(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    plan = list()
     if not ctx.validation:
+        today = date.today()
         api_desc = {}
         for key, value in api_conf.items():
             api_desc[key] = value["description"]
@@ -90,8 +93,8 @@ PLAN:
 2. Subtask 2
 3. Subtask 3
 ...
-"""
-        dialog_context = []
+    """
+        dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
@@ -115,33 +118,34 @@ PLAN:
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            plan = None
+            plan = list()
         int_ctx.save_to_shared_memory(ctx, actor, plan=plan)
         int_ctx.save_to_shared_memory(ctx, actor, step=0)
         int_ctx.save_to_shared_memory(ctx, actor, user_request=ctx.last_request)
         logger.info(f"PLAN: {plan}")
-        time.sleep(5)
-        return plan
+        time.sleep(TIME_SLEEP)
+    return plan
 
 
 def check_if_needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    answer = ""
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        plan = shared_memory.get("plan", [])
+        plan = shared_memory.get("plan", list())
         step = shared_memory.get("step", 0)
         subtask_results = shared_memory.get("subtask_results", {})
         if plan:
             if subtask_results:
                 tasks_history = f"""Here is the story of completed tasks and results:
-{subtask_results}
-"""
+    {subtask_results}
+    """
             else:
                 tasks_history = ""
             prompt = f"""{tasks_history}Here is your current task:
 {plan[step]}
 Do you need to clarify any details with the user related to your current task? \
 ANSWER ONLY YES/NO"""
-            dialog_context = []
+            dialog_context = list()
             human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
             lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
             lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
@@ -166,22 +170,25 @@ ANSWER ONLY YES/NO"""
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)
-                answer = None
+                answer = ""
             logger.info(f"NEEDS_CLARIFICATION: {answer}")
             int_ctx.save_to_shared_memory(ctx, actor, needs_details=answer)
-        return answer
+        else:
+            answer = ""
+    return answer
 
 
 def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    question = ""
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        plan = shared_memory.get("plan", [])
+        plan = shared_memory.get("plan", list())
         step = shared_memory.get("step", 0)
         subtask_results = shared_memory.get("subtask_results", {})
         if subtask_results:
             tasks_history = f"""CONTEXT:
-{"---".join(list(subtask_results.values()))}
-"""
+    {"---".join(list(subtask_results.values()))}
+    """
         else:
             tasks_history = ""
 
@@ -189,7 +196,7 @@ def clarify_details(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 {plan[step]}
 Formulate a clarifying question to the user to get necessary information \
 to complete the current task"""
-        dialog_context = []
+        dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
@@ -212,17 +219,19 @@ to complete the current task"""
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            question = None
+            question = ""
         int_ctx.save_to_shared_memory(ctx, actor, question=question)
         logger.info(f"CLARIFYING QUESTION: {question}")
-        time.sleep(5)
-        return question
+        time.sleep(TIME_SLEEP)
+    return question
 
 
 def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    api2use = ""
     if not ctx.validation:
+        today = date.today()
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        plan = shared_memory.get("plan", [])
+        plan = shared_memory.get("plan", list())
         step = shared_memory.get("step", 0)
         subtask_results = shared_memory.get("subtask_results", {})
         for key in api_conf.keys():
@@ -235,8 +244,8 @@ def choose_tool(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 
         if subtask_results:
             tasks_history = f"""CONTEXT:
-{"---".join(list(subtask_results.values()))}
-"""
+    {"---".join(list(subtask_results.values()))}
+    """
         else:
             tasks_history = ""
         prompt = f"""Today date is: {today}. {tasks_history}YOUR CURRENT TASK:
@@ -246,7 +255,7 @@ AVAILABLE TOOLS:
 Choose the best tool to use to complete your current task. \
 Return the name of the best tool to use exactly as it is written in the dictionary. \
 DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
-        dialog_context = []
+        dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
@@ -278,23 +287,25 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
             api2use = "generative_lm"
         int_ctx.save_to_shared_memory(ctx, actor, api2use=api2use)
         logger.info(f"CHOSEN TOOL: {api2use}")
-        time.sleep(5)
-        return api2use
+        time.sleep(TIME_SLEEP)
+    return api2use
 
 
 def ask4approval(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    response = ""
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        api2use = shared_memory.get("api2use", None)
+        api2use = shared_memory.get("api2use", "")
         response = f"""I need to use {api_conf[api2use]['display_name']} \
 to handle your request. Do you approve?"""
-        return response
+    return response
 
 
 def complete_subtask(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    response = ""
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        api2use = shared_memory.get("api2use", None)
+        api2use = shared_memory.get("api2use", "")
         subtask_results = shared_memory.get("subtask_results", {})
         step = shared_memory.get("step", 0)
         if api2use:
@@ -307,24 +318,28 @@ def complete_subtask(ctx: Context, actor: Actor, *args, **kwargs) -> str:
             except Exception:
                 response = "Unfortunately, something went wrong with API"
             signal.alarm(0)
+        else:
+            response = "Unfortunately, something went wrong"
         logger.info(f"subtask response: {response}")
         subtask_results[str(step)] = response
         logger.info(f"subtask result: {subtask_results}")
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
-        return response
+    return response
 
 
 def self_reflexion(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    response = ""
     if not ctx.validation:
+        today = date.today()
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         subtask_results = shared_memory.get("subtask_results", {})
-        plan = shared_memory.get("plan", [])
+        plan = shared_memory.get("plan", list())
         step = shared_memory.get("step", 0)
         prompt = f"""Today date is: {today}. YOUR TASK: {plan[step]}
 RESULT: {subtask_results[str(step)]}
 Do you think that you completed the task and the result is good and relevant? Return 'Yes', if positive, \
 and 'No' and the reason if negative."""
-        dialog_context = []
+        dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
@@ -347,16 +362,18 @@ and 'No' and the reason if negative."""
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            response = None
+            response = ""
         logger.info(f"self reflexion: {response}")
         step += 1
         int_ctx.save_to_shared_memory(ctx, actor, step=step)
         int_ctx.save_to_shared_memory(ctx, actor, self_reflexion=response)
-        return response
+    return response
 
 
 def final_answer(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    response = ""
     if not ctx.validation:
+        today = date.today()
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         subtask_results = shared_memory.get("subtask_results", {})
         user_request = shared_memory.get("user_request", "")
@@ -364,7 +381,7 @@ def final_answer(ctx: Context, actor: Actor, *args, **kwargs) -> str:
 CONTEXT:
 {"---".join(list(subtask_results.values()))}
 YOUR TASK: given the information in the context, form a final answer to the user request"""
-        dialog_context = []
+        dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
@@ -387,27 +404,28 @@ YOUR TASK: given the information in the context, form a final answer to the user
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            response = None
+            response = ""
 
         subtask_results = {}
-        plan = []
+        plan = list()
         step = 0
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
         int_ctx.save_to_shared_memory(ctx, actor, plan=plan)
         int_ctx.save_to_shared_memory(ctx, actor, step=step)
         logger.info(f"final answer: {response}")
-        return response
+    return response
 
 
 def retry_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
+    response = ""
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         subtask_results = shared_memory.get("subtask_results", {})
-        plan = shared_memory.get("plan", [])
+        plan = shared_memory.get("plan", list())
         step = shared_memory.get("step", 0)
         step -= 1
         del subtask_results[str(step)]
         int_ctx.save_to_shared_memory(ctx, actor, step=step)
         int_ctx.save_to_shared_memory(ctx, actor, subtask_results=subtask_results)
         response = f"""I didn't manage to complete subtask:\n{plan[step]}\nI will try again."""
-        return response
+    return response

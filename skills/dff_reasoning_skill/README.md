@@ -13,6 +13,7 @@ GENERATIVE_SERVICE_CONFIG: configuration file with generative parameters to util
 GENERATIVE_TIMEOUT: timeout for request to LLM
 N_UTTERANCES_CONTEXT: number of last utterances to consider as a dialog context
 ENVVARS_TO_SEND: API keys splitted by comma to get as env variables
+TIME_SLEEP: time to sleep between LLM requests
 ```
 
 ## Dependencies

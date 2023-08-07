@@ -67,9 +67,9 @@ def generative_lm_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            hypotheses = []
+            hypotheses = list()
     else:
-        hypotheses = []
+        hypotheses = list()
 
     if len(hypotheses) == 0:
         return ""

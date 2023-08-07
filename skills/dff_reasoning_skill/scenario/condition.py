@@ -31,7 +31,7 @@ def is_last_utt_approval_question(ctx: Context, actor: Actor, *args, **kwargs) -
 def needs_details(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        answer = shared_memory.get("needs_details", None)
+        answer = shared_memory.get("needs_details", "")
         if answer and re.search(yes_templates, answer.lower()):
             return True
     return False
@@ -41,20 +41,21 @@ def is_tool_needs_approval(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         api2use = shared_memory.get("api2use", None)
-        approved_tools = ctx.misc.get("slots", {}).get("approved_tools", [])
-        if api_conf[api2use]["needs_approval"] == "True":
-            if api_conf[api2use]["approve_once"] == "True":
-                if api2use not in approved_tools:
+        if api2use:
+            approved_tools = ctx.misc.get("slots", {}).get("approved_tools", [])
+            if api_conf[api2use]["needs_approval"] == "True":
+                if api_conf[api2use]["approve_once"] == "True":
+                    if api2use not in approved_tools:
+                        return True
+                else:
                     return True
-            else:
-                return True
     return False
 
 
 def is_self_reflection_ok(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        self_reflexion = shared_memory.get("self_reflexion", None)
+        self_reflexion = shared_memory.get("self_reflexion", "")
         if self_reflexion and re.search(yes_templates, self_reflexion.lower()):
             return True
     return False
@@ -64,7 +65,7 @@ def is_last_step(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         step = shared_memory.get("step", 0)
-        plan = shared_memory.get("plan", [])
+        plan = shared_memory.get("plan", list())
         if int(step) == len(plan):
             return True
     return False
