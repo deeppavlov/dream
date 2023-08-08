@@ -1,10 +1,10 @@
 # ros_flask_server service
 
-This is an intermediate node in the chain of dream_mint:
+This is an intermediate node in the chain of dream_embodied:
 
 ### Architecture
 
-[Architecture](../../assistant_dists/dream_mint/architecture.png)
+[Architecture](../../assistant_dists/dream_embodied/architecture.png)
 
 ### Description
 

@@ -101,7 +101,7 @@ def add_question_to_statement(
 def lower_duplicates_score(candidates, bot_utt_counter, scores, confidences):
     for i, cand in enumerate(candidates):
         # no penalties for repeat intent
-        if cand["skill_name"] == "dff_mint_skill" and "#+#repeat" in cand["text"]:
+        if cand["skill_name"] == "dff_embodied_skill" and "#+#repeat" in cand["text"]:
             continue
         if cand["skill_name"] == "dff_intent_responder_skill" and "#+#repeat" in cand["text"]:
             continue

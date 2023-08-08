@@ -1,5 +1,5 @@
-name: mint_status
-display_name: Mint status
+name: embodied_status
+display_name: Embodied status
 component_type: Script-based w/o NNs
 model_type: null
 is_customizable: false
@@ -10,10 +10,10 @@ gpu_usage: null
 connector:
   protocol: http
   timeout: 1.0
-  url: http://mint-status:8043/check
+  url: http://embodied-status:8043/check
 previous_services: null
 required_previous_services: null
 tags: null
 endpoint: check
-service: annotators/mint_status/service_configs/mint_status
+service: annotators/embodied_status/service_configs/embodied_status
 date_created: '2023-06-01T12:12:12'

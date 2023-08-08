@@ -1,5 +1,5 @@
-name: mint_sender
-display_name: Mint sender
+name: embodied_sender
+display_name: Embodied sender
 component_type: Script-based w/o NNs
 model_type: null
 is_customizable: false
@@ -10,10 +10,10 @@ gpu_usage: null
 connector:
   protocol: http
   timeout: 1.0
-  url: http://mint-sender:8042/send
-previous_services: [mint_status]
-required_previous_services: [mint_status]
+  url: http://embodied-sender:8042/send
+previous_services: [embodied_status]
+required_previous_services: [embodied_status]
 tags: null
 endpoint: send
-service: services/mint_sender/service_configs/mint_sender
+service: services/embodied_sender/service_configs/embodied_sender
 date_created: '2023-06-01T12:12:12'

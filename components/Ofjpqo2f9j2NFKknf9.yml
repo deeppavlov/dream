@@ -1,20 +1,20 @@
-name: dff_mint_skill
-display_name: Mint skill
+name: dff_embodied_skill
+display_name: Embodied skill
 component_type: Script-based w/o NNs
 model_type: null
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: A dff skill that interacts with ros_flask_server and mint_status. It allows Dream to answer to embodied intents.
+description: A dff skill that interacts with ros_flask_server and embodied_status. It allows Dream to answer to embodied intents.
 ram_usage: 150M
 gpu_usage: null
 connector:
   protocol: http
   timeout: 1.0
-  url: http://dff-mint-skill:8041/respond
+  url: http://dff-embodied-skill:8041/respond
 previous_services:
 - skill_selectors
-required_previous_services: [mint_status]
+required_previous_services: [embodied_status]
 tags: null
 endpoint: respond
-service: skills/dff_mint_skill/service_configs/dff_mint_skill
+service: skills/dff_embodied_skill/service_configs/dff_embodied_skill
 date_created: '2023-06-01T12:12:12'

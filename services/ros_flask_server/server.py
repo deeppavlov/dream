@@ -35,12 +35,12 @@ def respond_set_commands():
     st_time = time.perf_counter()
     VALID_COMMANDS = list(map(lambda i: i.lower(), request.json.get("commands", [])))
     if not VALID_COMMANDS:
-        logger.info("mint-server user did not send valid commands list")
-    logger.info(f"mint-server `VALID_COMMANDS` set: {VALID_COMMANDS}")
+        logger.info("embodied-server user did not send valid commands list")
+    logger.info(f"embodied-server `VALID_COMMANDS` set: {VALID_COMMANDS}")
 
     total_time = time.perf_counter() - st_time
 
-    logger.info(f"mint-server `is_command_valid` exec time: {total_time:.3f}s")
+    logger.info(f"embodied-server `is_command_valid` exec time: {total_time:.3f}s")
 
     return {"result": bool(VALID_COMMANDS)}
 
@@ -51,11 +51,11 @@ def respond_is_command_valid():
 
     command = request.json.get("command", None)
     results = {"result": any(item in command for item in VALID_COMMANDS)}
-    logger.info(f"mint-server `is_command_valid` results: {results}")
+    logger.info(f"embodied-server `is_command_valid` results: {results}")
 
     total_time = time.perf_counter() - st_time
 
-    logger.info(f"mint-server `is_command_valid` exec time: {total_time:.3f}s")
+    logger.info(f"embodied-server `is_command_valid` exec time: {total_time:.3f}s")
 
     return jsonify(results)
 
@@ -75,11 +75,11 @@ def respond_perform_command():
         except Exception as e:
             logger.info(f"Error inside ROS: {e}")
     results = {"result": cmd_valid}
-    logger.info(f"mint-server `perform_command` {command} appended to queue?: {results}")
+    logger.info(f"embodied-server `perform_command` {command} appended to queue?: {results}")
 
     total_time = time.perf_counter() - st_time
 
-    logger.info(f"mint-server `perform_command` exec time: {total_time:.3f}s")
+    logger.info(f"embodied-server `perform_command` exec time: {total_time:.3f}s")
 
     return jsonify(results)
 
@@ -92,11 +92,11 @@ def respond_receive_command():
 
     command = COMMAND_QUEUE.pop(0) if COMMAND_QUEUE else None
     results = {"command": command}
-    logger.info(f"mint-server `receive_command` results: {results}")
+    logger.info(f"embodied-server `receive_command` results: {results}")
 
     total_time = time.perf_counter() - st_time
 
-    logger.info(f"mint-server `receive_command` exec time: {total_time:.3f}s")
+    logger.info(f"embodied-server `receive_command` exec time: {total_time:.3f}s")
 
     return jsonify(results)
 
@@ -106,11 +106,11 @@ def respond_is_command_performed():
     st_time = time.perf_counter()
 
     results = {"result": EXECUTING_COMMAND}
-    logger.info(f"mint-server `is_command_performed` results: {results}")
+    logger.info(f"embodied-server `is_command_performed` results: {results}")
 
     total_time = time.perf_counter() - st_time
 
-    logger.info(f"mint-server `is_command_performed` exec time: {total_time:.3f}s")
+    logger.info(f"embodied-server `is_command_performed` exec time: {total_time:.3f}s")
 
     return jsonify(results)
 
@@ -122,12 +122,12 @@ def respond_command_is_performed():
     st_time = time.perf_counter()
 
     results = {"result": True}
-    logger.info(f"mint-server `command_is_performed` results: {results}")
+    logger.info(f"embodied-server `command_is_performed` results: {results}")
     EXECUTING_COMMAND = None
 
     total_time = time.perf_counter() - st_time
 
-    logger.info(f"mint-server `command_is_performed` exec time: {total_time:.3f}s")
+    logger.info(f"embodied-server `command_is_performed` exec time: {total_time:.3f}s")
 
     return jsonify(results)
 
