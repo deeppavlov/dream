@@ -24,6 +24,8 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
+LOAD_IN_8BIT = os.environ.get("LOAD_IN_8BIT", 0)
+LOAD_IN_8BIT = 0 if LOAD_IN_8BIT is None else bool(int(LOAD_IN_8BIT))
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 LANGUAGE = os.getenv("LANGUAGE", "EN")
 HF_ACCESS_TOKEN = os.environ.get("HF_ACCESS_TOKEN", None)
@@ -152,6 +154,9 @@ try:
 
     if HALF_PRECISION:
         additional_kwargs["torch_dtype"] = torch.float16
+    if LOAD_IN_8BIT:
+        additional_kwargs["load_in_8bit"] = True
+
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
     if torch.cuda.is_available():
         model.to("cuda")

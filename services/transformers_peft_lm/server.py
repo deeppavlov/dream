@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import time
+from copy import deepcopy
 
 import sentry_sdk
 import torch
@@ -20,8 +21,13 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
+HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
+HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
+LOAD_IN_8BIT = os.environ.get("LOAD_IN_8BIT", 0)
+LOAD_IN_8BIT = 0 if LOAD_IN_8BIT is None else bool(int(LOAD_IN_8BIT))
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 LANGUAGE = os.getenv("LANGUAGE", "EN")
+HF_ACCESS_TOKEN = os.environ.get("HF_ACCESS_TOKEN", None)
 NAMING = {
     "EN": ["AI", "Human"],
     "RU": ["Чат-бот", "Человек"],
@@ -71,17 +77,20 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
 
 
 try:
-    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    additional_kwargs = {}
+    if HF_ACCESS_TOKEN:
+        additional_kwargs["use_auth_token"] = HF_ACCESS_TOKEN
+
+    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
+
+    if HALF_PRECISION:
+        additional_kwargs["torch_dtype"] = torch.float16
+    if LOAD_IN_8BIT:
+        additional_kwargs["load_in_8bit"] = True
 
     default_config = GenerationConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-
     config = PeftConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
-    model = AutoModelForCausalLM.from_pretrained(
-        config.base_model_name_or_path,
-        torch_dtype=torch.float16,
-        # load_in_8bit=True,
-        # device_map="auto"
-    )
+    model = AutoModelForCausalLM.from_pretrained(config.base_model_name_or_path, **additional_kwargs)
     model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH)
     model.eval()
 
@@ -90,7 +99,11 @@ try:
         logger.info("transformers_peft_lm is set to run on cuda")
 
     example_response = generate_responses(
-        ["What is the goal of SpaceX?"], model, tokenizer, "You are a SpaceX Assistant.", default_config
+        ["What is the goal of SpaceX?"],
+        model,
+        tokenizer,
+        "You are a SpaceX Assistant.",
+        deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]),
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_peft_lm is ready")
