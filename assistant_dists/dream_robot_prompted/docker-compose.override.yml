@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087,
         sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145,
-        dff-robot-prompted-skill:8176"
+        dff-robot-prompted-skill:8179"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -131,7 +131,7 @@ services:
     env_file: [ .env,.env_secret ]
     build:
       args:
-        SERVICE_PORT: 8176
+        SERVICE_PORT: 8179
         SERVICE_NAME: dff_robot_prompted_skill
         PROMPT_FILE: common/prompts/robot.json
         GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
