@@ -1,5 +1,5 @@
 import logging
-# import json # comment out if saving dialog content is planned
+import json # comment out if saving dialog content is planned
 from copy import deepcopy
 from typing import Dict, List
 
@@ -721,9 +721,36 @@ def prepare_el_input(dialog: Dict):
     return entity_substr_list, entity_tags_list, context
 
 
+def prepare_el_input_last_bot(dialog: Dict):
+    num_last_utterances = 2
+    entities_with_labels = get_entities(dialog["bot_utterances"][-1], only_named=False, with_labels=True)
+    entity_substr_list, entity_tags_list = [], []
+    for entity in entities_with_labels:
+        if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+            entity_substr_list.append(entity["text"])
+            if "finegrained_label" in entity:
+                finegrained_labels = [[label.lower(), conf] for label, conf in entity["finegrained_label"]]
+                entity_tags_list.append(finegrained_labels)
+            elif "label" in entity:
+                entity_tags_list.append([[entity["label"].lower(), 1.0]])
+            else:
+                entity_tags_list.append([["misc", 1.0]])
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
+
+    return entity_substr_list, entity_tags_list, context
+
+
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
+    return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": [context]}]
+
+
+def el_formatter_last_bot_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog)
     return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": [context]}]
 
 
@@ -735,6 +762,26 @@ def custom_el_formatter_dialog(dialog: Dict):
     return [
         {
             "user_id": [user_id],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "context": [context],
+            "property_extraction": [property_extraction],
+        }
+    ]
+
+
+def custom_el_formatter_last_bot_dialog(dialog: Dict):
+    # Used by: bot-km annotator
+    bot_id = "/".join(["Bot", "514b2c2d-bb72-4294-9486-04f9e099825e"])
+    if len(dialog["bot_utterances"]):
+        entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog) #changed prepare_el_input
+        property_extraction = dialog["bot_utterances"][-1]["annotations"].get("property_extraction", {})
+    else:
+        property_extraction = {}
+        entity_substr_list, entity_tags_list, context = [], [], []
+    return [
+        {
+            "bot_id": [bot_id],
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
             "context": [context],
@@ -1220,6 +1267,8 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
 
 
 def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
     return [
         {
             "utterances": [dialog["human_utterances"][-1]],
@@ -1229,12 +1278,12 @@ def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def user_knowledge_memorizer_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
     # comment out the next two lines to save dialog data to see its contents
-    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
-    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    with open('test_formatters.json', 'w', encoding='utf-8') as f:
+        json.dump(dialog, f, ensure_ascii=False, indent=4)
     if dialog["bot_utterances"]:
         dialog_history = dialog["bot_utterances"][-1]
     else:
-        dialog_history = [""]
+        dialog_history = []
     return [
         {
             "utterances": [dialog_history],
