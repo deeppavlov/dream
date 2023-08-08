@@ -23,14 +23,4 @@ compose:
   - ./common:/src/common
   ports:
   - 8057:8057
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8057
-  - PORT=8057
+

@@ -24,6 +24,8 @@ compose:
       CONV_EVAL_STRENGTH: 0.4
       PRIORITIZE_HUMAN_INITIATIVE: 1
       QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+      LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
       FLASK_APP: server
     context: .
     dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
@@ -41,14 +43,3 @@ compose:
   - ./common:/src/common
   ports:
   - 8009:8009
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8009
-  - PORT=8009

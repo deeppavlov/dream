@@ -10,9 +10,9 @@ services:
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
-  ranking-based-response-selector:
+  llm-based-response-selector:
     volumes:
-      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./response_selectors/llm_based_response_selector:/src"
       - "./common:/src/common"
   combined-classification:
     volumes:
@@ -30,11 +30,11 @@ services:
     volumes:
       - "./annotators/prompt_selector:/src"
       - "./common:/src/common"
-  openai-api-davinci3:
+  openai-api-chatgpt:
     volumes:
       - "./services/openai_api_lm:/src"
       - "./common:/src/common"
-  dff-dream-persona-davinci3-prompted-skill:
+  dff-dream-persona-chatgpt-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"

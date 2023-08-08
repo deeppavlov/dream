@@ -56,7 +56,8 @@
             },
         {},
         {
-            "can_continue": "must"
+            "can_continue": "must",
+            "is_final_answer": "true"
         }
     ]
 ]

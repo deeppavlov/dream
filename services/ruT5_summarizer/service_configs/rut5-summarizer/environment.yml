@@ -1,0 +1,5 @@
+SERVICE_PORT: 8060
+SERVICE_NAME: rut5_summarizer
+PRETRAINED_MODEL_NAME: "IlyaGusev/rut5_base_sum_gazeta"
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

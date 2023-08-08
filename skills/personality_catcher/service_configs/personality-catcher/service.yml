@@ -17,14 +17,3 @@ compose:
   - ./skills/personality_catcher:/app
   ports:
   - 8010:8010
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8010
-  - PORT=8010

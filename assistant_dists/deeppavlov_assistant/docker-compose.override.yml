@@ -9,6 +9,7 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   ranking-based-response-selector:
     env_file: [ .env ]
@@ -40,6 +41,7 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
         N_SENTENCES_TO_RETURN: 3
         PROMPTS_TO_CONSIDER: deeppavlov
       context: .
@@ -88,7 +90,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 100M
+          memory: 500M
         reservations:
           memory: 100M
 

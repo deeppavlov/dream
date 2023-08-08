@@ -11,14 +11,15 @@ group: last_chance_service
 connector:
   protocol: python
   class_name: PredefinedTextConnector
-  response_text: Sorry, something went wrong inside. Please tell me, what did you
-    say.
+  response_text: Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую
+    реплику.
   annotations:
     sentseg:
-      punct_sent: Sorry, something went wrong inside. Please tell me, what did you say.
+      punct_sent: Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую
+        реплику.
       segments:
-        - Sorry, something went wrong inside.
-        - Please tell me, what did you say.
+      - Извини, что-то пошло не так в моем мозгу.
+      - Пожалуйста, повтори предыдущую реплику.
 dialog_formatter: null
 response_formatter: null
 previous_services: null
@@ -27,5 +28,5 @@ state_manager_method: add_bot_utterance_last_chance
 tags:
 - last_chance
 endpoint: respond
-service: services/last_chance_service/service_configs/agent
+service: services/agent_services/service_configs/dream_persona_rullama_prompted
 date_created: '2023-03-04T19:27:44'

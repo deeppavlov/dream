@@ -1,13 +1,16 @@
 import json
 import logging
 import os
+import re
 import time
+from copy import deepcopy
 
 import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import StoppingCriteria, StoppingCriteriaList
 
 from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
@@ -23,10 +26,14 @@ HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 LANGUAGE = os.getenv("LANGUAGE", "EN")
+HF_ACCESS_TOKEN = os.environ.get("HF_ACCESS_TOKEN", None)
 NAMING = {
     "EN": ["AI", "Human"],
-    "RU": ["Чат-бот", "Человек"],
+    "RU": ["Assistant", "Human"],
 }
+ADDITIONAL_EOS_TOKENS = os.environ.get("ADDITIONAL_EOS_TOKENS", None)  # for RuXGLM: "<|endoftext|>,Human:"
+if ADDITIONAL_EOS_TOKENS:
+    ADDITIONAL_EOS_TOKENS = ADDITIONAL_EOS_TOKENS.split(",")
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -37,7 +44,48 @@ DEFAULT_CONFIGS = {
         open("common/generative_configs/default_generative_config.json", "r")
     ),
     "togethercomputer/GPT-JT-6B-v1": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "lmsys/vicuna-13b-v1.3": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "dim/xglm-4.5B_ru_v10_epoch_6_step_41141": json.load(open("common/generative_configs/ruxglm_config.json", "r")),
+    "ai-forever/ruGPT-3.5-13B": json.load(open("common/generative_configs/rugpt35_config.json", "r")),
 }
+
+
+def add_replacement_tokens(text, replacement):
+    for pair in replacement:
+        text = text.replace(pair[0], f"{pair[1]} ")
+    return text
+
+
+def remove_replacement_tokens(text, replacement):
+    for pair in replacement:
+        text = text.replace(pair[1], pair[0])
+
+    text = text.replace("\n ", "\n")
+    return text
+
+
+def cut_predictions_by_additional_eos(text):
+    if ADDITIONAL_EOS_TOKENS:
+        for token in ADDITIONAL_EOS_TOKENS:
+            text = text.split(token)[0]
+    return text
+
+
+class StoppingCriteriaSub(StoppingCriteria):
+    def __init__(self, stops, tokenizer, prompt, replacement):
+        super().__init__()
+        self.stops = stops
+        self.tokenizer = tokenizer
+        self.prompt = add_replacement_tokens(prompt, replacement)
+        self.prompt = tokenizer.decode(tokenizer.encode(self.prompt))
+
+    def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor):
+        for stop in self.stops:
+            generated_temp_ids = input_ids.tolist()[0]
+            if stop in tokenizer.decode(generated_temp_ids)[len(self.prompt) :]:
+                return True
+
+        return False
 
 
 def generate_responses(context, model, tokenizer, prompt, generation_params, continue_last_uttr=False):
@@ -52,25 +100,42 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
     else:
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
-    max_length = generation_params.get("max_length", 50)
-    generation_params.pop("max_length", None)
-
+    replacement = generation_params.pop("replacement", [])
+    logger.info(f"replacement: {replacement}")
+    logger.info(f"generation_params: {generation_params}")
+    dialog_context = add_replacement_tokens(dialog_context, replacement)
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
     bot_input_ids = tokenizer([dialog_context], return_tensors="pt").input_ids
+    stopping_criteria = StoppingCriteriaList(
+        [
+            StoppingCriteriaSub(
+                stops=ADDITIONAL_EOS_TOKENS,
+                tokenizer=tokenizer,
+                prompt=dialog_context,
+                replacement=replacement,
+            )
+        ]
+    )
     with torch.no_grad():
         if torch.cuda.is_available():
             bot_input_ids = bot_input_ids.to("cuda")
         chat_history_ids = model.generate(
             bot_input_ids,
-            max_length=len(tokenizer(dialog_context)["input_ids"]) + max_length,
             pad_token_id=tokenizer.eos_token_id,
+            stopping_criteria=stopping_criteria,
             **generation_params,
         )
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
     for result in chat_history_ids:
-        output = tokenizer.decode(result, skip_special_tokens=True)
+        skip_special_tokens = False if replacement else True
+        output = tokenizer.decode(result, skip_special_tokens=skip_special_tokens)
+        # preprocess dialog context to correctly remove it from output
+        dialog_context = re.sub(r"  +", " ", dialog_context)
+        dialog_context = dialog_context.replace("\n ", "\n")
         result_cut = output.replace(dialog_context + " ", "")
+        result_cut = cut_predictions_by_additional_eos(result_cut)
+        result_cut = remove_replacement_tokens(result_cut, replacement)
         result_cut = [x.strip() for x in GENERATIVE_ROBOT_TEMPLATE.split(result_cut) if x.strip()][0]
         logger.info(f"hypothesis: {result_cut}")
         outputs.append(result_cut)
@@ -79,28 +144,25 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
 
 
 try:
-    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    additional_kwargs = {}
+    if HF_ACCESS_TOKEN:
+        additional_kwargs["use_auth_token"] = HF_ACCESS_TOKEN
+
+    tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
+
     if HALF_PRECISION:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, torch_dtype=torch.float16)
-    else:
-        model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+        additional_kwargs["torch_dtype"] = torch.float16
+    model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
     if torch.cuda.is_available():
         model.to("cuda")
         logger.info("transformers_lm is set to run on cuda")
-    default_config = {
-        "max_length": 60,
-        "min_length": 8,
-        "top_p": 0.9,
-        "temperature": 0.9,
-        "do_sample": True,
-        "num_return_sequences": 1,
-    }
+
     example_response = generate_responses(
         ["What is the goal of SpaceX?"],
         model,
         tokenizer,
         "You are a SpaceX Assistant.",
-        default_config,
+        deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]),
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_lm is ready")
@@ -122,7 +184,7 @@ def respond():
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
-    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    configs = [deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]) if el is None else el for el in configs]
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
 
@@ -157,7 +219,7 @@ def generate_goals():
     prompts = [] if prompts is None else prompts
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
-    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    configs = [deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]) if el is None else el for el in configs]
 
     try:
         responses = []

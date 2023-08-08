@@ -23,14 +23,3 @@ compose:
   - ./annotators/midas_predictor:/src
   ports:
   - 8121:8121
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8121
-  - PORT=8121

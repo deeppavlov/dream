@@ -11,13 +11,15 @@ group: timeout_service
 connector:
   protocol: python
   class_name: PredefinedTextConnector
-  response_text: Sorry, I need to think more on that. Let's talk about something else.
+  response_text: Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую
+    реплику.
   annotations:
     sentseg:
-      punct_sent: Sorry, I need to think more on that. Let's talk about something else.
+      punct_sent: Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую
+        реплику.
       segments:
-        - Sorry, I need to think more on that.
-        - Let's talk about something else.
+      - Извини, что-то пошло не так в моем мозгу.
+      - Пожалуйста, повтори предыдущую реплику.
 dialog_formatter: null
 response_formatter: null
 previous_services: null
@@ -26,5 +28,5 @@ state_manager_method: add_bot_utterance_last_chance
 tags:
 - timeout
 endpoint: null
-service: services/timeout_service/service_configs/agent
+service: services/agent_services/service_configs/dream_persona_rullama_prompted
 date_created: '2023-03-04T19:27:44'
