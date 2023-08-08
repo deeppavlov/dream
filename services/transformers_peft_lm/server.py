@@ -37,13 +37,15 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 DEFAULT_CONFIGS = {
-    "transformers-lm-bloomz7b": json.load(open("common/generative_configs/default_generative_config.json", "r")),
-    "transformers-lm-gptj": json.load(open("common/generative_configs/default_generative_config.json", "r")),
-    "transformers-lm-oasst12b": json.load(open("common/generative_configs/default_generative_config.json", "r")),
+    "IlyaGusev/llama_7b_ru_turbo_alpaca_lora": json.load(
+        open("common/generative_configs/gusev_llama_config.json", "r")
+    ),
+    "dim/llama2_13b_dolly_oasst1_chip2": json.load(open("common/generative_configs/rullama2_13b_config.json", "r")),
 }
 
 
 def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
+    global generation_config
     outputs = []
     dialog_context = ""
     if prompt:
@@ -56,13 +58,13 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
         dialog_context += "\n".join(context) + f"\n{NAMING[LANGUAGE][0]}:"
 
     logger.info(f"context inside generate_responses seen as: {dialog_context}")
-    data = tokenizer([dialog_context], return_tensors="pt")
+    data = tokenizer([dialog_context], return_tensors="pt", truncation=True, max_length=2048)
     data = {k: v.to(model.device) for k, v in data.items() if k in ("input_ids", "attention_mask")}
 
     with torch.no_grad():
         chat_history_ids = model.generate(
             **data,
-            generation_config=default_config,
+            generation_config=generation_config,
         )
     if torch.cuda.is_available():
         chat_history_ids = chat_history_ids.cpu()
@@ -78,21 +80,25 @@ def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=Fal
 
 try:
     additional_kwargs = {}
+    additional_peft_kwargs = {}
     if HF_ACCESS_TOKEN:
         additional_kwargs["use_auth_token"] = HF_ACCESS_TOKEN
-
     tokenizer = AutoTokenizer.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
-
     if HALF_PRECISION:
         additional_kwargs["torch_dtype"] = torch.float16
+        additional_peft_kwargs["torch_dtype"] = torch.float16
     if LOAD_IN_8BIT:
         additional_kwargs["load_in_8bit"] = True
 
     default_config = GenerationConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     config = PeftConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
     model = AutoModelForCausalLM.from_pretrained(config.base_model_name_or_path, **additional_kwargs)
-    model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH)
+    model = PeftModel.from_pretrained(model, PRETRAINED_MODEL_NAME_OR_PATH, **additional_peft_kwargs)
     model.eval()
+
+    generation_config = GenerationConfig.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH)
+    generation_config.do_sample = False
+    logger.info(f"generation_config: {generation_config}")
 
     if torch.cuda.is_available():
         model.to("cuda")
