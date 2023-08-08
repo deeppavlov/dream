@@ -45,6 +45,6 @@ services:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8176:8176
+      - 8179:8179
 
 version: "3.7"
