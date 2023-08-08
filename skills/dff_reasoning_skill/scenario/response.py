@@ -37,7 +37,7 @@ if GENERATIVE_SERVICE_CONFIG:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
-TIME_SLEEP = int(getenv("TIME_SLEEP", 0))
+TIME_SLEEP = float(getenv("TIME_SLEEP", 0))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
@@ -422,7 +422,7 @@ def retry_task(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         subtask_results = shared_memory.get("subtask_results", {})
         plan = shared_memory.get("plan", list())
-        step = shared_memory.get("step", 0)
+        step = shared_memory.get("step", 1)
         step -= 1
         del subtask_results[str(step)]
         int_ctx.save_to_shared_memory(ctx, actor, step=step)
