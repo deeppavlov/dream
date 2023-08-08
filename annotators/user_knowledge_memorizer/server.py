@@ -317,7 +317,7 @@ def add_entities_to_index(graph, bot_id: str, entities_info_lists: dict):
         f"'entity_substr': {substr_list}, 'entity_ids': {entity_ids},"
         f" 'tags': {tags_list}"
     )
-    graph.index.set_active_bot_id(bot_id)
+    graph.index.set_active_user_id(bot_id)
     graph.index.add_entities(substr_list, entity_ids, tags_list)
 
 
