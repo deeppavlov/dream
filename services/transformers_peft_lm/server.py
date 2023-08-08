@@ -36,13 +36,6 @@ NAMING = {
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
-DEFAULT_CONFIGS = {
-    "IlyaGusev/llama_7b_ru_turbo_alpaca_lora": json.load(
-        open("common/generative_configs/gusev_llama_config.json", "r")
-    ),
-    "dim/llama2_13b_dolly_oasst1_chip2": json.load(open("common/generative_configs/rullama2_13b_config.json", "r")),
-}
-
 
 def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
     global generation_config
@@ -109,7 +102,6 @@ try:
         model,
         tokenizer,
         "You are a SpaceX Assistant.",
-        deepcopy(DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH]),
     )
     logger.info(f"example response: {example_response}")
     logger.info("transformers_peft_lm is ready")
