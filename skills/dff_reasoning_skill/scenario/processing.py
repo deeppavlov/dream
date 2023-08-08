@@ -39,8 +39,8 @@ def save_approved_api():
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
         api2use = shared_memory.get("api2use", "")
         if api2use:
-            if api_conf[api2use]["needs_approval"] == "True":
-                if api_conf[api2use]["approve_once"] == "True":
+            if api_conf[api2use]["needs_approval"]:
+                if api_conf[api2use]["approve_once"]:
                     if api2use not in approved_tools:
                         approved_tools.append(api2use)
             slots["approved_tools"] = approved_tools

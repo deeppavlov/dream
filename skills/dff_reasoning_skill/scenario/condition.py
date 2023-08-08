@@ -43,8 +43,8 @@ def is_tool_needs_approval(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
         api2use = shared_memory.get("api2use", None)
         if api2use:
             approved_tools = ctx.misc.get("slots", {}).get("approved_tools", [])
-            if api_conf[api2use]["needs_approval"] == "True":
-                if api_conf[api2use]["approve_once"] == "True":
+            if api_conf[api2use]["needs_approval"]:
+                if api_conf[api2use]["approve_once"]:
                     if api2use not in approved_tools:
                         return True
                 else:
