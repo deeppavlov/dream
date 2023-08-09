@@ -1073,6 +1073,7 @@ def fromage_formatter(dialog: Dict) -> List:
     for url in reversed(image_paths):
         if url is not None and url.startswith("http"):
             input_dict.update({"image_paths": [url]})
+            break
         else:
             input_dict.update({"image_paths": [None]})
     return [input_dict]
