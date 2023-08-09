@@ -73,6 +73,18 @@ services:
       - "./common:/home/dkr/common"
     ports:
       - 5000:5000
+  dff-command-selector-skill:
+    volumes:
+      - "./skills/dff_command_selector_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8148:8148
+  robot-command-sender:
+    volumes:
+      - "./services/robot_command_sender:/src"
+      - "./common:/src/common"
+    ports:
+      - 8035:8035
   embodied-status:
     volumes:
       - "./annotators/embodied_status:/src"

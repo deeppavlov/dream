@@ -307,6 +307,24 @@
                     "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-skill"
                 }
             },
+            "dff_command_selector_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://dff-command-selector-skill:8148/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_command_selector_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jskfdgh384gtnfdsrkfg78.yml",
+                    "service": "skills/dff_command_selector_skill/service_configs/dff-command-selector-skill"
+                }
+            },
             "dummy_skill": {
                 "connector": {
                     "protocol": "python",

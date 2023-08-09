@@ -44,7 +44,6 @@ UNPREDICTABLE_SKILLS = [
 CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
 NOT_ADD_PROMPT_SKILLS = [
     "alexa_handler",
-    "dff_embodied_skill",
     "dff_intent_responder_skill",
     "misheard_asr",
     "dff_program_y_dangerous_skill",

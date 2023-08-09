@@ -82,7 +82,7 @@ class RuleBasedSkillSelectorConnector:
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
             high_priority_intent_detected = any(
                 [k for k in intent_catcher_intents if k in high_priority_intents["dff_intent_responder_skill"]]
-            ) or any([k for k in intent_catcher_intents if k in high_priority_intents["dff_embodied_skill"]])
+            )
             low_priority_intent_detected = any([k for k in intent_catcher_intents if k in low_priority_intents])
             embodied_cmd_detected = any([k for k in intent_catcher_intents if k in embodied_intents])
             command_detected = any([k for k in intent_catcher_intents if k in command_intents])
@@ -129,7 +129,6 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif embodied_cmd_detected:
                 skills_for_uttr.append("dummy_skill")
-                skills_for_uttr.append("dff_embodied_skill")
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif command_detected:
                 skills_for_uttr.append("dummy_skill")
