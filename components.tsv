@@ -82,8 +82,8 @@
 8078	text-qa-ru,text-qa
 8079
 8080	dff-grounding-skill
-8081
-8082
+8081    ranking-and-intent-based-response-selector
+8082    ranking-and-intent-based-response-selector-ru
 8083	knowledge-grounding
 8084
 8085	knowledge-grounding-skill
