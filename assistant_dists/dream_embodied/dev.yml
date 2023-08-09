@@ -91,5 +91,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8043:8043
+  robot-fake-server:
+    volumes:
+      - "./services/robot_fake_server:/src"
+      - "./common:/src/common"
+    ports:
+      - 8038:8038
 
 version: "3.7"

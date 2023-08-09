@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_embodied/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, dff-program-y-skill:8008, sentseg:8011, 
-          intent-catcher-commands:8014, badlisted-words:8018, dff-command-selector-skill:8148, dff-intent-responder-skill:8012, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, ros-flask-server:5000, embodied-status:8043"
+          intent-catcher-commands:8014, badlisted-words:8018, dff-command-selector-skill:8148, dff-intent-responder-skill:8012, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, ros-flask-server:5000, embodied-status:8043, robot-fake-server:8038"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -106,7 +106,8 @@ services:
         SERVICE_PORT: 8148
         SERVICE_NAME: dff_command_selector_skill
         LANGUAGE: EN
-        ROS_FSM_SERVER: http://ros-flask-server:5000
+        ROS_FLASK_SERVER: http://ros-flask-server:5000
+        ROS_FSM_SERVER: http://robot-fake-server:8038
       context: .
       dockerfile: ./skills/dff_command_selector_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8148 --reload
@@ -122,7 +123,8 @@ services:
     build:
       args:
         SERVICE_PORT: 8035
-        ROS_FSM_SERVER: http://ros-flask-server:5000
+        ROS_FLASK_SERVER: http://ros-flask-server:5000
+        ROS_FSM_SERVER: http://robot-fake-server:8038
       context: .
       dockerfile: ./services/robot_command_sender/Dockerfile
     command: flask run -h 0.0.0.0 -p 8035
@@ -262,6 +264,23 @@ services:
       context: .
       dockerfile: ./annotators/embodied_status/Dockerfile
     command: flask run -h 0.0.0.0 -p 8043
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  robot-fake-server:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8038
+      context: .
+      dockerfile: ./services/robot_fake_server/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8038
     environment:
       - FLASK_APP=server
     deploy:

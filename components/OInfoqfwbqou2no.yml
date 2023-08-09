@@ -1,4 +1,4 @@
-name: ros_flask_server/perform_command
+name: ros_flask_server_perform_command
 display_name: ROS-Flask server
 component_type: Script-based w/o NNs
 model_type: null
