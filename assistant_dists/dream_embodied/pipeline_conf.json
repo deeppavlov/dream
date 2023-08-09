@@ -289,11 +289,11 @@
                     "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
                 }
             },
-            "dff_embodied_skill": {
+            "dff_intent_responder_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-embodied-skill:8041/respond"
+                    "url": "http://dff-intent-responder-skill:8012/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -303,8 +303,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/Ofjpqo2f9j2NFKknf9.yml",
-                    "service": "skills/dff_embodied_skill/service_configs/dff_embodied_skill"
+                    "component": "components/CmQGq1Xn5YOaMwNIb4bEpA.yml",
+                    "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-skill"
                 }
             },
             "dummy_skill": {
@@ -364,18 +364,22 @@
             }
         },
         "actors": {
-            "embodied_sender": {
+            "robot_command_sender": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://embodied-sender:8042/send"
+                    "url": "http://robot-command-sender:8035/send"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_bot_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "response_selectors"
                 ],
-                "state_manager_method": "update_attributes"
+                "state_manager_method": "update_attributes",
+                "source": {
+                    "component": "components/iigrietu2934i2nh34e0.yml",
+                    "service": "services/robot_command_sender/service_configs/robot-command-sender"
+                }
             }
         }
     },

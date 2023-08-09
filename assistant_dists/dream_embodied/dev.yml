@@ -67,18 +67,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8021:8021
-  dff-embodied-skill:
-    volumes:
-      - "./skills/dff_embodied_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8041:8041
-  embodied-sender:
-    volumes:
-      - "./services/embodied_sender:/src"
-      - "./common:/src/common"
-    ports:
-      - 8042:8042
   ros-flask-server:
     volumes:
       - "./services/ros_flask_server:/home/dkr/"

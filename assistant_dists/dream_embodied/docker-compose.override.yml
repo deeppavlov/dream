@@ -218,24 +218,6 @@ services:
         reservations:
           memory: 100M
 
-  embodied-sender:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8042
-        ROS_FLASK_SERVER: http://ros-flask-server:5000
-      context: .
-      dockerfile: ./services/embodied_sender/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8042
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
-
   embodied-status:
     env_file: [ .env ]
     build:
@@ -253,23 +235,5 @@ services:
           memory: 100M
         reservations:
           memory: 100M
-
-  dff-embodied-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8041
-        SERVICE_NAME: dff_embodied_skill
-        LANGUAGE: EN
-        ROS_FLASK_SERVER: http://ros-flask-server:5000
-      context: .
-      dockerfile: ./skills/dff_embodied_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8041 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
 
 version: '3.7'
