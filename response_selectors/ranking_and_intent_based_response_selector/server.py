@@ -10,10 +10,19 @@ from typing import List
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from common.universal_templates import is_any_question_sentence_in_utterance, if_chat_about_particular_topic, \
-    if_not_want_to_chat_about_particular_topic, if_choose_topic, is_switch_topic
-from common.utils import is_toxic_or_badlisted_utterance, get_intents, get_entities, \
-    get_common_tokens_in_lists_of_strings
+from common.universal_templates import (
+    is_any_question_sentence_in_utterance,
+    if_chat_about_particular_topic,
+    if_not_want_to_chat_about_particular_topic,
+    if_choose_topic,
+    is_switch_topic,
+)
+from common.utils import (
+    is_toxic_or_badlisted_utterance,
+    get_intents,
+    get_entities,
+    get_common_tokens_in_lists_of_strings,
+)
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -39,7 +48,6 @@ LETS_CHAT_ABOUT_PARTICULAR_TOPICS = json.load(open(lets_chat_about_triggers_fnam
 
 require_action_intents_fname = "common/intents/require_action_intents.json"
 REQUIRE_ACTION_INTENTS = json.load(open(require_action_intents_fname))
-
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
@@ -93,13 +101,11 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
     human_entities = get_entities(last_human_ann_uttr, only_named=False, with_labels=False)
 
     _human_is_switch_topic_request = is_switch_topic(last_human_ann_uttr)
-    _human_is_request = any([intent in human_intents for intent in REQUIRE_ACTION_INTENTS.keys()])
     _human_is_any_question = is_any_question_sentence_in_utterance(last_human_ann_uttr)
     # if user utterance contains any question AND requires some intent by socialbot
     _human_is_require_action_intent = _human_is_any_question and any(
         [_intent in human_intents for _intent in REQUIRE_ACTION_INTENTS.keys()]
     )
-    _human_contains_entities = len(human_entities) > 0
     _human_wants_to_chat_about_topic = (
         if_chat_about_particular_topic(last_human_ann_uttr) and "about it" not in last_human_ann_uttr["text"].lower()
     )
@@ -107,7 +113,9 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
     _human_wants_bot_to_choose_topic = if_choose_topic(last_human_ann_uttr, prev_bot_uttr)
     _human_is_force_intent = any([_intent in human_intents for _intent in FORCE_INTENTS_IC.keys()])
     _human_force_intents_detected = [_intent for _intent in FORCE_INTENTS_IC.keys() if _intent in human_intents]
-    _human_force_intents_skills = sum([FORCE_INTENTS_IC.get(_intent, []) for _intent in _human_force_intents_detected], [])
+    _human_force_intents_skills = sum(
+        [FORCE_INTENTS_IC.get(_intent, []) for _intent in _human_force_intents_detected], []
+    )
     _human_require_action_intents_detected = [
         _intent for _intent in REQUIRE_ACTION_INTENTS.keys() if _intent in human_intents
     ]
@@ -120,19 +128,19 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
         hyp_named_entities = get_entities(hyp, only_named=True, with_labels=False)
         hyp_entities = get_entities(hyp, only_named=False, with_labels=False)
         # identifies if candidate contains named entities from last human utterance
-        _same_named_entities = (
-                len(get_common_tokens_in_lists_of_strings(hyp_named_entities, human_named_entities)) > 0
-        )
+        _same_named_entities = len(get_common_tokens_in_lists_of_strings(hyp_named_entities, human_named_entities)) > 0
         # identifies if candidate contains all (not only named) entities from last human utterance
         _same_entities = len(get_common_tokens_in_lists_of_strings(hyp_entities, human_entities)) > 0
-        _same_topic_entity = _same_named_entities or _same_entities
         _is_force_intent_skill = hyp["skill_name"] in _human_force_intents_skills and _human_is_force_intent
-        _hyp_wants_to_chat_about_topic = (if_chat_about_particular_topic(hyp) and "about it" not in hyp["text"].lower())
+        _hyp_wants_to_chat_about_topic = if_chat_about_particular_topic(hyp) and "about it" not in hyp["text"].lower()
 
         if _is_force_intent_skill:
             scores[hyp_id] += 1.0
-        elif (_human_is_switch_topic_request or _human_does_not_want_to_chat_about_topic \
-              or _human_wants_bot_to_choose_topic):
+        elif (
+            _human_is_switch_topic_request
+            or _human_does_not_want_to_chat_about_topic
+            or _human_wants_bot_to_choose_topic
+        ):
             # human wants to switch topic
             if len(human_named_entities) > 0 or len(human_entities) > 0:
                 # if user names entities which does not want to talk about
