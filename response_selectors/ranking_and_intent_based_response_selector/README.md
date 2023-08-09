@@ -1,10 +1,11 @@
-# Ranking-based Response Selector
+# Ranking- and Intent-based Response Selector
 
 ## Description
 
 Response Selector is a component selecting final response among the given hypotheses by different skills.
-The Ranking-based Response Selector utilizes floating point annotations by ranking candidate annotator (e.g., Sentence Ranker)
-to rank hypotheses and selects the best ranked one.
+The Ranking- and Intent-based Response Selector utilizes floating point annotations by ranking hypotheses with 
+a candidate annotator (e.g., Sentence Ranker), scaling ranking scores with heuristics depending on entities and intents,
+and finally selecting the best ranked one.
 
 ### Parameters
 
@@ -15,4 +16,6 @@ Parameter `FILTER_TOXIC_OR_BADLISTED` defines whether it filers out toxic hypoth
 
 ## Dependencies
 
-- either candidate annotations by `SENTENCE_RANKER_ANNOTATION_NAME` or service `SENTENCE_RANKER_SERVICE_URL`.
+- either candidate annotations by `SENTENCE_RANKER_ANNOTATION_NAME` or service `SENTENCE_RANKER_SERVICE_URL`,
+- intents annotations,
+- entities annotations.
