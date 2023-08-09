@@ -290,6 +290,43 @@ def el_formatter_dialog(dialog: Dict):
     return utils.dream_formatter(dialog, result_keys=["entity_substr", "entity_tags"])
 
 
+def prepare_el_input(dialog: Dict):
+    num_last_utterances = 2
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_substr_list, entity_tags_list = [], []
+    for entity in entities_with_labels:
+        if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+            entity_substr_list.append(entity["text"])
+            if "finegrained_label" in entity:
+                finegrained_labels = [[label.lower(), conf] for label, conf in entity["finegrained_label"]]
+                entity_tags_list.append(finegrained_labels)
+            elif "label" in entity:
+                entity_tags_list.append([[entity["label"].lower(), 1.0]])
+            else:
+                entity_tags_list.append([["misc", 1.0]])
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
+
+    return entity_substr_list, entity_tags_list, context
+
+
+def custom_el_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
+    property_extraction = dialog["human_utterances"][-1]["annotations"].get("property_extraction", {})
+    user_id = str(dialog["human_utterances"][-1].get("user", {}).get("id", ""))
+    return [
+        {
+            "user_id": [user_id],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "context": [context],
+            "property_extraction": [property_extraction],
+        }
+    ]
+
+
 def kbqa_formatter_dialog(dialog: Dict):
     return utils.dream_formatter(dialog, result_keys=["x_init", "entities", "entity_tags"])
 
