@@ -98,7 +98,7 @@ services:
           memory: 60G
 
   dff-storyteller-ru-prompted-skill:
-    env_file: [ .env ]
+    env_file: [ .env_ru ]
     build:
       args:
         SERVICE_PORT: 8173
