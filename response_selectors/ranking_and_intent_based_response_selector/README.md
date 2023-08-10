@@ -2,10 +2,10 @@
 
 ## Description
 
-Response Selector is a component selecting final response among the given hypotheses by different skills.
-The Ranking- and Intent-based Response Selector utilizes floating point annotations by ranking hypotheses with 
-a candidate annotator (e.g., Sentence Ranker), scaling ranking scores with heuristics depending on entities and intents,
-and finally selecting the best ranked one.
+Response Selector is a component that selects the final response among hypotheses provided by different skills.
+The Ranking- and Intent-based Response Selector utilizes floating point annotations by ranking hypotheses 
+with a candidate annotator (e.g., Sentence Ranker), scaling the resulting scores with heuristics based 
+on entities and intents, and finally selecting the best ranked one.
 
 ### Parameters
 
