@@ -30,6 +30,7 @@ services:
       ENABLE_LINK_QUESTIONS: 1
       ENABLE_NP_FACTS: 1
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   convers-evaluator-annotator:
     env_file: [ .env ]
