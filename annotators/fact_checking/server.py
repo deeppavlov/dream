@@ -27,36 +27,34 @@ if GENERATIVE_SERVICE_CONFIG:
 @app.route("/respond", methods=["POST"])
 def respond():
     hypotheses = request.json["hypotheses"]
-    human_uttr_attributes = request.json["human_uttr_attributes"] # CHECK HOW 2 GET
+    human_uttr_attributes = request.json["human_uttr_attributes"]
+    ie_types = ["external" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal" for hyp in hypotheses]
     external_service_hyps = [hyp["text"] for hyp in hypotheses if hyp["skill_name"] in EXTERNAL_SKILLS] # considered correct (always)
-    internal_service_hyps = [hyp["text"] for hyp in hypotheses if hyp["skill_name"] not in EXTERNAL_SKILLS] # need to be checked
-    try:
-        results = []
-        if len(external_service_hyps) == 0:
-            if len(internal_service_hyps) > 0:
-                logger.info(f"No external hypotheses to be used as ground truth. Marking all internal hypotheses as correct.")
-                results += ['Correct']*len(internal_service_hyps) # add always correct
+    results = []
+    for hyp, human_uttr_attr, ie_type in zip(hypotheses, human_uttr_attributes, ie_types):
+        hyp_text = hyp["text"]
+        try:
+            if ie_type == "external":
+                logger.info(f"Hypothesis `{hyp_text}` is external so it is deemed correct.")
+                results += ["Correct"]
             else:
-                logger.info(f"No hypotheses provided.")
-        else:
-            logger.info(f"Checking whether internal hypotheses contradict to any of the external hypotheses.")
-            for external_hyp in external_service_hyps:
-                results += ['Correct'] * len(external_service_hyps)
-            if len(internal_service_hyps) > 0:    
-                for internal_hyp in internal_service_hyps:
+                if len(external_service_hyps) == 0: # there are no external hyps to check upon
+                    logger.info(f"Hypothesis {hyp_text} is is deemed correct because there are no external hypothesis to check it upon.")
+                    results += ["Correct"]
+                else:
                     is_hyp_correct = True
-                    for external_hyp in external_service_hyps:
-                        curr_prompt = f'''Fact:{external_hyp} 
-Hypothesis: {internal_hyp}
+                    for external_service_hyp in external_service_hyps:
+                        curr_prompt = f'''Fact: `{external_service_hyp}`
+Hypothesis: `{hyp_text}`
 Does Hypothesis contain any information that contradicts Fact? Always answer only Yes or No.'''
                         logger.info(f"Sending prompt to llm to fact-check:\n`{curr_prompt}`")
-                        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+                        lm_service_kwargs = human_uttr_attr.pop("lm_service_kwargs", None)
                         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-                        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+                        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attr.get("envvars_to_send", [])
                         sending_variables = compose_sending_variables(
                             lm_service_kwargs,
                             envvars_to_send,
-                            **human_uttr_attributes,
+                            **human_uttr_attr,
                         )
                         response = send_request_to_prompted_generative_service(
                             "", # нужен ли нам контекст и какой длины?
@@ -71,13 +69,16 @@ Does Hypothesis contain any information that contradicts Fact? Always answer onl
                         if 'no' in result.lower():
                             is_hyp_correct = False
                     if is_hyp_correct:
+                        logger.info(f"Internal hypothesis `{hyp_text}` correct according to external services.")
                         results += ["Correct"]
                     else:
+                        logger.info(f"Internal hypothesis `{hyp_text}` incorrect according to external services.")
                         results += ["Incorrect"]
-    except Exception as e:
-        logger.error(e)
-        results.append(["Correct"] * len(hypotheses))
+        except Exception as e:
+            logger.error(e)
+            results += ["Correct"]
     return jsonify([{"batch": results}])
+
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=3000)
