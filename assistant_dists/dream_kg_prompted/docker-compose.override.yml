@@ -197,7 +197,7 @@ services:
         TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
         TERMINUSDB_SERVER_PASSWORD: root
         TERMINUSDB_SERVER_TEAM: admin
-        TERMINUSDB_SERVER_DB: user_knowledge_db
+        TERMINUSDB_SERVER_DB: bot_knowledge_db
         INDEX_LOAD_PATH: /root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
         OPENAI_API_KEY:
         CHAT_GPT_PORT: 8145

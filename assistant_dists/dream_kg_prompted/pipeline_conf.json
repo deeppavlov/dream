@@ -71,6 +71,7 @@
                     "sentseg",
                     "ner",
                     "spacy_nounphrases",
+                    "entity_detection",
                     "property_extraction",
                     "custom_entity_linking",
                     "user_knowledge_memorizer"
@@ -142,6 +143,26 @@
                     "service": "annotators/spacy_nounphrases/service_configs/spacy-nounphrases"
                 }
             },
+            "entity_detection": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-detection:8103/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_last_bot_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors",
+                    "response_annotators.sentseg",
+                    "response_annotators.ner"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
+                    "service": "annotators/entity_detection/service_configs/entity-detection"
+                }
+            },
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
@@ -152,7 +173,8 @@
                 "previous_services": [
                     "response_annotator_selectors",
                     "response_annotators.sentseg",
-                    "response_annotators.ner"
+                    "response_annotators.ner",
+                    "response_annotators.entity_detection"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
@@ -172,6 +194,7 @@
                     "response_annotator_selectors",
                     "response_annotators.sentseg",
                     "response_annotators.ner",
+                    "response_annotators.entity_detection",
                     "response_annotators.property_extraction"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
@@ -192,6 +215,7 @@
                     "response_annotator_selectors",
                     "response_annotators.sentseg",
                     "response_annotators.ner",
+                    "response_annotators.entity_detection",
                     "response_annotators.property_extraction",
                     "response_annotators.custom_entity_linking"
                 ],
@@ -257,26 +281,6 @@
                     "service": "annotators/NER_deeppavlov/service_configs/ner"
                 }
             },
-            "entity_detection": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://entity-detection:8103/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.sentseg",
-                    "annotators.spacy_nounphrases",
-                    "annotators.ner"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
-                    "service": "annotators/entity_detection/service_configs/entity-detection"
-                }
-            },
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
@@ -287,7 +291,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.ner",
-                    "annotators.entity_detection",
                     "annotators.spacy_nounphrases"
                 ],
                 "state_manager_method": "add_annotation",
