@@ -17,24 +17,14 @@ logger.setLevel(gunicorn_logger.level)
 app = Flask(__name__)
 
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
-PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME")
-if not PAYLOAD_ARGUMENT_NAME:
-    PAYLOAD_ARGUMENT_NAME = "payload"
-EXTERNAL_TIMEOUT = getenv("EXTERNAL_TIMEOUT")
-if not EXTERNAL_TIMEOUT:
-    EXTERNAL_TIMEOUT = 2
-else:
-    EXTERNAL_TIMEOUT = int(EXTERNAL_TIMEOUT)
-ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND")
-if not ARGUMENTS_TO_SEND:
-    ARGUMENTS_TO_SEND = ["user_id"]
-else:
+PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME", "payload")
+EXTERNAL_TIMEOUT = int(getenv("EXTERNAL_TIMEOUT", 2))
+ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND", ["user_id"])
+if type(ARGUMENTS_TO_SEND) == str:
     ARGUMENTS_TO_SEND = ARGUMENTS_TO_SEND.split(",")
-RESPONSE_KEY = getenv("RESPONSE_KEY")
-if not RESPONSE_KEY:
-    RESPONSE_KEY = "response"
+RESPONSE_KEY = getenv("RESPONSE_KEY", "response")
 
-assert "EXTERNAL_SKILL_URL", logger.info("You need to provide the external skill url to get its responses.")
+assert "EXTERNAL_SKILL_URL", logger.error("You need to provide the external skill url to get its responses.")
 
 
 @app.route("/respond", methods=["POST"])
@@ -67,7 +57,7 @@ def respond():
             confidence = 0.0
         responses.append(response)
         confidences.append(confidence)
-        logger.info(f"Responses: {str(responses)}, confidences: {str(confidences)}")
+    logger.info(f"Responses: {str(responses)}, confidences: {str(confidences)}")
     return jsonify(list(zip(responses, confidences)))
 
 

@@ -12,10 +12,10 @@ compose:
       ARGUMENTS_TO_SEND: dialog_id
       PAYLOAD_ARGUMENT_NAME: payload
       RESPONSE_KEY: response
-      REQUEST_TIMEOUT: 10
+      EXTERNAL_TIMEOUT: 2
     context: .
     dockerfile: ./skills/external_integration_skill/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:$8183 --timeout=300
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8183 --timeout=300
   deploy:
     resources:
       limits:
