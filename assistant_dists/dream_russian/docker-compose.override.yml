@@ -8,7 +8,7 @@ services:
           spelling-preprocessing-ru:8074, entity-linking-ru:8075, wiki-parser-ru:8077, dff-generative-ru-skill:8092,
           dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
           dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118,
-          fact-retrieval-ru:8110, text-qa-ru:8078"
+          fact-retrieval-ru:8110, text-qa-ru:8078, summarization-annotator:8058, rut5-summarizer:8060"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -444,5 +444,42 @@ services:
           memory: 3G
         reservations:
           memory: 3G
+
+  summarization-annotator:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8058
+        SERVICE_NAME: summarization_annotator
+        SUMMARIZATION_REQUEST_TIMEOUT: 10
+      context: ./annotators/summarization_annotator/
+    command: flask run -h 0.0.0.0 -p 8058
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  rut5-summarizer:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8060
+        SERVICE_NAME: ruT5_summarizer
+        PRETRAINED_MODEL_NAME: "IlyaGusev/rut5_base_sum_gazeta"
+      context: ./services/ruT5_summarizer/
+    command: flask run -h 0.0.0.0 -p 8060
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
 
 version: '3.7'

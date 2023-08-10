@@ -1,0 +1,7 @@
+{
+  "max_new_tokens": 200,
+  "min_new_tokens": 8,
+  "num_beams": 2,
+  "do_sample": true,
+  "num_return_sequences": 2
+}
