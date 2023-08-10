@@ -77,8 +77,7 @@ Does Hypothesis contain any information that contradicts Fact? Always answer onl
     except Exception as e:
         logger.error(e)
         results.append(["Correct"] * len(hypotheses))
-    return jsonify(results)
-
+    return jsonify([{"batch": results}])
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=3000)
+    app.run(debug=False, host="0.0.0.0", port=3000)
