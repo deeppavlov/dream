@@ -1,4 +1,4 @@
 #!/bin/bash
 
-#python test_server.py
+python test_server.py
 
