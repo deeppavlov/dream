@@ -124,14 +124,14 @@ class RuleBasedSkillSelectorConnector:
             elif user_uttr_text == "/get_dialog_id":
                 skills_for_uttr.append("dummy_skill")
             elif high_priority_intent_detected and HIGH_PRIORITY_INTENTS:
-                skills_for_uttr.append("dummy_skill")
+                #skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif embodied_cmd_detected:
-                skills_for_uttr.append("dummy_skill")
+                #skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dff_intent_responder_skill")
             elif command_detected:
-                skills_for_uttr.append("dummy_skill")
+                #skills_for_uttr.append("dummy_skill")
                 # process intents with Command Selector
                 skills_for_uttr.append("dff_command_selector_skill")
             elif is_sensitive_topic_and_request(user_uttr) and RESTRICTION_FOR_SENSITIVE_CASE:

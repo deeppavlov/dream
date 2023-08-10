@@ -97,5 +97,11 @@ services:
       - "./common:/src/common"
     ports:
       - 8038:8038
+  robot-notifications:
+    volumes:
+      - "./services/robot_notifications:/src"
+      - "./common:/src/common"
+    ports:
+      - 8036:8036
 
 version: "3.7"
