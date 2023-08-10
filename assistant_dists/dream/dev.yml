@@ -157,4 +157,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8167:8167
+  fact-checking:
+    volumes:
+      - "./annotators/fact_checking:/src"
+      - "./common:/src/common"
+    ports:
+      - 8182:8182
 version: "3.7"

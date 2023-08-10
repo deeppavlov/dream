@@ -1,0 +1,8 @@
+SERVICE_PORT: 8165
+SERVICE_NAME: doc_retriever
+CONFIG_PATH: ./doc_retriever_config.json
+DOC_PATH_OR_LINK: http://files.deeppavlov.ai/dream_data/documents_for_qa/test_file_dream_repo.html,http://files.deeppavlov.ai/dream_data/documents_for_qa/alphabet_financial_report.txt,http://files.deeppavlov.ai/dream_data/documents_for_qa/test_file_jurafsky_chatbots.pdf
+PARAGRAPHS_NUM: 5
+FILE_SERVER_TIMEOUT: 30
+CUDA_VISIBLE_DEVICES: '0'
+FLASK_APP: server

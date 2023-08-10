@@ -1,6 +1,7 @@
 import logging
 from copy import deepcopy
 from typing import Dict, List
+import json
 
 
 from common.utils import get_entities, get_intents
@@ -557,6 +558,8 @@ def persona_bot_formatter(dialog: Dict):
 
 
 def cropped_dialog(dialog: Dict):
+    with open('test_cand_ann.json', 'w', encoding='utf-8') as f:
+        json.dump(dialog, f, ensure_ascii=False, indent=4)
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
@@ -1245,3 +1248,9 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
     batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
+
+
+def hypotheses_and_attributes(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    human_uttr_attributes = [dialog["human_utterances"][-1]["annotations"] for _ in hypotheses]
+    return [{"hypotheses": hypotheses, "human_uttr_attributes": human_uttr_attributes}]

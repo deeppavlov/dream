@@ -24,10 +24,14 @@ SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 SENTENCE_RANKER_TIMEOUT = int(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
+# FACTUAL_CONFORMITY_SERVICE_URL = getenv("FACTUAL_CONFORMITY_SERVICE_URL")
+# FACTUAL_CONFORMITY_SERVICE_TIMEOUT = int(getenv("FACTUAL_CONFORMITY_SERVICE_TIMEOUT"))
+# EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
+# ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
+# ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
     "Ranker service URL or annotator name should be given"
 )
-
 
 def filter_out_badlisted_or_toxic(hypotheses):
     clean_hypotheses = []
@@ -38,6 +42,44 @@ def filter_out_badlisted_or_toxic(hypotheses):
         else:
             logger.info(f"Filter out toxic candidate: {hyp['text']}")
     return clean_hypotheses
+
+
+# def filter_out_false(hypotheses, human_uttr_attributes):
+#     try:
+#         ie_types = [
+#             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
+#         ]
+#         hyps_and_ies = zip(hypotheses, ie_types)
+#         for hyp, ie in hyps_and_ies:
+#             curr_prompt = f'''Fact:{hyp} 
+# Hypothesis: {ie}
+# Does Hypothesis contain any information that contradicts Fact? Only answer Yes or No.'''
+#             logger.info(f"filter_out_false sends prompt to llm:\n`{curr_prompt}`")
+#             lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+#             lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+#             envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+#             sending_variables = compose_sending_variables(
+#                 lm_service_kwargs,
+#                 envvars_to_send,
+#                 **human_uttr_attributes,
+#             )
+#             response = send_request_to_prompted_generative_service(
+#                 dialog_context,
+#                 curr_prompt,
+#                 GENERATIVE_SERVICE_URL,
+#                 GENERATIVE_SERVICE_CONFIG,
+#                 GENERATIVE_TIMEOUT,
+#                 sending_variables,
+#             )
+#             result = response[0]
+#     except Exception as e:
+#         sentry_sdk.capture_exception(e)
+#         logger.exception(e)
+#         result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]
+#         logger.info("Exception in LLM's invocation. Selected a response with the highest confidence.")
+#         logger.info(f"llm_based_response_selector selected:\n`{result}`")
+
+#     return result
 
 
 def select_response_by_scores(hypotheses, scores):
