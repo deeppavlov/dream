@@ -732,7 +732,6 @@ def prepare_el_input(dialog: Dict):
 
 
 def prepare_el_input_last_bot(dialog: Dict):
-    num_last_utterances = 2
     entities_with_labels = get_entities(dialog["bot_utterances"][-1], only_named=False, with_labels=True)
     entity_substr_list, entity_tags_list = [], []
     for entity in entities_with_labels:
@@ -747,7 +746,7 @@ def prepare_el_input_last_bot(dialog: Dict):
                 entity_tags_list.append([["misc", 1.0]])
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
+    context = [dialog["bot_utterances"][-1]["text"]]
 
     return entity_substr_list, entity_tags_list, context
 
@@ -760,7 +759,10 @@ def el_formatter_dialog(dialog: Dict):
 
 def el_formatter_last_bot_dialog(dialog: Dict):
     # Used by: entity_linking annotator
-    entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog)
+    if len(dialog["bot_utterances"]):
+        entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog)
+    else:
+        entity_substr_list, entity_tags_list, context = [""], [""], [""]
     return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": [context]}]
 
 
