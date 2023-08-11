@@ -42,6 +42,12 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8014:8014
+  dff-intent-responder-skill:
+    volumes:
+      - "./skills/dff_intent_responder_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8012:8012
   badlisted-words:
     volumes:
       - "./annotators/BadlistedWordsDetector:/src"

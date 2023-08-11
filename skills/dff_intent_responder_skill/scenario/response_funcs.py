@@ -4,7 +4,6 @@ import json
 import random
 from datetime import datetime
 from os import getenv
-from common.robot import check_if_valid_robot_command
 
 import common.dff.integration.context as int_ctx
 from df_engine.core import Actor, Context
@@ -12,7 +11,6 @@ from df_engine.core import Actor, Context
 
 INTENT_RESPONSE_PHRASES_FNAME = getenv("INTENT_RESPONSE_PHRASES_FNAME", "intent_response_phrases.json")
 LANGUAGE = getenv("LANGUAGE", "EN")
-ROS_FLASK_SERVER = getenv("ROS_FLASK_SERVER")
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 logger.info(f"Intent response phrases are from file: {INTENT_RESPONSE_PHRASES_FNAME}")
