@@ -72,6 +72,7 @@
                     "ner",
                     "spacy_nounphrases",
                     "entity_detection",
+                    "entity_linking",
                     "property_extraction",
                     "custom_entity_linking",
                     "user_knowledge_memorizer"
@@ -163,6 +164,27 @@
                     "service": "annotators/entity_detection/service_configs/entity-detection"
                 }
             },
+            "entity_linking": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-linking:8075/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors",
+                    "response_annotators.sentseg",
+                    "response_annotators.ner",
+                    "response_annotators.entity_detection"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "service": "annotators/entity_linking/service_configs/entity-linking"
+                }
+            },
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
@@ -174,7 +196,8 @@
                     "response_annotator_selectors",
                     "response_annotators.sentseg",
                     "response_annotators.ner",
-                    "response_annotators.entity_detection"
+                    "response_annotators.entity_detection",
+                    "response_annotators.entity_linking"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
@@ -195,6 +218,7 @@
                     "response_annotators.sentseg",
                     "response_annotators.ner",
                     "response_annotators.entity_detection",
+                    "response_annotators.entity_linking",
                     "response_annotators.property_extraction"
                 ],
                 "state_manager_method": "add_annotation_prev_bot_utt",
@@ -216,6 +240,7 @@
                     "response_annotators.sentseg",
                     "response_annotators.ner",
                     "response_annotators.entity_detection",
+                    "response_annotators.entity_linking",
                     "response_annotators.property_extraction",
                     "response_annotators.custom_entity_linking"
                 ],
@@ -279,25 +304,6 @@
                 "source": {
                     "component": "components/3RDNPBdybjBlSQZqcc7nGQ.yml",
                     "service": "annotators/NER_deeppavlov/service_configs/ner"
-                }
-            },
-            "entity_linking": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://entity-linking:8075/model"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.ner",
-                    "annotators.spacy_nounphrases"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
-                    "service": "annotators/entity_linking/service_configs/entity-linking"
                 }
             },
             "combined_classification": {
