@@ -1226,7 +1226,7 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
-def user_knowledge_memorizer_formatter_dialog(dialog: Dict) -> List[Dict]:
+def last_human_annotated_utterance(dialog: Dict) -> List[Dict]:
     return [
         {
             "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
