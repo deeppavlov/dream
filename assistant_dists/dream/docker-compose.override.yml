@@ -27,8 +27,10 @@ services:
         SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
         SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
         SENTENCE_RANKER_TIMEOUT: 3
-        FACTUAL_CONFORMITY_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+        ENABLE_FACT_CHECKING: 1
+        FACTUAL_CONFORMITY_SERVICE_URL: http://fact-checking:8182/respond
         FACTUAL_CONFORMITY_SERVICE_TIMEOUT: 5
+        FACTUAL_CONFORMITY_ANNOTATION_NAME: fact_checking
         N_UTTERANCES_CONTEXT: 5
         FILTER_TOXIC_OR_BADLISTED: 1
         FALLBACK_FILE: fallbacks_dream_en.json

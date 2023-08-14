@@ -23,12 +23,12 @@ SENTENCE_RANKER_ANNOTATION_NAME = getenv("SENTENCE_RANKER_ANNOTATION_NAME")
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 SENTENCE_RANKER_TIMEOUT = int(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
+ENABLE_FACT_CHECKING = int(getenv("ENABLE_FACT_CHECKING"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
-# FACTUAL_CONFORMITY_SERVICE_URL = getenv("FACTUAL_CONFORMITY_SERVICE_URL")
-# FACTUAL_CONFORMITY_SERVICE_TIMEOUT = int(getenv("FACTUAL_CONFORMITY_SERVICE_TIMEOUT"))
-# EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
-# ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-# ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+FACTUAL_CONFORMITY_SERVICE_URL = getenv("FACTUAL_CONFORMITY_SERVICE_URL")
+FACTUAL_CONFORMITY_SERVICE_TIMEOUT = int(getenv("FACTUAL_CONFORMITY_SERVICE_TIMEOUT"))
+FACTUAL_CONFORMITY_ANNOTATION_NAME = getenv("FACTUAL_CONFORMITY_ANNOTATION_NAME")
+
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
     "Ranker service URL or annotator name should be given"
 )
@@ -42,44 +42,6 @@ def filter_out_badlisted_or_toxic(hypotheses):
         else:
             logger.info(f"Filter out toxic candidate: {hyp['text']}")
     return clean_hypotheses
-
-
-# def filter_out_false(hypotheses, human_uttr_attributes):
-#     try:
-#         ie_types = [
-#             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
-#         ]
-#         hyps_and_ies = zip(hypotheses, ie_types)
-#         for hyp, ie in hyps_and_ies:
-#             curr_prompt = f'''Fact:{hyp} 
-# Hypothesis: {ie}
-# Does Hypothesis contain any information that contradicts Fact? Only answer Yes or No.'''
-#             logger.info(f"filter_out_false sends prompt to llm:\n`{curr_prompt}`")
-#             lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-#             lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-#             envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
-#             sending_variables = compose_sending_variables(
-#                 lm_service_kwargs,
-#                 envvars_to_send,
-#                 **human_uttr_attributes,
-#             )
-#             response = send_request_to_prompted_generative_service(
-#                 dialog_context,
-#                 curr_prompt,
-#                 GENERATIVE_SERVICE_URL,
-#                 GENERATIVE_SERVICE_CONFIG,
-#                 GENERATIVE_TIMEOUT,
-#                 sending_variables,
-#             )
-#             result = response[0]
-#     except Exception as e:
-#         sentry_sdk.capture_exception(e)
-#         logger.exception(e)
-#         result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]
-#         logger.info("Exception in LLM's invocation. Selected a response with the highest confidence.")
-#         logger.info(f"llm_based_response_selector selected:\n`{result}`")
-
-#     return result
 
 
 def select_response_by_scores(hypotheses, scores):
@@ -111,6 +73,32 @@ def get_scores(dialog_context, hypotheses):
     return scores
 
 
+def filter_out_factually_incorrect(hypotheses, human_uttr_attributes):
+    if all([FACTUAL_CONFORMITY_ANNOTATION_NAME in hyp.get("annotations", {}) for hyp in hypotheses]):
+        fact_check_result = [hyp.get("annotations", {}).get(FACTUAL_CONFORMITY_ANNOTATION_NAME, "Correct") for hyp in hypotheses]
+        logger.info(f"Got annotations from {FACTUAL_CONFORMITY_ANNOTATION_NAME}.")
+    else:
+        try:
+            fact_check_result = requests.post(
+                FACTUAL_CONFORMITY_SERVICE_URL,
+                json={"hypotheses": hypotheses, "human_uttr_attributes": human_uttr_attributes},
+                timeout=FACTUAL_CONFORMITY_SERVICE_TIMEOUT,
+            ).json()
+            fact_check_result = np.array(fact_check_result[0]["batch"])
+            logger.info(f"Annotated hypotheses via {FACTUAL_CONFORMITY_SERVICE_URL}.")
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            fact_check_result = ["Correct" for _ in hypotheses]
+            logger.exception(e)
+            logger.info("Error. Marking all hypotheses as correct.")
+    clean_hypotheses = [hyp for hyp, res in zip(hypotheses, fact_check_result) if res =='Correct']
+    logger.info(f"clean_hypotheses: {clean_hypotheses}\nfact_check_result: {fact_check_result}")
+    hypotheses_text = [hyp["text"] for hyp in hypotheses]
+    clean_hypotheses_text = [hyp["text"] for hyp in clean_hypotheses]
+    logger.info(f"Filtered out incorrect candidates: {'; '.join(set(hypotheses_text) - set(clean_hypotheses_text))}")
+    return clean_hypotheses
+
+
 def select_response(dialog_context, hypotheses):
     scores = get_scores(dialog_context, hypotheses)
     scores = [score if hyp["skill_name"] != "dummy_skill" else score - 1 for score, hyp in zip(scores, hypotheses)]
@@ -136,8 +124,11 @@ def respond():
 
     for i, dialog in enumerate(dialogs):
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        human_uttr_attributes = [dialog["human_utterances"][-1]["annotations"] for _ in hypotheses]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
+        if ENABLE_FACT_CHECKING:
+            hypotheses = filter_out_factually_incorrect(hypotheses, human_uttr_attributes)
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
