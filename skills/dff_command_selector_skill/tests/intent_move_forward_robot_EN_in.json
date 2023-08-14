@@ -8,7 +8,6 @@
                 {
                     "text": "hi.",
                     "annotations": {
-                        "spelling_preprocessing": "hi",
                         "badlisted_words": {
                             "bad_words": false
                         },
@@ -158,7 +157,6 @@
                 {
                     "text": "move forward for 10 meters.",
                     "annotations": {
-                        "spelling_preprocessing": "move forward for 10 meters",
                         "badlisted_words": {
                             "bad_words": false
                         },
