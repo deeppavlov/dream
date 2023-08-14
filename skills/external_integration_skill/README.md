@@ -42,7 +42,7 @@ __docker-compose.override.yml__
         SERVICE_NAME: external_fake_server
       context: .
       dockerfile: ./services/external_fake_server/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8172
+    command: flask run -h 0.0.0.0 -p 8184
     environment:
       - FLASK_APP=server
     deploy:
