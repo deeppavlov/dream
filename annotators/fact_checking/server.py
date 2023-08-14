@@ -56,7 +56,7 @@ def respond():
     hypotheses = request.json["hypotheses"]
     human_uttr_attributes = request.json["human_uttr_attributes"]
     ie_types = ["external" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal" for hyp in hypotheses]
-    external_service_hyps = [(hyp["text"], hyp["skill_name"]) for hyp in hypotheses if hyp["skill_name"] in EXTERNAL_SKILLS] # considered correct (always)
+    external_service_hyps = [(hyp["text"], hyp["skill_name"]) for hyp in hypotheses if hyp["skill_name"] in EXTERNAL_SKILLS]
     results = []
     for hyp, human_uttr_attr, ie_type in zip(hypotheses, human_uttr_attributes, ie_types):
         hyp_text = hyp["text"]
@@ -65,7 +65,7 @@ def respond():
                 logger.info(f"Hypothesis `{hyp_text}` is considered correct as it is external.")
                 results += ["Correct"]
             else:
-                if len(external_service_hyps) == 0: # there are no external hyps to check upon
+                if len(external_service_hyps) == 0: 
                     logger.info(f"Hypothesis `{hyp_text}` is considered correct as there are no external hypotheses to check it upon.")
                     results += ["Correct"]
                 else:
@@ -79,11 +79,11 @@ Does Hypothesis contradict Fact that {external_service_hyp}? Always answer only 
                             _is_hyp_correct = False
                             logger.info(f"""Internal hypothesis `{hyp_text}` is incorrect according to external service \
 {external_service_name}.""")
+                            results += ["Incorrect"]
+                            break
                     if _is_hyp_correct:
                         logger.info(f"Internal hypothesis `{hyp_text}` is correct according to all external services.")
                         results += ["Correct"]
-                    else:
-                        results += ["Incorrect"]
         except Exception as e:
             logger.error(e)
             results += ["Correct"]
