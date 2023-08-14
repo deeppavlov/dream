@@ -23,6 +23,7 @@ GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
+SKILLS_NOT_TO_CHECK = ["dummy_skill", "dff_intent_responder_skill"]
 
 
 def check_hyp_with_llm(curr_prompt, human_uttr_attr):
@@ -43,7 +44,6 @@ def check_hyp_with_llm(curr_prompt, human_uttr_attr):
         sending_variables,
     )
     result = response[0]
-    logger.info(f"llm response: `{result}`")
     if 'yes' in result.lower():
         _is_hyp_correct = False
     else:
@@ -64,6 +64,9 @@ def respond():
             if ie_type == "external":
                 logger.info(f"Hypothesis `{hyp_text}` is considered correct as it is external.")
                 results += ["Correct"]
+            elif hyp["skill_name"] in SKILLS_NOT_TO_CHECK:
+                logger.info(f"Hypothesis `{hyp_text}` is not checked as it was produced by {hyp['skill_name']}.")
+                results += ["Correct"]
             else:
                 if len(external_service_hyps) == 0: 
                     logger.info(f"Hypothesis `{hyp_text}` is considered correct as there are no external hypotheses to check it upon.")
@@ -73,7 +76,6 @@ def respond():
                     for external_service_hyp, external_service_name in external_service_hyps:
                         curr_prompt = f'''Hypothesis: "{hyp_text}"
 Does Hypothesis contradict Fact that {external_service_hyp}? Always answer only Yes or No without explanation.'''
-                        logger.info(f"Prompt sent to LLM by fact-checking:\n`{curr_prompt}`")
                         _is_hyp_correct_one_step = check_hyp_with_llm(curr_prompt, human_uttr_attr)
                         if not _is_hyp_correct_one_step:
                             _is_hyp_correct = False
