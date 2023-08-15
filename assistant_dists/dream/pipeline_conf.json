@@ -399,8 +399,8 @@
             "fact_checking": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://fact-checking:8182/respond"
+                    "timeout": 5.0,
+                    "url": "http://fact-checking:8182/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:hypotheses_and_attributes",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -410,7 +410,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/LKHNon389plcdknoiefh.yml",
+                    "component": "components/oijrtOIfj94jnvkf30n.yml",
                     "service": "annotators/fact_checking/service_configs/fact-checking"
                 }
             }
@@ -569,8 +569,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
-                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
+                    "component": "components/dvpefjoPOHC90efoi.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector-fact-checking"
                 }
             }
         }
