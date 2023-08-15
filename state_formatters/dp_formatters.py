@@ -1226,6 +1226,13 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
+def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
+    last_sentences = [dialog["human_utterances"][-1]["text"]]
+    dialog_ids = [dialog.get("dialog_id", "unknown")]
+    user_ids = [dialog["human_utterances"][-1]["user"]["id"]]
+    return [{"sentences": last_sentences, "dialog_ids": dialog_ids, "user_ids": user_ids}]
+
+
 def robot_formatter(dialog: Dict) -> Dict:
     """This formatter currently provides the JSON as is, without modifying it.
     Either edit it later or choose one of the existing formatters"""

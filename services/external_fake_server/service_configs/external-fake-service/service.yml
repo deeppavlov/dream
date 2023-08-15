@@ -1,0 +1,24 @@
+name: external-fake-server
+endpoints:
+- return_response
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8184
+      SERVICE_NAME: external_fake_server
+    context: .
+    dockerfile: ./skills/external_fake_server/Dockerfile
+  command: gunicorn --workers=2 server:app 
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./skills/external_fake_server:/src
+  - ./common:/src/common
+  ports:
+  - 8184:8184
