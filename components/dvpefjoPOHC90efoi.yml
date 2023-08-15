@@ -1,5 +1,5 @@
 name: response_selector
-display_name: Response Selector (Fact-Checking enables)
+display_name: Response Selector (Fact-Checking enabled)
 component_type: null
 model_type: Dictionary/Pattern-based
 is_customizable: false
