@@ -63,20 +63,6 @@
             }
         },
         "annotators": {
-            "embodied_status": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 10,
-                    "url": "http://embodied-status:8043/check"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "update_attributes",
-                "source": {
-                    "component": "components/Pnfwoei382fn02nv20vnvVN.yml",
-                    "service": "services/embodied_status/service_configs/embodied_status"
-                }
-            },
             "robot_notifications": {
                 "connector": {
                     "protocol": "http",

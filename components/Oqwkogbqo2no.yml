@@ -14,7 +14,7 @@ connector:
 previous_services:
 - skills
 required_previous_services: 
-- embodied_status
+- robot_notifications
 tags: null
 endpoint: is_command_performed
 service: services/ros_flask_server/service_configs/ros_flask_server

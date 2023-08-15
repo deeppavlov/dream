@@ -93,10 +93,10 @@ services:
       - 8035:8035
   embodied-status:
     volumes:
-      - "./annotators/embodied_status:/src"
+      - "./services/robot_notifications:/src"
       - "./common:/src/common"
     ports:
-      - 8043:8043
+      - 8036:8036
   robot-fake-server:
     volumes:
       - "./services/robot_fake_server:/src"
