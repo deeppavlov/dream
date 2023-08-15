@@ -32,6 +32,10 @@ FACTUAL_CONFORMITY_ANNOTATION_NAME = getenv("FACTUAL_CONFORMITY_ANNOTATION_NAME"
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
     "Ranker service URL or annotator name should be given"
 )
+if ENABLE_FACT_CHECKING:
+    assert FACTUAL_CONFORMITY_ANNOTATION_NAME or FACTUAL_CONFORMITY_SERVICE_URL, logger.error(
+    "Fact-checker service URL or annotator name should be given"
+)
 
 def filter_out_badlisted_or_toxic(hypotheses):
     clean_hypotheses = []
@@ -84,7 +88,7 @@ def filter_out_factually_incorrect(hypotheses, human_uttr_attributes):
                 json={"hypotheses": hypotheses, "human_uttr_attributes": human_uttr_attributes},
                 timeout=FACTUAL_CONFORMITY_SERVICE_TIMEOUT,
             ).json()
-            fact_check_result = np.array(fact_check_result[0]["batch"])
+            fact_check_result = fact_check_result[0]["batch"]
             logger.info(f"Annotated hypotheses via {FACTUAL_CONFORMITY_SERVICE_URL}.")
         except Exception as e:
             sentry_sdk.capture_exception(e)
@@ -92,10 +96,10 @@ def filter_out_factually_incorrect(hypotheses, human_uttr_attributes):
             logger.exception(e)
             logger.info("Error. Marking all hypotheses as correct.")
     clean_hypotheses = [hyp for hyp, res in zip(hypotheses, fact_check_result) if res =='Correct']
-    logger.info(f"clean_hypotheses: {clean_hypotheses}\nfact_check_result: {fact_check_result}")
     hypotheses_text = [hyp["text"] for hyp in hypotheses]
     clean_hypotheses_text = [hyp["text"] for hyp in clean_hypotheses]
-    logger.info(f"Filtered out incorrect candidates: {'; '.join(set(hypotheses_text) - set(clean_hypotheses_text))}")
+    logger.info(f"""Filtered out incorrect candidates: {'; '.join(set(hypotheses_text) - set(clean_hypotheses_text))}
+Remaining candidates: {clean_hypotheses_text}""")
     return clean_hypotheses
 
 
