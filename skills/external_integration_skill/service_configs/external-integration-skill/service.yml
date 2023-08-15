@@ -1,0 +1,29 @@
+name: external-integration-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8183
+      SERVICE_NAME: external_integration_skill
+      EXTERNAL_SKILL_URL: http://external-fake-server:8184/return_response
+      ARGUMENTS_TO_SEND: dialog_id
+      PAYLOAD_ARGUMENT_NAME: payload
+      RESPONSE_KEY: response
+      EXTERNAL_TIMEOUT: 2
+    context: .
+    dockerfile: ./skills/external_integration_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8183 --timeout=300
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/external_integration_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8183:8183

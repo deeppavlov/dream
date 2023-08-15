@@ -82,8 +82,8 @@
 8078	text-qa-ru,text-qa
 8079
 8080	dff-grounding-skill
-8081
-8082
+8081    ranking-and-intent-based-response-selector
+8082    ranking-and-intent-based-response-selector-ru
 8083	knowledge-grounding
 8084
 8085	knowledge-grounding-skill
@@ -180,3 +180,9 @@
 8176	dff-informal-letter-ru-prompted-skill
 8177	dff-journalist-helper-ru-prompted-skill
 8178    transformers-lm-rugpt35
+8179	dff-robot-prompted-skill
+8180
+8181
+8182
+8183	external-integration-skill
+8184	external-fake-server

@@ -1,5 +1,5 @@
 name: response_selector
-display_name: Response Selector
+display_name: Ranking-based Response Selector
 component_type: null
 model_type: Dictionary/Pattern-based
 is_customizable: false
