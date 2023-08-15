@@ -19,11 +19,12 @@ ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 EXTERNAL_SKILLS = getenv("EXTERNAL_SKILLS", None)
 EXTERNAL_SKILLS = [] if EXTERNAL_SKILLS is None else EXTERNAL_SKILLS.split(",")
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 0))
+GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
+SKILLS_NOT_TO_FACT_CHECK = ["dummy_skill", "dff_intent_responder_skill"]
 
 
 def check_hyp_with_llm(curr_prompt, human_uttr_attr):
@@ -36,7 +37,7 @@ def check_hyp_with_llm(curr_prompt, human_uttr_attr):
         **human_uttr_attr,
     )
     response = send_request_to_prompted_generative_service(
-        "", # нужен ли нам контекст и какой длины?
+        "",  # нужен ли нам контекст и какой длины?
         curr_prompt,
         GENERATIVE_SERVICE_URL,
         GENERATIVE_SERVICE_CONFIG,
@@ -44,7 +45,7 @@ def check_hyp_with_llm(curr_prompt, human_uttr_attr):
         sending_variables,
     )
     result = response[0]
-    if 'yes' in result.lower():
+    if "yes" in result.lower():
         _is_hyp_correct = False
     else:
         _is_hyp_correct = True
@@ -56,7 +57,9 @@ def respond():
     hypotheses = request.json["hypotheses"]
     human_uttr_attributes = request.json["human_uttr_attributes"]
     ie_types = ["external" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal" for hyp in hypotheses]
-    external_service_hyps = [(hyp["text"], hyp["skill_name"]) for hyp in hypotheses if hyp["skill_name"] in EXTERNAL_SKILLS]
+    external_service_hyps = [
+        (hyp["text"], hyp["skill_name"]) for hyp in hypotheses if hyp["skill_name"] in EXTERNAL_SKILLS
+    ]
     results = []
     for hyp, human_uttr_attr, ie_type in zip(hypotheses, human_uttr_attributes, ie_types):
         hyp_text = hyp["text"]
@@ -68,8 +71,11 @@ def respond():
                 logger.info(f"Hypothesis `{hyp_text}` is not checked as it was produced by {hyp['skill_name']}.")
                 results += ["Correct"]
             else:
-                if len(external_service_hyps) == 0: 
-                    logger.info(f"Hypothesis `{hyp_text}` is considered correct as there are no external hypotheses to check it upon.")
+                if len(external_service_hyps) == 0:
+                    logger.info(
+                        f"Hypothesis `{hyp_text}` is considered correct as there are no external hypotheses\
+to check it upon."
+                    )
                     results += ["Correct"]
                 else:
                     _is_hyp_correct = True
@@ -80,8 +86,10 @@ Does Hypothesis contradict Fact that {external_service_hyp}? Always answer only 
                         _is_hyp_correct_one_step = check_hyp_with_llm(curr_prompt, human_uttr_attr)
                         if not _is_hyp_correct_one_step:
                             _is_hyp_correct = False
-                            logger.info(f"""Internal hypothesis `{hyp_text}` is incorrect according to external service \
-{external_service_name}.""")
+                            logger.info(
+                                f"""Internal hypothesis `{hyp_text}` is incorrect according to external service \
+{external_service_name}."""
+                            )
                             results += ["Incorrect"]
                             break
                     if _is_hyp_correct:
