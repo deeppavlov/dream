@@ -35,7 +35,7 @@ def check_hyp_with_llm(curr_prompt, human_uttr_attr):
         **human_uttr_attr,
     )
     response = send_request_to_prompted_generative_service(
-        "",  # нужен ли нам контекст и какой длины?
+        "",
         curr_prompt,
         GENERATIVE_SERVICE_URL,
         GENERATIVE_SERVICE_CONFIG,
@@ -50,8 +50,8 @@ def check_hyp_with_llm(curr_prompt, human_uttr_attr):
     return _is_hyp_correct
 
 
-@app.route("/respond", methods=["POST"])
-def respond():
+@app.route("/respond_batch", methods=["POST"])
+def respond_batch():
     hypotheses = request.json["hypotheses"]
     human_uttr_attributes = request.json["human_uttr_attributes"]
     ie_types = ["external" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal" for hyp in hypotheses]
@@ -71,7 +71,7 @@ def respond():
             else:
                 if len(external_service_hyps) == 0:
                     logger.info(
-                        f"Hypothesis `{hyp_text}` is considered correct as there are no external hypotheses\
+                        f"Internal hypothesis `{hyp_text}` is considered correct as there are no external hypotheses \
 to check it upon."
                     )
                     results += ["Correct"]

@@ -1,8 +1,10 @@
 import requests
+from os import getenv
 
+SERVICE_PORT = getenv("SERVICE_PORT")
 
 def main():
-    url = "http://0.0.0.0:8182/respond"
+    url = f"http://0.0.0.0:{SERVICE_PORT}/respond_batch"
     result = requests.post(
         url=url,
         json={
