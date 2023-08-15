@@ -1172,6 +1172,14 @@ def speech_function_hypotheses_predictor_formatter(dialog: Dict):
     return ans
 
 
+def user_knowledge_graph_formatter_dialog(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "utterances": [dialog["human_utterances"][-1]],
+        }
+    ]
+
+
 def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
     hypotheses = []
     for hyp in dialog["human_utterances"][-1]["hypotheses"]:
