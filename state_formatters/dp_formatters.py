@@ -1,7 +1,6 @@
 import logging
 from copy import deepcopy
 from typing import Dict, List
-import json
 
 
 from common.utils import get_entities, get_intents
@@ -558,8 +557,6 @@ def persona_bot_formatter(dialog: Dict):
 
 
 def cropped_dialog(dialog: Dict):
-    with open("test_cand_ann.json", "w", encoding="utf-8") as f:
-        json.dump(dialog, f, ensure_ascii=False, indent=4)
     dialog = utils.get_last_n_turns(dialog)
     dialog = utils.remove_clarification_turns_from_dialog(dialog)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
