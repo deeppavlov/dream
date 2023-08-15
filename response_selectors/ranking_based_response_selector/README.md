@@ -19,4 +19,4 @@ Parameter `ENABLE_FACT_CHECKING` defines whether to filter out factually incorre
 ## Dependencies
 
 - either candidate annotations by `SENTENCE_RANKER_ANNOTATION_NAME` or service `SENTENCE_RANKER_SERVICE_URL`
-- __if `ENABLE_FACT_CHECKING=1`:__ candidate annotations by `FACTUAL_CONFORMITY_ANNOTATION_NAME` or service `FACTUAL_CONFORMITY_SERVICE_URL`
+- __only if `ENABLE_FACT_CHECKING=1`:__ either candidate annotations by `FACTUAL_CONFORMITY_ANNOTATION_NAME` or service `FACTUAL_CONFORMITY_SERVICE_URL`

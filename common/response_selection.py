@@ -68,3 +68,8 @@ BY_THE_WAY = [
     "Oh, before I forget,",
     "I wanted to mention that,",
 ]
+
+SKILLS_NOT_TO_FACT_CHECK = [
+    "dummy_skill",
+    "dff_intent_responder_skill"
+]
