@@ -16,7 +16,7 @@ def test_respond():
         ["Привет, Маркус! Я в порядке. Как дела?", "Я отлично. Какие у тебя планы на сегодня?"],
     ]
     prompts = [
-        "Respond like a friendly chatbot.",
+        "Respond like a friendly chatbot. \n Dialog:\n",
         "Отвечай как дружелюбный бот.",
     ]
     result = requests.post(
