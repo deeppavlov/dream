@@ -91,12 +91,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8035:8035
-  embodied-status:
-    volumes:
-      - "./services/robot_notifications:/src"
-      - "./common:/src/common"
-    ports:
-      - 8036:8036
   robot-fake-server:
     volumes:
       - "./services/robot_fake_server:/src"
