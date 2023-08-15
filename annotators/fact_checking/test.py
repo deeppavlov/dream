@@ -3,6 +3,7 @@ from os import getenv
 
 SERVICE_PORT = getenv("SERVICE_PORT")
 
+
 def main():
     url = f"http://0.0.0.0:{SERVICE_PORT}/respond_batch"
     result = requests.post(

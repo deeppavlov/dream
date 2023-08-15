@@ -34,8 +34,9 @@ assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.er
 )
 if ENABLE_FACT_CHECKING:
     assert FACTUAL_CONFORMITY_ANNOTATION_NAME or FACTUAL_CONFORMITY_SERVICE_URL, logger.error(
-    "Fact-checker service URL or annotator name should be given"
-)
+        "Fact-checker service URL or annotator name should be given"
+    )
+
 
 def filter_out_badlisted_or_toxic(hypotheses):
     clean_hypotheses = []
@@ -79,7 +80,9 @@ def get_scores(dialog_context, hypotheses):
 
 def filter_out_factually_incorrect(hypotheses, human_uttr_attributes):
     if all([FACTUAL_CONFORMITY_ANNOTATION_NAME in hyp.get("annotations", {}) for hyp in hypotheses]):
-        fact_check_result = [hyp.get("annotations", {}).get(FACTUAL_CONFORMITY_ANNOTATION_NAME, "Correct") for hyp in hypotheses]
+        fact_check_result = [
+            hyp.get("annotations", {}).get(FACTUAL_CONFORMITY_ANNOTATION_NAME, "Correct") for hyp in hypotheses
+        ]
         logger.info(f"Got annotations from {FACTUAL_CONFORMITY_ANNOTATION_NAME}.")
     else:
         try:
@@ -95,11 +98,13 @@ def filter_out_factually_incorrect(hypotheses, human_uttr_attributes):
             fact_check_result = ["Correct" for _ in hypotheses]
             logger.exception(e)
             logger.info("Error. Marking all hypotheses as correct.")
-    clean_hypotheses = [hyp for hyp, res in zip(hypotheses, fact_check_result) if res =='Correct']
+    clean_hypotheses = [hyp for hyp, res in zip(hypotheses, fact_check_result) if res == "Correct"]
     hypotheses_text = [hyp["text"] for hyp in hypotheses]
     clean_hypotheses_text = [hyp["text"] for hyp in clean_hypotheses]
-    logger.info(f"""Filtered out incorrect candidates: {'; '.join(set(hypotheses_text) - set(clean_hypotheses_text))}
-Remaining candidates: {clean_hypotheses_text}""")
+    logger.info(
+        f"""Filtered out incorrect candidates: {'; '.join(set(hypotheses_text) - set(clean_hypotheses_text))}
+Remaining candidates: {clean_hypotheses_text}"""
+    )
     return clean_hypotheses
 
 
