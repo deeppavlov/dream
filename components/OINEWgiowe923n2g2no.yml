@@ -13,7 +13,8 @@ connector:
   url: http://ros-flask-server:5000/is_command_valid
 previous_services:
 - skills
-required_previous_services: [embodied_status]
+required_previous_services: 
+- embodied_status
 tags: null
 endpoint: is_command_valid
 service: services/ros_flask_server/service_configs/ros_flask_server
