@@ -68,3 +68,5 @@ BY_THE_WAY = [
     "Oh, before I forget,",
     "I wanted to mention that,",
 ]
+
+EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]

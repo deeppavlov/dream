@@ -5,7 +5,7 @@ import json
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
-from common.response_selection import SKILLS_NOT_TO_FACT_CHECK
+from common.response_selection import EXTERNAL_SKILLS
 
 # logging here because it conflicts with tf
 
@@ -16,8 +16,6 @@ app = Flask(__name__)
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-EXTERNAL_SKILLS = getenv("EXTERNAL_SKILLS", None)
-EXTERNAL_SKILLS = [] if EXTERNAL_SKILLS is None else EXTERNAL_SKILLS.split(",")
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
