@@ -15,6 +15,9 @@ ENV LANGUAGE ${LANGUAGE}
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
+RUN apt update
+RUN apt install -y curl
+
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt && \
     python -m nltk.downloader wordnet
