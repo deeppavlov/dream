@@ -5,6 +5,7 @@
   "repetition_penalty": 1.1,
   "eos_token_id": [400],
   "replacement": [
-    ["\n", "</s>"]
+    ["\n", "</s>"],
+    [" +", " "]
   ]
 }

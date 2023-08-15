@@ -2,14 +2,6 @@ import os
 import requests
 
 
-DEFAULT_CONFIG = {
-    "max_new_tokens": 60,
-    "min_new_tokens": 8,
-    "top_p": 0.9,
-    "temperature": 0.9,
-    "do_sample": True,
-    "num_return_sequences": 2,
-}
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
 
@@ -32,7 +24,6 @@ def test_respond():
         json={
             "dialog_contexts": contexts,
             "prompts": prompts,
-            "configs": [DEFAULT_CONFIG] * len(contexts),
         },
     ).json()
     print(result)
