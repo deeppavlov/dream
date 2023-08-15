@@ -1,22 +1,17 @@
-# Document Retriever
+# Fact Checking
 
 ## Description
 
-Document Retriever is an annotator with two endpoints used to retrieve `PARAGRAPHS_NUM` document parts most relevant to the user request.
+Fact Checking conducts basic fact-checking of response candidates. As of now, it considers all hypotheses derived from external sources correct (skills relying on external sources are listed in `EXTERNAL_SKILLS`). Internally generated hypotheses are fact-checked by ensuring that they do not contradict any of the external hypotheses. For example, if `dff_google_api_skill` that relies on Google as a source of external knowledge responds _"Person X is 25 years old"_ and some solely LLM-based skill provides a hallucinated responds _"Person X is 23 years old"_, the second hypotheses is considered incorrect as it contradicts the first, external one.
 
-1. **train_and_upload_model** endpoint converts the documents provided by the user to txt format (if necessary) and splits them into chunks of ~100 words. Chunks are then transformed into a TF-IDF matrix; the resulting vectors and the vectorizer are saved for future use. This step is performed only once, in the beginning of the dialog.
-Documents (txt format), matrix, and vectorizer are uploaded to file server to be used by **return_candidates** endpoint and **dff_document_qa_llm** skill.
-2. **return_candidates** endpoint downloads TF-IDF matrix and vectorizer from the file server. It then converts the user’s utterance into a TF-IDF vector and finds `PARAGRAPHS_NUM` candidates with highest cosine similarity among TF-IDF vectors of text chunks.
+NB: Scripted responses from `dummy_skill` and `dff_intent_responder_skill` are not fact-checked for the sake of efficiency and are always deemed correct.
 
 ## Parameters
 
 ```
-CONFIG_PATH: configuration file with parameters for doc_retriever model
-FILE_SERVER_TIMEOUT: timeout for request where files are stored
-PARAGRAPHS_NUM: number of most relevant chunks to retrieve. Don't make this number too large or the chunks won't fit into LLM context!
-DOC_PATH_OR_LINK: paths or link to the files to be use for Question Answering. If paths, those are paths to files in `documents` folder in dream. If links, those must point to a file, not an Internet page. NB: file paths/links must be separated by a comma and no whitespace. 
+ENVVARS_TO_SEND: API keys splitted by comma to get as env variables
+GENERATIVE_SERVICE_URL: LLM to utilize for fact-checking
+GENERATIVE_TIMEOUT: timeout for the request to LLM
+GENERATIVE_SERVICE_CONFIG:  configuration file with generative parameters to utilize
+EXTERNAL_SKILLS: list of skills that generate hypotheses based on external knowledge; these skills are considered correct and the other hypotheses are checked upon them
 ```
-
-## Dependencies
-
-- **return_candidates** endpoint depends on **train_and_upload_model** endpoint
