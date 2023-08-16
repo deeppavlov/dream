@@ -443,7 +443,7 @@ def get_result(request, graph):
         logger.info(f"last_utt --  {last_utt}")
     
     # user_id = "/".join(["User", str(utt.get("user", {}).get("id", ""))]) # bot has no id in dialogue context
-        bot_id = "/".join(["Bot", "514b2c2d-bb72-4294-9486-04f9e099825e"])
+        bot_id = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
         bot_external_id = ""
         annotations = utt.get("annotations", {})
         custom_el_annotations = annotations.get("custom_entity_linking", [])
