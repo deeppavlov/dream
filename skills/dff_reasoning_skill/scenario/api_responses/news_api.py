@@ -14,7 +14,7 @@ def news_api_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     res = requests.get(main_url, params=query_params)
     open_bbc_page = res.json()
     article = open_bbc_page["articles"]
-    results = []
+    results = list()
     for ar in article:
         results.append(ar["title"])
 
