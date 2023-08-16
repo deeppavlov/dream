@@ -5,6 +5,12 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
   spacy-nounphrases:
     volumes:
       - "./annotators/spacy_nounphrases:/src"
@@ -16,12 +22,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
+      - 8002:8002
   ner:
     volumes:
       - './annotators/NER_deeppavlov:/src'
