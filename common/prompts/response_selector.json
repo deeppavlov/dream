@@ -1,0 +1,4 @@
+{
+    "prompt": "Select the most appropriate, relevant and non-toxic response among the hypotheses to the given dialog context. Return only the selected response without extra explanations. Always give the lowest priority to responses that contain 'As an AI language model'/'As a chatbot' and give the highest priority to responses coming from the external services:\n",
+    "goals": "Selects the most appropriate, relevant abd non-toxic response among hypotheses."
+}

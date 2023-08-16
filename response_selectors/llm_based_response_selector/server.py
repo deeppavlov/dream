@@ -28,14 +28,11 @@ if GENERATIVE_SERVICE_CONFIG:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
-CRITERION = getenv("CRITERION", "the most appropriate, relevant and non-toxic")
-PROMPT = (
-    f"""Select {CRITERION} response among the hypotheses to the given dialog context. """
-    """Return only the selected response without extra explanations. """
-    """Always give the lowest priority to responses that contain 'As an AI language model'/'As a chatbot' """
-    """and give the highest priority to responses coming from the external services:
-    """
-)
+PROMPT = getenv("PROMPT")
+assert PROMPT, logger.error("No prompt provided")
+with open(f"common/prompts/{PROMPT}", "r") as f:
+    PROMPT = json.load(f)["prompt"]
+
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
