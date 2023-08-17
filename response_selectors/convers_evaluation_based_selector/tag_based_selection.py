@@ -63,13 +63,13 @@ PRIORITIZE_SCRIPTED_SKILLS = int(getenv("PRIORITIZE_SCRIPTED_SKILLS", 1))
 LANGUAGE = getenv("LANGUAGE", "EN")
 MAX_TURNS_WITHOUT_SCRIPTS = int(getenv("MAX_TURNS_WITHOUT_SCRIPTS", 5))
 
-force_intents_fname = "force_intents_intent_catcher.json"
+force_intents_fname = "common/intents/force_intents_intent_catcher.json"
 FORCE_INTENTS_IC = json.load(open(force_intents_fname))
 
-lets_chat_about_triggers_fname = "lets_chat_about_triggers.json"
+lets_chat_about_triggers_fname = "common/intents/lets_chat_about_triggers.json"
 LETS_CHAT_ABOUT_PARTICULAR_TOPICS = json.load(open(lets_chat_about_triggers_fname))
 
-require_action_intents_fname = "require_action_intents.json"
+require_action_intents_fname = "common/intents/require_action_intents.json"
 REQUIRE_ACTION_INTENTS = json.load(open(require_action_intents_fname))
 
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])

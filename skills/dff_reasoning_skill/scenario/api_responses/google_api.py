@@ -1,5 +1,6 @@
 from os import getenv
 import json
+import logging
 from langchain.agents import Tool
 from langchain.memory import ConversationBufferMemory
 from langchain import OpenAI
@@ -7,6 +8,9 @@ from langchain.utilities import GoogleSearchAPIWrapper
 from langchain.agents import initialize_agent
 from df_engine.core import Context, Actor
 from scenario.utils import compose_input_for_API
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
@@ -25,6 +29,8 @@ for key, value in api_conf.copy().items():
         if not available_variables[api_key]:
             del api_conf[key]
             break
+
+logger.info(f"api_conf: {api_conf}")
 
 if "google_api" in api_conf.keys():
     search = GoogleSearchAPIWrapper()
