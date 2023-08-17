@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
+ROS_FLASK_SERVER = getenv("ROS_FLASK_SERVER")
 SKILL_NAMES_SENDING_COMMANDS = ["intent_responder", "dff_intent_responder_skill"]
 
 
@@ -35,7 +35,7 @@ def respond():
             logger.info(f"robot_command_sender: command `{command}` is being sent to robot")
             result = False
             try:
-                result = send_robot_command_to_perform(command, ROS_FSM_SERVER, dialog_id)
+                result = send_robot_command_to_perform(command, ROS_FLASK_SERVER, dialog_id)
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)

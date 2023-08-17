@@ -64,8 +64,10 @@ def respond_is_command_valid():
 def respond_perform_command():
     st_time = time.perf_counter()
 
+
     command = request.json.get("command", None)
     cmd_valid = command in VALID_COMMANDS
+    logger.info(f"ros-flask-server received command: {command}, valid? -{cmd_valid}")
     if cmd_valid:
         logger.info("Sending command to ROS...")
         try:
@@ -133,4 +135,4 @@ def respond_command_is_performed():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=6000, debug=True)

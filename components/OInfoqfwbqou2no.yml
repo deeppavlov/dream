@@ -10,7 +10,7 @@ gpu_usage: null
 connector:
   protocol: http
   timeout: 1.0
-  url: http://ros-flask-server:5000/perform_command
+  url: http://ros-flask-server:6000/perform_command
 previous_services:
 - skills
 required_previous_services: 

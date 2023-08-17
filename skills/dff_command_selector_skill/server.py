@@ -25,6 +25,7 @@ SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 ROS_FSM_SERVER = os.getenv("ROS_FSM_SERVER")
+ROS_FLASK_SERVER = os.getenv("ROS_FLASK_SERVER")
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -60,8 +61,9 @@ def handler(requested_data, random_seed=None):
 
 while True:
     result = containers.is_container_running(ROS_FSM_SERVER)
-    if result:
-        logger.info(f"GENERATIVE_SERVICE_URL: {ROS_FSM_SERVER} is ready")
+    result2 = containers.is_container_running(ROS_FLASK_SERVER)
+    if result and result2:
+        logger.info(f"GENERATIVE_SERVICE_URL: {ROS_FSM_SERVER} and {ROS_FLASK_SERVER} is ready")
         break
     else:
         time.sleep(5)

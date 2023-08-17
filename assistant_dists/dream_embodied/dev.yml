@@ -78,7 +78,7 @@ services:
       - "./services/ros_flask_server:/home/dkr/"
       - "./common:/home/dkr/common"
     ports:
-      - 5000:5000
+      - 6000:6000
   dff-command-selector-skill:
     volumes:
       - "./skills/dff_command_selector_skill:/src"

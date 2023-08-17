@@ -10,7 +10,7 @@ from df_engine.core import Actor, Context
 
 
 LANGUAGE = getenv("LANGUAGE", "EN")
-ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
+ROS_FLASK_SERVER = getenv("ROS_FLASK_SERVER")
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ def track_object_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = "I did not get tracked object. Please repeat the command."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
@@ -80,7 +80,7 @@ def turn_around_respond(ctx: Context, actor: Actor, intention: str):
             else:
                 response = "Turning around clockwise."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
@@ -102,7 +102,7 @@ def move_forward_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = "Moving forward."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
@@ -124,7 +124,7 @@ def move_backward_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = "Moving backward."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
@@ -137,7 +137,7 @@ def open_door_respond(ctx: Context, actor: Actor, intention: str):
     else:
         response = "Opening the door."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
@@ -164,7 +164,7 @@ def move_to_point_respond(ctx: Context, actor: Actor, intention: str):
         else:
             response = "I did not get a target point. Please repeat the command."
 
-    if check_if_valid_robot_command(command, ROS_FSM_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""

@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_embodied/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, dff-program-y-skill:8008, sentseg:8011, 
-          intent-catcher-commands:8014, badlisted-words:8018, dff-command-selector-skill:8148, dff-intent-responder-skill:8012, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, ros-flask-server:5000, robot-notifications:8036, robot-fake-server:8038"
+          intent-catcher-commands:8014, badlisted-words:8018, dff-command-selector-skill:8148, dff-intent-responder-skill:8012, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, ros-flask-server:6000, robot-notifications:8036, robot-fake-server:8038"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -106,7 +106,7 @@ services:
         SERVICE_PORT: 8148
         SERVICE_NAME: dff_command_selector_skill
         LANGUAGE: EN
-        ROS_FLASK_SERVER: http://ros-flask-server:5000
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
         ROS_FSM_SERVER: http://robot-fake-server:8038
       context: .
       dockerfile: ./skills/dff_command_selector_skill/Dockerfile
@@ -140,8 +140,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8035
-        ROS_FLASK_SERVER: http://ros-flask-server:5000
-        ROS_FSM_SERVER: http://robot-fake-server:8038
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
       context: .
       dockerfile: ./services/robot_command_sender/Dockerfile
     command: flask run -h 0.0.0.0 -p 8035
@@ -159,7 +158,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8036
-        ROS_FSM_SERVER: http://ros-flask-server:5000
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
       context: .
       dockerfile: ./services/robot_notifications/Dockerfile
     command: flask run -h 0.0.0.0 -p 8036
@@ -278,7 +277,7 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 5000
+        SERVICE_PORT: 6000
       context: .
       dockerfile: ./services/ros_flask_server/Dockerfile
     environment:
@@ -295,7 +294,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8036
-        ROS_FSM_SERVER: http://ros-flask-server:5000
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
       context: .
       dockerfile: ./services/robot_notifications/Dockerfile
     command: flask run -h 0.0.0.0 -p 8036
