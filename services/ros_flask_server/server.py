@@ -64,7 +64,6 @@ def respond_is_command_valid():
 def respond_perform_command():
     st_time = time.perf_counter()
 
-
     command = request.json.get("command", None)
     cmd_valid = command in VALID_COMMANDS
     logger.info(f"ros-flask-server received command: {command}, valid? -{cmd_valid}")
