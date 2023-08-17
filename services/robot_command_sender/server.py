@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 ROS_FLASK_SERVER = getenv("ROS_FLASK_SERVER")
-SKILL_NAMES_SENDING_COMMANDS = ["intent_responder", "dff_intent_responder_skill"]
+SKILL_NAMES_SENDING_COMMANDS = ["intent_responder", "dff_intent_responder_skill", "dff_command_selector_skill"]
 
 
 @app.route("/send", methods=["POST"])
