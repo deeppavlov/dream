@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, 
-          ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb:6363, 
+          ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb-server:6363, 
           user-knowledge-memorizer:8027, property-extraction:8131, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
           sentence-ranker:8128, prompt-selector:8135"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -145,10 +145,8 @@ services:
         reservations:
           memory: 2.5G
   
-  terminusdb:
-    image: terminusdb/terminusdb-server:dev-7022f970fe5605ec8048c258ea0219ac9039315e
-    ports:
-      - 7363:6363
+  terminusdb-server:
+    image: terminusdb/terminusdb-server:v10.1.10
 
   custom-entity-linking:
     env_file: [.env]
@@ -188,7 +186,7 @@ services:
           memory: 7G
 
   user-knowledge-memorizer:
-    env_file: [ .env, .env_secret ]
+    env_file: [ .env, .env_secret]
     build:
       args:
         SERVICE_PORT: 8027
@@ -199,7 +197,7 @@ services:
         TERMINUSDB_SERVER_TEAM: admin
         TERMINUSDB_SERVER_DB: bot_knowledge_db
         INDEX_LOAD_PATH: /root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
-        OPENAI_API_KEY:
+        ENVVARS_TO_SEND: OPENAI_API_KEY
         CHAT_GPT_PORT: 8145
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
