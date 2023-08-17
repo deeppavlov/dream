@@ -1,6 +1,8 @@
 import requests
 import os
 
+import scenario.response
+
 import common.test_utils as test_utils
 
 
@@ -35,6 +37,7 @@ def run_test(handler):
                 msg = f"{msg} ratio = {ratio}"
         assert is_equal_flag, msg
         print("Success")
+    scenario.response.tests_passed = True
 
 
 if __name__ == "__main__":
