@@ -11,6 +11,8 @@ RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 LANGUAGE = os.getenv("LANGUAGE", "EN")
 
+ROS_FLASK_SERVER = os.getenv("ROS_FLASK_SERVER")
+
 
 def handler(requested_data, random_seed):
     hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}).json()
@@ -37,7 +39,7 @@ def run_test(handler):
                 msg = f"{msg} ratio = {ratio}"
         assert is_equal_flag, msg
         print("Success")
-    scenario.response.tests_passed = True
+    scenario.response.ros_server_url = ROS_FLASK_SERVER
 
 
 if __name__ == "__main__":

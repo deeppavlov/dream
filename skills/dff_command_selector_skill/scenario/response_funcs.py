@@ -18,15 +18,14 @@ logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelnam
 logger = logging.getLogger(__name__)
 
 
-def get_respond_funcs(tests_passed: bool):
-    svr = ROS_FLASK_SERVER if tests_passed else ROS_FSM_SERVER
+def get_respond_funcs(ros_server_url: str):
     return {
-        "track_object": partial(track_object_respond, server=svr),
-        "turn_around": partial(turn_around_respond, server=svr),
-        "move_forward": partial(move_forward_respond, server=svr),
-        "move_backward": partial(move_backward_respond, server=svr),
-        "open_door": partial(open_door_respond, server=svr),
-        "move_to_point": partial(move_to_point_respond, server=svr),
+        "track_object": partial(track_object_respond, server=ros_server_url),
+        "turn_around": partial(turn_around_respond, server=ros_server_url),
+        "move_forward": partial(move_forward_respond, server=ros_server_url),
+        "move_backward": partial(move_backward_respond, server=ros_server_url),
+        "open_door": partial(open_door_respond, server=ros_server_url),
+        "move_to_point": partial(move_to_point_respond, server=ros_server_url),
     }
 
 
