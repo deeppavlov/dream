@@ -1227,11 +1227,14 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
 
 
 def last_human_annotated_utterance(dialog: Dict) -> List[Dict]:
-    return [
-        {
-            "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
-        }
-    ]
+    return [{"last_human_annotated_utterance": [dialog["human_utterances"][-1]],}]
+
+
+def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
+    last_sentences = [dialog["human_utterances"][-1]["text"]]
+    dialog_ids = [dialog.get("dialog_id", "unknown")]
+    user_ids = [dialog["human_utterances"][-1]["user"]["id"]]
+    return [{"sentences": last_sentences, "dialog_ids": dialog_ids, "user_ids": user_ids}]
 
 
 def robot_formatter(dialog: Dict) -> Dict:
