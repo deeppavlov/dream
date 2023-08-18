@@ -661,6 +661,8 @@ def dream_formatter(
                 if result_key in key:
                     if additional_params and service_name != "":
                         formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
+                    elif additional_params and service_name == "":
+                        formatted_dialog[result_key] = keys_table[key](dialog, additional_params)
                     else:
                         formatted_dialog[result_key] = keys_table[key](dialog)
             else:
