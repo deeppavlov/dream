@@ -14,7 +14,7 @@ compose:
       N_UTTERANCES_CONTEXT: 1
       ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       FILTER_TOXIC_OR_BADLISTED: 1
-      PROMPT: response_selector.json
+      PROMPT_FILE: common/prompts/response_selector.json
       FLASK_APP: server
     context: .
     dockerfile: ./response_selectors/llm_based_response_selector/Dockerfile
