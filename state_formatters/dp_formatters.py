@@ -42,8 +42,8 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
         additional_params={
             "utterance_type": "human_utterances",
             "attribute": "spelling_preprocessing",
-            "def_result": "dialog['human_utterances'][-1]['text']"
-        }
+            "def_result": "dialog['human_utterances'][-1]['text']",
+        },
     )
 
 
@@ -68,7 +68,7 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
             "bot_last_turns": None,
             "remove_clarification": False,
             "replace_utterances": False,
-        }
+        },
     )
 
 
@@ -82,8 +82,8 @@ def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
             "attribute": "annotations",
             "def_result": "",
             "sub_attribute": "spelling_preprocessing",
-            "def_subresult": dialog['human_utterances'][-1]['text']
-        }
+            "def_subresult": dialog["human_utterances"][-1]["text"],
+        },
     )
 
 
@@ -94,7 +94,7 @@ def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
         ["utterances_histories", "annotation_histories"],
         preprocess=True,
         preprocess_params={"bot_last_turns": utils.LAST_N_TURNS},
-        additional_params=dict()
+        additional_params=dict(),
     )
 
 
@@ -104,7 +104,7 @@ def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
         ["utterances_histories", "annotation_histories"],
         preprocess=True,
         preprocess_params={"bot_last_turns": utils.LAST_N_TURNS + 1},
-        additional_params={"crop": 1}
+        additional_params={"crop": 1},
     )
 
 
@@ -128,8 +128,8 @@ def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
             "attribute": "attributes",
             "def_result": dict(),
             "sub_attribute": "speech",
-            "def_subresult": dict()
-        }
+            "def_subresult": dict(),
+        },
     )
 
 
@@ -138,12 +138,8 @@ def last_utt_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
         ["sentences"],
-    additional_params={
-        "utterance_type": "attribute",
-        "attribute": "text",
-        "def_result": "",
-        "last_turns": 1
-    })
+        additional_params={"utterance_type": "attribute", "attribute": "text", "def_result": "", "last_turns": 1},
+    )
 
 
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
@@ -158,8 +154,8 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
             "def_result": "",
             "sub_atribute": "spelling_preprocessing",
             "def_subresult": dialog["human_utterances"][-1]["text"],
-            "last_turns": 1
-        }
+            "last_turns": 1,
+        },
     )
 
 
@@ -189,6 +185,7 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
         }
     ]
 
+
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     return utils.dream_formatter(
@@ -200,8 +197,8 @@ def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
             "attribute": "annotations",
             "def_result": "",
             "sub_attribute": "spelling_preprocessing",
-            "def_subresult": dialog["human_utterances"][-1]["text"]
-        }
+            "def_subresult": dialog["human_utterances"][-1]["text"],
+        },
     )
 
 
@@ -216,8 +213,8 @@ def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
             "attribute": "annotations",
             "def_result": "",
             "sub_attribute": "spelling_preprocessing",
-            "def_subresult": dialog["human_utterances"][-1]["text"]
-        }
+            "def_subresult": dialog["human_utterances"][-1]["text"],
+        },
     )
 
 
@@ -268,8 +265,8 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
             "attribute": "annotations",
             "def_result": "",
             "sub_attribute": "spelling_preprocessing",
-            "def_subresult": dialog["human_utterances"][-1]["text"]
-        }
+            "def_subresult": dialog["human_utterances"][-1]["text"],
+        },
     )
 
 
@@ -298,7 +295,7 @@ def persona_bot_formatter(dialog: Dict):
         "seq2seq-persona-based",
         preprocess=True,
         preprocess_params={"mode": "punct_sent", "remove_clarification": True, "replace_utterances": True},
-        additional_params={"utterance_type": "human_utteraces", "last_n_utts": 1}
+        additional_params={"utterance_type": "human_utteraces", "last_n_utts": 1},
     )
 
 
@@ -508,7 +505,6 @@ def fact_retrieval_rus_formatter_dialog(dialog: Dict):
             "entity_pages": [entity_pages_list],
         }
     ]
-
 
 
 def entity_storer_formatter(dialog: Dict) -> List[Dict]:
@@ -947,7 +943,6 @@ def last_utt_sentseg_segments_dialog(dialog: Dict):
 
 
 def ner_formatter_dialog(dialog: Dict):
-    
     return utils.dream_formatter(
         dialog,
         ["last_utterances"],
