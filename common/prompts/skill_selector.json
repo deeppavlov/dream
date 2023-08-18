@@ -1,0 +1,3 @@
+{
+    "prompt": "Select up to MAX_N_SKILLS the most relevant to the dialog context skills based on the given short descriptions of abilities of different skills of the assistant. Return only names of the selected skills divided by comma. Do not respond to the dialog context.\n\n"
+}

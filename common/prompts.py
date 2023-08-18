@@ -69,7 +69,6 @@ def compose_sending_variables(lm_service_kwargs, envvars_to_send, **kwargs):
     else:
         sending_variables = {}
 
-    # adding kwargs to request from the last human utterance's attributes
     for _key, _value in lm_service_kwargs.items():
         logger.info(f"Got/Re-writing {_key}s values from kwargs.")
         sending_variables[f"{_key}s"] = [deepcopy(_value)]

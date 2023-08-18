@@ -10,6 +10,13 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
+  llm-based-skill-selector:
+    volumes:
+      - "./skill_selectors/llm_based_skill_selector:/src"
+      - "./common:/src/common"
+      - "./components:/src/components"
+    ports:
+      - 8182:8182
   llm-based-response-selector:
     volumes:
       - "./response_selectors/llm_based_response_selector:/src"

@@ -10,15 +10,15 @@ The LLM-based Response Selector utilizes LLM with to select the best hypotheses 
 
 The algorithm sends request to the LLM on `GENERATIVE_SERVICE_URL` with a generative parameters 
 in `GENERATIVE_SERVICE_CONFIG` and timeout `GENERATIVE_TIMEOUT`. The algorithm utilizes `N_UTTERANCES_CONTEXT`
-last utterances as a context for LLM, and `PROMPT` for hypotheses selection:
+last utterances as a context for LLM, and `PROMPT_FILE` for hypotheses selection:
 ```python
 import json
 from os import getenv
 
 
-PROMPT = getenv("PROMPT")
-assert PROMPT
-with open(f"common/prompts/{PROMPT}", "r") as f:
+PROMPT_FILE = getenv("PROMPT_FILE")
+assert PROMPT_FILE
+with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 ```
 

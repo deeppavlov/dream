@@ -183,6 +183,6 @@
 8179	dff-robot-prompted-skill
 8180
 8181
-8182
+8182    llm-based-skill-selector
 8183	external-integration-skill
 8184	external-fake-server

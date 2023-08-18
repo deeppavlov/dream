@@ -58,7 +58,7 @@ services:
         N_UTTERANCES_CONTEXT: 1
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
         FILTER_TOXIC_OR_BADLISTED: 1
-        PROMPT: response_selector.json
+        PROMPT_FILE: common/prompts/response_selector.json
       context: .
       dockerfile: ./response_selectors/llm_based_response_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8003

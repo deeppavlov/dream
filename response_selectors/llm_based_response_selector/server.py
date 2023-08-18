@@ -28,9 +28,9 @@ if GENERATIVE_SERVICE_CONFIG:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
-PROMPT = getenv("PROMPT")
-assert PROMPT, logger.error("No prompt provided")
-with open(f"common/prompts/{PROMPT}", "r") as f:
+PROMPT_FILE = getenv("PROMPT_FILE")
+assert PROMPT_FILE, logger.error("No prompt provided")
+with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)

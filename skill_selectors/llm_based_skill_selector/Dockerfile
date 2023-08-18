@@ -2,7 +2,7 @@ FROM python:3.10
 
 RUN mkdir /src
 
-COPY ./response_selectors/llm_based_response_selector/requirements.txt /src/requirements.txt
+COPY ./skill_selectors/llm_based_skill_selector/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
 
 ARG SERVICE_PORT
@@ -17,14 +17,15 @@ ARG ENVVARS_TO_SEND
 ENV ENVVARS_TO_SEND ${ENVVARS_TO_SEND}
 ARG N_UTTERANCES_CONTEXT=5
 ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
-ARG FILTER_TOXIC_OR_BADLISTED=1
-ENV FILTER_TOXIC_OR_BADLISTED ${FILTER_TOXIC_OR_BADLISTED}
 ARG PROMPT_FILE
 ENV PROMPT_FILE ${PROMPT_FILE}
+ARG MAX_N_SKILLS
+ENV MAX_N_SKILLS ${MAX_N_SKILLS}
 
-COPY ./response_selectors/llm_based_response_selector/ /src/
+COPY skill_selectors/llm_based_skill_selector /src
 WORKDIR /src
 COPY ./common/ ./common/
+COPY ./components/ ./components/
 
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
