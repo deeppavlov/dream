@@ -343,12 +343,15 @@ def get_annotation_histories(dialog: Dict) -> List:
     return [[deepcopy(utt.get("annotations")) for utt in dialog["utterances"]]]
 
 
-def get_history(dialog):
-    return [
-        utt["annotations"].get("spelling_preprocessing", utt["text"])
-        for utt in dialog["utterances"]
-        if utt["user"]["user_type"] == "bot" and utt["active_skill"] == "eliza"
-    ]
+def get_human_utterance_history(dialog: Dict) -> List:
+    history = []
+    prev_human_utterance = None
+    for utt in dialog["utterances"]:
+        if utt["user"]["user_type"] == "human":
+            prev_human_utterance = utt["annotations"].get("spelling_preprocessing", utt["text"])
+        elif utt["user"]["user_type"] == "bot" and utt["active_skill"] == "eliza" and prev_human_utterance is not None:
+            history.append(prev_human_utterance)
+    return history
 
 
 def extract_entities(utterance):
@@ -389,24 +392,28 @@ def get_x_init(dialog):
     return sentences
 
 
-def get_utterances_attribute(
-    dialog: Dict, utterance_type: str, attribute: str = None, sub_attribute: str = None, last_n_utts: int = 0
-) -> List:
-    dialog_slice = dialog[utterance_type][-last_n_utts:] if last_n_utts > 0 else dialog[utterance_type]
+def get_utterances_attribute(dialog: Dict, params: Dict) -> List:
+    if params["last_n_utts"] > 0:
+        dialog_slice = dialog[params["utterance_type"]][-params["last_n_utts"]:]
+    else:
+        dialog_slice = dialog[params["utterance_type"]]
 
-    if attribute is None:
+    if params["attribute"] is None:
         return dialog_slice
 
-    if utterance_type == "human_utterance":
-        if attribute == "attributes":
-            return [dialog_slice[attribute]]
-        else:
-            dialog = dialog_slice[attribute]
+    if params["utterance_type"] == "human_utterance" and params["attribute"] == "attributes":
+         return [dialog_slice.get(params["attribute"], params["def_result"])]
+    else:
+        dialog_slice = dialog_slice.get(params["attribute"], params["def_result"])
 
-    if sub_attribute is None:
-        return [utt.get(attribute, "") for utt in dialog_slice]
+    if params["sub_attribute"] is None:
+        return [utt.get(params["attribute"], params["def_result"]) for utt in dialog_slice]
 
-    return [utt.get(attribute, {}).get(sub_attribute, "") for utt in dialog_slice]
+    return [
+        utt.get(
+            params["attribute"], params["def_result"]
+        ).get(params["sub_attribute"], params["def_subresult"]) for utt in dialog_slice
+    ]
 
 
 def get_ongoing_utterances(dialog):
@@ -418,24 +425,36 @@ def get_entities_with_labels(dialog: Dict) -> Union[List[Dict[str, str]], List]:
 
 
 def get_tokenized_sentences(dialog: Dict) -> List[List[str]]:
-    tokens = get_annotation(
-        dialog, annotation_type="spacy_annotator", default_result=[], last_n_utts=1, utterance_type="human_utterance"
-    )
+    tokens = get_utterances_attribute(dialog, params={
+        "utterance_type": "human_utterance",
+        "last_n_turns": 1,
+        "attribute": "annotations",
+        "def_result": "",
+        "sub_attribute": "spacy_annotator",
+        "def_subresult": []
+    })
     tokens = [token["text"] for token in tokens]
     return [tokens] if len(tokens) else None
 
 
 def get_sentences_with_history(dialog: Dict) -> List[str]:
     # get the two most recent bot and human utterances, and the last human utterance
-    last_human_utt = get_utterances_attribute(dialog, "human_utterances", "text", last_n_utts=1)[0]
-    prev_bot_utts = get_utterances_attribute(dialog, "bot_utterances", "text", last_n_utts=2)
-    prev_human_utts = get_utterances_attribute(
-        dialog, "human_utterances", "annotations", "spelling_preprocessing", last_n_utts=3
+    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
     )
-
-    # join the utterances with a separator, starting with the older utterances
-    utterances = [utt for pair in zip_longest(prev_human_utts, prev_bot_utts, fillvalue="") for utt in pair if utt]
-    sentence_w_history = " [SEP] ".join(utterances + [last_human_utt])
+    if dialog["bot_utterances"]:
+        # h sep b sep h sep b sep h
+        prev_bot_utts = [k["text"] for k in dialog["bot_utterances"][-2:]]
+        prev_human_utts = [
+            utt["annotations"].get("spelling_preprocessing", utt["text"]) for utt in dialog["human_utterances"][-3:-1]
+        ]
+        prev_utts = []
+        for human_utt, bot_utt in zip(prev_human_utts, prev_bot_utts):
+            prev_utts.append(human_utt)
+            prev_utts.append(bot_utt)
+        sentence_w_history = " [SEP] ".join(prev_utts + [last_human_utt])
+    else:
+        sentence_w_history = last_human_utt
 
     return [sentence_w_history]
 
@@ -458,7 +477,7 @@ def get_utterances_with_histories(dialog: Dict) -> List[List[str]]:
     return utterances_histories_batch
 
 
-def get_active_skills(dialog: Dict):
+def get_active_skills(dialog: Dict) -> List:
     active_skills = get_utterances_attribute(dialog, utterance_type="utterance", attribute="active_skill")
     return [[skill for skill in active_skills if skill]]
 
@@ -499,7 +518,7 @@ def get_fact_entities(dialog: Dict):
 
 def fetch_active_skills(dialog: Dict):
     all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
-    return [skill_name for skill_name in all_prev_active_skills if skill_name][-15:]
+    return [skill_name for skill_name in all_prev_active_skills if skill_name]
 
 
 def get_entity_info(dialog, param: str):
@@ -509,10 +528,6 @@ def get_entity_info(dialog, param: str):
         if "pages_titles" in entity_info and entity_info.get("pages_titles"):
             necessary_info.append(entity_info[param])
     return necessary_info
-
-
-def get_human_sentences(dialog):
-    return dialog["human_sentences"][-1]["text"]
 
 
 def get_dialog_history(dialog, last_n_utts: int = 2):
@@ -531,6 +546,37 @@ def get_new_dialog(dialog):
     new_dialog["human"] = {"attributes": attributes}
 
     return new_dialog
+
+
+def get_sents(dialog: Dict):
+    sents = [utt["text"] for utt in dialog["utterances"]]
+    pointer = (len(sents) + 1) % 6 if (len(sents) + 1) % 6 != 0 else 6
+    sents = sents[-(pointer + 5) :]
+    return [sents]
+
+
+def get_previous_summary(dialog: Dict)
+    bot_attributes = dialog["bot_utterances"][-1]["user"]["attributes"] if len(dialog["bot_utterances"]) else {}
+    previous_summary = bot_attributes["summarized_dialog"] if "summarized_dialog" in bot_attributes.keys() else []
+    previous_summary = previous_summary if previous_summary else ""
+    return [previous_summary]
+
+def service_multiple_choices(dialog: Dict, service_name: str, params: Dict = None):
+    if service_name == "convert":
+        dialog_20 = get_last_n_turns(dialog, bot_last_turns=20)
+        return [[utt["text"] for utt in dialog_20["utterances"]]]
+    elif service_name == "sentrewrite" and params:
+        utterances_histories = [utt["text"] for utt in dialog["utterances"][:-params.get("crop")]]
+        return [[utterances_histories]]
+    elif service_name in ("entity-detection", "property-extraction"):
+        return [[uttr["text"] for uttr in dialog["utterances"][-params.get("crop"):]]]
+    elif service_name == "seq2seq-persona-based":
+        utterances_histories = [utt["text"] for utt in dialog["utterances"]]
+        amount_utterances_history = 3
+        utterances_histories = utterances_histories[-amount_utterances_history:]
+        return [utterances_histories]
+    else:
+        return get_utterances_attribute(dialog, params)
 
 
 def dream_formatter(
@@ -563,40 +609,48 @@ def dream_formatter(
             "sentences",
             "speeches",
             "human_utterance",
-            "contexts",
             "utterances_histories",
-            "hypotheses",
             "utterances",
-            "currentUtterance",
-            "pastUtterances",
-            "pastResponses",
-        ): get_utterances_attribute,
-        "human_utterance_history_batch": get_history,
-        "personality": lambda dialog: dialog["bot"]["persona"]
+        ): service_multiple_choices,
+        "human_utterance_history_batch": get_human_utterance_history,
+        "human_attributes": lambda dialog: dialog["human"]["attributes"],
+        "personality": lambda dialog: [dialog["bot"]["persona"]]
         if service_name == "convert"
         else get_utterances_attribute,
-        ("states_batch", "dialogs"): lambda dialog: dialog,
+        ("states_batch", "dialogs"): lambda dialog: get_sents if service_name == "summarization-annotator" else dialog,
         "annotation_histories": get_annotation_histories,
         "entities_with_labels": get_entities_with_labels,
-        ("named_entities", "entity_info", "last_utterances", "sentences"): get_annotation,
-        ("entity_substr", "entity_tags"): extract_entities if service_name == "kbqa" else get_entities,
+        ("named_entities", "entity_info", "last_utterances", ""): get_annotation,
         "x_init": get_x_init,
         "sentences_with_history": get_sentences_with_history,
         "utterances_with_histories": get_utterances_with_histories,
-        "active_skills": get_active_skills,
         "cobot_topics": get_cobot_topics,
         "dialog_context": get_contexts,
         "last_midas_labels": get_midas_preparation,
-        "return_probas": lambda dialog: 1,
         "entities": get_fact_entities,
-        "all_prev_active_skills": fetch_active_skills,
+        ("all_prev_active_skills", "active_skills"): fetch_active_skills,
         "nounphrases": get_entities,
         ("entity_pages", "entity_ids", "entity_page_titles", "entity_substr", "entity_tags"): get_entity_info,
-        "human_sentences": get_human_sentences,
         "dialog_history": get_dialog_history,
         "dialogs": clean_up_utterances_to_avoid_unwanted_keys,
-        "human_utter_index": lambda dialog: len(dialog["utterances"] - 1),
         "new_dialog": get_new_dialog,
+        "previous_summaries": get_previous_summary,
+        "last_annotated_utterances": get_utterances_attribute
+    }
+
+    lambda_keys_table = {
+        "return_probas": lambda dialog: 1,
+        "human_utter_index": lambda dialog: len(dialog["utterances"] - 1),
+        "num_ongoing_utt": lambda dialog: [
+            count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")
+        ],
+        "human_sentences": lambda dialog: dialog["human_sentences"][-1]["text"],
+        "hypotheses": lambda dialog: [h["text"] for h in dialog["human_utterances"][-1]["hypotheses"]],
+        "dialog_contexts": lambda dialog: len(
+            [h["text"] for h in dialog["human_utterances"][-1]["hypotheses"]]
+        ) * dialog["human_utterances"][-1]["text"],
+        "contexts": lambda dialog: [uttr["text"] for uttr in dialog["utterances"][-4:]],
+        "prompt_goals": dialog["human"]["attributes"].get("prompts_goals", {})
     }
 
     formatted_dialog = dict()
@@ -605,11 +659,22 @@ def dream_formatter(
         for key in keys_table.keys():
             if isinstance(key, tuple):
                 if result_key in key:
-                    formatted_dialog[result_key] = keys_table[key](dialog)
-            else:
-                formatted_dialog[result_key] = keys_table[key](dialog)
+                    if additional_params and service_name != "":
+                        formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
+                    else:
+                        formatted_dialog[result_key] = keys_table[key](dialog)
 
-    # formatted_dialog = {key: keys_table[key](dialog, **additional_params) for key in result_keys}
+            else:
+                if additional_params and service_name != "":
+                    formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
+                elif additional_params:
+                    formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
+                else:
+                    formatted_dialog[result_key] = keys_table[key](dialog)
+
+    for result_key in result_keys:
+        if lambda_keys_table.get(result_key):
+            formatted_dialog[result_key] = lambda_keys_table[result_key]
 
     if formatted_dialog.get("tokenized_sentences") is None:
         del formatted_dialog["tokenized_sentences"]

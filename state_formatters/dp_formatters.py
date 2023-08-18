@@ -8,26 +8,26 @@ import state_formatters.utils as utils
 logger = logging.getLogger(__name__)
 
 
-def utt_sentseg_punct_dialog(dialog: Dict):
+def utt_sentseg_punct_dialog(dialog: Dict) -> List[Dict]:
     """
     Used by: skill_with_attributes_formatter; punct_dialogs_formatter,
     dummy_skill_formatter, base_response_selector_formatter
     """
     return utils.dream_formatter(
         dialog,
-        result_keys=["dialog"],
+        ["dialog"],
         preprocess=True,
         preprocess_params={"mode": "punct_sent", "remove_clarification": True, "replace_utterances": True},
     )
 
 
-def utt_non_punct_dialog(dialog: Dict):
+def utt_non_punct_dialog(dialog: Dict) -> List[Dict]:
     """
     Used by: book_skill
     """
     return utils.dream_formatter(
         dialog,
-        result_keys=["dialog"],
+        ["dialog"],
         preprocess=True,
         preprocess_params={"mode": "punct_sent", "remove_clarification": True, "replace_utterances": False},
     )
@@ -36,17 +36,21 @@ def utt_non_punct_dialog(dialog: Dict):
 def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: eliza_formatter
     return utils.dream_formatter(
-        service_name="eliza",
-        dialog=dialog,
-        result_keys=["last_utterance_batch", "human_utterance_history_batch"],
-        preprocess=False,
+        dialog,
+        ["last_utterance_batch", "human_utterance_history_batch"],
+        "eliza",
+        additional_params={
+            "utterance_type": "human_utterances",
+            "attribute": "spelling_preprocessing",
+            "def_result": "dialog['human_utterances'][-1]['text']"
+        }
     )
 
 
 def base_skill_selector_formatter_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
-        result_keys=["states_batch"],
+        ["states_batch"],
         preprocess=True,
         preprocess_params={"bot_last_turns": 5, "mode": "punct_sent"},
     )
@@ -56,39 +60,51 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: convert
     return utils.dream_formatter(
         dialog,
-        service_name="convert",
-        result_keys=["utterances_histories", "personality", "num_ongoing_utt", "human_attributes"],
+        ["utterances_histories", "personality", "num_ongoing_utt", "human_attributes"],
+        "convert",
         preprocess=True,
         preprocess_params={
             "mode": "punct_sent",
             "bot_last_turns": None,
             "remove_clarification": False,
             "replace_utterances": False,
-        },
+        }
     )
 
 
 def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: personality_catcher_formatter
-    return utils.dream_formatter(dialog, result_keys=["personality"])
+    return utils.dream_formatter(
+        dialog,
+        ["personality"],
+        additional_params={
+            "utterance_type": "human_utterances",
+            "attribute": "annotations",
+            "def_result": "",
+            "sub_attribute": "spelling_preprocessing",
+            "def_subresult": dialog['human_utterances'][-1]['text']
+        }
+    )
 
 
 def sent_rewrite_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sent_rewrite_formatter
     return utils.dream_formatter(
         dialog,
-        result_keys=["utterances_histories", "annotation_histories"],
+        ["utterances_histories", "annotation_histories"],
         preprocess=True,
         preprocess_params={"bot_last_turns": utils.LAST_N_TURNS},
+        additional_params=dict()
     )
 
 
 def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
-        result_keys=["utterances_histories", "annotation_histories"],
+        ["utterances_histories", "annotation_histories"],
         preprocess=True,
         preprocess_params={"bot_last_turns": utils.LAST_N_TURNS + 1},
+        additional_params={"crop": 1}
     )
 
 
@@ -96,7 +112,7 @@ def cobot_formatter_dialog(dialog: Dict):
     # Used by: cobot_dialogact_formatter, cobot_classifiers_formatter
     return utils.dream_formatter(
         dialog,
-        result_keys=["utterances_histories", "annotation_histories"],
+        ["utterances_histories"],
         preprocess=True,
         preprocess_params={"bot_last_turns": utils.LAST_N_TURNS},
     )
@@ -104,54 +120,105 @@ def cobot_formatter_dialog(dialog: Dict):
 
 def asr_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: asr_formatter
-    return utils.dream_formatter(dialog=dialog, result_keys=["speeches", "human_utterances"])
+    return utils.dream_formatter(
+        dialog,
+        ["speeches", "human_utterances"],
+        additional_params={
+            "utterance_type": "human_utterances",
+            "attribute": "attributes",
+            "def_result": dict(),
+            "sub_attribute": "speech",
+            "def_subresult": dict()
+        }
+    )
 
 
 def last_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: dp_toxic_formatter, sent_segm_formatter, tfidf_formatter, sentiment_classification
-    return utils.dream_formatter(dialog, result_keys=["sentences"])
+    return utils.dream_formatter(
+        dialog,
+        ["sentences"],
+    additional_params={
+        "utterance_type": "attribute",
+        "attribute": "text",
+        "def_result": "",
+        "last_turns": 1
+    })
 
 
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    return utils.dream_formatter(dialog, result_keys=["speeches"], service_name="sentseg")
+    return utils.dream_formatter(
+        dialog,
+        ["speeches"],
+        "sentseg",
+        additional_params={
+            "utterance_type": "human_utterances",
+            "attribute": "annotations",
+            "def_result": "",
+            "sub_atribute": "spelling_preprocessing",
+            "def_subresult": dialog["human_utterances"][-1]["text"],
+            "last_turns": 1
+        }
+    )
 
 
 def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
-        result_keys=["sentences"],
+        ["sentences"],
+        "entity-detection",
         preprocess=True,
         preprocess_params={"mode": "punct_sent", "remove_clarification": False, "replace_utterances": False},
     )
 
 
 def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
-    return utils.dream_formatter(
-        dialog=dialog,
-        result_keys=["utterances", "entities_with_labels", "named_entities", "entity_info"],
-        preprocess=True,
-        preprocess_params={
-            "mode": "punct_sent",
-            "bot_last_turns": 1,
-            "remove_clarification": False,
-            "replace_utterances": True,
-        },
-    )
-
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [uttr["text"] for uttr in dialog["utterances"][-2:]]
+    entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
+    entity_info_list = dialog["human_utterances"][-1]["annotations"].get("entity_linking", [{}])
+    named_entities = dialog["human_utterances"][-1]["annotations"].get("ner", [{}])
+    return [
+        {
+            "utterances": [dialog_history],
+            "entities_with_labels": [entities_with_labels],
+            "named_entities": [named_entities],
+            "entity_info": [entity_info_list],
+        }
+    ]
 
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
     return utils.dream_formatter(
-        dialog=dialog,
-        result_keys=["sentences", "sentences_with_history"],
-        service_name="preproc_last_human_utt_dialog_w_hist",
+        dialog,
+        ["sentences", "sentences_with_history"],
+        additional_params={
+            "utterance_type": "human_utterance",
+            "last_n_turns": 1,
+            "attribute": "annotations",
+            "def_result": "",
+            "sub_attribute": "spelling_preprocessing",
+            "def_subresult": dialog["human_utterances"][-1]["text"]
+        }
     )
 
 
 def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    return utils.dream_formatter(dialog=dialog, result_keys=["sentences", "tokenized_sentences"])
+    return utils.dream_formatter(
+        dialog,
+        ["sentences", "tokenized_sentences"],
+        additional_params={
+            "utterance_type": "human_utterance",
+            "last_n_turns": 1,
+            "attribute": "annotations",
+            "def_result": "",
+            "sub_attribute": "spelling_preprocessing",
+            "def_subresult": dialog["human_utterances"][-1]["text"]
+        }
+    )
 
 
 def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
@@ -195,35 +262,43 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
             "remove_clarification": False,
             "replace_utterances": False,
         },
+        additional_params={
+            "utterance_type": "human_utterance",
+            "last_n_turns": 1,
+            "attribute": "annotations",
+            "def_result": "",
+            "sub_attribute": "spelling_preprocessing",
+            "def_subresult": dialog["human_utterances"][-1]["text"]
+        }
     )
 
 
 def summarization_annotator_formatter(dialog: Dict):
     # Used by: summarization annotator
-    sents = [utt["text"] for utt in dialog["utterances"]]
-    pointer = (len(sents) + 1) % 6 if (len(sents) + 1) % 6 != 0 else 6
-    sents = sents[-(pointer + 5) :]
-    bot_attributes = dialog["bot_utterances"][-1]["user"]["attributes"] if len(dialog["bot_utterances"]) else {}
-    previous_summary = bot_attributes["summarized_dialog"] if "summarized_dialog" in bot_attributes.keys() else []
-    previous_summary = previous_summary if previous_summary else ""
-    return [{"dialogs": [sents], "previous_summaries": [previous_summary]}]
+    return utils.dream_formatter(dialog, ["dialogs", "previous_summaries"])
 
 
 def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
-    return utils.dream_formatter(
-        dialog,
-        result_keys=["hypotheses", "currentUtterance", "pastUtter", "pastResponses"],
-        preprocess=True,
-        preprocess_params={"remove_clarification": True},
-    )
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    conv = dict()
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    conv["hypotheses"] = [h["text"] for h in hypotheses]
+    conv["currentUtterance"] = dialog["human_utterances"][-1]["text"]
+    # cobot recommends to take 2 last utt for conversation evaluation service
+    conv["pastUtterances"] = [uttr["text"] for uttr in dialog["human_utterances"]][-3:-1]
+    conv["pastResponses"] = [uttr["text"] for uttr in dialog["bot_utterances"]][-2:]
+    return [conv]
 
 
 def persona_bot_formatter(dialog: Dict):
     return utils.dream_formatter(
         dialog,
-        result_keys=["utterances_histories", "last_annotated_utterances"],
+        ["utterances_histories", "last_annotated_utterances"],
+        "seq2seq-persona-based",
         preprocess=True,
         preprocess_params={"mode": "punct_sent", "remove_clarification": True, "replace_utterances": True},
+        additional_params={"utterance_type": "human_utteraces", "last_n_utts": 1}
     )
 
 
@@ -347,7 +422,7 @@ def hypotheses_with_context_list(dialog: Dict) -> List[Dict]:
 def context_formatter_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
-        result_keys=["contexts"],
+        result_keys=["contexts", "prompt_goals"],
         preprocess=True,
         preprocess_params={
             "mode": "punct_sent",
@@ -364,48 +439,82 @@ def midas_predictor_formatter(dialog: Dict):
 
 def fact_random_formatter_dialog(dialog: Dict):
     # Used by: fact-random annotator
-    return utils.dream_formatter(
-        dialog,
-        result_keys=["text", "entities"],
-        preprocess=True,
-        preprocess_params={"bot_last_turns": 1, "mode": "punct_sent"},
-    )
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list = []
+
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+
+    return [{"text": last_human_utt["text"], "entities": entity_substr_list}]
 
 
 def fact_retrieval_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
-    return utils.dream_formatter(
-        dialog,
-        result_keys=[
-            "human_sentences",
-            "dialog_history",
-            "nounphrases",
-            "entity_substr",
-            "entity_pages",
-            "entity_ids",
-            "entity_pages_titles",
-        ],
-        preprocess=True,
-        preprocess_params={"bot_last_turns": 1, "mode": "punct_sent"},
-        additional_params={"params": ["first_paragraphs", "entity_ids", "entity_substr", "pages_titles"]},
-    )
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-3:]])]
+
+    last_human_utt = dialog["human_utterances"][-1]
+    nounphrases = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=False)
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_pages_list = []
+    entity_ids_list = []
+    entity_substr_list = []
+    entity_pages_titles_list = []
+    for entity_info in entity_info_list:
+        if "pages_titles" in entity_info and entity_info["pages_titles"]:
+            entity_pages_list.append(entity_info["first_paragraphs"])
+            entity_ids_list.append(entity_info["entity_ids"])
+            entity_substr_list.append(entity_info["entity_substr"])
+            entity_pages_titles_list.append(entity_info["pages_titles"])
+    return [
+        {
+            "human_sentences": [last_human_utt["text"]],
+            "dialog_history": dialog_history,
+            "nounphrases": [nounphrases],
+            "entity_substr": [entity_substr_list],
+            "entity_pages": [entity_pages_list],
+            "entity_ids": [entity_ids_list],
+            "entity_pages_titles": [entity_pages_titles_list],
+        }
+    ]
 
 
 def fact_retrieval_rus_formatter_dialog(dialog: Dict):
     # Used by: odqa annotator
-    return utils.dream_formatter(
-        dialog,
-        result_keys=["dialog_history", "entity_substr", "entity_tags", "entity_pages"],
-        preprocess=True,
-        preprocess_params={"bot_last_turns": 1, "mode": "punct_sent"},
-        additional_params={"params": ["entity_substr", "entity_tags", "entity_pages"]},
-    )
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    dialog_history = [" ".join([uttr["text"] for uttr in dialog["utterances"][-2:]])]
+    last_human_utt = dialog["human_utterances"][-1]
+
+    entity_info_list = last_human_utt["annotations"].get("entity_linking", [{}])
+    entity_substr_list, entity_tags_list, entity_pages_list = [], [], []
+    for entity_info in entity_info_list:
+        if "entity_pages" in entity_info and entity_info["entity_pages"]:
+            entity_substr_list.append(entity_info["entity_substr"])
+            entity_tags_list.append(entity_info["entity_tags"])
+            entity_pages_list.append(entity_info["entity_pages"])
+    return [
+        {
+            "dialog_history": [dialog_history],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "entity_pages": [entity_pages_list],
+        }
+    ]
+
 
 
 def entity_storer_formatter(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
-        result_keys=["human_utter_index", "dialogs"],
+        ["human_utter_index", "dialogs"],
         preprocess=True,
         preprocess_params={"bot_last_turns": 5, "human_last_turns": 2, "mode": "punct_sent"},
     )
@@ -838,6 +947,7 @@ def last_utt_sentseg_segments_dialog(dialog: Dict):
 
 
 def ner_formatter_dialog(dialog: Dict):
+    
     return utils.dream_formatter(
         dialog,
         ["last_utterances"],
@@ -863,7 +973,7 @@ def ner_formatter_last_bot_dialog(dialog: Dict):
     else:
         return utils.dream_formatter(
             dialog,
-            ["get_annotation"],
+            ["last_utterances"],
             additional_params={
                 "annotation_type": "sentseg",
                 "default_result": [""],
