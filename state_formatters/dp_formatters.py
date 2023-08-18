@@ -192,8 +192,8 @@ def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
         dialog,
         ["sentences", "sentences_with_history"],
         additional_params={
-            "utterance_type": "human_utterance",
-            "last_n_turns": 1,
+            "utterance_type": "human_utterances",
+            "last_n_utts": 1,
             "attribute": "annotations",
             "def_result": "",
             "sub_attribute": "spelling_preprocessing",
@@ -208,8 +208,8 @@ def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
         dialog,
         ["sentences", "tokenized_sentences"],
         additional_params={
-            "utterance_type": "human_utterance",
-            "last_n_turns": 1,
+            "utterance_type": "human_utterances",
+            "last_n_utts": 1,
             "attribute": "annotations",
             "def_result": "",
             "sub_attribute": "spelling_preprocessing",
@@ -260,8 +260,8 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
             "replace_utterances": False,
         },
         additional_params={
-            "utterance_type": "human_utterance",
-            "last_n_turns": 1,
+            "utterance_type": "human_utterances",
+            "last_n_utts": 1,
             "attribute": "annotations",
             "def_result": "",
             "sub_attribute": "spelling_preprocessing",

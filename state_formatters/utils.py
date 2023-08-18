@@ -617,14 +617,12 @@ def dream_formatter(
             "utterances",
         ): service_multiple_choices,
         "human_utterance_history_batch": get_human_utterance_history,
-        "human_attributes": lambda dialog: dialog["human"]["attributes"],
         "personality": lambda dialog: [dialog["bot"]["persona"]]
         if service_name == "convert"
         else get_utterances_attribute,
-        ("states_batch", "dialogs"): lambda dialog: get_sents if service_name == "summarization-annotator" else dialog,
         "annotation_histories": get_annotation_histories,
         "entities_with_labels": get_entities_with_labels,
-        ("named_entities", "entity_info", "last_utterances", ""): get_annotation,
+        ("named_entities", "entity_info", "last_utterances"): get_annotation,
         "x_init": get_x_init,
         "sentences_with_history": get_sentences_with_history,
         "utterances_with_histories": get_utterances_with_histories,
@@ -634,16 +632,16 @@ def dream_formatter(
         "entities": get_fact_entities,
         ("all_prev_active_skills", "active_skills"): fetch_active_skills,
         "nounphrases": get_entities,
-        ("entity_pages", "entity_ids", "entity_page_titles", "entity_substr", "entity_tags"): get_entity_info,
         "dialog_history": get_dialog_history,
         "dialogs": clean_up_utterances_to_avoid_unwanted_keys,
         "new_dialog": get_new_dialog,
         "previous_summaries": get_previous_summary,
         "last_annotated_utterances": get_utterances_attribute,
+        ("states_batch", "dialogs"): lambda dialog: get_sents if service_name == "summarization-annotator" else dialog,
     }
 
     lambda_keys_table = {
-        "return_probas": lambda dialog: 1,
+        "return_probas": 1,
         "human_utter_index": lambda dialog: len(dialog["utterances"] - 1),
         "num_ongoing_utt": lambda dialog: [count_ongoing_skill_utterances(dialog["bot_utterances"], "convert_reddit")],
         "human_sentences": lambda dialog: dialog["human_sentences"][-1]["text"],
@@ -651,7 +649,8 @@ def dream_formatter(
         "dialog_contexts": lambda dialog: len([h["text"] for h in dialog["human_utterances"][-1]["hypotheses"]])
         * dialog["human_utterances"][-1]["text"],
         "contexts": lambda dialog: [uttr["text"] for uttr in dialog["utterances"][-4:]],
-        "prompt_goals": dialog["human"]["attributes"].get("prompts_goals", {}),
+        "prompt_goals": lambda dialog: dialog["human"]["attributes"].get("prompts_goals", {}),
+        "human_attributes": lambda dialog: dialog["human"]["attributes"],
     }
 
     formatted_dialog = dict()
@@ -664,7 +663,6 @@ def dream_formatter(
                         formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
                     else:
                         formatted_dialog[result_key] = keys_table[key](dialog)
-
             else:
                 if additional_params and service_name != "":
                     formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
@@ -675,7 +673,7 @@ def dream_formatter(
 
     for result_key in result_keys:
         if lambda_keys_table.get(result_key):
-            formatted_dialog[result_key] = lambda_keys_table[result_key]
+            formatted_dialog[result_key] = lambda_keys_table[result_key](dialog)
 
     if formatted_dialog.get("tokenized_sentences") is None:
         del formatted_dialog["tokenized_sentences"]
