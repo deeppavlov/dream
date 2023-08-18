@@ -1227,7 +1227,11 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
 
 
 def last_human_annotated_utterance(dialog: Dict) -> List[Dict]:
-    return [{"last_human_annotated_utterance": [dialog["human_utterances"][-1]],}]
+    return [
+        {
+            "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
+        }
+    ]
 
 
 def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
