@@ -3,7 +3,7 @@ import json
 
 
 def main():
-    url = "http://0.0.0.0:3000/model"
+    url = "http://0.0.0.0:8095/model"
 
     with open('test_request.json', 'r') as f:
         test_request = json.load(f)
