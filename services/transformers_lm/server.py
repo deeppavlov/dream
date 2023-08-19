@@ -52,13 +52,13 @@ DEFAULT_CONFIGS = {
 
 def add_replacement_tokens(text, replacement):
     for pair in replacement:
-        text = text.replace(pair[0], f"{pair[1]} ")
+        text = re.sub(pair[0], f"{pair[1]} ", text)
     return text
 
 
 def remove_replacement_tokens(text, replacement):
     for pair in replacement:
-        text = text.replace(pair[1], pair[0])
+        text = re.sub(pair[1], pair[0], text)
 
     text = text.replace("\n ", "\n")
     return text
@@ -133,6 +133,9 @@ def generate_responses(context, model, tokenizer, prompt, generation_params, con
         # preprocess dialog context to correctly remove it from output
         dialog_context = re.sub(r"  +", " ", dialog_context)
         dialog_context = dialog_context.replace("\n ", "\n")
+        output = re.sub(r"  +", " ", output)
+        output = output.replace("\n ", "\n")
+
         result_cut = output.replace(dialog_context + " ", "")
         result_cut = cut_predictions_by_additional_eos(result_cut)
         result_cut = remove_replacement_tokens(result_cut, replacement)

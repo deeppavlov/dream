@@ -1,0 +1,11 @@
+{
+    "arxiv_api": {
+        "display_name": "arxiv API",
+        "description": "arxiv API can search for latest articles on requested keyword.",
+        "keys": [],
+        "needs_approval": false,
+        "approve_once": false,
+        "timeout": 30,
+        "input_template": "Return only the keyword that is needed to be searched for. E.g., 'ChatGPT', 'dialog systems'."
+    }
+}
