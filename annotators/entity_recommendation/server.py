@@ -40,7 +40,7 @@ except Exception as e:
     raise e
 
 
-PADDING_VALUE = model.item_total - 1
+PADDING_VALUE = model.get_padding_value()
 
 
 def select_entity_ids(el_message, reference):

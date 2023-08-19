@@ -531,6 +531,9 @@ class THWADLight(THWADBase):
 
         to_gpu(self)
 
+    def get_padding_value(self):
+        return self.item_total - 1
+
     def get_item_ent_emb(self, ids=None):
         if ids is None:
             return self.item_embeddings.weight
