@@ -1,3 +1,4 @@
+import urllib.request
 import logging
 import os
 import time
@@ -8,6 +9,14 @@ import torch
 import numpy as np
 from src.model_utils.thswad import load_light_model_from_path
 from src.utils.misc import to_gpu
+from pathlib import Path
+
+
+def download_model_if_needed(config):
+    model_path = Path(config['light_model_path'])
+    model_path.parent.mkdir(parents=True, exist_ok=True)
+    if not model_path.exists() or ('force_download' in config and config['force_download']):
+        urllib.request.urlretrieve(config['light_model_url'], config['light_model_path'])
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -21,6 +30,7 @@ config_name = os.getenv("CONFIG")
 try:
     with open(config_name, 'r') as f:
         config = yaml.safe_load(f)
+    download_model_if_needed(config)
     PREV_CNT = config['prev_count']
     model = load_light_model_from_path(config['light_model_path'], PREV_CNT)
     logger.info("model loaded")
