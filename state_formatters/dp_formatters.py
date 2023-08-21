@@ -1023,8 +1023,7 @@ def personality_catcher_formatter_service(payload: List):
 
 
 def hypotheses_list(dialog: Dict) -> List[Dict]:
-    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
-    hypots = [h["text"] for h in hypotheses]
+    hypots = [h["text"] for h in dialog["human_utterances"][-1]["hypotheses"]]
     return [{"sentences": hypots}]
 
 
