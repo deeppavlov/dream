@@ -12,7 +12,6 @@ URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 LANGUAGE = os.getenv("LANGUAGE", "EN")
 
 FAKE_SERVER = os.getenv("FAKE", "True")
-ROS_FLASK_SERVER = os.getenv("ROS_FLASK_SERVER")
 
 
 def handler(requested_data, random_seed):
