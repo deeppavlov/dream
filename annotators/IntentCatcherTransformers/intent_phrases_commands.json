@@ -1,5 +1,18 @@
 {
     "intent_phrases": {
+        "test_command": {
+            "phrases": [
+                "test_command",
+                "test command"
+            ],
+            "reg_phrases": [
+                "test_command",
+                "test command"
+            ],
+            "min_precision": 0.94,
+            "punctuation": [
+                "."
+            ],
         "track_object": {
             "phrases": [
                 "((track)|(follow)|(trail)|(trace)|(find)|(rail)|(groove)|(monitor)) a ((human)|(man)|(car)|(bicycle)|(girl)|(dude)|(bag)|(chair)|(black dog)|(white cat))",

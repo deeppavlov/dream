@@ -11,6 +11,7 @@ RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 LANGUAGE = os.getenv("LANGUAGE", "EN")
 
+FAKE_SERVER = os.getenv("FAKE", True)
 ROS_FLASK_SERVER = os.getenv("ROS_FLASK_SERVER")
 
 
@@ -28,6 +29,9 @@ def run_test(handler):
         elif LANGUAGE == "EN" and "EN" not in test_name:
             # if russian language, skip english tests
             continue
+        if not FAKE_SERVER and "FAKE" in test_name:
+            # skip fake server tests if the server is real
+            continue
 
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
         print(f"test name: {test_name}")
@@ -39,7 +43,6 @@ def run_test(handler):
                 msg = f"{msg} ratio = {ratio}"
         assert is_equal_flag, msg
         print("Success")
-    scenario.response.ros_server_url = ROS_FLASK_SERVER
 
 
 if __name__ == "__main__":

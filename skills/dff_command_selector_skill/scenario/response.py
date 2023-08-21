@@ -11,11 +11,6 @@ from os import getenv
 
 logger = logging.getLogger(__name__)
 
-ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
-ROS_FLASK_SERVER = getenv("ROS_FLASK_SERVER")
-
-ros_server_url = ROS_FSM_SERVER
-
 
 def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
     annotated_utterance = int_ctx.get_last_human_utterance(ctx, actor)
@@ -23,11 +18,11 @@ def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
     logger.info(f"Detected intents: {intention}")
 
     response, conf, human_attr, bot_attr, attr = "", 0.0, {}, {}, {}
-    if intention is not None and confidence > 0 and intention in response_funcs.get_respond_funcs(ros_server_url):
+    if intention is not None and confidence > 0 and intention in response_funcs.get_respond_funcs():
         logger.debug(f"Intent is defined as {intention}")
         dialog = int_ctx.get_dialog(ctx, actor)
         dialog["seen"] = dialog["called_intents"][intention]
-        funcs = response_funcs.get_respond_funcs(ros_server_url)[intention]
+        funcs = response_funcs.get_respond_funcs()[intention]
         response = funcs(ctx, actor, intention)
         if not isinstance(response, str):
             conf = deepcopy(response[1])
@@ -79,7 +74,7 @@ def get_detected_intents(annotated_utterance):
     intents = get_intents(annotated_utterance, probs=True, which="intent_catcher")
     intent, confidence = None, 0.0
     for intent_name, intent_conf in intents.items():
-        if intent_conf > 0 and intent_name in response_funcs.get_respond_funcs(ros_server_url):
+        if intent_conf > 0 and intent_name in response_funcs.get_respond_funcs():
             confidence_current = intent_conf
             if confidence_current > confidence:
                 intent, confidence = intent_name, float(confidence_current)

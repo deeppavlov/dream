@@ -2,7 +2,6 @@ import logging
 
 from df_engine.core import Actor, Context
 from scenario.response_funcs import get_respond_funcs
-import scenario.response
 import common.utils as common_utils
 import common.dff.integration.context as int_ctx
 
@@ -21,5 +20,5 @@ def intent_catcher_exists_condition(ctx: Context, actor: Actor, *args, **kwargs)
 
     logger.info(f"INTENTS LIST: {intents_by_catcher}")
 
-    response_funcs = get_respond_funcs(scenario.response.ros_server_url)
+    response_funcs = get_respond_funcs()
     return bool(any([intent in response_funcs for intent in intents_by_catcher]))
