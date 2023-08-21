@@ -110,7 +110,7 @@ flows = {
         },
         "neg_to_italy": {
             RESPONSE: "What a pity! This country and its culture are truly inspiring. What about italian cuisine? "
-                      "Do you like it?",
+            "Do you like it?",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
