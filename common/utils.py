@@ -1133,20 +1133,31 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
 COBOT_ENTITIES_SKIP_LABELS = ["anaphor"]
 
 
-def get_entities(annotated_utterance, only_named=False, with_labels=False):
+def get_entities(annotated_utterance, only_named=False, with_labels=False, return_lemmas=False):
+    entities = []
     if not only_named:
         if "entity_detection" in annotated_utterance.get("annotations", {}):
+            # for english and russian languages
             labelled_entities = annotated_utterance["annotations"]["entity_detection"].get("labelled_entities", [])
             # skip some labels
             entities = [ent for ent in labelled_entities if ent["label"] not in COBOT_ENTITIES_SKIP_LABELS]
             if not with_labels:
                 entities = [ent["text"] for ent in entities]
-        else:
+        elif "spacy_nounphrases" in annotated_utterance.get("annotations", {}):
+            # for english language
             entities = annotated_utterance.get("annotations", {}).get("spacy_nounphrases", [])
             if with_labels:
                 # actually there are no labels for cobot nounphrases
                 # so, let's make it as for cobot_entities format
                 entities = [{"text": ent, "label": "misc"} for ent in entities]
+        elif "spacy_annotator" in annotated_utterance.get("annotations", {}):
+            # for russian language
+            words = annotated_utterance["annotations"]["spacy_annotator"]
+            for word in words:
+                if word.get("pos_", "") == "NOUN":
+                    entities += [{"text": word["lemma_"] if return_lemmas else word["text"], "label": "misc"}]
+            if not with_labels:
+                entities = [ent["text"] for ent in entities]
     else:
         # `ner` contains list of lists of dicts. the length of the list is n-sentences
         # each entity is {"confidence": 1, "end_pos": 1, "start_pos": 0, "text": "unicorns", "type": "ORG"}

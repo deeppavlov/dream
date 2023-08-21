@@ -17,5 +17,3 @@ ALWAYS_TURN_ON_ALL_SKILLS: whether to always turn on all skills. Avoid using thi
 ```
 
 ## Dependencies
-
-- either candidate annotations by `SENTENCE_RANKER_ANNOTATION_NAME` or service `SENTENCE_RANKER_SERVICE_URL`.

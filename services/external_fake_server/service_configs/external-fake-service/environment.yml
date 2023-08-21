@@ -1,0 +1,2 @@
+SERVICE_PORT: 8184
+SERVICE_NAME: external_fake_server
