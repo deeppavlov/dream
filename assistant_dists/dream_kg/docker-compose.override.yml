@@ -340,7 +340,4 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
-  terminusdb-server:
-    image: terminusdb/terminusdb-server:v10.1.10
 version: '3.7'
