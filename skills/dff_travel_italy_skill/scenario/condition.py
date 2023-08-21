@@ -66,6 +66,7 @@ while True:
         time.sleep(5)
         continue
 
+
 def check_flag(prop: str) -> Callable:
     def check_flag_handler(ctx: Context, actor: Actor) -> bool:
         return ctx.misc.get("flags", {}).get(prop, False)

@@ -104,6 +104,7 @@ FAVORITE_FOOD_WORDS = (
     r" food|meal|breakfast|lunch|dinner|branch|snack)"
 )
 
+
 def skill_trigger_phrases():
     return TRIGGER_PHRASES
 
