@@ -452,9 +452,11 @@ def get_result(request, graph):
         logger.debug(f"prop_ex_annotations before upper-casing --  {prop_ex_annotations}")
         for annotation in prop_ex_annotations:
             if "triplets" in annotation:
-                for idx, triplet in enumerate(annotation.copy()["triplets"]):
+                triplets = annotation["triplets"]
+                for idx in reversed(range(len(triplets))):
+                    triplet = triplets[idx]
                     if triplet["object"] == "<blank>":
-                        del annotation[idx]
+                        del triplets[idx]
                         logging.error(f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object")
 
         create_entities(graph, [(bot_external_id, "Bot")], has_name_property=True, entity_ids=[bot_id])
