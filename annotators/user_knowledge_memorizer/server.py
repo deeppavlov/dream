@@ -7,6 +7,7 @@ from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 from uuid import uuid4
 import time
+import sentry_sdk
 from flask import Flask, jsonify, request
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
@@ -14,6 +15,7 @@ from deeppavlov_kg import TerminusdbKnowledgeGraph
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 app = Flask(__name__)
 
 with open("rel_list.json") as file:
@@ -24,7 +26,7 @@ with open("abstract_rels.txt", "r") as file:
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
-assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified"
+assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is not specified")
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
 INDEX_LOAD_PATH = Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
@@ -109,11 +111,12 @@ def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list,
       entities_in_index, entities_not_in_index --  {('dog', 'Animal'):
         'Animal/ed8f16ae-56fb-46dc-b542-20987056fd00'}, [('dog', 'Animal'))]
     """
+
     def check_abstraction_in_index(relationship, entity_info, text):
         """Returns true if kind in index is 'Abstract' and the relationship in prop_ex is abstract, or if both aren't
         abstract. Otherwise, returns false."""
-        return is_abstract_relationship(
-            relationship, entity_info["entity_substr"], text) == ("Abstract" in entity_info["entity_id_tags"]
+        return is_abstract_relationship(relationship, entity_info["entity_substr"], text) == (
+            "Abstract" in entity_info["entity_id_tags"]
         )
 
     entities_in_index, entities_not_in_index = {}, []
@@ -152,7 +155,7 @@ def check_entities_in_kg(graph, entities: list) -> Tuple[list, list]:
     entities_in_kg, entities_not_in_kg = [], []
 
     all_entities_in_kg = graph.get_all_entities()
-    for (entity_substr, entity_kind) in entities:
+    for entity_substr, entity_kind in entities:
         in_kg = False
         for entity_props in all_entities_in_kg:
             if entity_substr == entity_props.get("substr") and entity_kind == entity_props["@type"]:
@@ -366,14 +369,13 @@ def add_triplets_to_dbs(graph, user_id: str, triplets_to_kg: dict, triplets_to_i
 def upper_case_input(triplets: List[dict]) -> List[dict]:
     """Upper-cases the relationship kind in each triplet in the prop_ex annotations"""
     return [
-        {
-            "subject": triplet["subject"], "relation": triplet["relation"].upper(), "object": triplet["object"]
-        } for triplet in triplets
+        {"subject": triplet["subject"], "relation": triplet["relation"].upper(), "object": triplet["object"]}
+        for triplet in triplets
     ]
 
 
 def check_abstract_triplets(
-    graph,entities: List[tuple], prop_ex_rel_triplets: List[dict], text: str, user_id: str
+    graph, entities: List[tuple], prop_ex_rel_triplets: List[dict], text: str, user_id: str
 ) -> Tuple[list, list]:
     abstract_triplets = []
     non_abstract_triplets = []
@@ -401,7 +403,7 @@ def check_abstract_triplets(
             graph.ontology.create_entity_kinds(kinds_to_add, parents)
         except ValueError:
             logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
-        except Exception: #TODO: replace with Terminusdb DatabaseError
+        except Exception:  # TODO: replace with Terminusdb DatabaseError
             graph.ontology.create_entity_kinds(parents)
             try:
                 graph.ontology.create_entity_kinds(kinds_to_add, parents)
@@ -411,13 +413,12 @@ def check_abstract_triplets(
 
 
 def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> Tuple[list, list]:
-    """Checks if the property triplets exist in kg and adds them if not.
-    """
+    """Checks if the property triplets exist in kg and adds them if not."""
     properties_to_add_to_kg, properties_already_in_kg = [], []
     try:
         user_properties = graph.get_properties_of_entity(user_id)
-    except:
-        user_properties = [] # new user
+    except Exception:
+        user_properties = []  # new user
     for triplet in prop_triplets:
         if triplet["property"] in user_properties and triplet["object"] == user_properties[triplet["property"]]:
             properties_already_in_kg.append(triplet)
@@ -432,7 +433,10 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
         property_kinds = [triplet["property"] for triplet in properties_to_add_to_kg]
         properties_families = [triplet["property_family"] for triplet in properties_to_add_to_kg]
         objects = [triplet["object"] for triplet in properties_to_add_to_kg]
-        logger.info(f"property_kinds -- {property_kinds}\nproperties_families -- {properties_families}\nproperties_to_add_to_kg -- {properties_to_add_to_kg}")
+        logger.info(
+            f"property_kinds -- {property_kinds}\nproperties_families -- {properties_families}\n"
+            f"properties_to_add_to_kg -- {properties_to_add_to_kg}"
+        )
         graph.ontology.create_property_kinds_of_entity_kind(
             "User",
             property_kinds,
@@ -444,85 +448,111 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
     return properties_to_add_to_kg, properties_already_in_kg
 
 
-def get_result(request, graph):
-    uttrs = request.json.get("utterances", [])
-    utt = uttrs[0]
+def memorize(graph, uttrs):
+    user_id = "/".join(["User", str(uttrs[0].get("user", {}).get("id", ""))])
+    user_external_id = str(uttrs[0].get("user", {}).get("user_external_id", ""))
 
-    user_id = "/".join(["User", str(utt.get("user", {}).get("id", ""))])
-    user_external_id = str(utt.get("user", {}).get("user_external_id", ""))
-    last_utt = utt["text"]
-    logger.info(f"last_utt --  {last_utt}")
-    annotations = utt.get("annotations", {})
-    custom_el_annotations = annotations.get("custom_entity_linking", [])
-    logger.info(f"custom_el_annotations --  {custom_el_annotations}")
-    prop_ex_annotations = annotations.get("property_extraction", [])
-    logger.debug(f"prop_ex_annotations before upper-casing --  {prop_ex_annotations}")
-    for annotation in prop_ex_annotations:
-        for triplet in annotation["triplets"]:
-            if triplet["object"] == "<blank>":
-                logging.error("ValueError: the property extraction output has '<blank>' object")
-                return [{"added_to_graph": [], "triplets_already_in_graph": []}]
+    triplets_added_to_kg_batch = []
+    triplets_already_in_kg_batch = []
+    for utt in uttrs:
+        last_utt = utt["text"]
+        logger.info(f"last_utt --  {last_utt}")
+        annotations = utt.get("annotations", {})
+        custom_el_annotations = annotations.get("custom_entity_linking", [])
+        logger.info(f"custom_el_annotations --  {custom_el_annotations}")
+        prop_ex_annotations = annotations.get("property_extraction", [])
+        logger.debug(f"prop_ex_annotations before upper-casing --  {prop_ex_annotations}")
+        for annotation in prop_ex_annotations:
+            if "triplets" in annotation:
+                for idx, triplet in enumerate(annotation.copy()["triplets"]):
+                    if triplet["object"] == "<blank>":
+                        del annotation[idx]
+                        logging.warning(
+                            f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
+                        )
 
-    create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])
+        create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])
 
-    prop_ex_rel_triplets, prop_triplets = check_property_vs_relationship(prop_ex_annotations)
-    prop_ex_rel_triplets = upper_case_input(prop_ex_rel_triplets)
-    logger.info(f"rel_triplets, prop_triplets --  {prop_ex_rel_triplets, prop_triplets}")
+        prop_ex_rel_triplets, prop_triplets = check_property_vs_relationship(prop_ex_annotations)
+        prop_ex_rel_triplets = upper_case_input(prop_ex_rel_triplets)
+        logger.info(f"rel_triplets, prop_triplets --  {prop_ex_rel_triplets, prop_triplets}")
 
-    if prop_triplets:
-        properties_added_to_kg, properties_already_in_kg = check_and_add_properties(graph, prop_triplets, user_id)
-    else:
-        properties_added_to_kg, properties_already_in_kg = [], []
-
-    entities_in_index, entities_not_in_index = check_entities_in_index(custom_el_annotations, prop_ex_rel_triplets, last_utt)
-    logger.info(f"entities_in_index, entities_not_in_index --  {entities_in_index, entities_not_in_index}")
-
-    if entities_not_in_index:
-        abstract_triplets, non_abstract_triplets =  check_abstract_triplets(graph, entities_not_in_index, prop_ex_rel_triplets, last_utt, user_id)
-        logger.info(f"abstract_triplets -- {abstract_triplets}")
-        logger.info(f"non_abstract_triplets -- {non_abstract_triplets}")
-
-        entities_in_kg_not_in_index, entities_not_in_kg = check_entities_in_kg(graph, non_abstract_triplets)
-        logger.debug(f"entities_not_in_kg -- {entities_not_in_kg}")
-
-        if entities_not_in_kg:
-            new_entities = create_entities(graph, entities_not_in_kg)
+        if prop_triplets:
+            properties_added_to_kg, properties_already_in_kg = check_and_add_properties(graph, prop_triplets, user_id)
         else:
-            new_entities = {}
-    else:
-        abstract_triplets = []
-        entities_in_kg_not_in_index = []
-        new_entities = {}
-    logger.info(f"new_entities -- {new_entities}")
-    logger.info(f"entities_in_kg_not_in_index -- {entities_in_kg_not_in_index}")
+            properties_added_to_kg, properties_already_in_kg = [], []
 
-    if entities_in_index:
-        triplets_of_entities_in_index = prepare_triplets(entities_in_index, prop_ex_rel_triplets, user_id)
-        logger.info(f"triplets_of_entities_in_index -- {triplets_of_entities_in_index}")
-        triplets_already_in_kg, triplets_not_in_kg = check_triplets_in_kg(graph, triplets_of_entities_in_index)
-    else:
-        triplets_already_in_kg = []
-        triplets_not_in_kg = {
-            "ids_a": [],
-            "relationship_kinds": [],
-            "ids_b": [],
-        }
-    logger.info(f"triplets_already_in_kg -- {triplets_already_in_kg}\ntriplets_not_in_kg -- {triplets_not_in_kg}")
-
-    if triplets_not_in_kg["ids_b"] or new_entities or entities_in_kg_not_in_index or abstract_triplets:
-        triplets_to_kg, triplets_to_index = prepare_triplets_to_add_to_dbs(
-            triplets_not_in_kg, prop_ex_rel_triplets, entities_in_kg_not_in_index, new_entities, abstract_triplets, user_id
+        entities_in_index, entities_not_in_index = check_entities_in_index(
+            custom_el_annotations, prop_ex_rel_triplets, last_utt
         )
-        logger.debug(f"triplets_to_kg -- {triplets_to_kg}\n triplets_to_index -- {triplets_to_index}")
-        triplets_added_to_kg = add_triplets_to_dbs(graph, user_id, triplets_to_kg, triplets_to_index)
-    else:
-        triplets_added_to_kg = []
+        logger.info(f"entities_in_index, entities_not_in_index --  {entities_in_index, entities_not_in_index}")
 
-    triplets_added_to_kg += properties_added_to_kg
-    triplets_already_in_kg += properties_already_in_kg
+        if entities_not_in_index:
+            abstract_triplets, non_abstract_triplets = check_abstract_triplets(
+                graph, entities_not_in_index, prop_ex_rel_triplets, last_utt, user_id
+            )
+            logger.info(f"abstract_triplets -- {abstract_triplets}")
+            logger.info(f"non_abstract_triplets -- {non_abstract_triplets}")
 
-    logger.info(f"added_to_graph -- {triplets_added_to_kg}, triplets_already_in_graph -- {triplets_already_in_kg}")
-    return [{"added_to_graph": triplets_added_to_kg, "triplets_already_in_graph": triplets_already_in_kg}]
+            entities_in_kg_not_in_index, entities_not_in_kg = check_entities_in_kg(graph, non_abstract_triplets)
+            logger.debug(f"entities_not_in_kg -- {entities_not_in_kg}")
+
+            if entities_not_in_kg:
+                new_entities = create_entities(graph, entities_not_in_kg)
+            else:
+                new_entities = {}
+        else:
+            abstract_triplets = []
+            entities_in_kg_not_in_index = []
+            new_entities = {}
+        logger.info(f"new_entities -- {new_entities}")
+        logger.info(f"entities_in_kg_not_in_index -- {entities_in_kg_not_in_index}")
+
+        if entities_in_index:
+            triplets_of_entities_in_index = prepare_triplets(entities_in_index, prop_ex_rel_triplets, user_id)
+            logger.info(f"triplets_of_entities_in_index -- {triplets_of_entities_in_index}")
+            triplets_already_in_kg, triplets_not_in_kg = check_triplets_in_kg(graph, triplets_of_entities_in_index)
+        else:
+            triplets_already_in_kg = []
+            triplets_not_in_kg = {
+                "ids_a": [],
+                "relationship_kinds": [],
+                "ids_b": [],
+            }
+        logger.info(f"triplets_already_in_kg -- {triplets_already_in_kg}\ntriplets_not_in_kg -- {triplets_not_in_kg}")
+
+        if triplets_not_in_kg["ids_b"] or new_entities or entities_in_kg_not_in_index or abstract_triplets:
+            triplets_to_kg, triplets_to_index = prepare_triplets_to_add_to_dbs(
+                triplets_not_in_kg,
+                prop_ex_rel_triplets,
+                entities_in_kg_not_in_index,
+                new_entities,
+                abstract_triplets,
+                user_id,
+            )
+            logger.debug(f"triplets_to_kg -- {triplets_to_kg}\n triplets_to_index -- {triplets_to_index}")
+            triplets_added_to_kg = add_triplets_to_dbs(graph, user_id, triplets_to_kg, triplets_to_index)
+        else:
+            triplets_added_to_kg = []
+
+        triplets_added_to_kg_batch.append(triplets_added_to_kg + properties_added_to_kg)
+        triplets_already_in_kg_batch.append(triplets_already_in_kg + properties_already_in_kg)
+
+    logger.info(
+        f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch}"
+    )
+    return [{"added_to_graph": triplets_added_to_kg_batch, "triplets_already_in_graph": triplets_already_in_kg_batch}]
+
+
+def get_result(request, graph):
+    uttrs = request.json.get("last_human_annotated_utterance", [])
+    try:
+        result = memorize(graph, uttrs)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        result = [{"added_to_graph": [[]] * len(uttrs), "triplets_already_in_graph": [[]] * len(uttrs)}]
+    return result
 
 
 @app.route("/respond", methods=["POST"])

@@ -6,12 +6,14 @@ from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 def formulate_utt_annotations(dog_id=None, park_id=None):
     utt_annotations = {
-        "property_extraction": [{
-            "triplets": [
-                {"subject": "user", "relation": "HAVE PET", "object": "dog"},
-                {"subject": "user", "relation": "LIKE GOTO", "object": "park"},
-            ]
-        }],
+        "property_extraction": [
+            {
+                "triplets": [
+                    {"subject": "user", "relation": "HAVE PET", "object": "dog"},
+                    {"subject": "user", "relation": "LIKE GOTO", "object": "park"},
+                ]
+            }
+        ],
         "custom_entity_linking": [],
     }
 
@@ -42,21 +44,24 @@ def formulate_utt_annotations(dog_id=None, park_id=None):
 
 def prepare_for_comparison(results):
     for result in results:
-        if triplets := result["added_to_graph"]:
-            for triplet in triplets:
-                triplet[2] = triplet[2].split("/")[0]
-        if triplets := result["triplets_already_in_graph"]:
-            for triplet in triplets:
-                triplet[2] = triplet[2].split("/")[0]
+        if uttrs := result["added_to_graph"]:
+            for utt in uttrs:
+                for triplet in utt:
+                    triplet[2] = triplet[2].split("/")[0]
+        if uttrs := result["triplets_already_in_graph"]:
+            for utt in uttrs:
+                for triplet in utt:
+                    triplet[2] = triplet[2].split("/")[0]
 
     return results
 
 
 def compare_results(results, golden_results) -> bool:
-    def compare(triplets, golden_result):
-        for triplet in triplets:
-            if triplet not in golden_result:
-                return False
+    def compare(uttrs, golden_result):
+        for idx, utt in enumerate(uttrs):
+            for triplet in utt:
+                if triplet not in golden_result[idx]:
+                    return False
         return True
 
     is_successfull = []
@@ -74,9 +79,9 @@ def main():
     TERMINUSDB_SERVER_DB = "user_knowledge_db"
     TERMINUSDB_SERVER_PASSWORD = "root"
     INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_memorizer"))
-    USER_KG_PORT = 8027
+    USER_KNOWLEDGE_MEMORIZER_PORT = 8027
 
-    USER_KG_URL = f"http://0.0.0.0:{USER_KG_PORT}/respond"
+    USER_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{USER_KNOWLEDGE_MEMORIZER_PORT}/respond"
 
     graph = TerminusdbKnowledgeGraph(
         db_name=TERMINUSDB_SERVER_DB,
@@ -107,25 +112,33 @@ def main():
 
     request_data = [
         {
-            "utterances": [
+            "last_human_annotated_utterance": [
                 {
                     "text": "i have a dog and a cat",
                     "user": {"id": USER_ID.split("/")[1]},
                     "annotations": formulate_utt_annotations(dog_id, park_id),
-                }
+                },
+                {
+                    "text": "",
+                    "user": {"id": ""},
+                    "annotations": {
+                        "property_extraction": [{}],
+                        "custom_entity_linking": [],
+                    },
+                },
             ]
         }
     ]
 
-    golden_triplets = [[USER_ID, "LIKE GOTO", "Place"], [USER_ID, "HAVE PET", "Animal"]]
+    golden_triplets = [[[USER_ID, "LIKE GOTO", "Place"], [USER_ID, "HAVE PET", "Animal"]], []]
     if added_new_entities:
-        golden_results = [[{"added_to_graph": golden_triplets, "triplets_already_in_graph": []}]]
+        golden_results = [[{"added_to_graph": golden_triplets, "triplets_already_in_graph": [[], []]}]]
     else:
-        golden_results = [[{"added_to_graph": [], "triplets_already_in_graph": golden_triplets}]]
+        golden_results = [[{"added_to_graph": [[], []], "triplets_already_in_graph": golden_triplets}]]
 
     count = 0
     for data, golden_result in zip(request_data, golden_results):
-        result = requests.post(USER_KG_URL, json=data).json()
+        result = requests.post(USER_KNOWLEDGE_MEMORIZER_URL, json=data).json()
         print(result)
         result = prepare_for_comparison(result)
         if compare_results(result, golden_result):

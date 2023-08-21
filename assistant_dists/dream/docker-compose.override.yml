@@ -8,7 +8,7 @@ services:
           combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
           sentence-ranker:8128, property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
           dff-dream-persona-chatgpt-prompted-skill:8137, dff-dream-faq-prompted-skill:8170,
-          openai-api-chatgpt-16k:8167"
+          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -294,6 +294,7 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
         N_SENTENCES_TO_RETURN: 3
         PROMPTS_TO_CONSIDER: dream_persona,dream_faq
       context: .
@@ -443,5 +444,42 @@ services:
           memory: 500M
         reservations:
           memory: 100M
+
+  summarization-annotator:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8058
+        SERVICE_NAME: summarization_annotator
+        SUMMARIZATION_REQUEST_TIMEOUT: 10
+      context: ./annotators/summarization_annotator/
+    command: flask run -h 0.0.0.0 -p 8058
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  dialog-summarizer:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8059
+        SERVICE_NAME: dialog_summarizer
+        PRETRAINED_MODEL_NAME: "knkarthick/MEETING_SUMMARY"
+      context: ./services/dialog_summarizer/
+    command: flask run -h 0.0.0.0 -p 8059
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
 
 version: '3.7'

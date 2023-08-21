@@ -47,22 +47,36 @@ def compose_data_for_model(ctx, actor):
 def compose_input_for_API(ctx: Context, actor: Actor, *args, **kwargs):
     if not ctx.validation:
         shared_memory = int_ctx.get_shared_memory(ctx, actor)
-        thought = shared_memory.get("thought", None)
-        question = shared_memory.get("question", None)
+        plan = shared_memory.get("plan", list())
+        step = shared_memory.get("step", 0)
+        subtask_results = shared_memory.get("subtask_results", {})
+        question = shared_memory.get("question", "")
         answer = ctx.misc.get("slots", {}).get("details_answer", None)
         api2use = shared_memory.get("api2use", "generative_lm")
         input_template = api_conf[api2use]["input_template"]
-        dialog_context = compose_data_for_model(ctx, actor)
+        dialog_context = list()
+        if subtask_results:
+            tasks_history = f"""Here is the story of completed tasks and results:
+{subtask_results}
+"""
+        else:
+            tasks_history = ""
         if question and answer:
-            prompt = f"""YOUR GOAL: {thought}
+            prompt = (
+                tasks_history
+                + f"""YOUR CURRENT TASK: {plan[step]}
 CLARIFYING QUESTION TO THE USER: {question}
 ANSWER TO THE QUESTION: {answer}
 Form an input to the {api2use} tool, taking all info above into account. \
 Input format: {input_template}"""
+            )
         else:
-            prompt = f"""YOUR GOAL: {thought}
+            prompt = (
+                tasks_history
+                + f"""YOUR GOAL: {plan[step]}
 Form an input to the {api2use} tool to achieve the goal. \
 Input format: {input_template}"""
+            )
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
         lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
@@ -72,25 +86,22 @@ Input format: {input_template}"""
             envvars_to_send,
             **human_uttr_attributes,
         )
-        if len(dialog_context) > 0:
-            try:
-                hypotheses = send_request_to_prompted_generative_service(
-                    dialog_context,
-                    prompt,
-                    GENERATIVE_SERVICE_URL,
-                    GENERATIVE_SERVICE_CONFIG,
-                    GENERATIVE_TIMEOUT,
-                    sending_variables,
-                )
-                api_input = hypotheses[0]
-            except Exception as e:
-                sentry_sdk.capture_exception(e)
-                logger.exception(e)
-                api_input = None
-        else:
-            api_input = None
+        try:
+            hypotheses = send_request_to_prompted_generative_service(
+                dialog_context,
+                prompt,
+                GENERATIVE_SERVICE_URL,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_TIMEOUT,
+                sending_variables,
+            )
+            api_input = hypotheses[0]
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(e)
+            api_input = ""
         logger.info(f"API INPUT: {api_input}")
         int_ctx.save_to_shared_memory(ctx, actor, api_input=api_input)
-        int_ctx.save_to_shared_memory(ctx, actor, question=None)
-        int_ctx.save_to_shared_memory(ctx, actor, answer=None)
+        int_ctx.save_to_shared_memory(ctx, actor, question="")
+        int_ctx.save_to_shared_memory(ctx, actor, answer="")
         return api_input

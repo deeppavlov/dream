@@ -1,0 +1,27 @@
+name: response_selector
+display_name: Ranking- and Intent-based Response Selector for Russian Language
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: The Ranking- and Intent-based Response Selector utilizes floating point 
+  annotations by ranking hypotheses with a candidate annotator (e.g., Sentence Ranker), 
+  scaling ranking scores with heuristics depending on entities and intents,
+  and finally selecting the best ranked one.
+ram_usage: 100M
+gpu_usage: null
+group: response_selectors
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://ranking-and-intent-based-response-selector-ru:8082/respond
+dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+previous_services:
+- candidate_annotators
+required_previous_services: null
+state_manager_method: add_bot_utterance
+tags: null
+endpoint: respond
+service: response_selectors/ranking_and_intent_based_response_selector/service_configs/ranking-and-intent-based-response-selector-ru
+date_created: '2023-03-16T09:45:32'

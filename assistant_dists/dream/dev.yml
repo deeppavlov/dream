@@ -141,6 +141,16 @@ services:
       - "./common:/src/common"
     ports:
       - 8170:8170
+  summarization-annotator:
+    volumes:
+      - "./annotators/summarization_annotator:/src"
+    ports:
+      - 8058:8058
+  dialog-summarizer:
+    volumes:
+      - "./services/dialog_summarizer:/src"
+    ports:
+      - 8059:8059
   openai-api-chatgpt-16k:
     volumes:
       - "./services/openai_api_lm:/src"

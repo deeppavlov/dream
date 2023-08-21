@@ -220,6 +220,9 @@ services:
         reservations:
           memory: 128M
 
+  terminusdb-server:
+    image: terminusdb/terminusdb-server:v10.1.10
+
   user-knowledge-memorizer:
     env_file: [ .env ]
     build:
@@ -237,7 +240,6 @@ services:
     command: flask run -h 0.0.0.0 -p 8027
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=3
     deploy:
       resources:
         limits:
@@ -257,9 +259,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 128M
         reservations:
-          memory: 512M
+          memory: 128M
 
   dff-travel-italy-skill:
     env_file: [ .env ]
@@ -274,7 +276,4 @@ services:
       context: .
       dockerfile: ./skills/dff_travel_italy_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8139 --reload
-
-  terminusdb-server:
-    image: terminusdb/terminusdb-server:v10.1.10
 version: '3.7'
