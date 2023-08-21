@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentence-ranker:8128,
           spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002,
-          badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075,
+          ner:8021, spelling-preprocessing:8074, entity-linking:8075,
           combined-classification:8087, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153,
           terminusdb-server:6363"
