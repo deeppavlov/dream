@@ -109,7 +109,8 @@ flows = {
             },
         },
         "neg_to_italy": {
-            RESPONSE: "What a pity! This country and its culture are truly inspiring. What about italian cuisine? Do you like it?",
+            RESPONSE: "What a pity! This country and its culture are truly inspiring. What about italian cuisine? "
+                      "Do you like it?",
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(DEFAULT_CONFIDENCE),
                 "set_can_continue": int_prs.set_can_continue(MUST_CONTINUE),
@@ -164,8 +165,8 @@ flows = {
         "bot_activ_opinion": {
             RESPONSE: int_rsp.multi_response(
                 replies=[
-                    "I prefer daytime activities: walking around the city, enjoying sun on a bench in some picturesque place... "
-                    "and sample hundreds of tastes of italian gelato.",
+                    "I prefer daytime activities: walking around the city, enjoying sun on a bench in some "
+                    "picturesque place... and sample hundreds of tastes of italian gelato.",
                     "I find it difficult to enjoy wandering about the city when the weather is bad. "
                     "If this is the case, I use this time to savour italian specialties in cozy trattorias.",
                 ],
