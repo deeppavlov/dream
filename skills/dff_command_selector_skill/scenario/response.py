@@ -23,7 +23,7 @@ def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
         dialog = int_ctx.get_dialog(ctx, actor)
         dialog["seen"] = dialog["called_intents"][intention]
         funcs = response_funcs.get_respond_funcs()[intention]
-        response = funcs(ctx, actor, intention)
+        response = funcs(ctx, actor)
         if not isinstance(response, str):
             conf = deepcopy(response[1])
             human_attr = deepcopy(response[2])
