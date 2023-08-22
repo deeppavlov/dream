@@ -154,7 +154,7 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
             "def_result": "",
             "sub_atribute": "spelling_preprocessing",
             "def_subresult": dialog["human_utterances"][-1]["text"],
-            "last_turns": 1,
+            "last_n_utts": 1,
         },
     )
 
