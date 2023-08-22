@@ -622,7 +622,6 @@ def dream_formatter(
             "utterances",
             "image_paths",
         ): service_multiple_choices,
-        "human_utterance_history_batch": get_human_utterance_history,
         "personality": lambda dialog: [dialog["bot"]["persona"]]
         if service_name == "convert"
         else get_utterances_attribute,
@@ -657,6 +656,7 @@ def dream_formatter(
         "contexts": lambda dialog: [uttr["text"] for uttr in dialog["utterances"][-4:]],
         "prompt_goals": lambda dialog: dialog["human"]["attributes"].get("prompts_goals", {}),
         "human_attributes": lambda dialog: dialog["human"]["attributes"],
+        "human_utterance_history_batch": lambda dialog: get_human_utterance_history(dialog),
     }
 
     formatted_dialog = dict()
@@ -673,8 +673,6 @@ def dream_formatter(
                         formatted_dialog[result_key] = keys_table[key](dialog)
             else:
                 if additional_params and service_name != "":
-                    formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
-                elif additional_params:
                     formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
                 else:
                     formatted_dialog[result_key] = keys_table[key](dialog)
