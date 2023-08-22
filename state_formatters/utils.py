@@ -320,7 +320,7 @@ def preprocess_dialog(
     dialog: Dict,
     params: Dict = {"mode": "", "bot_last_turns": None, "remove_clarification": False, "replace_utterances": False},
 ) -> Dict:
-    dialog = get_last_n_turns(dialog, bot_last_turns=params["bot_last_turns"])
+    dialog = get_last_n_turns(dialog, bot_last_turns=params.get("bot_last_turns"))
     if params["remove_clarification"]:
         dialog = remove_clarification_turns_from_dialog(dialog)
     if params["replace_utterances"]:
