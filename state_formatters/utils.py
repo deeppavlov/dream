@@ -615,7 +615,7 @@ def dream_formatter(
             "human_utterance",
             "utterances_histories",
             "utterances",
-            "image_paths"
+            "image_paths",
         ): service_multiple_choices,
         "human_utterance_history_batch": get_human_utterance_history,
         "personality": lambda dialog: [dialog["bot"]["persona"]]

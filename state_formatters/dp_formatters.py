@@ -759,14 +759,18 @@ def hypothesis_scorer_formatter(dialog: Dict) -> List[Dict]:
 
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
-    return utils.dream_formatter(dialog, ["image_paths"],additional_params={
+    return utils.dream_formatter(
+        dialog,
+        ["image_paths"],
+        additional_params={
             "utterance_type": "human_utterances",
             "last_n_utts": 1,
             "attribute": "attributes",
             "def_result": {},
             "sub_attribute": "image",
             "def_subresult": None,
-        },)
+        },
+    )
 
 
 def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
