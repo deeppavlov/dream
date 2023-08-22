@@ -33,8 +33,8 @@ def get_human_utterances(ctx: Context, actor: Actor) -> list:
 
 
 def test_command_respond(ctx: Context, actor: Actor):
-    command = 'test_command'
-    response = 'Success'
+    command = "test_command"
+    response = "Success"
 
     if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
         return response, 1.0, {}, {}, {"command_to_perform": command}

@@ -23,7 +23,7 @@ talker = rospy.Publisher("talker", String, queue_size=1)
 
 threading.Thread(target=lambda: rospy.init_node("listener", disable_signals=True)).start()
 
-VALID_COMMANDS = ['test_command']
+VALID_COMMANDS = ["test_command"]
 COMMAND_QUEUE = []
 EXECUTING_COMMAND = None
 
