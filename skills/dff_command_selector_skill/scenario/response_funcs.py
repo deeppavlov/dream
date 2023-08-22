@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import logging
 import re
-from functools import partial
 from os import getenv
 
 import common.dff.integration.context as int_ctx
@@ -34,8 +33,6 @@ def get_human_utterances(ctx: Context, actor: Actor) -> list:
 
 
 def test_command_respond(ctx: Context, actor: Actor):
-    utt = int_ctx.get_last_human_utterance(ctx, actor)
-    
     command = 'test_command'
     response = 'Success'
 

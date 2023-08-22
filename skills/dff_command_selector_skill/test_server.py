@@ -1,8 +1,6 @@
 import requests
 import os
 
-import scenario.response
-
 import common.test_utils as test_utils
 
 

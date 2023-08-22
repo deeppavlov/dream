@@ -6,7 +6,6 @@ import scenario.response_funcs as response_funcs
 from common.robot import command_intents
 from common.utils import get_intents
 from df_engine.core import Actor, Context
-from os import getenv
 
 
 logger = logging.getLogger(__name__)
