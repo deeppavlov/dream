@@ -318,13 +318,13 @@ def programy_post_formatter_dialog(dialog: Dict) -> Dict:
 
 def preprocess_dialog(
     dialog: Dict,
-    params: Dict = {"mode": "", "bot_last_turns": None, "remove_clarification": False, "replace_utterances": False},
+    params: Dict = {"mode": "punct_sent", "bot_last_turns": None, "remove_clarification": False, "replace_utterances": False},
 ) -> Dict:
     dialog = get_last_n_turns(dialog, bot_last_turns=params.get("bot_last_turns"))
-    if params["remove_clarification"]:
+    if params.get("remove_clarification"):
         dialog = remove_clarification_turns_from_dialog(dialog)
-    if params["replace_utterances"]:
-        dialog = replace_with_annotated_utterances(dialog, mode=params["mode"])
+    if params.get("replace_utterances"):
+        dialog = replace_with_annotated_utterances(dialog, mode=params.get("mode", "punct_sent"))
     return dialog
 
 
