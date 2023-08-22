@@ -242,7 +242,7 @@ services:
         TERMINUSDB_SERVER_PASSWORD: root
         TERMINUSDB_SERVER_TEAM: admin
         TERMINUSDB_SERVER_DB: user_knowledge_db
-        INDEX_LOAD_PATH: /root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
+        CONFIG: config.json
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
     command: flask run -h 0.0.0.0 -p 8027
