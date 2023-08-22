@@ -393,7 +393,7 @@ def get_x_init(dialog):
 
 def get_utterances_attribute(dialog: Dict, params: Dict) -> List:
     if params["last_n_utts"] > 0:
-        dialog_slice = dialog[params["utterance_type"]][-params["last_n_utts"] :]
+        dialog_slice = dialog[params["utterance_type"]][-params["last_n_utts"]]
     else:
         dialog_slice = dialog[params["utterance_type"]]
 
