@@ -108,7 +108,7 @@ def sent_rewrite_formatter_w_o_last_dialog(dialog: Dict) -> List[Dict]:
     )
 
 
-def cobot_formatter_dialog(dialog: Dict):
+def cobot_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: cobot_dialogact_formatter, cobot_classifiers_formatter
     return utils.dream_formatter(
         dialog,
@@ -247,7 +247,7 @@ def hypothesis_histories_list(dialog: Dict):
     )
 
 
-def last_utt_and_history_dialog(dialog: Dict) -> List:
+def last_utt_and_history_dialog(dialog: Dict) -> List[Dict]:
     # Used by: topicalchat retrieval skills
     return utils.dream_formatter(
         dialog,
@@ -270,7 +270,7 @@ def last_utt_and_history_dialog(dialog: Dict) -> List:
     )
 
 
-def summarization_annotator_formatter(dialog: Dict):
+def summarization_annotator_formatter(dialog: Dict) -> List[Dict]:
     # Used by: summarization annotator
     return utils.dream_formatter(dialog, ["dialogs", "previous_summaries"])
 
@@ -288,7 +288,7 @@ def convers_evaluator_annotator_formatter(dialog: Dict) -> List[Dict]:
     return [conv]
 
 
-def persona_bot_formatter(dialog: Dict):
+def persona_bot_formatter(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
         ["utterances_histories", "last_annotated_utterances"],
@@ -299,7 +299,7 @@ def persona_bot_formatter(dialog: Dict):
     )
 
 
-def cropped_dialog(dialog: Dict):
+def cropped_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
         result_keys=["dialogs"],
