@@ -2,13 +2,12 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, sentseg:8011, convers-evaluation-selector:8009,
-          badlisted-words:8018, ner:8021, spelling-preprocessing:8074, entity-linking:8075,
+      WAIT_HOSTS: "sentence-ranker:8128,
+          spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002,
+          ner:8021, spelling-preprocessing:8074, entity-linking:8075,
           combined-classification:8087, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153,
-          transformers-lm-gptjt:8161, dff-dream-persona-gpt-jt-prompted-skill:8134,
-          dff-template-skill:8120, terminusdb-server:6363"
+          terminusdb-server:6363"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -16,25 +15,24 @@ services:
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
 
-  convers-evaluator-annotator:
+  sentence-ranker:
     env_file: [ .env ]
     build:
       args:
-        CONFIG: conveval.json
-        SERVICE_PORT: 8004
-        DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
-      context: .
-      dockerfile: ./annotators/ConversationEvaluator/Dockerfile
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
     environment:
       - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
-          memory: 2G
+          memory: 3G
         reservations:
-          memory: 2G
+          memory: 3G
 
   spacy-nounphrases:
     env_file: [ .env ]
@@ -68,33 +66,21 @@ services:
         reservations:
           memory: 1.5G
 
-  convers-evaluation-selector:
+  ranking-based-response-selector:
     env_file: [ .env ]
     build:
       args:
-        TAG_BASED_SELECTION: 1
-        CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.1
-        ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 0
-        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
-        IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 1
-        RESTRICTION_FOR_SENSITIVE_CASE: 1
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
-        MAX_TURNS_WITHOUT_SCRIPTS: 7
-        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
-        PRIORITIZE_SCRIPTED_SKILLS: 0
-        CONFIDENCE_STRENGTH: 0.8
-        CONV_EVAL_STRENGTH: 0.4
-        PRIORITIZE_HUMAN_INITIATIVE: 1
-        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
         LANGUAGE: EN
-        FALLBACK_FILE: fallbacks_dream_en.json
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
       context: .
-      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8009
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
     environment:
       - FLASK_APP=server
     deploy:
@@ -103,23 +89,6 @@ services:
           memory: 100M
         reservations:
           memory: 100M
-
-  badlisted-words:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8018
-        SERVICE_NAME: badlisted_words
-      context: annotators/BadlistedWordsDetector/
-    command: flask run -h 0.0.0.0 -p 8018
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   ner:
     env_file: [ .env ]
@@ -225,7 +194,8 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: t5_generative_ie_lite_infer.json
+        CONFIG_T5: t5_generative_ie_lite_infer.json
+        CONFIG_REL_RANKER: rel_ranking_roberta.json
         SERVICE_PORT: 8136
         SRC_DIR: annotators/property_extraction/
         SERVICE_NAME: property_extraction
@@ -234,6 +204,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8136
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -250,63 +221,6 @@ services:
         SRC_DIR: annotators/custom_entity_linking
       context: ./
       dockerfile: annotators/custom_entity_linking/Dockerfile
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-  
-  transformers-lm-gptjt:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8161
-        SERVICE_NAME: transformers_lm_gptjt
-        PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
-        HALF_PRECISION: 1
-      context: .
-      dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8161
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 50G
-        reservations:
-          memory: 50G
-
-  dff-dream-persona-gpt-jt-prompted-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8134
-        SERVICE_NAME: dff_dream_persona_prompted_skill
-        PROMPT_FILE: common/prompts/dream_persona.json
-        GENERATIVE_SERVICE_URL: http://transformers-lm-gptjt:8161/respond
-        GENERATIVE_SERVICE_CONFIG: default_generative_config.json
-        GENERATIVE_TIMEOUT: 120
-        N_UTTERANCES_CONTEXT: 7
-      context: .
-      dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 128M
-
-  dff-template-skill:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8120
-        SERVICE_NAME: dff_template_skill
-      context: .
-      dockerfile: ./skills/dff_template_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8120 --reload
     deploy:
       resources:
         limits:
