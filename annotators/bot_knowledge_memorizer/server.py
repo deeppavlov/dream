@@ -447,7 +447,6 @@ def check_and_add_properties(graph, prop_triplets: List[dict], bot_id: str) -> T
 def get_result(request, graph):
     uttrs = request.json.get("utterances", [])
     utt = uttrs[0]
-    logger.info(f"utt -- {uttrs}")
     if utt:
         last_utt = utt["text"]
         logger.info(f"last_utt --  {last_utt}")
