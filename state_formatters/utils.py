@@ -440,7 +440,7 @@ def get_tokenized_sentences(dialog: Dict) -> List[List[str]]:
         },
     )
     tokens = [token["text"] for token in tokens]
-    return [tokens] if len(tokens) else None
+    return [tokens] if len(tokens) else [None]
 
 
 def get_sentences_with_history(dialog: Dict) -> List[str]:
@@ -604,7 +604,6 @@ def get_dialogs(dialog, service_name=""):
         return dialog
 
 
-
 def dream_formatter(
     dialog: Dict,
     result_keys: List,
@@ -658,6 +657,7 @@ def dream_formatter(
         "last_annotated_utterances": get_utterances_attribute,
         "states_batch": get_dialogs,
         "dialogs": get_dialogs,
+        "tokenized_sentences": get_tokenized_sentences,
     }
 
     lambda_keys_table = {
@@ -691,7 +691,7 @@ def dream_formatter(
         if lambda_keys_table.get(key):
             formatted_dialog[key] = lambda_keys_table[key](dialog)
 
-    if formatted_dialog.get("tokenized_sentences") is None:
-        del formatted_dialog["tokenized_sentences"]
+    if formatted_dialog.get("tokenized_sentences") == [None]:
+        formatted_dialog.pop("tokenized_sentences", None)
 
     return [formatted_dialog]
