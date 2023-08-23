@@ -127,7 +127,7 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.append("dummy_skill")
                 # process intent with corresponding IntentResponder
                 skills_for_uttr.append("dff_intent_responder_skill")
-            if embodied_cmd_detected or command_detected:
+            elif embodied_cmd_detected or command_detected:
                 skills_for_uttr.append("dummy_skill")
                 skills_for_uttr.append("dff_command_selector_skill")
             elif is_sensitive_topic_and_request(user_uttr) and RESTRICTION_FOR_SENSITIVE_CASE:
