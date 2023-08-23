@@ -622,7 +622,7 @@ def dream_formatter(
             "utterances",
             "image_paths",
         ): service_multiple_choices,
-        "personality": lambda dialog: [dialog["bot"]["persona"]]
+        "personality": lambda dialog, additional_params, service_name: [dialog["bot"]["persona"]]
         if service_name == "convert"
         else get_utterances_attribute,
         "annotation_histories": get_annotation_histories,
