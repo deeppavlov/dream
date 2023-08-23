@@ -6,6 +6,7 @@ import logging
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 from uuid import uuid4
+import time
 from flask import Flask, jsonify, request
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
@@ -28,13 +29,22 @@ TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
 INDEX_LOAD_PATH = Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
 
-kg_graph = TerminusdbKnowledgeGraph(
-    db_name=TERMINUSDB_SERVER_DB,
-    team=TERMINUSDB_SERVER_TEAM,
-    server=TERMINUSDB_SERVER_URL,
-    password=TERMINUSDB_SERVER_PASSWORD,
-    index_load_path=INDEX_LOAD_PATH,
-)
+while True:
+    try:
+        kg_graph = TerminusdbKnowledgeGraph(
+            db_name=TERMINUSDB_SERVER_DB,
+            team=TERMINUSDB_SERVER_TEAM,
+            server=TERMINUSDB_SERVER_URL,
+            password=TERMINUSDB_SERVER_PASSWORD,
+            index_load_path=INDEX_LOAD_PATH,
+        )
+        logger.info(f"TERMINUSDB_SERVER_URL: {TERMINUSDB_SERVER_URL} is ready")
+        break
+    except Exception as exc:
+        print(exc)
+        time.sleep(5)
+        continue
+
 logger.info("Graph Loaded!")
 
 
