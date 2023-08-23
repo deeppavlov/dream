@@ -24,6 +24,9 @@ SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 SENTENCE_RANKER_TIMEOUT = int(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
+
+EMOTIONAL_RESPONSES = int(getenv("EMOTIONAL_RESPONSES"))
+
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
     "Ranker service URL or annotator name should be given"
 )
@@ -103,7 +106,11 @@ def respond():
         try:
             best_id = hypotheses.index(selected_resp)
 
-            selected_responses.append(hypotheses[best_id].pop("text"))
+            if EMOTIONAL_RESPONSES:
+                emotional_hypotheses = hypotheses[best_id].get("annotations").get("emotional_bot_response")
+                selected_responses.append(emotional_hypotheses[0].pop("hypotheses"))
+            else:
+                selected_responses.append(hypotheses[best_id].pop("text"))
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))

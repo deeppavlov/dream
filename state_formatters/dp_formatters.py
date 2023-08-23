@@ -1226,13 +1226,6 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
-def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
-    last_sentences = [dialog["human_utterances"][-1]["text"]]
-    dialog_ids = [dialog.get("dialog_id", "unknown")]
-    user_ids = [dialog["human_utterances"][-1]["user"]["id"]]
-    return [{"sentences": last_sentences, "dialog_ids": dialog_ids, "user_ids": user_ids}]
-
-
 def robot_formatter(dialog: Dict) -> Dict:
     """This formatter currently provides the JSON as is, without modifying it.
     Either edit it later or choose one of the existing formatters"""
@@ -1252,3 +1245,24 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
     batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
+
+
+def user_emotion_bot_mood_formatter(dialog: Dict) -> List:
+    user_emotion = dialog["human_utterances"][-1]["annotations"].get("emotion_classification", ["neutral"])
+    try:
+        bot_mood = dialog["human_utterances"][-2]["annotations"].get("bot_mood", [])
+    except:  # IndexError?
+        logger.info('Setting default mood manually...')
+        
+        extraversion = 0.89
+        agreeableness = 0.92
+        conscientiousness = 0.86
+        neuroticism = 0.11
+        openness = 0.23
+
+        pleasure = 0.21 * extraversion + 0.59 * agreeableness + 0.19 * neuroticism
+        arousal = 0.15 * openness + 0.3 * agreeableness - 0.57 * neuroticism
+        dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.32 * agreeableness
+
+        bot_mood = [pleasure, arousal, dominance]
+    return [{"sentences": [dialog["human_utterances"][-1]["text"]], "user_emotion": [user_emotion], "bot_mood": [bot_mood]}]

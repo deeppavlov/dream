@@ -52,8 +52,8 @@
 8047	eliza
 8048
 8049	emotion-skill
-8050
-8051
+8050    emotional-bot-response
+8051    bot-emotion-classifier
 8052	dummy-skill-dialog
 8053	comet-atomic
 8054	meta-script-skill

@@ -141,20 +141,32 @@ services:
       - "./common:/src/common"
     ports:
       - 8170:8170
-  summarization-annotator:
-    volumes:
-      - "./annotators/summarization_annotator:/src"
-    ports:
-      - 8058:8058
-  dialog-summarizer:
-    volumes:
-      - "./services/dialog_summarizer:/src"
-    ports:
-      - 8059:8059
+  # summarization-annotator:
+  #   volumes:
+  #     - "./annotators/summarization_annotator:/src"
+  #   ports:
+  #     - 8058:8058
+  # dialog-summarizer:
+  #   volumes:
+  #     - "./services/dialog_summarizer:/src"
+  #   ports:
+  #     - 8059:8059
   openai-api-chatgpt-16k:
     volumes:
       - "./services/openai_api_lm:/src"
       - "./common:/src/common"
     ports:
       - 8167:8167
+  bot-emotion-classifier:
+    volumes:
+      - "./annotators/bot_emotion_classifier:/src"
+      - "./common:/src/common"
+    ports:
+      - 8051:8051
+  emotional-bot-response:
+    volumes:
+      - "./annotators/emotional_bot_response:/src"
+      - "./common:/src/common"
+    ports:
+      - 8050:8050
 version: "3.7"

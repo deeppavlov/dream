@@ -264,22 +264,21 @@
                     "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             },
-            "summarization_annotator": {
+            "bot_emotion_classifier": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10.0,
-                    "url": "http://summarization-annotator:8058/respond"
+                    "timeout": 3.0,
+                    "url": "http://bot-emotion-classifier:8051/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:summarization_annotator_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:user_emotion_bot_mood_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
+                "required_previous_services": [
+                    "annotators.combined_classification"
                 ],
-                "state_manager_method": "update_attributes",
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/riRfdGz86P51B9bL7fO6JR.yml",
-                    "service": "annotators/summarization_annotator/service_configs/summarization-annotator"
+                    "service": "annotators/bot_emotion_classifier/service_configs/bot-emotion-classifier"
                 }
             }
         },
@@ -394,6 +393,23 @@
                 "source": {
                     "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
                     "service": "services/sentence_ranker/service_configs/sentence-ranker"
+                }
+            },
+            "emotional_bot_response": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 15.0,
+                    "url": "http://emotional-bot-response:8050/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "service": "annotators/emotional_bot_response/service_configs/emotional-bot-response"
                 }
             }
         },
