@@ -28,6 +28,11 @@ COMMAND_QUEUE = []
 EXECUTING_COMMAND = None
 
 
+@app.route("/ping", methods=["POST"])
+def ping():
+    return "pong"
+
+
 @app.route("/set_commands", methods=["POST"])  # this endpoint should not be accessed from within dream
 def respond_set_commands():
     global VALID_COMMANDS

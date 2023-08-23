@@ -103,8 +103,6 @@ high_priority_intents = {
         "what_is_your_name",
         "where_are_you_from",
         "who_made_you",
-        "move_forward",
-        "move_backward",
     },
     "dff_grounding_skill": {"what_are_you_talking_about"},
 }
