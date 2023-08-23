@@ -1,0 +1,37 @@
+name: bot-knowledge-memorizer
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  - .env_secret
+  build:
+    args:
+      SERVICE_PORT: 8027
+      SRC_DIR: annotators/bot_knowledge_memorizer/
+      SERVICE_NAME: bot_knowledge_memorizer
+      TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
+      TERMINUSDB_SERVER_PASSWORD: root
+      TERMINUSDB_SERVER_TEAM: admin
+      TERMINUSDB_SERVER_DB: bot_knowledge_db
+      INDEX_LOAD_PATH: /root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
+      ENVVARS_TO_SEND: OPENAI_API_KEY
+      CHAT_GPT_PORT: 8145
+      FLASK_APP: server
+    context: ./
+    dockerfile: annotators/bot_knowledge_memorizer/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8027
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./annotators/bot_knowledge_memorizer:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8027:8027
+proxy: null

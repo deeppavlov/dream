@@ -75,7 +75,7 @@
                     "entity_linking",
                     "property_extraction",
                     "custom_entity_linking",
-                    "user_knowledge_memorizer"
+                    "bot_knowledge_memorizer"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -228,12 +228,12 @@
                     "service": "annotators/custom_entity_linking/service_configs/custom-entity-linking"
                 }
             },
-            "user_knowledge_memorizer": {
+            "bot_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://user-knowledge-memorizer:8027/respond"
+                    "url": "http://bot-knowledge-memorizer:8027/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_memorizer_formatter_last_bot_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:bot_knowledge_memorizer_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "response_annotator_selectors",
@@ -247,8 +247,8 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/74p4006d17yappr7ji7dtf.yml",
-                    "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer"
+                    "component": "components/RWwmOpf6OJ9THeBXKH38.yml",
+                    "service": "annotators/bot_knowledge_memorizer/service_configs/bot-knowledge-memorizer"
                 }
             }
         },
