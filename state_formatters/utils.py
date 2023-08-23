@@ -588,6 +588,23 @@ def service_multiple_choices(dialog: Dict, service_name: str, params: Dict = Non
         return get_utterances_attribute(dialog, params)
 
 
+def get_personality(dialog, service_name="", params=None):
+    if service_name == "convert":
+        return [dialog["bot"]["persona"]]
+    else:
+        return get_utterances_attribute(dialog, params)
+
+
+def get_dialogs(dialog, service_name=""):
+    if service_name == "entity-storer":
+        return get_new_dialog(dialog)
+    elif service_name == "summarization-annotator":
+        return get_sents(dialog)
+    else:
+        return dialog
+
+
+
 def dream_formatter(
     dialog: Dict,
     result_keys: List,
@@ -612,22 +629,20 @@ def dream_formatter(
         dialog = preprocess_dialog(dialog, preprocess_params)
 
     keys_table = {
-        (
-            "last_utterance",
-            "last_utterance_batch",
-            "sentences",
-            "speeches",
-            "human_utterance",
-            "utterances_histories",
-            "utterances",
-            "image_paths",
-        ): service_multiple_choices,
-        "personality": lambda dialog, additional_params, service_name: [dialog["bot"]["persona"]]
-        if service_name == "convert"
-        else get_utterances_attribute,
+        "last_utterance": service_multiple_choices,
+        "last_utterance_batch": service_multiple_choices,
+        "sentences": service_multiple_choices,
+        "speeches": service_multiple_choices,
+        "human_utterance": service_multiple_choices,
+        "utterances_histories": service_multiple_choices,
+        "utterances": service_multiple_choices,
+        "image_paths": service_multiple_choices,
+        "personality": get_personality,
         "annotation_histories": get_annotation_histories,
         "entities_with_labels": get_entities_with_labels,
-        ("named_entities", "entity_info", "last_utterances"): get_annotation,
+        "named_entities": get_entities,
+        "entity_info": get_entities,
+        "last_utterances": get_annotation,
         "x_init": get_x_init,
         "sentences_with_history": get_sentences_with_history,
         "utterances_with_histories": get_utterances_with_histories,
@@ -635,14 +650,14 @@ def dream_formatter(
         "dialog_context": get_contexts,
         "last_midas_labels": get_midas_preparation,
         "entities": get_fact_entities,
-        ("all_prev_active_skills", "active_skills"): fetch_active_skills,
+        "all_prev_active_skills": fetch_active_skills,
+        "active_skills": fetch_active_skills,
         "nounphrases": get_entities,
         "dialog_history": get_dialog_history,
-        "dialogs": clean_up_utterances_to_avoid_unwanted_keys,
-        "new_dialog": get_new_dialog,
         "previous_summaries": get_previous_summary,
         "last_annotated_utterances": get_utterances_attribute,
-        ("states_batch", "dialogs"): lambda dialog: get_sents if service_name == "summarization-annotator" else dialog,
+        "states_batch": get_dialogs,
+        "dialogs": get_dialogs,
     }
 
     lambda_keys_table = {
@@ -661,25 +676,20 @@ def dream_formatter(
 
     formatted_dialog = dict()
 
-    for result_key in result_keys:
-        for key in keys_table.keys():
-            if isinstance(key, tuple):
-                if result_key in key:
-                    if additional_params and service_name != "":
-                        formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
-                    elif additional_params and service_name == "":
-                        formatted_dialog[result_key] = keys_table[key](dialog, additional_params)
-                    else:
-                        formatted_dialog[result_key] = keys_table[key](dialog)
+    for key in result_keys:
+        if keys_table.get(key):
+            if additional_params and service_name != "":
+                formatted_dialog[key] = keys_table[key](dialog, service_name, additional_params)
+            elif service_name != "" and not additional_params:
+                formatted_dialog[key] = keys_table[key](dialog, service_name)
+            elif service_name == "" and additional_params:
+                formatted_dialog[key] = keys_table[key](dialog, params=additional_params)
             else:
-                if additional_params and service_name != "":
-                    formatted_dialog[result_key] = keys_table[key](dialog, service_name, additional_params)
-                else:
-                    formatted_dialog[result_key] = keys_table[key](dialog)
+                formatted_dialog[key] = keys_table[key](dialog)
 
-    for result_key in result_keys:
-        if lambda_keys_table.get(result_key):
-            formatted_dialog[result_key] = lambda_keys_table[result_key](dialog)
+    for key in result_keys:
+        if lambda_keys_table.get(key):
+            formatted_dialog[key] = lambda_keys_table[key](dialog)
 
     if formatted_dialog.get("tokenized_sentences") is None:
         del formatted_dialog["tokenized_sentences"]
