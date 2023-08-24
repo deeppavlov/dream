@@ -22,6 +22,7 @@ with open("rel_list.json") as file:
 with open("abstract_rels.txt", "r") as file:
     abstract_rels = [line.strip() for line in file.readlines()]
 
+BOT_ID = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified"
@@ -455,7 +456,7 @@ def get_result(request, graph):
     if utt:
         last_utt = utt["text"]
         logger.info(f"last_utt --  {last_utt}")
-        bot_id = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
+        bot_id = BOT_ID
         bot_external_id = ""
         annotations = utt.get("annotations", {})
         custom_el_annotations = annotations.get("custom_entity_linking", [])
