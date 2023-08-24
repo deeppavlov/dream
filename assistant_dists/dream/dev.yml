@@ -13,7 +13,7 @@ services:
       - 8011:8011
   ranking-based-response-selector-fact-checking:
     volumes:
-      - "./response_selectors/ranking_based_response_selector_fact_checking:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
       - 8002:8002
