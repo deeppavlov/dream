@@ -38,7 +38,6 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
         ["last_utterance_batch", "human_utterance_history_batch"],
-        "eliza",
         additional_params={
             "utterance_type": "human_utterances",
             "annotation_attribute": "spelling_preprocessing",
@@ -144,7 +143,6 @@ def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
         ["speeches"],
-        "sentseg",
         additional_params={
             "utterance_type": "human_utterances",
             "annotation_attribute": "spelling_preprocessing",
@@ -158,7 +156,6 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
     return utils.dream_formatter(
         dialog,
         ["sentences"],
-        "entity-detection",
         preprocess=True,
         preprocess_params={"mode": "punct_sent", "remove_clarification": False, "replace_utterances": False},
         additional_params={
