@@ -66,7 +66,13 @@ def predict_personality(text):
         AGR = cAGR.predict(text_vector_31)
         CON = cCON.predict(text_vector_31)
         OPN = cOPN.predict(text_vector_31)
-        return [EXT[0], NEU[0], AGR[0], CON[0], OPN[0]]
+        return {
+            "EXT": EXT[0],
+            "NEU": NEU[0], 
+            "AGR": AGR[0], 
+            "CON": CON[0], 
+            "OPN": OPN[0]
+        }
     except Exception as e:
         sentry_sdk.capture_exception(e)
         raise e
@@ -85,6 +91,5 @@ class PersonalityPayload(BaseModel):
 @app.post("/model")
 def infer(payload: PersonalityPayload):
     logger.info(f"Personality Detection: {payload}")
-    raw = [predict_personality(p) for p in payload.personality]
-    personality = {"EXT": raw[0], "NEU": raw[1], "AGR": raw[2], "CON": raw[3], "OPN": raw[4]}
+    personality = [predict_personality(p) for p in payload.personality]
     return jsonify_data(personality)
