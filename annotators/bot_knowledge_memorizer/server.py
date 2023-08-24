@@ -27,7 +27,12 @@ TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified"
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
-INDEX_LOAD_PATH = Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
+config_path = os.getenv("CONFIG")
+with open(config_path, 'r') as config_file:
+    config = json.load(config_file)
+index_load_path = Path(os.path.expanduser(
+    config["metadata"]["variables"]["CUSTOM_EL"]
+))
 
 while True:
     try:
@@ -36,7 +41,7 @@ while True:
             team=TERMINUSDB_SERVER_TEAM,
             server=TERMINUSDB_SERVER_URL,
             password=TERMINUSDB_SERVER_PASSWORD,
-            index_load_path=INDEX_LOAD_PATH,
+            index_load_path=index_load_path,
         )
         logger.info(f"TERMINUSDB_SERVER_URL: {TERMINUSDB_SERVER_URL} is ready")
         break
@@ -450,8 +455,6 @@ def get_result(request, graph):
     if utt:
         last_utt = utt["text"]
         logger.info(f"last_utt --  {last_utt}")
-    
-    # user_id = "/".join(["User", str(utt.get("user", {}).get("id", ""))]) # bot has no id in dialogue context
         bot_id = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
         bot_external_id = ""
         annotations = utt.get("annotations", {})
