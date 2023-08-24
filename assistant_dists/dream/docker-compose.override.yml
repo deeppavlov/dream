@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002,
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector-fact-checking:8002,
           dff-intent-responder-skill:8012, intent-catcher:8014, ner:8021,
           factoid-qa:8071, kbqa:8072, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
@@ -17,7 +17,7 @@ services:
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
 
-  ranking-based-response-selector:
+  ranking-based-response-selector-fact-checking:
     env_file: [ .env ]
     build:
       args:

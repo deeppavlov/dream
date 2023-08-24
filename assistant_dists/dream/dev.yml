@@ -11,9 +11,9 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  ranking-based-response-selector:
+  ranking-based-response-selector-fact-checking:
     volumes:
-      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./response_selectors/ranking_based_response_selector_fact_checking:/src"
       - "./common:/src/common"
     ports:
       - 8002:8002

@@ -31,7 +31,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
     restart: unless-stopped
-  ranking-based-response-selector:
+  ranking-based-response-selector-fact-checking:
     restart: unless-stopped
   dff-intent-responder-skill:
     restart: unless-stopped

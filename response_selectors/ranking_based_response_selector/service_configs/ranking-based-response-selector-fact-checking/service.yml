@@ -1,4 +1,4 @@
-name: ranking-based-response-selector
+name: ranking-based-response-selector-fact-checking
 endpoints:
 - respond
 compose:
