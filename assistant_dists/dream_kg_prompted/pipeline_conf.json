@@ -188,6 +188,7 @@
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1.5,
                     "url": "http://property-extraction:8131/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_last_bot_dialog",
@@ -209,6 +210,7 @@
             "custom_entity_linking": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1.5,
                     "url": "http://custom-entity-linking:8153/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:custom_el_formatter_last_bot_dialog",
@@ -231,6 +233,7 @@
             "bot_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1.5,
                     "url": "http://bot-knowledge-memorizer:8027/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:bot_knowledge_memorizer_formatter_last_bot_dialog",
