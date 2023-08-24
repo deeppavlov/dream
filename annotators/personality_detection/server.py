@@ -66,13 +66,7 @@ def predict_personality(text):
         AGR = cAGR.predict(text_vector_31)
         CON = cCON.predict(text_vector_31)
         OPN = cOPN.predict(text_vector_31)
-        return {
-            "EXT": EXT[0],
-            "NEU": NEU[0],
-            "AGR": AGR[0],
-            "CON": CON[0],
-            "OPN": OPN[0]
-        }
+        return {"EXT": EXT[0], "NEU": NEU[0], "AGR": AGR[0], "CON": CON[0], "OPN": OPN[0]}
     except Exception as e:
         sentry_sdk.capture_exception(e)
         raise e
