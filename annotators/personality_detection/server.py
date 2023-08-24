@@ -68,9 +68,9 @@ def predict_personality(text):
         OPN = cOPN.predict(text_vector_31)
         return {
             "EXT": EXT[0],
-            "NEU": NEU[0], 
-            "AGR": AGR[0], 
-            "CON": CON[0], 
+            "NEU": NEU[0],
+            "AGR": AGR[0],
+            "CON": CON[0],
             "OPN": OPN[0]
         }
     except Exception as e:
