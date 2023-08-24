@@ -576,7 +576,7 @@ def get_utterances_histories(dialog: Dict, params: Dict = None):
     else:
         if params.get("bot_last_turns"):
             dialog = get_last_n_turns(dialog, bot_last_turns=params.get("bot_last_turns"))
-        utterances_histories = [utt["text"] for utt in dialog["utterances"][:-params.get("crop")]]
+        utterances_histories = [utt["text"] for utt in dialog["utterances"][: -params.get("crop")]]
         return [utterances_histories]
 
 
