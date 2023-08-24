@@ -427,6 +427,9 @@ services:
 
   personality-detection:
     build:
+      args:
+        SERVICE_PORT: 8026
+        SERVICE_NAME: personality_detection
       context: annotators/personality_detection
     command: uvicorn server:app --host 0.0.0.0 --port 8026
     deploy:
