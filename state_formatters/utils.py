@@ -434,16 +434,16 @@ def get_tokenized_sentences(dialog: Dict) -> List[List[str]]:
 
 
 def get_annotation(dialog: Dict, params: Dict) -> List:
-    return dialog[
-        params["utterance_type"][-params["last_n_utts"]]["annotations"].get(
-            params["annotation_attribute"], params["def_subresult"]
-        )
-    ]
+    return dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+    )
 
 
 def get_sentences_with_history(dialog: Dict, params: Dict = None) -> List[str]:
     # get the two most recent bot and human utterances, and the last human utterance
-    last_human_utt = get_annotation(dialog, params)
+    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+    )
     if dialog["bot_utterances"]:
         # h sep b sep h sep b sep h
         prev_bot_utts = [k["text"] for k in dialog["bot_utterances"][-2:]]
