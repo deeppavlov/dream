@@ -141,7 +141,8 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
                      kbqa text-qa wiki-parser combined-classification fact-retrieval \
                      dff-intent-responder-skill entity-detection sentence-ranker \
                      property-extraction ner prompt-selector \
-                     dff-dream-persona-chatgpt-prompted-skill dff-google-api-skill; do
+                     dff-dream-persona-chatgpt-prompted-skill dff-google-api-skill \
+                     fact-checking; do
 
         echo "Run tests for $container"
         dockercompose_cmd exec -T -u $(id -u) $container ./test.sh
