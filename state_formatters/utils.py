@@ -570,22 +570,14 @@ def get_previous_summary(dialog: Dict):
     return [previous_summary]
 
 
-def service_multiple_choices(dialog: Dict, service_name: str, params: Dict = None):
-    if service_name == "convert":
-        dialog_20 = get_last_n_turns(dialog, bot_last_turns=20)
-        return [[utt["text"] for utt in dialog_20["utterances"]]]
-    elif service_name == "sentrewrite" and params:
-        utterances_histories = [utt["text"] for utt in dialog["utterances"][: -params.get("crop")]]
-        return [[utterances_histories]]
-    elif service_name in ("entity-detection", "property-extraction"):
-        return [[uttr["text"] for uttr in dialog["utterances"][-params.get("crop") :]]]
-    elif service_name == "seq2seq-persona-based":
-        utterances_histories = [utt["text"] for utt in dialog["utterances"]]
-        amount_utterances_history = 3
-        utterances_histories = utterances_histories[-amount_utterances_history:]
-        return [utterances_histories]
-    else:
+def get_utterances_histories(dialog: Dict, params: Dict = None):
+    if params.get("utterance_type"):
         return get_utterances_attribute(dialog, params)
+    else:
+        if params.get("bot_last_turns"):
+            dialog = get_last_n_turns(dialog, bot_last_turns=params.get("bot_last_turns"))
+        utterances_histories = [utt["text"] for utt in dialog["utterances"][:-params.get("crop")]]
+        return [utterances_histories]
 
 
 def get_personality(dialog, service_name="", params=None):
@@ -628,14 +620,13 @@ def dream_formatter(
         dialog = preprocess_dialog(dialog, preprocess_params)
 
     keys_table = {
-        "last_utterance": service_multiple_choices,
-        "last_utterance_batch": service_multiple_choices,
-        "sentences": service_multiple_choices,
-        "speeches": service_multiple_choices,
-        "human_utterance": service_multiple_choices,
-        "utterances_histories": service_multiple_choices,
-        "utterances": service_multiple_choices,
-        "image_paths": service_multiple_choices,
+        "last_utterance_batch": get_utterances_histories,
+        "sentences": get_utterances_histories,
+        "speeches": get_utterances_histories,
+        "human_utterance": get_utterances_histories,
+        "utterances_histories": get_utterances_histories,
+        "utterances": get_utterances_histories,
+        "image_paths": get_utterances_histories,
         "personality": get_personality,
         "annotation_histories": get_annotation_histories,
         "entities_with_labels": get_entities_with_labels,
