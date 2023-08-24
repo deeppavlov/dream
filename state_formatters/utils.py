@@ -1,4 +1,4 @@
-from typing import Dict, List, Union, Any
+from typing import Dict, List, Union
 import logging
 from copy import deepcopy
 import re
@@ -333,16 +333,6 @@ def preprocess_dialog(
     return dialog
 
 
-def get_annotation(
-    dialog: Dict,
-    annotation_type: str,
-    default_result: Any = None,
-    last_n_utts: int = 1,
-    utterance_type: str = "human_utterances",
-) -> List[Dict]:
-    return dialog[utterance_type][-last_n_utts]["annotations"].get(annotation_type, default_result)
-
-
 def get_annotation_histories(dialog: Dict) -> List:
     return [[deepcopy(utt.get("annotations")) for utt in dialog["utterances"]]]
 
@@ -443,11 +433,17 @@ def get_tokenized_sentences(dialog: Dict) -> List[List[str]]:
     return [tokens] if len(tokens) else [None]
 
 
-def get_sentences_with_history(dialog: Dict) -> List[str]:
+def get_annotation(dialog: Dict, params: Dict) -> List:
+    return dialog[
+        params["utterance_type"][-params["last_n_utts"]]["annotations"].get(
+            params["annotation_attribute"], params["def_subresult"]
+        )
+    ]
+
+
+def get_sentences_with_history(dialog: Dict, params: Dict = None) -> List[str]:
     # get the two most recent bot and human utterances, and the last human utterance
-    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
-        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
-    )
+    last_human_utt = get_annotation(dialog, params)
     if dialog["bot_utterances"]:
         # h sep b sep h sep b sep h
         prev_bot_utts = [k["text"] for k in dialog["bot_utterances"][-2:]]
@@ -571,20 +567,17 @@ def get_previous_summary(dialog: Dict):
 
 
 def get_utterances_histories(dialog: Dict, params: Dict = None):
-    if params.get("utterance_type"):
-        return get_utterances_attribute(dialog, params)
-    else:
-        if params.get("bot_last_turns"):
-            dialog = get_last_n_turns(dialog, bot_last_turns=params.get("bot_last_turns"))
-        utterances_histories = [utt["text"] for utt in dialog["utterances"][: -params.get("crop")]]
-        return [utterances_histories]
+    if params.get("bot_last_turns"):
+        dialog = get_last_n_turns(dialog, bot_last_turns=params.get("bot_last_turns"))
+    utterances_histories = [utt["text"] for utt in dialog["utterances"][: -params.get("crop")]]
+    return [utterances_histories]
 
 
 def get_personality(dialog, service_name="", params=None):
     if service_name == "convert":
         return [dialog["bot"]["persona"]]
     else:
-        return get_utterances_attribute(dialog, params)
+        return get_annotation(dialog, params)
 
 
 def get_dialogs(dialog, service_name=""):
@@ -620,12 +613,10 @@ def dream_formatter(
         dialog = preprocess_dialog(dialog, preprocess_params)
 
     keys_table = {
-        "last_utterance_batch": get_utterances_histories,
-        "sentences": get_utterances_histories,
-        "speeches": get_utterances_histories,
-        "human_utterance": get_utterances_histories,
-        "utterances_histories": get_utterances_histories,
-        "utterances": get_utterances_histories,
+        "last_utterance_batch": get_annotation,
+        "sentences": get_annotation,
+        "speeches": get_annotation,
+        "utterances_histories": get_utterances_attribute,
         "image_paths": get_utterances_histories,
         "personality": get_personality,
         "annotation_histories": get_annotation_histories,
@@ -663,6 +654,7 @@ def dream_formatter(
         "prompt_goals": lambda dialog: dialog["human"]["attributes"].get("prompts_goals", {}),
         "human_attributes": lambda dialog: dialog["human"]["attributes"],
         "human_utterance_history_batch": lambda dialog: get_human_utterance_history(dialog),
+        "human_utterances": lambda dialog: [dialog["human_utterances"][-3:]],
     }
 
     formatted_dialog = dict()
