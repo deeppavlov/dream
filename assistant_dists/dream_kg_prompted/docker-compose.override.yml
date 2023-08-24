@@ -196,7 +196,7 @@ services:
         TERMINUSDB_SERVER_PASSWORD: root
         TERMINUSDB_SERVER_TEAM: admin
         TERMINUSDB_SERVER_DB: bot_knowledge_db
-        INDEX_LOAD_PATH: /root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
+        CONFIG: config.json
         ENVVARS_TO_SEND: OPENAI_API_KEY
         CHAT_GPT_PORT: 8145
       context: ./

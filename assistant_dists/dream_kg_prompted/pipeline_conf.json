@@ -233,7 +233,7 @@
             "bot_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.5,
+                    "timeout": 3.0,
                     "url": "http://bot-knowledge-memorizer:8027/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:bot_knowledge_memorizer_formatter_last_bot_dialog",
