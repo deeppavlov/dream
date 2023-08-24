@@ -82,15 +82,9 @@ class PersonalityPayload(BaseModel):
     personality: List[str] = Body(...)
 
 
-@app.post('/model')
+@app.post("/model")
 def infer(payload: PersonalityPayload):
     logger.info(f"Personality Detection: {payload}")
     raw = [predict_personality(p) for p in payload.personality]
-    personality = {
-        "EXT": raw[0],
-        "NEU": raw[1],
-        "AGR": raw[2],
-        "CON": raw[3],
-        "OPN": raw[4]
-    }
+    personality = {"EXT": raw[0], "NEU": raw[1], "AGR": raw[2], "CON": raw[3], "OPN": raw[4]}
     return jsonify_data(personality)
