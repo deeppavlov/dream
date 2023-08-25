@@ -401,7 +401,7 @@
                     "timeout": 15.0,
                     "url": "http://emotional-bot-response:8050/respond_batch"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "dialog_formatter": "state_formatters.dp_formatters:bot_mood_emotion_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "skills"

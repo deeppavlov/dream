@@ -56,7 +56,7 @@ logger.info(f"Available APIs: {', '.join([api['display_name'] for api in api_con
 def timeout_handler():
     raise Exception("API timeout")
 
-def make_prompt(sentence, emotion='angry', mood='frustrated', intensity=7):
+def make_prompt(sentence, emotion='happy', mood='joy', intensity=7):
     prompt = f"""You are a writer who needs to rewrite a sentence to express specific emotions, moods, and intensity levels. Your task is to generate a new sentence that conveys the desired emotions, moods, and emotion intensity (0 represents minimal intensity and 10 represents maximum intensity) while keeping the original meaning and vocabulary range. Here's the information you have:
 
     **Input:**
@@ -125,12 +125,11 @@ def get_llm_emotional_response(prompt):
 #     return response.choices[0].message["content"]
 
 
-def rewrite_sentences(sentences):
+def rewrite_sentences(sentences, bot_emotion, bot_mood_label):
     try:
-        batch_tokens = []
         result = []
         for sent in sentences:
-            prompt = make_prompt(sent) # emotion, mood, intensity
+            prompt = make_prompt(sent, bot_emotion, bot_mood_label, 7) # emotion, mood, intensity
             # response = get_completion(prompt)
             response = get_llm_emotional_response(prompt)
             result.append([{"hypotheses": response}])
@@ -147,7 +146,9 @@ def respond():
     logger.info(f"llm-emotion-rewriting: entered")
     st_time = time.time()
     sentences = request.json.get("sentences", [])
-    result = rewrite_sentences(sentences)
+    bot_mood_label = request.json.get("bot_mood_label", "")
+    bot_emotion = request.json.get("bot_emotion", "")
+    result = rewrite_sentences(sentences, bot_emotion, bot_mood_label)
     total_time = time.time() - st_time
     logger.info(f"llm-emotion-rewriting exec time: {total_time:.3f}s")
 
@@ -158,7 +159,9 @@ def respond():
 def respond_batch():
     st_time = time.time()
     sentences = request.json.get("sentences", [])
-    result = rewrite_sentences(sentences)
+    bot_mood_label = request.json.get("bot_mood_label", "")
+    bot_emotion = request.json.get("bot_emotion", "")
+    result = rewrite_sentences(sentences, bot_emotion, bot_mood_label)
     total_time = time.time() - st_time
     logger.info(f"llm-emotion-rewriting exec time: {total_time:.3f}s")
 
@@ -166,9 +169,14 @@ def respond_batch():
 
 
 try:
+    logger.info("llm-emotion-rewriting is starting")
+
     sentences = ['I will eat pizza.']
-    response = rewrite_sentences(sentences)
+    bot_mood_label = "frustrated"
+    bot_emotion = "anger"
+    response = rewrite_sentences(sentences, bot_mood_label, bot_emotion)
     print(response)
+
     logger.info("llm-emotion-rewriting is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)

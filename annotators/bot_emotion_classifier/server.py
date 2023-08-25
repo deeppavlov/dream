@@ -4,12 +4,24 @@ import os
 import sentry_sdk
 from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
-
 import stanza
-# stanza.download('en')
+
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
+logging.getLogger("werkzeug").setLevel("WARNING")
+
+
+# stanza.download('en') -> moved to Dockerfile
 nlp = stanza.Pipeline('en')
 
 
+# D-scripts dictionaries
 pos_type_expl = {'i - someone': 1,
                  'you - someone': 2,
                  'i - you': 3,
@@ -33,6 +45,7 @@ second_prons = ['you']
 inclusive_prons = ['we']
 
 
+# SRL - semantic role labelling
 def find_root(sent):
     for token in sent:
         if token['deprel'] == 'root':
@@ -140,13 +153,8 @@ def get_dsript_type(orig_sent, type_expl):
         type_num = type_expl[line]
     return type_num
 
-sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-app = Flask(__name__)
-
+# emotion and mood dictionaries
 positive_emotions = ['admiration', 'joy', 'liking', 'love', 'hope', 'gratitude', 'pride', 'relief', 'surprise']
 negative_emotions = ['anger', 'resentment', 'disappointment', 'disliking', 'shame', 'distress', 'fear', 'remorse', 'surprise']
 
@@ -193,6 +201,8 @@ pad_moods = {
     '-11-1': 'fear',
 }
 
+
+# default mood
 extraversion = 0.89
 agreeableness = 0.92
 conscientiousness = 0.86
@@ -206,12 +216,11 @@ dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.
 default_mood = [pleasure, arousal, dominance]
 
 
-def get_bot_emotion(sent, emotion):
+# get bot emotion using user emotion and user utterance
+def get_bot_emotion(sent, emotion, sentiment):
     if emotion == 'neutral':
         bot_emotion = 'neutral'
     elif emotion == 'surprise':
-        # sentiment = get_sentiment(sent)
-        sentiment = 'positive'
         if sentiment == 'negative':
             type_num = get_dsript_type(sent, neg_type_expl)
             bot_emotion = neg_reactions[type_num][emotion]
@@ -229,6 +238,7 @@ def get_bot_emotion(sent, emotion):
     return bot_emotion
 
 
+# the rate of mood decrease
 def get_dim_decay(default_dim, curr_dim):
     p_dif = abs(default_dim - curr_dim)
     if p_dif == 0:
@@ -248,6 +258,7 @@ def get_decay(default_mood, curr_mood):
     return decay
 
 
+# comparison of old and new mood
 def check_same_mood(curr_mood, new_mood):
     print(curr_mood, new_mood)
     for i in range(len(curr_mood)):
@@ -256,6 +267,7 @@ def check_same_mood(curr_mood, new_mood):
     return True
 
 
+# new mood calculation using difference btw current mood and current emotion
 def get_new_mood(default_mood, curr_mood, bot_emotion):
     if check_same_mood(pad_emotions[bot_emotion], curr_mood):
         decay = [0, 0, 0]
@@ -274,49 +286,68 @@ def get_new_mood(default_mood, curr_mood, bot_emotion):
 
 @app.route("/model", methods=["POST"])
 def respond():
-    sentences = request.json["sentences"]
-    bot_mood_list = request.json["bot_mood"]
-    user_emotion_list = request.json["user_emotion"]
+    sentence = request.json.get("sentences", "")
+    user_emotion = request.json.get("user_emotion", {})
+    sentiment = request.json.get("sentiment", {})
+    bot_mood = request.json.get("bot_mood", default_mood)
 
-    print('SENTENCES:', sentences)
-    print('BOT MOOD: ', bot_mood_list)
-    print('USER_EMOTION: ', user_emotion_list)
+    print('SENTENCE:', sentence)
+    print('USER EMOTION: ', user_emotion)
+    print('SENTIMENT: ', sentiment)
+    print('OLD BOT MOOD: ', bot_mood)
 
-    logger.info('User emotion: {}'.format(user_emotion_list[0]))
-    logger.info('Current bot mood: {}'.format(bot_mood_list[0]))
-    for sent, bot_mood, user_emotion in zip(sentences, bot_mood_list, user_emotion_list):
-        logger.info("User's utterance: {}".format(sent[0]))
-        bot_emotion = get_bot_emotion(sent[0], user_emotion)
-        logger.info('New bot emotion: {}'.format(bot_emotion))
-        curr_mood = get_new_mood(default_mood, bot_mood, bot_emotion)
-    logger.info('New bot mood: {}'.format(curr_mood))
+    # logger.info("PAD[neutral]: {}".format(pad_emotions["neutral"]))
 
-    # curr_mood = [1, 2, 3]
+    logger.info("User's utterance: {}".format(sentence))
+    logger.info('User emotion: {}'.format(user_emotion))
+    logger.info('Sentiment: {}'.format(sentiment))
+    logger.info('Old bot mood: {}'.format(bot_mood))
 
-    # for dim in curr_mood:
-    #     if dim != 0:
-    #         str(int(dim / abs(dim)))
-    #     else:
-    #         '-1'
+    bot_emotion = get_bot_emotion(sentence, user_emotion, sentiment)
+    logger.info('New bot emotion: {}'.format(bot_emotion))
+    print('NEW BOT EMOTION: ', bot_emotion)
 
-    dim_symbols = [str(int(dim / abs(dim))) if dim != 0 else '-1' for dim in curr_mood]
+    new_bot_mood = get_new_mood(default_mood, bot_mood, bot_emotion)
+    logger.info('New bot mood: {}'.format(new_bot_mood))
+    print('NEW BOT MOOD: ', new_bot_mood)
+
+    dim_symbols = [str(int(dim / abs(dim))) if dim != 0 else '-1' for dim in new_bot_mood]
     octant = ''.join(dim_symbols)
-    logger.info('New bot mood label: {}'.format(pad_moods[octant]))
-    print('CURRENT MOOD: ', curr_mood)
-    return jsonify([{"bot_mood": curr_mood}])
+
+    new_bot_mood_label = pad_moods[octant]
+    logger.info('New bot mood label: {}'.format(new_bot_mood_label))
+    print('NEW BOT MOOD LABEL: ', new_bot_mood_label)
+
+    return jsonify([{"bot_mood": new_bot_mood, 
+                     "bot_mood_label": new_bot_mood_label,
+                     "bot_emotion": bot_emotion}])
 
 
 try:
     logger.info("bot-emotion-classifier is starting")
-    sent = ['I do not think you are right.']
 
-    bot_emotion = get_bot_emotion(sent[0], 'anger')
+    sentence = "I am so sad"
+    user_emotion = "distress"
+    sentiment = "negative"
+    bot_mood = default_mood
 
-    # logger.info("Current bot emotion: {}".format(bot_emotion))
-    # logger.info("PAD: {}".format(pad_emotions[bot_emotion]))
+    logger.info("User's utterance: {}".format(sentence))
+    logger.info('User emotion: {}'.format(user_emotion))
+    logger.info('Sentiment: {}'.format(sentiment))
+    logger.info('Old bot mood: {}'.format(bot_mood))
 
-    curr_mood = get_new_mood(default_mood, pad_emotions['anger'], bot_emotion)
-    
+    bot_emotion = get_bot_emotion(sentence, user_emotion, sentiment)
+    logger.info('New bot emotion: {}'.format(bot_emotion))
+
+    new_bot_mood = get_new_mood(default_mood, bot_mood, bot_emotion)
+    logger.info('New bot mood: {}'.format(new_bot_mood))
+
+    dim_symbols = [str(int(dim / abs(dim))) if dim != 0 else '-1' for dim in new_bot_mood]
+    octant = ''.join(dim_symbols)
+
+    new_bot_mood_label = pad_moods[octant]
+    logger.info('New bot mood label: {}'.format(new_bot_mood_label))
+
     logger.info("bot-emotion-classifier is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)

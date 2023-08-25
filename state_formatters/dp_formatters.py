@@ -1247,22 +1247,48 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     return batches
 
 
-def user_emotion_bot_mood_formatter(dialog: Dict) -> List:
-    user_emotion = dialog["human_utterances"][-1]["annotations"].get("emotion_classification", ["neutral"])
-    try:
-        bot_mood = dialog["human_utterances"][-2]["annotations"].get("bot_mood", [])
-    except:  # IndexError?
-        logger.info('Setting default mood manually...')
-        
-        extraversion = 0.89
-        agreeableness = 0.92
-        conscientiousness = 0.86
-        neuroticism = 0.11
-        openness = 0.23
+def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
+    user_emotions = dialog["human_utterances"][-1]["annotations"].get("combined_classification", {}).get("emotion_classification", {})
+    if (user_emotions):
+        user_emotion = max(user_emotions, key=user_emotions.get)
+    else:
+        user_emotion = "neutral"
 
-        pleasure = 0.21 * extraversion + 0.59 * agreeableness + 0.19 * neuroticism
-        arousal = 0.15 * openness + 0.3 * agreeableness - 0.57 * neuroticism
-        dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.32 * agreeableness
+    sentiments = dialog["human_utterances"][-1]["annotations"].get("combined_classification", {}).get("sentiment_classification", {})
+    if (sentiments):
+        sent = max(sentiments, key=sentiments.get)
+    else:
+        sent = "neutral"
 
-        bot_mood = [pleasure, arousal, dominance]
-    return [{"sentences": [dialog["human_utterances"][-1]["text"]], "user_emotion": [user_emotion], "bot_mood": [bot_mood]}]
+    extraversion = 0.89
+    agreeableness = 0.92
+    conscientiousness = 0.86
+    neuroticism = 0.11
+    openness = 0.23
+
+    pleasure = 0.21 * extraversion + 0.59 * agreeableness + 0.19 * neuroticism
+    arousal = 0.15 * openness + 0.3 * agreeableness - 0.57 * neuroticism
+    dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.32 * agreeableness
+
+    default_bot_mood = [pleasure, arousal, dominance]
+
+    if len(dialog["human_utterances"]) > 1:
+        bot_mood = dialog["human_utterances"][-2]["annotations"].get("bot_mood", default_bot_mood)
+    else:
+        bot_mood = default_bot_mood
+
+    return [{"sentences": dialog["human_utterances"][-1]["text"], 
+             "user_emotion": user_emotion,
+             "sentiment": sent,
+             "bot_mood": bot_mood}]
+
+
+def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+
+    bot_mood_label = dialog["human_utterances"][-1]["annotations"].get("bot_mood_label", "hello")
+    bot_emotion = dialog["human_utterances"][-1]["annotations"].get("bot_emotion", "hello")
+    return [{"sentences": hypots,
+             "bot_mood_label": bot_mood_label,
+             "bot_emotion": bot_emotion}]
