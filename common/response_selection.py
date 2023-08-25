@@ -42,7 +42,12 @@ UNPREDICTABLE_SKILLS = [
     "seq2seq_persona_based",
 ]
 CAN_NOT_BE_DISLIKED_SKILLS = ["meta_script_skill", "personal_info_skill"]
-NOT_ADD_PROMPT_SKILLS = ["alexa_handler", "dff_intent_responder_skill", "misheard_asr", "dff_program_y_dangerous_skill"]
+NOT_ADD_PROMPT_SKILLS = [
+    "alexa_handler",
+    "dff_intent_responder_skill",
+    "misheard_asr",
+    "dff_program_y_dangerous_skill",
+]
 
 COMPLETELY_CHANGING_THE_SUBJECT_PHRASES = [
     "Completely changing the subject,",
