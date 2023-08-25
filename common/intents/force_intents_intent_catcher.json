@@ -4,10 +4,10 @@
         "dff_program_y_skill"
     ],
     "repeat": [
-        "dff_intent_responder_skill",
+        "dff_intent_responder_skill"
     ],
     "what_time": [
-        "dff_intent_responder_skill",
+        "dff_intent_responder_skill"
     ],
     "cant_do": [
         "dff_intent_responder_skill",
@@ -34,6 +34,6 @@
         "dff_program_y_skill"
     ],
     "dont_understand": [
-        "dff_intent_responder_skill",
+        "dff_intent_responder_skill"
     ]
 }
