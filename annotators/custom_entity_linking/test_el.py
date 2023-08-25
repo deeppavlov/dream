@@ -3,19 +3,43 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 from deeppavlov_kg import TerminusdbKnowledgeGraph
+import sentry_sdk
+from deeppavlov import build_model
+import nltk
 
 load_dotenv("./.env")
 
-TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
-INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_memorizer"))
+config_name = "annotators/custom_entity_linking/custom_entity_linking.json"
+nltk.download('stopwords')
 
-graph = TerminusdbKnowledgeGraph(db_name=TERMINUSDB_SERVER_DB, index_load_path=INDEX_LOAD_PATH)
+try:
+    el = build_model(config_name, download=True)
+    print("model loaded")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    print(e)
+    raise e
+
+INDEX_LOAD_PATH = Path(os.path.expanduser(el.pipe[-1][-1].load_path))
+TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
+TERMINUSDB_SERVER_TEAM = "admin"
+TERMINUSDB_SERVER_DB = "user_knowledge_db"
+TERMINUSDB_SERVER_PASSWORD = "root"
+
+
+graph = TerminusdbKnowledgeGraph(
+    db_name=TERMINUSDB_SERVER_DB,
+    team=TERMINUSDB_SERVER_TEAM,
+    server=TERMINUSDB_SERVER_URL,
+    password=TERMINUSDB_SERVER_PASSWORD,
+    index_load_path=INDEX_LOAD_PATH
+)
 
 
 def main():
     url = "http://0.0.0.0:8153"
     inserted_data = {
-        "user_id": "1234",
+        "user_id": "User/Jack",
         "entity_info": {
             "entity_substr": ["forrest gump"],
             "entity_ids": ["film/123"],
@@ -31,7 +55,7 @@ def main():
 
     request_data = [
         {
-            "user_id": ["1234"],
+            "user_id": ["User/Jack"],
             "entity_substr": [["forrest gump"]],
             "entity_tags": [[[("film", 1.0)]]],
             "context": [["who directed forrest gump?"]],
