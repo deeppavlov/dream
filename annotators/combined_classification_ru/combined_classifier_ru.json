@@ -1,132 +1,70 @@
 {
-  "metadata": {
-    "variables": {
-      "BACKBONE": "DeepPavlov/rubert-base-cased-conversational",
-      "MODELS_PATH": "~/.deeppavlov/models",
-      "SINGLE_SENTENCE_LEN": 32,
-      "MULTI_SENTENCE_LEN": 128,
-      "NUM_TRAIN_EPOCHS": 5,
-      "GRADIENT_ACC_STEPS": 8
-    },
-    "download":[{
-        "url": "http://files.deeppavlov.ai/dream_data/distilru_v1/model.tar.gz",
-        "subdir": "{MODELS_PATH}"
-      }]
-  },
-   "dataset_reader":{
-      "class_name":"multitask_reader",
-      "task_defaults":{"class_name":"basic_classification_reader", 
-                       "path": "null",
-                       "x":"text",
-                       "y":"label_id",
-                       "train":"train.csv",
-                       "valid":"val.csv",
-                       "test":"test.csv",
-                       "header":0,
-                       "sep":"\t",
-                       "label_type":"int"},
-      "tasks":{"emo":{"data_path":"data/emotion_ru_dialog"},
-               "sentiment":{"data_path":"data/sentiment_ru_dialog"},
-               "toxic":{"data_path":"data/toxic"},
-               "factoid":{"data_path":"data/Yahoo"},
-               "midas":{"data_path":"data/midas_ru"},
-               "topics":{"data_path":"data/topics"}
-              }
-      },
-    "dataset_iterator": {
-        "class_name": "multitask_iterator",
-        "num_train_epochs": "{NUM_TRAIN_EPOCHS}",
-        "gradient_accumulation_steps": "{GRADIENT_ACC_STEPS}",
-        "task_defaults": {
-            "class_name": "basic_classification_iterator",
-            "seed": 42},
-        "tasks": {"emo":{},"sentiment":{},"toxic":{},"factoid":{},"midas":{},"topics":{}}
-    },
-  "chainer": {
-    "in": [
-      "x"
-    ],
-    "pipe": [
-      {
-        "class_name": "torch_transformers_preprocessor",
-        "vocab_file": "{BACKBONE}",
-        "max_seq_length": "{SINGLE_SENTENCE_LEN}",
-        "in": [
-          "x"
-        ],
-        "out": [
-          "bert_features"
-        ]
-      },
-      {
-        "id": "multitask_transformer",
-        "class_name": "multitask_transformer",
-        "optimizer_parameters": {
-          "lr": 2e-5
-        },
-        "learning_rate_drop_patience": 2,
-        "learning_rate_drop_div": 2.0,
-        "return_probas": true,
-        "backbone_model": "{BACKBONE}",
-        "save_path": "{MODELS_PATH}/model",
-        "load_path": "{MODELS_PATH}/model",
-        "tasks": {
-          "emo": {
-            "type": "classification",
-            "options": 7,
-            "type_to_cache": 0
-          },
-          "sentiment": {
-            "type": "classification",
-            "options": 3,
-            "type_to_cache": 0
-          },
-          "toxic": {
-            "type": "classification",
-            "options": 2,
-            "type_to_cache": 0
-          },
-          "factoid": {
-            "type": "classification",
-            "options": 2,
-            "type_to_cache": 0
-          },
-          "midas": {
-            "type": "classification",
-            "options": 15,
-            "type_to_cache": 0
-          },
-          "topics": {
-            "type": "classification",
-            "options": 76,
-            "type_to_cache": 0
-          }
-        },
-        "in": [
-          "bert_features_x",
-          "bert_features_x",          
-          "bert_features_x",
-          "bert_features_x",
-          "bert_features_x",
-          "bert_features_x"
-        ],
-        "out": [
-          "y_emo_pred_probas",
-          "y_sentiment_pred_probas",
-          "y_toxic_pred_probas",
-          "y_factoid_pred_probas",
-          "y_midas_pred_probas",
-          "y_topics_pred_probas"
-        ]
+   "metadata":{
+      "variables":{
+         "ROOT_PATH":"/",
+         "DP_NAME":"distilrubert-base-cased-conversational",
+         "BACKBONE":"DeepPavlov/{DP_NAME}",
+         "NAME":"rumtl",
+         "BATCH_SIZE":160,
+         "SAVE_LOAD_PATH":"{ROOT_PATH}/{NAME}",
+         "NUM_TRAIN_EPOCHS":30,
+         "GRADIENT_ACC_STEPS":1
       }
-    ],
-    "out": [
-      "y_emo_pred_probas",
-      "y_sentiment_pred_probas",
-      "y_toxic_pred_probas",
-      "y_factoid_pred_probas",
-      "y_midas_pred_probas",
-      "y_topics_pred_probas"      
-    ]
-  }
+   },
+      "download":[{
+        "url": "http://files.deeppavlov.ai/dream_data/rumtl.pth.tar.gz",
+        "subdir": "{MODELS_PATH}"
+      }],
+   "chainer":{
+      "in":[
+         "x_emo","x_sentiment","x_toxic","x_factoid","x_midas","x_topics"
+      ],
+      "in_y":[
+         "y_emo","y_sentiment","y_toxic","y_factoid","y_midas","y_topics"
+      ],
+      "pipe":[
+         {
+            "class_name":"multitask_pipeline_preprocessor",
+            "possible_keys_to_extract":[0],
+            "preprocessor":"TorchTransformersPreprocessor",
+            "do_lower_case":true,
+            "n_task":6,
+            "vocab_file":"{BACKBONE}",
+            "max_seq_length":128,
+            "in":["x_emo","x_sentiment","x_toxic","x_factoid","x_midas","x_topics"],
+            "out":["bert_features_emo","bert_features_sentiment","bert_features_toxic","bert_features_factoid","bert_features_midas","bert_features_topics"]
+         },
+         {
+            "id":"multitask_transformer",
+            "class_name":"multitask_transformer",
+            "optimizer_parameters":{
+               "lr":2e-5
+            },
+            "gradient_accumulation_steps":"{GRADIENT_ACC_STEPS}",
+            "learning_rate_drop_patience":2,
+            "learning_rate_drop_div":2.0,
+            "return_probas":true,
+            "new_model":false,
+            "backbone_model":"{BACKBONE}",
+            "save_path":"{SAVE_LOAD_PATH}",
+            "load_path":"{SAVE_LOAD_PATH}",
+            "tasks":{
+               "emo":{"type":"classification","options":7},
+               "sentiment":{"type":"classification","options":3},
+               "toxic":{"type":"classification","options":2},
+               "factoid":{"type":"classification","options":2},
+               "midas":{"type":"classification","options":15},
+                "topics":{"type":"classification", "options":76}
+            },
+            "in":["bert_features_emo","bert_features_sentiment","bert_features_toxic","bert_features_factoid","bert_features_midas","bert_features_topics"],
+            "in_y":["y_emo","y_sentiment","y_toxic","y_factoid","y_midas","y_topics"],
+            "out":["y_emo_pred","y_sentiment_pred","y_toxic_pred","y_factoid_pred","y_midas_pred","y_topics_pred"]
+         }
+      ],
+      "out":["y_emo_pred","y_sentiment_pred","y_toxic_pred","y_factoid_pred","y_midas_pred","y_topics_pred"]
+   }
+}
+      ],
+      "class_name":"torch_trainer"
+   }
 }
