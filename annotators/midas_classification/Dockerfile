@@ -1,3 +1,10 @@
+FROM deeppavlov/base-gpu:0.14.1
+
+ARG CONFIG
+ARG SED_ARG=" | "
+
+ENV CONFIG=$CONFIG
+
 RUN mkdir /src /midas
 
 COPY ./requirements.txt /src/requirements.txt
