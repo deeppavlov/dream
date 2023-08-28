@@ -10,7 +10,7 @@ import nltk
 load_dotenv("./.env")
 
 config_name = "annotators/custom_entity_linking/custom_entity_linking.json"
-nltk.download('stopwords')
+nltk.download("stopwords")
 
 try:
     el = build_model(config_name, download=True)
@@ -32,7 +32,7 @@ graph = TerminusdbKnowledgeGraph(
     team=TERMINUSDB_SERVER_TEAM,
     server=TERMINUSDB_SERVER_URL,
     password=TERMINUSDB_SERVER_PASSWORD,
-    index_load_path=INDEX_LOAD_PATH
+    index_load_path=INDEX_LOAD_PATH,
 )
 
 
