@@ -1,0 +1,56 @@
+services:
+  sentseg:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=proxy.deeppavlov.ai:8011
+    - PORT=8011
+
+  entity-detection:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=proxy.deeppavlov.ai:8103
+    - PORT=8103
+
+  entity-linking:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=proxy.deeppavlov.ai:8075
+    - PORT=8075
+
+  wiki-parser:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=proxy.deeppavlov.ai:8077
+    - PORT=8077
+
+  factoid-qa:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=proxy.deeppavlov.ai:8071
+    - PORT=8071
+
+  dff-program-y-skill:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+    - PROXY_PASS=proxy.deeppavlov.ai:8008
+    - PORT=8008
+
+version: '3.7'

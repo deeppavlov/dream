@@ -1,0 +1,399 @@
+{
+    "services": {
+        "last_chance_service": {
+            "group": "last_chance_service",
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "segments": [
+                            "Sorry, something went wrong inside.",
+                            "Please tell me, what did you say."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ],
+            "endpoint": "respond",
+            "is_enabled": true,
+            "source": {
+                "component": "components/70NLr5qqOow5.yml",
+                "service": "services/agent_services/service_configs/ai_faq_assistant"
+            }
+        },
+        "timeout_service": {
+            "group": "timeout_service",
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "segments": [
+                            "Sorry, something went wrong inside.",
+                            "Please tell me, what did you say."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ],
+            "endpoint": "respond",
+            "is_enabled": true,
+            "source": {
+                "component": "components/x8rLTpIWct4P.yml",
+                "service": "services/agent_services/service_configs/ai_faq_assistant"
+            }
+        },
+        "annotators": {
+            "sentseg": {
+                "group": "response_annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "endpoint": "sentseg",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
+                }
+            },
+            "entity_storer": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-storer:8089/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:entity_storer_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.combined_classification",
+                    "annotators.intent_catcher"
+                ],
+                "state_manager_method": "update_attributes",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/KSNMJJOS15MN2lsyS8fjBg.yml",
+                    "service": "annotators/entity_storer/service_configs/entity-storer"
+                }
+            },
+            "entity_detection": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-detection:8103/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/tgzaSQggV7wgMprOmF1Ww.yml",
+                    "service": "annotators/entity_detection/service_configs/entity-detection"
+                }
+            },
+            "entity_linking": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-linking:8075/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:el_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.ner",
+                    "annotators.entity_detection",
+                    "annotators.spacy_nounphrases"
+                ],
+                "state_manager_method": "add_annotation",
+                "endpoint": "model",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "service": "annotators/entity_linking/service_configs/entity-linking"
+                }
+            },
+            "wiki_parser": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://wiki-parser:8077/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:wp_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": [
+                    "annotators.entity_linking"
+                ],
+                "state_manager_method": "add_annotation",
+                "endpoint": "model",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/O4FVnkAwjay1mL1FbuRGWw.yml",
+                    "service": "annotators/wiki_parser/service_configs/wiki-parser"
+                }
+            },
+            "midas_classification": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://midas-classification:8090/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation",
+                "endpoint": "model",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/iOsQxWRQCKwOap49G0TAag.yml",
+                    "service": "annotators/midas_classification/service_configs/midas-classification"
+                }
+            },
+            "midas_predictor": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://midas-predictor:8121/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:midas_predictor_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.combined_classification"
+                ],
+                "state_manager_method": "add_annotation",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/V2iGM38Tkgmf1OcURQnAg.yml",
+                    "service": "annotators/midas_predictor/service_configs/midas-predictor"
+                }
+            }
+        },
+        "response_annotators": {
+            "midas_classification": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://midas-classification:8090/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation",
+                "endpoint": "model",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/iOsQxWRQCKwOap49G0TAag.yml",
+                    "service": "annotators/midas_classification/service_configs/midas-classification"
+                }
+            },
+            "midas_predictor": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://midas-predictor:8121/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:midas_predictor_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.combined_classification"
+                ],
+                "state_manager_method": "add_annotation",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/V2iGM38Tkgmf1OcURQnAg.yml",
+                    "service": "annotators/midas_predictor/service_configs/midas-predictor"
+                }
+            },
+            "entity_detection": {
+                "group": "candidate_annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://entity-detection:8103/respond_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "endpoint": "respond_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
+                    "service": "annotators/entity_detection/service_configs/entity-detection"
+                }
+            }
+        },
+        "response_annotator_selectors": {
+            "group": "response_annotator_selectors",
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
+            }
+        },
+        "candidate_annotators": {},
+        "skill_selectors": {
+            "rule_based_selector": {
+                "group": "skill_selectors",
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ],
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                }
+            }
+        },
+        "skills": {
+            "factoid_qa": {
+                "group": "skills",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://factoid-qa:8071/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/qx0j5QHAzog0b39nRnuA.yml",
+                    "service": "skills/factoid_qa/service_configs/factoid-qa"
+                }
+            },
+            "dff_program_y_skill": {
+                "group": "skills",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://dff-program-y-skill:8008/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_program_y_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/ckUclxqUplyzwmnYyixEw.yml",
+                    "service": "skills/dff_program_y_skill/service_configs/dff-program-y-skill"
+                }
+            },
+            "dummy_skill": {
+                "group": "skills",
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
+            }
+        },
+        "response_selectors": {
+            "response_selector": {
+                "group": "response_selectors",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://ranking-and-intent-based-response-selector-ru:8082/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "candidate_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/hjbdfiugef7h3niknto59u9dgf.yml",
+                    "service": "response_selectors/ranking_and_intent_based_response_selector/service_configs/ranking-and-intent-based-response-selector-ru"
+                }
+            }
+        }
+    },
+    "metadata": {
+        "display_name": "Dream Distribution for AC, MIDAS-based",
+        "author": "deepypavlova@email.org",
+        "description": "Dream Distribution n2(MIDAS-based),created as a part of report for AC",
+        "date_created": "2023-08-23T08:15:28"
+    }
+}
