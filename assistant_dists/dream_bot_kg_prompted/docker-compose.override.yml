@@ -280,7 +280,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        BOT_KG_SERVICE_URL: http://bot-knowledge-memorizer:8027/respond
         ENVVARS_TO_SEND: OPENAI_API_KEY
       context: .
       dockerfile: ./skills/dff_knowledge_prompted_skill/Dockerfile
