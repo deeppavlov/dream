@@ -29,11 +29,9 @@ assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is n
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
 config_path = os.getenv("CONFIG")
-with open(config_path, 'r') as config_file:
+with open(config_path, "r") as config_file:
     config = json.load(config_file)
-index_load_path = Path(os.path.expanduser(
-    config["metadata"]["variables"]["CUSTOM_EL"]
-))
+index_load_path = Path(os.path.expanduser(config["metadata"]["variables"]["CUSTOM_EL"]))
 
 kg_graph = TerminusdbKnowledgeGraph(
     db_name=TERMINUSDB_SERVER_DB,
@@ -464,7 +462,9 @@ def memorize(graph, uttrs):
                     triplet = triplets[idx]
                     if triplet["object"] == "<blank>":
                         del triplets[idx]
-                        logging.error(f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object")
+                        logging.error(
+                            f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
+                        )
 
         create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])
 
