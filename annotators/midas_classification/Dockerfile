@@ -5,17 +5,17 @@ ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
 
-RUN mkdir /src /midas
+RUN mkdir /src
+RUN mkdir /midas
 
 COPY ./requirements.txt /src/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r /src/requirements.txt && \
-    python -c "import nltk; nltk.download('punkt'); nltk.download('wordnet')" && \
-    python -m spacy download en_core_web_sm \
-
+RUN pip install -r /src/requirements.txt
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('wordnet')"
 COPY . /src/
 
 WORKDIR /src
+
+RUN python -m spacy download en_core_web_sm
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
