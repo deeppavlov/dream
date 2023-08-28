@@ -278,6 +278,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
+                    "component": "components/uKasd89kldsIK0Pd.yml",
                     "service": "annotators/bot_emotion_classifier/service_configs/bot-emotion-classifier"
                 }
             }
@@ -409,6 +410,7 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
+                    "component": "components/fuipwahef749384h2e.yml",
                     "service": "annotators/emotional_bot_response/service_configs/emotional-bot-response"
                 }
             }

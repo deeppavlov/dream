@@ -155,8 +155,8 @@ def get_dsript_type(orig_sent, type_expl):
 
 
 # emotion and mood dictionaries
-positive_emotions = ['admiration', 'joy', 'liking', 'love', 'hope', 'gratitude', 'pride', 'relief', 'surprise']
-negative_emotions = ['anger', 'resentment', 'disappointment', 'disliking', 'shame', 'distress', 'fear', 'remorse', 'surprise']
+positive_emotions = ['admiration', 'joy', 'liking', 'love', 'hope', 'gratitude', 'pride', 'relief', 'surprise', 'neutral']
+negative_emotions = ['anger', 'resentment', 'disappointment', 'disliking', 'shame', 'distress', 'fear', 'remorse', 'surprise', 'sadness', 'disgust']
 
 
 def get_pad_emotions(filename):
@@ -186,7 +186,28 @@ def get_reaction_dict(filename):
     return full_dict
 
 
-pad_emotions = get_pad_emotions('info_files/PAD_emotions.txt')
+# pad_emotions = get_pad_emotions('info_files/PAD_emotions.txt')
+
+pad_emotions = {'anger': [-0.51, 0.59, 0.25],
+                'resentment': [-0.2, -0.3, -0.2],
+                'disappointment': [-0.3, -0.4, -0.4],
+                'disgust': [-0.4, -0.2, 0.1],
+                'shame': [-0.3, 0.1, -0.6],
+                'distress': [-0.4, 0.2, 0.5],
+                'fear': [-0.64, 0.6, 0.43],
+                'sadness': [-0.3, 0.1, -0.6],
+                'admiration': [0.4, 0.3, -0.24],
+                'joy': [0.4, 0.2, 0.1],
+                'liking': [0.4, -0.16, -0.24],
+                'love': [0.3, 0.1, 0.2],
+                'surprise': [0.2, 0.2, -0.1],
+                'gratitude': [0.2, 0.5, -0.3],
+                'pride': [0.4, 0.3, 0.3],
+                'relief': [0.2, -0.3, -0.4],
+                'pity': [-0.4, -0.2, -0.5],
+                'neutral': [0.0, 0.0, 0.0]
+                }
+
 neg_reactions = get_reaction_dict('info_files/neg_reactions.txt')
 pos_reactions = get_reaction_dict('info_files/pos_reactions.txt')
 
@@ -199,6 +220,7 @@ pad_moods = {
     '1-1-1': 'docile',
     '1-11': 'relaxed',
     '-11-1': 'fear',
+    '000': 'neutral'
 }
 
 
@@ -311,9 +333,15 @@ def respond():
     logger.info('New bot mood: {}'.format(new_bot_mood))
     print('NEW BOT MOOD: ', new_bot_mood)
 
-    dim_symbols = [str(int(dim / abs(dim))) if dim != 0 else '-1' for dim in new_bot_mood]
-    octant = ''.join(dim_symbols)
-
+    octant = ''
+    for dim in new_bot_mood:
+        if dim == 0:
+            octant += '0'
+        elif dim > 0:
+            octant += '1'
+        else:
+            octant += '-1'
+    
     new_bot_mood_label = pad_moods[octant]
     logger.info('New bot mood label: {}'.format(new_bot_mood_label))
     print('NEW BOT MOOD LABEL: ', new_bot_mood_label)
@@ -342,9 +370,15 @@ try:
     new_bot_mood = get_new_mood(default_mood, bot_mood, bot_emotion)
     logger.info('New bot mood: {}'.format(new_bot_mood))
 
-    dim_symbols = [str(int(dim / abs(dim))) if dim != 0 else '-1' for dim in new_bot_mood]
-    octant = ''.join(dim_symbols)
-
+    octant = ''
+    for dim in new_bot_mood:
+        if dim == 0:
+            octant += '0'
+        elif dim > 0:
+            octant += '1'
+        else:
+            octant += '-1'
+    
     new_bot_mood_label = pad_moods[octant]
     logger.info('New bot mood label: {}'.format(new_bot_mood_label))
 

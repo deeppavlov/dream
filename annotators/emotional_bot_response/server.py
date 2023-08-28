@@ -22,8 +22,6 @@ app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
-# openai.api_key = getenv('OPENAI_API_KEY')
-
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 if GENERATIVE_SERVICE_CONFIG:
@@ -56,7 +54,7 @@ logger.info(f"Available APIs: {', '.join([api['display_name'] for api in api_con
 def timeout_handler():
     raise Exception("API timeout")
 
-def make_prompt(sentence, emotion='happy', mood='joy', intensity=7):
+def make_prompt(sentence, emotion='neutral', mood='happy', intensity=7):
     prompt = f"""You are a writer who needs to rewrite a sentence to express specific emotions, moods, and intensity levels. Your task is to generate a new sentence that conveys the desired emotions, moods, and emotion intensity (0 represents minimal intensity and 10 represents maximum intensity) while keeping the original meaning and vocabulary range. Here's the information you have:
 
     **Input:**
@@ -115,22 +113,11 @@ def get_llm_emotional_response(prompt):
 
     return response
 
-# def get_completion(prompt, model="gpt-3.5-turbo"):
-#     messages = [{"role": "user", "content": prompt}]
-#     response = openai.ChatCompletion.create(
-#         model=model,
-#         messages=messages,
-#         temperature=0.9,
-#     )
-#     return response.choices[0].message["content"]
-
-
 def rewrite_sentences(sentences, bot_emotion, bot_mood_label):
     try:
         result = []
         for sent in sentences:
             prompt = make_prompt(sent, bot_emotion, bot_mood_label, 7) # emotion, mood, intensity
-            # response = get_completion(prompt)
             response = get_llm_emotional_response(prompt)
             result.append([{"hypotheses": response}])
     except Exception as exc:
@@ -143,14 +130,14 @@ def rewrite_sentences(sentences, bot_emotion, bot_mood_label):
 
 @app.route("/respond", methods=["POST"])
 def respond():
-    logger.info(f"llm-emotion-rewriting: entered")
+    logger.info(f"emotional-bot-response: entered")
     st_time = time.time()
     sentences = request.json.get("sentences", [])
     bot_mood_label = request.json.get("bot_mood_label", "")
     bot_emotion = request.json.get("bot_emotion", "")
     result = rewrite_sentences(sentences, bot_emotion, bot_mood_label)
     total_time = time.time() - st_time
-    logger.info(f"llm-emotion-rewriting exec time: {total_time:.3f}s")
+    logger.info(f"emotional-bot-response exec time: {total_time:.3f}s")
 
     return jsonify(result)
 
@@ -163,21 +150,21 @@ def respond_batch():
     bot_emotion = request.json.get("bot_emotion", "")
     result = rewrite_sentences(sentences, bot_emotion, bot_mood_label)
     total_time = time.time() - st_time
-    logger.info(f"llm-emotion-rewriting exec time: {total_time:.3f}s")
+    logger.info(f"emotional-bot-response exec time: {total_time:.3f}s")
 
     return jsonify([{"batch": result}])
 
 
 try:
-    logger.info("llm-emotion-rewriting is starting")
+    logger.info("emotional-bot-response is starting")
 
     sentences = ['I will eat pizza.']
-    bot_mood_label = "frustrated"
+    bot_mood_label = "angry"
     bot_emotion = "anger"
     response = rewrite_sentences(sentences, bot_mood_label, bot_emotion)
     print(response)
 
-    logger.info("llm-emotion-rewriting is ready")
+    logger.info("emotional-bot-response is ready")
 except Exception as e:
     sentry_sdk.capture_exception(e)
     logger.exception(e)
