@@ -144,4 +144,9 @@ services:
       - "./annotators/personality_detection:/src"
     ports:
       - 8026:8026
+  emotion-detection:
+    volumes:
+      - "./annotators/emotion_detection:/src"
+    ports:
+      - 8027:8027
 version: "3.7"

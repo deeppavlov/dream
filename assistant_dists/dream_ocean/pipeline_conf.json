@@ -101,6 +101,22 @@
                     "service": "annotators/personality_detection/service_configs/personality_detection"
                 }
             },
+            "emotion_detection": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 3.0,
+                    "url": "http://emotion-detection:8027/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_human_bot_annotated_utterance",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "previous_services": [],
+                "is_enabled": true,
+                "source": {
+                    "component": "components/OQWoiqfnqwfnoqwib.yml",
+                    "service": "annotators/emotion_detection/service_configs/emotion_detection"
+                }
+            },
             "prompt_goals_collector": {
                 "connector": {
                     "protocol": "http",

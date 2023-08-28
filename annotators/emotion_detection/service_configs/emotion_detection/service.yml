@@ -1,0 +1,23 @@
+name: emotion-detection
+endpoints:
+- model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8027
+      SERVICE_NAME: emotion_detection
+    context: .
+    dockerfile: ./annotators/emotion_detection/Dockerfile
+  command: uvicorn server:app --host 0.0.0.0 --port 8027
+  deploy:
+    resources:
+      limits:
+        memory: 312M
+      reservations:
+        memory: 312M
+  volumes:
+  - ./annotators/emotion_detection:/src
+  ports:
+  - 8027:8027
