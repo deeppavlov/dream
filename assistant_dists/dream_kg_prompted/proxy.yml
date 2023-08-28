@@ -18,15 +18,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8021
       - PORT=8021
 
-  entity-linking:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8075
-      - PORT=8075
-
   combined-classification:
     command: ["nginx", "-g", "daemon off;"]
     build:

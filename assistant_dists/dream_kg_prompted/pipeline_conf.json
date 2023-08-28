@@ -188,7 +188,7 @@
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.5,
+                    "timeout": 5,
                     "url": "http://property-extraction:8131/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_last_bot_dialog",
@@ -499,6 +499,7 @@
         },
         "response_selectors": {
             "response_selector": {
+		"required_previous_services": ["response_annotators"],
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
