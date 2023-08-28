@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg_prompted/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_bot_kg_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, 
           ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb-server:6363, 
@@ -280,7 +280,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        BOT_KG_SERVICE_URL: http://bot-knowledge-memorizer:8027/respond
         ENVVARS_TO_SEND: OPENAI_API_KEY
       context: .
       dockerfile: ./skills/dff_knowledge_prompted_skill/Dockerfile
