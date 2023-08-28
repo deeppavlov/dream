@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg_prompted/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_bot_kg_prompted/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, 
           ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb-server:6363, 
