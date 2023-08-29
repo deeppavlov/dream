@@ -38,6 +38,9 @@ def generate_responses(image_path, prompt):
     inp_image = [utils.get_image_from_url(image_path)]
     if prompt == "":
         prompt = ["What is the image?"]
+    elif isinstance(prompt, str):
+        prompt = [prompt]
+
     text = ""
     for p in prompt:
         text += f"Q: {p}\nA:"
