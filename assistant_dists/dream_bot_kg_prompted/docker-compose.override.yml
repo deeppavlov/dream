@@ -197,7 +197,7 @@ services:
         TERMINUSDB_SERVER_TEAM: admin
         TERMINUSDB_SERVER_DB: bot_knowledge_db
         CONFIG: config.json
-        ENVVARS_TO_SEND: OPENAI_API_KEY
+        OPENAI_API_KEY: 
         CHAT_GPT_PORT: 8145
       context: ./
       dockerfile: annotators/bot_knowledge_memorizer/Dockerfile

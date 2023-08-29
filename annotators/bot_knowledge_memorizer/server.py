@@ -5,6 +5,7 @@ import json
 import logging
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
+import requests
 from uuid import uuid4
 import time
 from flask import Flask, jsonify, request
@@ -21,6 +22,8 @@ with open("rel_list.json") as file:
 
 with open("abstract_rels.txt", "r") as file:
     abstract_rels = [line.strip() for line in file.readlines()]
+
+USE_BOT_KG_DATA = os.getenv("USE_BOT_KG_DATA", False)
 
 BOT_ID = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
@@ -53,6 +56,13 @@ while True:
 
 logger.info("Graph Loaded!")
 
+DEFAULT_CONFIG = {
+    "max_tokens": 64,
+    "temperature": 0.4,
+    "top_p": 1.0,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
+}
 
 def check_property_vs_relationship(utterances_info: List[dict]) -> Tuple[list, list]:
     """Checks if the prop_ex triplets are relationship or property triplets.
@@ -449,6 +459,31 @@ def check_and_add_properties(graph, prop_triplets: List[dict], bot_id: str) -> T
             del prop["property_family"]
     return properties_to_add_to_kg, properties_already_in_kg
 
+def generate_prompt(triplets):
+    CHAT_GPT_PORT = os.getenv("CHAT_GPT_PORT")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    assert OPENAI_API_KEY, "Error: OpenAI API key is not specified in env"
+
+    url = f"http://openai-api-chatgpt:{CHAT_GPT_PORT}/respond"
+    contexts = [
+        [
+        ],
+    ]
+    prompts = [
+        # "Generate natural language sentences based on the following triplets. One sentence for each triplets"
+        "Translate from semantic triple to sentence. Triplets" # prompt seems to work best (tested on one triple only)
+        f" : {triplets}"
+    ]
+    json_input = {
+        "dialog_contexts": contexts,
+        "prompts": prompts,
+        "configs": [DEFAULT_CONFIG] * len(contexts),
+        "openai_api_keys": [OPENAI_API_KEY] * len(contexts)
+    }
+
+    return requests.post(
+        url, json=json_input
+    ).json()
 
 def get_result(request, graph):
     uttrs = request.json.get("utterances", [])
@@ -461,6 +496,17 @@ def get_result(request, graph):
         annotations = utt.get("annotations", {})
         custom_el_annotations = annotations.get("custom_entity_linking", [])
         logger.info(f"custom_el_annotations --  {custom_el_annotations}")
+
+        # To get mentions from custom-el, if needed (to be decided)
+
+        # entities_with_types = {}
+        # found_kg_ids = []
+        # for entity_info in custom_el_annotations:
+        #     if entity_info.get("entity_id_tags", []):
+        #         entities_with_types[(entity_info["entity_substr"], entity_info["entity_id_tags"][0])] = \
+        #             entity_info["entity_ids"][0]
+        #     found_kg_ids.append(entity_info["entity_ids"][0])
+
         prop_ex_annotations = annotations.get("property_extraction", [])
         logger.debug(f"prop_ex_annotations before upper-casing --  {prop_ex_annotations}")
         for annotation in prop_ex_annotations:
@@ -469,6 +515,26 @@ def get_result(request, graph):
                     if triplet["object"] == "<blank>":
                         del annotation[idx]
                         logging.error(f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object")
+
+        # Part to use custom knowledge in LLM prompt (in progress)
+
+        # triplets = []
+        # for entity, entity_id in entities_with_types.items():
+        #     rels = graph.search_for_relationships(id_a=BOT_ID, id_b=entity_id)
+        #     logger.info(f"rels from custom_el in KG --||-- {rels}")
+        #     for rel in rels:
+        #         triplets.append(["User", rel['rel'].split('_')[0].lower(), entity[0]]) #TODO: you can do better than this naive split
+
+        # triplets = ", ".join([str(triplet) for triplet in triplets])
+        # logger.info(f"triplets -- {triplets}")
+        # bot_triplets = graph.search_for_relationships(id_a=BOT_ID)
+        # bot_triplets = [("Bot", triplet["rel"], triplet["id_b"]) for triplet in bot_triplets]
+        bot_triplets = [("Bot", "like general", "football")] # test example
+
+        if bot_triplets and USE_BOT_KG_DATA:
+            prompt = generate_prompt(bot_triplets)
+        else:
+            prompt = ""
 
         create_entities(graph, [(bot_external_id, "Bot")], has_name_property=True, entity_ids=[bot_id])
 
@@ -527,9 +593,9 @@ def get_result(request, graph):
 
         triplets_added_to_kg += properties_added_to_kg
         triplets_already_in_kg += properties_already_in_kg
-
-        logger.info(f"added_to_graph -- {triplets_added_to_kg}, triplets_already_in_graph -- {triplets_already_in_kg}")
-        return [{"added_to_graph": triplets_added_to_kg, "triplets_already_in_graph": triplets_already_in_kg}]
+    
+        logger.info(f"added_to_graph -- {triplets_added_to_kg}, triplets_already_in_graph -- {triplets_already_in_kg}, kg_prompt -- {prompt}")
+        return [{"added_to_graph": triplets_added_to_kg, "triplets_already_in_graph": triplets_already_in_kg, "kg_prompt": prompt}]
     
     return [{"added_to_graph": [], "triplets_already_in_graph": []}]
 
