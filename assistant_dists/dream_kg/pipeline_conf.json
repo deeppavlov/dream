@@ -200,6 +200,7 @@
             "custom_entity_linking": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2.0,
                     "url": "http://custom-entity-linking:8153/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:custom_el_formatter_dialog",
@@ -384,6 +385,25 @@
                 "source": {
                     "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
                     "service": "annotators/combined_classification/service_configs/combined-classification"
+                }
+            },
+            "user_knowledge_memorizer": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://user-knowledge-memorizer:8027/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_human_annotated_utterance",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.property_extraction",
+                    "annotators.custom_entity_linking"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/74p4006d17yappr7ji7dtf.yml",
+                    "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer"
                 }
             }
         },

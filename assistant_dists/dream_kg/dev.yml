@@ -84,4 +84,11 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 6363:6363
+  user-knowledge-memorizer:
+    volumes:
+      - "./annotators/user_knowledge_memorizer:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8027:8027
 version: "3.7"

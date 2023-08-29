@@ -7,7 +7,7 @@ services:
           ner:8021, spelling-preprocessing:8074, entity-linking:8075,
           combined-classification:8087, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153,
-          terminusdb-server:6363"
+          terminusdb-server:6363, user-knowledge-memorizer:8027"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -230,4 +230,28 @@ services:
 
   terminusdb-server:
     image: terminusdb/terminusdb-server:v10.1.10
+
+  user-knowledge-memorizer:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8027
+        SRC_DIR: annotators/user_knowledge_memorizer/
+        SERVICE_NAME: user_knowledge_memorizer
+        TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
+        TERMINUSDB_SERVER_PASSWORD: root
+        TERMINUSDB_SERVER_TEAM: admin
+        TERMINUSDB_SERVER_DB: user_knowledge_db
+        CONFIG: config.json
+      context: ./
+      dockerfile: annotators/user_knowledge_memorizer/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8027
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
 version: '3.7'
