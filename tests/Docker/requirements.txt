@@ -1,0 +1,4 @@
+click==8.1.6
+PyYAML==6.0.1
+python-dotenv==1.0.0
+python-on-whales==0.64.1

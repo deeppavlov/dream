@@ -1,0 +1,63 @@
+name: Dream Tests
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: [self-hosted]
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: Add .env_secret file
+      run: touch .env_secret
+
+    - name: Add google api keys
+      run: ./tests/test.sh MODE=add-google
+
+    - name: Build universal_prompted_assistant
+      run: ./tests/test.sh BOT=universal_prompted_assistant MODE=build
+
+    - name: Start universal_prompted_assistant
+      run: |
+        ./tests/test.sh BOT=universal_prompted_assistant MODE=clean
+        ./tests/test.sh BOT=universal_prompted_assistant MODE=start
+
+    - name: Test universal_prompted_assistant
+      run: |
+        ./tests/test.sh BOT=universal_prompted_assistant MODE=test
+        ./tests/test.sh BOT=universal_prompted_assistant MODE=clean
+
+    - name: Add openai api key
+      run: |
+        ./tests/test.sh MODE=add-openai
+
+    - name: Build multiskill_ai_assistant
+      run: ./tests/test.sh BOT=multiskill_ai_assistant MODE=build
+
+    - name: Start multiskill_ai_assistant
+      run: |
+        ./tests/test.sh BOT=multiskill_ai_assistant MODE=clean
+        ./tests/test.sh BOT=multiskill_ai_assistant MODE=start
+
+    - name: Test multiskill_ai_assistant
+      run: |
+        ./tests/test.sh BOT=multiskill_ai_assistant MODE=test
+        ./tests/test.sh BOT=multiskill_ai_assistant MODE=clean
+
+    - name: Logs
+      if: failure()
+      run: |
+        ./tests/test.sh BOT=multiskill_ai_assistant MODE=logs
+        ./tests/test.sh BOT=universal_prompted_assistant MODE=logs
+
+    - name: Cleanup
+      if: always()
+      run: |
+        ./tests/test.sh BOT=universal_prompted_assistant MODE=clean
+        ./tests/test.sh BOT=multiskill_ai_assistant MODE=clean
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      GOOGLE_CSE_ID: ${{ secrets.GOOGLE_CSE_ID }}
