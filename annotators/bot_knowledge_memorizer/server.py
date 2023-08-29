@@ -195,7 +195,7 @@ def create_entities(
     logger.debug(f"entities_info_lists -- {entities_info_lists}")
 
     try:
-        graph.ontology.create_entity_kinds(entities_info_lists["tags_list"])
+        graph.ontology.create_entity_kinds(set(entities_info_lists["tags_list"]))
     except ValueError:
         logger.info(f"All entity kinds '{entities_info_lists['tags_list']}' are already in KG")
 
