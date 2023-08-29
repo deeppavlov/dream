@@ -257,6 +257,14 @@ class RuleBasedSkillSelectorConnector:
                     if "dff_voice_skill" in skills_for_uttr:
                         skills_for_uttr.pop(skills_for_uttr.index("dff_voice_skill"))
 
+                if user_uttr["attributes"].get("sound_path") is not None:
+                    # logger.info(f'VOICE DETECTED: {user_uttr["attributes"].get("sound_path")}')
+                    if "dff_whisper_at_skill" not in skills_for_uttr:
+                        skills_for_uttr.append("dff_whisper_at_skill")
+                else:
+                    if "dff_whisper_at_skill" in skills_for_uttr:
+                        skills_for_uttr.pop(skills_for_uttr.index("dff_whisper_at_skill"))
+
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 
             if "dff_coronavirus_skill" in skills_for_uttr:

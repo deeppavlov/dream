@@ -81,4 +81,12 @@ services:
       - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8444:8444
+
+  dff-whisper-at-skill:
+    volumes:
+      - "./skills/dff_whisper_at_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8555:8555
+      
 version: "3.7"
