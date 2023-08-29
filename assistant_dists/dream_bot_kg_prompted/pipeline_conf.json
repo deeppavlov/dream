@@ -395,7 +395,9 @@
                     "skill_name": "dff_knowledge_prompted_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
+                "required_previous_services": [
+                    "response_annotators.custom_entity_linking",
+                    "response_annotators.bot_knowledge_memorizer",
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis",
