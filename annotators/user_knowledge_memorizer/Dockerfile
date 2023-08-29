@@ -23,7 +23,7 @@ COPY ./annotators/user_knowledge_memorizer/requirements.txt .
 RUN pip install --upgrade pip && \
     pip install --no-cache -r /src/requirements.txt && \
     python -m nltk.downloader wordnet && \
-    pip install git+https://github.com/deeppavlov/custom_kg_svc.git@feat/support_index
+    pip install git+https://github.com/deeppavlov/custom_kg_svc.git@724513b4
     
 COPY $SRC_DIR .
 
