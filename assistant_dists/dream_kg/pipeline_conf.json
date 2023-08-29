@@ -200,6 +200,7 @@
             "custom_entity_linking": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2.0,
                     "url": "http://custom-entity-linking:8153/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:custom_el_formatter_dialog",
@@ -314,6 +315,24 @@
             }
         },
         "candidate_annotators": {
+            "sentence_ranker": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://sentence-ranker:8128/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
+                }
+            },
             "spacy_nounphrases": {
                 "connector": {
                     "protocol": "http",
@@ -371,6 +390,7 @@
             "user_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 2.0,
                     "url": "http://user-knowledge-memorizer:8027/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_annotated_utterance",
@@ -468,9 +488,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://ranking-based-response-selector:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
@@ -478,8 +498,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ly2AVNtIcJpTWz1qJ1mvKQ.yml",
-                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }

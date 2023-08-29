@@ -2,8 +2,8 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "
-          spacy-nounphrases:8006, sentseg:8011, convers-evaluation-selector:8009,
+      WAIT_HOSTS: "sentence-ranker:8128,
+          spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002,
           ner:8021, spelling-preprocessing:8074, entity-linking:8075,
           combined-classification:8087, entity-detection:8103,
           property-extraction:8136, custom-entity-linking:8153,
@@ -15,6 +15,25 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
 
   spacy-nounphrases:
     env_file: [ .env ]
@@ -48,33 +67,21 @@ services:
         reservations:
           memory: 1.5G
 
-  convers-evaluation-selector:
+  ranking-based-response-selector:
     env_file: [ .env ]
     build:
       args:
-        TAG_BASED_SELECTION: 1
-        CALL_BY_NAME_PROBABILITY: 0.5
-        PROMPT_PROBA: 0.1
-        ACKNOWLEDGEMENT_PROBA: 0.3
-        PRIORITIZE_WITH_REQUIRED_ACT: 0
-        PRIORITIZE_NO_DIALOG_BREAKDOWN: 0
-        PRIORITIZE_WITH_SAME_TOPIC_ENTITY: 0
-        IGNORE_DISLIKED_SKILLS: 0
-        GREETING_FIRST: 1
-        RESTRICTION_FOR_SENSITIVE_CASE: 1
-        PRIORITIZE_PROMTS_WHEN_NO_SCRIPTS: 1
-        MAX_TURNS_WITHOUT_SCRIPTS: 7
-        ADD_ACKNOWLEDGMENTS_IF_POSSIBLE: 1
-        PRIORITIZE_SCRIPTED_SKILLS: 0
-        CONFIDENCE_STRENGTH: 0.8
-        CONV_EVAL_STRENGTH: 0.4
-        PRIORITIZE_HUMAN_INITIATIVE: 1
-        QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
         LANGUAGE: EN
-        FALLBACK_FILE: fallbacks_dream_en.json
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
       context: .
-      dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8009
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
     environment:
       - FLASK_APP=server
     deploy:
@@ -188,7 +195,8 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: t5_generative_ie_lite_infer.json
+        CONFIG_T5: t5_generative_ie_lite_infer.json
+        CONFIG_REL_RANKER: rel_ranking_roberta.json
         SERVICE_PORT: 8136
         SRC_DIR: annotators/property_extraction/
         SERVICE_NAME: property_extraction
@@ -197,6 +205,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8136
     environment:
       - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -234,7 +243,7 @@ services:
         TERMINUSDB_SERVER_PASSWORD: root
         TERMINUSDB_SERVER_TEAM: admin
         TERMINUSDB_SERVER_DB: user_knowledge_db
-        INDEX_LOAD_PATH: /root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
+        CONFIG: config.json
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
     command: flask run -h 0.0.0.0 -p 8027

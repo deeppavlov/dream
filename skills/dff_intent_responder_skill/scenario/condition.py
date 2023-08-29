@@ -18,5 +18,7 @@ def intent_catcher_exists_condition(ctx: Context, actor: Actor, *args, **kwargs)
         which="intent_catcher",
     )
 
+    logger.info(f"INTENTS LIST: {intents_by_catcher}")
+
     response_funcs = get_respond_funcs()
     return bool(any([intent in response_funcs for intent in intents_by_catcher]))

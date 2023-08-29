@@ -29,7 +29,10 @@ TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is not specified")
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
-INDEX_LOAD_PATH = Path(os.path.expanduser(os.getenv("INDEX_LOAD_PATH")))
+config_path = os.getenv("CONFIG")
+with open(config_path, "r") as config_file:
+    config = json.load(config_file)
+index_load_path = Path(os.path.expanduser(config["metadata"]["variables"]["CUSTOM_EL"]))
 
 while True:
     try:
@@ -38,7 +41,7 @@ while True:
             team=TERMINUSDB_SERVER_TEAM,
             server=TERMINUSDB_SERVER_URL,
             password=TERMINUSDB_SERVER_PASSWORD,
-            index_load_path=INDEX_LOAD_PATH,
+            index_load_path=index_load_path,
         )
         logger.info(f"TERMINUSDB_SERVER_URL: {TERMINUSDB_SERVER_URL} is ready")
         break
@@ -464,10 +467,12 @@ def memorize(graph, uttrs):
         logger.debug(f"prop_ex_annotations before upper-casing --  {prop_ex_annotations}")
         for annotation in prop_ex_annotations:
             if "triplets" in annotation:
-                for idx, triplet in enumerate(annotation.copy()["triplets"]):
+                triplets = annotation["triplets"]
+                for idx in reversed(range(len(triplets))):
+                    triplet = triplets[idx]
                     if triplet["object"] == "<blank>":
-                        del annotation[idx]
-                        logging.warning(
+                        del triplets[idx]
+                        logging.error(
                             f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
                         )
 
