@@ -85,6 +85,7 @@ class EntityLinker(Component, Serializable):
         entity_substr_batch: List[List[str]],
         entity_tags_batch: List[List[str]] = None,
     ):
+        user_ids = [user_id.replace("/", "slash").replace("-", "hyphen") for user_id in user_ids]
         entity_ids_batch, entity_conf_batch, entity_id_tags_batch = [], [], []
         for user_id, entity_substr_list, entity_tags_list in zip(user_ids, entity_substr_batch, entity_tags_batch):
             entity_ids_list, entity_conf_list, entity_id_tags_list = self.link_entities(
