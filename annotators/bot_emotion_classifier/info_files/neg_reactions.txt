@@ -1,0 +1,49 @@
+anger	shame
+resentment	distress
+disappointment	shame
+disgust	distress
+shame	shame
+distress	shame
+fear	shame
+sadness	shame
+surprise	shame
+
+anger	pity
+resentment	pity
+disappointment	pity
+disgust	neutral
+shame	pity
+distress	pity
+fear	fear
+sadness	pity
+surprise	pity
+
+anger	anger
+resentment	resentment
+disappointment	disappointment
+disgust	disgust
+shame	shame
+distress	distress
+fear	fear
+sadness	sadness
+surprise	distress
+
+anger	resentment
+resentment	resentment
+disappointment	distress
+disgust	resentment
+shame	resentment
+distress	distress
+fear	fear
+sadness	resentment
+surprise	distress
+
+anger	pity
+resentment	pity
+disappointment	pity
+disgust	pity
+shame	pity
+distress	pity
+fear	pity
+sadness	pity
+surprise	pity
