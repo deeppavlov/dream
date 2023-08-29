@@ -456,5 +456,7 @@ services:
           memory: 312M
         reservations:
           memory: 312M
+    environment:
+      - FLASK_APP=server
 
 version: '3.7'

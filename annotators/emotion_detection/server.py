@@ -1,8 +1,8 @@
 import logging
 import os
 import opensmile
-from models import MultimodalClassificaionModel, MainModel
-from utils import prepare_models
+from multimodal_concat.models import MultimodalClassificaionModel, MainModel
+from multimodal_concat.utils import prepare_models
 
 import torch
 import numpy as np
