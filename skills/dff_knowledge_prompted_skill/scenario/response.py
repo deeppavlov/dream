@@ -19,12 +19,13 @@ logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
-USE_KG_DATA = getenv("USE_KG_DATA", False)
+USE_KG_DATA = getenv("USE_KG_DATA", False) # set variable not in .env but in Dockerfile and docker-compose
+USE_BOT_KG_DATA = getenv("USE_BOT_KG_DATA", False)
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 
-PROMPT_FILE = getenv("PROMPT_FILE")
+PROMPT_FILE = getenv("PROMPT_FILE") # set prompt in docker-compose?
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 ALLOW_PROMPT_RESET = int(getenv("ALLOW_PROMPT_RESET", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
@@ -100,6 +101,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     prompt = shared_memory.get("prompt", "")
     prompt = prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
 
+    # # To use knowledge about user
     # custom_el = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("custom_entity_linking")
     # user_kg = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("user_knowledge_graph")
     # logger.info(f"custom_el: {custom_el}")
@@ -109,6 +111,24 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     #     kg_prompt = re.sub(r'[-\n]', '', kg_prompt[0][0].lower()).split('.')
     #     kg_prompt = ",".join(kg_prompt[:-1])
     #     prompt = prompt + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
+
+    # # To use knowledge abaout bot
+    bot_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("bot_utterances", [{}])
+    if bot_utterances:
+        custom_el = bot_utterances[-1].get("annotations", {}).get("custom_entity_linking")
+        bot_kg = bot_utterances[-1].get("annotations", {}).get("bot_knowledge_memorizer")
+    else:
+        custom_el = {}
+        bot_kg = {}
+    logger.info(f"custom_el: {custom_el}")
+    logger.info(f"bot_kg: {bot_kg}")
+
+    if USE_BOT_KG_DATA and bot_kg and (kg_prompt:=bot_kg["kg_prompt"]):
+        logger.info(f"USE_BOT_KG_DATA - {USE_BOT_KG_DATA}")
+        logger.info(f"kg_prompt - {kg_prompt}")
+        kg_prompt = re.sub(r'[-\n]', '', kg_prompt[0][0].lower()).split('.')
+        kg_prompt = ",".join(kg_prompt[:-1])
+        prompt = prompt + f" {kg_prompt}. INSTRUCTION: Now respond to a user. Be concise, but engaging. Answer in 1, 2 or 3 sentences."
 
     logger.info(f"prompt: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
