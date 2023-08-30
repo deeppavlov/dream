@@ -62,7 +62,7 @@ while True:
         logger.info(f"TERMINUSDB_SERVER_URL: {TERMINUSDB_SERVER_URL} is ready")
         break
     except Exception as exc:
-        print(exc)
+        logger.error(exc)
         time.sleep(5)
         continue
 

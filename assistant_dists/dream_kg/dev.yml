@@ -96,11 +96,11 @@ services:
       - "./skills/dff_user_kg_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8132:8132
+      - 8028:8028
   dff-travel-italy-skill:
     volumes:
       - "./skills/dff_travel_italy_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8139:8139
+      - 8025:8025
 version: "3.7"

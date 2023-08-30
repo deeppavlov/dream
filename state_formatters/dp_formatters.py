@@ -995,7 +995,6 @@ def dff_user_kg_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_travel_italy_skill_formatter(dialog: Dict) -> List[Dict]:
-    logger.info(f"here are the utt:\n {dialog.get('human_utterances')}")
     return utils.dff_formatter(dialog, "dff_travel_italy_skill")
 
 
