@@ -1,11 +1,14 @@
-FROM python:3.9
+FROM nvidia/cuda:12.1.1-base-ubuntu20.04
++
+RUN apt update
+RUN apt install -y python3.9
+RUN apt install -y git python3-pip
 
 WORKDIR /src
 
 COPY . /src
 RUN pip install -r requirements.txt
 
-RUN apt update
 RUN apt install -y ffmpeg libsm6 libxext6
 
 RUN pip install gdown

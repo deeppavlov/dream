@@ -125,7 +125,7 @@ tensorflow==2.13.0
 tensorflow-estimator==2.13.0
 tensorflow-io-gcs-filesystem==0.32.0
 termcolor==2.2.0
-tifffile==2023.7.18
+tifffile==2023.7.10
 tokenizers==0.12.1
 torch==1.13.1
 torch-optimizer==0.3.0

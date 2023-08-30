@@ -21,6 +21,8 @@ text_model, video_model, audio_model = prepare_models(num_labels, "./")
 
 logger = logging.getLogger(__name__)
 
+prefix = "Detect emotions:"
+prefix_len = len(prefix)
 
 def sample_frame_indices(seg_len, clip_len=16, frame_sample_rate=4, mode="video"):
     converted_len = int(clip_len * frame_sample_rate)
@@ -132,12 +134,12 @@ final_model = create_final_model()
 @app.route("/model", methods=["POST"])
 def infer():
     msg_text = request.json["last_human_utterances"][-1]["text"]
-    msg_split = msg_text.split('\n')
 
-    if all([len(msg_split) == 2, "https://" in msg_split[1], len(msg_split[0])]):
+    if prefix in msg_text:
         try:
-            logger.info(f"Emotion Detection: {msg_text}")
-            emotion = predict_emotion(msg_split[0], msg_split[1])
+            text = msg_text[prefix_len:]
+            logger.info(f"Emotion Detection: {text}")
+            emotion = predict_emotion(text, "/src/datafiles/vid.mp4")
         except Exception as e:
             raise ValueError(f"The message format is correct, but: {e}")
     else:

@@ -455,6 +455,7 @@ services:
         reservations:
           memory: 312M
     environment:
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
 
 version: '3.7'
