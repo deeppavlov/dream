@@ -1259,24 +1259,27 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
     # comment out the next two lines to save dialog data to see its contents
     # with open('test_formatters.json', 'w', encoding='utf-8') as f:
     #     json.dump(dialog, f, ensure_ascii=False, indent=4)
-    user_emotions = dialog["human_utterances"][-1]["annotations"].get("combined_classification", {}).get("emotion_classification", {})
+    user_emotions = dialog["human_utterances"][-1]["annotations"].get("combined_classification", 
+                                                                      {}).get("emotion_classification", {})
     if (user_emotions):
         user_emotion = max(user_emotions, key=user_emotions.get)
     else:
         user_emotion = "neutral"
 
-    sentiments = dialog["human_utterances"][-1]["annotations"].get("combined_classification", {}).get("sentiment_classification", {})
+    sentiments = dialog["human_utterances"][-1]["annotations"].get("combined_classification", 
+                                                                   {}).get("sentiment_classification", {})
     if (sentiments):
         sent = max(sentiments, key=sentiments.get)
     else:
         sent = "neutral"
 
     if len(dialog["human_utterances"]) > 1:
-        bot_mood = dialog["human_utterances"][-2]["annotations"].get("bot_emotion_classifier", {}).get("bot_mood", [0.75, 0.25, 0.44])
+        bot_mood = dialog["human_utterances"][-2]["annotations"].get("bot_emotion_classifier", 
+                                                                     {}).get("bot_mood", [0.75, 0.25, 0.44])
     else:
         bot_mood = [0.75, 0.25, 0.44]
 
-    return [{"sentences": dialog["human_utterances"][-1]["text"], 
+    return [{"sentences": dialog["human_utterances"][-1]["text"],
              "user_emotion": user_emotion,
              "sentiment": sent,
              "bot_mood": bot_mood}]
@@ -1289,8 +1292,10 @@ def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
 
-    bot_mood_label = dialog["human_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_mood_label", "happy")
-    bot_emotion = dialog["human_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_emotion", "neutral")
+    bot_mood_label = dialog["human_utterances"][-1]["annotations"].get("bot_emotion_classifier", 
+                                                                       {}).get("bot_mood_label", "happy")
+    bot_emotion = dialog["human_utterances"][-1]["annotations"].get("bot_emotion_classifier", 
+                                                                    {}).get("bot_emotion", "neutral")
     return [{"sentences": hypots,
              "bot_mood_label": bot_mood_label,
              "bot_emotion": bot_emotion}]

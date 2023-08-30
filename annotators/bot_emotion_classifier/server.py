@@ -155,8 +155,11 @@ def get_dsript_type(orig_sent, type_expl):
 
 
 # emotion and mood dictionaries
-positive_emotions = ['admiration', 'joy', 'liking', 'love', 'hope', 'gratitude', 'pride', 'relief', 'surprise', 'neutral']
-negative_emotions = ['anger', 'resentment', 'disappointment', 'disliking', 'shame', 'distress', 'fear', 'remorse', 'surprise', 'sadness', 'disgust']
+positive_emotions = ['admiration', 'joy', 'liking', 'love', 'hope', 
+                     'gratitude', 'pride', 'relief', 'surprise', 'neutral']
+negative_emotions = ['anger', 'resentment', 'disappointment', 'disliking', 
+                     'shame', 'distress', 'fear', 'remorse', 'surprise', 
+                     'sadness', 'disgust']
 
 
 def get_pad_emotions(filename):
@@ -182,8 +185,9 @@ def get_reaction_dict(filename):
         for line in lines:
             parts = line.split('\t')
             type_dict[parts[0]] = parts[1]
-        full_dict[i+1] = type_dict
+        full_dict[i + 1] = type_dict
     return full_dict
+
 
 pad_emotions = {'anger': [-0.51, 0.59, 0.25],
                 'resentment': [-0.2, -0.3, -0.2],
@@ -262,7 +266,7 @@ def get_dim_decay(default_dim, curr_dim):
     p_dif = abs(default_dim - curr_dim)
     if p_dif == 0:
         p_dif = 0.00001
-    decay = 1/p_dif * 0.01
+    decay = 1 / p_dif * 0.01
     if decay > p_dif:
         decay = p_dif
     if default_dim < curr_dim:
@@ -281,7 +285,7 @@ def get_decay(default_mood, curr_mood):
 def check_same_mood(curr_mood, new_mood):
     print(curr_mood, new_mood)
     for i in range(len(curr_mood)):
-        if curr_mood[i]*new_mood[i] < 0:
+        if curr_mood[i] * new_mood[i] < 0:
             return False
     return True
 
@@ -336,12 +340,12 @@ def respond():
             octant += '1'
         else:
             octant += '-1'
-    
+
     new_bot_mood_label = pad_moods[octant]
     logger.info('New bot mood label: {}'.format(new_bot_mood_label))
     print('NEW BOT MOOD LABEL: ', new_bot_mood_label)
 
-    return jsonify([{"bot_mood": new_bot_mood, 
+    return jsonify([{"bot_mood": new_bot_mood,
                      "bot_mood_label": new_bot_mood_label,
                      "bot_emotion": bot_emotion}])
 
@@ -373,7 +377,7 @@ try:
             octant += '1'
         else:
             octant += '-1'
-    
+
     new_bot_mood_label = pad_moods[octant]
     logger.info('New bot mood label: {}'.format(new_bot_mood_label))
 
