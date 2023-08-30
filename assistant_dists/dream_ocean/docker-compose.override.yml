@@ -449,8 +449,6 @@ services:
       context: annotators/emotion_detection
     command: flask run -h 0.0.0.0 -p 8027
     deploy:
-      mode: replicated
-      replicas: 1
       resources:
         limits:
           memory: 312M

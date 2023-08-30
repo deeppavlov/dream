@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 label2id = {'anger': 0, 'disgust': 1, 'fear': 2, 'joy': 3, 'neutral': 4, 'sadness': 5, 'surprise': 6}
 num_labels = 7
-text_model, video_model, audio_model = prepare_models(num_labels)
+text_model, video_model, audio_model = prepare_models(num_labels, "./")
 
 logger = logging.getLogger(__name__)
 
