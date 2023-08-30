@@ -122,9 +122,7 @@ def process_audio(file_path: str):
     )
 
     audio_features = smile.process_files([file_path])
-    return audio_features.values.reshape(
-        audio_features.shape[0], 1, audio_features.shape[1]
-    )
+    return audio_features.values.reshape(audio_features.shape[0], 1, audio_features.shape[1])
 
 
 def inference(text: str, video_path: str):
@@ -166,9 +164,7 @@ def infer():
         except Exception as e:
             raise ValueError(f"The message format is correct, but: {e}")
     else:
-        raise ValueError(
-            "Input should be text and a videofile link on two separate lines."
-        )
+        raise ValueError("Input should be text and a videofile link on two separate lines.")
     return jsonify(emotion)
 
 
