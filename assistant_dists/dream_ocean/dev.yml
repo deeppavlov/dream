@@ -149,5 +149,5 @@ services:
       - "./annotators/emotion_detection:/src/drm"
       - "/home/dikanskiy/emotion_test:/src/datafiles"
     ports:
-      - 8027:8027
+      - 8025:8025
 version: "3.7"

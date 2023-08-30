@@ -11,7 +11,7 @@ group: annotators
 connector:
   protocol: http
   timeout: 15.0
-  url: http://emotion-detection:8027/model
+  url: http://emotion-detection:8025/model
 dialog_formatter: state_formatters.dp_formatters:last_human_bot_annotated_utterance
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services: null
