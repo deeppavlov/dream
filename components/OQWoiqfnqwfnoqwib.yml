@@ -5,12 +5,12 @@ model_type: ML-based
 is_customizable: false
 author: publisher@deeppavlov.ai
 description: Emotion detection annotator.
-ram_usage: 312M
-gpu_usage: null
+ram_usage: 1G
+gpu_usage: 1G
 group: annotators
 connector:
   protocol: http
-  timeout: 3.0
+  timeout: 15.0
   url: http://emotion-detection:8027/model
 dialog_formatter: state_formatters.dp_formatters:last_human_bot_annotated_utterance
 response_formatter: state_formatters.dp_formatters:simple_formatter_service

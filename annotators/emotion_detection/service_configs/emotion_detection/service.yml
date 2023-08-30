@@ -8,16 +8,17 @@ compose:
     args:
       SERVICE_PORT: 8027
       SERVICE_NAME: emotion_detection
+      CUDA_VISIBLE_DEVICES: 0
     context: .
     dockerfile: ./annotators/emotion_detection/Dockerfile
   command: uvicorn server:app --host 0.0.0.0 --port 8027
   deploy:
     resources:
       limits:
-        memory: 312M
+        memory: 1G
       reservations:
-        memory: 312M
+        memory: 1G
   volumes:
-  - ./annotators/emotion_detection:/src
+  - ./annotators/emotion_detection:/src/drm
   ports:
   - 8027:8027

@@ -451,9 +451,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 312M
+          memory: 1G
         reservations:
-          memory: 312M
+          memory: 1G
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
