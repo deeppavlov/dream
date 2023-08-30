@@ -110,7 +110,7 @@ def process_audio(file_path: str):
     return audio_features.values.reshape(audio_features.shape[0], 1, audio_features.shape[1])
 
 
-def infer(text: str, video_path: str):
+def inference(text: str, video_path: str):
     text_encoding = process_text(text)
     video_encoding = process_video(video_path)
     audio_features = process_audio(video_path)
@@ -122,7 +122,7 @@ def infer(text: str, video_path: str):
 
 def predict_emotion(text: str, video_path: str):
     try:
-        return infer(text, video_path)
+        return inference(text, video_path)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         raise e
@@ -140,6 +140,7 @@ def infer():
             text = msg_text[prefix_len:]
             logger.info(f"Emotion Detection: {text}")
             emotion = predict_emotion(text, "/src/datafiles/vid.mp4")
+            logger.info(f"Detected emotion: {jsonify(emotion)}")
         except Exception as e:
             raise ValueError(f"The message format is correct, but: {e}")
     else:

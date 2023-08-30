@@ -1,5 +1,5 @@
 FROM nvidia/cuda:12.1.1-base-ubuntu20.04
-+
+
 RUN apt update
 RUN apt install -y python3.9
 RUN apt install -y git python3-pip
