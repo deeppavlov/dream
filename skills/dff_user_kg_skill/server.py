@@ -59,6 +59,7 @@ def handler(requested_data, random_seed=None):
     logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
     return responses
 
+
 try:
     test_server.run_test(handler)
     logger.info("test query processed")
