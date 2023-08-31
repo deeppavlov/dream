@@ -46,11 +46,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
