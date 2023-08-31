@@ -3,8 +3,8 @@ from time import time
 
 
 def main_test():
-    url = "http://0.0.0.0:8087/model"
-    batch_url = "http://0.0.0.0:8087/batch_model"
+    url = "http://0.0.0.0:8198/model"
+    batch_url = "http://0.0.0.0:8198/batch_model"
     configs = [
         {
             "sentences": ["do you like porn"],

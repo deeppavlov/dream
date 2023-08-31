@@ -43,7 +43,7 @@ def get_result(sentences, sentences_with_history, postannotations=False):
 
 
 try:
-    model = build_model("combined_classifier.json", download=True)
+    model = build_model("combined_classifier_ru.json", download=True)
     logger.info("Making test res")
     test_res = get_result(["a"], ["a"])
     logger.info("model loaded, test query processed")
