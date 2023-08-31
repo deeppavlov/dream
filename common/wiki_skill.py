@@ -679,7 +679,7 @@ def extract_entity(ctx, entity_type):
         if entities:
             return entities[0]
     else:
-        res = re.findall(entity_type, user_uttr["text"])
+        res = re.findall(entity_type, user_uttr.get("text", ""))
         if res:
             return res[0]
     return ""

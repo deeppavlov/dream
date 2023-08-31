@@ -91,4 +91,16 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8027:8027
+  dff-user-kg-skill:
+    volumes:
+      - "./skills/dff_user_kg_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8028:8028
+  dff-travel-italy-skill:
+    volumes:
+      - "./skills/dff_travel_italy_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8025:8025
 version: "3.7"

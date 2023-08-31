@@ -990,6 +990,14 @@ def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
 
+def dff_user_kg_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_user_kg_skill")
+
+
+def dff_travel_italy_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_travel_italy_skill")
+
+
 def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
     intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
     called_intents = {intent: False for intent in intents}
