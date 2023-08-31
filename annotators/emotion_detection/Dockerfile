@@ -9,7 +9,7 @@ WORKDIR /src
 COPY . /src
 RUN pip install -r requirements.txt
 
-RUN apt install -y ffmpeg==7:4.2.7-0ubuntu0.1 libsm6==2:1.2.3-1 libxext6==2:1.3.4-0ubuntu1
+RUN apt install -y ffmpeg=7:4.2.7-0ubuntu0.1 libsm6=2:1.2.3-1 libxext6=2:1.3.4-0ubuntu1
 
 RUN pip install gdown==4.7.1
 

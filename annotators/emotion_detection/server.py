@@ -194,7 +194,7 @@ def subinfer(msg_text):
             text = msg_text[prefix_len:]
             logger.info(f"Emotion Detection: {text}")
             emotion = predict_emotion(text, "/src/datafiles/vid.mp4")
-            logger.info(f"Detected emotion: {jsonify(emotion)}")
+            logger.info(f"Detected emotion: {jsonify_data(emotion)}")
         except Exception as e:
             raise ValueError(f"The message format is correct, but: {e}")
     else:
