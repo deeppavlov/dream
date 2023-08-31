@@ -7,13 +7,14 @@ from multimodal_concat.utils import prepare_models
 import torch
 import numpy as np
 import sentry_sdk
-from flask import Flask, jsonify, request
-from sentry_sdk.integrations.flask import FlaskIntegration
+from fastapi import FastAPI, Body
+from pydantic import BaseModel
+from starlette.middleware.cors import CORSMiddleware
 from transformers import AutoTokenizer, AutoProcessor
+from typing import Any, List
 import cv2
 
-sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-app = Flask(__name__)
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
 label2id = {
     "anger": 0,
@@ -31,6 +32,38 @@ logger = logging.getLogger(__name__)
 
 prefix = "Detect emotions:"
 prefix_len = len(prefix)
+
+
+def jsonify_data(data: Any) -> Any:
+    """Replaces JSON-non-serializable objects with JSON-serializable.
+
+    Function replaces numpy arrays and numbers with python lists and numbers, tuples is replaces with lists. All other
+    object types remain the same.
+
+    Args:
+        data: Object to make JSON-serializable.
+
+    Returns:
+        Modified input data.
+
+    """
+    if isinstance(data, (list, tuple)):
+        result = [jsonify_data(item) for item in data]
+    elif isinstance(data, dict):
+        result = {}
+        for key in data.keys():
+            result[key] = jsonify_data(data[key])
+    elif isinstance(data, np.ndarray):
+        result = data.tolist()
+    elif isinstance(data, np.integer):
+        result = int(data)
+    elif isinstance(data, np.floating):
+        result = float(data)
+    elif callable(getattr(data, "to_serializable_dict", None)):
+        result = data.to_serializable_dict()
+    else:
+        result = data
+    return result
 
 
 def sample_frame_indices(seg_len, clip_len=16, frame_sample_rate=4, mode="video"):
@@ -151,10 +184,11 @@ def predict_emotion(text: str, video_path: str):
 final_model = create_final_model()
 
 
-@app.route("/model", methods=["POST"])
-def infer():
-    msg_text = request.json["last_human_utterances"][-1]["text"]
+class EmotionsPayload(BaseModel):
+    personality: List[str] = Body(...)
 
+
+def subinfer(msg_text):
     if prefix in msg_text:
         try:
             text = msg_text[prefix_len:]
@@ -165,8 +199,17 @@ def infer():
             raise ValueError(f"The message format is correct, but: {e}")
     else:
         raise ValueError("Input should be text and a videofile link on two separate lines.")
-    return jsonify(emotion)
+    return emotion
 
 
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8025)
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+)
+
+
+@app.post("/model")
+def infer(payload: EmotionsPayload):
+    logger.info(f"Emotion Detection: {payload}")
+    emotion = [subinfer(p) for p in payload.personality]
+    return jsonify_data(emotion)

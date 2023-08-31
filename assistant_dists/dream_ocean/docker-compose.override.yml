@@ -7,7 +7,7 @@ services:
           factoid-qa:8071, kbqa:8072, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
           sentence-ranker:8128, property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
-          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059, personality-detection:8026, emotion-detection:8025"
+          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059, personality-detection:8026, emotion-detection:8045"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -444,10 +444,10 @@ services:
   emotion-detection:
     build:
       args:
-        SERVICE_PORT: 8025
+        SERVICE_PORT: 8045
         SERVICE_NAME: emotion_detection
       context: annotators/emotion_detection
-    command: flask run -h 0.0.0.0 -p 8025
+    command: flask run -h 0.0.0.0 -p 8045
     deploy:
       resources:
         limits:

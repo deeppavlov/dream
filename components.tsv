@@ -27,7 +27,7 @@
 8022	dff-program-y-dangerous-skill
 8023	dff-movie-skill
 8024	sentiment-classification-multilingual
-8025    emotion-detection
+8025
 8026    personality-detection
 8027
 8028
@@ -47,7 +47,7 @@
 8042    embodied-sender
 8043
 8044
-8045
+8045    emotion-detection
 8046
 8047	eliza
 8048

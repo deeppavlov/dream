@@ -105,9 +105,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 15.0,
-                    "url": "http://emotion-detection:8025/model"
+                    "url": "http://emotion-detection:8045/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_human_bot_annotated_utterance",
+                "dialog_formatter": "state_formatters.dp_formatters:personality_catcher_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [],
