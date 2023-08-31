@@ -155,10 +155,10 @@ def get_dsript_type(orig_sent, type_expl):
 
 
 # emotion and mood dictionaries
-positive_emotions = ['admiration', 'joy', 'liking', 'love', 'hope', 
+positive_emotions = ['admiration', 'joy', 'liking', 'love', 'hope',
                      'gratitude', 'pride', 'relief', 'surprise', 'neutral']
-negative_emotions = ['anger', 'resentment', 'disappointment', 'disliking', 
-                     'shame', 'distress', 'fear', 'remorse', 'surprise', 
+negative_emotions = ['anger', 'resentment', 'disappointment', 'disliking',
+                     'shame', 'distress', 'fear', 'remorse', 'surprise',
                      'sadness', 'disgust']
 
 
