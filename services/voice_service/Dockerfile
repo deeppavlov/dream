@@ -39,7 +39,7 @@ RUN sed -i "s|/home/ilia/projects/audio-captioning/pretrained_weights/Cnn14_mAP=
 RUN cat /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 # PATH
 RUN mkdir /src/aux_files/pretrained_weights
-RUN gdown https://drive.google.com/file/d/1CVD_JFEx9iFg8DH1cZd81gcPvxrb8uZq/view?usp=sharing -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
+RUN gdown https://drive.google.com/uc?id=1CVD_JFEx9iFg8DH1cZd81gcPvxrb8uZq -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
 
 # SWA
 # RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
