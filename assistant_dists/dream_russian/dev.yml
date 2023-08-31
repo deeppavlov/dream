@@ -46,6 +46,7 @@ services:
     volumes:
       - "./annotators/combined_classification_ru:/src"
       - "~/.deeppavlov/cache:/root/.cache"
+      - "./common:/src/common"
     ports:
       - 8198:8198
   ner-ru:
