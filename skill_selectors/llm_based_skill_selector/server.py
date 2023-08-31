@@ -54,24 +54,18 @@ def select_skills(dialog):
 
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
     human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
+    pipeline = dialog.get("attributes", {}).get("pipeline", [])
+    # pipeline is smth like this: ['annotators.sentseg', 'skills.dummy_skill',
+    # 'candidate_annotators.sentence_ranker', 'response_selectors.response_selector', ...]
+    all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
 
     try:
-        pipeline = dialog.get("attributes", {}).get("pipeline", [])
-        # pipeline is smth like this: ['annotators.sentseg', 'skills.dummy_skill',
-        # 'candidate_annotators.sentence_ranker', 'response_selectors.response_selector', ...]
-        all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
-        if all([name in PROMPT for name in all_skill_names]):
-            # skill descriptions are already in a prompt
-            pass
-        else:
-            # need to add skill descriptions in prompt
+        if "LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS" in PROMPT:
+            # need to add skill descriptions in prompt in replacement of `LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS`
             skill_descr_dict = collect_descriptions_from_components(all_skill_names)
             skill_descriptions = "Skills:\n"
             skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descr_dict.items()])
-            if "transformers" in GENERATIVE_SERVICE_URL:
-                PROMPT = f"{skill_descriptions}\n{PROMPT}"
-            else:
-                PROMPT = f"{PROMPT}\n{skill_descriptions}"
+            PROMPT = PROMPT.replace("LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS", skill_descriptions)
 
         logger.info(f"llm_based_skill_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_skill_selector sends prompt to llm:\n`{PROMPT}`")
@@ -103,6 +97,9 @@ def select_skills(dialog):
     logger.info(f"llm_based_skill_selector selected:\n`{selected_skills}`")
 
     selected_skills = list(set(selected_skills))
+    if selected_skills == ["dummy_skill"]:
+        logger.info("Selected only Dummy Skill. Turn on all skills from pipeline.")
+        selected_skills.extend(all_skill_names)
     return selected_skills
 
 
