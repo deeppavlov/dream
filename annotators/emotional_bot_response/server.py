@@ -9,19 +9,26 @@ from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+from common.prompts import (
+    send_request_to_prompted_generative_service,
+    compose_sending_variables,
+)
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
-GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
+GENERATIVE_SERVICE_URL = getenv(
+    "GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond"
+)
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
@@ -48,14 +55,16 @@ for key, value in api_conf.copy().items():
             del api_conf[key]
             break
 
-logger.info(f"Available APIs: {', '.join([api['display_name'] for api in api_conf.values()])}")
+logger.info(
+    f"Available APIs: {', '.join([api['display_name'] for api in api_conf.values()])}"
+)
 
 
 def timeout_handler():
     raise Exception("API timeout")
 
 
-def make_prompt(sentence, emotion='neutral', mood='happy', intensity=7):
+def make_prompt(sentence, emotion="neutral", mood="happy", intensity=7):
     prompt = f"""You are a writer who needs to rewrite a sentence to express
     specific emotions, moods, and intensity levels. Your task is to generate
     a new sentence that conveys the desired emotions, moods, and emotion intensity
@@ -141,7 +150,9 @@ def rewrite_sentences(sentences, bot_emotion, bot_mood_label):
     try:
         result = []
         for sent in sentences:
-            prompt = make_prompt(sent, bot_emotion, bot_mood_label, 7)  # emotion, mood, intensity
+            prompt = make_prompt(
+                sent, bot_emotion, bot_mood_label, 7
+            )  # emotion, mood, intensity
             response = get_llm_emotional_response(prompt)
             result.append([{"hypotheses": response}])
     except Exception as exc:
@@ -182,7 +193,7 @@ def respond_batch():
 try:
     logger.info("emotional-bot-response is starting")
 
-    sentences = ['I will eat pizza.']
+    sentences = ["I will eat pizza."]
     bot_mood_label = "angry"
     bot_emotion = "anger"
     response = rewrite_sentences(sentences, bot_mood_label, bot_emotion)
