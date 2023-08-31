@@ -3,6 +3,7 @@
 3772	faq-skill
 3882	harvesters-maintenance-gobot-skill
 4242	agent
+6000    ros-flask-server
 8002	ranking-based-response-selector,ranking-based-response-selector-ru
 8003	llm-based-response-selector
 8004	convers-evaluator-annotator
@@ -26,10 +27,10 @@
 8022	dff-program-y-dangerous-skill
 8023	dff-movie-skill
 8024	sentiment-classification-multilingual
-8025
-8026
-8027
-8028
+8025    dff-travel-italy-skill
+8026    personality-detection
+8027    user-knowledge-memorizer
+8028    dff-user-kg-skill
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
 8031	asr
@@ -42,8 +43,8 @@
 8038    robot-fake-server
 8039
 8040
-8041
-8042
+8041    dff-embodied-skill
+8042    embodied-sender
 8043
 8044
 8045

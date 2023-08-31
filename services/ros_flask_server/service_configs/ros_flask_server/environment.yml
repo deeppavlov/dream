@@ -1,0 +1,2 @@
+SERVICE_PORT: 6000
+SERVICE_NAME: ros_flask_server

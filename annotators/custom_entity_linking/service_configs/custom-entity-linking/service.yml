@@ -1,7 +1,6 @@
 name: custom-entity-linking
 endpoints:
 - model
-- add_entities
 compose:
   env_file:
   - .env

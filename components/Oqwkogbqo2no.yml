@@ -1,0 +1,21 @@
+name: ros_flask_server_is_command_performed
+display_name: ROS-Flask server
+component_type: Script-based w/o NNs
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: This service allows Dream to interact with special connectors using ROS. It is an intermediate node between Dream and Client. This exact endpoint is used to check whether the last Client-received command is already executed.
+ram_usage: 250M
+gpu_usage: null
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://ros-flask-server:6000/is_command_performed
+previous_services:
+- skills
+required_previous_services: 
+- robot_notifications
+tags: null
+endpoint: is_command_performed
+service: services/ros_flask_server/service_configs/ros_flask_server
+date_created: '2023-06-01T12:12:12'

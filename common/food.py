@@ -99,6 +99,11 @@ FOOD_FACT_ACKNOWLEDGEMENTS = [
     "ENTITY. Yummy! I love it too. ",
 ]
 
+FAVORITE_FOOD_WORDS = (
+    r"((favorite|favourite|delicious|appetizing|exquisite|savory|tasty|yummy|mouthwatering)"
+    r" food|meal|breakfast|lunch|dinner|branch|snack)"
+)
+
 
 def skill_trigger_phrases():
     return TRIGGER_PHRASES

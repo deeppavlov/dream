@@ -1,0 +1,27 @@
+name: ros-flask-server
+endpoints:
+- is_command_valid
+- perform_command
+- is_command_performed
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 6000
+      SERVICE_NAME: ros_flask_server
+    context: .
+    dockerfile: ./services/ros_flask_server/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:6000 --timeout 600
+  environment: null
+  deploy:
+    resources:
+      limits:
+        memory: 250M
+      reservations:
+        memory: 250M
+  volumes:
+  - ./common:/src/common
+  - ./services/ros_flask_server:/src
+  ports:
+  - 6000:6000
