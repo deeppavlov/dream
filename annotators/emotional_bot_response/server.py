@@ -146,48 +146,57 @@ def get_llm_emotional_response(prompt):
     return response
 
 
-def rewrite_sentences(sentences, bot_emotion, bot_mood_label):
+def rewrite_sentences(sentence, bot_emotion, bot_mood_label):
+    result = {}
     try:
-        result = []
-        for sent in sentences:
-            prompt = make_prompt(
-                sent, bot_emotion, bot_mood_label, 7
-            )  # emotion, mood, intensity
-            response = get_llm_emotional_response(prompt)
-            result.append([{"hypotheses": response}])
+        prompt = make_prompt(
+            sentence, bot_emotion, bot_mood_label, 7
+        )  # emotion, mood, intensity
+        response = get_llm_emotional_response(prompt)
+        result = {"hypotheses": response}
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = []
-        for sent in sentences:
-            result.append([{"hypotheses": "fallback standard response"}])
+        result = {"hypotheses": "fallback standard response"}
     return result
 
 
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
+
     sentences = request.json.get("sentences", [])
-    bot_mood_label = request.json.get("bot_mood_label", "")
-    bot_emotion = request.json.get("bot_emotion", "")
-    result = rewrite_sentences(sentences, bot_emotion, bot_mood_label)
+    bot_mood_label = request.json.get("bot_mood_label", [])
+    bot_emotion = request.json.get("bot_emotion", [])
+
+    results = []
+    for i in range(len(sentences)):
+        result = rewrite_sentences(sentences[i], bot_emotion[0], bot_mood_label[0])
+        results.append(result)
+
     total_time = time.time() - st_time
     logger.info(f"emotional-bot-response exec time: {total_time:.3f}s")
 
-    return jsonify(result)
+    return jsonify(results)
 
 
 @app.route("/respond_batch", methods=["POST"])
 def respond_batch():
     st_time = time.time()
+
     sentences = request.json.get("sentences", [])
-    bot_mood_label = request.json.get("bot_mood_label", "")
-    bot_emotion = request.json.get("bot_emotion", "")
-    result = rewrite_sentences(sentences, bot_emotion, bot_mood_label)
+    bot_mood_label = request.json.get("bot_mood_label", [])
+    bot_emotion = request.json.get("bot_emotion", [])
+
+    results = []
+    for i in range(len(sentences)):
+        result = rewrite_sentences(sentences[i], bot_emotion[0], bot_mood_label[0])
+        results.append(result)
+
     total_time = time.time() - st_time
     logger.info(f"emotional-bot-response exec time: {total_time:.3f}s")
 
-    return jsonify([{"batch": result}])
+    return jsonify([{"batch": results}])
 
 
 try:

@@ -1,10 +1,10 @@
-# Ranking-based Response Selector
+# Emotion Ranking-based Response Selector
 
 ## Description
 
 Response Selector is a component selecting final response among the given hypotheses by different skills.
-The Ranking-based Response Selector utilizes floating point annotations by ranking candidate annotator (e.g., Sentence Ranker)
-to rank hypotheses and selects the best ranked one.
+The Emotion Ranking-based Response Selector utilizes floating point annotations by ranking candidate annotator (e.g., Sentence Ranker)
+to rank hypotheses and selects emotional form of the best ranked one.
 
 ### Parameters
 

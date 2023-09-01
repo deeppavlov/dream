@@ -19,7 +19,7 @@ health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
-# stanza.download('en') -> moved to Dockerfile
+# stanza.download('en')  # -> moved to Dockerfile
 nlp = stanza.Pipeline("en")
 
 
@@ -351,41 +351,47 @@ def get_new_mood(default_mood, curr_mood, bot_emotion):
 
 @app.route("/model", methods=["POST"])
 def respond():
-    sentence = request.json.get("sentences", "")
-    user_emotion = request.json.get("user_emotion", {})
-    sentiment = request.json.get("sentiment", {})
-    bot_mood = request.json.get("bot_mood", default_mood)
+    sentences = request.json.get("sentences", [])
+    user_emotions = request.json.get("user_emotion", [])
+    sentiments = request.json.get("sentiment", [])
+    bot_moods = request.json.get("bot_mood", [])
 
-    print("SENTENCE:", sentence)
-    print("USER EMOTION: ", user_emotion)
-    print("SENTIMENT: ", sentiment)
-    print("OLD BOT MOOD: ", bot_mood)
+    for i in range(len(sentences)):
+        sentence = sentences[i]
+        user_emotion = user_emotions[i]
+        sentiment = sentiments[i]
+        bot_mood = bot_moods[i]
 
-    logger.info("User's utterance: {}".format(sentence))
-    logger.info("User emotion: {}".format(user_emotion))
-    logger.info("Sentiment: {}".format(sentiment))
-    logger.info("Old bot mood: {}".format(bot_mood))
+        print("SENTENCE:", sentence)
+        print("USER EMOTION: ", user_emotion)
+        print("SENTIMENT: ", sentiment)
+        print("OLD BOT MOOD: ", bot_mood)
 
-    bot_emotion = get_bot_emotion(sentence, user_emotion, sentiment)
-    logger.info("New bot emotion: {}".format(bot_emotion))
-    print("NEW BOT EMOTION: ", bot_emotion)
+        logger.info("User's utterance: {}".format(sentence))
+        logger.info("User emotion: {}".format(user_emotion))
+        logger.info("Sentiment: {}".format(sentiment))
+        logger.info("Old bot mood: {}".format(bot_mood))
 
-    new_bot_mood = get_new_mood(default_mood, bot_mood, bot_emotion)
-    logger.info("New bot mood: {}".format(new_bot_mood))
-    print("NEW BOT MOOD: ", new_bot_mood)
+        bot_emotion = get_bot_emotion(sentence, user_emotion, sentiment)
+        logger.info("New bot emotion: {}".format(bot_emotion))
+        print("NEW BOT EMOTION: ", bot_emotion)
 
-    octant = ""
-    for dim in new_bot_mood:
-        if dim == 0:
-            octant += "0"
-        elif dim > 0:
-            octant += "1"
-        else:
-            octant += "-1"
+        new_bot_mood = get_new_mood(default_mood, bot_mood, bot_emotion)
+        logger.info("New bot mood: {}".format(new_bot_mood))
+        print("NEW BOT MOOD: ", new_bot_mood)
 
-    new_bot_mood_label = pad_moods[octant]
-    logger.info("New bot mood label: {}".format(new_bot_mood_label))
-    print("NEW BOT MOOD LABEL: ", new_bot_mood_label)
+        octant = ""
+        for dim in new_bot_mood:
+            if dim == 0:
+                octant += "0"
+            elif dim > 0:
+                octant += "1"
+            else:
+                octant += "-1"
+
+        new_bot_mood_label = pad_moods[octant]
+        logger.info("New bot mood label: {}".format(new_bot_mood_label))
+        print("NEW BOT MOOD LABEL: ", new_bot_mood_label)
 
     return jsonify(
         [

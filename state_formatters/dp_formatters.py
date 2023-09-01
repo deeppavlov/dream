@@ -6,7 +6,8 @@ from typing import Dict, List
 from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
-# import json # comment out if saving dialog content is planned
+# import json  # comment out if saving dialog content is planned
+
 
 logger = logging.getLogger(__name__)
 
@@ -1457,10 +1458,10 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
 
     return [
         {
-            "sentences": dialog["human_utterances"][-1]["text"],
-            "user_emotion": user_emotion,
-            "sentiment": sent,
-            "bot_mood": bot_mood,
+            "sentences": [dialog["human_utterances"][-1]["text"]],
+            "user_emotion": [user_emotion],
+            "sentiment": [sent],
+            "bot_mood": [bot_mood],
         }
     ]
 
@@ -1485,7 +1486,7 @@ def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
     return [
         {
             "sentences": hypots,
-            "bot_mood_label": bot_mood_label,
-            "bot_emotion": bot_emotion,
+            "bot_mood_label": [bot_mood_label],
+            "bot_emotion": [bot_emotion],
         }
     ]
