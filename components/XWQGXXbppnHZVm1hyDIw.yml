@@ -4,8 +4,7 @@ component_type: null
 model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: a hierarchical algorithm based on several linear models and a rule-based
-  approach for the prediction of speech functions described by Eggins and Slade
+description: an algorithm based on NN
 ram_usage: 1.1G
 gpu_usage: 4.5G
 group: candidate_annotators

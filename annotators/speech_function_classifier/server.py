@@ -57,7 +57,7 @@ async def handler(payload: List[Payload]):
             authors = ["John"] + ["Doe"] * phrase_len
             response = [p.prev_speech_function]
             for phr, prev_phr, auth, prev_auth in zip(phrases[1:], phrases[:-1], authors[1:], authors[:-1]):
-                speech_f = get_speech_function(phr, prev_phr, response[-1], auth, prev_auth)
+                speech_f = get_speech_function(phr, prev_phr, auth, prev_auth)
                 response.append(speech_f)
             responses[i] = response[1:]
     except Exception as e:
