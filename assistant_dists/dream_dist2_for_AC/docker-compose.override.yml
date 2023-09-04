@@ -1,6 +1,5 @@
 services:
   agent:
-    build:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/ai_faq_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: sentseg:8011, entity-storer:8089, entity-detection:8103, entity-linking:8075,
