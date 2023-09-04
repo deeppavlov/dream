@@ -12,3 +12,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  fromage:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
