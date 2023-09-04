@@ -112,6 +112,7 @@ high_priority_intents = {
 
 low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
+
 def join_words_in_or_pattern(words):
     return r"(" + r"|".join([r"\b%s\b" % word for word in words]) + r")"
 
@@ -783,7 +784,7 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
     if 'topics_ru' in annotations:
         dp_topics_probs, dp_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="topics_ru"
-        )        
+        )
     if which == "all":
         answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels + topics_ru_labels
         answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs,

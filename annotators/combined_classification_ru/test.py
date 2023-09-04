@@ -36,7 +36,7 @@ def main_test():
             "sentences": ["привет", "и вот таких уродов дахуя"],
             "task": "toxic_classification",
             "answers_bert": [["not_toxic"], ["toxic"]],
-        }
+        },
     ]
     t = time()
     for config in configs:
@@ -56,8 +56,8 @@ def main_test():
             print((response, answer, sentence))
             predicted_classes = [class_ for class_ in response if response[class_] == max(response.values())]
             assert sorted(answer) == sorted(predicted_classes), " * ".join(
-                    [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
-                )
+                [str(j) for j in [sentence, config["task"], answer, predicted_classes, response]]
+            )
     print("SUCCESS!")
     print(time() - t)
     return 0
