@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/ai_faq_assistant/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_dist2_for_AC/pipeline_conf.json'
     environment:
       WAIT_HOSTS: sentseg:8011, entity-storer:8089, entity-detection:8103, entity-linking:8075,
         wiki-parser:8077, combined-classification:8087, factoid-qa:8071,

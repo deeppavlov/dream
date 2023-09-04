@@ -53,4 +53,13 @@ services:
     - PROXY_PASS=proxy.deeppavlov.ai:8008
     - PORT=8008
 
+  combined-classification:
+    command: ["nginx", "-g", "daemon off;"]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8087
+      - PORT=8087
+
 version: '3.7'
