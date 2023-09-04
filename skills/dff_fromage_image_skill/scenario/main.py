@@ -12,24 +12,21 @@ from . import response as loc_rsp
 logger = logging.getLogger(__name__)
 
 flows = {
-    GLOBAL: {
-        TRANSITIONS: {
-            ("fromage_caption_response", "general_node"): loc_cnd.caption_condition,
-        }
+    "global_flow": {
+        "start": {
+            RESPONSE: "",
+            TRANSITIONS: {
+                ("fromage_caption_response", "general_node"): loc_cnd.caption_condition,
+            },
+        },
+        "fallback": {
+            RESPONSE: "",
+            TRANSITIONS: {},
+        },
     },
     "fromage_caption_response": {
         "general_node": {
             RESPONSE: loc_rsp.generic_response,
-            TRANSITIONS: {},
-        },
-    },
-    "global_flow": {
-        "start": {
-            RESPONSE: "",
-            TRANSITIONS: {},
-        },
-        "fallback": {
-            RESPONSE: "Okay. Why did you send me this picture?",
             TRANSITIONS: {},
         },
     },
