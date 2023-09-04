@@ -4,16 +4,14 @@ from os import getenv
 from random import choice
 
 from common.utils import (
-    join_words_in_or_pattern,
-    join_sentences_in_or_pattern,
     get_topics,
     get_intents,
     get_sentiment,
     is_yes,
     is_no,
     get_entities,
-    join_word_beginnings_in_or_pattern,
 )
+from common.join_pattern import *
 from common.greeting import GREETING_QUESTIONS_TEXTS
 import sentry_sdk
 

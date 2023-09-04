@@ -9,6 +9,21 @@ from random import choice
 from common.custom_requests import request_triples_wikidata
 from common.factoid import FACTOID_THRESHOLD
 from common.combined_classes import combined_classes
+from common.join_pattern import *
+
+from common.food import FOOD_COMPILED_PATTERN as FOOD_PATTERN
+from common.books import BOOK_PATTERN
+from common.music import MUSIC_COMPILED_PATTERN as MUSIC_PATTERN
+from common.news import NEWS_COMPILED_PATTERN as NEWS_PATTERN
+from common.travel import TRAVELLING_TEMPLATE as TRAVEL_PATTERN
+from common.art import ART_PATTERN
+from common.science import SCIENCE_COMPILED_PATTERN as SCIENCE_PATTERN
+from common.movies import MOVIE_COMPILED_PATTERN as MOVIE_PATTERN
+from common.animals import ANIMALS_FIND_TEMPLATE as ANIMALS_PATTERN
+from common.gaming import VIDEO_GAME_WORDS_COMPILED_PATTERN as GAME_PATTERN
+from common.sport import about_sport
+from common.gossip import GOSSIP_COMPILED_PATTERN as CELEBRITIES_PATTERN
+
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
@@ -111,19 +126,6 @@ high_priority_intents = {
 }
 
 low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
-
-
-def join_words_in_or_pattern(words):
-    return r"(" + r"|".join([r"\b%s\b" % word for word in words]) + r")"
-
-
-def join_word_beginnings_in_or_pattern(words):
-    return r"(" + r"|".join([r"\b%s" % word for word in words]) + r")"
-
-
-def join_sentences_in_or_pattern(sents):
-    return r"(" + r"|".join(sents) + r")"
-
 
 MULTILABEL_TASKS = [
     "emotion_classification",
@@ -1292,18 +1294,6 @@ class Topic:
                 return True
         return False
 
-from common.food import FOOD_COMPILED_PATTERN as FOOD_PATTERN
-from common.books import BOOK_PATTERN
-from common.music import MUSIC_COMPILED_PATTERN as MUSIC_PATTERN
-from common.news import NEWS_COMPILED_PATTERN as NEWS_PATTERN
-from common.travel import TRAVELLING_TEMPLATE as TRAVEL_PATTERN
-from common.art import ART_PATTERN
-from common.science import SCIENCE_COMPILED_PATTERN as SCIENCE_PATTERN
-from common.movies import MOVIE_COMPILED_PATTERN as MOVIE_PATTERN
-from common.animals import ANIMALS_FIND_TEMPLATE as ANIMALS_PATTERN
-from common.gaming import VIDEO_GAME_WORDS_COMPILED_PATTERN as GAME_PATTERN
-from common.sport import about_sport
-from common.gossip import GOSSIP_COMPILED_PATTERN as CELEBRITIES_PATTERN
 
 TOPICS = {
     "food": Topic(TOPIC_GROUPS['food'], FOOD_PATTERN),
