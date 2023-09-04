@@ -55,18 +55,22 @@ def generate_responses(image_path, prompt):
 @app.route("/respond", methods=["POST"])
 def respond():
     st_time = time.time()
-    image_paths = request.json.get("image_paths", [])
-    sentences = request.json.get("sentences", [])
+    image_paths = request.json.get("image_paths")
+    sentences = request.json.get("sentences")
 
-    try:
-        frmg_answers = []
-        for image_path, sentence in zip(image_paths, sentences):
-            outputs = generate_responses(image_path, sentence)
-            frmg_answers += outputs
-    except Exception as exc:
-        logger.exception(exc)
-        sentry_sdk.capture_exception(exc)
-        frmg_answers = [[""]] * len(sentences)
+
+    frmg_answers = []
+    for image_path, sentence in zip(image_paths, sentences):
+        if image_path:
+            try:
+                outputs = generate_responses(image_path, sentence)
+                frmg_answers += outputs
+            except Exception as exc:
+                logger.exception(exc)
+                sentry_sdk.capture_exception(exc)
+                frmg_answers += [[""]]
+        else:
+            frmg_answers += [[""]]
 
     total_time = time.time() - st_time
     logger.info(f"fromage results: {frmg_answers}")
