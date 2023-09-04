@@ -58,7 +58,6 @@ def respond():
     image_paths = request.json.get("image_paths")
     sentences = request.json.get("sentences")
 
-
     frmg_answers = []
     for image_path, sentence in zip(image_paths, sentences):
         if image_path:

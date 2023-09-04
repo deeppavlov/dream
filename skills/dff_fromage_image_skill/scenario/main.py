@@ -2,7 +2,6 @@ import logging
 
 from df_engine.core.keywords import (
     TRANSITIONS,
-    GLOBAL,
     RESPONSE,
 )
 from df_engine.core import Actor
