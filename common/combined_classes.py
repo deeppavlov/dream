@@ -114,7 +114,7 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "Opinion_RequestIntent",
         "Multiple_GoalsIntent",
     ],
-    "ru_topics": [
+    "topics_ru": [
         "музыка",
         "еда, напитки и кулинария",
         "новости",
