@@ -208,7 +208,7 @@ TOPIC_GROUPS = {
     "games": ["Games", "Toys&Games", "Videogames", "видеоигры", "игрушки", "настольные игры"],
     "animals": ["Pets_Animals", "Animals&Pets", "кошки", "собаки"],
     "sex": ["Sex_Profanity", "секс", "секспросвет"],
-    "weather": ["Weather_Time", "погода"]
+    "weather": ["Weather_Time", "погода"],
 }  # The list can be expanded according to the topic list supported
 
 
@@ -783,14 +783,11 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
             annotated_utterance, model_name="deeppavlov_topics"
         )
     topics_ru_probs, topics_ru_labels = {}, []
-    if 'topics_ru' in annotations:
-        dp_topics_probs, dp_topics_labels = _get_combined_annotations(
-            annotated_utterance, model_name="topics_ru"
-        )
+    if "topics_ru" in annotations:
+        dp_topics_probs, dp_topics_labels = _get_combined_annotations(annotated_utterance, model_name="topics_ru")
     if which == "all":
         answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels + topics_ru_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs,
-                        **dp_topics_probs, **topics_ru_labels}
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs, **topics_ru_labels}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
@@ -1296,24 +1293,24 @@ class Topic:
 
 
 TOPICS = {
-    "food": Topic(TOPIC_GROUPS['food'], FOOD_PATTERN),
-    "books": Topic(TOPIC_GROUPS['books'], BOOK_PATTERN),
-    "music": Topic(TOPIC_GROUPS['music'], MUSIC_PATTERN),
-    "news": Topic(TOPIC_GROUPS['news'], NEWS_PATTERN),
-    "politics": Topic(TOPIC_GROUPS['politics']),
-    "sports": Topic(TOPIC_GROUPS['sports'], detecting_function=about_sport),
-    "religion": Topic(TOPIC_GROUPS['religion']),
-    "movies": Topic(TOPIC_GROUPS['movies'], MOVIE_PATTERN),
-    "fashion": Topic(TOPIC_GROUPS['fashion']),
-    "travel": Topic(TOPIC_GROUPS['travel'], TRAVEL_PATTERN),
-    "celebrities": Topic(TOPIC_GROUPS['celebrities'], CELEBRITIES_PATTERN),
-    "art": Topic(TOPIC_GROUPS['art'], ART_PATTERN),
-    "science": Topic(TOPIC_GROUPS['science'], SCIENCE_PATTERN),
-    "entertainment": Topic(TOPIC_GROUPS['entertainment']),
-    "games": Topic(TOPIC_GROUPS['games'], GAME_PATTERN),
-    "animals": Topic(TOPIC_GROUPS['animals'], ANIMALS_PATTERN),
-    "sex": Topic(TOPIC_GROUPS['sex']),
-    "weather": Topic(TOPIC_GROUPS['weather']),
+    "food": Topic(TOPIC_GROUPS["food"], FOOD_PATTERN),
+    "books": Topic(TOPIC_GROUPS["books"], BOOK_PATTERN),
+    "music": Topic(TOPIC_GROUPS["music"], MUSIC_PATTERN),
+    "news": Topic(TOPIC_GROUPS["news"], NEWS_PATTERN),
+    "politics": Topic(TOPIC_GROUPS["politics"]),
+    "sports": Topic(TOPIC_GROUPS["sports"], detecting_function=about_sport),
+    "religion": Topic(TOPIC_GROUPS["religion"]),
+    "movies": Topic(TOPIC_GROUPS["movies"], MOVIE_PATTERN),
+    "fashion": Topic(TOPIC_GROUPS["fashion"]),
+    "travel": Topic(TOPIC_GROUPS["travel"], TRAVEL_PATTERN),
+    "celebrities": Topic(TOPIC_GROUPS["celebrities"], CELEBRITIES_PATTERN),
+    "art": Topic(TOPIC_GROUPS["art"], ART_PATTERN),
+    "science": Topic(TOPIC_GROUPS["science"], SCIENCE_PATTERN),
+    "entertainment": Topic(TOPIC_GROUPS["entertainment"]),
+    "games": Topic(TOPIC_GROUPS["games"], GAME_PATTERN),
+    "animals": Topic(TOPIC_GROUPS["animals"], ANIMALS_PATTERN),
+    "sex": Topic(TOPIC_GROUPS["sex"]),
+    "weather": Topic(TOPIC_GROUPS["weather"]),
 }  # The list can be expanded according to the topic list supported
 
 
