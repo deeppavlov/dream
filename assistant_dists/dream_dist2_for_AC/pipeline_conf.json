@@ -159,88 +159,42 @@
                     "service": "annotators/wiki_parser/service_configs/wiki-parser"
                 }
             },
-            "midas_classification": {
-                "group": "annotators",
+            "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://midas-classification:8090/model"
+                    "timeout": 2.0,
+                    "url": "http://combined-classification:8087/batch_model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
+                    "skills"
                 ],
-                "state_manager_method": "add_annotation",
-                "endpoint": "model",
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/iOsQxWRQCKwOap49G0TAag.yml",
-                    "service": "annotators/midas_classification/service_configs/midas-classification"
-                }
-            },
-            "midas_predictor": {
-                "group": "annotators",
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://midas-predictor:8121/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:midas_predictor_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.combined_classification"
-                ],
-                "state_manager_method": "add_annotation",
-                "endpoint": "respond",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/V2iGM38Tkgmf1OcURQnAg.yml",
-                    "service": "annotators/midas_predictor/service_configs/midas-predictor"
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             }
         },
         "response_annotators": {
-            "midas_classification": {
-                "group": "annotators",
+            "combined_classification": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://midas-classification:8090/model"
+                    "timeout": 2.0,
+                    "url": "http://combined-classification:8087/batch_model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
-                    "annotators.sentseg"
+                    "skills"
                 ],
-                "state_manager_method": "add_annotation",
-                "endpoint": "model",
+                "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/iOsQxWRQCKwOap49G0TAag.yml",
-                    "service": "annotators/midas_classification/service_configs/midas-classification"
-                }
-            },
-            "midas_predictor": {
-                "group": "annotators",
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://midas-predictor:8121/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:midas_predictor_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.combined_classification"
-                ],
-                "state_manager_method": "add_annotation",
-                "endpoint": "respond",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/V2iGM38Tkgmf1OcURQnAg.yml",
-                    "service": "annotators/midas_predictor/service_configs/midas-predictor"
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
             },
             "entity_detection": {
