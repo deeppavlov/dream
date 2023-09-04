@@ -5,6 +5,7 @@ import sentry_sdk
 from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 import stanza
+from common.utils import get_emotions, get_sentiment
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
@@ -349,18 +350,32 @@ def get_new_mood(default_mood, curr_mood, bot_emotion):
     return new_mood_reg
 
 
+def get_mood_label(bot_mood):
+    octant = ""
+    for dim in bot_mood:
+        if dim == 0:
+            octant += "0"
+        elif dim > 0:
+            octant += "1"
+        else:
+            octant += "-1"
+
+    return pad_moods[octant]
+
+
 @app.route("/model", methods=["POST"])
 def respond():
     sentences = request.json.get("sentences", [])
-    user_emotions = request.json.get("user_emotion", [])
-    sentiments = request.json.get("sentiment", [])
+    annotated_utterances = request.json.get("annotated_utterances", [])
     bot_moods = request.json.get("bot_mood", [])
 
     for i in range(len(sentences)):
         sentence = sentences[i]
-        user_emotion = user_emotions[i]
-        sentiment = sentiments[i]
+        annotated_utterance = annotated_utterances[i]
         bot_mood = bot_moods[i]
+
+        user_emotion = get_emotions(annotated_utterance, probs=False)[0]
+        sentiment = get_sentiment(annotated_utterance, probs=False)[0]
 
         print("SENTENCE:", sentence)
         print("USER EMOTION: ", user_emotion)
@@ -380,16 +395,7 @@ def respond():
         logger.info("New bot mood: {}".format(new_bot_mood))
         print("NEW BOT MOOD: ", new_bot_mood)
 
-        octant = ""
-        for dim in new_bot_mood:
-            if dim == 0:
-                octant += "0"
-            elif dim > 0:
-                octant += "1"
-            else:
-                octant += "-1"
-
-        new_bot_mood_label = pad_moods[octant]
+        new_bot_mood_label = get_mood_label(new_bot_mood)
         logger.info("New bot mood label: {}".format(new_bot_mood_label))
         print("NEW BOT MOOD LABEL: ", new_bot_mood_label)
 
@@ -423,16 +429,7 @@ try:
     new_bot_mood = get_new_mood(default_mood, bot_mood, bot_emotion)
     logger.info("New bot mood: {}".format(new_bot_mood))
 
-    octant = ""
-    for dim in new_bot_mood:
-        if dim == 0:
-            octant += "0"
-        elif dim > 0:
-            octant += "1"
-        else:
-            octant += "-1"
-
-    new_bot_mood_label = pad_moods[octant]
+    new_bot_mood_label = get_mood_label(new_bot_mood)
     logger.info("New bot mood label: {}".format(new_bot_mood_label))
 
     logger.info("bot-emotion-classifier is ready")

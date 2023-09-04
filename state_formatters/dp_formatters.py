@@ -1428,28 +1428,7 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
     # with open('test_formatters.json', 'w', encoding='utf-8') as f:
     #     json.dump(dialog, f, ensure_ascii=False, indent=4)
     sentences = [dialog["human_utterances"][-1]["text"]]
-
-    user_emotions = (
-        dialog["human_utterances"][-1]["annotations"]
-        .get("combined_classification", {})
-        .get("emotion_classification", {})
-    )
-    if user_emotions:
-        user_emotion = max(user_emotions, key=user_emotions.get)
-    else:
-        user_emotion = "neutral"
-    user_emotions_list = len(sentences) * [user_emotion]
-
-    sentiments = (
-        dialog["human_utterances"][-1]["annotations"]
-        .get("combined_classification", {})
-        .get("sentiment_classification", {})
-    )
-    if sentiments:
-        sent = max(sentiments, key=sentiments.get)
-    else:
-        sent = "neutral"
-    sentiments_list = len(sentences) * [sent]
+    annotated_utterances = [dialog["human_utterances"][-1]]
 
     if len(dialog["human_utterances"]) > 1:
         bot_mood = (
@@ -1464,8 +1443,7 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
     return [
         {
             "sentences": sentences,
-            "user_emotion": user_emotions_list,
-            "sentiment": sentiments_list,
+            "annotated_utterances": annotated_utterances,
             "bot_mood": bot_mood_list,
         }
     ]
