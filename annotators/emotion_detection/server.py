@@ -8,10 +8,11 @@ import torch
 import numpy as np
 import sentry_sdk
 from fastapi import FastAPI, Body
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from transformers import AutoTokenizer, AutoProcessor
-from typing import Any, List
+from typing import List
 import cv2
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
@@ -30,40 +31,8 @@ text_model, video_model, audio_model = prepare_models(num_labels, "./")
 
 logger = logging.getLogger(__name__)
 
-prefix = "Detect emotions:"
+prefix = os.getenv("PREFIX")
 prefix_len = len(prefix)
-
-
-def jsonify_data(data: Any) -> Any:
-    """Replaces JSON-non-serializable objects with JSON-serializable.
-
-    Function replaces numpy arrays and numbers with python lists and numbers, tuples is replaces with lists. All other
-    object types remain the same.
-
-    Args:
-        data: Object to make JSON-serializable.
-
-    Returns:
-        Modified input data.
-
-    """
-    if isinstance(data, (list, tuple)):
-        result = [jsonify_data(item) for item in data]
-    elif isinstance(data, dict):
-        result = {}
-        for key in data.keys():
-            result[key] = jsonify_data(data[key])
-    elif isinstance(data, np.ndarray):
-        result = data.tolist()
-    elif isinstance(data, np.integer):
-        result = int(data)
-    elif isinstance(data, np.floating):
-        result = float(data)
-    elif callable(getattr(data, "to_serializable_dict", None)):
-        result = data.to_serializable_dict()
-    else:
-        result = data
-    return result
 
 
 def sample_frame_indices(seg_len, clip_len=16, frame_sample_rate=4, mode="video"):
@@ -115,7 +84,7 @@ def create_final_model():
         input_size=1920,
         hidden_size=512,
     )
-    checkpoint = torch.load("final_model.pt")
+    checkpoint = torch.load(os.getenv("MULTIMODAL_MODEL"))
     multi_model.load_state_dict(checkpoint)
 
     device = "cuda"
@@ -123,7 +92,7 @@ def create_final_model():
 
 
 def process_text(input_tokens: str):
-    text_model_name = "bert-large-uncased"
+    text_model_name = os.getenv("TEXT_MODEL")
     tokenizer = AutoTokenizer.from_pretrained(text_model_name)
 
     return tokenizer(
@@ -138,7 +107,7 @@ def process_text(input_tokens: str):
 def process_video(video_path: str):
     video_frames = get_frames(video_path)
 
-    video_model_name = "microsoft/xclip-base-patch32"
+    video_model_name = os.getenv("VIDEO_MODEL")
     video_feature_extractor = AutoProcessor.from_pretrained(video_model_name)
 
     return video_feature_extractor(videos=video_frames, return_tensors="pt")
@@ -189,12 +158,13 @@ class EmotionsPayload(BaseModel):
 
 
 def subinfer(msg_text):
+    emotion = "Emotion detection unsuccessfull. An error occured during inference."
     if prefix in msg_text:
         try:
             text = msg_text[prefix_len:]
             logger.info(f"Emotion Detection: {text}")
             emotion = predict_emotion(text, "/src/datafiles/vid.mp4")
-            logger.info(f"Detected emotion: {jsonify_data(emotion)}")
+            logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
         except Exception as e:
             raise ValueError(f"The message format is correct, but: {e}")
     else:
@@ -212,4 +182,4 @@ app.add_middleware(
 def infer(payload: EmotionsPayload):
     logger.info(f"Emotion Detection: {payload}")
     emotion = [subinfer(p) for p in payload.personality]
-    return jsonify_data(emotion)
+    return jsonable_encoder(emotion)

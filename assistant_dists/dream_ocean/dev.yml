@@ -145,8 +145,6 @@ services:
     ports:
       - 8026:8026
   emotion-detection:
-    volumes:
-      - "./annotators/emotion_detection:/src/drm"
     ports:
       - 8045:8045
 version: "3.7"

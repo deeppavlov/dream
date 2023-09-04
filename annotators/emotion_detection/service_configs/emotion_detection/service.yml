@@ -8,6 +8,10 @@ compose:
     args:
       SERVICE_PORT: 8045
       SERVICE_NAME: emotion_detection
+      VIDEO_MODEL: "microsoft/xclip-base-patch32"
+      TEXT_MODEL: "bert-large-uncased"
+      MULTIMODAL_MODEL: "final_model.pt"
+      PREFIX: "Detect emotions:"
     context: .
     dockerfile: ./annotators/emotion_detection/Dockerfile
   command: uvicorn server:app --host 0.0.0.0 --port 8045
@@ -17,7 +21,7 @@ compose:
         memory: 1G
       reservations:
         memory: 1G
-  volumes:
-  - ./annotators/emotion_detection:/src/drm
+  environment:
+      - CUDA_VISIBLE_DEVICES=0
   ports:
   - 8045:8045
