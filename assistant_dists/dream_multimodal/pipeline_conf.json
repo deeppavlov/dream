@@ -108,6 +108,21 @@
                     "annotators.sentseg"
                 ]
             },
+            "image_captioning": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 3.0,
+                    "url": "http://image-captioning:8123/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:image_captioning_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/f2hECzXDTTfljm5mweoMFA.yml",
+                    "service": "services/image_captioning/service_configs/image-captioning"
+                }
+            },
             "voice_service": {
                 "connector": {
                     "protocol": "http",
@@ -186,6 +201,24 @@
                     "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
+            },
+            "dff_image_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://dff-image-skill:8124/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_image_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/unB9cRBV3MRGqKtrbQDPA.yml",
+                    "service": "skills/dff_image_skill/service_configs/dff-image-skill"
+                }
             },
             "dff_voice_skill": {
                 "connector": {

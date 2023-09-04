@@ -30,7 +30,12 @@ def eliza_formatter_dialog(dialog: Dict) -> List[Dict]:
     last_utterance = dialog["human_utterances"][-1]["annotations"].get(
         "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
     )
-    return [{"last_utterance_batch": [last_utterance], "human_utterance_history_batch": [history]}]
+    return [
+        {
+            "last_utterance_batch": [last_utterance],
+            "human_utterance_history_batch": [history],
+        }
+    ]
 
 
 def cobot_qa_formatter_service(payload: List):
