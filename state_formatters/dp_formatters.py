@@ -793,7 +793,7 @@ def custom_el_formatter_dialog(dialog: Dict):
 
 def custom_el_formatter_last_bot_dialog(dialog: Dict):
     # Used by: bot-km annotator
-    bot_id = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
+    bot_id = "514b2c3d-bb73-4294-9486-04f9e099835e"
     if len(dialog["bot_utterances"]):
         entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog) #changed prepare_el_input
         property_extraction = dialog["bot_utterances"][-1]["annotations"].get("property_extraction", {})
