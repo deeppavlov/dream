@@ -41,12 +41,4 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
-  image-captioning:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-  dff-image-skill:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
 version: "3.7"
