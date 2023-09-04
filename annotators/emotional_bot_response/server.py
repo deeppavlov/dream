@@ -190,7 +190,7 @@ def respond_batch():
 
     results = []
     for i in range(len(sentences)):
-        result = rewrite_sentences(sentences[i], bot_emotion[0], bot_mood_label[0])
+        result = rewrite_sentences(sentences[i], bot_emotion[i], bot_mood_label[i])
         results.append(result)
 
     total_time = time.time() - st_time
@@ -203,10 +203,11 @@ try:
     logger.info("emotional-bot-response is starting")
 
     sentences = ["I will eat pizza."]
-    bot_mood_label = "angry"
-    bot_emotion = "anger"
-    response = rewrite_sentences(sentences, bot_mood_label, bot_emotion)
-    print(response)
+    bot_mood_labels = ["angry"]
+    bot_emotions = ["anger"]
+    responses = rewrite_sentences(sentences, bot_mood_labels, bot_emotions)
+    logger.info("TEST. Sentences: {}".format(sentences))
+    logger.info("TEST. Emotional sentences: {}".format(responses))
 
     logger.info("emotional-bot-response is ready")
 except Exception as e:

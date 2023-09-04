@@ -1427,6 +1427,8 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
     # comment out the next two lines to save dialog data to see its contents
     # with open('test_formatters.json', 'w', encoding='utf-8') as f:
     #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    sentences = [dialog["human_utterances"][-1]["text"]]
+
     user_emotions = (
         dialog["human_utterances"][-1]["annotations"]
         .get("combined_classification", {})
@@ -1436,6 +1438,7 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
         user_emotion = max(user_emotions, key=user_emotions.get)
     else:
         user_emotion = "neutral"
+    user_emotions_list = len(sentences) * [user_emotion]
 
     sentiments = (
         dialog["human_utterances"][-1]["annotations"]
@@ -1446,6 +1449,7 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
         sent = max(sentiments, key=sentiments.get)
     else:
         sent = "neutral"
+    sentiments_list = len(sentences) * [sent]
 
     if len(dialog["human_utterances"]) > 1:
         bot_mood = (
@@ -1455,13 +1459,14 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
         )
     else:
         bot_mood = [0.75, 0.25, 0.44]
+    bot_mood_list = len(sentences) * [bot_mood]
 
     return [
         {
-            "sentences": [dialog["human_utterances"][-1]["text"]],
-            "user_emotion": [user_emotion],
-            "sentiment": [sent],
-            "bot_mood": [bot_mood],
+            "sentences": sentences,
+            "user_emotion": user_emotions_list,
+            "sentiment": sentiments_list,
+            "bot_mood": bot_mood_list,
         }
     ]
 
@@ -1478,15 +1483,20 @@ def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
         .get("bot_emotion_classifier", {})
         .get("bot_mood_label", "happy")
     )
+
+    bot_mood_labels = len(hypots) * [bot_mood_label]
+
     bot_emotion = (
         dialog["human_utterances"][-1]["annotations"]
         .get("bot_emotion_classifier", {})
         .get("bot_emotion", "neutral")
     )
+
+    bot_emotions = len(hypots) * [bot_emotion]
     return [
         {
             "sentences": hypots,
-            "bot_mood_label": [bot_mood_label],
-            "bot_emotion": [bot_emotion],
+            "bot_mood_label": bot_mood_labels,
+            "bot_emotion": bot_emotions,
         }
     ]
