@@ -1,0 +1,6 @@
+SERVICE_PORT: 8025
+SERVICE_NAME: dff_travel_italy_skill
+TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
+TERMINUSDB_SERVER_PASSWORD: root
+TERMINUSDB_SERVER_TEAM: admin
+TERMINUSDB_SERVER_DB: user_knowledge_db

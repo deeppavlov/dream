@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-ROS_FSM_SERVER = getenv("ROS_FSM_SERVER")
+ROS_FLASK_SERVER = getenv("ROS_FLASK_SERVER")
 SERVICE_PORT = int(getenv("SERVICE_PORT"))
 
 
@@ -32,7 +32,7 @@ def respond():
             logger.info(f"robot_notifications: found command `{command}` sent to robot")
             result = False
             try:
-                result = check_if_command_performed(command, ROS_FSM_SERVER, dialog.get("dialog_id", "unknown"))
+                result = check_if_command_performed(command, ROS_FLASK_SERVER, dialog.get("dialog_id", "unknown"))
             except Exception as e:
                 sentry_sdk.capture_exception(e)
                 logger.exception(e)

@@ -8,7 +8,6 @@
                 {
                     "text": "turn clockwise for 180 degrees.",
                     "annotations": {
-                        "spelling_preprocessing": "turn clockwise for 180 degrees",
                         "badlisted_words": {
                             "bad_words": false
                         },
@@ -262,7 +261,6 @@
                 {
                     "text": "move backward.",
                     "annotations": {
-                        "spelling_preprocessing": "move backward",
                         "badlisted_words": {
                             "bad_words": false
                         },

@@ -9,6 +9,8 @@ RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
 URL = f"http://0.0.0.0:{SERVICE_PORT}/respond"
 LANGUAGE = os.getenv("LANGUAGE", "EN")
 
+FAKE_SERVER = os.getenv("FAKE", True)
+
 
 def handler(requested_data, random_seed):
     hypothesis = requests.post(URL, json={**requested_data, "random_seed": random_seed}).json()
@@ -23,6 +25,9 @@ def run_test(handler):
             continue
         elif LANGUAGE == "EN" and "EN" not in test_name:
             # if russian language, skip english tests
+            continue
+        if not FAKE_SERVER and "FAKE" in test_name:
+            # skip fake server tests if the server is real
             continue
 
         hypothesis = handler(in_data[test_name], RANDOM_SEED)
