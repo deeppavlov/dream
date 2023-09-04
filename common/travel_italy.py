@@ -1,7 +1,7 @@
 import re
 
 ITALY_PATTERN = re.compile(
-    r"(italy|italian(s)?|(italian)? city|people|language|rome|venice)(\.|\?)|", 
+    r"(italy|italian(s)?|(italian)? city|people|language|rome|venice)(\.|\?)|",
     re.IGNORECASE,
 )
 
@@ -23,6 +23,7 @@ ITALY_TRAVEL_SKILL_CHECK_PHRASES = [
     ITALY_TRAVEL_SKILL_CHECK_PHRASE3,
     ASK_TO_REPEAT_ITALY,
 ] + QUESTIONS_ABOUT_ITALY
+
 
 def italy_travel_skill_was_proposed(prev_bot_utt):
     return any([j in prev_bot_utt.get("text", "").lower() for j in ITALY_TRAVEL_SKILL_CHECK_PHRASES])

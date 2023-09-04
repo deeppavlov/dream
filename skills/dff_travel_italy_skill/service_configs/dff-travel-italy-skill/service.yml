@@ -1,0 +1,30 @@
+name: dff-travel-italy-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  - .env_secret
+  build:
+    args:
+      SERVICE_PORT: 8025
+      SERVICE_NAME: dff_travel_italy_skill
+      TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
+      TERMINUSDB_SERVER_PASSWORD: root
+      TERMINUSDB_SERVER_TEAM: admin
+      TERMINUSDB_SERVER_DB: user_knowledge_db
+    context: .
+    dockerfile: ./skills/dff_travel_italy_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8025 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_travel_italy_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8025:8025
+proxy: null

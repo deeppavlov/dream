@@ -27,10 +27,10 @@
 8022	dff-program-y-dangerous-skill
 8023	dff-movie-skill
 8024	sentiment-classification-multilingual
-8025
+8025    dff-travel-italy-skill
 8026    personality-detection
-8027
-8028
+8027    user-knowledge-memorizer
+8028    dff-user-kg-skill
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
 8031	asr

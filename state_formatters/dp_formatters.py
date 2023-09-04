@@ -995,7 +995,6 @@ def dff_user_kg_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def dff_travel_italy_skill_formatter(dialog: Dict) -> List[Dict]:
-    logger.info(f"here are the utt:\n {dialog.get('human_utterances')}")
     return utils.dff_formatter(dialog, "dff_travel_italy_skill")
 
 
@@ -1249,6 +1248,14 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
+
+
+def last_human_annotated_utterance(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
+        }
+    ]
 
 
 def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:

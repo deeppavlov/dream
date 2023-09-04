@@ -1,12 +1,18 @@
 import logging
 import re
-from typing import Callable, Any
-import sentry_sdk
+from typing import Callable
 from os import getenv
-import functools
-import json
+import time
+import sentry_sdk
+
+
 from deeppavlov_kg import TerminusdbKnowledgeGraph
-from scenario.config import TERMINUSDB_SERVER_URL, TERMINUSDB_SERVER_PASSWORD, TERMINUSDB_SERVER_DB, TERMINUSDB_SERVER_TEAM
+from scenario.config import (
+    TERMINUSDB_SERVER_URL,
+    TERMINUSDB_SERVER_PASSWORD,
+    TERMINUSDB_SERVER_DB,
+    TERMINUSDB_SERVER_TEAM,
+)
 
 
 from df_engine.core import Context, Actor
@@ -18,23 +24,12 @@ import common.dff.integration.context as int_ctx
 from common.travel_italy import ITALY_PATTERN, italy_travel_skill_was_proposed
 from common.food import FOOD_WORDS, FAVORITE_FOOD_WORDS
 
-from common.universal_templates import (
-    NOT_LIKE_PATTERN,
-    if_chat_about_particular_topic,
-    is_switch_topic,
-    tell_me_more,
-)
+from common.universal_templates import if_chat_about_particular_topic
 from common.utils import (
     get_intents,
     get_sentiment,
-    is_question,
-    is_opinion_request,
-    is_opinion_expression,
 )  # present in integration
 
-# import scenario.response as loc_rsp
-# import scenario.universal as universal
-# from scenario.universal import GENRE_PATTERN, get_slot
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -56,12 +51,20 @@ SIDE_INTENTS = {
     "who_made_you",
 }
 
-graph = TerminusdbKnowledgeGraph(
-    db_name=TERMINUSDB_SERVER_DB,
-    team=TERMINUSDB_SERVER_TEAM,
-    server=TERMINUSDB_SERVER_URL,
-    password=TERMINUSDB_SERVER_PASSWORD,
-)
+while True:
+    try:
+        graph = TerminusdbKnowledgeGraph(
+            db_name=TERMINUSDB_SERVER_DB,
+            team=TERMINUSDB_SERVER_TEAM,
+            server=TERMINUSDB_SERVER_URL,
+            password=TERMINUSDB_SERVER_PASSWORD,
+        )
+        logger.info(f"TERMINUSDB_SERVER_URL: {TERMINUSDB_SERVER_URL} is ready")
+        break
+    except Exception as exc:
+        logger.error(exc)
+        time.sleep(5)
+        continue
 
 
 def check_flag(prop: str) -> Callable:
@@ -70,15 +73,17 @@ def check_flag(prop: str) -> Callable:
 
     return check_flag_handler
 
+
 def start_condition(ctx: Context, actor: Actor) -> bool:
     # with open("new.json", "w") as ctx_file:               # to get contents of ctx.misc["agent"]
     #     json.dump(ctx.misc["agent"], ctx_file, indent=2)
-    
+
     return if_chat_about_particular_topic(
         int_ctx.get_last_human_utterance(ctx, actor),
         int_ctx.get_last_bot_utterance(ctx, actor),
         compiled_pattern=ITALY_PATTERN,
     )
+
 
 def is_side_or_stop(ctx: Context, actor: Actor) -> bool:
     """
@@ -89,13 +94,16 @@ def is_side_or_stop(ctx: Context, actor: Actor) -> bool:
     logger.debug("Side intent detected, exiting")
     return side_intent_present
 
+
 def is_proposed_skill(ctx: Context, actor: Actor) -> bool:
     return italy_travel_skill_was_proposed(int_ctx.get_last_bot_utterance(ctx, actor))
+
 
 def travel_italy_skill_switch(ctx: Context, actor: Actor) -> bool:
     user_uttr = int_ctx.get_last_human_utterance(ctx, actor)
 
     return re.findall(ITALY_PATTERN, user_uttr["text"])
+
 
 def sentiment_detected(name: str = "positive", threshold: float = 0.6) -> Callable:
     def sentiment_detected_handler(ctx: Context, actor: Actor) -> bool:
@@ -105,6 +113,7 @@ def sentiment_detected(name: str = "positive", threshold: float = 0.6) -> Callab
         return sentiment_probs.get(name, 0) >= threshold
 
     return sentiment_detected_handler
+
 
 exit_skill = cnd.any(
     [
@@ -119,6 +128,7 @@ asked_about_italian_cuisine = cnd.regexp(re.compile(FOOD_WORDS, re.IGNORECASE))
 
 uttr_about_favorite_food = cnd.regexp(re.compile(FAVORITE_FOOD_WORDS, re.IGNORECASE))
 
+
 def example_lets_talk_about():
     def example_lets_talk_about_handler(ctx: Context, actor: Actor, *args, **kwargs) -> str:
         return int_cnd.is_lets_chat_about_topic_human_initiative(ctx, actor)
@@ -131,9 +141,9 @@ def get_current_user_id(ctx: Context, actor: Actor) -> bool:
         user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]["id"]
 
         return user_id
-    
+
     return None
-    
+
 
 def has_entity_in_graph(property):
     def has_entity_in_graph_handler(ctx: Context, actor: Actor) -> Context:
@@ -146,9 +156,7 @@ def has_entity_in_graph(property):
             logger.info(f"property to search for -- {property}")
             if property in user_existing_properties:
                 return True
-        
+
         return False
-    
+
     return has_entity_in_graph_handler
-    
-    

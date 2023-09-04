@@ -6,12 +6,12 @@
         {
             "human_utterances": [
                 {
-                    "text": "let's talk about art.",
+                    "text": "let's talk about pets.",
                     "annotations": {
                         "asr": {
                             "asr_confidence": "undefined"
                         },
-                        "spelling_preprocessing": "let's talk about art",
+                        "spelling_preprocessing": "let's talk about pets",
                         "badlisted_words": {
                             "bad_words": false
                         },
@@ -19,9 +19,9 @@
                             "books"
                         ],
                         "sentseg": {
-                            "punct_sent": "let's talk about art.",
+                            "punct_sent": "let's talk about pets.",
                             "segments": [
-                                "let's talk about art."
+                                "let's talk about pets."
                             ]
                         },
                         "intent_catcher": {
@@ -191,7 +191,7 @@
                         },
                         "fact_random": {
                             "facts": [],
-                            "response": "let's talk about art."
+                            "response": "let's talk about pets."
                         },
                         "kbqa": {
                             "answer": "",
@@ -201,7 +201,7 @@
                         "sentrewrite": {
                             "clusters": [],
                             "modified_sents": [
-                                "let's talk about art."
+                                "let's talk about pets."
                             ]
                         },
                         "wiki_parser": {
@@ -275,7 +275,7 @@
             "bot_utterances": []
         }
     ],
-    "dff_art_skill_state_batch": [
+    "dff_user_kg_skill_state_batch": [
         {}
     ],
     "dff_shared_state_batch": [
@@ -309,6 +309,9 @@
     ],
     "disliked_skills_batch": [
         []
+    ],
+    "prompts_goals_batch": [
+        {}
     ],
     "clarification_request_flag_batch": [
         false

@@ -10,11 +10,20 @@ RUN pip install -r requirements.txt
 # Here you can make changes 
 
 ARG SERVICE_NAME
+ARG TERMINUSDB_SERVER_PASSWORD
+ARG TERMINUSDB_SERVER_URL
+ARG TERMINUSDB_SERVER_TEAM
+ARG TERMINUSDB_SERVER_DB
+
 ENV SERVICE_NAME ${SERVICE_NAME}
+ENV TERMINUSDB_SERVER_PASSWORD=$TERMINUSDB_SERVER_PASSWORD
+ENV TERMINUSDB_SERVER_URL=$TERMINUSDB_SERVER_URL
+ENV TERMINUSDB_SERVER_TEAM=$TERMINUSDB_SERVER_TEAM
+ENV TERMINUSDB_SERVER_DB=$TERMINUSDB_SERVER_DB
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -m nltk.downloader wordnet
+RUN pip install -r requirements.txt && \
+    python -m nltk.downloader wordnet
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/
