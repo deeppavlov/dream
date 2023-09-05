@@ -10,6 +10,12 @@ from typing import List
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.utils import (
+    is_toxic_or_badlisted_utterance,
+    get_intents,
+    get_entities,
+    get_common_tokens_in_lists_of_strings,
+)
 from common.universal_templates import (
     is_any_question_sentence_in_utterance,
     if_chat_about_particular_topic,
@@ -17,13 +23,6 @@ from common.universal_templates import (
     if_choose_topic,
     is_switch_topic,
 )
-from common.utils import (
-    is_toxic_or_badlisted_utterance,
-    get_intents,
-    get_entities,
-    get_common_tokens_in_lists_of_strings,
-)
-
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 

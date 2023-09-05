@@ -14,8 +14,8 @@ import common.dialogflow_framework.utils.state as state_utils
 import common.dialogflow_framework.utils.condition as condition_utils
 import dialogflows.scopes as scopes
 from common.constants import CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
-from common.universal_templates import DONOTKNOW_LIKE, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.utils import get_entities, join_words_in_or_pattern, get_comet_conceptnet_annotations
+from common.universal_templates import DONOTKNOW_LIKE, COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.food import (
     FAST_FOOD_FACTS,
     FAST_FOOD_QUESTIONS,

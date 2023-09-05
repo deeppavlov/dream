@@ -40,8 +40,8 @@ from common.travel import (
     NOWHERE_TEMPLATE,
     TOO_SIMPLE_TRAVEL_FACTS,
 )
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, get_sentiment, get_named_locations, FACTS_EXTRA_WORDS, get_entities
+from common.universal_templates import if_chat_about_particular_topic
 from common.fact_random import get_fact
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))

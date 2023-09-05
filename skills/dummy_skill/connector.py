@@ -24,13 +24,13 @@ from common.link import (
 )
 from common.remove_lists import NP_REMOVE_LIST, NP_IGNORE_LIST
 from common.sensitive import is_sensitive_situation
+from common.utils import get_entities, is_no, get_intents, is_yes
 from common.universal_templates import (
     opinion_request_question,
     is_switch_topic,
     if_choose_topic,
     is_any_question_sentence_in_utterance,
 )
-from common.utils import get_entities, is_no, get_intents, is_yes
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)

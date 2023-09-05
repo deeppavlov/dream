@@ -3,8 +3,8 @@ import logging
 from copy import deepcopy
 import re
 
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents, service_intents
+from common.universal_templates import if_chat_about_particular_topic
 from common.grounding import BUT_PHRASE, REPEAT_PHRASE
 
 logger = logging.getLogger(__name__)

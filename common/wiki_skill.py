@@ -2,10 +2,10 @@ import itertools
 import logging
 import random
 import re
+from common.utils import is_no, is_yes
 from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
 from common.animals import ANIMALS_FIND_TEMPLATE
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import is_no, is_yes
 from common.wiki_skill_scenarios import topic_config
 
 logger = logging.getLogger(__name__)

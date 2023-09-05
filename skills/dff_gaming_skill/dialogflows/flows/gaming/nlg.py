@@ -11,8 +11,8 @@ from common.gaming import (
     GAMES_WITH_AT_LEAST_1M_COPIES_SOLD_COMPILED_PATTERN,
     VIDEO_GAME_WORDS_COMPILED_PATTERN,
 )
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities, is_no
+from common.universal_templates import if_chat_about_particular_topic
 
 import dialogflows.common.nlg as common_nlg
 import dialogflows.common.shared_memory_ops as gaming_memory

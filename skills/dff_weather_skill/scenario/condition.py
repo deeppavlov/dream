@@ -1,8 +1,8 @@
 from df_engine.core import Actor, Context
 
 from common.dff.integration.context import get_last_bot_utterance, get_last_human_utterance
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_intents
+from common.universal_templates import if_chat_about_particular_topic
 from common.weather import WEATHER_COMPILED_PATTERN, WEATHER_REQUEST_COMPILED_PATTERN, is_weather_for_homeland_requested
 from scenario.utils import retrieve_location_entity_from_utterance
 

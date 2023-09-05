@@ -22,8 +22,9 @@ from common.wiki_skill import (
     QUESTION_TEMPLATES_SHORT,
     WIKI_BADLIST,
 )
-from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
+from common.universal_templates import CONTINUE_PATTERN
+
 
 nltk.download("punkt")
 

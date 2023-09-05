@@ -15,8 +15,8 @@ from common.emotion import (
     emo_advice_requested,
     is_positive_regexp_based,
 )
-from common.universal_templates import book_movie_music_found
 from common.utils import get_emotions, is_yes, is_no
+from common.universal_templates import book_movie_music_found
 from common.greeting import HOW_ARE_YOU_RESPONSES
 from collections import defaultdict
 import re

@@ -8,8 +8,8 @@ import sentry_sdk
 
 from common.link import get_previously_active_skill
 from common.robot import command_intents
-from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_factoid, get_intents, high_priority_intents
+from common.universal_templates import is_any_question_sentence_in_utterance
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))

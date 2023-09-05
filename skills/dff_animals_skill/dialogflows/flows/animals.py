@@ -11,8 +11,8 @@ from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 from common.dialogflow_framework.utils.condition import if_was_prev_active
 from common.dialogflow_framework.utils.condition import get_last_state
-from common.universal_templates import if_chat_about_particular_topic, if_lets_chat, NOT_LIKE_PATTERN
 from common.utils import is_yes, is_no
+from common.universal_templates import if_chat_about_particular_topic, if_lets_chat, NOT_LIKE_PATTERN
 from common.animals import (
     PETS_TEMPLATE,
     PETS_TEMPLATE_EXT,

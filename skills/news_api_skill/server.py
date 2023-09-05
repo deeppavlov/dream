@@ -31,12 +31,12 @@ from common.news import (
     extract_topics,
     EXTRACT_OFFERED_NEWS_TOPIC_TEMPLATE,
 )
+from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics
 from common.universal_templates import (
     COMPILE_NOT_WANT_TO_TALK_ABOUT_IT,
     COMPILE_SWITCH_TOPIC,
     if_chat_about_particular_topic,
 )
-from common.utils import get_skill_outputs_from_dialog, is_yes, is_no, get_topics
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))

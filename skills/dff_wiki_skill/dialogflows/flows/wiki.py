@@ -11,8 +11,8 @@ import sentry_sdk
 import common.constants as common_constants
 from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
-from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_LETS_TALK
 from common.utils import is_no, is_yes
+from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT, COMPILE_LETS_TALK
 from common.wiki_skill import choose_title, find_paragraph, find_all_paragraphs, delete_hyperlinks
 from common.wiki_skill import if_switch_wiki_skill, continue_after_topic_skill
 from common.wiki_skill import switch_wiki_skill_on_news, preprocess_news, if_must_switch

@@ -15,9 +15,9 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
 from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO, MUST_CONTINUE
-from common.universal_templates import is_switch_topic, if_chat_about_particular_topic
-
 from common.utils import get_skill_outputs_from_dialog, is_yes
+
+from common.universal_templates import is_switch_topic, if_chat_about_particular_topic
 from common.game_cooperative_skill import game_skill_was_proposed, GAMES_COMPILED_PATTERN, FALLBACK_ACKN_TEXT
 from common.gaming import find_games_in_text
 from common.dialogflow_framework.programy.text_preprocessing import clean_text

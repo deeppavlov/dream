@@ -9,9 +9,8 @@ from dialogflows.flows.imdb_database import IMDb
 from dialogflows.flows.utils import list_unique_values
 
 from common.movies import extract_movies_names_from_annotations
-from common.universal_templates import LIKE_PATTERN, NOT_LIKE_PATTERN
 from common.utils import get_intents, is_opinion_request, midas_classes
-
+from common.universal_templates import LIKE_PATTERN, NOT_LIKE_PATTERN
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -39,7 +39,6 @@ from common.movies import (
     NOT_LIKE_NOT_WATCH_MOVIES_TEMPLATE,
     ACKNOWLEDGEMENT_LIKES_MOVIE,
 )
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import (
     is_opinion_request,
     is_opinion_expression,
@@ -48,6 +47,7 @@ from common.utils import (
     get_all_not_used_templates,
     FACTS_EXTRA_WORDS,
 )
+from common.universal_templates import if_chat_about_particular_topic
 from nltk.tokenize import sent_tokenize
 from dialogflows.flows.utils import (
     is_movie_title_question,

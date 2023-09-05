@@ -11,8 +11,8 @@ from common.gaming import (
     VIDEO_GAME_QUESTION_COMPILED_PATTERN,
     find_games_in_text,
 )
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import is_no, is_yes
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 
 
 logger = logging.getLogger(__name__)

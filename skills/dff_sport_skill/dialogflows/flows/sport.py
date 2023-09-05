@@ -14,7 +14,6 @@ from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 from common.universal_templates import if_chat_about_particular_topic
 from common.link import link_to_skill2i_like_to_talk
-from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 import common.greeting as common_greeting
 import common.link as common_link
@@ -50,6 +49,7 @@ from common.sport import (
 
 import common.dialogflow_framework.utils.condition as condition_utils
 from common.utils import get_sentiment, get_named_persons
+from common.universal_templates import COMPILE_NOT_WANT_TO_TALK_ABOUT_IT
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))

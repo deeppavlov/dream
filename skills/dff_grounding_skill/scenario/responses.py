@@ -11,8 +11,8 @@ from common.greeting import GREETING_QUESTIONS
 from common.link import link_to_skill2key_words
 from common.grounding import what_we_talk_about, are_we_recorded, MANY_INTERESTING_QUESTIONS
 from common.sensitive import is_sensitive_topic_and_request
-from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_entities, is_toxic_or_badlisted_utterance, is_no
+from common.universal_templates import is_any_question_sentence_in_utterance
 
 from .utils import MIDAS_INTENT_ACKNOWLEDGEMENTS, get_midas_intent_acknowledgement
 from .responses_utils import (

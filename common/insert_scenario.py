@@ -24,8 +24,8 @@ from common.wiki_skill import (
     QUESTION_TEMPLATES_SHORT,
     CONF_DICT,
 )
-from common.universal_templates import CONTINUE_PATTERN
 from common.utils import is_no, is_yes
+from common.universal_templates import CONTINUE_PATTERN
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logger = logging.getLogger(__name__)

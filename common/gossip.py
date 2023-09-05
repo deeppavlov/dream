@@ -1,7 +1,7 @@
 import re
 import logging
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_topics, TOPIC_GROUPS
+from common.universal_templates import if_chat_about_particular_topic
 
 logger = logging.getLogger(__name__)
 

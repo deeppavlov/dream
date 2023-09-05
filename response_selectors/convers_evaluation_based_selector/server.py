@@ -13,13 +13,13 @@ from flask import Flask, request, jsonify
 from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec, HI_THIS_IS_DREAM
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import (
     get_intent_name,
     low_priority_intents,
     substitute_nonwords,
     is_toxic_or_badlisted_utterance,
 )
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.response_selection import ACTIVE_SKILLS
 from tag_based_selection import tag_based_response_selection
 from utils import (

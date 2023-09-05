@@ -13,9 +13,9 @@ from flask import Flask, request, jsonify
 from nltk import pos_tag, tokenize
 
 from common.constants import CAN_NOT_CONTINUE
-from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
 from common.utils import get_intents, get_topics, get_entities
-from common.join_pattern import *
+from common.universal_templates import if_chat_about_particular_topic, if_choose_topic
+from common.join_pattern import * 
 from common.response_selection import ACTIVE_SKILLS
 
 sentry_sdk.init(getenv("SENTRY_DSN"))

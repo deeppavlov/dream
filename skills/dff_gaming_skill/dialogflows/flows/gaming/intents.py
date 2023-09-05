@@ -13,8 +13,8 @@ from common.gaming import (
 )
 
 from common.link import link_to_skill2i_like_to_talk
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import is_no, is_yes
+from common.universal_templates import if_chat_about_particular_topic
 
 import dialogflows.common.intents as common_intents
 from dialogflows.flows.minecraft.intents import is_minecraft_mentioned_in_user_or_bot_uttr

@@ -12,13 +12,6 @@ from common.greeting import greeting_spec
 from common.link import skills_phrases_map
 from common.constants import CAN_CONTINUE_PROMPT, CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_NOT_CONTINUE
 from common.sensitive import is_sensitive_situation
-from common.universal_templates import (
-    if_chat_about_particular_topic,
-    is_switch_topic,
-    is_any_question_sentence_in_utterance,
-    if_not_want_to_chat_about_particular_topic,
-    if_choose_topic,
-)
 from common.utils import (
     get_intents,
     get_topics,
@@ -26,6 +19,13 @@ from common.utils import (
     get_common_tokens_in_lists_of_strings,
     is_no,
     get_dialog_breakdown_annotations,
+)
+from common.universal_templates import (
+    if_chat_about_particular_topic,
+    is_switch_topic,
+    is_any_question_sentence_in_utterance,
+    if_not_want_to_chat_about_particular_topic,
+    if_choose_topic,
 )
 from utils import (
     how_are_you_spec,

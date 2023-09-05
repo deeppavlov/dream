@@ -9,8 +9,8 @@ from spacy.symbols import nsubj, VERB, PROPN, NOUN
 from random import choice, shuffle
 
 from common.constants import CAN_NOT_CONTINUE
-from common.universal_templates import join_words_in_or_pattern
 from common.utils import is_opinion_request, get_skill_outputs_from_dialog, get_entities, get_toxic
+from common.universal_templates import join_words_in_or_pattern
 from common.greeting import dont_tell_you_answer
 from utils import (
     get_used_attributes_by_name,

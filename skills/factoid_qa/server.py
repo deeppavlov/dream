@@ -13,8 +13,8 @@ from flask import Flask, request, jsonify
 from os import getenv
 
 from common.factoid import DONT_KNOW_ANSWER, FACTOID_NOTSURE_CONFIDENCE
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import get_entities, get_factoid
+from common.universal_templates import if_chat_about_particular_topic
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 

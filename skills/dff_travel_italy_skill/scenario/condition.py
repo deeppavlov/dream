@@ -24,12 +24,11 @@ import common.dff.integration.context as int_ctx
 from common.travel_italy import ITALY_PATTERN, italy_travel_skill_was_proposed
 from common.food import FOOD_WORDS, FAVORITE_FOOD_WORDS
 
-from common.universal_templates import if_chat_about_particular_topic
 from common.utils import (
     get_intents,
     get_sentiment,
 )  # present in integration
-
+from common.universal_templates import if_chat_about_particular_topic
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)

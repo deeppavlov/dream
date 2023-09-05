@@ -12,9 +12,9 @@ import sentry_sdk
 from dff import dialogflow_extension
 import common.dialogflow_framework.utils.state as state_utils
 import dialogflows.scopes as scopes
-from common.universal_templates import if_chat_about_particular_topic
 from common.constants import CAN_CONTINUE_SCENARIO, MUST_CONTINUE, CAN_CONTINUE_PROMPT, CAN_NOT_CONTINUE
 from common.utils import is_yes, is_no
+from common.universal_templates import if_chat_about_particular_topic
 
 from common.wiki_skill import dff_wiki_phrases
 from common.insert_scenario import (

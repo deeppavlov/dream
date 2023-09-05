@@ -1,6 +1,6 @@
 import re
-from common.universal_templates import is_any_question_sentence_in_utterance, NOT_LIKE_PATTERN
 from common.utils import get_topics, TOPIC_GROUPS, get_comet_conceptnet_annotations
+from common.universal_templates import is_any_question_sentence_in_utterance, NOT_LIKE_PATTERN
 
 LIKE_ANIMALS_REQUESTS = ["Do you like animals?"]
 HAVE_PETS_REQUESTS = ["Do you have pets?"]

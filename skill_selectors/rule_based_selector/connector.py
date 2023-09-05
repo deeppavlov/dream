@@ -15,12 +15,6 @@ from common.response_selection import UNPREDICTABLE_SKILLS
 from common.robot import command_intents, embodied_intents
 from common.sensitive import is_sensitive_topic_and_request
 from common.skills_turn_on_topics_and_patterns import turn_on_skills
-from common.universal_templates import (
-    if_chat_about_particular_topic,
-    if_choose_topic,
-    GREETING_QUESTIONS_TEXTS,
-    is_any_question_sentence_in_utterance,
-)
 from common.utils import (
     high_priority_intents,
     low_priority_intents,
@@ -28,6 +22,12 @@ from common.utils import (
     get_intents,
     get_named_locations,
     get_factoid,
+)
+from common.universal_templates import (
+    if_chat_about_particular_topic,
+    if_choose_topic,
+    GREETING_QUESTIONS_TEXTS,
+    is_any_question_sentence_in_utterance,
 )
 from common.weather import if_special_weather_turn_on
 from common.wiki_skill import (
