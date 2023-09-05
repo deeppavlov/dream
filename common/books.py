@@ -1,5 +1,6 @@
 import re
-from common.utils import get_topics, TOPIC_GROUPS
+from common.combined_classes import TOPIC_GROUPS
+from common import utils
 
 BOOK_SKILL_CHECK_PHRASE = "the last book"
 BOOK_SKILL_CHECK_PHRASE2 = "your favourite book"
@@ -40,7 +41,7 @@ BOOK_PATTERN = re.compile(
 
 
 def about_book(annotated_utterance):
-    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    found_topics = utils.get_topics(annotated_utterance, probs=False, which="all")
     if any([book_topic in found_topics for book_topic in TOPIC_GROUPS["books"]]):
         return True
     elif re.findall(BOOK_PATTERN, annotated_utterance["text"]):

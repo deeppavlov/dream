@@ -7,7 +7,7 @@ import sentry_sdk
 
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
-from common.utils import combined_classes
+from common.combined_classes import combined_classes
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 

@@ -8,21 +8,11 @@ from random import choice
 
 from common.custom_requests import request_triples_wikidata
 from common.factoid import FACTOID_THRESHOLD
-from common.combined_classes import combined_classes
+from common.combined_classes import combined_classes, TOPIC_GROUPS
 from common.join_pattern import *
 
-from common.food import FOOD_COMPILED_PATTERN as FOOD_PATTERN
-from common.books import BOOK_PATTERN
-from common.music import MUSIC_COMPILED_PATTERN as MUSIC_PATTERN
-from common.news import NEWS_COMPILED_PATTERN as NEWS_PATTERN
-from common.travel import TRAVELLING_TEMPLATE as TRAVEL_PATTERN
-from common.art import ART_PATTERN
-from common.science import SCIENCE_COMPILED_PATTERN as SCIENCE_PATTERN
-from common.movies import MOVIE_COMPILED_PATTERN as MOVIE_PATTERN
-from common.animals import ANIMALS_FIND_TEMPLATE as ANIMALS_PATTERN
-from common.gaming import VIDEO_GAME_WORDS_COMPILED_PATTERN as GAME_PATTERN
-from common.sport import about_sport
-from common.gossip import GOSSIP_COMPILED_PATTERN as CELEBRITIES_PATTERN
+from common import food, books, music, news, travel
+from common import art, science, movies, animals, gaming, sport, gossip
 
 import sentry_sdk
 
@@ -188,28 +178,6 @@ midas_classes = {
 }
 MIDAS_SEMANTIC_LABELS = sum([intent_list for intent_list in midas_classes["semantic_request"].values()], [])
 MIDAS_FUNCTIONAL_LABELS = sum([intent_list for intent_list in midas_classes["functional_request"].values()], [])
-
-
-TOPIC_GROUPS = {
-    "food": ["Food", "Food_Drink", "еда, напитки и кулинария", "еда"],
-    "books": ["Entertainment_Books", "Literature", "Books&Literature", "литература", "чтение"],
-    "music": ["Music", "Entertainment_Music", "музыка"],
-    "news": ["News", "новости"],
-    "politics": ["Politics", "политика"],
-    "sports": ["Sports", "спорт", "фитнес"],
-    "religion": ["Religion"],
-    "movies": ["Entertainment_Movies", "Movies_TV", "Movies&Tv", "сериалы", "тв", "телевидение"],
-    "fashion": ["Clothes", "Fashion", "одежда", "мода и стиль"],
-    "travel": ["Travel", "Travel_Geo", "путешествия", "туризм"],
-    "celebrities": ["Celebrities", "Celebrities&Events", "знаменитости"],
-    "art": ["Art_Event", "Art&Hobbies", "искусство"],
-    "science": ["Science_and_Technology", "SciTech", "наука", "технологии"],
-    "entertainment": ["Entertainment", "Entertainment_General"],
-    "games": ["Games", "Toys&Games", "Videogames", "видеоигры", "игрушки", "настольные игры"],
-    "animals": ["Pets_Animals", "Animals&Pets", "кошки", "собаки"],
-    "sex": ["Sex_Profanity", "секс", "секспросвет"],
-    "weather": ["Weather_Time", "погода"],
-}  # The list can be expanded according to the topic list supported
 
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
@@ -783,11 +751,14 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
             annotated_utterance, model_name="deeppavlov_topics"
         )
     topics_ru_probs, topics_ru_labels = {}, []
-    if "topics_ru" in annotations:
-        dp_topics_probs, dp_topics_labels = _get_combined_annotations(annotated_utterance, model_name="topics_ru")
+    if 'topics_ru' in annotations:
+        dp_topics_probs, dp_topics_labels = _get_combined_annotations(
+            annotated_utterance, model_name="topics_ru"
+        )
     if which == "all":
         answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels + topics_ru_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs, **topics_ru_labels}
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs,
+                        **dp_topics_probs, **topics_ru_labels}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
@@ -1293,24 +1264,24 @@ class Topic:
 
 
 TOPICS = {
-    "food": Topic(TOPIC_GROUPS["food"], FOOD_PATTERN),
-    "books": Topic(TOPIC_GROUPS["books"], BOOK_PATTERN),
-    "music": Topic(TOPIC_GROUPS["music"], MUSIC_PATTERN),
-    "news": Topic(TOPIC_GROUPS["news"], NEWS_PATTERN),
-    "politics": Topic(TOPIC_GROUPS["politics"]),
-    "sports": Topic(TOPIC_GROUPS["sports"], detecting_function=about_sport),
-    "religion": Topic(TOPIC_GROUPS["religion"]),
-    "movies": Topic(TOPIC_GROUPS["movies"], MOVIE_PATTERN),
-    "fashion": Topic(TOPIC_GROUPS["fashion"]),
-    "travel": Topic(TOPIC_GROUPS["travel"], TRAVEL_PATTERN),
-    "celebrities": Topic(TOPIC_GROUPS["celebrities"], CELEBRITIES_PATTERN),
-    "art": Topic(TOPIC_GROUPS["art"], ART_PATTERN),
-    "science": Topic(TOPIC_GROUPS["science"], SCIENCE_PATTERN),
-    "entertainment": Topic(TOPIC_GROUPS["entertainment"]),
-    "games": Topic(TOPIC_GROUPS["games"], GAME_PATTERN),
-    "animals": Topic(TOPIC_GROUPS["animals"], ANIMALS_PATTERN),
-    "sex": Topic(TOPIC_GROUPS["sex"]),
-    "weather": Topic(TOPIC_GROUPS["weather"]),
+    "food": Topic(TOPIC_GROUPS['food'], food.FOOD_COMPILED_PATTERN),
+    "books": Topic(TOPIC_GROUPS['books'], books.BOOK_PATTERN),
+    "music": Topic(TOPIC_GROUPS['music'], music.MUSIC_COMPILED_PATTERN),
+    "news": Topic(TOPIC_GROUPS['news'], news.NEWS_COMPILED_PATTERN),
+    "politics": Topic(TOPIC_GROUPS['politics']),
+    "sports": Topic(TOPIC_GROUPS['sports'], detecting_function=sport.about_sport),
+    "religion": Topic(TOPIC_GROUPS['religion']),
+    "movies": Topic(TOPIC_GROUPS['movies'], movies.MOVIE_COMPILED_PATTERN),
+    "fashion": Topic(TOPIC_GROUPS['fashion']),
+    "travel": Topic(TOPIC_GROUPS['travel'], travel.TRAVELLING_TEMPLATE),
+    "celebrities": Topic(TOPIC_GROUPS['celebrities'], gossip.GOSSIP_COMPILED_PATTERN),
+    "art": Topic(TOPIC_GROUPS['art'], art.ART_PATTERN),
+    "science": Topic(TOPIC_GROUPS['science'], science.SCIENCE_COMPILED_PATTERN),
+    "entertainment": Topic(TOPIC_GROUPS['entertainment']),
+    "games": Topic(TOPIC_GROUPS['games'], gaming.VIDEO_GAME_WORDS_COMPILED_PATTERN),
+    "animals": Topic(TOPIC_GROUPS['animals'], animals.ANIMALS_FIND_TEMPLATE),
+    "sex": Topic(TOPIC_GROUPS['sex']),
+    "weather": Topic(TOPIC_GROUPS['weather']),
 }  # The list can be expanded according to the topic list supported
 
 

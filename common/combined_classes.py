@@ -193,3 +193,24 @@ combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
         "еда",
     ],
 }
+
+TOPIC_GROUPS = {
+    "food": ["Food", "Food_Drink", "еда, напитки и кулинария", "еда"],
+    "books": ["Entertainment_Books", "Literature", "Books&Literature", "литература", "чтение"],
+    "music": ["Music", "Entertainment_Music", "музыка"],
+    "news": ["News", "новости"],
+    "politics": ["Politics", "политика"],
+    "sports": ["Sports", "спорт", "фитнес"],
+    "religion": ["Religion"],
+    "movies": ["Entertainment_Movies", "Movies_TV", "Movies&Tv", "сериалы", "тв", "телевидение"],
+    "fashion": ["Clothes", "Fashion", "одежда", "мода и стиль"],
+    "travel": ["Travel", "Travel_Geo", "путешествия", "туризм"],
+    "celebrities": ["Celebrities", "Celebrities&Events", "знаменитости"],
+    "art": ["Art_Event", "Art&Hobbies", "искусство"],
+    "science": ["Science_and_Technology", "SciTech", "наука", "технологии"],
+    "entertainment": ["Entertainment", "Entertainment_General"],
+    "games": ["Games", "Toys&Games", "Videogames", "видеоигры", "игрушки", "настольные игры"],
+    "animals": ["Pets_Animals", "Animals&Pets", "кошки", "собаки"],
+    "sex": ["Sex_Profanity", "секс", "секспросвет"],
+    "weather": ["Weather_Time", "погода"]
+}  # The list can be expanded according to the topic list supported
