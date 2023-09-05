@@ -454,7 +454,7 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
 
     # prev uttr is what do you want to talk about?
-    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr, probs=False, 
+    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr, probs=False,
                                                                     which="intent_catcher")
     prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
 

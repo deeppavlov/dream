@@ -751,14 +751,11 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
             annotated_utterance, model_name="deeppavlov_topics"
         )
     topics_ru_probs, topics_ru_labels = {}, []
-    if 'topics_ru' in annotations:
-        dp_topics_probs, dp_topics_labels = _get_combined_annotations(
-            annotated_utterance, model_name="topics_ru"
-        )
+    if "topics_ru" in annotations:
+        dp_topics_probs, dp_topics_labels = _get_combined_annotations(annotated_utterance, model_name="topics_ru")
     if which == "all":
         answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels + topics_ru_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs,
-                        **dp_topics_probs, **topics_ru_labels}
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs, **topics_ru_labels}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
@@ -1264,24 +1261,24 @@ class Topic:
 
 
 TOPICS = {
-    "food": Topic(TOPIC_GROUPS['food'], food.FOOD_COMPILED_PATTERN),
-    "books": Topic(TOPIC_GROUPS['books'], books.BOOK_PATTERN),
-    "music": Topic(TOPIC_GROUPS['music'], music.MUSIC_COMPILED_PATTERN),
-    "news": Topic(TOPIC_GROUPS['news'], news.NEWS_COMPILED_PATTERN),
-    "politics": Topic(TOPIC_GROUPS['politics']),
-    "sports": Topic(TOPIC_GROUPS['sports'], detecting_function=sport.about_sport),
-    "religion": Topic(TOPIC_GROUPS['religion']),
-    "movies": Topic(TOPIC_GROUPS['movies'], movies.MOVIE_COMPILED_PATTERN),
-    "fashion": Topic(TOPIC_GROUPS['fashion']),
-    "travel": Topic(TOPIC_GROUPS['travel'], travel.TRAVELLING_TEMPLATE),
-    "celebrities": Topic(TOPIC_GROUPS['celebrities'], gossip.GOSSIP_COMPILED_PATTERN),
-    "art": Topic(TOPIC_GROUPS['art'], art.ART_PATTERN),
-    "science": Topic(TOPIC_GROUPS['science'], science.SCIENCE_COMPILED_PATTERN),
-    "entertainment": Topic(TOPIC_GROUPS['entertainment']),
-    "games": Topic(TOPIC_GROUPS['games'], gaming.VIDEO_GAME_WORDS_COMPILED_PATTERN),
-    "animals": Topic(TOPIC_GROUPS['animals'], animals.ANIMALS_FIND_TEMPLATE),
-    "sex": Topic(TOPIC_GROUPS['sex']),
-    "weather": Topic(TOPIC_GROUPS['weather']),
+    "food": Topic(TOPIC_GROUPS["food"], food.FOOD_COMPILED_PATTERN),
+    "books": Topic(TOPIC_GROUPS["books"], books.BOOK_PATTERN),
+    "music": Topic(TOPIC_GROUPS["music"], music.MUSIC_COMPILED_PATTERN),
+    "news": Topic(TOPIC_GROUPS["news"], news.NEWS_COMPILED_PATTERN),
+    "politics": Topic(TOPIC_GROUPS["politics"]),
+    "sports": Topic(TOPIC_GROUPS["sports"], detecting_function=sport.about_sport),
+    "religion": Topic(TOPIC_GROUPS["religion"]),
+    "movies": Topic(TOPIC_GROUPS["movies"], movies.MOVIE_COMPILED_PATTERN),
+    "fashion": Topic(TOPIC_GROUPS["fashion"]),
+    "travel": Topic(TOPIC_GROUPS["travel"], travel.TRAVELLING_TEMPLATE),
+    "celebrities": Topic(TOPIC_GROUPS["celebrities"], gossip.GOSSIP_COMPILED_PATTERN),
+    "art": Topic(TOPIC_GROUPS["art"], art.ART_PATTERN),
+    "science": Topic(TOPIC_GROUPS["science"], science.SCIENCE_COMPILED_PATTERN),
+    "entertainment": Topic(TOPIC_GROUPS["entertainment"]),
+    "games": Topic(TOPIC_GROUPS["games"], gaming.VIDEO_GAME_WORDS_COMPILED_PATTERN),
+    "animals": Topic(TOPIC_GROUPS["animals"], animals.ANIMALS_FIND_TEMPLATE),
+    "sex": Topic(TOPIC_GROUPS["sex"]),
+    "weather": Topic(TOPIC_GROUPS["weather"]),
 }  # The list can be expanded according to the topic list supported
 
 
