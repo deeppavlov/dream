@@ -7,6 +7,7 @@ import pathlib
 from copy import deepcopy
 from random import choice, choices
 
+from common import utils, universal_templates  # Importing before skills to avoid circular import
 import common.animals as dff_animals_skill
 import common.books as books
 import common.emotion as emotion
