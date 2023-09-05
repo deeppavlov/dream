@@ -137,7 +137,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     echo "Passing test data to each skill selected for testing"
 
 
-    for container in sentseg intent-catcher ranking-based-response-selector entity-linking \
+    for container in sentseg intent-catcher ranking-based-response-selector-fact-checking entity-linking \
                      kbqa text-qa wiki-parser combined-classification fact-retrieval \
                      dff-intent-responder-skill entity-detection sentence-ranker \
                      property-extraction ner prompt-selector \
