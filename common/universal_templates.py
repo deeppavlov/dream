@@ -384,7 +384,8 @@ def if_choose_topic(annotated_uttr, prev_annotated_uttr=None):
         chat_about_intent and re.search(COMPILE_SOMETHING, uttr_)
     )
     # bot asks "what user wants to talk about", and user answers "something"
-    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
+    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr,
+                                                                    probs=False, which="intent_catcher")
     prev_uttr_asks_what_topic = prev_chat_about_intent or re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_)
     smth2 = prev_uttr_asks_what_topic and re.search(COMPILE_SOMETHING, uttr_)
 
@@ -400,7 +401,8 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
         return True
 
     # prev uttr is what do you want to talk about?
-    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
+    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr,
+                                                                    probs=False, which="intent_catcher")
     prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
     if prev_what_to_chat_about and utils.is_no(annotated_uttr):
         # previously offered to chat about topic, user declines
@@ -413,7 +415,8 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
         return True
 
     # current uttr is lets talk about something else / other than
-    chat_about_intent = "lets_chat_about" in utils.get_intents(annotated_uttr, probs=False, which="intent_catcher")
+    chat_about_intent = "lets_chat_about" in utils.get_intents(annotated_uttr, 
+                                                               probs=False, which="intent_catcher")
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
     if chat_about and SOMETHING_ELSE.search(uttr_):
         return True

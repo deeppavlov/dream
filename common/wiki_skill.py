@@ -3,9 +3,7 @@ import logging
 import random
 import re
 from common import utils, universal_templates
-from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
 from common.animals import ANIMALS_FIND_TEMPLATE
-from common.universal_templates import if_chat_about_particular_topic
 from common.wiki_skill_scenarios import topic_config
 
 logger = logging.getLogger(__name__)
@@ -790,7 +788,7 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
         if (
             (isinstance(pattern, str) and re.findall(pattern, user_uttr["text"], re.IGNORECASE))
             or (isinstance(pattern, re.Pattern) and re.findall(pattern, user_uttr["text"]))
-            or universal_templates.if_chat_about_particular_topic(user_uttr, bot_uttr, 
+            or universal_templates.if_chat_about_particular_topic(user_uttr, bot_uttr,
                                                                   compiled_pattern=pattern)
         ):
             flag = True
