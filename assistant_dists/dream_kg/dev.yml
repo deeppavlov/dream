@@ -5,12 +5,12 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  convers-evaluator-annotator:
+  sentence-ranker:
     volumes:
-      - "./annotators/ConversationEvaluator:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8004:8004
+      - 8128:8128
   spacy-nounphrases:
     volumes:
       - "./annotators/spacy_nounphrases:/src"
@@ -22,18 +22,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
+      - 8002:8002
   ner:
     volumes:
       - './annotators/NER_deeppavlov:/src'
@@ -85,28 +79,28 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8153:8153
-  transformers-lm-gptjt:
-    volumes:
-      - "./services/transformers_lm:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8161:8161
-  dff-dream-persona-gpt-jt-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8134:8134
-  dff-template-skill:
-    volumes:
-      - "./skills/dff_template_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8120:8120
   terminusdb-server:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 6363:6363
+  user-knowledge-memorizer:
+    volumes:
+      - "./annotators/user_knowledge_memorizer:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8027:8027
+  dff-user-kg-skill:
+    volumes:
+      - "./skills/dff_user_kg_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8028:8028
+  dff-travel-italy-skill:
+    volumes:
+      - "./skills/dff_travel_italy_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8025:8025
 version: "3.7"

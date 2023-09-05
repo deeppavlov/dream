@@ -15,6 +15,9 @@ ENV LANGUAGE ${LANGUAGE}
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
+RUN apt update
+RUN apt install -y curl
+
 COPY skills/${SERVICE_NAME}/requirements.txt .
 RUN pip install -r requirements.txt && \
     python -m nltk.downloader wordnet
@@ -25,10 +28,13 @@ COPY ./common/ ./common/
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-ARG ROS_FSM_SERVER
-ENV ROS_FSM_SERVER ${ROS_FSM_SERVER}
+ARG FAKE
+ENV FAKE ${FAKE}
 
-# wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
+ARG ROS_FLASK_SERVER
+ENV ROS_FLASK_SERVER ${ROS_FLASK_SERVER}
+
+# wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change status to unhealthy
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 
 

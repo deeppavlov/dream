@@ -1,0 +1,23 @@
+name: personality_detection
+display_name: Personality Detection
+component_type: null
+model_type: ML-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Personality detection using OCEAN.
+ram_usage: 312M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 3.0
+  url: http://personality-detection:8026/model
+dialog_formatter: state_formatters.dp_formatters:personality_catcher_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: model
+service: annotators/personality_detection/service_configs/personality_detection
+date_created: '2023-08-24T12:12:12'
