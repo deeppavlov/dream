@@ -51,7 +51,6 @@ def generative_lm_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     sending_variables = compose_sending_variables(
         lm_service_kwargs,
         envvars_to_send,
-        **human_uttr_attributes,
     )
     prompt = compose_input_for_API(ctx, actor)
     if len(dialog_context) > 0:

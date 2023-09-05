@@ -102,7 +102,6 @@ PLAN:
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
-            **human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -155,7 +154,6 @@ ANSWER ONLY YES/NO"""
             sending_variables = compose_sending_variables(
                 lm_service_kwargs,
                 envvars_to_send,
-                **human_uttr_attributes,
             )
             try:
                 hypotheses = send_request_to_prompted_generative_service(
@@ -204,7 +202,6 @@ to complete the current task"""
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
-            **human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -263,7 +260,6 @@ DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
-            **human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -347,7 +343,6 @@ and 'No' and the reason if negative."""
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
-            **human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -389,7 +384,6 @@ YOUR TASK: given the information in the context, form a final answer to the user
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
-            **human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(

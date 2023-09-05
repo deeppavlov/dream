@@ -52,7 +52,7 @@ def check_universal_assistant(lm_services):
                 "payload": "I want an article about quantum physics for children.",
                 "prompt": prompt,
                 "lm_service_url": LM_SERVICES_MAPPING[lm_service],
-                "openai_api_key": OPENAI_API_KEY,
+                "lm_service_kwargs": {"openai_api_key": OPENAI_API_KEY},
             },
         ).json()["active_skill"]
 

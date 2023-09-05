@@ -89,44 +89,67 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    prompt = human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)
-    logger.info(f"prompt: {prompt}")
-    lm_service_url = human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)
-    logger.info(f"lm_service_url: {lm_service_url}")
-    # this is a dictionary! not a file!
-    lm_service_config = human_uttr_attributes.pop("lm_service_config", None)
-    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-    envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
-    sending_variables = compose_sending_variables(
-        lm_service_kwargs,
-        envvars_to_send,
-        **human_uttr_attributes,
-    )
 
-    if len(dialog_context) > 0:
-        try:
-            hypotheses = send_request_to_prompted_generative_service(
-                dialog_context,
-                prompt,
-                lm_service_url,
-                lm_service_config,
-                GENERATIVE_TIMEOUT,
-                sending_variables,
-            )
-        except Exception as e:
-            sentry_sdk.capture_exception(e)
-            logger.exception(e)
-            hypotheses = []
+    if isinstance(human_uttr_attributes.get("prompt", None), list):
+        skill_names = human_uttr_attributes.pop("skill_name", None)
+        prompts = human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)
+        lm_service_urls = human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)
+        lm_service_configs = human_uttr_attributes.pop("lm_service_config", None)
+        lm_service_configs = [None for _ in prompts] if lm_service_configs is None else lm_service_configs
+        lm_service_kwargss = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_kwargss = [None for _ in prompts] if lm_service_kwargss is None else lm_service_kwargss
+        lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
     else:
-        hypotheses = []
-    logger.info(f"generated hypotheses: {hypotheses}")
-    for hyp in hypotheses:
-        confidence = DEFAULT_CONFIDENCE
-        if len(hyp) and hyp[-1] not in [".", "?", "!"]:
-            hyp += "."
-            confidence = LOW_CONFIDENCE
-        gathering_responses(hyp, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        skill_names = [human_uttr_attributes.pop("skill_name", None)]
+        prompts = [human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)]
+        lm_service_urls = [human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)]
+        # the config is a dictionary! not a file!
+        lm_service_configs = [human_uttr_attributes.pop("lm_service_config", None)]
+        lm_service_kwargss = [human_uttr_attributes.pop("lm_service_kwargs", None)]
+        lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
+
+    for skill_name, prompt, lm_service_url, lm_service_config, lm_service_kwargs in zip(
+        skill_names, prompts, lm_service_urls, lm_service_configs, lm_service_kwargss
+    ):
+        logger.info(f"lm_service_url: {lm_service_url}")
+        logger.info(f"prompt: {prompt}")
+        envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            envvars_to_send,
+        )
+        if len(dialog_context) > 0:
+            try:
+                hypotheses = send_request_to_prompted_generative_service(
+                    dialog_context,
+                    prompt,
+                    lm_service_url,
+                    lm_service_config,
+                    GENERATIVE_TIMEOUT,
+                    sending_variables,
+                )
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                hypotheses = []
+        else:
+            hypotheses = []
+        logger.info(f"generated hypotheses: {hypotheses}")
+        for hyp in hypotheses:
+            confidence = DEFAULT_CONFIDENCE
+            if len(hyp) and hyp[-1] not in [".", "?", "!"]:
+                hyp += "."
+                confidence = LOW_CONFIDENCE
+            gathering_responses(
+                hyp,
+                confidence,
+                {},
+                {},
+                {
+                    "can_continue": CAN_NOT_CONTINUE,
+                    "skill_name": "dff_universal_prompted_skill" if skill_name is None else skill_name,
+                },
+            )
 
     if len(curr_responses) == 0:
         return ""

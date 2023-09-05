@@ -84,7 +84,6 @@ Input format: {input_template}"""
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
-            **human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(

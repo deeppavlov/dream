@@ -1,0 +1,26 @@
+FROM python:3.10
+
+RUN mkdir /src
+
+COPY ./response_selectors/universal_llm_based_response_selector/requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
+
+ARG SERVICE_PORT
+ENV SERVICE_PORT ${SERVICE_PORT}
+ARG DEFAULT_LM_SERVICE_URL
+ENV DEFAULT_LM_SERVICE_URL ${DEFAULT_LM_SERVICE_URL}
+ARG GENERATIVE_TIMEOUT
+ENV GENERATIVE_TIMEOUT ${GENERATIVE_TIMEOUT}
+ARG DEFAULT_LM_SERVICE_CONFIG
+ENV DEFAULT_LM_SERVICE_CONFIG ${DEFAULT_LM_SERVICE_CONFIG}
+ARG N_UTTERANCES_CONTEXT=5
+ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
+ARG FILTER_TOXIC_OR_BADLISTED=1
+ENV FILTER_TOXIC_OR_BADLISTED ${FILTER_TOXIC_OR_BADLISTED}
+
+COPY ./response_selectors/universal_llm_based_response_selector/ /src/
+WORKDIR /src
+COPY ./common/ ./common/
+
+
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200

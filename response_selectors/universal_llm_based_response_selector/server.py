@@ -4,6 +4,7 @@ import difflib
 import json
 import logging
 import numpy as np
+import re
 import time
 from copy import deepcopy
 from os import getenv
@@ -21,23 +22,33 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
-GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
-if GENERATIVE_SERVICE_CONFIG:
-    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
-        GENERATIVE_SERVICE_CONFIG = json.load(f)
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
-PROMPT_FILE = getenv("PROMPT_FILE")
-assert PROMPT_FILE, logger.error("No prompt provided")
-with open(PROMPT_FILE, "r") as f:
-    PROMPT = json.load(f)["prompt"]
 
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+DEFAULT_PROMPT = json.load(open("common/prompts/response_selector.json", "r"))["prompt"]
+DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-gptjt:8161/respond")
+DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
+DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
+ENVVARS_TO_SEND = {
+    "http://transformers-lm-gptj:8130/respond": [],
+    "http://transformers-lm-bloomz7b:8146/respond": [],
+    "http://transformers-lm-oasst12b:8158/respond": [],
+    "http://openai-api-chatgpt:8145/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-chatgpt-16k:8167/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-davinci3:8131/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-gpt4:8159/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://openai-api-gpt4-32k:8160/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
+    "http://transformers-lm-gptjt:8161/respond": [],
+    "http://anthropic-api-claude-v1:8164/respond": ["ANTHROPIC_API_KEY"],
+    "http://anthropic-api-claude-instant-v1:8163/respond": ["ANTHROPIC_API_KEY"],
+    "http://transformers-lm-vicuna13b:8168/respond": [],
+    "http://transformers-lm-ruxglm:8171/respond": [],
+    "http://transformers-lm-rugpt35:8178/respond": [],
+}
+
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
 
-assert GENERATIVE_SERVICE_URL
+FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
@@ -57,30 +68,47 @@ def select_response_by_scores(hypotheses, scores):
     return result, best_id
 
 
-def select_response(dialog_context, hypotheses, human_uttr_attributes):
+def select_response(dialog, hypotheses, human_uttr_attributes):
+    dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+
+    # get prompt from the current utterance attributes
+    given_prompt = human_uttr_attributes.get("response_selector_prompt", DEFAULT_PROMPT)
+    for i in range(1, len(dialog["utterances"]) + 1, 2):
+        curr_prompt = dialog["utterances"][-i].get("attributes", {}).get("response_selector_prompt", DEFAULT_PROMPT)
+        # checking only user utterances
+        if curr_prompt != given_prompt:
+            # cut context on the last user utterance utilizing the current prompt
+            dialog_context = dialog_context[-i + 2 :]
+            break
+
     try:
         ie_types = [
             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
         ]
-        if "transformers" in GENERATIVE_SERVICE_URL:
+        if "transformers" in DEFAULT_LM_SERVICE_URL:
             curr_prompt = (
                 "Hypotheses:\n"
                 + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
                 + "\n"
-                + PROMPT
+                + given_prompt
             )
         else:
             curr_prompt = (
-                PROMPT
+                given_prompt
                 + "\nHypotheses:\n"
                 + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
             )
-        logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
-        logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
+        logger.info(f"universal_llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
+        logger.info(f"universal_llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
-        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+        lm_service_url = human_uttr_attributes.pop("response_selector_lm_service_url", DEFAULT_LM_SERVICE_URL)
+        logger.info(f"lm_service_url: {lm_service_url}")
+        # this is a dictionary! not a file!
+        lm_service_config = human_uttr_attributes.pop("response_selector_lm_service_config", None)
+
+        lm_service_kwargs = human_uttr_attributes.pop("response_selector_lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+        envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
@@ -88,8 +116,8 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
         response = send_request_to_prompted_generative_service(
             dialog_context,
             curr_prompt,
-            GENERATIVE_SERVICE_URL,
-            GENERATIVE_SERVICE_CONFIG,
+            lm_service_url,
+            lm_service_config,
             GENERATIVE_TIMEOUT,
             sending_variables,
         )
@@ -99,7 +127,7 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
         logger.exception(e)
         result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]
         logger.info("Exception in LLM's invocation. Selected a response with the highest confidence.")
-    logger.info(f"llm_based_response_selector selected:\n`{result}`")
+    logger.info(f"universal_llm_based_response_selector selected:\n`{result}`")
 
     return result
 
@@ -134,10 +162,7 @@ def respond():
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
-        dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
-        selected_resp = select_response(
-            dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {})
-        )
+        selected_resp = select_response(dialog, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
         if selected_resp:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
             hypotheses[best_id].pop("text")
@@ -161,7 +186,7 @@ def respond():
             selected_attributes.append(hypotheses[best_id])
 
     total_time = time.time() - st_time
-    logger.info(f"llm_based_response_selector exec time = {total_time:.3f}s")
+    logger.info(f"universal_llm_based_response_selector exec time = {total_time:.3f}s")
     return jsonify(
         list(
             zip(

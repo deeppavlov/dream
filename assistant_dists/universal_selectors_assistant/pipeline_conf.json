@@ -28,7 +28,7 @@
             ],
             "source": {
                 "component": "components/5J6lKI1JAjI9.yml",
-                "service": "services/agent_services/service_configs/universal_prompted_assistant"
+                "service": "services/agent_services/service_configs/universal_selectors_assistant"
             }
         },
         "timeout_service": {
@@ -52,7 +52,7 @@
             ],
             "source": {
                 "component": "components/6UmSIUrka1Tl.yml",
-                "service": "services/agent_services/service_configs/universal_prompted_assistant"
+                "service": "services/agent_services/service_configs/universal_selectors_assistant"
             }
         },
         "response_annotator_selectors": {
@@ -214,8 +214,8 @@
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://ranking-based-response-selector:8002/respond"
+                    "timeout": 20.0,
+                    "url": "http://universal-llm-based-response-selector:8181/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -225,18 +225,18 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
-                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
+                    "component": "components/jksdfhuiwebfuw7f823rf.yml",
+                    "service": "response_selectors/universal_llm_based_response_selector/service_configs/universal-llm-based-response-selector"
                 }
             }
         }
     },
     "metadata": {
-        "display_name": "Universal Prompted Assistant",
+        "display_name": "Universal Selectors Assistant",
         "author": "Sentius",
-        "description": "Universal Assistant to debug LLM-based Skills",
+        "description": "Universal Assistant to debug LLM-based Skill and Response Selectors",
         "version": "0.0.1",
-        "date_created": "2023-08-10T02:00:00",
+        "date_created": "2023-09-05T02:00:00",
         "ram_usage": "4 GB",
         "gpu_usage": "3 GB",
         "disk_usage": "10 GB"

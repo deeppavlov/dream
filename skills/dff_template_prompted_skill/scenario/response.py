@@ -93,7 +93,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     sending_variables = compose_sending_variables(
         lm_service_kwargs,
         envvars_to_send,
-        **human_uttr_attributes,
     )
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)

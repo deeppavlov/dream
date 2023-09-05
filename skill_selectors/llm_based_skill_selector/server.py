@@ -76,7 +76,6 @@ def select_skills(dialog):
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
-            **human_uttr_attributes,
         )
         response = send_request_to_prompted_generative_service(
             dialog_context,

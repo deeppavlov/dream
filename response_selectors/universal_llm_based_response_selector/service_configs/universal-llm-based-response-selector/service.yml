@@ -1,0 +1,30 @@
+name: universal-llm-based-response-selector
+endpoints:
+- respond
+compose:
+  env_file: [ .env,.env_secret ]
+  build:
+    args:
+      SERVICE_PORT: 8181
+      SERVICE_NAME: response_selector
+      LANGUAGE: EN
+      FILTER_TOXIC_OR_BADLISTED: 1
+      DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+      DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json
+      GENERATIVE_TIMEOUT: 120
+      N_UTTERANCES_CONTEXT: 1
+      FLASK_APP: server
+    context: .
+    dockerfile: ./response_selectors/universal_llm_based_response_selector/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8181
+  environment:
+    - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  ports:
+  - 8181:8181
+proxy: null
