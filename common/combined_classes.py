@@ -212,5 +212,5 @@ TOPIC_GROUPS = {
     "games": ["Games", "Toys&Games", "Videogames", "видеоигры", "игрушки", "настольные игры"],
     "animals": ["Pets_Animals", "Animals&Pets", "кошки", "собаки"],
     "sex": ["Sex_Profanity", "секс", "секспросвет"],
-    "weather": ["Weather_Time", "погода"]
+    "weather": ["Weather_Time", "погода"],
 }  # The list can be expanded according to the topic list supported
