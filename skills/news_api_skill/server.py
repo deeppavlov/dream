@@ -121,7 +121,7 @@ def collect_topics_and_statuses(dialogs):
         )
 
         if len(prev_news_skill_output) > 0 and len(prev_news_skill_output[-1]) > 0:
-            logger.info(f"News skill was prev active.")
+            logger.info("News skill was prev active.")
             prev_news_skill_output = prev_news_skill_output[-1]
             prev_status = prev_news_skill_output.get("news_status", "")
             prev_topic = prev_news_skill_output.get("news_topic", "all")
@@ -200,7 +200,7 @@ def collect_topics_and_statuses(dialogs):
                 statuses.append("finished")
                 curr_news_samples.append(get_news_for_current_entity("all", curr_uttr, discussed_news))
         else:
-            logger.info(f"News skill was NOT active.")
+            logger.info("News skill was NOT active.")
             about_news = (
                 ({"News"} & set(get_topics(curr_uttr, which="cobot_topics")))
                 or re.search(NEWS_TEMPLATES, curr_uttr["text"].lower())

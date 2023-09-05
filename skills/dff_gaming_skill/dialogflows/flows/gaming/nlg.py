@@ -53,10 +53,10 @@ IGDB_GAME_GENRES_FOR_REPLICAS = get_igdb_id_to_name("genre", "name_for_inserting
 
 @error_handler
 def check_game_name_with_user_response(vars):
-    logger.info(f"check_game_name_with_user_response")
+    logger.info("check_game_name_with_user_response")
     igdb_game_description, _ = game_info.search_igdb_game_description_by_user_and_bot_phrases(vars)
     if igdb_game_description is not None:
-        logger.info(f"(user_wants_to_talk_about_particular_game_request)saving candidate id to shared memory")
+        logger.info("user_wants_to_talk_about_particular_game_request saving candidate id to shared memory")
         state_utils.save_to_shared_memory(vars, candidate_game_id=igdb_game_description["id"])
         shared_memory = state_utils.get_shared_memory(vars)
         logger.info(f"(check_game_name_with_user_response)shared_memory: {shared_memory.keys()}")

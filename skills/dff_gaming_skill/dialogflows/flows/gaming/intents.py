@@ -183,7 +183,7 @@ def user_doesnt_like_gaming_request(ngrams, vars):
 
 
 def user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request(ngrams, vars):
-    logger.info(f"user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request")
+    logger.info("user_didnt_name_game_after_question_about_games_and_didnt_refuse_to_discuss_request")
     user_uttr = state_utils.get_last_human_utterance(vars)
     bot_text = state_utils.get_last_bot_utterance(vars).get("text", "")
     found_game_name = bool(find_games_in_text(user_uttr.get("text", "")))
