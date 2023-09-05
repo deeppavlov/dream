@@ -415,7 +415,7 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
         return True
 
     # current uttr is lets talk about something else / other than
-    chat_about_intent = "lets_chat_about" in utils.get_intents(annotated_uttr, 
+    chat_about_intent = "lets_chat_about" in utils.get_intents(annotated_uttr,
                                                                probs=False, which="intent_catcher")
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
     if chat_about and SOMETHING_ELSE.search(uttr_):
@@ -454,7 +454,8 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
 
     # prev uttr is what do you want to talk about?
-    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
+    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(prev_annotated_uttr, probs=False, 
+                                                                    which="intent_catcher")
     prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
 
     not_want = if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr)
