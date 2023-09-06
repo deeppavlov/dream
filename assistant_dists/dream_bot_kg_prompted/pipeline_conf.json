@@ -167,7 +167,7 @@
             "entity_linking": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
+                    "timeout": 5.0,
                     "url": "http://entity-linking:8075/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:el_formatter_last_bot_dialog",
@@ -233,7 +233,7 @@
             "bot_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3.0,
+                    "timeout": 5.0,
                     "url": "http://bot-knowledge-memorizer:8027/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:bot_knowledge_memorizer_formatter_last_bot_dialog",
