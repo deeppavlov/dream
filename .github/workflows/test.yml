@@ -46,11 +46,13 @@ jobs:
         ./tests/test.sh BOT=multiskill_ai_assistant MODE=test
         ./tests/test.sh BOT=multiskill_ai_assistant MODE=clean
 
-    - name: Logs
+    - name: Universal logs
       if: failure()
-      run: |
-        ./tests/test.sh BOT=multiskill_ai_assistant MODE=logs
-        ./tests/test.sh BOT=universal_prompted_assistant MODE=logs
+      run: ./tests/test.sh BOT=universal_prompted_assistant MODE=logs
+
+    - name: Multiskill logs
+      if: failure()
+      run: ./tests/test.sh BOT=multiskill_ai_assistant MODE=logs
 
     - name: Cleanup
       if: always()

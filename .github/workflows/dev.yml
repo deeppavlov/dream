@@ -1,0 +1,48 @@
+name: Update dev environment
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: update base bots
+        id: dev_update
+        run: /home/ubuntu/venv/bin/python3 utils/deploy/deploy.py
+
+      - name: test universal
+        run: BOT_PORT=4249 /home/ubuntu/venv/bin/python3 tests/test.py universal_prompted_assistant
+
+      - name: test multy
+        run: BOT_PORT=4250 /home/ubuntu/venv/bin/python3 tests/test.py multiskill_ai_assistant
+
+      - name: Dev Update Notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: steps.dev_update.outputs.exit_code == 0
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          overwrite: "{title: `Dev updated`, text: ''}"
+          job: '{"status": "success"}'
+
+      - name: Dev update failure notification
+        uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          overwrite: "{title: `Failed to update dev`, text: ''}"
+          job: '{"status": "failure"}'
+
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      GOOGLE_CSE_ID: ${{ secrets.GOOGLE_CSE_ID }}
+      PORTAINER_URL: ${{ secrets.DEV_PORTAINER_URL }}
+      PORTAINER_KEY: ${{ secrets.DEV_PORTAINER_KEY }}
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      PROXY_HOST: ${{ secrets.PROXY_HOST }}

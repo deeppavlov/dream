@@ -2,19 +2,30 @@ import argparse
 import os
 import random
 from time import sleep
+from urllib import parse
 
 import requests
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+BOT_PORT = os.getenv("BOT_PORT")
+PORTAINER_URL = os.getenv("PORTAINER_URL")
+
+if BOT_PORT and PORTAINER_URL:
+    print("testing in portainer")
+    BOT_URL = f"http://{parse.urlparse(PORTAINER_URL).hostname}:{BOT_PORT}"
+else:
+    BOT_URL = "http://0.0.0.0:4242"
+
+host = parse.urlparse(PORTAINER_URL).hostname
 
 
 def test_bot():
     user_id = random.randint(0, 100)
     res = requests.post(
-        "http://0.0.0.0:4242",
+        BOT_URL,
         json={
             "user_id": f"test-user-{user_id}",
-            "payload": "Who are you? who built you? what can you do?",
+            "payload": "Help me with an article about penguins.",
         },
     ).json()["active_skill"]
     if "prompted" in res:
@@ -46,10 +57,10 @@ def check_universal_assistant(lm_services):
         print(f"Checking `Universal Assistant` with `{lm_service}`")
 
         result = requests.post(
-            "http://0.0.0.0:4242",
+            BOT_URL,
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
-                "payload": "I want an article about quantum physics for children.",
+                "payload": "Help me with an article about penguins.",
                 "prompt": prompt,
                 "lm_service_url": LM_SERVICES_MAPPING[lm_service],
                 "lm_service_kwargs": {"openai_api_key": OPENAI_API_KEY},
