@@ -58,6 +58,9 @@ def select_response_by_scores(hypotheses, scores):
 
 
 def select_response(dialog_context, hypotheses, human_uttr_attributes):
+    if human_uttr_attributes.get("return_all_hypotheses", None):
+        return "\n".join(['"' + hyp["skill_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses])
+
     try:
         ie_types = [
             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
@@ -85,6 +88,7 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
             sending_variables,
         )
         result = response[0]
+        result = result.replace("[internal service]", "").replace("[external service]", "").strip()
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

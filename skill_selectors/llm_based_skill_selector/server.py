@@ -58,6 +58,9 @@ def select_skills(dialog):
     # pipeline is smth like this: ['annotators.sentseg', 'skills.dummy_skill',
     # 'candidate_annotators.sentence_ranker', 'response_selectors.response_selector', ...]
     all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
+    if human_uttr_attributes.get("selected_skills", None) in ["all", []]:
+        logger.info(f"llm_based_skill_selector selected ALL skills:\n`{all_skill_names}`")
+        return all_skill_names
 
     try:
         if "LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS" in PROMPT:

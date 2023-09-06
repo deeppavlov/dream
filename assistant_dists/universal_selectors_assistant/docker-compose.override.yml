@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_selectors_assistant/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "sentseg:8011, universal-llm-based-response-selector:8181, combined-classification:8087, 
-        sentence-ranker:8128, openai-api-chatgpt:8145, openai-api-davinci3:8131,
+        sentence-ranker:8128, openai-api-chatgpt:8145, openai-api-davinci3:8131, universal-llm-based-skill-selector:8187,
         openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167,
         dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -28,8 +28,9 @@ services:
     env_file: [ .env ]
     build:
       args:
-        CONFIG: combined_classifier.json
         SERVICE_PORT: 8087
+        SERVICE_NAME: combined_classification
+        CONFIG: combined_classifier.json
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8087 --timeout 600
@@ -41,6 +42,29 @@ services:
           memory: 2G
         reservations:
           memory: 2G
+
+  universal-llm-based-skill-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8187
+        SERVICE_NAME: skill_selector
+        DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+        DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json
+        GENERATIVE_TIMEOUT: 20
+        N_UTTERANCES_CONTEXT: 3
+        MAX_N_SKILLS: 3
+      context: .
+      dockerfile: ./skill_selectors/universal_llm_based_skill_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8187
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   universal-llm-based-response-selector:
     env_file: [ .env ]

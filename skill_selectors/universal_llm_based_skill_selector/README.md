@@ -1,11 +1,16 @@
-# Universal LLM-based Response Selector
+# Universal LLM-based Skill Selector
 
 ## Description
 
-Debugging Response Selector is a component selecting final response among the given hypotheses by different skills.
-The LLM-based Response Selector utilizes LLM with to select the best hypotheses in a generative manner.
-The considered LLM-service, generative parameters, prompts and skill names are provided IN attributes of 
-the last human utterance.
+Debugging Skill Selector is a component selecting a list of skills to generate hypotheses.
+The LLM-based Skill Selector utilizes LLM service to select the skills in a generative manner.
+The considered LLM-service, generative parameters and prompt  are provided IN attributes of 
+the last human utterance. The list of all available skills is picked up from human utterance attributes.
+
+
+**Important** Provide `"return_all_hypotheses": True` (to return joined list of all returned hypotheses) 
+and `"selected_skills": "all"` (to turn on dff_universal_prompted_skill because all other prompted skills
+are not deployed during debugging process).
 
 How to use:
 
@@ -44,22 +49,28 @@ for lm_service in ["ChatGPT"]:
                 {"openai_api_key": "FILL IN"},
                 {"openai_api_key": "FILL IN"}
             ],
-            # ---------------------------- response selector parameters
-            "response_selector_prompt": "Select the most funny answer.\nLIST_OF_HYPOTHESES\n", 
-            "response_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
-            "response_selector_lm_service_config": 
+            # ---------------------------- response selector MUST RETURN ALL HYPOTHESES JOINED
+            "return_all_hypotheses": True,
+            # ---------------------------- skill selector 
+            "selected_skills": "all", # must use it to turn on universal skill (others are not deployed!)
+            "skill_selector_prompt": """
+Select up to 2 the most relevant to the dialog context skills based on the given short descriptions of abilities of different skills of the assistant.
+
+Skills:
+"Mathematician Skill": "A skill pretending to be a mathematician."
+"blondy_skill": "A Skill pretending to be a blondy girl."
+
+Return only names of the selected skills divided by comma. Do not respond to the dialog context.""", 
+            "skill_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
+            "skill_selector_lm_service_config": 
                 {
                     "max_new_tokens": 64,
-                    "temperature": 0.9,
+                    "temperature": 0.4,
                     "top_p": 1.0,
                     "frequency_penalty": 0,
                     "presence_penalty": 0
                 },
-            "response_selector_lm_service_kwargs": 
-                {
-                    "openai_api_key": "FILL IN"
-                },
-            "selected_skills": "all",
+            "skill_selector_lm_service_kwargs": {"openai_api_key": "FILL IN"},
         }).json()
     print(f"Response:\n{result['response']}")
     if result["active_skill"] not in ["Dummy Skill", "dummy_skill"]:
@@ -73,8 +84,8 @@ for lm_service in ["ChatGPT"]:
 
 ### Parameters
 
-The algorithm utilizes `N_UTTERANCES_CONTEXT` last utterances as a context for LLM,
-Parameter `FILTER_TOXIC_OR_BADLISTED` defines whether it filers out toxic hypotheses or not.
+The algorithm utilizes `N_UTTERANCES_CONTEXT` last utterances as a context for LLM.
+Number of returned skills can ve varied by the prompt itself.
 
 ## Dependencies
 

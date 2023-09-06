@@ -71,6 +71,9 @@ def select_response_by_scores(hypotheses, scores):
 def select_response(dialog, hypotheses, human_uttr_attributes):
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
 
+    if human_uttr_attributes.get("return_all_hypotheses", None):
+        return "\n".join(['"' + hyp["skill_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses])
+
     # get prompt from the current utterance attributes
     given_prompt = human_uttr_attributes.get("response_selector_prompt", DEFAULT_PROMPT)
     for i in range(1, len(dialog["utterances"]) + 1, 2):
@@ -113,6 +116,7 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
             sending_variables,
         )
         result = response[0]
+        result = result.replace("[internal service]", "").replace("[external service]", "").strip()
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

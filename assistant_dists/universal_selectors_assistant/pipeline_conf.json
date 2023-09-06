@@ -112,12 +112,13 @@
             }
         },
         "skill_selectors": {
-            "rule_based_selector": {
+            "skill_selector": {
                 "connector": {
-                    "protocol": "python",
-                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                    "protocol": "http",
+                    "timeout": 10.0,
+                    "url": "http://universal-llm-based-skill-selector:8187/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators"
@@ -127,8 +128,8 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
-                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                    "component": "components/jkdfh12oien9dfuih1.yml",
+                    "service": "skill_selectors/universal_llm_based_skill_selector/service_configs/universal-llm-based-skill-selector"
                 }
             }
         },

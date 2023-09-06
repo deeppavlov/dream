@@ -1,4 +1,4 @@
-name: universal-llm-based-response-selector
+name: universal-llm-based-skill-selector
 endpoints:
 - respond
 compose:
@@ -6,18 +6,17 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8181
-      SERVICE_NAME: response_selector
-      LANGUAGE: EN
-      FILTER_TOXIC_OR_BADLISTED: 1
+      SERVICE_PORT: 8187
+      SERVICE_NAME: skill_selector
       DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
       DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json
-      GENERATIVE_TIMEOUT: 120
-      N_UTTERANCES_CONTEXT: 1
+      GENERATIVE_TIMEOUT: 20
+      N_UTTERANCES_CONTEXT: 3
+      MAX_N_SKILLS: 3
       FLASK_APP: server
     context: .
-    dockerfile: ./response_selectors/universal_llm_based_response_selector/Dockerfile
-  command: flask run -h 0.0.0.0 -p 8181
+    dockerfile: ./skill_selectors/universal_llm_based_skill_selector/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8187
   environment:
     - FLASK_APP=server
   deploy:
@@ -27,5 +26,6 @@ compose:
       reservations:
         memory: 100M
   ports:
-  - 8181:8181
+  - 8187:8187
 proxy: null
+

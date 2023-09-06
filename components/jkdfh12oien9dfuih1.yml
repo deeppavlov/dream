@@ -1,0 +1,25 @@
+name: skill_selector
+display_name: Universal LLM-based Skill Selector
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Algorithm that selects skills to generate hypotheses among the given list of all available
+  skills in pipeline and provided LLM service
+ram_usage: 100M
+gpu_usage: null
+group: skill_selectors
+connector:
+  protocol: http
+  timeout: 10.0
+  url: http://universal-llm-based-skill-selector:8187/respond
+dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: skill_selectors/universal_llm_based_skill_selector/service_configs/universal-llm-based-skill-selector
+date_created: '2023-03-16T09:45:32'
