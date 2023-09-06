@@ -62,19 +62,10 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
         ie_types = [
             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
         ]
-        if "transformers" in GENERATIVE_SERVICE_URL:
-            curr_prompt = (
-                "Hypotheses:\n"
-                + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
-                + "\n"
-                + PROMPT
-            )
-        else:
-            curr_prompt = (
-                PROMPT
-                + "\nHypotheses:\n"
-                + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
-            )
+        curr_prompt = PROMPT.replace(
+            "LIST_OF_HYPOTHESES",
+            "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)]),
+        )
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 

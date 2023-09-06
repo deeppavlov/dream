@@ -85,19 +85,10 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
         ie_types = [
             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
         ]
-        if "transformers" in DEFAULT_LM_SERVICE_URL:
-            curr_prompt = (
-                "Hypotheses:\n"
-                + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
-                + "\n"
-                + given_prompt
-            )
-        else:
-            curr_prompt = (
-                given_prompt
-                + "\nHypotheses:\n"
-                + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)])
-            )
+        curr_prompt = given_prompt.replace(
+            "LIST_OF_HYPOTHESES",
+            "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)]),
+        )
         logger.info(f"universal_llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"universal_llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
