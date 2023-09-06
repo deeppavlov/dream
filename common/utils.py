@@ -752,10 +752,10 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         )
     topics_ru_probs, topics_ru_labels = {}, []
     if "topics_ru" in annotations:
-        dp_topics_probs, dp_topics_labels = _get_combined_annotations(annotated_utterance, model_name="topics_ru")
+        topics_ru_probs, topics_ru_labels = _get_combined_annotations(annotated_utterance, model_name="topics_ru")
     if which == "all":
         answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels + topics_ru_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs, **topics_ru_labels}
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs, **topics_ru_probs}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
