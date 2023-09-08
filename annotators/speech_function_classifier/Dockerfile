@@ -12,6 +12,8 @@ RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@feat/speech-fn 
 
 COPY . ./
 
+RUN pip install -r requirements.txt
+
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
