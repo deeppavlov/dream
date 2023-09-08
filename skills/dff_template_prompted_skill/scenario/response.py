@@ -99,6 +99,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
     prompt = prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
+    logger.info(f"prompt: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
 
     if len(dialog_context) > 0:
