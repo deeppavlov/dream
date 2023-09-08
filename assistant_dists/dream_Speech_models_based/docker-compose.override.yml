@@ -6,6 +6,7 @@ services:
           dff-intent-responder-skill:8012, intent-catcher:8014, ner:8021,
           factoid-qa:8071, kbqa:8072, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
+          speech-function-classifier:8108,
           sentence-ranker:8128, property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
           openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -422,5 +423,22 @@ services:
           memory: 4G
         reservations:
           memory: 4G
+
+  speech-function-classifier:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8108
+        SERVICE_NAME: speech_function_classifier
+      context: ./annotators/speech_function_classifier/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8108
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
 
 version: '3.7'

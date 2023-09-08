@@ -85,6 +85,22 @@
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
+            "speech_function_classifier": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5,
+                    "url": "http://sentseg:8108/speech-function-classifier"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "CREATE COMPONENT",
+                    "service": "annotators/speech_function_classifier/service_configs/speech-function-classifier"
+                }
+            },
             "prompt_goals_collector": {
                 "connector": {
                     "protocol": "http",

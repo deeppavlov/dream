@@ -90,4 +90,5 @@ async def annotation(payload: List[AnnotationPayload]):
     )
     total_time = time.time() - st_time
     logger.info(f"speech_function_classifier batch exec time: {total_time:.3f}s")
+    logger.info(f"speech function classifier result: {responses}")
     return [{"batch": responses}]
