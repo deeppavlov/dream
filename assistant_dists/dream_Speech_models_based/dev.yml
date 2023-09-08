@@ -141,7 +141,7 @@ services:
       - 8167:8167
   speech-function-classifier:
     volumes:
-      - "./services/speech_function_classifier:/src"
+      - "./annotators/speech_function_classifier:/src"
     ports:
       - 8108:8108
 version: "3.7"
