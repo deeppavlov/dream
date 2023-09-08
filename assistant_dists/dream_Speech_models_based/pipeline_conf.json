@@ -89,7 +89,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 5,
-                    "url": "http://sentseg:8108/speech-function-classifier"
+                    "url": "http://speech-function-classifier:8108/annotation"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
