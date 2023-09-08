@@ -2,10 +2,12 @@
     "connectors": {
         "sentseg": {
             "protocol": "http",
+            "timeout": 1.5,
             "url": "http://sentseg:8011/sentseg"
         },
         "ner": {
             "protocol": "http",
+            "timeout": 1.5,
             "url": "http://ner:8021/ner"
         }
     },
@@ -22,7 +24,10 @@
                             "Sorry, something went wrong inside.",
                             "Please tell me, what did you say."
                         ]
-                    }
+                    },
+                    "ner": [
+                        []
+                    ]
                 }
             },
             "state_manager_method": "add_bot_utterance_last_chance",
@@ -31,8 +36,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/BaSKxZCuhKjw.yml",
-                "service": "services/agent_services/service_configs/dff_knowledge_prompted_skill"
+                "component": "components/rFC0YJOoDFvS.yml",
+                "service": "services/agent_services/service_configs/dream_kg_prompted"
             }
         },
         "timeout_service": {
@@ -59,8 +64,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/BaSKxZCuhKjw.yml",
-                "service": "services/agent_services/service_configs/dff_knowledge_prompted_skill"
+                "component": "components/rFC0YJOoDFvS.yml",
+                "service": "services/agent_services/service_configs/dream_kg_prompted"
             }
         },
         "response_annotator_selectors": {
@@ -272,18 +277,24 @@
                     "service": "annotators/custom_entity_linking/service_configs/custom-entity-linking"
                 }
             },
-            "user_knowledge_graph": {
+            "user_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
-                    "url": "http://user-knowledge-graph:8129/respond"
+                    "timeout": 2.0,
+                    "url": "http://user-knowledge-memorizer:8027/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:user_knowledge_graph_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:last_human_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
                 "previous_services": [
                     "annotators.property_extraction",
                     "annotators.custom_entity_linking"
-                ]
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/74p4006d17yappr7ji7dtf.yml",
+                    "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer"
+                }
             },
             "combined_classification": {
                 "connector": {

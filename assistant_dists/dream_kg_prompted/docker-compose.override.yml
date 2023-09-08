@@ -4,13 +4,14 @@ services:
     environment:
       WAIT_HOSTS: "spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, 
           ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb:6363, 
-          user-knowledge-graph:8129, property-extraction:8131, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
+          user-knowledge-memorizer:8027, property-extraction:8131, custom-entity-linking:8153, dff-knowledge-prompted-skill:8137, 
           sentence-ranker:8128, prompt-selector:8135"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   spacy-nounphrases:
     env_file: [.env]
@@ -187,21 +188,25 @@ services:
         reservations:
           memory: 7G
 
-  user-knowledge-graph:
+  user-knowledge-memorizer:
     env_file: [ .env, .env_secret ]
     build:
       args:
-        PORT: 8129
-        SRC_DIR: annotators/user_knowledge_graph/
+        SERVICE_PORT: 8027
+        SRC_DIR: annotators/user_knowledge_memorizer/
+        SERVICE_NAME: user_knowledge_memorizer
+        TERMINUSDB_SERVER_URL: https://7063.deeppavlov.ai/
+        TERMINUSDB_SERVER_PASSWORD: G5KMuz9dF1K2mD5cPz726oazSJJtkFLw
+        TERMINUSDB_SERVER_TEAM: admin
+        TERMINUSDB_SERVER_DB: new_kg_skill12
+        CONFIG: config.json
         OPENAI_API_KEY:
         CHAT_GPT_PORT: 8145
       context: ./
-      dockerfile: annotators/user_knowledge_graph/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8129
+      dockerfile: annotators/user_knowledge_memorizer/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8027
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=8
-      - INDEX_LOAD_PATH=/root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream
     deploy:
       resources:
         limits:
