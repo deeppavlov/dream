@@ -117,30 +117,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
-  dff-dream-persona-chatgpt-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8137:8137
-  dff-google-api-skill:
-    volumes:
-      - "./skills/dff_google_api_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8162:8162
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8136:8136
-  dff-dream-faq-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8170:8170
   summarization-annotator:
     volumes:
       - "./annotators/summarization_annotator:/src"
@@ -157,4 +139,9 @@ services:
       - "./common:/src/common"
     ports:
       - 8167:8167
+  speech-function-classifier:
+    volumes:
+      - "./services/speech_function_classifier:/src"
+    ports:
+      - 8108:8108
 version: "3.7"

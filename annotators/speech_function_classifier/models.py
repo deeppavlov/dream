@@ -1,6 +1,8 @@
 from deeppavlov import build_model
 
+
 model = build_model('speech_fn')
+
 
 def check_sfs(predicted_sf, previous_sf, current_speaker, previous_speaker):
     if predicted_sf == 'Command':
