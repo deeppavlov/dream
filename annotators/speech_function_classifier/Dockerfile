@@ -4,8 +4,11 @@ WORKDIR /src
 
 RUN apt-get update && apt-get install -y --allow-unauthenticated git curl && rm -rf /var/lib/apt/lists/*
 
-RUN git clone -b feat/speech-fn https://github.com/deeppavlov/DeepPavlov.git && \
-	cd DeepPavlov && pip install -e . && cd .. && rm -rf DeepPavlov && python -m deeppavlov download speech_fn
+# RUN git clone -b feat/speech-fn https://github.com/deeppavlov/DeepPavlov.git && \
+# 	cd DeepPavlov && pip install -e . && cd .. && rm -rf DeepPavlov && python -m deeppavlov download speech_fn
+
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@feat/speech-fn && \
+        python -m deeppavlov download speech_fn
 
 COPY . ./
 
