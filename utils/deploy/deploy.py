@@ -124,6 +124,18 @@ multi_bot = Bot(
 )
 
 
+selectors_bot = Bot(
+    dist_name="universal_selectors_assistant",
+    stack_name="selectors",
+    user_services=[
+        "universal-llm-based-skill-selector",
+        "universal-llm-based-response-selector",
+    ],
+    deployment_dict=gen_deployment_dict(4248),
+    prefix="universal_",
+)
+
+
 def check(port):
     host = parse.urlparse(settings.portainer_url).hostname
     url = f"http://{host}:{port}/ping"
@@ -159,7 +171,8 @@ def main():
     deploy(universal_bot)
     dotenv.set_key(DREAM_ROOT_PATH / ".env", "OPENAI_API_KEY", settings.openai_api_key)
     deploy(multi_bot)
-    [check(port) for port in [4249, 4250]]
+    deploy(selectors_bot)
+    [check(port) for port in [4249, 4250, 4248]]
 
 
 if __name__ == "__main__":

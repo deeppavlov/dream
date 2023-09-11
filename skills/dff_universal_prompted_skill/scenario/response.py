@@ -89,9 +89,20 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    selected_skill_names = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("skill_selector", [])
 
     if isinstance(human_uttr_attributes.get("prompt", None), list):
-        skill_names = human_uttr_attributes.pop("skill_name", None)
+        skill_names = human_uttr_attributes.pop("skill_name", [])
+        if (
+            human_uttr_attributes.get("selected_skills", None) in ["all", []]
+            or "skill_selector_prompt" not in human_uttr_attributes
+        ):
+            selected_skill_ids = [skill_id for skill_id, _ in enumerate(skill_names)]
+        else:
+            # if user do not ask to turn on all skills, turn on only skills selected by Skill Selector
+            selected_skill_ids = [
+                skill_id for skill_id, skill_name in enumerate(skill_names) if skill_name in selected_skill_names
+            ]
         prompts = human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)
         lm_service_urls = human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)
         lm_service_configs = human_uttr_attributes.pop("lm_service_config", None)
@@ -101,6 +112,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
     else:
         skill_names = [human_uttr_attributes.pop("skill_name", None)]
+        selected_skill_ids = [0]
         prompts = [human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)]
         lm_service_urls = [human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)]
         # the config is a dictionary! not a file!
@@ -108,9 +120,15 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         lm_service_kwargss = [human_uttr_attributes.pop("lm_service_kwargs", None)]
         lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
 
-    for skill_name, prompt, lm_service_url, lm_service_config, lm_service_kwargs in zip(
-        skill_names, prompts, lm_service_urls, lm_service_configs, lm_service_kwargss
-    ):
+    # MODE: debugging skill selector
+    # -> turn on only skills from (skill_name of human_utterance attributes & selected by skill selector)
+    for skill_id in selected_skill_ids:
+        skill_name = skill_names[skill_id]
+        prompt = prompts[skill_id]
+        lm_service_url = lm_service_urls[skill_id]
+        lm_service_config = lm_service_configs[skill_id]
+        lm_service_kwargs = lm_service_kwargss[skill_id]
+
         logger.info(f"lm_service_url: {lm_service_url}")
         logger.info(f"prompt: {prompt}")
         envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])

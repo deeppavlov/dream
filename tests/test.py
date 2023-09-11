@@ -74,6 +74,83 @@ def check_universal_assistant(lm_services):
         sleep(5)
 
 
+def check_universal_selectors_assistant(lm_services):
+    if OPENAI_API_KEY is None:
+        raise ValueError("OPENAI_API_KEY is None!")
+    for lm_service in lm_services:
+        print(f"Checking `Universal Selectors Assistant` with `{lm_service}`")
+
+        print("Checking debugging `Skill Selector`")
+        result = requests.post(
+            BOT_URL,
+            json={
+                "user_id": f"test-user-{random.randint(100, 1000)}",
+                "payload": "How much is two plus two?",
+                "skill_name": ["Mathematician Skill", "blondy_skill"],
+                "prompt": ["Answer as a mathematician.", "Answer like you are a stupid Blondy Girl."],
+                "lm_service_url": [LM_SERVICES_MAPPING[lm_service], LM_SERVICES_MAPPING[lm_service]],
+                "lm_service_kwargs": [{"openai_api_key": OPENAI_API_KEY}, {"openai_api_key": OPENAI_API_KEY}],
+                # response selector     ----------------------------
+                "return_all_hypotheses": True,
+                # skill selector     ----------------------------
+                "skill_selector_prompt": """Select up to 1 the most relevant to the dialog context skills.
+LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS
+Return only names of the selected skills divided by comma. Do not respond to the dialog context.""",
+                "skill_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
+                "skill_selector_lm_service_config": {
+                    "max_new_tokens": 128,
+                    "temperature": 0.4,
+                    "top_p": 1.0,
+                    "frequency_penalty": 0,
+                    "presence_penalty": 0,
+                },
+                "skill_selector_lm_service_kwargs": {"openai_api_key": OPENAI_API_KEY},
+            },
+        ).json()
+
+        if all([skill_name in result["text"] for skill_name in ["Mathematician Skill", "blondy_skill"]]):
+            print("Success!")
+        else:
+            raise ValueError(
+                f"\nERROR: `Universal Selectors Assistant` returned `{result['text']}` with lm service {lm_service}\n"
+            )
+        sleep(5)
+
+        print("Checking debugging `Response Selector`")
+        result = requests.post(
+            BOT_URL,
+            json={
+                "user_id": f"test-user-{random.randint(100, 1000)}",
+                "payload": "How much is two plus two?",
+                "skill_name": ["Mathematician Skill", "blondy_skill"],
+                "prompt": ["Answer as a mathematician.", "Answer like you are a stupid Blondy Girl."],
+                "lm_service_url": [LM_SERVICES_MAPPING[lm_service], LM_SERVICES_MAPPING[lm_service]],
+                "lm_service_kwargs": [{"openai_api_key": OPENAI_API_KEY}, {"openai_api_key": OPENAI_API_KEY}],
+                # response selector     ----------------------------
+                "response_selector_prompt": "Select the most funny answer.\nLIST_OF_HYPOTHESES\n",
+                "response_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
+                "response_selector_lm_service_config": {
+                    "max_new_tokens": 64,
+                    "temperature": 0.9,
+                    "top_p": 1.0,
+                    "frequency_penalty": 0,
+                    "presence_penalty": 0,
+                },
+                "response_selector_lm_service_kwargs": {"openai_api_key": OPENAI_API_KEY},
+                # skill selector     ----------------------------
+                "selected_skills": "all",
+            },
+        ).json()
+
+        if result["active_skill"] in ["Mathematician Skill", "blondy_skill"]:
+            print("Success!")
+        else:
+            raise ValueError(
+                f"\nERROR: `Universal Selectors Assistant` returned `{result['text']}` with lm service {lm_service}\n"
+            )
+        sleep(5)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("assistant", help="assistant to test")
@@ -83,6 +160,8 @@ def main():
         test_bot()
     elif assistant == "universal_prompted_assistant":
         check_universal_assistant(["ChatGPT", "GPT-3.5"])  # TODO: add "GPT-4 32k", "GPT-4" and "ChatGPT 16k"
+    elif assistant == "universal_selectors_assistant":
+        check_universal_selectors_assistant(["ChatGPT", "GPT-3.5"])  # TODO: add "GPT-4 32k", "GPT-4" and "ChatGPT 16k"
 
 
 if __name__ == "__main__":

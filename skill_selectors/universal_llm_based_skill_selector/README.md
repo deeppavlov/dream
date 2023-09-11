@@ -52,7 +52,6 @@ for lm_service in ["ChatGPT"]:
             # ---------------------------- response selector MUST RETURN ALL HYPOTHESES JOINED
             "return_all_hypotheses": True,
             # ---------------------------- skill selector 
-            "selected_skills": "all", # must use it to turn on universal skill (others are not deployed!)
             "skill_selector_prompt": """
 Select up to 2 the most relevant to the dialog context skills based on the given short descriptions of abilities of different skills of the assistant.
 

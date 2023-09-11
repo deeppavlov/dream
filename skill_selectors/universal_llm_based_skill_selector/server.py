@@ -44,7 +44,7 @@ MAX_N_SKILLS = int(getenv("MAX_N_SKILLS"))
 DEFAULT_PROMPT = DEFAULT_PROMPT.replace("up to MAX_N_SKILLS", f"up to {MAX_N_SKILLS}")
 
 
-def collect_descriptions_from_components(skill_names):
+def collect_descriptions_from_components(skill_names, prompts):
     result = {}
     for fname in listdir("components/"):
         if "yml" in fname:
@@ -52,6 +52,9 @@ def collect_descriptions_from_components(skill_names):
             if component["name"] in skill_names:
                 result[component["name"]] = component["description"]
 
+    for skill_name, prompt in zip(skill_names, prompts):
+        if skill_name not in result:
+            result[skill_name] = f"Agent with the following task:\n`{prompt}`"
     return result
 
 
@@ -62,22 +65,34 @@ def select_skills(dialog):
 
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
     human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
-    # collect skill names from human utterance attributes in DEBUG mode
-    all_skill_names = human_uttr_attributes.get("skill_name", [])
-    if human_uttr_attributes.get("selected_skills", None) in ["all", []]:
-        # also add all skills from pipeline
+
+    _is_prompt_based_selection = "skill_selector_prompt" in human_uttr_attributes
+    # if debugging response selector (selected_skills=all and skill_selector_prompt is not given):
+    #   return all skills from pipeline conf
+    # if debugging skill selector (skill_selector_prompt is given):
+    #   -> ask LLM with prompt and skills descriptions for skills from human utterance attributes
+    #   -> add skills from pipeline conf
+    # the universal skill must generate only from the intersection of selected by Skill selector and given in attrs
+
+    if human_uttr_attributes.get("selected_skills", None) in ["all", []] and not _is_prompt_based_selection:
+        # MODE: debugging response selector
+        # TURN ON: all skills from pipeline
         pipeline = dialog.get("attributes", {}).get("pipeline", [])
-        all_skill_names += [el.split(".")[1] for el in pipeline if "skills" in el]
+        all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
         logger.info(f"universal_llm_based_skill_selector selected ALL skills:\n`{all_skill_names}`")
         return all_skill_names
 
+    # MODE: debugging skill selector
+    # TURN ON: all skills & turn on skills selected by LLM via prompt
     try:
         logger.info(f"universal_llm_based_skill_selector sends dialog context to llm:\n`{dialog_context}`")
         prompt = human_uttr_attributes.pop("skill_selector_prompt", DEFAULT_PROMPT)
 
         if "LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS" in prompt:
             # need to add skill descriptions in prompt in replacement of `LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS`
-            skill_descr_dict = collect_descriptions_from_components(all_skill_names)
+            skill_descr_dict = collect_descriptions_from_components(
+                human_uttr_attributes.get("skill_name", []), human_uttr_attributes.get("prompt", [])
+            )
             skill_descriptions = "Skills:\n"
             skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descr_dict.items()])
             prompt = prompt.replace("LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS", skill_descriptions)
@@ -103,19 +118,25 @@ def select_skills(dialog):
             GENERATIVE_TIMEOUT,
             sending_variables,
         )
-        for skill_name in all_skill_names:
+        for skill_name in human_uttr_attributes.get("skill_name", []):
             if skill_name in response[0]:
                 selected_skills += [skill_name]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         logger.info("Exception in LLM's invocation. Turn on all skills from pipeline.")
+    # so, now we have selected_skills containing skills from human utterance attributes skill names (not deployed)
 
+    # we need to add dff_universal_skill to generate prompt-based hypotheses
+    selected_skills += ["dff_universal_prompted_skill"]
     logger.info(f"universal_llm_based_skill_selector selected:\n`{selected_skills}`")
 
     selected_skills = list(set(selected_skills))
     if selected_skills == ["dummy_skill"]:
         logger.info("Selected only Dummy Skill. Turn on all skills from pipeline.")
+        pipeline = dialog.get("attributes", {}).get("pipeline", [])
+        all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
+        selected_skills = list(set(selected_skills))
         selected_skills.extend(all_skill_names)
     return selected_skills
 
