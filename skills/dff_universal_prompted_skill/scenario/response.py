@@ -1,14 +1,17 @@
+import asyncio
 import json
 import logging
 import re
-import sentry_sdk
 from os import getenv
 from typing import Any
+
+import aiohttp
+import sentry_sdk
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+from common.prompts import compose_sending_variables
 from df_engine.core import Context, Actor
 
 
@@ -68,24 +71,87 @@ def compose_data_for_model(ctx, actor):
     return context
 
 
-def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
-    curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs = (
-        [],
-        [],
-        [],
-        [],
-        [],
+async def async_request_to_prompted_generative_service(
+    session, dialog_context, prompt, url, config, timeout, lm_service_kwargs, skill_name
+):
+    logger.info(f"lm_service_url: {url}")
+    logger.info(f"prompt: {prompt}")
+    envvars_to_send = ENVVARS_TO_SEND.get(url, [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
     )
+    try:
+        async with session.post(
+            url,
+            json={
+                "dialog_contexts": [dialog_context],
+                "prompts": [prompt],
+                "configs": [config],
+                **sending_variables,
+            },
+            timeout=aiohttp.ClientTimeout(timeout),
+        ) as resp:
+            hypotheses = (await resp.json())[0]
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        hypotheses = []
+    logger.info(f"generated hypotheses: {hypotheses}")
 
-    def gathering_responses(reply, confidence, human_attr, bot_attr, attr):
-        nonlocal curr_responses, curr_confidences, curr_human_attrs, curr_bot_attrs, curr_attrs
-        if reply and confidence:
-            curr_responses += [reply]
-            curr_confidences += [confidence]
-            curr_human_attrs += [human_attr]
-            curr_bot_attrs += [bot_attr]
-            curr_attrs += [attr]
+    curr_responses, curr_confidences, curr_attrs = [], [], []
+    for hyp in hypotheses:
+        confidence = DEFAULT_CONFIDENCE
+        if len(hyp) and hyp[-1] not in [".", "?", "!"]:
+            hyp += "."
+            confidence = LOW_CONFIDENCE
+        if hyp and confidence:
+            curr_responses.append(hyp)
+            curr_confidences.append(confidence)
+            curr_attrs.append(
+                {
+                    "can_continue": CAN_NOT_CONTINUE,
+                    "skill_name": skill_name or "dff_universal_prompted_skill",
+                }
+            )
+    return curr_responses, curr_confidences, curr_attrs
 
+
+async def gather_responses(
+    selected_skill_ids, skill_names, prompts, lm_service_urls, lm_service_configs, lm_service_kwargss, dialog_context
+):
+    tasks = []
+    async with aiohttp.ClientSession() as session:
+        for skill_id in selected_skill_ids:
+            skill_name = skill_names[skill_id]
+            prompt = prompts[skill_id]
+            lm_service_url = lm_service_urls[skill_id]
+            lm_service_config = lm_service_configs[skill_id]
+            lm_service_kwargs = lm_service_kwargss[skill_id]
+
+            tasks.append(
+                asyncio.ensure_future(
+                    async_request_to_prompted_generative_service(
+                        session,
+                        dialog_context,
+                        prompt,
+                        lm_service_url,
+                        lm_service_config,
+                        GENERATIVE_TIMEOUT,
+                        lm_service_kwargs,
+                        skill_name,
+                    )
+                )
+            )
+        responses, confidences, attrs = [], [], []
+        for curr_responses, curr_confidences, curr_attrs in await asyncio.gather(*tasks):
+            responses.extend(curr_responses)
+            confidences.extend(curr_confidences)
+            attrs.extend(curr_attrs)
+        return responses, confidences, attrs
+
+
+def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
@@ -120,62 +186,28 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         lm_service_kwargss = [human_uttr_attributes.pop("lm_service_kwargs", None)]
         lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
 
-    # MODE: debugging skill selector
-    # -> turn on only skills from (skill_name of human_utterance attributes & selected by skill selector)
-    for skill_id in selected_skill_ids:
-        skill_name = skill_names[skill_id]
-        prompt = prompts[skill_id]
-        lm_service_url = lm_service_urls[skill_id]
-        lm_service_config = lm_service_configs[skill_id]
-        lm_service_kwargs = lm_service_kwargss[skill_id]
+    if len(dialog_context) == 0:
+        return ""
 
-        logger.info(f"lm_service_url: {lm_service_url}")
-        logger.info(f"prompt: {prompt}")
-        envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
-        sending_variables = compose_sending_variables(
-            lm_service_kwargs,
-            envvars_to_send,
+    responses, confidences, attrs = asyncio.run(
+        gather_responses(
+            selected_skill_ids,
+            skill_names,
+            prompts,
+            lm_service_urls,
+            lm_service_configs,
+            lm_service_kwargss,
+            dialog_context,
         )
-        if len(dialog_context) > 0:
-            try:
-                hypotheses = send_request_to_prompted_generative_service(
-                    dialog_context,
-                    prompt,
-                    lm_service_url,
-                    lm_service_config,
-                    GENERATIVE_TIMEOUT,
-                    sending_variables,
-                )
-            except Exception as e:
-                sentry_sdk.capture_exception(e)
-                logger.exception(e)
-                hypotheses = []
-        else:
-            hypotheses = []
-        logger.info(f"generated hypotheses: {hypotheses}")
-        for hyp in hypotheses:
-            confidence = DEFAULT_CONFIDENCE
-            if len(hyp) and hyp[-1] not in [".", "?", "!"]:
-                hyp += "."
-                confidence = LOW_CONFIDENCE
-            gathering_responses(
-                hyp,
-                confidence,
-                {},
-                {},
-                {
-                    "can_continue": CAN_NOT_CONTINUE,
-                    "skill_name": "dff_universal_prompted_skill" if skill_name is None else skill_name,
-                },
-            )
+    )
 
-    if len(curr_responses) == 0:
+    if len(responses) == 0:
         return ""
 
     return int_rsp.multi_response(
-        replies=curr_responses,
-        confidences=curr_confidences,
-        human_attr=curr_human_attrs,
-        bot_attr=curr_bot_attrs,
-        hype_attr=curr_attrs,
+        replies=responses,
+        confidences=confidences,
+        human_attr=[{} for _ in responses],
+        bot_attr=[{} for _ in responses],
+        hype_attr=attrs,
     )(ctx, actor, *args, **kwargs)

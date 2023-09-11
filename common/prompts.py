@@ -1,9 +1,9 @@
 import json
 import logging
-import requests
 from copy import deepcopy
 from os import getenv
 
+import requests
 
 logger = logging.getLogger(__name__)
 
