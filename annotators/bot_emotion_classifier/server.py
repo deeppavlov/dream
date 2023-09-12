@@ -10,9 +10,7 @@ from common.utils import get_emotions, get_sentiment
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -145,17 +143,9 @@ def get_dsript_type(orig_sent, type_expl):
     subj, obj = find_final_arguments(sent)
     subj = subj.lower()
     obj = obj.lower()
-    if (
-        subj not in first_prons
-        and subj not in second_prons
-        and subj not in inclusive_prons
-    ):
+    if subj not in first_prons and subj not in second_prons and subj not in inclusive_prons:
         subj = "someone"
-    if (
-        obj not in first_prons
-        and obj not in second_prons
-        and obj not in inclusive_prons
-    ):
+    if obj not in first_prons and obj not in second_prons and obj not in inclusive_prons:
         obj = "someone"
     if subj in first_prons:
         subj = "i"
@@ -270,12 +260,7 @@ openness = 0.23
 
 pleasure = 0.21 * extraversion + 0.59 * agreeableness + 0.19 * neuroticism
 arousal = 0.15 * openness + 0.3 * agreeableness - 0.57 * neuroticism
-dominance = (
-    0.25 * openness
-    + 0.17 * conscientiousness
-    + 0.6 * extraversion
-    - 0.32 * agreeableness
-)
+dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.32 * agreeableness
 
 default_mood = [pleasure, arousal, dominance]
 
@@ -338,9 +323,7 @@ def get_new_mood(default_mood, curr_mood, bot_emotion):
     else:
         decay = get_decay(default_mood, curr_mood)
     vec = [pad_emotions[bot_emotion][i] - curr_mood[i] for i in range(len(curr_mood))]
-    new_mood = [
-        0.5 * curr_mood[i] + 0.5 * vec[i] + decay[i] for i in range(len(curr_mood))
-    ]
+    new_mood = [0.5 * curr_mood[i] + 0.5 * vec[i] + decay[i] for i in range(len(curr_mood))]
     new_mood_reg = [1 if dim > 1 else dim for dim in new_mood]
     new_mood_reg = [-1 if dim < -1 else dim for dim in new_mood_reg]
 

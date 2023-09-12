@@ -123,17 +123,9 @@ def get_dsript_type(orig_sent, type_expl):
     subj, obj = find_final_arguments(sent)
     subj = subj.lower()
     obj = obj.lower()
-    if (
-        subj not in first_prons
-        and subj not in second_prons
-        and subj not in inclusive_prons
-    ):
+    if subj not in first_prons and subj not in second_prons and subj not in inclusive_prons:
         subj = "someone"
-    if (
-        obj not in first_prons
-        and obj not in second_prons
-        and obj not in inclusive_prons
-    ):
+    if obj not in first_prons and obj not in second_prons and obj not in inclusive_prons:
         obj = "someone"
     if subj in first_prons:
         subj = "i"

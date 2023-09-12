@@ -17,18 +17,14 @@ from common.prompts import (
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
-GENERATIVE_SERVICE_URL = getenv(
-    "GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond"
-)
+GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
@@ -55,9 +51,7 @@ for key, value in api_conf.copy().items():
             del api_conf[key]
             break
 
-logger.info(
-    f"Available APIs: {', '.join([api['display_name'] for api in api_conf.values()])}"
-)
+logger.info(f"Available APIs: {', '.join([api['display_name'] for api in api_conf.values()])}")
 
 
 def timeout_handler():
@@ -149,9 +143,7 @@ def get_llm_emotional_response(prompt):
 def rewrite_sentences(sentence, bot_emotion, bot_mood_label):
     result = {}
     try:
-        prompt = make_prompt(
-            sentence, bot_emotion, bot_mood_label, 7
-        )  # emotion, mood, intensity
+        prompt = make_prompt(sentence, bot_emotion, bot_mood_label, 7)  # emotion, mood, intensity
         response = get_llm_emotional_response(prompt)
         result = {"hypotheses": response}
     except Exception as exc:

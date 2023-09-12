@@ -14,9 +14,7 @@ from common.utils import is_toxic_or_badlisted_utterance
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
-)
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
@@ -52,16 +50,8 @@ def select_response_by_scores(hypotheses, scores):
 
 
 def get_scores(dialog_context, hypotheses):
-    if all(
-        [
-            SENTENCE_RANKER_ANNOTATION_NAME in hyp.get("annotations", {})
-            for hyp in hypotheses
-        ]
-    ):
-        scores = [
-            hyp.get("annotations", {}).get(SENTENCE_RANKER_ANNOTATION_NAME, 0.0)
-            for hyp in hypotheses
-        ]
+    if all([SENTENCE_RANKER_ANNOTATION_NAME in hyp.get("annotations", {}) for hyp in hypotheses]):
+        scores = [hyp.get("annotations", {}).get(SENTENCE_RANKER_ANNOTATION_NAME, 0.0) for hyp in hypotheses]
         logger.info("Selected a response via Sentence Ranker Annotator.")
     else:
         try:
@@ -84,10 +74,7 @@ def get_scores(dialog_context, hypotheses):
 
 def select_response(dialog_context, hypotheses):
     scores = get_scores(dialog_context, hypotheses)
-    scores = [
-        score if hyp["skill_name"] != "dummy_skill" else score - 1
-        for score, hyp in zip(scores, hypotheses)
-    ]
+    scores = [score if hyp["skill_name"] != "dummy_skill" else score - 1 for score, hyp in zip(scores, hypotheses)]
     logger.info(f"Scores for selection:\n`{scores}`")
     result = select_response_by_scores(hypotheses, scores)[0]
     logger.info(f"emotion_ranking_based_response_selector selected:\n`{result}`")
@@ -112,35 +99,22 @@ def respond():
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
-        hypotheses_texts = "\n".join(
-            [
-                f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}'
-                for h in hypotheses
-            ]
-        )
+        hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
-        dialog_context = [
-            uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]
-        ]
+        dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(dialog_context, hypotheses)
         try:
             best_id = hypotheses.index(selected_resp)
 
             if EMOTIONAL_RESPONSES:
-                emotional_hypotheses = (
-                    hypotheses[best_id].get("annotations").get("emotional_bot_response")
-                )
+                emotional_hypotheses = hypotheses[best_id].get("annotations").get("emotional_bot_response")
                 selected_responses.append(emotional_hypotheses.pop("hypotheses"))
             else:
                 selected_responses.append(hypotheses[best_id].pop("text"))
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))
-            selected_human_attributes.append(
-                hypotheses[best_id].pop("human_attributes", {})
-            )
-            selected_bot_attributes.append(
-                hypotheses[best_id].pop("bot_attributes", {})
-            )
+            selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
+            selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
             selected_attributes.append(hypotheses[best_id])
 
@@ -151,26 +125,18 @@ def respond():
                 "Exception in finding selected response in hypotheses. "
                 "Selected a response with the highest confidence."
             )
-            selected_resp, best_id = select_response_by_scores(
-                hypotheses, [hyp["confidence"] for hyp in hypotheses]
-            )
+            selected_resp, best_id = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])
 
             selected_responses.append(hypotheses[best_id].pop("text"))
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))
-            selected_human_attributes.append(
-                hypotheses[best_id].pop("human_attributes", {})
-            )
-            selected_bot_attributes.append(
-                hypotheses[best_id].pop("bot_attributes", {})
-            )
+            selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
+            selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
             selected_attributes.append(hypotheses[best_id])
 
     total_time = time.time() - st_time
-    logger.info(
-        f"emotion_ranking_based_response_selector exec time = {total_time:.3f}s"
-    )
+    logger.info(f"emotion_ranking_based_response_selector exec time = {total_time:.3f}s")
     return jsonify(
         list(
             zip(
