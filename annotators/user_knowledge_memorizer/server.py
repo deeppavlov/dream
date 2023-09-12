@@ -56,13 +56,7 @@ while True:
 logger.info("Graph Loaded!")
 
 
-DEFAULT_CONFIG = {
-    "max_tokens": 64,
-    "temperature": 0.4,
-    "top_p": 1.0,
-    "frequency_penalty": 0,
-    "presence_penalty": 0
-}
+DEFAULT_CONFIG = {"max_tokens": 64, "temperature": 0.4, "top_p": 1.0, "frequency_penalty": 0, "presence_penalty": 0}
 
 
 def check_property_vs_relationship(utterances_info: List[dict]) -> Tuple[list, list]:
@@ -470,8 +464,7 @@ def generate_prompt(triplets):
 
     url = f"http://openai-api-chatgpt:{CHAT_GPT_PORT}/respond"
     contexts = [
-        [
-        ],
+        [],
     ]
     prompts = [
         # "Generate natural language sentences based on the following triplets. One sentence for each triplets"
@@ -482,12 +475,10 @@ def generate_prompt(triplets):
         "dialog_contexts": contexts,
         "prompts": prompts,
         "configs": [DEFAULT_CONFIG] * len(contexts),
-        "openai_api_keys": [OPENAI_API_KEY] * len(contexts)
+        "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
     }
 
-    return requests.post(
-        url, json=json_input
-    ).json()
+    return requests.post(url, json=json_input).json()
 
 
 def memorize(graph, uttrs):
@@ -616,7 +607,13 @@ def memorize(graph, uttrs):
     logger.info(
         f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {prompt}"
     )
-    return [{"added_to_graph": triplets_added_to_kg_batch, "triplets_already_in_graph": triplets_already_in_kg_batch, "kg_prompt": prompt}]
+    return [
+        {
+            "added_to_graph": triplets_added_to_kg_batch,
+            "triplets_already_in_graph": triplets_already_in_kg_batch,
+            "kg_prompt": prompt,
+        }
+    ]
 
 
 def get_result(request, graph):
@@ -626,7 +623,13 @@ def get_result(request, graph):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = [{"added_to_graph": [[]] * len(uttrs), "triplets_already_in_graph": [[]] * len(uttrs), "kg_prompt": [[]] * len(uttrs)}]
+        result = [
+            {
+                "added_to_graph": [[]] * len(uttrs),
+                "triplets_already_in_graph": [[]] * len(uttrs),
+                "kg_prompt": [[]] * len(uttrs),
+            }
+        ]
     return result
 
 

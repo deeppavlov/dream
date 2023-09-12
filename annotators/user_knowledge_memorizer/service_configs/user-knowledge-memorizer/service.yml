@@ -14,6 +14,9 @@ compose:
       TERMINUSDB_SERVER_TEAM: admin
       TERMINUSDB_SERVER_DB: user_knowledge_db
       CONFIG: config.json
+      OPENAI_API_KEY:
+      CHAT_GPT_PORT: 8145
+      USE_KG_DATA: 1
     context: ./
     dockerfile: annotators/user_knowledge_memorizer/Dockerfile
   command: flask run -h 0.0.0.0 -p 8027
