@@ -64,6 +64,7 @@ services:
       - "./services/fromage:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
+      - "/home/serikoo/fromage_model:/services/fromage/fromage_model"
     ports:
       - 8069:8069
   dff-fromage-image-skill:

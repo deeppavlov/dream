@@ -24,5 +24,6 @@ compose:
   volumes:
   - ./services/fromage:/src
   - ./common:/src/common
+  - ~/fromage_model:/services/fromage/fromage_model
   ports:
   - 8069:8069

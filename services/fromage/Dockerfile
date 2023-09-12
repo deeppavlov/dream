@@ -26,9 +26,9 @@ RUN mkdir /fromage && \
     git clone https://github.com/ciwwwnd/fromage.git /fromage
 
 RUN mkdir -p /services/fromage/fromage_model
-RUN gdown 1wMojZNqEwApNlsCZVvSgQVtZLgbeLoKi -O /services/fromage/fromage_model/cc3m_embeddings.pkl
-RUN gdown 1qyDiUw6uMA4nijLaNpr3J-2pigdIANYE -O /services/fromage/fromage_model/model_args.json
-RUN gdown 1oG_fWDje3M6XBoU2GtrOlrqaffJEhxyN -O /services/fromage/fromage_model/pretrained_ckpt.pth.tar
+RUN [ ! -e /services/fromage/fromage_model/cc3m_embeddings.pkl ] && gdown 1wMojZNqEwApNlsCZVvSgQVtZLgbeLoKi -O /services/fromage/fromage_model/cc3m_embeddings.pkl
+RUN [ ! -e /services/fromage/fromage_model/model_args.json ] && gdown 1qyDiUw6uMA4nijLaNpr3J-2pigdIANYE -O /services/fromage/fromage_model/model_args.json
+RUN [ ! -e /services/fromage/fromage_model/pretrained_ckpt.pth.tar ] && gdown 1oG_fWDje3M6XBoU2GtrOlrqaffJEhxyN -O /services/fromage/fromage_model/pretrained_ckpt.pth.tar
 
 COPY ./services/fromage/ /src/
 COPY ./common/ ./common/

@@ -14,7 +14,6 @@ services:
     volumes:
       - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
-  sentseg:
   dff-intent-responder-skill:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
