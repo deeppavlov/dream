@@ -9,8 +9,7 @@ compose:
     args:
       SERVICE_PORT: 8198
       SERVICE_NAME: combined_classification_ru
-      CONFIG: combined_classifier.json
-      CUDA_VISIBLE_DEVICES: '0'
+      CONFIG: combined_classifier_ru.json
     context: .
     dockerfile: ./annotators/combined_classification_ru/Dockerfile
   command: gunicorn --workers=1 server:app -b 0.0.0.0:8198 --timeout 600
