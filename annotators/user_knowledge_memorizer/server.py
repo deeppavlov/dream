@@ -605,7 +605,8 @@ def memorize(graph, uttrs):
         triplets_already_in_kg_batch.append(triplets_already_in_kg + properties_already_in_kg)
 
     logger.info(
-        f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {prompt}"
+        f"added_to_graph -- {triplets_added_to_kg_batch}, "
+        f"triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {prompt}"
     )
     return [
         {
