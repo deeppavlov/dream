@@ -78,7 +78,6 @@ def main():
     TERMINUSDB_SERVER_TEAM = "admin"
     TERMINUSDB_SERVER_DB = "bot_knowledge_db"
     TERMINUSDB_SERVER_PASSWORD = "root"
-    INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/bot_knowledge_memorizer"))
     BOT_KNOWLEDGE_MEMORIZER_PORT = 8027
 
     BOT_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{BOT_KNOWLEDGE_MEMORIZER_PORT}/respond"
@@ -88,7 +87,6 @@ def main():
         team=TERMINUSDB_SERVER_TEAM,
         server=TERMINUSDB_SERVER_URL,
         password=TERMINUSDB_SERVER_PASSWORD,
-        index_load_path=INDEX_LOAD_PATH,
     )
 
     BOT_ID = "Bot/514b2c3d-bb73-4294-9486-04f9e099835e"
