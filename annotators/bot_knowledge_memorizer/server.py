@@ -28,7 +28,7 @@ USE_BOT_KG_DATA = os.getenv("USE_BOT_KG_DATA", False)
 BOT_ID = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
-assert TERMINUSDB_SERVER_PASSWORD, "TerminusDB server password is not specified"
+assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is not specified")
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
 config_path = os.getenv("CONFIG")
@@ -414,13 +414,13 @@ def check_abstract_triplets(
 
     if kinds_to_add:
         try:
-            graph.ontology.create_entity_kinds(kinds_to_add, parents)
+            graph.ontology.create_entity_kinds(set(kinds_to_add, parents))
         except ValueError:
             logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
         except Exception: #TODO: replace with Terminusdb DatabaseError
             graph.ontology.create_entity_kinds(parents)
             try:
-                graph.ontology.create_entity_kinds(kinds_to_add, parents)
+                graph.ontology.create_entity_kinds(set(kinds_to_add, parents))
             except ValueError:
                 logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
     return abstract_triplets, non_abstract_triplets
@@ -511,10 +511,14 @@ def get_result(request, graph):
         logger.debug(f"prop_ex_annotations before upper-casing --  {prop_ex_annotations}")
         for annotation in prop_ex_annotations:
             if "triplets" in annotation:
-                for idx, triplet in enumerate(annotation.copy()["triplets"]):
+                triplets = annotation["triplets"]
+                for idx in reversed(range(len(triplets))):
+                    triplet = triplets[idx]
                     if triplet["object"] == "<blank>":
-                        del annotation[idx]
-                        logging.error(f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object")
+                        del triplets[idx]
+                        logging.error(
+                            f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
+                        )
 
         # Part to use custom knowledge in LLM prompt (in progress)
 
