@@ -5,6 +5,7 @@ import json
 import logging
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
+import requests
 from uuid import uuid4
 import time
 import sentry_sdk
@@ -23,6 +24,8 @@ with open("rel_list.json") as file:
 
 with open("abstract_rels.txt", "r") as file:
     abstract_rels = [line.strip() for line in file.readlines()]
+
+USE_KG_DATA = os.getenv("USE_KG_DATA", 0)
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
@@ -51,6 +54,15 @@ while True:
         continue
 
 logger.info("Graph Loaded!")
+
+
+DEFAULT_CONFIG = {
+    "max_tokens": 64,
+    "temperature": 0.4,
+    "top_p": 1.0,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
+}
 
 
 def check_property_vs_relationship(utterances_info: List[dict]) -> Tuple[list, list]:
@@ -451,6 +463,33 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
     return properties_to_add_to_kg, properties_already_in_kg
 
 
+def generate_prompt(triplets):
+    CHAT_GPT_PORT = os.getenv("CHAT_GPT_PORT")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
+
+    url = f"http://openai-api-chatgpt:{CHAT_GPT_PORT}/respond"
+    contexts = [
+        [
+        ],
+    ]
+    prompts = [
+        # "Generate natural language sentences based on the following triplets. One sentence for each triplets"
+        "Translate from semantic triple to sentence. Triplets"
+        f" : {triplets}"
+    ]
+    json_input = {
+        "dialog_contexts": contexts,
+        "prompts": prompts,
+        "configs": [DEFAULT_CONFIG] * len(contexts),
+        "openai_api_keys": [OPENAI_API_KEY] * len(contexts)
+    }
+
+    return requests.post(
+        url, json=json_input
+    ).json()
+
+
 def memorize(graph, uttrs):
     user_id = "/".join(["User", str(uttrs[0].get("user", {}).get("id", ""))])
     user_external_id = str(uttrs[0].get("user", {}).get("user_external_id", ""))
@@ -475,6 +514,37 @@ def memorize(graph, uttrs):
                         logging.error(
                             f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
                         )
+
+        user_triplets = graph.search_for_relationships(id_a=user_id)
+        user_triplets = [("User", triplet["rel"], triplet["id_b"]) for triplet in user_triplets]
+        logger.info(f"user triplets -- {user_triplets}")
+        # Generate prompt with knowledge about user
+        if user_triplets and USE_KG_DATA:
+            prompt = generate_prompt(user_triplets)
+        else:
+            prompt = ""
+
+        # sents = [
+        #     "User like sport swimming with his cat",
+        #     "User like his cat",
+        #     "User is ok with cats",
+        #     "User like sport swimming with cat",
+        #     "User adopted a cat last year, but it's dead now.",
+        #     "User adopted a cat last year"
+        # ]
+        # utt = [
+        #     "User has a pet cat",
+        #     "User has a pet cat",
+        #     "User has a pet cat",
+        #     "User has a pet cat",
+        #     "User has a pet cat",
+        #     "User has a pet cat"
+        # ]
+        # requesed_data = {"sentence_pairs": list(zip(sents, utt))}
+        # logger.info(f"requested_data -- {requesed_data}")
+        # res = requests.post("http://sentence-ranker:8128/respond", json=requesed_data, timeout=10).json()[0]["batch"]
+        # res = list(zip(sents, res))
+        # logger.info(f"res -- {res}")
 
         create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])
 
@@ -544,9 +614,9 @@ def memorize(graph, uttrs):
         triplets_already_in_kg_batch.append(triplets_already_in_kg + properties_already_in_kg)
 
     logger.info(
-        f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch}"
+        f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {prompt}"
     )
-    return [{"added_to_graph": triplets_added_to_kg_batch, "triplets_already_in_graph": triplets_already_in_kg_batch}]
+    return [{"added_to_graph": triplets_added_to_kg_batch, "triplets_already_in_graph": triplets_already_in_kg_batch, "kg_prompt": prompt}]
 
 
 def get_result(request, graph):
@@ -556,7 +626,7 @@ def get_result(request, graph):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = [{"added_to_graph": [[]] * len(uttrs), "triplets_already_in_graph": [[]] * len(uttrs)}]
+        result = [{"added_to_graph": [[]] * len(uttrs), "triplets_already_in_graph": [[]] * len(uttrs), "kg_prompt": [[]] * len(uttrs)}]
     return result
 
 
