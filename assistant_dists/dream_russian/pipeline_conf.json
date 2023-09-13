@@ -151,9 +151,8 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification_ru",
-                    "container": "combined-classification-ru",
-                    "endpoint": "model"
+                    "component": "components/5eb485871be3.yml",
+                    "service": "annotators/combined_classification_ru/service_configs/combined-classification-ru"
                 }
             },
             "intent_catcher": {
