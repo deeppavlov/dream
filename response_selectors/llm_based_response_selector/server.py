@@ -4,6 +4,7 @@ import difflib
 import json
 import logging
 import numpy as np
+import re
 import time
 from copy import deepcopy
 from os import getenv
@@ -32,6 +33,7 @@ PROMPT_FILE = getenv("PROMPT_FILE")
 assert PROMPT_FILE, logger.error("No prompt provided")
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
+KEEP_ORIGINAL_HYPOTHESIS = int(getenv("KEEP_ORIGINAL_HYPOTHESIS"))
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
@@ -135,8 +137,15 @@ def respond():
         )
         if selected_resp:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
-            hypotheses[best_id].pop("text")
-            selected_responses.append(selected_resp)
+            if KEEP_ORIGINAL_HYPOTHESIS:
+                selected_responses.append(hypotheses[best_id].pop("text"))
+            else:
+                if re.match(r'^".+"$', hypotheses[best_id].get("text")):
+                    pass
+                elif re.match(r'^".+"$', selected_resp):
+                    selected_resp = selected_resp[1:-1]
+                hypotheses[best_id].pop("text")
+                selected_responses.append(selected_resp)
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))

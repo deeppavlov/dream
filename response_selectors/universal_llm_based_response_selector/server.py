@@ -29,6 +29,7 @@ DEFAULT_PROMPT = json.load(open("common/prompts/response_selector.json", "r"))["
 DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-gptjt:8161/respond")
 DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
+KEEP_ORIGINAL_HYPOTHESIS = int(getenv("KEEP_ORIGINAL_HYPOTHESIS"))
 ENVVARS_TO_SEND = {
     "http://transformers-lm-gptj:8130/respond": [],
     "http://transformers-lm-bloomz7b:8146/respond": [],
@@ -160,8 +161,15 @@ def respond():
         selected_resp = select_response(dialog, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
         if selected_resp:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
-            hypotheses[best_id].pop("text")
-            selected_responses.append(selected_resp)
+            if KEEP_ORIGINAL_HYPOTHESIS:
+                selected_responses.append(hypotheses[best_id].pop("text"))
+            else:
+                if re.match(r'^".+"$', hypotheses[best_id].get("text")):
+                    pass
+                elif re.match(r'^".+"$', selected_resp):
+                    selected_resp = selected_resp[1:-1]
+                hypotheses[best_id].pop("text")
+                selected_responses.append(selected_resp)
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
             selected_confidences.append(hypotheses[best_id].pop("confidence"))
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
