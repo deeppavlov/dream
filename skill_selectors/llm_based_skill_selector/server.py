@@ -30,8 +30,6 @@ with open(PROMPT_FILE, "r") as f:
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 DEFAULT_SKILLS = ["dummy_skill"]
-MAX_N_SKILLS = int(getenv("MAX_N_SKILLS"))
-PROMPT = PROMPT.replace("up to MAX_N_SKILLS", f"up to {MAX_N_SKILLS}")
 
 assert GENERATIVE_SERVICE_URL
 

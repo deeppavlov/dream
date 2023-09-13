@@ -53,7 +53,6 @@ services:
         DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 3
-        MAX_N_SKILLS: 3
       context: .
       dockerfile: ./skill_selectors/universal_llm_based_skill_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8187

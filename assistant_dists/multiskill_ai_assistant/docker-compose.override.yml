@@ -59,7 +59,6 @@ services:
         N_UTTERANCES_CONTEXT: 3
         ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
         PROMPT_FILE: common/prompts/skill_selector.json
-        MAX_N_SKILLS: 3
       context: .
       dockerfile: ./skill_selectors/llm_based_skill_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8182

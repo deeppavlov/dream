@@ -40,8 +40,6 @@ ENVVARS_TO_SEND = {
 }
 
 DEFAULT_SKILLS = ["dummy_skill"]
-MAX_N_SKILLS = int(getenv("MAX_N_SKILLS"))
-DEFAULT_PROMPT = DEFAULT_PROMPT.replace("up to MAX_N_SKILLS", f"up to {MAX_N_SKILLS}")
 
 
 def collect_descriptions_from_components(skill_names, prompts):
