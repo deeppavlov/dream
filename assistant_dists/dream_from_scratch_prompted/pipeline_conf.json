@@ -26,10 +26,9 @@
             "tags": [
                 "last_chance"
             ],
-            "is_enabled": true,
             "source": {
-                "component": "components/uBwLe0Jusl7Q.yml",
-                "service": "services/agent_services/service_configs/dream_persona_prompted"
+                "component": "components/ORrfDhL6aqYS.yml",
+                "service": "services/agent_services/service_configs/dream_from_scratch_prompted"
             }
         },
         "timeout_service": {
@@ -51,10 +50,47 @@
             "tags": [
                 "timeout"
             ],
+            "source": {
+                "component": "components/sRlBA8KUwLyO.yml",
+                "service": "services/agent_services/service_configs/dream_from_scratch_prompted"
+            }
+        },
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
             "is_enabled": true,
             "source": {
-                "component": "components/Vi0jGZfqNIU8.yml",
-                "service": "services/agent_services/service_configs/dream_persona_prompted"
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
+            }
+        },
+        "response_annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
+                }
             }
         },
         "annotators": {
@@ -86,8 +122,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/Wps5FHxkwj3Z.yml",
-                    "service": "annotators/prompt_selector/service_configs/dream_persona_prompted"
+                    "component": "components/tK0hTk4TyMj7.yml",
+                    "service": "annotators/prompt_selector/service_configs/dream_from_scratch_prompted"
                 }
             },
             "prompt_selector": {
@@ -104,47 +140,72 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/Wps5FHxkwj3Z.yml",
-                    "service": "annotators/prompt_selector/service_configs/dream_persona_prompted"
+                    "component": "components/tK0hTk4TyMj7.yml",
+                    "service": "annotators/prompt_selector/service_configs/dream_from_scratch_prompted"
                 }
             }
         },
-        "response_annotators": {
-            "sentseg": {
+        "skill_selectors": {
+            "skill_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://sentseg:8011/sentseg"
+                    "timeout": 10.0,
+                    "url": "http://llm-based-skill-selector:8182/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "response_annotator_selectors"
+                    "annotators"
                 ],
-                "state_manager_method": "add_annotation_prev_bot_utt",
+                "state_manager_method": "add_annotation",
+                "tags": [
+                    "selector"
+                ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
-                    "service": "annotators/SentSeg/service_configs/sentseg"
+                    "component": "components/sdikfjoisah4nr.yml",
+                    "service": "skill_selectors/llm_based_skill_selector/service_configs/llm-based-skill-selector"
                 }
             }
         },
-        "response_annotator_selectors": {
-            "connector": {
-                "protocol": "python",
-                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
-                "annotator_names": [
-                    "sentseg"
-                ]
+        "skills": {
+            "dff_dream_persona_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-persona-chatgpt-prompted-skill:8137/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-chatgpt-prompted-skill"
+                }
             },
-            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-            "tags": [
-                "selector"
-            ],
-            "is_enabled": true,
-            "source": {
-                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
-                "service": "services/response_annotator_selectors/service_configs/agent"
+            "dummy_skill": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
             }
         },
         "candidate_annotators": {
@@ -185,73 +246,12 @@
                 }
             }
         },
-        "skill_selectors": {
-            "description_based_skill_selector": {
-                "connector": {
-                    "protocol": "python",
-                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators"
-                ],
-                "tags": [
-                    "selector"
-                ],
-                "is_enabled": true,
-                "source": {
-                    "component": "components/dfsw4bji8bgjq2.yml",
-                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
-                }
-            }
-        },
-        "skills": {
-            "dff_dream_persona_prompted_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 120.0,
-                    "url": "http://dff-dream-persona-gpt-jt-prompted-skill:8134/respond"
-                },
-                "dialog_formatter": {
-                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_dream_persona_prompted_skill"
-                },
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/6lLhP7zuoiI0bxJEDLWUg.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-gpt-jt-prompted-skill"
-                }
-            },
-            "dummy_skill": {
-                "connector": {
-                    "protocol": "python",
-                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
-                    "service": "skills/dummy_skill/service_configs/agent"
-                }
-            }
-        },
         "response_selectors": {
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://ranking-based-response-selector:8002/respond"
+                    "timeout": 120.0,
+                    "url": "http://llm-based-response-selector:8003/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -261,20 +261,20 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
-                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
+                    "component": "components/jsdgfy23brksd8f.yml",
+                    "service": "response_selectors/llm_based_response_selector/service_configs/llm-based-response-selector"
                 }
             }
         }
     },
     "metadata": {
-        "display_name": "Persona-based Prompted Dream",
+        "display_name": "ChatGPT-based Prompted Dream",
         "author": "DeepPavlov",
-        "description": "This is a simple dialog system that can chat with you on any topic. It has a pre-defined 'personality' and uses `GPT-JT 6B` model to generate responses.",
+        "description": "This is a simple dialog system that can chat with you on any topic. It has a pre-defined 'personality' and uses OpenAI ChatGPT model to generate responses.",
         "version": "0.0.1",
         "date_created": "2023-01-10T02:00:00",
-        "ram_usage": "50 GB",
-        "gpu_usage": "30 GB",
-        "disk_usage": "50 GB"
+        "ram_usage": "4 GB",
+        "gpu_usage": "3 GB",
+        "disk_usage": "10 GB"
     }
 }

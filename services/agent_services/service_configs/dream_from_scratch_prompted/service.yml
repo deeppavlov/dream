@@ -1,0 +1,15 @@
+name: agent
+endpoints:
+- respond
+compose:
+  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_from_scratch_prompted/pipeline_conf.json'
+  environment:
+    WAIT_HOSTS: ''
+    WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
+    LANGUAGE: EN
+    FALLBACK_FILE: fallbacks_dream_en.json
+  volumes:
+  - .:/dp-agent
+  ports:
+  - 4242:4242
+proxy: null

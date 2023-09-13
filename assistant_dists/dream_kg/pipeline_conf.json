@@ -449,7 +449,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 120.0,
-                    "url": "http://dff-dream-persona-gpt-j-prompted-skill:8134/respond"
+                    "url": "http://dff-dream-persona-gpt-jt-prompted-skill:8134/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
