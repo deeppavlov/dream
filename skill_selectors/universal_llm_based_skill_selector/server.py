@@ -116,6 +116,7 @@ def select_skills(dialog):
             GENERATIVE_TIMEOUT,
             sending_variables,
         )
+        logger.info(f"universal_llm_based_skill_selector received from llm:\n`{response}`")
         for skill_name in human_uttr_attributes.get("skill_name", []):
             if skill_name in response[0]:
                 selected_skills += [skill_name]

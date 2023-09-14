@@ -117,6 +117,7 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
             sending_variables,
         )
         result = response[0]
+        logger.info(f"universal_llm_based_response_selector received from llm:\n`{result}`")
         result = result.replace("[internal service]", "").replace("[external service]", "").strip()
     except Exception as e:
         sentry_sdk.capture_exception(e)

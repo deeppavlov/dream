@@ -86,6 +86,7 @@ def select_skills(dialog):
             GENERATIVE_TIMEOUT,
             sending_variables,
         )
+        logger.info(f"llm_based_skill_selector received from llm:\n`{response}`")
         for skill_name in all_skill_names:
             if skill_name in response[0]:
                 selected_skills += [skill_name]
