@@ -14,6 +14,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logger = logging.getLogger(__name__)
+KEEP_ZERO_CONFS = int(os.getenv("KEEP_ZERO_CONFS"))
 
 
 def get_result(sentences, sentences_with_history, postannotations=False):
@@ -35,9 +36,18 @@ def get_result(sentences, sentences_with_history, postannotations=False):
                     if is_toxic:  # sum of probs of all toxic classes >0.5
                         prob_list[i][-1] = 0
                         prob_list[i] = [k / sum(prob_list[i]) for k in prob_list[i]]
-                    ans[i][task_name] = {
-                        class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
-                    }
+
+                    if KEEP_ZERO_CONFS:
+                        ans[i][task_name] = {
+                            class_: round(float(prob), 2)
+                            for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                        }
+                    else:
+                        ans[i][task_name] = {
+                            class_: round(float(prob), 2)
+                            for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                            if float(prob) >= 0.1
+                        }
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
