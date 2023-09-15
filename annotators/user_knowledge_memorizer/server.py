@@ -457,6 +457,21 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
     return properties_to_add_to_kg, properties_already_in_kg
 
 
+def get_knowledge(user_id):
+    user_data = kg_graph.search_for_relationships(id_a=user_id)
+    rels = [triplet["rel"] for triplet in user_data]
+    entity_ids = [triplet["id_b"] for triplet in user_data]
+    relationship_entity_id_pair = list(zip(rels, entity_ids))
+    entity_values = kg_graph.get_properties_of_entities(entity_ids)
+    user_triplets = []
+    for entity in entity_values:
+        for rel, id in relationship_entity_id_pair:
+            if entity["@id"] == id:
+                user_triplets.extend([("User", rel, entity.get("substr", entity.get("Name")))])
+
+    return user_triplets
+
+
 def generate_prompt(triplets):
     CHAT_GPT_PORT = os.getenv("CHAT_GPT_PORT")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -506,8 +521,7 @@ def memorize(graph, uttrs):
                             f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
                         )
 
-        user_triplets = graph.search_for_relationships(id_a=user_id)
-        user_triplets = [("User", triplet["rel"], triplet["id_b"]) for triplet in user_triplets]
+        user_triplets = get_knowledge(user_id)
         logger.info(f"user triplets -- {user_triplets}")
         # Generate prompt with knowledge about user
         if user_triplets and USE_KG_DATA:
