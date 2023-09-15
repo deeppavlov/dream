@@ -550,7 +550,7 @@ def memorize(graph, uttrs):
 
         # logger.info(f"user data -- {user_data}")
         # Generate prompt with related knowledge about user
-        sents = user_data[0][0].split('.')[:-1]
+        sents = user_data[0][0].split(".")[:-1]
         # logger.info(f"sents -- {sents}")
         last_utt_to_compare = [last_utt] * len(sents)
         related_knowledge = relativity_filter(sents, last_utt_to_compare)
