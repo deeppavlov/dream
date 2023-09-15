@@ -472,7 +472,7 @@ def get_knowledge(user_id):
     return user_triplets
 
 
-def generate_prompt(triplets):
+def convert_triplets_to_natural_language(triplets):
     CHAT_GPT_PORT = os.getenv("CHAT_GPT_PORT")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
@@ -494,6 +494,24 @@ def generate_prompt(triplets):
     }
 
     return requests.post(url, json=json_input).json()
+
+
+def relativity_filter(sents, last_utt):
+    SENTENCE_RANKER_PORT = os.getenv("SENTENCE_RANKER_PORT")
+    THRESHOLD = 0.5
+    requested_data = {"sentence_pairs": list(zip(sents, last_utt))}
+    url = f"http://sentence-ranker:{SENTENCE_RANKER_PORT}/respond"
+    res = requests.post(url, json=requested_data, timeout=10).json()[0]["batch"]
+    res = list(zip(sents, res))
+    new_prompt = []
+    for sent, score in res:
+        # logger.info(f"sent -- {sent}")
+        # logger.info(f"score -- {score}")
+        if score >= THRESHOLD:
+            new_prompt.append(sent)
+
+    new_prompt = [".".join(new_prompt)]
+    return new_prompt
 
 
 def memorize(graph, uttrs):
@@ -523,33 +541,20 @@ def memorize(graph, uttrs):
 
         user_triplets = get_knowledge(user_id)
         logger.info(f"user triplets -- {user_triplets}")
-        # Generate prompt with knowledge about user
-        if user_triplets and USE_KG_DATA:
-            prompt = generate_prompt(user_triplets)
-        else:
-            prompt = ""
 
-        # sents = [
-        #     "User like sport swimming with his cat",
-        #     "User like his cat",
-        #     "User is ok with cats",
-        #     "User like sport swimming with cat",
-        #     "User adopted a cat last year, but it's dead now.",
-        #     "User adopted a cat last year"
-        # ]
-        # utt = [
-        #     "User has a pet cat",
-        #     "User has a pet cat",
-        #     "User has a pet cat",
-        #     "User has a pet cat",
-        #     "User has a pet cat",
-        #     "User has a pet cat"
-        # ]
-        # requesed_data = {"sentence_pairs": list(zip(sents, utt))}
-        # logger.info(f"requested_data -- {requesed_data}")
-        # res = requests.post("http://sentence-ranker:8128/respond", json=requesed_data, timeout=10).json()[0]["batch"]
-        # res = list(zip(sents, res))
-        # logger.info(f"res -- {res}")
+        # Convert triplets into natural language
+        if user_triplets and USE_KG_DATA:
+            user_data = convert_triplets_to_natural_language(user_triplets)
+        else:
+            user_data = ""
+
+        # logger.info(f"user data -- {user_data}")
+        # Generate prompt with related knowledge about user
+        sents = user_data[0][0].split('.')[:-1]
+        # logger.info(f"sents -- {sents}")
+        last_utt_to_compare = [last_utt] * len(sents)
+        related_knowledge = relativity_filter(sents, last_utt_to_compare)
+        logger.info(f"related knowledge -- {related_knowledge}")
 
         create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])
 
@@ -620,13 +625,13 @@ def memorize(graph, uttrs):
 
     logger.info(
         f"added_to_graph -- {triplets_added_to_kg_batch}, "
-        f"triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {prompt}"
+        f"triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {related_knowledge}"
     )
     return [
         {
             "added_to_graph": triplets_added_to_kg_batch,
             "triplets_already_in_graph": triplets_already_in_kg_batch,
-            "kg_prompt": prompt,
+            "kg_prompt": related_knowledge,
         }
     ]
 

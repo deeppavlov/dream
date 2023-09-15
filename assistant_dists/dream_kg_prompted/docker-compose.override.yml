@@ -200,6 +200,7 @@ services:
         CONFIG: config.json
         OPENAI_API_KEY:
         CHAT_GPT_PORT: 8145
+        SENTENCE_RANKER_PORT: 8128
         USE_KG_DATA: 1
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
