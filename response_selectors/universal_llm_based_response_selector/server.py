@@ -72,7 +72,9 @@ def select_response_by_scores(hypotheses, scores):
 def select_response(dialog, hypotheses, human_uttr_attributes):
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
 
-    if human_uttr_attributes.get("return_all_hypotheses", None):
+    _is_prompt_based_selection = "response_selector_prompt" in human_uttr_attributes
+
+    if human_uttr_attributes.get("return_all_hypotheses", None) and not _is_prompt_based_selection:
         return "\n".join(['"' + hyp["skill_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses])
 
     # get prompt from the current utterance attributes
@@ -159,9 +161,16 @@ def respond():
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
-        selected_resp = select_response(dialog, hypotheses, dialog["human_utterances"][-1].get("attributes", {}))
+        human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
+        _is_prompt_based_selection = "response_selector_prompt" in human_uttr_attributes
+        selected_resp = select_response(dialog, hypotheses, human_uttr_attributes)
         if selected_resp:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
+            if human_uttr_attributes.get("return_all_hypotheses", None) and _is_prompt_based_selection:
+                selected_resp += "\nHypotheses:" + "\n".join(
+                    ['"' + hyp["skill_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses]
+                )
+
             if KEEP_ORIGINAL_HYPOTHESIS:
                 selected_responses.append(hypotheses[best_id].pop("text"))
             else:
