@@ -275,7 +275,7 @@
                 "required_previous_services": [
                     "annotators.combined_classification"
                 ],
-                "state_manager_method": "add_annotation",
+                "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
                     "component": "components/uKasd89kldsIK0Pd.yml",
