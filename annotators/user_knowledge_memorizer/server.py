@@ -496,22 +496,22 @@ def convert_triplets_to_natural_language(triplets):
     return requests.post(url, json=json_input).json()
 
 
-def relativity_filter(sents, last_utt):
+def relativity_filter(user_knowledge, last_utt):
     SENTENCE_RANKER_PORT = os.getenv("SENTENCE_RANKER_PORT")
     THRESHOLD = 0.5
-    requested_data = {"sentence_pairs": list(zip(sents, last_utt))}
+    requested_data = {"sentence_pairs": list(zip(user_knowledge, last_utt))}
     url = f"http://sentence-ranker:{SENTENCE_RANKER_PORT}/respond"
     res = requests.post(url, json=requested_data, timeout=10).json()[0]["batch"]
-    res = list(zip(sents, res))
-    new_prompt = []
-    for sent, score in res:
-        # logger.info(f"sent -- {sent}")
+    res = list(zip(user_knowledge, res))
+    user_related_knowledge = []
+    for knowledge, score in res:
+        # logger.info(f"knowledge -- {knowledge}")
         # logger.info(f"score -- {score}")
         if score >= THRESHOLD:
-            new_prompt.append(sent)
+            user_related_knowledge.append(knowledge)
 
-    new_prompt = [".".join(new_prompt)]
-    return new_prompt
+    user_related_knowledge = [".".join(user_related_knowledge)]
+    return user_related_knowledge
 
 
 def memorize(graph, uttrs):
@@ -544,16 +544,19 @@ def memorize(graph, uttrs):
 
         # Convert triplets into natural language
         if user_triplets and USE_KG_DATA:
-            user_data = convert_triplets_to_natural_language(user_triplets)
+            user_knowledge = convert_triplets_to_natural_language(user_triplets)
         else:
-            user_data = ""
+            user_knowledge = []
 
-        # logger.info(f"user data -- {user_data}")
+        # logger.info(f"user knowledge -- {user_knowledge}")
         # Generate prompt with related knowledge about user
-        sents = user_data[0][0].split(".")[:-1]
-        # logger.info(f"sents -- {sents}")
-        last_utt_to_compare = [last_utt] * len(sents)
-        related_knowledge = relativity_filter(sents, last_utt_to_compare)
+        if user_knowledge:
+            user_knowledge = user_knowledge[0][0].split(".")[:-1]
+            # logger.info(f"user_knowledge -- {user_knowledge}")
+            last_utt_to_compare = [last_utt] * len(user_knowledge)
+            related_knowledge = relativity_filter(user_knowledge, last_utt_to_compare)
+        else:
+            related_knowledge = []
         logger.info(f"related knowledge -- {related_knowledge}")
 
         create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])
