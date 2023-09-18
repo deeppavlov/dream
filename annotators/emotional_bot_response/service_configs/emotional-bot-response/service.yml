@@ -12,7 +12,6 @@ compose:
       SERVICE_NAME: emotional-bot-response
       WORK_DIR: annotators/emotional_bot_response
       FLASK_APP: server
-      API_CONFIGS: generative_lm.json
       GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
       GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
       GENERATIVE_TIMEOUT: 120

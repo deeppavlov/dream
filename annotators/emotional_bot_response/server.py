@@ -37,26 +37,6 @@ ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
 available_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
 
-API_CONFIGS = getenv("API_CONFIGS", None)
-API_CONFIGS = [] if API_CONFIGS is None else API_CONFIGS.split(",")
-api_conf = {}
-for config in API_CONFIGS:
-    with open(f"api_configs/{config}", "r") as f:
-        conf = json.load(f)
-        api_conf.update(conf)
-
-for key, value in api_conf.copy().items():
-    for api_key in value["keys"]:
-        if not available_variables[api_key]:
-            del api_conf[key]
-            break
-
-logger.info(f"Available APIs: {', '.join([api['display_name'] for api in api_conf.values()])}")
-
-
-def timeout_handler():
-    raise Exception("API timeout")
-
 
 def make_prompt(sentence, emotion="neutral", mood="happy", intensity=7):
     prompt = f"""You are a writer who needs to rewrite a sentence to express

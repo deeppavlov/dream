@@ -464,7 +464,6 @@ services:
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 1
         ENVVARS_TO_SEND: OPENAI_API_KEY
-        API_CONFIGS: generative_lm.json
       context: .
       dockerfile: annotators/emotional_bot_response/Dockerfile
     command: flask run -h 0.0.0.0 -p 8050
