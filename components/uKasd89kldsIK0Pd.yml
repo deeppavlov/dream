@@ -1,4 +1,4 @@
-name: bot-emotion-classifier
+name: bot_emotion_classifier
 display_name: Bot Emotion Classifier
 component_type: Script-based with NN
 model_type: ML-based

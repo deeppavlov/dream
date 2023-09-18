@@ -1,4 +1,4 @@
-name: emotion-ranking-based-response-selector
+name: emotion_ranking_based_response_selector
 endpoints:
 - respond
 compose:
