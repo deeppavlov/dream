@@ -36,8 +36,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/sbDcAqiNqxFz.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "component": "components/skjdfhow389rhuweih1982ehbjdfh.yml",
+                "service": "services/agent_services/service_configs/dream_ranking_and_midas_based_dm"
             }
         },
         "timeout_service": {
@@ -64,8 +64,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/rFC0YJOoDFvS.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "component": "components/dciuh4ikfjg43jhwefoi.yml",
+                "service": "services/agent_services/service_configs/dream_ranking_and_midas_based_dm"
             }
         },
         "annotators": {
@@ -558,9 +558,9 @@
         }
     },
     "metadata": {
-        "display_name": "Dream",
+        "display_name": "Dream with Ranking- and MIDAS-based DM",
         "author": "DeepPavlov",
-        "description": "Main version of DeepPavlov Dream Socialbot",
+        "description": "DeepPavlov Dream Distribution with Ranking- and MIDAS-based Dialog Management",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
         "ram_usage": "20 GB",
