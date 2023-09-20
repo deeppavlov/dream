@@ -21,7 +21,8 @@ def check_sfs(predicted_sf, previous_sf, current_speaker, previous_speaker):
 
 
 def get_speech_function(phrase, prev_phrase, speaker="John", previous_speaker="Doe"):
-    # note: default values for current and previous speaker are only to make them different. In out case they are always
+    # note: default values for current and previous speaker are only to make them different.
+    # In out case they are always
     # different (bot and human)
 
     predicted_sf = model((phrase,), (prev_phrase,))
