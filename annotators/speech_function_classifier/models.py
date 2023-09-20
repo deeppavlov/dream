@@ -1,22 +1,22 @@
 from deeppavlov import build_model
 
 
-model = build_model('speech_fn')
+model = build_model("speech_fn")
 
 
 def check_sfs(predicted_sf, previous_sf, current_speaker, previous_speaker):
-    if predicted_sf == 'Command':
+    if predicted_sf == "Command":
         if ("Open" in previous_sf or previous_sf is None) and current_speaker == previous_speaker:
-            return 'Open.Command'
+            return "Open.Command"
         elif current_speaker == previous_speaker:
-            return 'Sustain.Continue.Command'
+            return "Sustain.Continue.Command"
         else:
-            return 'React.Respond.Command'
-    elif predicted_sf == 'Engage':
+            return "React.Respond.Command"
+    elif predicted_sf == "Engage":
         if previous_sf is None:
-            return 'Open.Attend'
+            return "Open.Attend"
         else:
-            return 'React.Respond.Support.Engage'
+            return "React.Respond.Support.Engage"
     return predicted_sf
 
 
