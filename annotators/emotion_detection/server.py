@@ -33,9 +33,6 @@ text_model, video_model, audio_model = prepare_models(num_labels, "./")
 
 logger = logging.getLogger(__name__)
 
-prefix = os.getenv("PREFIX")
-prefix_len = len(prefix)
-
 
 def sample_frame_indices(seg_len, clip_len=16, frame_sample_rate=4, mode="video"):
     converted_len = int(clip_len * frame_sample_rate)
@@ -160,23 +157,19 @@ class EmotionsPayload(BaseModel):
     video_path: List[str]
 
 
-def subinfer(msg_text):
+def subinfer(msg_text: str, video_path: str):
     emotion = "Emotion detection unsuccessfull. An error occured during inference."
-    if prefix in msg_text:
-        # TODO: maybe add support for multiple videos in one message
-        try:
-            (text, link) = msg_text[prefix_len:].split('\n')
-            logger.info(f"Emotion Detection: {text}, {link}")
-            file = URLopener()
-            if os.path.exists("/src/datafiles/vid.ogg"):
-                os.remove("/src/datafiles/vid.ogg")
-            file.retrieve(link, "/src/datafiles/vid.ogg")
-            emotion = predict_emotion(text, "/src/datafiles/vid.ogg")
-            logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
-        except Exception as e:
-            raise ValueError(f"The message format is correct, but: {e}")
-    else:
-        raise ValueError(f"Input should be text and a videofile link on two separate lines. And should start with {prefix}")
+    # TODO: maybe add support for multiple videos in one message
+    try:
+        logger.info(f"Emotion Detection: {msg_text}")
+        file = URLopener()
+        if os.path.exists("/src/datafiles/vid.ogg"):
+            os.remove("/src/datafiles/vid.ogg")
+        file.retrieve(video_path, "/src/datafiles/vid.ogg")
+        emotion = predict_emotion(msg_text, "/src/datafiles/vid.ogg")
+        logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
+    except Exception as e:
+        raise ValueError(f"The message format is correct, but: {e}")
     return emotion
 
 
@@ -189,5 +182,5 @@ app.add_middleware(
 @app.post("/model")
 def infer(payload: EmotionsPayload):
     logger.info(f"Emotion Detection: {payload}")
-    emotion = [subinfer(p) for p in payload.personality]
+    emotion = [subinfer(p, p.video_path) for p in payload.personality]
     return jsonable_encoder(emotion)
