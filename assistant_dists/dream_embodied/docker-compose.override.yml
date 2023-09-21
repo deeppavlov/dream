@@ -10,6 +10,9 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
 
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
+
   ranking-based-response-selector:
     env_file: [ .env ]
     build:

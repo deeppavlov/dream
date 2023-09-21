@@ -107,7 +107,7 @@
                     "timeout": 15.0,
                     "url": "http://emotion-detection:8045/model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:personality_catcher_formatter_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:emotion_detection_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "previous_services": [],

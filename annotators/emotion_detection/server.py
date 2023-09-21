@@ -1,19 +1,21 @@
 import logging
 import os
 import opensmile
-from multimodal_concat.models import MultimodalClassificaionModel, MainModel
-from multimodal_concat.utils import prepare_models
-
 import torch
 import numpy as np
 import sentry_sdk
+import cv2
+
+from multimodal_concat.models import MultimodalClassificaionModel, MainModel
+from multimodal_concat.utils import prepare_models
+
 from fastapi import FastAPI, Body
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from transformers import AutoTokenizer, AutoProcessor
 from typing import List
-import cv2
+from urllib.request import URLopener
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -154,21 +156,27 @@ final_model = create_final_model()
 
 
 class EmotionsPayload(BaseModel):
-    personality: List[str] = Body(...)
+    personality: List[str]
+    video_path: List[str]
 
 
 def subinfer(msg_text):
     emotion = "Emotion detection unsuccessfull. An error occured during inference."
     if prefix in msg_text:
+        # TODO: maybe add support for multiple videos in one message
         try:
-            text = msg_text[prefix_len:]
-            logger.info(f"Emotion Detection: {text}")
-            emotion = predict_emotion(text, "/src/datafiles/vid.mp4")
+            (text, link) = msg_text[prefix_len:].split('\n')
+            logger.info(f"Emotion Detection: {text}, {link}")
+            file = URLopener()
+            if os.path.exists("/src/datafiles/vid.ogg"):
+                os.remove("/src/datafiles/vid.ogg")
+            file.retrieve(link, "/src/datafiles/vid.ogg")
+            emotion = predict_emotion(text, "/src/datafiles/vid.ogg")
             logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
         except Exception as e:
             raise ValueError(f"The message format is correct, but: {e}")
     else:
-        raise ValueError("Input should be text and a videofile link on two separate lines.")
+        raise ValueError(f"Input should be text and a videofile link on two separate lines. And should start with {prefix}")
     return emotion
 
 
