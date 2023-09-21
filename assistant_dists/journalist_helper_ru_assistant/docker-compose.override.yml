@@ -62,7 +62,6 @@ services:
         SERVICE_NAME: prompt_selector
         SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
         N_SENTENCES_TO_RETURN: 2
-        PROMPTS_TO_CONSIDER: journalist_helper_ru
       context: .
       dockerfile: ./annotators/prompt_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8135

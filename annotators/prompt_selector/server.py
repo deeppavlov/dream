@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import requests
 import time
 from copy import deepcopy
@@ -19,26 +20,33 @@ app = Flask(__name__)
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 logger.info(f"prompt-selector considered ranker: {SENTENCE_RANKER_SERVICE_URL}")
 N_SENTENCES_TO_RETURN = int(getenv("N_SENTENCES_TO_RETURN"))
-# list of string names of prompts from common/prompts
-PROMPTS_TO_CONSIDER = getenv("PROMPTS_TO_CONSIDER", "").split(",")
-logger.info(f"prompt-selector considered prompts: {PROMPTS_TO_CONSIDER}")
-PROMPTS = []
-PROMPTS_NAMES = []
-for filename in listdir("common/prompts"):
-    prompt_name = Path(filename).stem
-    if ".json" in filename and prompt_name in PROMPTS_TO_CONSIDER:
-        data = json.load(open(f"common/prompts/{filename}", "r"))
-        PROMPTS.append(data.get("goals", ""))
-        PROMPTS_NAMES.append(prompt_name)
+
+
+def get_prompts_for_skills_in_pipeline(pipeline):
+    all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
+    prompted_skills = [skill for skill in all_skill_names if "prompted_skill" in skill]
+    prompts_to_consider = [re.findall(r"dff_(.+)_prompted_skill", skill)[0] for skill in prompted_skills]
+
+    logger.info(f"prompt-selector considered prompts: {prompts_to_consider}")
+    prompts = []
+    prompts_names = []
+    for filename in listdir("common/prompts"):
+        prompt_name = Path(filename).stem
+        if ".json" in filename and prompt_name in prompts_to_consider:
+            data = json.load(open(f"common/prompts/{filename}", "r"))
+            prompts.append(data.get("goals", ""))
+            prompts_names.append(prompt_name)
+
+    return prompts, prompts_names
 
 
 def get_result(request):
-    global PROMPTS, PROMPTS_NAMES
     st_time = time.time()
     # batch of contexts
     contexts = request.json["contexts"]
     # batch of prompts_goals dicts [{"promptname1": "promptgoal1", "promptname2": "promptgoal2"}]
     prompts_goals_from_attributes = request.json["prompts_goals"]
+    pipelines = request.json["pipelines"]
 
     result = []
     pairs = []
@@ -49,7 +57,9 @@ def get_result(request):
             str_context = "\n".join(context[-3:])
         else:
             str_context = context[-1]
-        for _prompt_goals, _prompt_name in zip(PROMPTS, PROMPTS_NAMES):
+
+        prompts, prompts_names = get_prompts_for_skills_in_pipeline(pipelines[context_id])
+        for _prompt_goals, _prompt_name in zip(prompts, prompts_names):
             pairs += [
                 [
                     str_context,
@@ -78,13 +88,13 @@ def get_result(request):
                         scores[_id] = -1.0
                 most_relevant_sent_ids = np.argsort(scores[curr_ids])[::-1][:N_SENTENCES_TO_RETURN]
                 curr_result = {
-                    "prompts": [PROMPTS_NAMES[_id] for _id in most_relevant_sent_ids],
+                    "prompts": [prompts_names[_id] for _id in most_relevant_sent_ids],
                     "max_similarity": scores[curr_ids][most_relevant_sent_ids[0]],
                 }
                 # add to prompts to be turned on, those prompts which goals are empty
                 for _id in curr_ids:
                     if is_empty_prompts[_id]:
-                        curr_result["prompts"] += [PROMPTS_NAMES[_id]]
+                        curr_result["prompts"] += [prompts_names[_id]]
                 result += [curr_result]
         except Exception as exc:
             logger.exception(exc)

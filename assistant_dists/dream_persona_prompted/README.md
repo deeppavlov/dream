@@ -35,12 +35,8 @@ The distribution may contain **several Prompt-based skills.** Therefore, the **P
 The Prompt Selector is also a light-weight container utilizing **Sentence Ranker** component 
 (its URL is given in `.env` file as `SENTENCE_RANKER_SERVICE_URL`) to select `N_SENTENCES_TO_RETURN` 
 the most relevant prompts (precisely, it returns ordered list of prompt names) among the given ones. 
-The `,`-joint list of the prompt names to be considered is given as an environmental variable `PROMPTS_TO_CONSIDER`.
+Selects among the prompts for which the prompted skills are included in the current pipeline.
 Each considered prompt should be located as `dream/common/prompts/<prompt_name>.json`.
-
-**Note!** In the Dream Persona Prompted Distribution we give a list of prompts to the Prompt Selector: `dream_persona,pizza` 
-separated with semicolon just for the demonstration of the `PROMPTS_TO_CONSIDER`'s input format. Actually,
-Dream Persona Prompted Distribution contains only one prompted skill which utilizes Dream Persona prompt.
 
 ### Skill Selector
 

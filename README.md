@@ -66,7 +66,6 @@ Russian version of DeepPavlov Dream Socialbot. This is a generative-based social
 Mini version of DeepPavlov Dream Socialbot with the use of prompt-based generative models. 
 This is a generative-based socialbot that uses large language models to generate most of the responses. 
 You can upload your own prompts (json files) to [common/prompts](https://github.com/deeppavlov/dream/common/prompts),
-add prompt names to `PROMPTS_TO_CONSIDER` (comma-separated),
 and the provided information will be used in LLM-powered reply generation as a prompt.
 [Link to the distribution.](https://github.com/deeppavlov/dream/tree/main/assistant_dists/dream_persona_prompted)
 
