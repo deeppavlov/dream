@@ -1,5 +1,8 @@
 name: transformers-lm-gptj
 endpoints:
+- ping
+- envvars_to_send
+- max_tokens
 - respond
 - generate_goals
 compose:

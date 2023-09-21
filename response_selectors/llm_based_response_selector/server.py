@@ -11,6 +11,7 @@ from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.utils import is_toxic_or_badlisted_utterance
 
@@ -35,8 +36,7 @@ with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 KEEP_ORIGINAL_HYPOTHESIS = int(getenv("KEEP_ORIGINAL_HYPOTHESIS"))
 
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
 
 assert GENERATIVE_SERVICE_URL
@@ -95,7 +95,7 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]
+        result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]["text"]
         logger.info("Exception in LLM's invocation. Selected a response with the highest confidence.")
     logger.info(f"llm_based_response_selector selected:\n`{result}`")
 

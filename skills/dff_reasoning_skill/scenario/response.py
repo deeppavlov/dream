@@ -9,8 +9,8 @@ from datetime import date
 
 from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
+from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
-
 
 from scenario.api_responses.generative_lm import generative_lm_response
 from scenario.api_responses.news_api import news_api_response
@@ -43,8 +43,7 @@ FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 available_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
 
 API_CONFIGS = getenv("API_CONFIGS", None)

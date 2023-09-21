@@ -138,7 +138,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-text-davinci-003.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:

@@ -1,5 +1,8 @@
 name: anthropic-api-claude-v1
 endpoints:
+- ping
+- envvars_to_send
+- max_tokens
 - respond
 - generate_goals
 compose:

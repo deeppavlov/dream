@@ -9,6 +9,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, compose_sending_variables
 from df_engine.core import Context, Actor
 
@@ -26,8 +27,7 @@ if GENERATIVE_SERVICE_CONFIG:
 PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 ALLOW_PROMPT_RESET = int(getenv("ALLOW_PROMPT_RESET", 0))
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE

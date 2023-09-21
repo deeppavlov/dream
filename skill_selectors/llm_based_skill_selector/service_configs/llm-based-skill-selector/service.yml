@@ -11,7 +11,6 @@ compose:
       GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
       GENERATIVE_TIMEOUT: 20
       N_UTTERANCES_CONTEXT: 3
-      ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       PROMPT_FILE: common/prompts/skill_selector.json
       FLASK_APP: server
     context: .

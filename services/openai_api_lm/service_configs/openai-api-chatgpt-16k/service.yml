@@ -1,5 +1,8 @@
 name: openai-api-chatgpt-16k
 endpoints:
+- ping
+- envvars_to_send
+- max_tokens
 - respond
 - generate_goals
 compose:

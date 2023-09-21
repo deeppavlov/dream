@@ -35,6 +35,11 @@ DEFAULT_CONFIGS = {
     "transformers-lm-gptj": json.load(open("common/generative_configs/default_generative_config.json", "r")),
     "transformers-lm-oasst12b": json.load(open("common/generative_configs/default_generative_config.json", "r")),
 }
+MAX_TOKENS = {
+    "transformers-lm-bloomz7b": 2048,
+    "transformers-lm-gptj": 2048,
+    "transformers-lm-oasst12b": 5120,
+}
 
 
 def generate_responses(context, model, tokenizer, prompt, continue_last_uttr=False):
@@ -103,6 +108,17 @@ except Exception as e:
 @app.route("/ping", methods=["POST"])
 def ping():
     return "pong"
+
+
+@app.route("/envvars_to_send", methods=["POST"])
+def envvars_to_send():
+    return jsonify([])
+
+
+@app.route("/max_tokens", methods=["POST"])
+def max_tokens():
+    global PRETRAINED_MODEL_NAME_OR_PATH
+    return jsonify(MAX_TOKENS[PRETRAINED_MODEL_NAME_OR_PATH])
 
 
 @app.route("/respond", methods=["POST"])

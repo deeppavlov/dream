@@ -27,6 +27,10 @@ DEFAULT_CONFIGS = {
     "claude-1": json.load(open("common/generative_configs/anthropic_generative_config.json", "r")),
     "claude-instant-1": json.load(open("common/generative_configs/anthropic_generative_config.json", "r")),
 }
+MAX_TOKENS = {
+    "claude-1": 9000,
+    "claude-instant-1": 9000,
+}
 
 
 def generate_responses(context, anthropic_api_key, prompt, generation_params, continue_last_uttr=False):
@@ -62,6 +66,17 @@ def generate_responses(context, anthropic_api_key, prompt, generation_params, co
 @app.route("/ping", methods=["POST"])
 def ping():
     return "pong"
+
+
+@app.route("/envvars_to_send", methods=["POST"])
+def envvars_to_send():
+    return jsonify("ANTHROPIC_API_KEY")
+
+
+@app.route("/max_tokens", methods=["POST"])
+def max_tokens():
+    global PRETRAINED_MODEL_NAME_OR_PATH
+    return jsonify(MAX_TOKENS[PRETRAINED_MODEL_NAME_OR_PATH])
 
 
 @app.route("/respond", methods=["POST"])

@@ -57,7 +57,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 3
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
         PROMPT_FILE: common/prompts/skill_selector.json
       context: .
       dockerfile: ./skill_selectors/llm_based_skill_selector/Dockerfile
@@ -79,10 +78,9 @@ services:
         SERVICE_NAME: response_selector
         LANGUAGE: EN
         GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
-        GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+        GENERATIVE_SERVICE_CONFIG: openai-chatgpt-long.json
         GENERATIVE_TIMEOUT: 120
-        N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
+        N_UTTERANCES_CONTEXT: 3
         FILTER_TOXIC_OR_BADLISTED: 1
         PROMPT_FILE: common/prompts/response_selector.json
       context: .
@@ -167,7 +165,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:
@@ -188,7 +185,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:
@@ -209,7 +205,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:
@@ -230,7 +225,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:
@@ -251,7 +245,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:

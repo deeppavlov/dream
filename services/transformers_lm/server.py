@@ -48,6 +48,14 @@ DEFAULT_CONFIGS = {
     "dim/xglm-4.5B_ru_v10_epoch_6_step_41141": json.load(open("common/generative_configs/ruxglm_config.json", "r")),
     "ai-forever/ruGPT-3.5-13B": json.load(open("common/generative_configs/rugpt35_config.json", "r")),
 }
+MAX_TOKENS = {
+    "EleutherAI/gpt-j-6B": 2048,
+    "OpenAssistant/pythia-12b-sft-v8-7k-steps": 5120,
+    "togethercomputer/GPT-JT-6B-v1": 2048,
+    "lmsys/vicuna-13b-v1.3": 2048,
+    "dim/xglm-4.5B_ru_v10_epoch_6_step_41141": 2048,
+    "ai-forever/ruGPT-3.5-13B": 2048,
+}
 
 
 def add_replacement_tokens(text, replacement):
@@ -178,6 +186,17 @@ except Exception as e:
 @app.route("/ping", methods=["POST"])
 def ping():
     return "pong"
+
+
+@app.route("/envvars_to_send", methods=["POST"])
+def envvars_to_send():
+    return jsonify([])
+
+
+@app.route("/max_tokens", methods=["POST"])
+def max_tokens():
+    global PRETRAINED_MODEL_NAME_OR_PATH
+    return jsonify(MAX_TOKENS[PRETRAINED_MODEL_NAME_OR_PATH])
 
 
 @app.route("/respond", methods=["POST"])

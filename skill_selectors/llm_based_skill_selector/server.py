@@ -6,6 +6,7 @@ from os import getenv, listdir
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 
 
@@ -27,8 +28,7 @@ assert PROMPT_FILE, logger.error("No prompt provided")
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 DEFAULT_SKILLS = ["dummy_skill"]
 
 assert GENERATIVE_SERVICE_URL

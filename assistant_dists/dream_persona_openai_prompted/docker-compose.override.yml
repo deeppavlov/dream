@@ -53,10 +53,9 @@ services:
         SERVICE_NAME: response_selector
         LANGUAGE: EN
         GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
-        GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+        GENERATIVE_SERVICE_CONFIG: openai-chatgpt-long.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 1
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
         FILTER_TOXIC_OR_BADLISTED: 1
         PROMPT_FILE: common/prompts/response_selector.json
       context: .
@@ -141,7 +140,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:
@@ -178,7 +176,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
     deploy:

@@ -6,6 +6,7 @@ import logging
 
 from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
+from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 
 
@@ -19,9 +20,8 @@ for config in API_CONFIGS:
 
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
+ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:

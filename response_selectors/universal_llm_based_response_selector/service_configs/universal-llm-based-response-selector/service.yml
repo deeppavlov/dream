@@ -11,7 +11,7 @@ compose:
       LANGUAGE: EN
       FILTER_TOXIC_OR_BADLISTED: 1
       DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
-      DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json
+      DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt-long.json
       GENERATIVE_TIMEOUT: 120
       N_UTTERANCES_CONTEXT: 1
       FLASK_APP: server

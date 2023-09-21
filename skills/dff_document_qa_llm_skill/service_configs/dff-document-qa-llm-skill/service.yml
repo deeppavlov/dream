@@ -12,7 +12,6 @@ compose:
       GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
       GENERATIVE_TIMEOUT: 120
       N_UTTERANCES_CONTEXT: 7
-      ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
       FILE_SERVER_TIMEOUT: 30
       DOCUMENT_PROMPT_FILE: common/prompts/document_qa_instruction.json
     context: .

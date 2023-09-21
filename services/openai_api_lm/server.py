@@ -32,6 +32,13 @@ DEFAULT_CONFIGS = {
     "gpt-4-32k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
 }
 CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"]
+MAX_TOKENS = {
+    "text-davinci-003": 4097,
+    "gpt-3.5-turbo": 4096,
+    "gpt-3.5-turbo-16k": 16384,
+    "gpt-4": 8192,
+    "gpt-4-32k": 32768,
+}
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
@@ -90,6 +97,17 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
 @app.route("/ping", methods=["POST"])
 def ping():
     return "pong"
+
+
+@app.route("/envvars_to_send", methods=["POST"])
+def envvars_to_send():
+    return jsonify(["OPENAI_API_KEY", "OPENAI_ORGANIZATION"])
+
+
+@app.route("/max_tokens", methods=["POST"])
+def max_tokens():
+    global PRETRAINED_MODEL_NAME_OR_PATH
+    return jsonify(MAX_TOKENS[PRETRAINED_MODEL_NAME_OR_PATH])
 
 
 @app.route("/respond", methods=["POST"])

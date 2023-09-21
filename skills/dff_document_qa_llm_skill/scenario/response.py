@@ -11,6 +11,7 @@ from common.build_dataset import build_dataset
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.containers import get_envvars_for_llm
 from common.prompts import (
     send_request_to_prompted_generative_service,
     compose_sending_variables,
@@ -30,9 +31,8 @@ GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")  # add env!!!
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 FILE_SERVER_TIMEOUT = int(getenv("FILE_SERVER_TIMEOUT", 30))
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
+ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 DEFAULT_SYSTEM_PROMPT = "Answer questions based on part of a text."
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 with open(DOCUMENT_PROMPT_FILE, "r") as f:
     DOCUMENT_PROMPT_TEXT = json.load(f)["prompt"]
 if GENERATIVE_SERVICE_CONFIG:

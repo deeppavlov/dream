@@ -11,6 +11,7 @@ import sentry_sdk
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
+from common.containers import get_envvars_for_llm
 from common.prompts import compose_sending_variables
 from df_engine.core import Context, Actor
 
@@ -28,22 +29,6 @@ DEFAULT_PROMPT = "Respond like a friendly chatbot."
 DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-gptjt:8161/respond")
 DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
-ENVVARS_TO_SEND = {
-    "http://transformers-lm-gptj:8130/respond": [],
-    "http://transformers-lm-bloomz7b:8146/respond": [],
-    "http://transformers-lm-oasst12b:8158/respond": [],
-    "http://openai-api-chatgpt:8145/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-chatgpt-16k:8167/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-davinci3:8131/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-gpt4:8159/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-gpt4-32k:8160/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://transformers-lm-gptjt:8161/respond": [],
-    "http://anthropic-api-claude-v1:8164/respond": ["ANTHROPIC_API_KEY"],
-    "http://anthropic-api-claude-instant-v1:8163/respond": ["ANTHROPIC_API_KEY"],
-    "http://transformers-lm-vicuna13b:8168/respond": [],
-    "http://transformers-lm-ruxglm:8171/respond": [],
-    "http://transformers-lm-rugpt35:8178/respond": [],
-}
 
 
 def compose_data_for_model(ctx, actor):
@@ -76,7 +61,7 @@ async def async_request_to_prompted_generative_service(
 ):
     logger.info(f"lm_service_url: {url}")
     logger.info(f"prompt: {prompt}")
-    envvars_to_send = ENVVARS_TO_SEND.get(url, [])
+    envvars_to_send = get_envvars_for_llm(url)
     sending_variables = compose_sending_variables(
         lm_service_kwargs,
         envvars_to_send,

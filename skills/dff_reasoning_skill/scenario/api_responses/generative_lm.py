@@ -2,11 +2,14 @@ from os import getenv
 import logging
 import sentry_sdk
 import json
-from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
-from scenario.utils import compose_input_for_API, compose_data_for_model
-from df_engine.core import Context, Actor
+
 import common.dff.integration.context as int_ctx
+from common.containers import get_envvars_for_llm
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+from df_engine.core import Context, Actor
+from scenario.utils import compose_input_for_API, compose_data_for_model
 from typing import Any
+
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -19,8 +22,7 @@ if GENERATIVE_SERVICE_CONFIG:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 

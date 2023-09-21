@@ -104,7 +104,6 @@ services:
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION
         ALLOW_PROMPT_RESET: 1
       context: .
       dockerfile: ./skills/dff_template_prompted_skill/Dockerfile

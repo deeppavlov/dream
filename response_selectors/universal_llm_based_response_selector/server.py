@@ -11,6 +11,7 @@ from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.utils import is_toxic_or_badlisted_utterance
 
@@ -30,22 +31,6 @@ DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-l
 DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
 KEEP_ORIGINAL_HYPOTHESIS = int(getenv("KEEP_ORIGINAL_HYPOTHESIS"))
-ENVVARS_TO_SEND = {
-    "http://transformers-lm-gptj:8130/respond": [],
-    "http://transformers-lm-bloomz7b:8146/respond": [],
-    "http://transformers-lm-oasst12b:8158/respond": [],
-    "http://openai-api-chatgpt:8145/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-chatgpt-16k:8167/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-davinci3:8131/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-gpt4:8159/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://openai-api-gpt4-32k:8160/respond": ["OPENAI_API_KEY", "OPENAI_ORGANIZATION"],
-    "http://transformers-lm-gptjt:8161/respond": [],
-    "http://anthropic-api-claude-v1:8164/respond": ["ANTHROPIC_API_KEY"],
-    "http://anthropic-api-claude-instant-v1:8163/respond": ["ANTHROPIC_API_KEY"],
-    "http://transformers-lm-vicuna13b:8168/respond": [],
-    "http://transformers-lm-ruxglm:8171/respond": [],
-    "http://transformers-lm-rugpt35:8178/respond": [],
-}
 
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
 
@@ -105,7 +90,7 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
 
         lm_service_kwargs = human_uttr_attributes.pop("response_selector_lm_service_kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-        envvars_to_send = ENVVARS_TO_SEND.get(lm_service_url, [])
+        envvars_to_send = get_envvars_for_llm(lm_service_url)
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
