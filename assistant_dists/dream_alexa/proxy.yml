@@ -6,7 +6,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8011
+      - PROXY_PASS=3.95.137.219:8011
       - PORT=8011
 
   dff-intent-responder-skill:
@@ -87,7 +87,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8087
+      - PROXY_PASS=3.95.137.219:8087
       - PORT=8087
 
   fact-retrieval:
