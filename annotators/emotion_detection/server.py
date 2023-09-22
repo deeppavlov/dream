@@ -9,13 +9,13 @@ import cv2
 from multimodal_concat.models import MultimodalClassificaionModel, MainModel
 from multimodal_concat.utils import prepare_models
 
-from fastapi import FastAPI, Body
+from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 from transformers import AutoTokenizer, AutoProcessor
 from typing import List
-from urllib.request import URLopener
+from urllib.request import urlretrieve
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"))
 
@@ -159,17 +159,16 @@ class EmotionsPayload(BaseModel):
 
 def subinfer(msg_text: str, video_path: str):
     emotion = "Emotion detection unsuccessfull. An error occured during inference."
-    # TODO: maybe add support for multiple videos in one message
     try:
-        logger.info(f"Emotion Detection: {msg_text}")
-        file = URLopener()
-        if os.path.exists("/src/datafiles/vid.ogg"):
-            os.remove("/src/datafiles/vid.ogg")
-        file.retrieve(video_path, "/src/datafiles/vid.ogg")
-        emotion = predict_emotion(msg_text, "/src/datafiles/vid.ogg")
+        filename = video_path.split("=")[-1]
+        filepath = f"/src/datafiles/{filename}"
+        urlretrieve(video_path, filepath)
+        if not os.path.exists(filepath):
+            raise ValueError(f"Failed to retrieve videofile from {filepath}")
+        emotion = predict_emotion(msg_text, filepath)
         logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
     except Exception as e:
-        raise ValueError(f"The message format is correct, but: {e}")
+        raise ValueError(f"The message format is correct, but: {e}, vid: {video_path}, file: {os.path.exists(filepath)}, filepath: {filepath}, text: {msg_text}")
     return emotion
 
 
@@ -182,5 +181,5 @@ app.add_middleware(
 @app.post("/model")
 def infer(payload: EmotionsPayload):
     logger.info(f"Emotion Detection: {payload}")
-    emotion = [subinfer(p, p.video_path) for p in payload.personality]
+    emotion = [subinfer(p[0], p[1]) for p in zip(payload.personality, payload.video_path)]
     return jsonable_encoder(emotion)
