@@ -99,6 +99,7 @@
                 "previous_services": [
                     "annotators"
                 ],
+                "state_manager_method": "add_annotation",
                 "tags": [
                     "selector"
                 ],

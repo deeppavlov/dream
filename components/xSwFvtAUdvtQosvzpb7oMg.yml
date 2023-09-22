@@ -18,7 +18,7 @@ response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services:
 - annotators
 required_previous_services: null
-state_manager_method: null
+state_manager_method: add_annotation
 tags:
 - selector
 endpoint: respond
