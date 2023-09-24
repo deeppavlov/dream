@@ -395,9 +395,8 @@
                 "state_manager_method": "add_hypothesis_annotation_batch",
                 "is_enabled": true,
                 "source": {
-                    "directory": "annotators/combined_classification_ru",
-                    "container": "combined-classification-ru",
-                    "endpoint": "batch_model"
+                    "component": "components/5eb485871be3.yml",
+                    "service": "annotators/combined_classification_ru/service_configs/combined-classification-ru"
                 }
             },
             "entity_detection": {
