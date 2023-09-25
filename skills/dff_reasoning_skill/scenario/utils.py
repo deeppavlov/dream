@@ -26,7 +26,7 @@ GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 30))
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))

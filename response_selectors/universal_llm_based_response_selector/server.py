@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT"))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 

@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 EXTERNAL_SKILL_URL = getenv("EXTERNAL_SKILL_URL", None)
 PAYLOAD_ARGUMENT_NAME = getenv("PAYLOAD_ARGUMENT_NAME", "payload")
-EXTERNAL_TIMEOUT = int(getenv("EXTERNAL_TIMEOUT", 2))
+EXTERNAL_TIMEOUT = float(getenv("EXTERNAL_TIMEOUT", 2))
 ARGUMENTS_TO_SEND = getenv("ARGUMENTS_TO_SEND", ["user_id"])
 if isinstance(ARGUMENTS_TO_SEND, str):
     ARGUMENTS_TO_SEND = ARGUMENTS_TO_SEND.split(",")

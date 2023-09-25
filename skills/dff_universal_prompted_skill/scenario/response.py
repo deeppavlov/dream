@@ -19,7 +19,7 @@ from df_engine.core import Context, Actor
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")

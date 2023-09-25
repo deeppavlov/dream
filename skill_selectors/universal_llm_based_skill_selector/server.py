@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 
 DEFAULT_PROMPT = json.load(open("common/prompts/skill_selector.json", "r"))["prompt"]
