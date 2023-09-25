@@ -379,7 +379,7 @@ def select_response(candidates, scores, confidences, is_toxics, dialog, all_prev
     best_human_attributes = best_candidate.get("human_attributes", {})
     best_bot_attributes = best_candidate.get("bot_attributes", {})
 
-    if len(dialog["bot_utterances"]) == 0 and greeting_spec[LANGUAGE] not in best_text:
+    if len(dialog["bot_utterances"]) == 0 and greeting_spec[LANGUAGE] not in best_text and GREETING_FIRST:
         # add greeting to the first bot uttr, if it's not already included
         best_text = f"{HI_THIS_IS_DREAM[LANGUAGE]} {best_text}"
 
