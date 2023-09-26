@@ -170,14 +170,18 @@ def subinfer(msg_text: str, video_path: str):
         logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
     except Exception as e:
         raise ValueError(
-            f"The message format is correct, but: {e}, vid: {video_path}, file: {os.path.exists(filepath)}, filepath: {filepath}, text: {msg_text}"
+            f"The message format is correct, but: {e}"
         )
     return emotion
 
 
 app = FastAPI()
 app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
