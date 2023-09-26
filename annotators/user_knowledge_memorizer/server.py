@@ -479,13 +479,13 @@ def get_knowledge(user_id):
     return user_triplets
 
 
-def convert_triplets_to_natural_language(triplets):
+def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
     contexts = [
         [],
     ]
     prompts = [
         # "Generate natural language sentences based on the following triplets. One sentence for each triplets"
-        "Translate from semantic triple to sentence. Triplets"
+        "Translate each semantic triple into a sentence. Triplets"
         f" : {triplets}"
     ]
     try:
@@ -508,7 +508,7 @@ def convert_triplets_to_natural_language(triplets):
     return hypotheses
 
 
-def relativity_filter(user_knowledge, last_utt):
+def relativity_filter(user_knowledge: List[str], last_utt: List[str]) -> List[str]:
     THRESHOLD = 0.5
     requested_data = {"sentence_pairs": list(zip(user_knowledge, last_utt))}
     res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=10).json()[0]["batch"]
@@ -519,8 +519,10 @@ def relativity_filter(user_knowledge, last_utt):
         # logger.info(f"score -- {score}")
         if score >= THRESHOLD:
             user_related_knowledge.append(knowledge)
-
-    user_related_knowledge = [".".join(user_related_knowledge)]
+    if user_related_knowledge:
+        user_related_knowledge = [".".join(user_related_knowledge)]
+    else:
+        user_related_knowledge = []
     return user_related_knowledge
 
 
@@ -550,7 +552,7 @@ def memorize(graph, uttrs):
                         )
 
         user_triplets = get_knowledge(user_id)
-        logger.info(f"user triplets -- {user_triplets}")
+        # logger.info(f"user triplets -- {user_triplets}")
 
         # Convert triplets into natural language
         if user_triplets and USE_KG_DATA:
