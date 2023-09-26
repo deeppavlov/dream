@@ -159,6 +159,7 @@ class EmotionsPayload(BaseModel):
 
 def subinfer(msg_text: str, video_path: str):
     emotion = "Emotion detection unsuccessfull. An error occured during inference."
+    filepath = "undefined"
     try:
         filename = video_path.split("=")[-1]
         filepath = f"/src/datafiles/{filename}"
@@ -168,7 +169,9 @@ def subinfer(msg_text: str, video_path: str):
         emotion = predict_emotion(msg_text, filepath)
         logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
     except Exception as e:
-        raise ValueError(f"The message format is correct, but: {e}, vid: {video_path}, file: {os.path.exists(filepath)}, filepath: {filepath}, text: {msg_text}")
+        raise ValueError(
+            f"The message format is correct, but: {e}, vid: {video_path}, file: {os.path.exists(filepath)}, filepath: {filepath}, text: {msg_text}"
+        )
     return emotion
 
 

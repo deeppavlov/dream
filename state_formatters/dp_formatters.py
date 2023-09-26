@@ -109,9 +109,7 @@ def emotion_detection_formatter(dialog: Dict) -> List[Dict]:
                     "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
                 )
             ],
-            "video_path": [
-                dialog["human_utterances"][-1]["attributes"].get("video_path")
-            ]
+            "video_path": [dialog["human_utterances"][-1]["attributes"].get("video_path")],
         }
     ]
 
