@@ -488,14 +488,24 @@ def convert_triplets_to_natural_language(triplets):
         "Translate from semantic triple to sentence. Triplets"
         f" : {triplets}"
     ]
-    json_input = {
-        "dialog_contexts": contexts,
-        "prompts": prompts,
-        "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
-        "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
-    }
+    try:
+        response = requests.post(
+            GENERATIVE_SERVICE_URL,
+            json={
+                "dialog_contexts": contexts,
+                "prompts": prompts,
+                "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
+                "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
+            },
+            timeout=120,
+        )
+        hypotheses = response.json()[0]
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        hypotheses = []
 
-    return requests.post(GENERATIVE_SERVICE_URL, json=json_input).json()
+    return hypotheses
 
 
 def relativity_filter(user_knowledge, last_utt):
@@ -551,7 +561,7 @@ def memorize(graph, uttrs):
         # logger.info(f"user knowledge -- {user_knowledge}")
         # Generate prompt with related knowledge about user
         if user_knowledge:
-            user_knowledge = user_knowledge[0][0].split(".")[:-1]
+            user_knowledge = user_knowledge[0].split(".")[:-1]
             # logger.info(f"user_knowledge -- {user_knowledge}")
             last_utt_to_compare = [last_utt] * len(user_knowledge)
             related_knowledge = relativity_filter(user_knowledge, last_utt_to_compare)
