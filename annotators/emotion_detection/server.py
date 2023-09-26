@@ -169,9 +169,7 @@ def subinfer(msg_text: str, video_path: str):
         emotion = predict_emotion(msg_text, filepath)
         logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
     except Exception as e:
-        raise ValueError(
-            f"The message format is correct, but: {e}"
-        )
+        raise ValueError(f"The message format is correct, but: {e}")
     return emotion
 
 
