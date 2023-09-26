@@ -4,7 +4,7 @@ RUN apt update
 RUN apt install -y python3.9
 RUN apt install -y git python3-pip
 
-ARG VIDEO_PRETREINED
+ARG VIDEO_PRETRAINED
 ARG TEXT_PRETRAINED
 ARG MODEL_PATH
 ARG MULTIMODAL_MODEL
