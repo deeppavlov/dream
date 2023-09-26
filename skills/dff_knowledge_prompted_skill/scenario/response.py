@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
-USE_KG_DATA = getenv("USE_KG_DATA", False)
+USE_KG_DATA = int(getenv("USE_KG_DATA", 0))
 USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:

@@ -25,7 +25,17 @@ with open("rel_list.json") as file:
 with open("abstract_rels.txt", "r") as file:
     abstract_rels = [line.strip() for line in file.readlines()]
 
-USE_KG_DATA = os.getenv("USE_KG_DATA", 0)
+USE_KG_DATA = int(os.getenv("USE_KG_DATA", 0))
+GENERATIVE_SERVICE_URL = os.getenv("GENERATIVE_SERVICE_URL")
+GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
+
+SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
@@ -54,9 +64,6 @@ while True:
         continue
 
 logger.info("Graph Loaded!")
-
-
-DEFAULT_CONFIG = {"max_tokens": 64, "temperature": 0.4, "top_p": 1.0, "frequency_penalty": 0, "presence_penalty": 0}
 
 
 def check_property_vs_relationship(utterances_info: List[dict]) -> Tuple[list, list]:
@@ -473,11 +480,6 @@ def get_knowledge(user_id):
 
 
 def convert_triplets_to_natural_language(triplets):
-    CHAT_GPT_PORT = os.getenv("CHAT_GPT_PORT")
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
-
-    url = f"http://openai-api-chatgpt:{CHAT_GPT_PORT}/respond"
     contexts = [
         [],
     ]
@@ -489,19 +491,17 @@ def convert_triplets_to_natural_language(triplets):
     json_input = {
         "dialog_contexts": contexts,
         "prompts": prompts,
-        "configs": [DEFAULT_CONFIG] * len(contexts),
+        "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
         "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
     }
 
-    return requests.post(url, json=json_input).json()
+    return requests.post(GENERATIVE_SERVICE_URL, json=json_input).json()
 
 
 def relativity_filter(user_knowledge, last_utt):
-    SENTENCE_RANKER_PORT = os.getenv("SENTENCE_RANKER_PORT")
     THRESHOLD = 0.5
     requested_data = {"sentence_pairs": list(zip(user_knowledge, last_utt))}
-    url = f"http://sentence-ranker:{SENTENCE_RANKER_PORT}/respond"
-    res = requests.post(url, json=requested_data, timeout=10).json()[0]["batch"]
+    res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=10).json()[0]["batch"]
     res = list(zip(user_knowledge, res))
     user_related_knowledge = []
     for knowledge, score in res:
