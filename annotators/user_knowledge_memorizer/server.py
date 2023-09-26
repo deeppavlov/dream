@@ -42,7 +42,7 @@ TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is not specified")
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
-config_path = os.getenv("CONFIG")
+config_path = os.getenv("USER_KM_SERVICE_CONFIG")
 with open(config_path, "r") as config_file:
     config = json.load(config_file)
 index_load_path = Path(os.path.expanduser(config["metadata"]["variables"]["CUSTOM_EL"]))
