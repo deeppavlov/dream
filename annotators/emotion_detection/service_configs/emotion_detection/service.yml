@@ -8,9 +8,10 @@ compose:
     args:
       SERVICE_PORT: 8045
       SERVICE_NAME: emotion_detection
-      VIDEO_MODEL: "microsoft/xclip-base-patch32"
-      TEXT_MODEL: "bert-large-uncased"
+      VIDEO_PRETRAINED: "microsoft/xclip-base-patch32"
+      TEXT_PRETRAINED: "bert-large-uncased"
       MULTIMODAL_MODEL: "final_model.pt"
+      MODEL_PATH: "/data/"
       PREFIX: "Detect emotions:"
     context: .
     dockerfile: ./annotators/emotion_detection/Dockerfile
