@@ -32,44 +32,63 @@ for lm_service in ["ChatGPT"]:
             "user_id": f"test-user-{random.randint(100, 1000)}", 
             "payload": "How much is two plus two?",
             # ---------------------------- batch of universal skills to generate hypotheses
-            "skill_name": ["Mathematician Skill", "blondy_skill"],
-            "prompt": ["Answer as a mathematician.", "Answer like you are a stupid Blondy Girl."], 
-            "lm_service_url": [LM_SERVICES_MAPPING[lm_service], LM_SERVICES_MAPPING[lm_service]],
-            "lm_service_config": [
+            "skills": [
                 {
-                    "max_new_tokens": 64,
-                    "temperature": 0.9,
-                    "top_p": 1.0,
-                    "frequency_penalty": 0,
-                    "presence_penalty": 0
-                }, 
-                None
-            ],
-            "lm_service_kwargs": [
-                {"openai_api_key": "FILL IN"},
-                {"openai_api_key": "FILL IN"}
+                    "name": "dff_34857435_prompted_skill",
+                    "display_name": "Mathematician Skill",
+                    "description": "Mathematician Skill imitating an intelligent person.", 
+                    "prompt": "Answer like you are mathematician.",
+                    "lm_service": {
+                        "url": LM_SERVICES_MAPPING[lm_service],
+                        "config": {
+                            "max_new_tokens": 64,
+                            "temperature": 0.9,
+                            "top_p": 1.0,
+                            "frequency_penalty": 0,
+                            "presence_penalty": 0
+                        }, 
+                        "kwargs": {
+                            "openai_api_key": "FILL-IN"
+                        },
+                    }
+                },
+                {
+                    "name": "dff_bniu23rh_prompted_skill",
+                    "display_name": "Blondy skill",
+                    "description": "Skill for stupid funny responses imitating a blondy girl.",
+                    "prompt": "Answer like you are a stupid Blondy Girl.",
+                    "lm_service": {
+                        "url": LM_SERVICES_MAPPING[lm_service],
+                        "config": None, 
+                        "kwargs": {
+                            "openai_api_key": "FILL-IN"
+                        },
+                    }
+                },
             ],
             # ---------------------------- response selector MUST RETURN ALL HYPOTHESES JOINED
             "return_all_hypotheses": True,
             # ---------------------------- skill selector 
-            "skill_selector_prompt": """
+            "skill_selector": {
+                "prompt": """
 Select up to 2 the most relevant to the dialog context skills based on the given short descriptions of abilities of different skills of the assistant.
 
-Skills:
-"Mathematician Skill": "A skill pretending to be a mathematician."
-"blondy_skill": "A Skill pretending to be a blondy girl."
+LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS
 
-Return only names of the selected skills divided by comma. Do not respond to the dialog context.""", 
-            "skill_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
-            "skill_selector_lm_service_config": 
-                {
-                    "max_new_tokens": 64,
-                    "temperature": 0.4,
-                    "top_p": 1.0,
-                    "frequency_penalty": 0,
-                    "presence_penalty": 0
-                },
-            "skill_selector_lm_service_kwargs": {"openai_api_key": "FILL IN"},
+Return only names of the selected skills divided by comma. Do not respond to the dialog context.""",
+                "lm_service": {
+                    "url": LM_SERVICES_MAPPING[lm_service],
+                    "config": 
+                        {
+                            "max_new_tokens": 64,
+                            "temperature": 0.4,
+                            "top_p": 1.0,
+                            "frequency_penalty": 0,
+                            "presence_penalty": 0
+                        },
+                    "kwargs": {"openai_api_key": "FILL-IN"},
+                }
+            }
         }).json()
     print(f"Response:\n{result['response']}")
     if result["active_skill"] not in ["Dummy Skill", "dummy_skill"]:

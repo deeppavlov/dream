@@ -3,6 +3,7 @@ import logging
 import yaml
 import time
 from os import getenv, listdir
+from typing import List
 
 import sentry_sdk
 from flask import Flask, request, jsonify
@@ -27,17 +28,31 @@ DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_
 DEFAULT_SKILLS = ["dummy_skill"]
 
 
-def collect_descriptions_from_components(skill_names, prompts):
-    result = {}
+def collect_descriptions_from_components(skills: List[dict]):
+    result = []
+    all_skills = [skill["name"] for skill in skills]
+    collected_skills = []
+
+    # collect display names and descriptions from the request
+    for skill in skills:
+        if skill.get("display_name", "") and skill.get("description", ""):
+            result += [(skill["display_name"], skill["description"])]
+            collected_skills += [skill["name"]]
+
+    # collect display names and descriptions of skills which descriptions are not given in request
+    # from the components folder
     for fname in listdir("components/"):
         if "yml" in fname:
             component = yaml.load(open(f"components/{fname}", "r"), Loader=yaml.FullLoader)
-            if component["name"] in skill_names:
-                result[component["name"]] = component["description"]
+            if component["name"] in all_skills and component["name"] not in collected_skills:
+                result += [(component["display_name"], component["description"])]
+                collected_skills += [component["name"]]
 
-    for skill_name, prompt in zip(skill_names, prompts):
-        if skill_name not in result:
-            result[skill_name] = f"Agent with the following task:\n`{prompt}`"
+    # for the rest of unfound skills, compose description by hands
+    for skill in skills:
+        if skill["name"] not in collected_skills:
+            prompt = skill["prompt"]
+            result += [(skill["name"], f"Agent with the following task:\n`{prompt}`")]
     return result
 
 
@@ -49,7 +64,8 @@ def select_skills(dialog):
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
     human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
 
-    _is_prompt_based_selection = "skill_selector_prompt" in human_uttr_attributes
+    _skill_selector = human_uttr_attributes.get("skill_selector", {})
+    _is_prompt_based_selection = "prompt" in _skill_selector
     # if debugging response selector (selected_skills=all and skill_selector_prompt is not given):
     #   return all skills from pipeline conf
     # if debugging skill selector (skill_selector_prompt is given):
@@ -69,23 +85,21 @@ def select_skills(dialog):
     # TURN ON: all skills & turn on skills selected by LLM via prompt
     try:
         logger.info(f"universal_llm_based_skill_selector sends dialog context to llm:\n`{dialog_context}`")
-        prompt = human_uttr_attributes.pop("skill_selector_prompt", DEFAULT_PROMPT)
+        prompt = _skill_selector.get("prompt", DEFAULT_PROMPT)
 
         if "LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS" in prompt:
             # need to add skill descriptions in prompt in replacement of `LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS`
-            skill_descr_dict = collect_descriptions_from_components(
-                human_uttr_attributes.get("skill_name", []), human_uttr_attributes.get("prompt", [])
-            )
+            skill_descriptions_list = collect_descriptions_from_components(human_uttr_attributes.get("skills", []))
             skill_descriptions = "Skills:\n"
-            skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descr_dict.items()])
+            skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descriptions_list])
             prompt = prompt.replace("LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS", skill_descriptions)
         logger.info(f"prompt: {prompt}")
 
-        lm_service_url = human_uttr_attributes.pop("skill_selector_lm_service_url", DEFAULT_LM_SERVICE_URL)
+        lm_service_url = _skill_selector.get("lm_service", {}).get("url", DEFAULT_LM_SERVICE_URL)
         logger.info(f"lm_service_url: {lm_service_url}")
         # this is a dictionary! not a file!
-        lm_service_config = human_uttr_attributes.pop("skill_selector_lm_service_config", None)
-        lm_service_kwargs = human_uttr_attributes.pop("skill_selector_lm_service_kwargs", None)
+        lm_service_config = _skill_selector.get("lm_service", {}).get("config", None)
+        lm_service_kwargs = _skill_selector.get("lm_service", {}).get("kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = get_envvars_for_llm(lm_service_url)
         sending_variables = compose_sending_variables(
@@ -102,9 +116,9 @@ def select_skills(dialog):
             sending_variables,
         )
         logger.info(f"universal_llm_based_skill_selector received from llm:\n`{response}`")
-        for skill_name in human_uttr_attributes.get("skill_name", []):
-            if skill_name in response[0]:
-                selected_skills += [skill_name]
+        for skill in human_uttr_attributes.get("skills", []):
+            if skill.get("display_name", skill["name"]) in response[0]:
+                selected_skills += [skill["name"]]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

@@ -61,13 +61,21 @@ def check_universal_assistant(lm_services):
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
                 "payload": "Help me with an article about penguins.",
-                "prompt": prompt,
-                "lm_service_url": LM_SERVICES_MAPPING[lm_service],
-                "lm_service_kwargs": {"openai_api_key": OPENAI_API_KEY},
+                "skills": [
+                    {
+                        "name": "dff_baby_sitting_prompted_skill",
+                        "display_name": "Baby Sitting Assistant",
+                        "prompt": prompt,
+                        "lm_service": {
+                            "url": LM_SERVICES_MAPPING[lm_service],
+                            "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                        },
+                    }
+                ],
             },
         ).json()["active_skill"]
 
-        if "prompted" in result:
+        if result == "dff_baby_sitting_prompted_skill":
             print("Success!")
         else:
             raise ValueError(f"\nERROR: `Universal Assistant` returned `{result}` with lm service {lm_service}\n")
@@ -77,8 +85,39 @@ def check_universal_assistant(lm_services):
 def check_universal_selectors_assistant(lm_services):
     if OPENAI_API_KEY is None:
         raise ValueError("OPENAI_API_KEY is None!")
+
     for lm_service in lm_services:
         print(f"Checking `Universal Selectors Assistant` with `{lm_service}`")
+        skills_full_input = [
+            {
+                "name": "dff_mathematician_prompted_skill",
+                "display_name": "Mathematician Skill",
+                "description": "Mathematician Skill imitating an intelligent person.",
+                "prompt": "Answer like you are mathematician.",
+                "lm_service": {
+                    "url": LM_SERVICES_MAPPING[lm_service],
+                    "config": {
+                        "max_new_tokens": 64,
+                        "temperature": 0.9,
+                        "top_p": 1.0,
+                        "frequency_penalty": 0,
+                        "presence_penalty": 0,
+                    },
+                    "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                },
+            },
+            {
+                "name": "dff_blondy_prompted_skill",
+                "display_name": "Blondy skill",
+                "description": "Skill for stupid funny responses imitating a blondy girl.",
+                "prompt": "Answer like you are a stupid Blondy Girl.",
+                "lm_service": {
+                    "url": LM_SERVICES_MAPPING[lm_service],
+                    "config": None,
+                    "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                },
+            },
+        ]
 
         print("Checking debugging `Skill Selector`")
         result = requests.post(
@@ -86,29 +125,30 @@ def check_universal_selectors_assistant(lm_services):
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
                 "payload": "How much is two plus two?",
-                "skill_name": ["Mathematician Skill", "blondy_skill"],
-                "prompt": ["Answer as a mathematician.", "Answer like you are a stupid Blondy Girl."],
-                "lm_service_url": [LM_SERVICES_MAPPING[lm_service], LM_SERVICES_MAPPING[lm_service]],
-                "lm_service_kwargs": [{"openai_api_key": OPENAI_API_KEY}, {"openai_api_key": OPENAI_API_KEY}],
+                "skills": skills_full_input,
                 # response selector     ----------------------------
                 "return_all_hypotheses": True,
                 # skill selector     ----------------------------
-                "skill_selector_prompt": """Select up to 1 the most relevant to the dialog context skills.
+                "skill_selector": {
+                    "prompt": """Select up to 1 the most relevant to the dialog context skills.
 LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS
 Return only names of the selected skills divided by comma. Do not respond to the dialog context.""",
-                "skill_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
-                "skill_selector_lm_service_config": {
-                    "max_new_tokens": 128,
-                    "temperature": 0.4,
-                    "top_p": 1.0,
-                    "frequency_penalty": 0,
-                    "presence_penalty": 0,
+                    "lm_service": {
+                        "url": LM_SERVICES_MAPPING[lm_service],
+                        "config": {
+                            "max_new_tokens": 128,
+                            "temperature": 0.4,
+                            "top_p": 1.0,
+                            "frequency_penalty": 0,
+                            "presence_penalty": 0,
+                        },
+                        "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                    },
                 },
-                "skill_selector_lm_service_kwargs": {"openai_api_key": OPENAI_API_KEY},
             },
         ).json()
 
-        if all([skill_name in result["text"] for skill_name in ["Mathematician Skill", "blondy_skill"]]):
+        if all([skill_name in result["text"] for skill_name in ["Mathematician Skill", "Blondy Skill"]]):
             print("Success!")
         else:
             raise ValueError(
@@ -122,27 +162,28 @@ Return only names of the selected skills divided by comma. Do not respond to the
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
                 "payload": "How much is two plus two?",
-                "skill_name": ["Mathematician Skill", "blondy_skill"],
-                "prompt": ["Answer as a mathematician.", "Answer like you are a stupid Blondy Girl."],
-                "lm_service_url": [LM_SERVICES_MAPPING[lm_service], LM_SERVICES_MAPPING[lm_service]],
-                "lm_service_kwargs": [{"openai_api_key": OPENAI_API_KEY}, {"openai_api_key": OPENAI_API_KEY}],
+                "skills": skills_full_input,
                 # response selector     ----------------------------
-                "response_selector_prompt": "Select the most funny answer.\nLIST_OF_HYPOTHESES\n",
-                "response_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
-                "response_selector_lm_service_config": {
-                    "max_new_tokens": 64,
-                    "temperature": 0.9,
-                    "top_p": 1.0,
-                    "frequency_penalty": 0,
-                    "presence_penalty": 0,
+                "response_selector": {
+                    "prompt": "Select the most funny answer.\nLIST_OF_HYPOTHESES\n",
+                    "lm_service": {
+                        "url": LM_SERVICES_MAPPING[lm_service],
+                        "config": {
+                            "max_new_tokens": 64,
+                            "temperature": 0.9,
+                            "top_p": 1.0,
+                            "frequency_penalty": 0,
+                            "presence_penalty": 0,
+                        },
+                        "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                    },
                 },
-                "response_selector_lm_service_kwargs": {"openai_api_key": OPENAI_API_KEY},
                 # skill selector     ----------------------------
                 "selected_skills": "all",
             },
         ).json()
 
-        if result["active_skill"] in ["Mathematician Skill", "blondy_skill"]:
+        if result["active_skill"] in ["dff_mathematician_prompted_skill", "dff_blondy_prompted_skill"]:
             print("Success!")
         else:
             raise ValueError(

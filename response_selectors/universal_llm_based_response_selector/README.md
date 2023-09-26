@@ -27,38 +27,57 @@ for lm_service in ["ChatGPT"]:
             "user_id": f"test-user-{random.randint(100, 1000)}", 
             "payload": "How much is two plus two?",
             # ---------------------------- batch of universal skills to generate hypotheses
-            "skill_name": ["Mathematician Skill", "blondy_skill"],
-            "prompt": ["Answer as a mathematician.", "Answer like you are a stupid Blondy Girl."], 
-            "lm_service_url": [LM_SERVICES_MAPPING[lm_service], LM_SERVICES_MAPPING[lm_service]],
-            "lm_service_config": [
+            "skills": [
                 {
-                    "max_new_tokens": 64,
-                    "temperature": 0.9,
-                    "top_p": 1.0,
-                    "frequency_penalty": 0,
-                    "presence_penalty": 0
-                }, 
-                None
-            ],
-            "lm_service_kwargs": [
-                {"openai_api_key": "FILL IN"},
-                {"openai_api_key": "FILL IN"}
+                    "name": "dff_34857435_prompted_skill",
+                    "display_name": "Mathematician Skill",
+                    "description": "Mathematician Skill imitating an intelligent person.", 
+                    "prompt": "Answer like you are mathematician.",
+                    "lm_service": {
+                        "url": LM_SERVICES_MAPPING[lm_service],
+                        "config": {
+                            "max_new_tokens": 64,
+                            "temperature": 0.9,
+                            "top_p": 1.0,
+                            "frequency_penalty": 0,
+                            "presence_penalty": 0
+                        }, 
+                        "kwargs": {
+                            "openai_api_key": "FILL-IN"
+                        },
+                    }
+                },
+                {
+                    "name": "dff_bniu23rh_prompted_skill",
+                    "display_name": "Blondy skill",
+                    "description": "Skill for stupid funny responses imitating a blondy girl.",
+                    "prompt": "Answer like you are a stupid Blondy Girl.",
+                    "lm_service": {
+                        "url": LM_SERVICES_MAPPING[lm_service],
+                        "config": None, 
+                        "kwargs": {
+                            "openai_api_key": "FILL-IN"
+                        },
+                    }
+                },
             ],
             # ---------------------------- response selector parameters
-            "response_selector_prompt": "Select the most funny answer.\nLIST_OF_HYPOTHESES\n", 
-            "response_selector_lm_service_url": LM_SERVICES_MAPPING[lm_service],
-            "response_selector_lm_service_config": 
-                {
-                    "max_new_tokens": 64,
-                    "temperature": 0.9,
-                    "top_p": 1.0,
-                    "frequency_penalty": 0,
-                    "presence_penalty": 0
-                },
-            "response_selector_lm_service_kwargs": 
-                {
-                    "openai_api_key": "FILL IN"
-                },
+            "response_selector": {
+                "prompt": "Select the most funny answer.\nLIST_OF_HYPOTHESES\n", 
+                "lm_service": {
+                    "url": LM_SERVICES_MAPPING[lm_service],
+                    "config": 
+                        {
+                            "max_new_tokens": 64,
+                            "temperature": 0.9,
+                            "top_p": 1.0,
+                            "frequency_penalty": 0,
+                            "presence_penalty": 0
+                        },
+                    "kwargs": {"openai_api_key": "FILL-IN"},
+                }
+            },
+            # ---------------------------- skill selector parameters
             "selected_skills": "all",
         }).json()
     print(f"Response:\n{result['response']}")

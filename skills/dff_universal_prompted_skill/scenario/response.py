@@ -42,13 +42,12 @@ def compose_data_for_model(ctx, actor):
     # drop the dialog history when prompt changes
     last_uttr = int_ctx.get_last_human_utterance(ctx, actor)
     # get prompt from the current utterance attributes
-    given_prompt = last_uttr.get("attributes", {}).get("prompt", DEFAULT_PROMPT)
+    given_skills = last_uttr.get("attributes", {}).get("skills", [])
     history = int_ctx.get_utterances(ctx, actor)
 
     for i in range(1, len(history) + 1, 2):
-        curr_prompt = history[-i].get("attributes", {}).get("prompt", DEFAULT_PROMPT)
         # checking only user utterances
-        if curr_prompt != given_prompt:
+        if history[-i].get("attributes", {}).get("skills", []) != given_skills:
             # cut context on the last user utterance utilizing the current prompt
             context = context[-i + 2 :]
             break
@@ -140,36 +139,29 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
     logger.info(f"dialog_context: {dialog_context}")
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
+    # skill selector selects by display names!
     selected_skill_names = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("skill_selector", [])
+    _skills = human_uttr_attributes.get("skills", [])
 
-    if isinstance(human_uttr_attributes.get("prompt", None), list):
-        skill_names = human_uttr_attributes.pop("skill_name", [])
-        if (
-            human_uttr_attributes.get("selected_skills", None) in ["all", []]
-            or "skill_selector_prompt" not in human_uttr_attributes
-        ):
-            selected_skill_ids = [skill_id for skill_id, _ in enumerate(skill_names)]
-        else:
-            # if user do not ask to turn on all skills, turn on only skills selected by Skill Selector
-            selected_skill_ids = [
-                skill_id for skill_id, skill_name in enumerate(skill_names) if skill_name in selected_skill_names
-            ]
-        prompts = human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)
-        lm_service_urls = human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)
-        lm_service_configs = human_uttr_attributes.pop("lm_service_config", None)
-        lm_service_configs = [None for _ in prompts] if lm_service_configs is None else lm_service_configs
-        lm_service_kwargss = human_uttr_attributes.pop("lm_service_kwargs", None)
-        lm_service_kwargss = [None for _ in prompts] if lm_service_kwargss is None else lm_service_kwargss
-        lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
+    skill_names = [skill["name"] for skill in _skills]
+    if human_uttr_attributes.get("selected_skills", None) in ["all", []] or "prompt" not in human_uttr_attributes.get(
+        "skill_selector", {}
+    ):
+        selected_skill_ids = [skill_id for skill_id, _ in enumerate(skill_names)]
     else:
-        skill_names = [human_uttr_attributes.pop("skill_name", None)]
-        selected_skill_ids = [0]
-        prompts = [human_uttr_attributes.pop("prompt", DEFAULT_PROMPT)]
-        lm_service_urls = [human_uttr_attributes.pop("lm_service_url", DEFAULT_LM_SERVICE_URL)]
-        # the config is a dictionary! not a file!
-        lm_service_configs = [human_uttr_attributes.pop("lm_service_config", None)]
-        lm_service_kwargss = [human_uttr_attributes.pop("lm_service_kwargs", None)]
-        lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
+        # if user do not ask to turn on all skills, turn on only skills selected by Skill Selector
+        selected_skill_ids = [
+            skill_id for skill_id, skill_name in enumerate(skill_names) if skill_name in selected_skill_names
+        ]
+
+    prompts = [skill.get("prompt", DEFAULT_PROMPT) for skill in _skills]
+    lm_services = [skill.get("lm_service", {}) for skill in _skills]
+    lm_service_urls = [lm_service.get("url", DEFAULT_LM_SERVICE_URL) for lm_service in lm_services]
+    lm_service_configs = [lm_service.get("config", None) for lm_service in lm_services]
+    lm_service_configs = [None for _ in prompts] if lm_service_configs is None else lm_service_configs
+    lm_service_kwargss = [lm_service.get("kwargs", None) for lm_service in lm_services]
+    lm_service_kwargss = [None for _ in prompts] if lm_service_kwargss is None else lm_service_kwargss
+    lm_service_kwargss = [{} if el is None else el for el in lm_service_kwargss]
 
     if len(dialog_context) == 0:
         return ""

@@ -57,15 +57,23 @@ def select_response_by_scores(hypotheses, scores):
 def select_response(dialog, hypotheses, human_uttr_attributes):
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
 
-    _is_prompt_based_selection = "response_selector_prompt" in human_uttr_attributes
+    _response_selector = human_uttr_attributes.get("response_selector", {})
+    _is_prompt_based_selection = "prompt" in _response_selector
 
     if human_uttr_attributes.get("return_all_hypotheses", None) and not _is_prompt_based_selection:
-        return "\n".join(['"' + hyp["skill_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses])
+        for hyp in hypotheses:
+            hyp["display_name"] = hyp["skill_name"]
+            for _skill in human_uttr_attributes.get("skills", []):
+                if hyp["skill_name"] == _skill["name"]:
+                    hyp["display_name"] = _skill["display_name"]
+        return "\n".join(['"' + hyp["display_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses])
 
     # get prompt from the current utterance attributes
-    given_prompt = human_uttr_attributes.get("response_selector_prompt", DEFAULT_PROMPT)
+    given_prompt = _response_selector.get("prompt", DEFAULT_PROMPT)
     for i in range(1, len(dialog["utterances"]) + 1, 2):
-        curr_prompt = dialog["utterances"][-i].get("attributes", {}).get("response_selector_prompt", DEFAULT_PROMPT)
+        curr_prompt = (
+            dialog["utterances"][-i].get("attributes", {}).get("response_selector", {}).get("prompt", DEFAULT_PROMPT)
+        )
         # checking only user utterances
         if curr_prompt != given_prompt:
             # cut context on the last user utterance utilizing the current prompt
@@ -83,12 +91,12 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
         logger.info(f"universal_llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"universal_llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
 
-        lm_service_url = human_uttr_attributes.pop("response_selector_lm_service_url", DEFAULT_LM_SERVICE_URL)
+        lm_service_url = _response_selector.get("lm_service", {}).get("url", DEFAULT_LM_SERVICE_URL)
         logger.info(f"lm_service_url: {lm_service_url}")
         # this is a dictionary! not a file!
-        lm_service_config = human_uttr_attributes.pop("response_selector_lm_service_config", None)
+        lm_service_config = _response_selector.get("lm_service", {}).get("config", None)
 
-        lm_service_kwargs = human_uttr_attributes.pop("response_selector_lm_service_kwargs", None)
+        lm_service_kwargs = _response_selector.get("lm_service", {}).get("kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = get_envvars_for_llm(lm_service_url)
         sending_variables = compose_sending_variables(
@@ -119,7 +127,9 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
 def find_most_similar_hypothesis(final_text, hypotheses):
     scores = []
     for hyp in hypotheses:
-        if final_text in hyp["text"]:
+        if hyp["skill_name"] == "dummy_skill":
+            scores += [0.01]
+        elif final_text in hyp["text"]:
             scores += [0.99]
         else:
             scores += [difflib.SequenceMatcher(None, final_text, hyp["text"]).ratio()]
@@ -147,13 +157,19 @@ def respond():
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
-        _is_prompt_based_selection = "response_selector_prompt" in human_uttr_attributes
+        _response_selector = human_uttr_attributes.get("response_selector", {})
+        _is_prompt_based_selection = "prompt" in _response_selector
         selected_resp = select_response(dialog, hypotheses, human_uttr_attributes)
         if selected_resp:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
             if human_uttr_attributes.get("return_all_hypotheses", None) and _is_prompt_based_selection:
+                for hyp in hypotheses:
+                    hyp["display_name"] = hyp["skill_name"]
+                    for _skill in human_uttr_attributes.get("skills", []):
+                        if hyp["skill_name"] == _skill["name"]:
+                            hyp["display_name"] = _skill["display_name"]
                 selected_resp += "\nHypotheses:" + "\n".join(
-                    ['"' + hyp["skill_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses]
+                    ['"' + hyp["display_name"] + '": "' + hyp["text"] + '"' for hyp in hypotheses]
                 )
 
             if KEEP_ORIGINAL_HYPOTHESIS:
