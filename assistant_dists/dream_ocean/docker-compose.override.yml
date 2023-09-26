@@ -446,10 +446,10 @@ services:
       args:
         SERVICE_PORT: 8045
         SERVICE_NAME: emotion_detection
-        VIDEO_MODEL: "microsoft/xclip-base-patch32"
-        TEXT_MODEL: "bert-large-uncased"
-        MULTIMODAL_MODEL: "final_model.pt"
-        PREFIX: "Detect emotions:"
+        VIDEO_PRETRAINED: "microsoft/xclip-base-patch32"
+        TEXT_PRETRAINED: "bert-large-uncased"
+        MODEL_PATH: "/data"
+        MULTIMODAL_MODEL: "/data/final_model.pt"
       context: annotators/emotion_detection
     command: uvicorn server:app --host 0.0.0.0 --port 8045
     deploy:

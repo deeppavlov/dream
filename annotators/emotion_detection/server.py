@@ -29,7 +29,7 @@ label2id = {
     "surprise": 6,
 }
 num_labels = 7
-text_model, video_model, audio_model = prepare_models(num_labels, "./")
+text_model, video_model, audio_model = prepare_models(num_labels, os.getenv("MODEL_PATH"))
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +91,7 @@ def create_final_model():
 
 
 def process_text(input_tokens: str):
-    text_model_name = os.getenv("TEXT_MODEL")
+    text_model_name = os.getenv("TEXT_PRETRAINED")
     tokenizer = AutoTokenizer.from_pretrained(text_model_name)
 
     return tokenizer(
@@ -106,7 +106,7 @@ def process_text(input_tokens: str):
 def process_video(video_path: str):
     video_frames = get_frames(video_path)
 
-    video_model_name = os.getenv("VIDEO_MODEL")
+    video_model_name = os.getenv("VIDEO_PRETRAINED")
     video_feature_extractor = AutoProcessor.from_pretrained(video_model_name)
 
     return video_feature_extractor(videos=video_frames, return_tensors="pt")

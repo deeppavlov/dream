@@ -7,12 +7,10 @@ RUN apt install -y git python3-pip
 ARG VIDEO_MODEL
 ARG TEXT_MODEL
 ARG MULTIMODAL_MODEL
-ARG PREFIX
 
 ENV VIDEO_MODEL=$VIDEO_MODEL
 ENV TEXT_MODEL=$TEXT_MODEL
 ENV MULTIMODAL_MODEL=$MULTIMODAL_MODEL
-ENV PREFIX=$PREFIX
 
 WORKDIR /src
 
@@ -24,14 +22,13 @@ RUN apt install -y ffmpeg=7:4.2.7-0ubuntu0.1 libsm6=2:1.2.3-1 libxext6=2:1.3.4-0
 
 RUN pip install gdown==4.7.1
 
-RUN git clone https://github.com/anna-a-m/MultimodalERC repo && cd repo && git reset --hard 95cbd971ecb2a057f0162f0384bba28c6fddee31
+RUN git clone https://github.com/anna-a-m/MultimodalERC /data/repo && cd /data/repo && git reset --hard 95cbd971ecb2a057f0162f0384bba28c6fddee31
 
-RUN mv -f repo/* .
-RUN rm -rf repo
+RUN mv -f /data/repo/* /data/ && rm -rf /data/repo
 
-RUN touch multimodal_concat/__init__.py
+RUN touch /data/multimodal_concat/__init__.py
 
-RUN gdown 'https://drive.google.com/uc?id=12C36rGUe7tuWGAh_FByw80c3wAtdUHx8' -O '1d_cnn_with_opensmile.pt'
-RUN gdown 'https://drive.google.com/uc?id=1ZHw2MEbjLwU5A7EaNysgVHZlaWq4FJZG' -O 'bert-large-uncased_none_seed-42.pt'
-RUN gdown 'https://drive.google.com/uc?id=1tDf-jWihZ6M0oX-niOfVmLUimJqYrG_M' -O 'final_model.pt'
-RUN gdown 'https://drive.google.com/uc?id=1DMUHqbwqn-j9XIhoqnfSwqyqrlPMkVJe' -O 'XCLIP_Augmented.pt'
+RUN gdown 'https://drive.google.com/uc?id=12C36rGUe7tuWGAh_FByw80c3wAtdUHx8' -O '/data/1d_cnn_with_opensmile.pt'
+RUN gdown 'https://drive.google.com/uc?id=1ZHw2MEbjLwU5A7EaNysgVHZlaWq4FJZG' -O '/data/bert-large-uncased_none_seed-42.pt'
+RUN gdown 'https://drive.google.com/uc?id=1tDf-jWihZ6M0oX-niOfVmLUimJqYrG_M' -O '/data/final_model.pt'
+RUN gdown 'https://drive.google.com/uc?id=1DMUHqbwqn-j9XIhoqnfSwqyqrlPMkVJe' -O '/data/XCLIP_Augmented.pt'
