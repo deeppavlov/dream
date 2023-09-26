@@ -7,7 +7,7 @@ compose:
   - .env_secret
   build:
     args:
-      SERVICE_PORT: 8137
+      SERVICE_PORT: 8050
       SERVICE_NAME: dff_knowledge_prompted_skill
       PROMPT_FILE: common/prompts/knowledge.json
       GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond

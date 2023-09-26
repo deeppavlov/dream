@@ -375,7 +375,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 120,
-                    "url": "http://dff-knowledge-prompted-skill:8137/respond"
+                    "url": "http://dff-knowledge-prompted-skill:8050/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
