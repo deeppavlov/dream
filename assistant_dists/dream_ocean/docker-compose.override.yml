@@ -15,6 +15,9 @@ services:
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
 
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
+
   ranking-based-response-selector:
     env_file: [ .env ]
     build:

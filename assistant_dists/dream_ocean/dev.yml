@@ -149,4 +149,9 @@ services:
       - "./annotators/emotion_detection:/src"
     ports:
       - 8045:8045
+  files:
+    ports:
+      - 3000:3000
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
 version: "3.7"
