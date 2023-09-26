@@ -30,7 +30,7 @@ RUN mkdir /pavlov && \
 
 RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pyaml openpyxl==3.0.0 xlrd==1.2.0 ruamel-yaml==0.17.21
 
-ARG AGENT_COMMIT=e1b385986e6b94c829fc672107c8b099ed54a70f
+ARG AGENT_COMMIT=b662dba9982af741d5cb7f757f4d8e9888e87857
 RUN pip install https://codeload.github.com/deeppavlov/dp-agent/tar.gz/${AGENT_COMMIT}
 
 ENV LANG C.UTF-8

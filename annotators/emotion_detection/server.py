@@ -5,6 +5,10 @@ import torch
 import numpy as np
 import sentry_sdk
 import cv2
+import sys
+
+sys.path.append("/data")
+sys.path.append("/data/multimodal_concat")
 
 from multimodal_concat.models import MultimodalClassificaionModel, MainModel
 from multimodal_concat.utils import prepare_models

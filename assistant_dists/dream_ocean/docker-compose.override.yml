@@ -448,7 +448,7 @@ services:
         SERVICE_NAME: emotion_detection
         VIDEO_PRETRAINED: "microsoft/xclip-base-patch32"
         TEXT_PRETRAINED: "bert-large-uncased"
-        MODEL_PATH: "/data"
+        MODEL_PATH: "/data/"
         MULTIMODAL_MODEL: "/data/final_model.pt"
       context: annotators/emotion_detection
     command: uvicorn server:app --host 0.0.0.0 --port 8045
