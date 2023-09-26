@@ -558,7 +558,7 @@
             "response_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 1.0,
+                    "timeout": 5.0,
                     "url": "http://ranking-based-response-selector-fact-checking:8002/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
