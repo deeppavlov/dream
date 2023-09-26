@@ -162,7 +162,7 @@ def subinfer(msg_text: str, video_path: str):
     filepath = "undefined"
     try:
         filename = video_path.split("=")[-1]
-        filepath = f"/src/datafiles/{filename}"
+        filepath = f"/data/{filename}"
         urlretrieve(video_path, filepath)
         if not os.path.exists(filepath):
             raise ValueError(f"Failed to retrieve videofile from {filepath}")
