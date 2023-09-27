@@ -511,18 +511,23 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
 def relativity_filter(user_knowledge: List[str], last_utt: List[str]) -> List[str]:
     THRESHOLD = 0.5
     requested_data = {"sentence_pairs": list(zip(user_knowledge, last_utt))}
-    res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=10).json()[0]["batch"]
-    res = list(zip(user_knowledge, res))
-    user_related_knowledge = []
-    for knowledge, score in res:
-        # logger.info(f"knowledge -- {knowledge}")
-        # logger.info(f"score -- {score}")
-        if score >= THRESHOLD:
-            user_related_knowledge.append(knowledge)
+    try:
+        res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=120).json()[0]["batch"]
+        res = list(zip(user_knowledge, res))
+        user_related_knowledge = []
+        for knowledge, score in res:
+            # logger.info(f"knowledge -- {knowledge}")
+            # logger.info(f"score -- {score}")
+            if score >= THRESHOLD:
+                user_related_knowledge.append(knowledge)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        user_related_knowledge = []
+
     if user_related_knowledge:
         user_related_knowledge = [".".join(user_related_knowledge)]
-    else:
-        user_related_knowledge = []
+
     return user_related_knowledge
 
 
