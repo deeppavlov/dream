@@ -248,7 +248,7 @@ services:
         SERVICE_PORT: 8147
         SERVICE_NAME: dff_universal_prompted_skill
         GENERATIVE_TIMEOUT: 120
-        N_UTTERANCES_CONTEXT: 7
+        N_UTTERANCES_CONTEXT: 1
         DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
         DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json
       context: .

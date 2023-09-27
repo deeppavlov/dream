@@ -7,11 +7,6 @@ The LLM-based Skill Selector utilizes LLM service to select the skills in a gene
 The considered LLM-service, generative parameters and prompt  are provided IN attributes of 
 the last human utterance. The list of all available skills is picked up from human utterance attributes.
 
-
-**Important** Provide `"return_all_hypotheses": True` (to return joined list of all returned hypotheses) 
-and `"selected_skills": "all"` (to turn on dff_universal_prompted_skill because all other prompted skills
-are not deployed during debugging process).
-
 How to use:
 
 ```python
@@ -66,8 +61,8 @@ for lm_service in ["ChatGPT"]:
                     }
                 },
             ],
-            # ---------------------------- response selector MUST RETURN ALL HYPOTHESES JOINED
-            "return_all_hypotheses": True,
+            # ---------------------------- get_debug_output to receive all hypotheses
+            "debug_output": True,
             # ---------------------------- skill selector 
             "skill_selector": {
                 "prompt": """
@@ -98,6 +93,11 @@ Return only names of the selected skills divided by comma. Do not respond to the
     else:
         print(f"\nERROR: `Universal Assistant` returned `{result}`\n")
     sleep(5)
+
+    # all hypotheses could be accessed via the command:
+    print([(hyp["skill_name"], hyp["text"]) for hyp in result["debug_output"]["hypotheses"]])
+    # [('dummy_skill', "Sorry, probably, I didn't get what you meant. What do you want to talk about?"),
+    #  ('dff_34857435_prompted_skill', 'Two plus two equals four.')]
 ```
 
 ### Parameters

@@ -126,8 +126,6 @@ def check_universal_selectors_assistant(lm_services):
                 "user_id": f"test-user-{random.randint(100, 1000)}",
                 "payload": "How much is two plus two?",
                 "skills": skills_full_input,
-                # response selector     ----------------------------
-                "return_all_hypotheses": True,
                 # skill selector     ----------------------------
                 "skill_selector": {
                     "prompt": """Select up to 1 the most relevant to the dialog context skills.
@@ -145,10 +143,11 @@ Return only names of the selected skills divided by comma. Do not respond to the
                         "kwargs": {"openai_api_key": OPENAI_API_KEY},
                     },
                 },
+                "debug_output": True,
             },
         ).json()
 
-        if all([skill_name in result["text"] for skill_name in ["Mathematician Skill", "Blondy Skill"]]):
+        if result["active_skill"] != "dummy_skill" and "hypotheses" in result.get("debug_output", {}):
             print("Success!")
         else:
             raise ValueError(
