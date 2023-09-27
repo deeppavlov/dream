@@ -61,6 +61,7 @@ def check_universal_assistant(lm_services):
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
                 "payload": "Help me with an article about penguins.",
+                "api_keys": {"openai_api_key": OPENAI_API_KEY},
                 "skills": [
                     {
                         "name": "dff_baby_sitting_prompted_skill",
@@ -68,7 +69,7 @@ def check_universal_assistant(lm_services):
                         "prompt": prompt,
                         "lm_service": {
                             "url": LM_SERVICES_MAPPING[lm_service],
-                            "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                            "kwargs": None,
                         },
                     }
                 ],
@@ -103,7 +104,7 @@ def check_universal_selectors_assistant(lm_services):
                         "frequency_penalty": 0,
                         "presence_penalty": 0,
                     },
-                    "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                    "kwargs": None,
                 },
             },
             {
@@ -114,7 +115,7 @@ def check_universal_selectors_assistant(lm_services):
                 "lm_service": {
                     "url": LM_SERVICES_MAPPING[lm_service],
                     "config": None,
-                    "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                    "kwargs": None,
                 },
             },
         ]
@@ -125,6 +126,7 @@ def check_universal_selectors_assistant(lm_services):
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
                 "payload": "How much is two plus two?",
+                "api_keys": {"openai_api_key": OPENAI_API_KEY},
                 "skills": skills_full_input,
                 # skill selector     ----------------------------
                 "skill_selector": {
@@ -140,7 +142,7 @@ Return only names of the selected skills divided by comma. Do not respond to the
                             "frequency_penalty": 0,
                             "presence_penalty": 0,
                         },
-                        "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                        "kwargs": None,
                     },
                 },
                 "debug_output": True,
@@ -161,6 +163,7 @@ Return only names of the selected skills divided by comma. Do not respond to the
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
                 "payload": "How much is two plus two?",
+                "api_keys": {"openai_api_key": OPENAI_API_KEY},
                 "skills": skills_full_input,
                 # response selector     ----------------------------
                 "response_selector": {
@@ -174,7 +177,7 @@ Return only names of the selected skills divided by comma. Do not respond to the
                             "frequency_penalty": 0,
                             "presence_penalty": 0,
                         },
-                        "kwargs": {"openai_api_key": OPENAI_API_KEY},
+                        "kwargs": None,
                     },
                 },
                 # skill selector     ----------------------------

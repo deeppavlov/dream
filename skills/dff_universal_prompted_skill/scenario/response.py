@@ -56,7 +56,7 @@ def compose_data_for_model(ctx, actor):
 
 
 async def async_request_to_prompted_generative_service(
-    session, dialog_context, prompt, url, config, timeout, lm_service_kwargs, skill_name
+    session, dialog_context, prompt, url, config, timeout, lm_service_kwargs, skill_name, human_uttr_attributes
 ):
     logger.info(f"lm_service_url: {url}")
     logger.info(f"prompt: {prompt}")
@@ -64,6 +64,7 @@ async def async_request_to_prompted_generative_service(
     sending_variables = compose_sending_variables(
         lm_service_kwargs,
         envvars_to_send,
+        human_uttr_attributes,
     )
     try:
         async with session.post(
@@ -102,7 +103,14 @@ async def async_request_to_prompted_generative_service(
 
 
 async def gather_responses(
-    selected_skill_ids, skill_names, prompts, lm_service_urls, lm_service_configs, lm_service_kwargss, dialog_context
+    selected_skill_ids,
+    skill_names,
+    prompts,
+    lm_service_urls,
+    lm_service_configs,
+    lm_service_kwargss,
+    dialog_context,
+    human_uttr_attributes,
 ):
     tasks = []
     async with aiohttp.ClientSession() as session:
@@ -124,6 +132,7 @@ async def gather_responses(
                         GENERATIVE_TIMEOUT,
                         lm_service_kwargs,
                         skill_name,
+                        human_uttr_attributes,
                     )
                 )
             )
@@ -175,6 +184,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             lm_service_configs,
             lm_service_kwargss,
             dialog_context,
+            human_uttr_attributes,
         )
     )
 

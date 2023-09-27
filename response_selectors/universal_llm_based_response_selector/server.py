@@ -63,6 +63,7 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
     if not _is_prompt_based_selection:
         # in case of skill selector's debug, we chose response for the dialog context by scores
         result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]["text"]
+        logger.info("Select by confidences because it is not Response Selector's Debug")
         return result
 
     # get prompt from the current utterance attributes
@@ -99,6 +100,7 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
             envvars_to_send,
+            human_uttr_attributes,
         )
         response = send_request_to_prompted_generative_service(
             dialog_context,
@@ -173,7 +175,7 @@ def respond():
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
             selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
-            selected_attributes.append(hypotheses[best_id])
+            selected_attributes.append(deepcopy(hypotheses[best_id]))
 
         else:
             logger.info("Select a response with the highest confidence.")
@@ -184,7 +186,7 @@ def respond():
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
             selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
-            selected_attributes.append(hypotheses[best_id])
+            selected_attributes.append(deepcopy(hypotheses[best_id]))
 
     total_time = time.time() - st_time
     logger.info(f"universal_llm_based_response_selector exec time = {total_time:.3f}s")

@@ -42,9 +42,7 @@ for lm_service in ["ChatGPT"]:
                             "frequency_penalty": 0,
                             "presence_penalty": 0
                         }, 
-                        "kwargs": {
-                            "openai_api_key": "FILL-IN"
-                        },
+                        "kwargs": None,
                     }
                 },
                 {
@@ -55,9 +53,7 @@ for lm_service in ["ChatGPT"]:
                     "lm_service": {
                         "url": LM_SERVICES_MAPPING[lm_service],
                         "config": None, 
-                        "kwargs": {
-                            "openai_api_key": "FILL-IN"
-                        },
+                        "kwargs": None,
                     }
                 },
             ],
@@ -81,8 +77,11 @@ Return only names of the selected skills divided by comma. Do not respond to the
                             "frequency_penalty": 0,
                             "presence_penalty": 0
                         },
-                    "kwargs": {"openai_api_key": "FILL-IN"},
+                    "kwargs": None,
                 }
+            },
+            "api_keys": {
+                "openai_api_key": "FILL-IN"
             }
         }).json()
     print(f"Response:\n{result['response']}")

@@ -22,9 +22,29 @@ result = requests.post(
      json={
          "user_id": f"test-user-000", 
          "payload": "Who are you? who built you? what can you do?",
-         "prompt": prompt, 
-         "lm_service_url": lm_service,
-         "openai_api_key": "Your OpenAI API Key here",
+         "skills": [
+            {
+                "name": "dff_34857435_prompted_skill",
+                "display_name": "Mathematician Skill",
+                "description": "Mathematician Skill imitating an intelligent person.", 
+                "prompt": "Answer like you are mathematician.",
+                "lm_service": {
+                    "url": lm_service,
+                    "config": {
+                        "max_new_tokens": 64,
+                        "temperature": 0.9,
+                        "top_p": 1.0,
+                        "frequency_penalty": 0,
+                        "presence_penalty": 0
+                    }, 
+                    "kwargs": None,
+                }
+            },
+         ],
+         "api_keys": {
+             "openai_api_key": "FILL-IN"
+         },
+         "debug_output": True,
      }).json()
 ```
 

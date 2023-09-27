@@ -42,9 +42,7 @@ for lm_service in ["ChatGPT"]:
                             "frequency_penalty": 0,
                             "presence_penalty": 0
                         }, 
-                        "kwargs": {
-                            "openai_api_key": "FILL-IN"
-                        },
+                        "kwargs": None,
                     }
                 },
                 {
@@ -55,9 +53,7 @@ for lm_service in ["ChatGPT"]:
                     "lm_service": {
                         "url": LM_SERVICES_MAPPING[lm_service],
                         "config": None, 
-                        "kwargs": {
-                            "openai_api_key": "FILL-IN"
-                        },
+                        "kwargs": None,
                     }
                 },
             ],
@@ -74,11 +70,14 @@ for lm_service in ["ChatGPT"]:
                             "frequency_penalty": 0,
                             "presence_penalty": 0
                         },
-                    "kwargs": {"openai_api_key": "FILL-IN"},
+                    "kwargs": None,
                 }
             },
             # ---------------------------- skill selector parameters
             "selected_skills": "all",
+            "api_keys": {
+                "openai_api_key": "FILL-IN"
+            }
         }).json()
     print(f"Response:\n{result['response']}")
     if result["active_skill"] not in ["Dummy Skill", "dummy_skill"]:

@@ -95,12 +95,11 @@ PLAN:
     """
         dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
         sending_variables = compose_sending_variables(
-            lm_service_kwargs,
+            {},
             envvars_to_send,
+            human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -145,14 +144,13 @@ Do you need to clarify any details with the user related to your current task? \
 ANSWER ONLY YES/NO"""
             dialog_context = list()
             human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-            lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-            lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
             envvars_to_send = (
                 ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
             )
             sending_variables = compose_sending_variables(
-                lm_service_kwargs,
+                {},
                 envvars_to_send,
+                human_uttr_attributes,
             )
             try:
                 hypotheses = send_request_to_prompted_generative_service(
@@ -195,12 +193,11 @@ Formulate a clarifying question to the user to get necessary information \
 to complete the current task"""
         dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
         sending_variables = compose_sending_variables(
-            lm_service_kwargs,
+            {},
             envvars_to_send,
+            human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -253,12 +250,11 @@ Return the name of the best tool to use exactly as it is written in the dictiona
 DON'T EXPLAIN YOUR DECISION, JUST RETURN THE KEY. E.g. google_api"""
         dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
         sending_variables = compose_sending_variables(
-            lm_service_kwargs,
+            {},
             envvars_to_send,
+            human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -336,12 +332,11 @@ Do you think that you completed the task and the result is good and relevant? Re
 and 'No' and the reason if negative."""
         dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
         sending_variables = compose_sending_variables(
-            lm_service_kwargs,
+            {},
             envvars_to_send,
+            human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(
@@ -377,12 +372,11 @@ CONTEXT:
 YOUR TASK: given the information in the context, form a final answer to the user request"""
         dialog_context = list()
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-        lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
-        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
         envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
         sending_variables = compose_sending_variables(
-            lm_service_kwargs,
+            {},
             envvars_to_send,
+            human_uttr_attributes,
         )
         try:
             hypotheses = send_request_to_prompted_generative_service(

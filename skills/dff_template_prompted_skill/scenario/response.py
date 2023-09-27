@@ -87,12 +87,13 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+    lm_service_kwargs = human_uttr_attributes.get("lm_service", {}).get("kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
     envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
     sending_variables = compose_sending_variables(
         lm_service_kwargs,
         envvars_to_send,
+        human_uttr_attributes,
     )
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)

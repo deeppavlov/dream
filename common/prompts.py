@@ -51,19 +51,26 @@ def if_none_var_values(sending_variables):
     return False
 
 
-def compose_sending_variables(lm_service_kwargs, envvars_to_send):
+def compose_sending_variables(lm_service_kwargs, envvars_to_send, human_uttr_attrs):
     if len(envvars_to_send):
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
         # from env variables
         sending_variables = {f"{var.lower()}s": [getenv(var, None)] for var in envvars_to_send}
         if if_none_var_values(sending_variables):
-            logger.info(f"Did not get {envvars_to_send}'s values. Sending without them.")
+            logger.info(f"Did not get {envvars_to_send}'s values from environment.")
+            from_attrs = human_uttr_attrs.get("api_keys", {})
+            sending_variables = {f"{var.lower()}s": [from_attrs.get(var.lower(), None)] for var in envvars_to_send}
         else:
             logger.info(f"Got {envvars_to_send}'s values from environment.")
+        if if_none_var_values(sending_variables):
+            logger.info(f"Did not get {envvars_to_send}'s values from human uttrs.")
+        else:
+            logger.info(f"Got {envvars_to_send}'s values from human uttr attrs `api_keys`.")
     else:
         sending_variables = {}
 
     for _key, _value in lm_service_kwargs.items():
         logger.info(f"Got/Re-writing {_key}s values from kwargs.")
         sending_variables[f"{_key}s"] = [deepcopy(_value)]
+
     return sending_variables
