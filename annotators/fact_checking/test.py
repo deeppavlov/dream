@@ -13,7 +13,7 @@ def main():
                 {"skill_name": "dff_google_api_skill", "text": "Jack is 5 years old."},
                 {
                     "skill_name": "dff_dream_persona_chatgpt_prompted_skill",
-                    "text": "Jack is 25 years old.",
+                    "text": "Jack is 999 years old.",
                 },
                 {
                     "skill_name": "dummy_skill",
