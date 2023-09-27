@@ -3,7 +3,6 @@ import logging
 from df_engine.core.keywords import TRANSITIONS, RESPONSE
 from df_engine.core import Actor
 import df_engine.conditions as cnd
-import df_engine.labels as lbl
 
 from . import response as loc_rsp
 
