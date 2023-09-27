@@ -5,7 +5,7 @@ import torch
 import numpy as np
 import sentry_sdk
 import cv2
-import aux
+import aux  # noqa: F401
 
 from multimodal_concat.models import MultimodalClassificaionModel, MainModel
 from multimodal_concat.utils import prepare_models
