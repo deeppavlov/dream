@@ -18,7 +18,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
-FILE_SERVER_TIMEOUT = int(os.environ.get("FILE_SERVER_TIMEOUT", 30))
+FILE_SERVER_TIMEOUT = float(os.environ.get("FILE_SERVER_TIMEOUT", 30))
 
 
 def find_and_download_docs_if_needed(dialog, model_needs_train, filepaths_in_container, docs_and_links):
