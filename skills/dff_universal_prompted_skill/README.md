@@ -51,7 +51,7 @@ result = requests.post(
 ### Parameters
 
 ```
-GENERATIVE_TIMEOUT: timeout for request to LLM
+DEFAULT_LM_SERVICE_TIMEOUT: default timeout for request to LLM
 N_UTTERANCES_CONTEXT: number of last utterances to consider as a dialog context
 DEFAULT_LM_SERVICE_URL: default LLM to utilize if not provided in the request
 DEFAULT_LM_SERVICE_CONFIG: onfiguration file with generative parameters to utilize if not provided in the request

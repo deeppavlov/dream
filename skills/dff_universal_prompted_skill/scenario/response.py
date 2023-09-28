@@ -19,7 +19,7 @@ from df_engine.core import Context, Actor
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
+DEFAULT_LM_SERVICE_TIMEOUT = float(getenv("DEFAULT_LM_SERVICE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
@@ -120,6 +120,11 @@ async def gather_responses(
             lm_service_url = lm_service_urls[skill_id]
             lm_service_config = lm_service_configs[skill_id]
             lm_service_kwargs = lm_service_kwargss[skill_id]
+            lm_service_timeout = (
+                lm_service_config.pop("timeout", DEFAULT_LM_SERVICE_TIMEOUT)
+                if lm_service_config
+                else DEFAULT_LM_SERVICE_TIMEOUT
+            )
 
             tasks.append(
                 asyncio.ensure_future(
@@ -129,7 +134,7 @@ async def gather_responses(
                         prompt,
                         lm_service_url,
                         lm_service_config,
-                        GENERATIVE_TIMEOUT,
+                        lm_service_timeout,
                         lm_service_kwargs,
                         skill_name,
                         human_uttr_attributes,

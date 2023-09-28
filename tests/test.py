@@ -98,7 +98,7 @@ def check_universal_selectors_assistant(lm_services):
                 "lm_service": {
                     "url": LM_SERVICES_MAPPING[lm_service],
                     "config": {
-                        "max_new_tokens": 64,
+                        "max_tokens": 64,
                         "temperature": 0.9,
                         "top_p": 1.0,
                         "frequency_penalty": 0,
@@ -136,7 +136,7 @@ Return only names of the selected skills divided by comma. Do not respond to the
                     "lm_service": {
                         "url": LM_SERVICES_MAPPING[lm_service],
                         "config": {
-                            "max_new_tokens": 128,
+                            "max_tokens": 128,
                             "temperature": 0.4,
                             "top_p": 1.0,
                             "frequency_penalty": 0,
@@ -171,7 +171,7 @@ Return only names of the selected skills divided by comma. Do not respond to the
                     "lm_service": {
                         "url": LM_SERVICES_MAPPING[lm_service],
                         "config": {
-                            "max_new_tokens": 64,
+                            "max_tokens": 64,
                             "temperature": 0.9,
                             "top_p": 1.0,
                             "frequency_penalty": 0,

@@ -8,7 +8,7 @@ compose:
     args:
       SERVICE_PORT: 8161
       SERVICE_NAME: dff_universal_prompted_skill
-      GENERATIVE_TIMEOUT: 120
+      DEFAULT_LM_SERVICE_TIMEOUT: 120
       N_UTTERANCES_CONTEXT: 7
     context: .
     dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile

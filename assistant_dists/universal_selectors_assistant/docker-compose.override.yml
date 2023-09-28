@@ -51,7 +51,7 @@ services:
         SERVICE_NAME: skill_selector
         DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
         DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json
-        GENERATIVE_TIMEOUT: 20
+        DEFAULT_LM_SERVICE_TIMEOUT: 20
         N_UTTERANCES_CONTEXT: 1
       context: .
       dockerfile: ./skill_selectors/universal_llm_based_skill_selector/Dockerfile
@@ -75,7 +75,7 @@ services:
         FILTER_TOXIC_OR_BADLISTED: 1
         DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
         DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt-long.json
-        GENERATIVE_TIMEOUT: 120
+        DEFAULT_LM_SERVICE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 1
       context: .
       dockerfile: ./response_selectors/universal_llm_based_response_selector/Dockerfile
@@ -247,7 +247,7 @@ services:
       args:
         SERVICE_PORT: 8147
         SERVICE_NAME: dff_universal_prompted_skill
-        GENERATIVE_TIMEOUT: 120
+        DEFAULT_LM_SERVICE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 1
         DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
         DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt.json

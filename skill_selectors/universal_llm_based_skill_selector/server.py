@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
+DEFAULT_LM_SERVICE_TIMEOUT = float(getenv("DEFAULT_LM_SERVICE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 
 DEFAULT_PROMPT = json.load(open("common/prompts/skill_selector.json", "r"))["prompt"]
@@ -107,13 +107,18 @@ def select_skills(dialog):
             envvars_to_send,
             human_uttr_attributes,
         )
+        lm_service_timeout = (
+            lm_service_config.pop("timeout", DEFAULT_LM_SERVICE_TIMEOUT)
+            if lm_service_config
+            else DEFAULT_LM_SERVICE_TIMEOUT
+        )
 
         response = send_request_to_prompted_generative_service(
             dialog_context,
             prompt,
             lm_service_url,
             lm_service_config,
-            GENERATIVE_TIMEOUT,
+            lm_service_timeout,
             sending_variables,
         )
         logger.info(f"universal_llm_based_skill_selector received from llm:\n`{response}`")
