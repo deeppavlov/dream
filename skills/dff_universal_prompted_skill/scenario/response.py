@@ -104,9 +104,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         **human_uttr_attributes,
     )
     lm_service_timeout = (
-        lm_service_config.pop("timeout", GENERATIVE_TIMEOUT)
-        if lm_service_config
-        else GENERATIVE_TIMEOUT
+        lm_service_config.pop("timeout", GENERATIVE_TIMEOUT) if lm_service_config else GENERATIVE_TIMEOUT
     )
 
     if len(dialog_context) > 0:
