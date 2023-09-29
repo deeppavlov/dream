@@ -151,7 +151,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/5eb485871be3.yml",
+                    "component": "components/3dcc0944c3e0.yml",
                     "service": "annotators/combined_classification_ru/service_configs/combined-classification-ru"
                 }
             },
