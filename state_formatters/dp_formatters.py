@@ -1264,6 +1264,8 @@ def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
     sentences = [dialog["human_utterances"][-1]["text"]]
     annotated_utterances = [dialog["human_utterances"][-1]]
 
+    # [0.75, 0.25, 0.44] - default mood of the bot in PAD coordinates
+    # for detailed calculation please refer to bot_emotion_classifier
     if len(dialog["bot_utterances"]) > 1:
         bot_mood = (
             dialog["bot_utterances"][-2]["annotations"]
@@ -1290,17 +1292,21 @@ def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
 
-    bot_mood_label = (
-        dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_mood_label", "happy")
-    )
+    if dialog["bot_utterances"]:
+        bot_mood_label = (
+            dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_mood_label", "happy")
+        )
+
+        bot_emotion = (
+            dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_emotion", "neutral")
+        )
+    else:
+        bot_mood_label = "happy"
+        bot_emotion = "neutral"
 
     bot_mood_labels = len(hypots) * [bot_mood_label]
-
-    bot_emotion = (
-        dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_emotion", "neutral")
-    )
-
     bot_emotions = len(hypots) * [bot_emotion]
+
     return [
         {
             "sentences": hypots,
