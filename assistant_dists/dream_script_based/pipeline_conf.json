@@ -1497,6 +1497,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
+                    "skills",
                     "candidate_annotators"
                 ],
                 "state_manager_method": "add_bot_utterance",

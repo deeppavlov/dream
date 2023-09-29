@@ -16,6 +16,7 @@ connector:
 dialog_formatter: state_formatters.dp_formatters:cropped_dialog
 response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
 previous_services:
+- skills
 - candidate_annotators
 required_previous_services: null
 state_manager_method: add_bot_utterance
