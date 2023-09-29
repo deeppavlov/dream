@@ -9,9 +9,8 @@ compose:
   build:
     args:
       SERVICE_PORT: 8050
-      SERVICE_NAME: emotional-bot-response
+      SERVICE_NAME: emotional_bot_response
       WORK_DIR: annotators/emotional_bot_response
-      FLASK_APP: server
       GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
       GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
       GENERATIVE_TIMEOUT: 120

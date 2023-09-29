@@ -1,4 +1,4 @@
-name: emotion_ranking_based_response_selector
+name: emotion-ranking-based-response-selector
 endpoints:
 - respond
 compose:
@@ -14,7 +14,6 @@ compose:
       N_UTTERANCES_CONTEXT: 5
       FILTER_TOXIC_OR_BADLISTED: 1
       EMOTIONAL_RESPONSES: 1
-      FLASK_APP: server
     context: .
     dockerfile: ./response_selectors/emotion_ranking_based_response_selector/Dockerfile
   command: flask run -h 0.0.0.0 -p 8048

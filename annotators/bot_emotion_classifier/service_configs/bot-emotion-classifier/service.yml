@@ -7,9 +7,8 @@ compose:
   build:
     args:
       SERVICE_PORT: 8051
-      SERVICE_NAME: bot-emotion-classifier
+      SERVICE_NAME: bot_emotion_classifier
       WORK_DIR: annotators/bot_emotion_classifier
-      FLASK_APP: server
     context: .
     dockerfile: annotators/bot_emotion_classifier/Dockerfile
   command: flask run -h 0.0.0.0 -p 8051
