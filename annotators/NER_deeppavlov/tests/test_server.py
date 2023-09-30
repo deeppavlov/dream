@@ -12,8 +12,10 @@ import requests
                     ["Я видела Ивана в Москве"],
                     ["i have heard about justin. he is in sahara desert"],
                     ["I have heard about Justin. He is in Sahara Desert"],
-                    ["can john smith move forward for 15 meters, then for \
-                    fifteen meters, and get back to las vegas then"],
+                    [
+                        "can john smith move forward for 15 meters, then for \
+                    fifteen meters, and get back to las vegas then"
+                    ],
                     ["я бы проехала на 30 метров вперед, а потом повернула на сорок пять градусов по часовой стрелке"],
                     [""],
                 ]
@@ -43,9 +45,9 @@ import requests
                 ],
                 [[]],
                 [[]],
-            ]
+            ],
         )
-    ]
+    ],
 )
 def main(url: str, request_data: dict, gold_results: list):
     result = requests.post(url, json=request_data).json()
