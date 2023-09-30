@@ -372,6 +372,7 @@ def get_triplets_entities(dialog):
         if object_entity_substr and object_entity_substr not in entity_substr_list:
             entity_substr_list.append(object_entity_substr)
             entity_tags_list.append([["misc", 1.0]])
+    return entity_substr_list, entity_tags_list
 
 
 def get_x_init(dialog):
