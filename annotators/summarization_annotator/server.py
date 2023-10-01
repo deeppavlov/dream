@@ -12,7 +12,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
-SUMMARIZATION_REQUEST_TIMEOUT = int(getenv("SUMMARIZATION_REQUEST_TIMEOUT"))
+SUMMARIZATION_REQUEST_TIMEOUT = float(getenv("SUMMARIZATION_REQUEST_TIMEOUT"))
 SUMMARIZATION_SERVICE_URL = getenv("SUMMARIZATION_SERVICE_URL")
 logger.info(f"summarization-annotator considered summarizer: {SUMMARIZATION_SERVICE_URL}")
 

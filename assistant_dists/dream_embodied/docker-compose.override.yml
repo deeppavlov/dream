@@ -1,0 +1,327 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_embodied/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, dff-program-y-skill:8008, sentseg:8011, 
+          intent-catcher-commands:8014, badlisted-words:8018, dff-command-selector-skill:8148, dff-intent-responder-skill:8012, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, ros-flask-server:6000, robot-notifications:8036, robot-fake-server:8038"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: EN
+
+  ranking-based-response-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        LANGUAGE: EN
+        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+      context: .
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  sentence-ranker:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8128
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
+      context: ./services/sentence_ranker/
+    command: flask run -h 0.0.0.0 -p 8128
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 3G
+
+  spacy-nounphrases:
+    env_file: [ .env ]
+    build:
+      context: .
+      dockerfile: ./annotators/spacy_nounphrases/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8006
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  dff-program-y-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8008
+        SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: EN
+      context: .
+      dockerfile: ./skills/dff_program_y_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 1024M
+
+  sentseg:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+  dff-command-selector-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8148
+        SERVICE_NAME: dff_command_selector_skill
+        LANGUAGE: EN
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
+        FAKE: "False"
+      context: .
+      dockerfile: ./skills/dff_command_selector_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8148 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  dff-intent-responder-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8012
+        SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
+      context: .
+      dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  robot-command-sender:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8035
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
+      context: .
+      dockerfile: ./services/robot_command_sender/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8035
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  robot-notifications:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8036
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
+      context: .
+      dockerfile: ./services/robot_notifications/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8036
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  intent-catcher-commands:
+    env_file: [.env]
+    build:
+      context: .
+      dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
+      args:
+        SERVICE_PORT: 8014
+        CONFIG_NAME: intents_model_dp_config_commands.json
+        INTENT_PHRASES_PATH: intent_phrases_commands.json
+    command:  python -m flask run -h 0.0.0.0 -p 8014
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
+
+  badlisted-words:
+    env_file: [ .env ]
+    build:
+      context: annotators/BadlistedWordsDetector/
+    command: flask run -h 0.0.0.0 -p 8018
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 256M
+
+  dialogpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8125
+        SERVICE_NAME: dialogpt
+        PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
+        N_HYPOTHESES_TO_GENERATE: 5
+        CONFIG_NAME: dialogpt_en.json
+        MAX_HISTORY_DEPTH: 2
+      context: .
+      dockerfile: ./services/dialogpt/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8125
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  entity-detection:
+    env_file: [ .env ]
+    build:
+      args:
+        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
+        CONFIG: entity_detection_eng.json
+        LOWERCASE: 1
+        PORT: 8103
+        SRC_DIR: annotators/entity_detection/
+        FINEGRAINED: 0
+      context: ./
+      dockerfile: annotators/entity_detection/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8103
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 2.5G
+
+  ner:
+    env_file: [ .env ]
+    build:
+      args:
+        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
+        PORT: 8021
+        SRC_DIR: annotators/NER_deeppavlov
+        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
+      context: ./
+      dockerfile: annotators/NER_deeppavlov/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8021
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 2G
+
+  ros-flask-server:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 6000
+      context: .
+      dockerfile: ./services/ros_flask_server/Dockerfile
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  robot-notifications:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8036
+        ROS_FLASK_SERVER: http://ros-flask-server:6000
+      context: .
+      dockerfile: ./services/robot_notifications/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8036
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  robot-fake-server:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8038
+      context: .
+      dockerfile: ./services/robot_fake_server/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8038
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+version: '3.7'
