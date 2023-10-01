@@ -97,7 +97,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "CREATE COMPONENT",
+                    "component": "components/IvTBJz0AoCD98qMOkbXEkg.yml",
                     "service": "annotators/speech_function_classifier/service_configs/speech-function-classifier"
                 }
             },
