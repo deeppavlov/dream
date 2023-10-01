@@ -33,7 +33,7 @@ app = Flask(__name__)
 
 SENTENCE_RANKER_ANNOTATION_NAME = getenv("SENTENCE_RANKER_ANNOTATION_NAME")
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
-SENTENCE_RANKER_TIMEOUT = int(getenv("SENTENCE_RANKER_TIMEOUT"))
+SENTENCE_RANKER_TIMEOUT = float(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
@@ -60,8 +60,8 @@ def filter_out_badlisted_or_toxic(hypotheses):
 
 def select_response_by_scores(hypotheses, scores):
     best_id = np.argmax(scores)
-    res = hypotheses[best_id]
-    return res, best_id
+    result = hypotheses[best_id]
+    return result, best_id
 
 
 def get_scores(dialog_context, hypotheses):
@@ -93,7 +93,7 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
 
     # ---------------------------------------------------------------------------------------------------------
     # sfc-based scaling
-    speech_predictor = last_human_ann_uttr["annotations"]["speech_function_predictor"]
+    speech_predictor = last_human_ann_uttr["annotations"].get("speech_function_predictor", [])
     human_named_entities = get_entities(last_human_ann_uttr, only_named=True, with_labels=False)
     human_entities = get_entities(last_human_ann_uttr, only_named=False, with_labels=False)
 
@@ -145,12 +145,12 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
                     # if hyp contains offer on chat about some entities, increase score
                     scores[hyp_id] *= 1.5
         elif _human_wants_to_chat_about_topic:
-            # if usernames entities which does not want to talk about
+            # if user names entities which does not want to talk about
             if _same_named_entities or _same_entities:
                 # if hyp contains requested entities, increase score
                 scores[hyp_id] *= 1.5
 
-    # ---------------------------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------------------------------
 
     logger.info(f"Scores for selection:\n`{scores}`")
     result = select_response_by_scores(hypotheses, scores)[0]

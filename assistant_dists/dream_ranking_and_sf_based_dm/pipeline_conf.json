@@ -36,8 +36,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/sbDcAqiNqxFz.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "component": "components/sjkdfh289fnkdfg.yml",
+                "service": "services/agent_services/service_configs/dream_ranking_and_sf_based_dm"
             }
         },
         "timeout_service": {
@@ -64,8 +64,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/rFC0YJOoDFvS.yml",
-                "service": "services/agent_services/service_configs/dream"
+                "component": "components/Wejhdfp3utgih8.yml",
+                "service": "services/agent_services/service_configs/dream_ranking_and_sf_based_dm"
             }
         },
         "annotators": {
@@ -88,7 +88,7 @@
             "speech_function_classifier": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5,
+                    "timeout": 5.0,
                     "url": "http://speech-function-classifier:8108/annotation"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
@@ -99,6 +99,24 @@
                 "source": {
                     "component": "CREATE COMPONENT",
                     "service": "annotators/speech_function_classifier/service_configs/speech-function-classifier"
+                }
+            },
+            "speech_function_predictor": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 5.0,
+                    "url": "http://speech-function-predictor:8107/annotation"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotations.speech_function_classifier"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "FNmTZbz8EA6Y80b5pXZzQ.yml",
+                    "service": "annotators/speech_function_classifier/service_configs/speech-function-predictor"
                 }
             },
             "prompt_goals_collector": {
@@ -435,6 +453,48 @@
             }
         },
         "skills": {
+            "dff_dream_persona_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-persona-chatgpt-prompted-skill:8137/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-chatgpt-prompted-skill"
+                }
+            },
+            "dff_google_api_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-google-api-skill:8162/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_google_api_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/VJ7c3sLqEi.yml",
+                    "service": "skills/dff_google_api_skill/service_configs/dff-google-api-skill"
+                }
+            },
             "dff_intent_responder_skill": {
                 "connector": {
                     "protocol": "http",
@@ -487,6 +547,27 @@
                     "component": "components/qx0j5QHAzog0b39nRnuA.yml",
                     "service": "skills/factoid_qa/service_configs/factoid-qa"
                 }
+            },
+            "dff_dream_faq_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-faq-prompted-skill:8170/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_faq_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jFmKPqMJh0.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-faq-prompted-skill"
+                }
             }
         },
         "response_selectors": {
@@ -511,9 +592,9 @@
         }
     },
     "metadata": {
-        "display_name": "Dream",
+        "display_name": "Dream with Ranking- and Speech Function-based DM",
         "author": "DeepPavlov",
-        "description": "Main version of DeepPavlov Dream Socialbot",
+        "description": "DeepPavlov Dream Distribution with Ranking- and Speech Function-based Dialog Management",
         "version": "0.1.0",
         "date_created": "2022-12-12T12:12:00",
         "ram_usage": "20 GB",
