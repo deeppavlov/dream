@@ -1,14 +1,13 @@
 import json
 import logging
-import yaml
 import time
-from os import getenv, listdir
-from typing import List
+from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
 from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+from common.selectors import collect_descriptions_from_components
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -26,34 +25,6 @@ DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generat
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
 
 DEFAULT_SKILLS = ["dummy_skill"]
-
-
-def collect_descriptions_from_components(skills: List[dict]):
-    result = []
-    all_skills = [skill["name"] for skill in skills]
-    collected_skills = []
-
-    # collect display names and descriptions from the request
-    for skill in skills:
-        if skill.get("display_name", "") and skill.get("description", ""):
-            result += [(skill["display_name"], skill["description"])]
-            collected_skills += [skill["name"]]
-
-    # collect display names and descriptions of skills which descriptions are not given in request
-    # from the components folder
-    for fname in listdir("components/"):
-        if "yml" in fname:
-            component = yaml.load(open(f"components/{fname}", "r"), Loader=yaml.FullLoader)
-            if component["name"] in all_skills and component["name"] not in collected_skills:
-                result += [(component["display_name"], component["description"])]
-                collected_skills += [component["name"]]
-
-    # for the rest of unfound skills, compose description by hands
-    for skill in skills:
-        if skill["name"] not in collected_skills:
-            prompt = skill["prompt"]
-            result += [(skill["name"], f"Agent with the following task:\n`{prompt}`")]
-    return result
 
 
 def select_skills(dialog):
@@ -86,10 +57,11 @@ def select_skills(dialog):
     try:
         logger.info(f"universal_llm_based_skill_selector sends dialog context to llm:\n`{dialog_context}`")
         prompt = _skill_selector.get("prompt", DEFAULT_PROMPT)
-
+        skill_descriptions_list, display_names_mapping = collect_descriptions_from_components(
+            human_uttr_attributes.get("skills", [])
+        )
         if "LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS" in prompt:
             # need to add skill descriptions in prompt in replacement of `LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS`
-            skill_descriptions_list = collect_descriptions_from_components(human_uttr_attributes.get("skills", []))
             skill_descriptions = "Skills:\n"
             skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descriptions_list])
             prompt = prompt.replace("LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS", skill_descriptions)
@@ -120,11 +92,11 @@ def select_skills(dialog):
             lm_service_config,
             lm_service_timeout,
             sending_variables,
-        )
+        )[0]
         logger.info(f"universal_llm_based_skill_selector received from llm:\n`{response}`")
-        for skill in human_uttr_attributes.get("skills", []):
-            if skill.get("display_name", skill["name"]) in response[0]:
-                selected_skills += [skill["name"]]
+        for skill_name, display_name in display_names_mapping.items():
+            if display_name in response:
+                selected_skills += [skill_name]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -133,6 +105,7 @@ def select_skills(dialog):
 
     # we need to add dff_universal_skill to generate prompt-based hypotheses
     selected_skills += ["dff_universal_prompted_skill"]
+    selected_skills = list(set(selected_skills))
     logger.info(f"universal_llm_based_skill_selector selected:\n`{selected_skills}`")
 
     selected_skills = list(set(selected_skills))

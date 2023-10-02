@@ -22,12 +22,17 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT"))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
+
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT"))
+GENERATIVE_TIMEOUT = (
+    GENERATIVE_SERVICE_CONFIG.pop("timeout", GENERATIVE_TIMEOUT) if GENERATIVE_SERVICE_CONFIG else GENERATIVE_TIMEOUT
+)
+
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 PROMPT_FILE = getenv("PROMPT_FILE")
@@ -38,7 +43,6 @@ KEEP_ORIGINAL_HYPOTHESIS = int(getenv("KEEP_ORIGINAL_HYPOTHESIS"))
 
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
-
 assert GENERATIVE_SERVICE_URL
 
 
@@ -59,7 +63,8 @@ def select_response_by_scores(hypotheses, scores):
     return result, best_id
 
 
-def select_response(dialog_context, hypotheses, human_uttr_attributes):
+def select_response(dialog, hypotheses, human_uttr_attributes):
+    dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
     try:
         ie_types = [
             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
@@ -103,7 +108,9 @@ def select_response(dialog_context, hypotheses, human_uttr_attributes):
 def find_most_similar_hypothesis(final_text, hypotheses):
     scores = []
     for hyp in hypotheses:
-        if final_text in hyp["text"]:
+        if hyp["skill_name"] == "dummy_skill":
+            scores += [0.01]
+        elif final_text in hyp["text"]:
             scores += [0.99]
         else:
             scores += [difflib.SequenceMatcher(None, final_text, hyp["text"]).ratio()]
@@ -130,12 +137,12 @@ def respond():
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
-        dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
-        selected_resp = select_response(
-            dialog_context, hypotheses, dialog["human_utterances"][-1].get("attributes", {})
-        )
+        human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
+
+        selected_resp = select_response(dialog, hypotheses, human_uttr_attributes)
         if selected_resp:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
+
             if KEEP_ORIGINAL_HYPOTHESIS:
                 selected_responses.append(hypotheses[best_id].pop("text"))
             else:
@@ -150,7 +157,7 @@ def respond():
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
             selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
-            selected_attributes.append(hypotheses[best_id])
+            selected_attributes.append(deepcopy(hypotheses[best_id]))
 
         else:
             logger.info("Select a response with the highest confidence.")
@@ -161,7 +168,7 @@ def respond():
             selected_human_attributes.append(hypotheses[best_id].pop("human_attributes", {}))
             selected_bot_attributes.append(hypotheses[best_id].pop("bot_attributes", {}))
             hypotheses[best_id].pop("annotations", {})
-            selected_attributes.append(hypotheses[best_id])
+            selected_attributes.append(deepcopy(hypotheses[best_id]))
 
     total_time = time.time() - st_time
     logger.info(f"llm_based_response_selector exec time = {total_time:.3f}s")

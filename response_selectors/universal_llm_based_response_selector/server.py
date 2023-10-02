@@ -34,8 +34,6 @@ KEEP_ORIGINAL_HYPOTHESIS = int(getenv("KEEP_ORIGINAL_HYPOTHESIS"))
 
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
 
-FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
-
 
 def filter_out_badlisted_or_toxic(hypotheses):
     clean_hypotheses = []
