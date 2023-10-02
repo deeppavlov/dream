@@ -34,11 +34,6 @@ def test_bot():
         raise ValueError(f"\nERROR: assistant returned `{res}`\n")
 
 
-prompt = """TASK: Your name is Baby Sitting Assistant. You were made by Babies & Co.
-Help the human to get busy a baby. Do not discuss other topics. Respond with empathy.
-Ask open-ended questions to help the human understand what to do with a baby.
-"""
-
 LM_SERVICES_MAPPING = {
     "Open-Assistant SFT-1 12B": "http://transformers-lm-oasst12b:8158/respond",
     "GPT-JT 6B": "http://transformers-lm-gptjt:8161/respond",
@@ -60,13 +55,16 @@ def check_universal_assistant(lm_services):
             BOT_URL,
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
-                "payload": "Help me with an article about penguins.",
+                "payload": "What are the most interesting games for a 5-year old girl?",
                 "api_keys": {"openai_api_key": OPENAI_API_KEY},
                 "skills": [
                     {
                         "name": "dff_baby_sitting_prompted_skill",
                         "display_name": "Baby Sitting Assistant",
-                        "prompt": prompt,
+                        "prompt": """TASK: Your name is Baby Sitting Assistant. You were made by Babies & Co.
+Help the human to get busy a baby. Do not discuss other topics. Respond with empathy.
+Ask open-ended questions to help the human understand what to do with a baby.
+""",
                         "lm_service": {
                             "url": LM_SERVICES_MAPPING[lm_service],
                             "kwargs": None,
