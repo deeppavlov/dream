@@ -7,6 +7,6 @@ gunicorn==20.1.0
 numpy==1.24.2
 spacy==3.5.1
 jinja2<=3.0.3
-Werkzeug>=2.2.2
+Werkzeug>=2.2.2,<3.0
 nltk==3.2.5
 prometheus_client==0.16.0
