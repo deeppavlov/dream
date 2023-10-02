@@ -11,12 +11,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  ranking-based-response-selector:
+  ranking-and-sf-based-response-selector:
     volumes:
-      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./response_selectors/ranking_and_sf_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8002:8002
+      - 8082:8082
   dff-intent-responder-skill:
     volumes:
       - "./skills/dff_intent_responder_skill:/src"
@@ -135,12 +135,14 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8136:8136
-  dff-dream-faq-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8170:8170
+#incative due to absence of the API key.
+#Might you have one, pls add  it to env.secret and uncomment the service
+#  dff-dream-faq-prompted-skill:
+#    volumes:
+#      - "./skills/dff_template_prompted_skill:/src"
+#      - "./common:/src/common"
+#    ports:
+#      - 8170:8170
   summarization-annotator:
     volumes:
       - "./annotators/summarization_annotator:/src"

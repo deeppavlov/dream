@@ -453,48 +453,6 @@
             }
         },
         "skills": {
-            "dff_dream_persona_prompted_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 120.0,
-                    "url": "http://dff-dream-persona-chatgpt-prompted-skill:8137/respond"
-                },
-                "dialog_formatter": {
-                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_dream_persona_prompted_skill"
-                },
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-chatgpt-prompted-skill"
-                }
-            },
-            "dff_google_api_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 120.0,
-                    "url": "http://dff-google-api-skill:8162/respond"
-                },
-                "dialog_formatter": {
-                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_google_api_skill"
-                },
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/VJ7c3sLqEi.yml",
-                    "service": "skills/dff_google_api_skill/service_configs/dff-google-api-skill"
-                }
-            },
             "dff_intent_responder_skill": {
                 "connector": {
                     "protocol": "http",
@@ -547,35 +505,14 @@
                     "component": "components/qx0j5QHAzog0b39nRnuA.yml",
                     "service": "skills/factoid_qa/service_configs/factoid-qa"
                 }
-            },
-            "dff_dream_faq_prompted_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 120.0,
-                    "url": "http://dff-dream-faq-prompted-skill:8170/respond"
-                },
-                "dialog_formatter": {
-                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_dream_faq_prompted_skill"
-                },
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/jFmKPqMJh0.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-faq-prompted-skill"
-                }
             }
         },
         "response_selectors": {
-            "response_selector": {
+            "ranking_and_sf_based_response_selector": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://ranking-based-response-selector:8002/respond"
+                    "url": "http://ranking-and-sf-based-response-selector:8082/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
@@ -585,8 +522,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
-                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
+                    "component": "components/Mul0SGf8K24fWIOBjH2m.yml",
+                    "service": "response_selectors/ranking_and_sf_based_response_selector/service_configs/ranking-and-sf-based-response-selector"
                 }
             }
         }

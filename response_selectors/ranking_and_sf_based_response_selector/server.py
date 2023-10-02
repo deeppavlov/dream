@@ -154,7 +154,7 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
 
     logger.info(f"Scores for selection:\n`{scores}`")
     result = select_response_by_scores(hypotheses, scores)[0]
-    logger.info(f"ranking_and_intent_based_response_selector selected:\n`{result}`")
+    logger.info(f"ranking_and_sf_based_response_selector selected:\n`{result}`")
 
     return result
 
@@ -214,7 +214,7 @@ def respond():
             selected_attributes.append(hypotheses[best_id])
 
     total_time = time.time() - st_time
-    logger.info(f"ranking_and_intent_based_response_selector exec time = {total_time:.3f}s")
+    logger.info(f"ranking_and_sf_based_response_selector exec time = {total_time:.3f}s")
     return jsonify(
         list(
             zip(
