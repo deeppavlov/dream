@@ -6,7 +6,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=3.95.137.219:8011
+      - PROXY_PASS=44.211.138.94:8011
       - PORT=8011
 
   combined-classification:
@@ -15,7 +15,7 @@ services:
       context: dp/proxy/
       dockerfile: Dockerfile
     environment:
-      - PROXY_PASS=3.95.137.219:8087
+      - PROXY_PASS=44.211.138.94:8087
       - PORT=8087
 
   sentence-ranker:
