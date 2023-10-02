@@ -7,4 +7,4 @@ numpy==1.24.2
 nltk==3.2.5
 prometheus_client
 jinja2<=3.0.3
-Werkzeug>=2.2.2
+Werkzeug>=2.2.2,<3.0
