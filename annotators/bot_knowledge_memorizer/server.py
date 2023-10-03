@@ -25,7 +25,15 @@ with open("rel_list.json") as file:
 with open("abstract_rels.txt", "r") as file:
     abstract_rels = [line.strip() for line in file.readlines()]
 
-USE_BOT_KG_DATA = os.getenv("USE_BOT_KG_DATA", False)
+USE_BOT_KG_DATA = int(os.getenv("USE_BOT_KG_DATA", 0))
+GENERATIVE_SERVICE_URL = os.getenv("GENERATIVE_SERVICE_URL")
+GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
 
 BOT_ID = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
@@ -33,12 +41,10 @@ TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is not specified")
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
-config_path = os.getenv("CONFIG")
-with open(config_path, 'r') as config_file:
+config_path = os.getenv("BOT_KM_SERVICE_CONFIG")
+with open(config_path, "r") as config_file:
     config = json.load(config_file)
-index_load_path = Path(os.path.expanduser(
-    config["metadata"]["variables"]["CUSTOM_EL"]
-))
+index_load_path = Path(os.path.expanduser(config["metadata"]["variables"]["CUSTOM_EL"]))
 
 while True:
     try:
@@ -58,13 +64,6 @@ while True:
 
 logger.info("Graph Loaded!")
 
-DEFAULT_CONFIG = {
-    "max_tokens": 64,
-    "temperature": 0.4,
-    "top_p": 1.0,
-    "frequency_penalty": 0,
-    "presence_penalty": 0
-}
 
 def check_property_vs_relationship(utterances_info: List[dict]) -> Tuple[list, list]:
     """Checks if the prop_ex triplets are relationship or property triplets.
@@ -127,11 +126,12 @@ def check_entities_in_index(custom_el_annotations: list, prop_ex_triplets: list,
       entities_in_index, entities_not_in_index --  {('dog', 'Animal'):
         'Animal/ed8f16ae-56fb-46dc-b542-20987056fd00'}, [('dog', 'Animal'))]
     """
+
     def check_abstraction_in_index(relationship, entity_info, text):
         """Returns true if kind in index is 'Abstract' and the relationship in prop_ex is abstract, or if both aren't
         abstract. Otherwise, returns false."""
-        return is_abstract_relationship(
-            relationship, entity_info["entity_substr"], text) == ("Abstract" in entity_info["entity_id_tags"]
+        return is_abstract_relationship(relationship, entity_info["entity_substr"], text) == (
+            "Abstract" in entity_info["entity_id_tags"]
         )
 
     entities_in_index, entities_not_in_index = {}, []
@@ -170,7 +170,7 @@ def check_entities_in_kg(graph, entities: list) -> Tuple[list, list]:
     entities_in_kg, entities_not_in_kg = [], []
 
     all_entities_in_kg = graph.get_all_entities()
-    for (entity_substr, entity_kind) in entities:
+    for entity_substr, entity_kind in entities:
         in_kg = False
         for entity_props in all_entities_in_kg:
             if entity_substr == entity_props.get("substr") and entity_kind == entity_props["@type"]:
@@ -384,14 +384,13 @@ def add_triplets_to_dbs(graph, bot_id: str, triplets_to_kg: dict, triplets_to_in
 def upper_case_input(triplets: List[dict]) -> List[dict]:
     """Upper-cases the relationship kind in each triplet in the prop_ex annotations"""
     return [
-        {
-            "subject": triplet["subject"], "relation": triplet["relation"].upper(), "object": triplet["object"]
-        } for triplet in triplets
+        {"subject": triplet["subject"], "relation": triplet["relation"].upper(), "object": triplet["object"]}
+        for triplet in triplets
     ]
 
 
 def check_abstract_triplets(
-    graph,entities: List[tuple], prop_ex_rel_triplets: List[dict], text: str, bot_id: str
+    graph, entities: List[tuple], prop_ex_rel_triplets: List[dict], text: str, bot_id: str
 ) -> Tuple[list, list]:
     abstract_triplets = []
     non_abstract_triplets = []
@@ -419,7 +418,7 @@ def check_abstract_triplets(
             graph.ontology.create_entity_kinds(set(kinds_to_add, parents))
         except ValueError:
             logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
-        except Exception: #TODO: replace with Terminusdb DatabaseError
+        except Exception:  # TODO: replace with Terminusdb DatabaseError
             graph.ontology.create_entity_kinds(parents)
             try:
                 graph.ontology.create_entity_kinds(set(kinds_to_add, parents))
@@ -429,13 +428,12 @@ def check_abstract_triplets(
 
 
 def check_and_add_properties(graph, prop_triplets: List[dict], bot_id: str) -> Tuple[list, list]:
-    """Checks if the property triplets exist in kg and adds them if not.
-    """
+    """Checks if the property triplets exist in kg and adds them if not."""
     properties_to_add_to_kg, properties_already_in_kg = [], []
     try:
         bot_properties = graph.get_properties_of_entity(bot_id)
-    except:
-        bot_properties = [] # new bot
+    except Exception:
+        bot_properties = []  # new bot
     for triplet in prop_triplets:
         if triplet["property"] in bot_properties and triplet["object"] == bot_properties[triplet["property"]]:
             properties_already_in_kg.append(triplet)
@@ -450,7 +448,10 @@ def check_and_add_properties(graph, prop_triplets: List[dict], bot_id: str) -> T
         property_kinds = [triplet["property"] for triplet in properties_to_add_to_kg]
         properties_families = [triplet["property_family"] for triplet in properties_to_add_to_kg]
         objects = [triplet["object"] for triplet in properties_to_add_to_kg]
-        logger.info(f"property_kinds -- {property_kinds}\nproperties_families -- {properties_families}\nproperties_to_add_to_kg -- {properties_to_add_to_kg}")
+        logger.info(
+            f"property_kinds -- {property_kinds}\nproperties_families -- {properties_families}\n"
+            f"properties_to_add_to_kg -- {properties_to_add_to_kg}"
+        )
         graph.ontology.create_property_kinds_of_entity_kind(
             "Bot",
             property_kinds,
@@ -461,31 +462,50 @@ def check_and_add_properties(graph, prop_triplets: List[dict], bot_id: str) -> T
             del prop["property_family"]
     return properties_to_add_to_kg, properties_already_in_kg
 
-def generate_prompt(triplets):
-    CHAT_GPT_PORT = os.getenv("CHAT_GPT_PORT")
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    assert OPENAI_API_KEY, "Error: OpenAI API key is not specified in env"
 
-    url = f"http://openai-api-chatgpt:{CHAT_GPT_PORT}/respond"
+def get_knowledge(bot_id):
+    bot_data = kg_graph.search_for_relationships(id_a=bot_id)
+    rels = [triplet["rel"] for triplet in bot_data]
+    entity_ids = [triplet["id_b"] for triplet in bot_data]
+    relationship_entity_id_pair = list(zip(rels, entity_ids))
+    entity_values = kg_graph.get_properties_of_entities(entity_ids)
+    bot_triplets = []
+    for entity in entity_values:
+        for rel, id in relationship_entity_id_pair:
+            if entity["@id"] == id:
+                bot_triplets.extend([("Bot", rel, entity.get("substr", entity.get("Name")))])
+
+    return bot_triplets
+
+
+def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
     contexts = [
-        [
-        ],
+        [],
     ]
     prompts = [
         # "Generate natural language sentences based on the following triplets. One sentence for each triplets"
-        "Translate from semantic triple to sentence. Triplets" # prompt seems to work best (tested on one triple only)
+        "Translate each semantic triple into a sentence. Triplets"
         f" : {triplets}"
     ]
-    json_input = {
-        "dialog_contexts": contexts,
-        "prompts": prompts,
-        "configs": [DEFAULT_CONFIG] * len(contexts),
-        "openai_api_keys": [OPENAI_API_KEY] * len(contexts)
-    }
+    try:
+        response = requests.post(
+            GENERATIVE_SERVICE_URL,
+            json={
+                "dialog_contexts": contexts,
+                "prompts": prompts,
+                "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
+                "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
+            },
+            timeout=120,
+        )
+        hypotheses = response.json()[0]
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        hypotheses = []
 
-    return requests.post(
-        url, json=json_input
-    ).json()
+    return hypotheses
+
 
 def memorize(graph, utt):
     bot_id = BOT_ID
@@ -521,23 +541,12 @@ def memorize(graph, utt):
                         f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
                     )
 
-    # Part to use custom knowledge in LLM prompt (in progress)
-
-    # triplets = []
-    # for entity, entity_id in entities_with_types.items():
-    #     rels = graph.search_for_relationships(id_a=BOT_ID, id_b=entity_id)
-    #     logger.info(f"rels from custom_el in KG --||-- {rels}")
-    #     for rel in rels:
-    #         triplets.append(["User", rel['rel'].split('_')[0].lower(), entity[0]]) #TODO: you can do better than this naive split
-
-    # triplets = ", ".join([str(triplet) for triplet in triplets])
-    # logger.info(f"triplets -- {triplets}")
-    # bot_triplets = graph.search_for_relationships(id_a=BOT_ID)
-    # bot_triplets = [("Bot", triplet["rel"], triplet["id_b"]) for triplet in bot_triplets]
-    bot_triplets = [("Bot", "like general", "football")] # test example
+    bot_triplets = get_knowledge(bot_id)
+    logger.info(f"bot triplets -- {bot_triplets}")
+    # bot_triplets = [("Bot", "like general", "football")] # test example
 
     if bot_triplets and USE_BOT_KG_DATA:
-        prompt = generate_prompt(bot_triplets)
+        prompt = convert_triplets_to_natural_language(bot_triplets)
     else:
         prompt = ""
 
@@ -552,11 +561,15 @@ def memorize(graph, utt):
     else:
         properties_added_to_kg, properties_already_in_kg = [], []
 
-    entities_in_index, entities_not_in_index = check_entities_in_index(custom_el_annotations, prop_ex_rel_triplets, last_utt)
+    entities_in_index, entities_not_in_index = check_entities_in_index(
+        custom_el_annotations, prop_ex_rel_triplets, last_utt
+    )
     logger.info(f"entities_in_index, entities_not_in_index --  {entities_in_index, entities_not_in_index}")
 
     if entities_not_in_index:
-        abstract_triplets, non_abstract_triplets =  check_abstract_triplets(graph, entities_not_in_index, prop_ex_rel_triplets, last_utt, bot_id)
+        abstract_triplets, non_abstract_triplets = check_abstract_triplets(
+            graph, entities_not_in_index, prop_ex_rel_triplets, last_utt, bot_id
+        )
         logger.info(f"abstract_triplets -- {abstract_triplets}")
         logger.info(f"non_abstract_triplets -- {non_abstract_triplets}")
 
@@ -589,7 +602,12 @@ def memorize(graph, utt):
 
     if triplets_not_in_kg["ids_b"] or new_entities or entities_in_kg_not_in_index or abstract_triplets:
         triplets_to_kg, triplets_to_index = prepare_triplets_to_add_to_dbs(
-            triplets_not_in_kg, prop_ex_rel_triplets, entities_in_kg_not_in_index, new_entities, abstract_triplets, bot_id
+            triplets_not_in_kg,
+            prop_ex_rel_triplets,
+            entities_in_kg_not_in_index,
+            new_entities,
+            abstract_triplets,
+            bot_id,
         )
         logger.debug(f"triplets_to_kg -- {triplets_to_kg}\n triplets_to_index -- {triplets_to_index}")
         triplets_added_to_kg = add_triplets_to_dbs(graph, bot_id, triplets_to_kg, triplets_to_index)
@@ -599,8 +617,17 @@ def memorize(graph, utt):
     triplets_added_to_kg_batch.append(triplets_added_to_kg + properties_added_to_kg)
     triplets_already_in_kg_batch.append(triplets_already_in_kg + properties_already_in_kg)
 
-    logger.info(f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {prompt}")
-    return [{"added_to_graph": triplets_added_to_kg_batch, "triplets_already_in_graph": triplets_already_in_kg_batch, "kg_prompt":prompt}]
+    logger.info(
+        f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch},"
+        f" kg_prompt -- {prompt}"
+    )
+    return [
+        {
+            "added_to_graph": triplets_added_to_kg_batch,
+            "triplets_already_in_graph": triplets_already_in_kg_batch,
+            "kg_prompt": prompt,
+        }
+    ]
 
 
 def get_result(request, graph):
@@ -613,8 +640,15 @@ def get_result(request, graph):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = [{"added_to_graph": [[]] * len(utt), "triplets_already_in_graph": [[]] * len(utt), "kg_prompt": [[]] * len(utt)}]
+        result = [
+            {
+                "added_to_graph": [[]] * len(utt),
+                "triplets_already_in_graph": [[]] * len(utt),
+                "kg_prompt": [[]] * len(utt),
+            }
+        ]
     return result
+
 
 @app.route("/respond", methods=["POST"])
 def respond():
