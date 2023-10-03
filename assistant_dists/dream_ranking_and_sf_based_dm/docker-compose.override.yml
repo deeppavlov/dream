@@ -507,7 +507,7 @@ services:
       args:
         SERVICE_PORT: 8107
         SERVICE_NAME: speech_function_predictor
-      context: ./annotators/speech_function_predictor/
+      context: .
     command: gunicorn -k uvicorn.workers.UvicornWorker --workers=1 server:app -b 0.0.0.0:8107
     environment:
       - CUDA_VISIBLE_DEVICES=0
