@@ -282,6 +282,7 @@ services:
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
         ENVVARS_TO_SEND: OPENAI_API_KEY
+        USE_BOT_KG_DATA: 1
       context: .
       dockerfile: ./skills/dff_knowledge_prompted_skill/Dockerfile
     deploy:
