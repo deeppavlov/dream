@@ -164,4 +164,9 @@ services:
       - "./annotators/speech_function_classifier:/src"
     ports:
       - 8108:8108
+  speech-function-predictor:
+    volumes:
+      - "./annotators/speech_function_predictor:/src"
+    ports:
+      - 8107:8107
 version: "3.7"

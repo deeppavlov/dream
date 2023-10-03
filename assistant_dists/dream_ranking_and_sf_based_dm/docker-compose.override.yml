@@ -8,7 +8,7 @@ services:
           text-qa:8078, combined-classification:8087, fact-retrieval:8100,
           entity-detection:8103, speech-function-classifier:8108, sentence-ranker:8128,
           property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
-          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059"
+          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059, speech-function-predictor:8107"
 
 
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -492,6 +492,23 @@ services:
         SERVICE_NAME: speech_function_classifier
       context: ./annotators/speech_function_classifier/
     command: gunicorn -k uvicorn.workers.UvicornWorker --workers=1 server:app -b 0.0.0.0:8108
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+
+  speech-function-predictor:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8107
+        SERVICE_NAME: speech_function_predictor
+      context: ./annotators/speech_function_predictor/
+    command: gunicorn -k uvicorn.workers.UvicornWorker --workers=1 server:app -b 0.0.0.0:8107
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
