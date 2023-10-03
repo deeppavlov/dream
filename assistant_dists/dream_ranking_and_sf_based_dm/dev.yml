@@ -123,12 +123,12 @@ services:
 #      - "./common:/src/common"
 #    ports:
 #      - 8137:8137
-  dff-google-api-skill:
-    volumes:
-      - "./skills/dff_google_api_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8162:8162
+#  dff-google-api-skill:
+#    volumes:
+#      - "./skills/dff_google_api_skill:/src"
+#      - "./common:/src/common"
+#    ports:
+#      - 8162:8162
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"
