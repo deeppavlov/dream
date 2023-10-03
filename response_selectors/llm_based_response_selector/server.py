@@ -11,7 +11,7 @@ from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from common.containers import get_envvars_for_llm
+from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.utils import is_toxic_or_badlisted_utterance
 
@@ -23,6 +23,15 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
+while True:
+    result = is_container_running(GENERATIVE_SERVICE_URL)
+    if result:
+        logger.info(f"GENERATIVE_SERVICE_URL: {GENERATIVE_SERVICE_URL} is ready")
+        break
+    else:
+        time.sleep(5)
+        continue
+
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
