@@ -739,7 +739,6 @@ def el_formatter_dialog(dialog: Dict):
     entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
     return [
         {
-            "user_id": [user_id],
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
             "context": [context],
