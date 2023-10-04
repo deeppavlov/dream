@@ -50,8 +50,6 @@
                 "service": "services/agent_services/service_configs/dream_persona_ruxglm_prompted"
             }
         },
-        "annotators": {
-        },
         "candidate_annotators": {
             "dialogrpt": {
                 "connector": {
@@ -72,25 +70,6 @@
                 }
             }
         },
-        "response_annotators": {},
-        "response_annotator_selectors": {
-            "connector": {
-                "protocol": "python",
-                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
-                "annotator_names": [
-                    "sentseg"
-                ]
-            },
-            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-            "tags": [
-                "selector"
-            ],
-            "is_enabled": true,
-            "source": {
-                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
-                "service": "services/response_annotator_selectors/service_configs/agent"
-            }
-        },
         "skill_selectors": {
             "description_based_skill_selector": {
                 "connector": {
@@ -100,7 +79,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators"
                 ],
                 "state_manager_method": "add_annotation",
                 "tags": [

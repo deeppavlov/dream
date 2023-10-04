@@ -36,12 +36,6 @@
                 "service": "services/agent_services/service_configs/universal_selectors_assistant"
             }
         },
-        "response_annotator_selectors": {
-        },
-        "response_annotators": {
-        },
-        "annotators": {
-        },
         "skill_selectors": {
             "skill_selector": {
                 "connector": {
@@ -52,7 +46,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators"
                 ],
                 "state_manager_method": "add_annotation",
                 "tags": [
