@@ -7,9 +7,6 @@ services:
   mongo:
     command: mongod
     image: mongo:4.0.0
-  sentseg:
-    volumes:
-      - "./annotators/SentSeg:/src"
   llm-based-response-selector:
     volumes:
       - "./response_selectors/llm_based_response_selector:/src"
