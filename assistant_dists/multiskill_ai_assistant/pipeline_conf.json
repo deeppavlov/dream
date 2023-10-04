@@ -36,10 +36,6 @@
                 "service": "services/agent_services/service_configs/multiskill_ai_assistant"
             }
         },
-        "response_annotator_selectors": {
-        },
-        "response_annotators": {
-        },
         "annotators": {
             "prompt_goals_collector": {
                 "connector": {
