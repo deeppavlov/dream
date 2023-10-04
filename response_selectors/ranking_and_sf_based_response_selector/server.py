@@ -179,11 +179,12 @@ def respond():
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+        bot_uttr = dialog["bot_utterances"][-1] if dialog["bot_utterances"][-1] else ""
         selected_resp = select_response(
             dialog_context,
             hypotheses,
             dialog["human_utterances"][-1],
-            dialog["bot_utterances"][-1],
+            bot_uttr,
         )
         try:
             best_id = hypotheses.index(selected_resp)
