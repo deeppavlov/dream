@@ -180,7 +180,11 @@ def respond():
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
-        bot_uttr = dialog["bot_utterances"][-1] if dialog["bot_utterances"][-1] else ""
+        bot_uttr = ""
+        try:
+            bot_uttr = dialog["bot_utterances"][-1]
+        except IndexError:
+            logger.info("bot_uttrs is empty for this dialog")
         selected_resp = select_response(
             dialog_context,
             hypotheses,
