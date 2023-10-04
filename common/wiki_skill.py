@@ -669,6 +669,11 @@ def extract_entity(ctx, entity_type):
         user_property = entity_type.split("prop:")[1]
         obj = find_entity_prex(annotations, user_property)
         return obj
+    elif entity_type.startswith("kg"):
+        kg_type = entity_type.split("kg:")[1]
+        found_entity = find_entity_custom_kg(annotations, kg_type)
+        if found_entity:
+            return found_entity
     elif entity_type == "any_entity":
         entities = annotations.get("entity_detection", {}).get("entities", [])
         if entities:

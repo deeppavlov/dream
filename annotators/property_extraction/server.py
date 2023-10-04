@@ -1,10 +1,10 @@
-import copy
 import logging
 import os
 import re
 import time
 import pickle
 import itertools
+import json
 
 import nltk
 import sentry_sdk
@@ -26,8 +26,16 @@ nlp = spacy.load("en_core_web_sm")
 
 t5_config = os.getenv("CONFIG_T5")
 rel_ranker_config = os.getenv("CONFIG_REL_RANKER")
-port = int(os.getenv("SERVICE_PORT"))
 add_entity_info = int(os.getenv("ADD_ENTITY_INFO", "0"))
+
+try:
+    generative_ie = build_model(t5_config, download=True)
+    rel_ranker = build_model(rel_ranker_config, download=True)
+    logger.info("property extraction model is loaded.")
+except Exception as e:
+    sentry_sdk.capture_exception(e)
+    logger.exception(e)
+    raise e
 
 rel_type_dict = {}
 relations_all = []
@@ -42,17 +50,12 @@ with open("rel_list.txt", "r") as fl:
             rel_type = "property"
         rel_type_dict[rel.replace("_", " ")] = rel_type
 
-with open("rel_groups.pickle", "rb") as fl:
+config_metadata = json.load(open(rel_ranker_config))["metadata"]["variables"]
+root_path = config_metadata["ROOT_PATH"]
+model_path = config_metadata["MODEL_PATH"].replace("{ROOT_PATH}", root_path)
+rels_path = os.path.expanduser(f"{model_path}/rel_groups.pickle")
+with open(rels_path, "rb") as fl:
     rel_groups_list = pickle.load(fl)
-
-try:
-    generative_ie = build_model(t5_config, download=True)
-    rel_ranker = build_model(rel_ranker_config, download=True)
-    logger.info("property extraction model is loaded.")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    logger.exception(e)
-    raise e
 
 
 def sentrewrite(sentence, init_answer):
@@ -102,6 +105,31 @@ def get_relations(uttr_batch, thres=0.5):
     return relations_pred_batch
 
 
+def postprocess_triplets(triplets_init, scores_init, uttr):
+    triplets, existing_obj = [], []
+    scores_dict = {}
+    for triplet_init, score in zip(triplets_init, scores_init):
+        triplet = ""
+        fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
+        if fnd and fnd[0][1] in rel_type_dict:
+            triplet = list(fnd[0])
+            if triplet[0] in ["i", "my"]:
+                triplet[0] = "user"
+            obj = triplet[2]
+            if obj in existing_obj:
+                prev_triplet, prev_score = scores_dict[obj]
+                if score > prev_score:
+                    triplets.remove(prev_triplet)
+                else:
+                    continue
+            scores_dict[obj] = (triplet, score)
+            existing_obj.append(obj)
+            if obj.islower() and obj.capitalize() in uttr:
+                triplet[2] = obj.capitalize()
+        triplets.append(triplet)
+    return triplets
+
+
 def generate_triplets(uttr_batch, relations_pred_batch):
     triplets_corr_batch = []
     t5_input_uttrs = []
@@ -112,34 +140,13 @@ def generate_triplets(uttr_batch, relations_pred_batch):
     t5_pred_triplets, t5_pred_scores = generative_ie(t5_input_uttrs, relations_pred_flat)
     logger.debug(f"t5 raw output: {t5_pred_triplets} scores: {t5_pred_scores}")
 
-    curr_idx = 0
+    offset_start = 0
     for uttr, pred_rels in zip(uttr_batch, relations_pred_batch):
-        triplets, existing_obj = [], set()
-        scores_dict = {}
-        for _ in pred_rels:
-            triplet_init = t5_pred_triplets[curr_idx]
-            curr_score = t5_pred_scores[curr_idx]
-            curr_idx += 1
-            triplet = ""
-            fnd = re.findall(r"<subj> (.*?)<rel> (.*?)<obj> (.*)", triplet_init)
-            if fnd and fnd[0][1] in rel_type_dict:
-                triplet = list(fnd[0])
-                if triplet[0] in ["i", "my"]:
-                    triplet[0] = "user"
-                obj = triplet[2]
-                if obj in existing_obj:
-                    # logger.debug(f"existing_obj - {existing_obj} \nscores_dict - {scores_dict}")
-                    prev_triplet, prev_score = scores_dict[obj]
-                    if curr_score > prev_score:
-                        logger.debug(f"popping {prev_triplet}, low score")
-                        triplets.remove(prev_triplet)
-                    else:
-                        continue
-                scores_dict[obj] = (triplet, curr_score)
-                existing_obj.add(obj)
-                if obj.islower() and obj.capitalize() in uttr:
-                    triplet[2] = obj.capitalize()
-            triplets.append(triplet)
+        rels_len = len(pred_rels)
+        triplets_init = t5_pred_triplets[offset_start : (offset_start + rels_len)]
+        scores_init = t5_pred_scores[offset_start : (offset_start + rels_len)]
+        offset_start += rels_len
+        triplets = postprocess_triplets(triplets_init, scores_init, uttr)
         triplets_corr_batch.append(triplets)
     return triplets_corr_batch
 
@@ -151,7 +158,7 @@ def get_result(request):
     entities_with_labels_batch = request.json.get("entities_with_labels", [[] for _ in init_uttrs])
     entity_info_batch = request.json.get("entity_info", [[] for _ in init_uttrs])
     logger.info(
-        f"init_uttrs {init_uttrs}, entities_with_labels_batch: {entities_with_labels_batch} entity_info_batch: {entity_info_batch}"
+        f"init_uttrs {init_uttrs} entities_with_labels: {entities_with_labels_batch} entity_info: {entity_info_batch}"
     )
     uttrs = []
     for uttr_list in init_uttrs:
@@ -205,6 +212,7 @@ def get_result(request):
                         if not offsets:
                             start_offset = uttr.find(entity_substr.lower())
                             end_offset = start_offset + len(entity_substr)
+                            offsets = [start_offset, end_offset]
                         if entity_substr in [triplet[0], triplet[2]]:
                             entity_substr_dict[entity_substr] = {"offsets": offsets}
 
@@ -262,4 +270,4 @@ def respond():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=port)
+    app.run(debug=False, host="0.0.0.0", port=3000)

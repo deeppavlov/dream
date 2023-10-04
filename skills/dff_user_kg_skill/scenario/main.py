@@ -16,10 +16,6 @@ from df_engine.core import Actor
 import common.constants as common_constants
 import common.dff.integration.condition as int_cnd
 import common.dff.integration.processing as int_prs
-import scenario.condition as loc_cnd
-import scenario.processing as loc_prs
-import common.universal_templates as templates
-from common.art import SUPER_CONFIDENCE, HIGH_CONFIDENCE
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
@@ -38,12 +34,12 @@ flows = {
             RESPONSE: "Do you have a pet?",
             TRANSITIONS: {
                 ("personal_info_flow", "pet_r", 2): int_cnd.has_entities("prop:have_pet"),
-                ("personal_info_flow", "hobby_q", 1): cnd.true()
+                ("personal_info_flow", "hobby_q", 1): cnd.true(),
             },
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(1.0),
                 "set_can_continue": int_prs.set_can_continue(common_constants.MUST_CONTINUE),
-            }
+            },
         },
         "pet_r": {
             RESPONSE: "Cool! I also have a {users_pet}.",
@@ -69,7 +65,7 @@ flows = {
             RESPONSE: "Cool! I also like {users_hobby}.",
             TRANSITIONS: {
                 ("personal_info_flow", "pet_q", 1): cnd.regexp(re.compile(r"(pet|pets)")),
-                lbl.forward(): cnd.true()
+                lbl.forward(): cnd.true(),
             },
             PROCESSING: {
                 "entity_extraction": int_prs.entities(users_hobby=["prop:like_activity", "default:this activity"]),
@@ -86,7 +82,7 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(common_constants.MUST_CONTINUE),
             },
             TRANSITIONS: {},
-        }
+        },
     },
     "global_flow": {
         "start": {

@@ -1,0 +1,7 @@
+SERVICE_PORT: 8183
+SERVICE_NAME: external_integration_skill
+EXTERNAL_SKILL_URL: http://external-fake-server:8184/return_response
+ARGUMENTS_TO_SEND: dialog_id
+PAYLOAD_ARGUMENT_NAME: payload
+RESPONSE_KEY: response
+EXTERNAL_TIMEOUT: 2

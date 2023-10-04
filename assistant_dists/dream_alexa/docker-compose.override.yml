@@ -24,7 +24,12 @@ services:
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
+      ENABLE_NP_QUESTIONS: 1
+      ENABLE_SWITCH_TOPIC: 1
+      ENABLE_LINK_QUESTIONS: 1
+      ENABLE_NP_FACTS: 1
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   convers-evaluator-annotator:
     env_file: [.env]
@@ -129,6 +134,8 @@ services:
         CONV_EVAL_STRENGTH: 0.4
         PRIORITIZE_HUMAN_INITIATIVE: 0
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: EN
+        FALLBACK_FILE: fallbacks_dream_en.json
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -767,6 +774,7 @@ services:
         CONFIG: combined_classifier.json
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8087 --timeout 600
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:

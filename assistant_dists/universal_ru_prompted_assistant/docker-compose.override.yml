@@ -1,0 +1,216 @@
+services:
+  agent:
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_ru_prompted_assistant/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: "ranking-based-response-selector-ru:8002,
+        dialogrpt-ru:8122, transformers-lm-ruxglm:8171, transformers-lm-rugpt35:8178, 
+        openai-api-chatgpt:8145, openai-api-davinci3:8131,
+        openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167,
+        dff-universal-ru-prompted-skill:8161"
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1800}
+      HIGH_PRIORITY_INTENTS: 0
+      RESTRICTION_FOR_SENSITIVE_CASE: 0
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: RU
+      FALLBACK_FILE: fallbacks_dream_ru.json
+
+  ranking-based-response-selector-ru:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        SENTENCE_RANKER_ANNOTATION_NAME: dialogrpt
+        SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+      context: .
+      dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+
+  dialogrpt-ru:
+    env_file: [ .env_ru ]
+    build:
+      context: ./services/dialogrpt_ru/
+      args:
+        SERVICE_PORT: 8122
+        PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+        TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
+    command: flask run -h 0.0.0.0 -p 8122
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
+
+  transformers-lm-ruxglm:
+    env_file: [ .env_ru,.env_secret ]
+    build:
+      args:
+        SERVICE_PORT: 8171
+        SERVICE_NAME: transformers_lm_ruxglm
+        PRETRAINED_MODEL_NAME_OR_PATH: dim/xglm-4.5B_ru_v10_epoch_6_step_41141
+        HALF_PRECISION: 1
+        ADDITIONAL_EOS_TOKENS: <|endoftext|>,Human
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8171
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 60G
+        reservations:
+          memory: 60G
+
+  transformers-lm-rugpt35:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8178
+        SERVICE_NAME: transformers_lm_rugpt35
+        PRETRAINED_MODEL_NAME_OR_PATH: ai-forever/ruGPT-3.5-13B
+        HALF_PRECISION: 1
+      context: .
+      dockerfile: ./services/transformers_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8178
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 60G
+        reservations:
+          memory: 60G
+
+  openai-api-chatgpt:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8145
+        SERVICE_NAME: openai_api_chatgpt
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8145
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  openai-api-davinci3:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8131
+        SERVICE_NAME: openai_api_davinci3
+        PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8131
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  openai-api-gpt4:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8159
+        SERVICE_NAME: openai_api_gpt4
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8159
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  openai-api-gpt4-32k:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8160
+        SERVICE_NAME: openai_api_gpt4_32k
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-32k
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8160
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  openai-api-chatgpt-16k:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8167
+        SERVICE_NAME: openai_api_chatgpt_16k
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo-16k
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8167
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  dff-universal-ru-prompted-skill:
+    env_file: [ .env_ru ]
+    build:
+      args:
+        SERVICE_PORT: 8161
+        SERVICE_NAME: dff_universal_prompted_skill
+        GENERATIVE_TIMEOUT: 120
+        N_UTTERANCES_CONTEXT: 7
+        DEFAULT_LM_SERVICE_URL: http://transformers-lm-ruxglm:8171/respond
+        DEFAULT_LM_SERVICE_CONFIG: ruxglm_config.json
+      context: .
+      dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+version: '3.7'

@@ -33,7 +33,7 @@ SKILL_TRIGGERS = {
         "intents": [],
     },
     "dff_user_kg_skill": {
-        "compiled_patterns": [re.compile(r"(\bpet|pets|hobby|hobbies)")],
+        "compiled_patterns": [re.compile(r"(\bpet\b|\bpets\b|hobby|hobbies)")],
         "previous_bot_patterns": [],
         "detected_topics": [],
         "intents": [],

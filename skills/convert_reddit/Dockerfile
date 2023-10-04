@@ -13,13 +13,12 @@ ENV PYTHONPATH /usr/local/bin/python
 ENV DEVICE cpu
 
 WORKDIR /app
-RUN mkdir /root/convert_data/
+RUN mkdir /root/convert_data/ && \
+    wget $DATA_URL -q -P /root/convert_data/ && \
+    tar -xvzf /root/convert_data/*.tar.gz -C /root/convert_data/
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-
-RUN wget $DATA_URL -q -P /root/convert_data/
-RUN tar -xvzf /root/convert_data/*.tar.gz -C /root/convert_data/
 
 COPY . .
 

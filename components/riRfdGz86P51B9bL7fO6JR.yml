@@ -1,0 +1,24 @@
+name: summarization-annotator
+display_name: Summarization Annotator
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Annotator that accesses summarization services
+ram_usage: 256M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 10.0
+  url: http://summarization-annotator:8058/respond
+dialog_formatter: state_formatters.dp_formatters:summarization_annotator_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.spelling_preprocessing
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: respond
+service: annotators/summarization_annotator/service_configs/summarization-annotator
+date_created: '2023-07-04T11:39:32'

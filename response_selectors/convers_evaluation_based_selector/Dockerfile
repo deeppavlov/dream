@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.9.16-slim
 
 WORKDIR /src
 
@@ -38,11 +38,13 @@ ARG CONV_EVAL_STRENGTH
 ENV CONV_EVAL_STRENGTH ${CONV_EVAL_STRENGTH}
 ARG QUESTION_TO_QUESTION_DOWNSCORE_COEF
 ENV QUESTION_TO_QUESTION_DOWNSCORE_COEF ${QUESTION_TO_QUESTION_DOWNSCORE_COEF}
+ARG FALLBACK_FILE
+ENV FALLBACK_FILE ${FALLBACK_FILE}
 
 
 COPY ./response_selectors/convers_evaluation_based_selector/requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-RUN python -c "import nltk; nltk.download('punkt')"
+RUN pip install -r requirements.txt && \
+    python -c "import nltk; nltk.download('punkt')"
 
 ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}

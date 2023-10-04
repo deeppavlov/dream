@@ -28,20 +28,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  transformers-lm-gptj:
+  transformers-lm-gptjt:
     volumes:
       - "./services/transformers_lm:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8130:8130
-  transformers-lm-oasst12b:
-    volumes:
-      - "./services/transformers_lm:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8158:8158
+      - 8161:8161
   openai-api-chatgpt:
     volumes:
       - "./services/openai_api_lm:/src"
@@ -66,6 +59,24 @@ services:
       - "./common:/src/common"
     ports:
       - 8160:8160
+  openai-api-chatgpt-16k:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8167:8167
+  anthropic-api-claude-v1:
+    volumes:
+      - "./services/anthropic_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8164:8164
+  anthropic-api-claude-instant-v1:
+    volumes:
+      - "./services/anthropic_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8163:8163
   dff-universal-prompted-skill:
     volumes:
       - "./skills/dff_universal_prompted_skill:/src"

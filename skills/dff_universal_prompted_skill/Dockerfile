@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.9.16-slim
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -23,10 +23,10 @@ ARG DEFAULT_LM_SERVICE_CONFIG
 ENV DEFAULT_LM_SERVICE_CONFIG ${DEFAULT_LM_SERVICE_CONFIG}
 
 COPY skills/dff_universal_prompted_skill/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+RUN pip install -r requirements.txt && \
+    python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
 COPY skills/dff_universal_prompted_skill/ ./
 COPY ./common/ ./common/
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout ${GENERATIVE_TIMEOUT:-30}

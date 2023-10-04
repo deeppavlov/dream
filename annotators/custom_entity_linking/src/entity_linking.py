@@ -16,7 +16,7 @@ import os
 import re
 import sqlite3
 from logging import getLogger
-from typing import List, Tuple
+from typing import List
 from collections import defaultdict
 
 import nltk
@@ -28,7 +28,6 @@ from deeppavlov.core.models.component import Component
 from deeppavlov.core.models.serializable import Serializable
 
 log = getLogger(__name__)
-nltk.download("stopwords")
 
 
 @register("entity_linker")
@@ -80,49 +79,15 @@ class EntityLinker(Component, Serializable):
     def save(self) -> None:
         pass
 
-    def add_custom_entities(self, user_id, entity_substr_list, entity_ids_list, tags_list):
-        if self.conn is None:
-            if not os.path.exists(self.load_path):
-                os.makedirs(self.load_path)
-            self.conn = sqlite3.connect(str(self.load_path / "custom_database.db"), check_same_thread=False)
-            self.cur = self.conn.cursor()
-            self.cur.execute(
-                "CREATE VIRTUAL TABLE IF NOT EXISTS inverted_index USING fts5(title, entity_id, num_rels "
-                "UNINDEXED, tag, user_id, tokenize = 'porter ascii');"
-            )
-
-        for entity_substr, entity_id, tag in zip(entity_substr_list, entity_ids_list, tags_list):
-            entity_id = entity_id.replace("/", "slash").replace("-", "hyphen")
-            query_str = f"title:{entity_substr} AND tag:{tag} AND user_id:{user_id}"
-
-            query = "SELECT * FROM inverted_index WHERE inverted_index MATCH ?;"
-            res = self.cur.execute(query, (query_str,)).fetchall()
-            if res and res[0][3] == "name" and res[0][1] == entity_id and tag == "name":
-                query = "DELETE FROM inverted_index WHERE entity_id=? AND tag=? AND user_id=?;"
-                self.cur.execute(query, (entity_id, tag, user_id))
-                self.cur.execute(
-                    "INSERT INTO inverted_index " "VALUES (?, ?, ?, ?, ?);",
-                    (entity_substr.lower(), entity_id, 1, tag, user_id),
-                )
-                self.conn.commit()
-            elif not res:
-                self.cur.execute(
-                    "INSERT INTO inverted_index " "VALUES (?, ?, ?, ?, ?);",
-                    (entity_substr.lower(), entity_id, 1, tag, user_id),
-                )
-                self.conn.commit()
-
     def __call__(
         self,
         user_ids: List[str],
         entity_substr_batch: List[List[str]],
         entity_tags_batch: List[List[str]] = None,
     ):
-
+        user_ids = [user_id.replace("/", "slash").replace("-", "hyphen") for user_id in user_ids]
         entity_ids_batch, entity_conf_batch, entity_id_tags_batch = [], [], []
-        for user_id, entity_substr_list, entity_tags_list in zip(
-            user_ids, entity_substr_batch, entity_tags_batch
-        ):
+        for user_id, entity_substr_list, entity_tags_list in zip(user_ids, entity_substr_batch, entity_tags_batch):
             entity_ids_list, entity_conf_list, entity_id_tags_list = self.link_entities(
                 user_id,
                 entity_substr_list,
@@ -145,7 +110,13 @@ class EntityLinker(Component, Serializable):
         entity_ids_list, conf_list, entity_id_tags_list = [], [], []
         if entity_substr_list:
             for entity_substr, tags in zip(entity_substr_list, entity_tags_list):
-                for symb_old, symb_new in [("'", "''"), ("-", " "), ("@", ""), (".", ""), ("  ", " ")]:
+                for symb_old, symb_new in [
+                    ("'", "''"),
+                    ("-", " "),
+                    ("@", ""),
+                    (".", ""),
+                    ("  ", " "),
+                ]:
                     entity_substr = entity_substr.replace(symb_old, symb_new)
                 cand_ent_init = defaultdict(set)
                 if len(entity_substr) > 1:
@@ -186,13 +157,25 @@ class EntityLinker(Component, Serializable):
 
     def process_cand_ent(self, cand_ent_init, entities_and_ids, entity_substr_split, tags):
         if tags:
-            for entity_title, entity_id, entity_rels, f_tag, user_id in entities_and_ids:
+            for (
+                entity_title,
+                entity_id,
+                entity_rels,
+                f_tag,
+                user_id,
+            ) in entities_and_ids:
                 for tag, tag_conf in tags:
                     if tag == f_tag:
                         substr_score = self.calc_substr_score(entity_title, entity_substr_split)
                         cand_ent_init[entity_id].add((substr_score, entity_rels, tag_conf, f_tag))
         else:
-            for entity_title, entity_id, entity_rels, f_tag, user_id in entities_and_ids:
+            for (
+                entity_title,
+                entity_id,
+                entity_rels,
+                f_tag,
+                user_id,
+            ) in entities_and_ids:
                 substr_score = self.calc_substr_score(entity_title, entity_substr_split)
                 cand_ent_init[entity_id].add((substr_score, entity_rels, 1.0, f_tag))
         return cand_ent_init

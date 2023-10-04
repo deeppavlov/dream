@@ -1,7 +1,7 @@
 [
     [
         "Возможно, тебе просто еще не встретилось что-то на самом деле интересное тебе. Чем ты занимаешься на выходных?",
-        1.0,
+        0.95,
         {
             "dff_friendship_skill_state": {
                 "shared_memory": {
@@ -59,11 +59,13 @@
             },
             "used_links": {},
             "age_group": "",
-            "disliked_skills": []
-        },
+                "disliked_skills": [],
+                "prompts_goals": {}
+            },
         {},
         {
             "can_continue": "must",
+            "is_final_answer": "true",
             "response_parts": [
                 "acknowledgement",
                 "body"

@@ -12,15 +12,13 @@ RUN rm -r /etc/apt/sources.list.d && \
     pip install -r requirements.txt
 
 RUN apt-get update && \
-    apt-get install unzip \
-                wget
-
-RUN apt install -y libsndfile-dev
+    apt-get install -y unzip \
+            wget  \
+            libsndfile-dev
 
 RUN wget http://files.deeppavlov.ai/deeppavlov_data/nemo/voice_cloning/pretrained.zip && \
     unzip pretrained.zip && \
-    rm pretrained.zip
-
-RUN wget http://files.deeppavlov.ai/deeppavlov_data/nemo/voice_cloning/gerty_sample.wav
+    rm pretrained.zip && \
+    wget http://files.deeppavlov.ai/deeppavlov_data/nemo/voice_cloning/gerty_sample.wav
 
 COPY main.py .

@@ -8,6 +8,7 @@ compose:
     args:
       SERVICE_PORT: 8133
       SERVICE_NAME: relative_persona_extractor
+      SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
       N_SENTENCES_TO_RETURN: 3
       FLASK_APP: server
     context: .
@@ -26,14 +27,3 @@ compose:
   - ./common:/src/common
   ports:
   - 8133:8133
-proxy:
-  command:
-  - nginx
-  - -g
-  - daemon off;
-  build:
-    context: dp/proxy/
-    dockerfile: Dockerfile
-  environment:
-  - PROXY_PASS=dream.deeppavlov.ai:8133
-  - PORT=8133

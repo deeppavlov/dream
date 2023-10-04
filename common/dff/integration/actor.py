@@ -28,10 +28,13 @@ def load_ctxs(requested_data):
     used_links_batch = requested_data.get("used_links_batch", [{}] * len(dialog_batch))
     age_group_batch = requested_data.get("age_group_batch", [""] * len(dialog_batch))
     disliked_skills_batch = requested_data.get("disliked_skills_batch", [{}] * len(dialog_batch))
+    prompts_goals_batch = requested_data.get("prompts_goals_batch", [{}] * len(dialog_batch))
     clarification_request_flag_batch = requested_data.get(
         "clarification_request_flag_batch",
         [False] * len(dialog_batch),
     )
+    dialog_id_batch = requested_data.get("dialog_id_batch", [0] * len(dialog_batch))
+
     ctxs = []
     for (
         human_utter_index,
@@ -42,7 +45,9 @@ def load_ctxs(requested_data):
         used_links,
         age_group,
         disliked_skills,
+        prompts_goals,
         clarification_request_flag,
+        dialog_id,
     ) in zip(
         human_utter_index_batch,
         dialog_batch,
@@ -52,7 +57,9 @@ def load_ctxs(requested_data):
         used_links_batch,
         age_group_batch,
         disliked_skills_batch,
+        prompts_goals_batch,
         clarification_request_flag_batch,
+        dialog_id_batch,
     ):
         ctx = get_ctx(
             human_utter_index,
@@ -63,7 +70,9 @@ def load_ctxs(requested_data):
             used_links,
             age_group,
             disliked_skills,
+            prompts_goals,
             clarification_request_flag,
+            dialog_id,
         )
         ctxs += [ctx]
     return ctxs
@@ -78,7 +87,9 @@ def get_ctx(
     used_links,
     age_group,
     disliked_skills,
+    prompts_goals,
     clarification_request_flag,
+    dialog_id,
 ):
     context = state.get("context", {})
     previous_human_utter_index = state.get("previous_human_utter_index", -1)
@@ -98,7 +109,9 @@ def get_ctx(
         "used_links": used_links,
         "age_group": age_group,
         "disliked_skills": disliked_skills,
+        "prompts_goals": prompts_goals,
         "clarification_request_flag": clarification_request_flag,
+        "dialog_id": dialog_id,
     }
     ctx = Context.cast(context)
     ctx.misc["agent"] = agent
@@ -114,6 +127,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     used_links = agent["used_links"]
     age_group = agent["age_group"]
     disliked_skills = agent["disliked_skills"]
+    prompts_goals = agent["prompts_goals"]
     current_turn_dff_suspended = agent["current_turn_dff_suspended"]
     response_parts = agent.get("response_parts", [])
     history[str(human_utter_index)] = list(ctx.labels.values())[-1]
@@ -126,6 +140,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
     confidence = ctx.misc["agent"]["response"].get("confidence", 0.85)
     can_continue = CAN_CONTINUE_SCENARIO if confidence else CAN_NOT_CONTINUE
     can_continue = ctx.misc["agent"]["response"].get("can_continue", can_continue)
+    is_final_answer = ctx.misc["agent"]["response"].get("is_final_answer", "true")
     ctx.clear(2, ["requests", "responses", "labels"])
     del ctx.misc["agent"]
     state["context"] = json.loads(ctx.json())
@@ -136,8 +151,9 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "used_links": used_links,
         "age_group": age_group,
         "disliked_skills": disliked_skills,
+        "prompts_goals": prompts_goals,
     }
-    hype_attr = {"can_continue": can_continue}
+    hype_attr = {"can_continue": can_continue, "is_final_answer": is_final_answer}
     if response_parts:
         hype_attr["response_parts"] = response_parts
     response = ctx.last_response

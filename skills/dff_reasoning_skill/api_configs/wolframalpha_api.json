@@ -1,0 +1,11 @@
+{
+    "wolframalpha_api": {
+        "display_name": "WolframAlpha API",
+        "description": "The WolframAlpha API can perform calculations and do math.",
+        "keys": ["WOLFRAMALPHA_APP_ID"],
+        "needs_approval": false,
+        "approve_once": false,
+        "timeout": 30,
+        "input_template": "Equation that needs to be solved. DON'T RETURN ANY TEXT. Examples: '5 + 2', '7 + 2x = 12 - 3x'"
+    }
+}

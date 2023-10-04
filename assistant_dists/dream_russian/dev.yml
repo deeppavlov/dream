@@ -47,7 +47,7 @@ services:
       - "./annotators/toxic_classification_ru:/src"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8126:8126
+      - 8118:8118
   ner-ru:
     volumes:
       - './annotators/NER_deeppavlov:/src'
@@ -130,11 +130,21 @@ services:
       - "./annotators/fact_retrieval_rus:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8130:8130
+      - 8110:8110
   text-qa-ru:
     volumes:
       - "./services/text_qa:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8078:8078
+  summarization-annotator:
+    volumes:
+      - "./annotators/summarization_annotator:/src"
+    ports:
+      - 8058:8058
+  rut5-summarizer:
+    volumes:
+      - "./services/ruT5_summarizer:/src"
+    ports:
+      - 8060:8060
 version: "3.7"

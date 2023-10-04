@@ -1,0 +1,27 @@
+name: dff-google-api-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  - .env_secret
+  build:
+    args:
+      SERVICE_PORT: 8162
+      SERVICE_NAME: dff_google_api_skill
+      ENVVARS_TO_SEND: OPENAI_API_KEY,GOOGLE_CSE_ID,GOOGLE_API_KEY
+    context: .
+    dockerfile: ./skills/dff_google_api_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8162 --reload
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - "./skills/dff_google_api_skill:/src"
+  - "./common:/src/common"
+  ports:
+  - 8162:8162
+proxy: null

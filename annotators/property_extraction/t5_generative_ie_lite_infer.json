@@ -41,7 +41,7 @@
     },
     "download": [
       {
-        "url": "http://files.deeppavlov.ai/tmp/raushan/t5_generative_lite.tar.gz",
+        "url": "http://files.deeppavlov.ai/deeppavlov_data/generative_ie/t5_generative_lite.tar.gz",
         "subdir": "{MODEL_PATH}"
       }
     ]

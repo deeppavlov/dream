@@ -1,6 +1,7 @@
 name: openai-api-davinci3
 endpoints:
 - respond
+- generate_goals
 compose:
   env_file:
   - .env

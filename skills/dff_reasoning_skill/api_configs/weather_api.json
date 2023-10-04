@@ -1,0 +1,11 @@
+{
+    "weather_api": {
+        "display_name": "Weather API",
+        "description": "The Weather API can provide current weather information for a given location.",
+        "keys": ["OPENWEATHERMAP_API_KEY"],
+        "needs_approval": false,
+        "approve_once": false,
+        "timeout": 30,
+        "input_template": "Just the request in a string format"
+    }
+}

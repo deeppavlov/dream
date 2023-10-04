@@ -39,3 +39,6 @@ The dialogue skill **skills\dff-intent-responder-skill** was created based on **
 Tests for all input intentions including a default case are added.
 ### Jan 21, 2022
 The dialogue skill **skills\dff-intent-responder-skill** is moved to **skills\dff_template_skill**. Code review changes applied, tests are recreated in microservice environment.
+
+
+## Depencencies

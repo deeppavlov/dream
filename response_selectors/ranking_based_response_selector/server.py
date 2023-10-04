@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 SENTENCE_RANKER_ANNOTATION_NAME = getenv("SENTENCE_RANKER_ANNOTATION_NAME")
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
-SENTENCE_RANKER_TIMEOUT = int(getenv("SENTENCE_RANKER_TIMEOUT"))
+SENTENCE_RANKER_TIMEOUT = float(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
@@ -96,7 +96,8 @@ def respond():
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
-
+        hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
+        logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
         selected_resp = select_response(dialog_context, hypotheses)
         try:
