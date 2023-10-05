@@ -171,7 +171,6 @@ def respond():
     selected_attributes = []
 
     for i, dialog in enumerate(dialogs):
-        logger.info(f"dialog: {dialog}")
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)

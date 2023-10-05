@@ -2,7 +2,7 @@ Flask==2.2.3
 sentry_sdk==0.13.3
 transformers==4.6.1
 nltk==3.6.2
-click==7.1.2
+click>=7.1.2
 requests==2.25.1 
 scipy==1.6.3
 pandas==1.2.4

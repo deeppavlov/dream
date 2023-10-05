@@ -491,7 +491,7 @@ services:
         SERVICE_PORT: 8108
         SERVICE_NAME: speech_function_classifier
       context: ./annotators/speech_function_classifier/
-    command: gunicorn -k uvicorn.workers.UvicornWorker --workers=1 server:app -b 0.0.0.0:8108
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8108
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:

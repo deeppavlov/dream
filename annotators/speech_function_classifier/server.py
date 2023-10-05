@@ -1,7 +1,7 @@
 import logging
 import os
 import time
-from typing import List
+from typing import List, Dict
 
 import sentry_sdk
 from flask import Flask, request, jsonify
@@ -27,7 +27,7 @@ except Exception as e:
     raise e
 
 
-async def handler(payload: List):
+def handler(payload: List[Dict]):
     responses = [""] * len(payload)
     try:
         for i, p in enumerate(payload):
@@ -45,21 +45,23 @@ async def handler(payload: List):
     return responses
 
 
-@app.post("/annotation")
-async def annotation():
+@app.route("/annotation", methods=["POST"])
+def annotation():
     st_time = time.time()
     phrases = request.json.get("phrase", [])
     prev_phrases = request.json.get("prev_phrase", [])
     prev_speech_funcs = request.json.get("prev_speech_function", [])
-    responses = await handler(
+    payloads = [
         [
-            {
-                "phrase": sent_tokenize(phr),
-                "prev_phrase": prev_phr,
-                "prev_speech_function": prev_speech_func
-            }
-            for phr, prev_phr, prev_speech_func in zip(phrases, prev_phrases, prev_speech_funcs)
+            ("phrase", sent_tokenize(phr)),
+            ("prev_phrase", prev_phr),
+            ("prev_speech_function", prev_speech_func)
         ]
+        for phr, prev_phr, prev_speech_func in zip(phrases, prev_phrases, prev_speech_funcs)
+    ]
+    payloads = list(filter(lambda x: dict(x), payloads))
+    responses = handler(
+        payloads
     )
     total_time = time.time() - st_time
     logger.info(f"speech_function_classifier batch exec time: {total_time:.3f}s")

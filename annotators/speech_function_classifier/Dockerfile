@@ -20,4 +20,4 @@ ENV SERVICE_NAME ${SERVICE_NAME}
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
-CMD gunicorn -k uvicorn.workers.UvicornWorker --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
