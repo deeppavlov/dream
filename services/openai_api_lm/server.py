@@ -59,7 +59,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
 
     _max_tokens = generation_params.pop("max_tokens", None)
     _max_tokens = None if _max_tokens and _max_tokens >= MAX_TOKENS[PRETRAINED_MODEL_NAME_OR_PATH] else _max_tokens
-    len_context = len(prompt) + sum([len(ENCODER.encode(uttr)) for uttr in context])
+    len_context = len(ENCODER.encode(prompt)) + sum([len(ENCODER.encode(uttr)) for uttr in context])
     _max_tokens = max(8, _max_tokens - len_context - 1) if _max_tokens else None
 
     if PRETRAINED_MODEL_NAME_OR_PATH in CHAT_COMPLETION_MODELS:
