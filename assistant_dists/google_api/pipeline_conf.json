@@ -7,13 +7,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
-                        "segments": [
-                            "Sorry, something went wrong inside.",
-                            "Please tell me, what did you say."
-                        ]
-                    }
                 }
             },
             "state_manager_method": "add_bot_utterance_last_chance",
@@ -32,13 +25,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
-                        "segments": [
-                            "Sorry, I need to think more on that.",
-                            "Let's talk about something else."
-                        ]
-                    }
                 }
             },
             "state_manager_method": "add_bot_utterance_last_chance",
@@ -51,25 +37,6 @@
                 "service": "services/agent_services/service_configs/google_api"
             }
         },
-        "response_annotator_selectors": {
-            "connector": {
-                "protocol": "python",
-                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
-                "annotator_names": [
-                    "sentseg"
-                ]
-            },
-            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-            "tags": [
-                "selector"
-            ],
-            "is_enabled": true,
-            "source": {
-                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
-                "service": "services/response_annotator_selectors/service_configs/agent"
-            }
-        },
-        "response_annotators": {},
         "annotators": {
             "combined_classification": {
                 "connector": {

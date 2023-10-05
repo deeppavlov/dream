@@ -1,10 +1,5 @@
 {
     "connectors": {
-        "sentseg": {
-            "protocol": "http",
-            "timeout": 1.5,
-            "url": "http://sentseg:8011/sentseg"
-        }
     },
     "services": {
         "last_chance_service": {
@@ -13,13 +8,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
-                        "segments": [
-                            "Sorry, something went wrong inside.",
-                            "Please tell me, what did you say."
-                        ]
-                    }
                 }
             },
             "state_manager_method": "add_bot_utterance_last_chance",
@@ -38,13 +26,6 @@
                 "class_name": "PredefinedTextConnector",
                 "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
                 "annotations": {
-                    "sentseg": {
-                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
-                        "segments": [
-                            "Sorry, I need to think more on that.",
-                            "Let's talk about something else."
-                        ]
-                    }
                 }
             },
             "state_manager_method": "add_bot_utterance_last_chance",
@@ -58,22 +39,6 @@
             }
         },
         "annotators": {
-            "sentseg": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://sentseg:8011/sentseg"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
-                    "service": "annotators/SentSeg/service_configs/sentseg"
-                }
-            },
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
@@ -89,44 +54,6 @@
                     "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
                     "service": "annotators/combined_classification/service_configs/combined-classification"
                 }
-            }
-        },
-        "response_annotators": {
-            "sentseg": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://sentseg:8011/sentseg"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_annotator_selectors"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
-                    "service": "annotators/SentSeg/service_configs/sentseg"
-                }
-            }
-        },
-        "response_annotator_selectors": {
-            "connector": {
-                "protocol": "python",
-                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
-                "annotator_names": [
-                    "sentseg"
-                ]
-            },
-            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-            "tags": [
-                "selector"
-            ],
-            "is_enabled": true,
-            "source": {
-                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
-                "service": "services/response_annotator_selectors/service_configs/agent"
             }
         },
         "candidate_annotators": {

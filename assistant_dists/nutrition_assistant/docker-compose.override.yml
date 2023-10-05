@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/nutrition_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
+      WAIT_HOSTS: "ranking-based-response-selector:8002, combined-classification:8087, 
         sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145, 
         dff-nutrition-prompted-skill:8141"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -11,20 +11,6 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
-
-  sentseg:
-    env_file: [ .env ]
-    build:
-      context: ./annotators/SentSeg/
-    command: flask run -h 0.0.0.0 -p 8011
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1.5G
-        reservations:
-          memory: 1.5G
 
   combined-classification:
     env_file: [ .env ]

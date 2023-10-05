@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_reasoning/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, combined-classification:8087,
+      WAIT_HOSTS: "combined-classification:8087,
           openai-api-chatgpt:8145, dff-reasoning-skill:8169, ranking-based-response-selector:8002,
           sentence-ranker:8128"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
@@ -30,20 +30,6 @@ services:
           memory: 3G
         reservations:
           memory: 3G
-
-  sentseg:
-    env_file: [ .env ]
-    build:
-      context: ./annotators/SentSeg/
-    command: flask run -h 0.0.0.0 -p 8011
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1.5G
-        reservations:
-          memory: 1.5G
 
   ranking-based-response-selector:
     env_file: [ .env ]

@@ -17,8 +17,7 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  sentseg:
-    restart: unless-stopped
+
   dff-reasoning-skill:
     restart: unless-stopped
 

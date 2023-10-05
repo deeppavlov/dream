@@ -18,9 +18,6 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  sentseg:
-    volumes:
-      - "./annotators/SentSeg:/src"
   sentence-ranker:
     volumes:
       - "~/.deeppavlov/cache:/root/.cache"

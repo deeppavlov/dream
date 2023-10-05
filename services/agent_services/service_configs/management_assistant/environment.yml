@@ -1,6 +1,4 @@
-WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087,
-  sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145,
-  dff-roles-prompted-skill:8185"
+WAIT_HOSTS: ""
 WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 HIGH_PRIORITY_INTENTS: 1
 RESTRICTION_FOR_SENSITIVE_CASE: 1
