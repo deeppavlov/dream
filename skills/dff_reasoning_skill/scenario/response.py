@@ -9,7 +9,7 @@ from datetime import date
 
 from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
-from common.containers import get_envvars_for_llm
+from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 
 from scenario.api_responses.generative_lm import generative_lm_response
@@ -31,6 +31,16 @@ logger = logging.getLogger(__name__)
 
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL", "http://openai-api-chatgpt:8145/respond")
+
+while True:
+    result = is_container_running(GENERATIVE_SERVICE_URL)
+    if result:
+        logger.info(f"GENERATIVE_SERVICE_URL: {GENERATIVE_SERVICE_URL} is ready")
+        break
+    else:
+        time.sleep(5)
+        continue
+
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.json")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:

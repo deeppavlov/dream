@@ -2,6 +2,7 @@ import json
 import logging
 import re
 import sentry_sdk
+import time
 from os import getenv
 from pathlib import Path
 from typing import Any
@@ -9,7 +10,7 @@ from typing import Any
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.containers import get_envvars_for_llm
+from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, compose_sending_variables
 from df_engine.core import Context, Actor
 
@@ -18,6 +19,16 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
+
+while True:
+    result = is_container_running(GENERATIVE_SERVICE_URL)
+    if result:
+        logger.info(f"GENERATIVE_SERVICE_URL: {GENERATIVE_SERVICE_URL} is ready")
+        break
+    else:
+        time.sleep(5)
+        continue
+
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:

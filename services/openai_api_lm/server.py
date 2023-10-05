@@ -5,6 +5,7 @@ import time
 
 import openai
 import sentry_sdk
+import tiktoken
 from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
@@ -39,6 +40,14 @@ MAX_TOKENS = {
     "gpt-4": 8192,
     "gpt-4-32k": 32768,
 }
+try:
+    ENCODER = tiktoken.encoding_for_model(PRETRAINED_MODEL_NAME_OR_PATH)
+    logger.info("Utilize tiktoken model: {PRETRAINED_MODEL_NAME_OR_PATH}")
+except Exception as exc:
+    logger.exception(exc)
+    sentry_sdk.capture_exception(exc)
+    ENCODER = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    logger.info("Utilize tiktoken model: `gpt-3.5-turbo`")
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
@@ -47,6 +56,11 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     assert openai_api_key, logger.error("Error: OpenAI API key is not specified in env")
     openai.api_key = openai_api_key
     openai.organization = openai_org if openai_org else None
+
+    _max_tokens = generation_params.pop("max_tokens", None)
+    _max_tokens = None if _max_tokens and _max_tokens >= MAX_TOKENS[PRETRAINED_MODEL_NAME_OR_PATH] else _max_tokens
+    len_context = len(prompt) + sum([len(ENCODER.encode(uttr)) for uttr in context])
+    _max_tokens = max(8, _max_tokens - len_context - 1) if _max_tokens else None
 
     if PRETRAINED_MODEL_NAME_OR_PATH in CHAT_COMPLETION_MODELS:
         logger.info("Use special chat completion endpoint")
@@ -63,7 +77,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
         ]
         logger.info(f"context inside generate_responses seen as: {messages}")
         response = openai.ChatCompletion.create(
-            model=PRETRAINED_MODEL_NAME_OR_PATH, messages=messages, **generation_params
+            model=PRETRAINED_MODEL_NAME_OR_PATH, messages=messages, max_tokens=_max_tokens, **generation_params
         )
     else:
         dialog_context = ""
@@ -79,6 +93,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
         response = openai.Completion.create(
             model=PRETRAINED_MODEL_NAME_OR_PATH,
             prompt=dialog_context,
+            max_tokens=_max_tokens,
             **generation_params,
         )
 

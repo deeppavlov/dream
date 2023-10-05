@@ -2,6 +2,7 @@ import logging
 import re
 import requests
 import sentry_sdk
+import time
 from os import getenv
 from typing import Any
 
@@ -9,13 +10,21 @@ import common.dff.integration.response as int_rsp
 import common.dff.integration.context as int_ctx
 from df_engine.core import Context, Actor
 from common.constants import CAN_NOT_CONTINUE
+from common.containers import is_container_running
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
-assert GENERATIVE_SERVICE_URL
+
+while True:
+    result = is_container_running(GENERATIVE_SERVICE_URL)
+    if result:
+        break
+    else:
+        time.sleep(5)
+        continue
 
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")

@@ -1,17 +1,17 @@
 import json
 import logging
-import re
-import sentry_sdk
-from os import getenv
 import os
-from typing import Any, List
+import re
 import requests
+import sentry_sdk
+import time
+from typing import Any, List
 
 from common.build_dataset import build_dataset
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.containers import get_envvars_for_llm
+from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import (
     send_request_to_prompted_generative_service,
     compose_sending_variables,
@@ -19,18 +19,28 @@ from common.prompts import (
 from df_engine.core import Context, Actor
 
 
-sentry_sdk.init(getenv("SENTRY_DSN"))
+sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
-DOCUMENT_PROMPT_FILE = getenv("DOCUMENT_PROMPT_FILE")
+GENERATIVE_SERVICE_URL = os.getenv("GENERATIVE_SERVICE_URL")
+
+while True:
+    result = is_container_running(GENERATIVE_SERVICE_URL)
+    if result:
+        logger.info(f"GENERATIVE_SERVICE_URL: {GENERATIVE_SERVICE_URL} is ready")
+        break
+    else:
+        time.sleep(5)
+        continue
+
+DOCUMENT_PROMPT_FILE = os.getenv("DOCUMENT_PROMPT_FILE")
 assert GENERATIVE_SERVICE_URL, logger.error("Error: GENERATIVE_SERVICE_URL is not specified in env")
 assert DOCUMENT_PROMPT_FILE, logger.error("Error: DOCUMENT_PROMPT_FILE is not specified in env")
 
-GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
-GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")  # add env!!!
-N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
-FILE_SERVER_TIMEOUT = float(getenv("FILE_SERVER_TIMEOUT", 30))
+GENERATIVE_TIMEOUT = float(os.getenv("GENERATIVE_TIMEOUT", 5))
+GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")  # add env!!!
+N_UTTERANCES_CONTEXT = int(os.getenv("N_UTTERANCES_CONTEXT", 3))
+FILE_SERVER_TIMEOUT = float(os.getenv("FILE_SERVER_TIMEOUT", 30))
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 DEFAULT_SYSTEM_PROMPT = "Answer questions based on part of a text."
 with open(DOCUMENT_PROMPT_FILE, "r") as f:

@@ -10,7 +10,6 @@ from flask import Flask, request, jsonify
 from sentry_sdk.integrations.logging import ignore_logger
 
 from common.dff.integration.actor import load_ctxs, get_response
-from common import containers
 from scenario.main import actor
 
 import test_server
@@ -56,16 +55,6 @@ def handler(requested_data, random_seed=None):
     total_time = time.time() - st_time
     logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
     return responses
-
-
-while True:
-    result = containers.is_container_running(GENERATIVE_SERVICE_URL)
-    if result:
-        logger.info(f"GENERATIVE_SERVICE_URL: {GENERATIVE_SERVICE_URL} is ready")
-        break
-    else:
-        time.sleep(5)
-        continue
 
 
 try:
