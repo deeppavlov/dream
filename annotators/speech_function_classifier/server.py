@@ -6,6 +6,7 @@ from typing import List, Dict
 import sentry_sdk
 from flask import Flask, request, jsonify
 from nltk import sent_tokenize
+from itertools import zip_longest
 
 from models import get_speech_function
 
@@ -31,10 +32,10 @@ def handler(payload: List[Dict]):
     responses = [""] * len(payload)
     try:
         for i, p in enumerate(payload):
-            phrase_len = len(p.phrase)
-            phrases = [p.prev_phrase] + p.phrase
+            phrase_len = len(p["phrase"])
+            phrases = [p["prev_phrase"]] + p["phrase"]
             authors = ["John"] + ["Doe"] * phrase_len
-            response = [p.prev_speech_function]
+            response = [p["prev_speech_function"]]
             for phr, prev_phr, auth, prev_auth in zip(phrases[1:], phrases[:-1], authors[1:], authors[:-1]):
                 speech_f = get_speech_function(phr, prev_phr, auth, prev_auth)
                 response.append(speech_f)
@@ -49,20 +50,18 @@ def handler(payload: List[Dict]):
 def annotation():
     st_time = time.time()
     phrases = request.json.get("phrase", [])
-    prev_phrases = request.json.get("prev_phrase", [])
-    prev_speech_funcs = request.json.get("prev_speech_function", [])
-    payloads = [
-        [
-            ("phrase", sent_tokenize(phr)),
-            ("prev_phrase", prev_phr),
-            ("prev_speech_function", prev_speech_func)
-        ]
-        for phr, prev_phr, prev_speech_func in zip(phrases, prev_phrases, prev_speech_funcs)
-    ]
-    payloads = list(filter(lambda x: dict(x), payloads))
-    responses = handler(
-        payloads
+    prev_phrases = [request.json.get("prev_phrase", [])]
+    prev_speech_funcs = [request.json.get("prev_speech_function", [])]
+    payloads = []
+    for phr, prev_phr, prev_speech_func in zip_longest(phrases, prev_phrases, prev_speech_funcs):
+        payloads.append(
+            {
+                "phrase": sent_tokenize(phr),
+                "prev_phrase": prev_phr,
+                "prev_speech_function": prev_speech_func
+            }
     )
+    responses = handler(payloads)
     total_time = time.time() - st_time
     logger.info(f"speech_function_classifier batch exec time: {total_time:.3f}s")
     logger.info(f"speech function classifier result: {responses}")
