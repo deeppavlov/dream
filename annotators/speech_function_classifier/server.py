@@ -1,13 +1,11 @@
 import logging
 import os
 import time
-from typing import Optional, List
+from typing import List
 
 import sentry_sdk
-from fastapi import FastAPI
+from flask import Flask, request, jsonify
 from nltk import sent_tokenize
-from pydantic import BaseModel
-from starlette.middleware.cors import CORSMiddleware
 
 from models import get_speech_function
 
@@ -16,26 +14,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-class Payload(BaseModel):
-    phrase: List[str]
-    prev_phrase: Optional[str]
-    prev_speech_function: Optional[str]
-
-
-class AnnotationPayload(BaseModel):
-    phrase: str
-    prev_phrase: Optional[str]
-    prev_speech_function: Optional[str]
+app = Flask(__name__)
 
 
 try:
@@ -48,7 +27,7 @@ except Exception as e:
     raise e
 
 
-async def handler(payload: List[Payload]):
+async def handler(payload: List):
     responses = [""] * len(payload)
     try:
         for i, p in enumerate(payload):
@@ -66,26 +45,20 @@ async def handler(payload: List[Payload]):
     return responses
 
 
-@app.post("/model")
-async def answer(payload: Payload):
-    st_time = time.time()
-    responses = await handler([payload])
-    total_time = time.time() - st_time
-    logger.info(f"speech_function_classifier model exec time: {total_time:.3f}s")
-    return responses
-
-
 @app.post("/annotation")
-async def annotation(payload: List[AnnotationPayload]):
+async def annotation():
     st_time = time.time()
+    phrases = request.json.get("phrase", [])
+    prev_phrases = request.json.get("prev_phrase", [])
+    prev_speech_funcs = request.json.get("prev_speech_function", [])
     responses = await handler(
         [
-            Payload(
-                phrase=sent_tokenize(p.phrase),
-                prev_phrase=p.prev_phrase,
-                prev_speech_function=p.prev_speech_function,
-            )
-            for p in payload
+            {
+                "phrase": sent_tokenize(phr),
+                "prev_phrase": prev_phr,
+                "prev_speech_function": prev_speech_func
+            }
+            for phr, prev_phr, prev_speech_func in zip(phrases, prev_phrases, prev_speech_funcs)
         ]
     )
     total_time = time.time() - st_time

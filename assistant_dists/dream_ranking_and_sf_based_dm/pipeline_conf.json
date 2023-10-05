@@ -110,7 +110,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotations.speech_function_classifier"
+                    "annotators.speech_function_classifier"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
