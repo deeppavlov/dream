@@ -32,7 +32,7 @@ RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pya
 RUN pip install jinja2==3.0.3 Werkzeug==2.0.3
 
 # ARG AGENT_COMMIT=21825ea7676748372ca4f73e9cb5b930dbef93ec
-RUN pip install https://codeload.github.com/moon-strider/dp-agent/tar.gz/21825ea7676748372ca4f73e9cb5b930dbef93ec
+RUN pip install https://codeload.github.com/moon-strider/dp-agent/tar.gz/b662dba9982af741d5cb7f757f4d8e9888e87857
 RUN cat /usr/local/lib/python3.7/site-packages/deeppavlov_agent/channels/telegram/bot.py
 
 ENV LANG C.UTF-8
