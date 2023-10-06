@@ -182,6 +182,9 @@
                     "candidate_annotators"
                 ],
                 "state_manager_method": "add_bot_utterance",
+                "tags": [
+                    "selector"
+                ],
                 "is_enabled": true,
                 "source": {
                     "component": "components/hE12LfxAkX3K9gU0nU4yE2.yml",

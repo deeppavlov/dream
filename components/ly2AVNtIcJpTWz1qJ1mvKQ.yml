@@ -20,7 +20,8 @@ previous_services:
 - candidate_annotators
 required_previous_services: null
 state_manager_method: add_bot_utterance
-tags: null
+tags:
+- selector
 endpoint: respond
 service: response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector
 date_created: '2023-03-16T09:45:32'

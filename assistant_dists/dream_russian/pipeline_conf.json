@@ -617,6 +617,9 @@
                     "candidate_annotators"
                 ],
                 "state_manager_method": "add_bot_utterance",
+                "tags": [
+                    "selector"
+                ],
                 "is_enabled": true,
                 "source": {
                     "component": "components/SFiPofc4cGq6IRlit38e8A.yml",

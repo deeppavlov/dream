@@ -20,7 +20,8 @@ previous_services:
 - candidate_annotators
 required_previous_services: null
 state_manager_method: add_bot_utterance
-tags: null
+tags:
+- selector
 endpoint: respond
 service: response_selectors/universal_llm_based_response_selector/service_configs/universal-llm-based-response-selector
 date_created: '2023-09-01T09:45:32'

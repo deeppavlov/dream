@@ -19,7 +19,8 @@ previous_services:
 - annotators
 required_previous_services: null
 state_manager_method: add_annotation
-tags: null
+tags:
+- selector
 endpoint: respond
 service: skill_selectors/universal_llm_based_skill_selector/service_configs/universal-llm-based-skill-selector
 date_created: '2023-03-16T09:45:32'
