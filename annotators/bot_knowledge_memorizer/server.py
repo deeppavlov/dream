@@ -35,6 +35,8 @@ if GENERATIVE_SERVICE_CONFIG:
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
 
+SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
+
 BOT_ID = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
@@ -507,7 +509,52 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
     return hypotheses
 
 
-def memorize(graph, utt):
+def relativity_filter(bot_knowledge: List[str], last_utt: List[str]) -> List[str]:
+    THRESHOLD = 0.2
+    requested_data = {"sentence_pairs": list(zip(bot_knowledge, last_utt))}
+    try:
+        res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=120).json()[0]["batch"]
+        res = list(zip(bot_knowledge, res))
+        bot_related_knowledge = []
+        for knowledge, score in res:
+            logger.info(f"knowledge -- {knowledge}")
+            logger.info(f"score -- {score}")
+            if score >= THRESHOLD:
+                bot_related_knowledge.append(knowledge)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        bot_related_knowledge = []
+
+    if bot_related_knowledge:
+        bot_related_knowledge = [".".join(bot_related_knowledge)]
+
+    return bot_related_knowledge
+
+
+def create_kg_prompt(bot_id: str, last_human_utt: str) -> List[str]:
+    bot_triplets = get_knowledge(bot_id)
+    logger.info(f"bot triplets -- {bot_triplets}")
+    if bot_triplets and USE_BOT_KG_DATA:
+        bot_knowledge = convert_triplets_to_natural_language(bot_triplets)
+    else:
+        bot_knowledge = []
+    # logger.info(f"bot knowledge -- {bot_knowledge}")
+    # Generate prompt with related knowledge about bot
+    if bot_knowledge:
+        bot_knowledge = bot_knowledge[0].split(".")[:-1]
+        # logger.info(f"bot_knowledge -- {bot_knowledge}")
+        last_utt_to_compare = [last_human_utt] * len(bot_knowledge)
+        logger.info(f"last_utt_to_compare -- {last_utt_to_compare}")
+        related_knowledge = relativity_filter(bot_knowledge, last_utt_to_compare)
+    else:
+        related_knowledge = []
+    logger.info(f"related knowledge -- {related_knowledge}")
+
+    return related_knowledge
+
+
+def memorize(graph, utt, last_human_utt):
     bot_id = BOT_ID
     bot_external_id = ""
     triplets_added_to_kg_batch = []
@@ -541,14 +588,7 @@ def memorize(graph, utt):
                         f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
                     )
 
-    bot_triplets = get_knowledge(bot_id)
-    logger.info(f"bot triplets -- {bot_triplets}")
-    # bot_triplets = [("Bot", "like general", "football")] # test example
-
-    if bot_triplets and USE_BOT_KG_DATA:
-        prompt = convert_triplets_to_natural_language(bot_triplets)
-    else:
-        prompt = ""
+    related_knowledge = create_kg_prompt(bot_id, last_human_utt)
 
     create_entities(graph, [(bot_external_id, "Bot")], has_name_property=True, entity_ids=[bot_id])
 
@@ -619,24 +659,27 @@ def memorize(graph, utt):
 
     logger.info(
         f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch},"
-        f" kg_prompt -- {prompt}"
+        f" kg_prompt -- {related_knowledge}"
     )
     return [
         {
             "added_to_graph": triplets_added_to_kg_batch,
             "triplets_already_in_graph": triplets_already_in_kg_batch,
-            "kg_prompt": prompt,
+            "kg_prompt": related_knowledge,
         }
     ]
 
 
 def get_result(request, graph):
     uttrs = request.json.get("utterances", [])
+    human_uttrs = request.json.get("human_utterances", [])
     utt = uttrs[0]
+    last_human_utt = human_uttrs[0]["text"]
     if not utt:
-        return [{"added_to_graph": [], "triplets_already_in_graph": [], "kg_prompt": []}]
+        related_knowledge = create_kg_prompt(BOT_ID, last_human_utt)
+        return [{"added_to_graph": [], "triplets_already_in_graph": [], "kg_prompt": related_knowledge}]
     try:
-        result = memorize(graph, utt)
+        result = memorize(graph, utt, last_human_utt)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)

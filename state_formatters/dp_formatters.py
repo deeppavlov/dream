@@ -1308,6 +1308,7 @@ def bot_knowledge_memorizer_formatter_last_bot_dialog(dialog: Dict) -> List[Dict
     return [
         {
             "utterances": [dialog_history],
+            "human_utterances": [dialog["human_utterances"][-1]],
         }
     ]
 
