@@ -155,9 +155,9 @@ def respond():
             if KEEP_ORIGINAL_HYPOTHESIS:
                 selected_responses.append(hypotheses[best_id].pop("text"))
             else:
-                if re.match(r'^".+"$', hypotheses[best_id].get("text")):
+                if re.match(r'^"[\S\s.]+"$', hypotheses[best_id].get("text")):
                     pass
-                elif re.match(r'^".+"$', selected_resp):
+                elif re.match(r'^"[\S\s.]+"$', selected_resp):
                     selected_resp = selected_resp[1:-1]
                 hypotheses[best_id].pop("text")
                 selected_responses.append(selected_resp)
