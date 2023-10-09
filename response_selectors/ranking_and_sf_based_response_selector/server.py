@@ -94,6 +94,7 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
     # ---------------------------------------------------------------------------------------------------------
     # sfc-based scaling
     speech_predictor = last_human_ann_uttr["annotations"].get("speech_function_predictor", [])
+    speech_annotation = last_human_ann_uttr["annotations"].get("speech_function_classifier", [])
     human_named_entities = get_entities(last_human_ann_uttr, only_named=True, with_labels=False)
     human_entities = get_entities(last_human_ann_uttr, only_named=False, with_labels=False)
 
@@ -118,7 +119,7 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
         speech_predictor_hyps = [v["prediction"] for v in speech_predictor]
         speech_predictor_scores = [v["confidence"] for v in speech_predictor]
         try:
-            speech_index = speech_predictor_hyps.index(hyp)
+            speech_index = speech_predictor_hyps.index(speech_annotation)
             scores[hyp_id] += speech_predictor_scores[speech_index]
         except ValueError:
             logger.info(f"Speech function index could not be found from {hyp}, id: {hyp_id}.")
