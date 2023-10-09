@@ -94,7 +94,7 @@ services:
       - "./common:/src/common"
     ports:
       - 9145:8145
-  dff-knowledge-prompted-skill:
+  dff-bot-knowledge-prompted-skill:
     volumes:
       - "./skills/dff_knowledge_prompted_skill:/src"
       - "./common:/src/common"
