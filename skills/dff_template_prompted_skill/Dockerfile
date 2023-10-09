@@ -33,4 +33,4 @@ ENV N_UTTERANCES_CONTEXT ${N_UTTERANCES_CONTEXT}
 ARG ALLOW_PROMPT_RESET=0
 ENV ALLOW_PROMPT_RESET ${ALLOW_PROMPT_RESET}
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout ${GENERATIVE_TIMEOUT:-30}
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout ${GENERATIVE_TIMEOUT:-120}

@@ -29,4 +29,4 @@ RUN pip install -r requirements.txt && \
 COPY skills/dff_universal_prompted_skill/ ./
 COPY ./common/ ./common/
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout ${DEFAULT_LM_SERVICE_TIMEOUT:-120}

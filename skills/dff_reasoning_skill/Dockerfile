@@ -37,4 +37,4 @@ COPY ./skills/dff_weather_skill/tools/ ./tools/
 COPY ./skills/dff_weather_skill/data/ ./data/
 
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT}
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout ${GENERATIVE_TIMEOUT:-120}
