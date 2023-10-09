@@ -126,7 +126,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     if USE_BOT_KG_DATA and bot_kg and (kg_prompt := bot_kg["kg_prompt"]):
         logger.info(f"USE_BOT_KG_DATA - {USE_BOT_KG_DATA}")
         logger.info(f"kg_prompt - {kg_prompt}")
-        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0][0].lower()).split(".")
+        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0].lower()).split(".")
         kg_prompt = ",".join(kg_prompt[:-1])
         prompt = (
             prompt
