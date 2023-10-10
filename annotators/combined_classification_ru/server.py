@@ -9,6 +9,19 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 from common.combined_classes import combined_classes
 
+
+supported_tasks = [
+    "emotion_classification",
+    "sentiment_classification",
+    "toxic_classification",
+    "factoid_classification",
+    "midas_classification",
+    "topics_ru",
+]
+
+combined_classes = {task: combined_classes[task] for task in combined_classes if task in supported_tasks}
+combined_classes["toxic_classification"] = ["not_toxic", "toxic"]  # As Russian toxic supports only TWO classes
+
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
@@ -22,22 +35,17 @@ def get_result(sentences, sentences_with_history, postannotations=False):
     if not sentences:
         logger.exception("Input sentences not received")
         sentences = [" "]
-    if not sentences_with_history:
-        logger.exception("Input sentences with history not received")
-        sentences_with_history = sentences
+    # if not sentences_with_history:
+    #    logger.exception("Input sentences with history not received")
+    #    sentences_with_history = sentences
     data = [sentences for _ in range(len(combined_classes))]
     try:
         prob_lists = model(*data)
         for task_name, prob_list in zip(combined_classes, prob_lists):
             for i in range(len(prob_list)):
-                if prob_list[i] is not None and len(prob_list[i]):
-                    is_toxic = "toxic" in task_name and prob_list[i][-1] < 0.5
-                    if is_toxic:  # sum of probs of all toxic classes >0.5
-                        prob_list[i][-1] = 0
-                        prob_list[i] = [k / sum(prob_list[i]) for k in prob_list[i]]
-                    ans[i][task_name] = {
-                        class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
-                    }
+                ans[i][task_name] = {
+                    class_: round(float(prob), 2) for class_, prob in zip(combined_classes[task_name], prob_list[i])
+                }
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -46,7 +54,7 @@ def get_result(sentences, sentences_with_history, postannotations=False):
 
 
 try:
-    model = build_model("combined_classifier.json", download=True)
+    model = build_model("combined_classifier_ru.json", download=True)
     logger.info("Making test res")
     test_res = get_result(["a"], ["a"])
     logger.info("model loaded, test query processed")
