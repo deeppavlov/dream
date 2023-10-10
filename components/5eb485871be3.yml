@@ -20,6 +20,6 @@ previous_services:
 required_previous_services: null
 state_manager_method: add_hypothesis_annotation_batch
 tags: null
-endpoint: model
+endpoint: batch_model
 service: annotators/combined_classification_ru/service_configs/combined-classification-ru
 date_created: '2023-03-16T09:45:32'
