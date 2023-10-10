@@ -28,6 +28,7 @@ with open("abstract_rels.txt", "r") as file:
 USE_KG_DATA = int(os.getenv("USE_KG_DATA", 0))
 GENERATIVE_SERVICE_URL = os.getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")
+GENERATIVE_SERVICE_TIMEOUT = float(os.getenv("GENERATIVE_SERVICE_TIMEOUT", 5))
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
@@ -36,6 +37,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
 
 SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
+SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
+THRESHOLD = 0.5
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
@@ -497,7 +500,7 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
                 "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
                 "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
             },
-            timeout=120,
+            timeout=GENERATIVE_SERVICE_TIMEOUT,
         )
         hypotheses = response.json()[0]
     except Exception as e:
@@ -509,10 +512,11 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
 
 
 def relativity_filter(user_knowledge: List[str], last_utt: List[str]) -> List[str]:
-    THRESHOLD = 0.5
     requested_data = {"sentence_pairs": list(zip(user_knowledge, last_utt))}
     try:
-        res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=120).json()[0]["batch"]
+        res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=SENTENCE_RANKER_TIMEOUT).json()[0][
+            "batch"
+        ]
         res = list(zip(user_knowledge, res))
         user_related_knowledge = []
         for knowledge, score in res:

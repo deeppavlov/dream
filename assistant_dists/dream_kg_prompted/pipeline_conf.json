@@ -242,6 +242,7 @@
             "property_extraction": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1.0,
                     "url": "http://property-extraction:8131/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:property_extraction_formatter_dialog",
@@ -260,6 +261,7 @@
             "custom_entity_linking": {
                 "connector": {
                     "protocol": "http",
+                    "timeout": 1.0,
                     "url": "http://custom-entity-linking:8153/model"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:custom_el_formatter_dialog",
@@ -374,7 +376,7 @@
             "dff_knowledge_prompted_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 120,
+                    "timeout": 120.0,
                     "url": "http://dff-knowledge-prompted-skill:8050/respond"
                 },
                 "dialog_formatter": {
