@@ -541,6 +541,7 @@ def memorize(graph, uttrs):
 
     triplets_added_to_kg_batch = []
     triplets_already_in_kg_batch = []
+    related_knowledge = []
     for utt in uttrs:
         last_utt = utt["text"]
         logger.info(f"last_utt --  {last_utt}")
