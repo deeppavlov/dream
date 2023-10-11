@@ -38,7 +38,7 @@ except Exception as e:
     raise e
 
 
-async def handler(payload: List[str]):
+def handler(payload: List[str]):
     responses = [{}] * len(payload)
     try:
         responses = [predict(speech_function) for speech_function in payload]
@@ -49,19 +49,19 @@ async def handler(payload: List[str]):
 
 
 @app.route("/model", methods=["POST"])
-async def answer(payload: List[str]):
+def answer(payload: List[str]):
     st_time = time.time()
-    responses = await handler(payload)
+    responses = handler(payload)
     total_time = time.time() - st_time
     logger.info(f"speech_function_predictor model exec time: {total_time:.3f}s")
     return responses
 
 
 @app.route("/annotation", methods=["POST"])
-async def annotation():
+def annotation():
     st_time = time.time()
     payload = request.json.get("funcs", [])
-    responses = await handler(payload)
+    responses = handler(payload)
     total_time = time.time() - st_time
     logger.info(f"speech_function_predictor batch exec time: {total_time:.3f}s")
     return [{"batch": responses}]
