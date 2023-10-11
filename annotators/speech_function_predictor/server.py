@@ -4,8 +4,7 @@ import os
 import time
 
 import sentry_sdk
-from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
+from flask import Flask, request, jsonify
 
 from model import init_model
 
@@ -14,14 +13,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = Flask(__name__)
 
 
 class_dict, counters, label_to_name = init_model()
@@ -56,7 +48,7 @@ async def handler(payload: List[str]):
     return responses
 
 
-@app.post("/model")
+@app.route("/model", methods=["POST"])
 async def answer(payload: List[str]):
     st_time = time.time()
     responses = await handler(payload)
@@ -65,9 +57,10 @@ async def answer(payload: List[str]):
     return responses
 
 
-@app.post("/annotation")
-async def annotation(payload: List[str]):
+@app.route("/annotation", methods=["POST"])
+async def annotation():
     st_time = time.time()
+    payload = request.json.get("funcs", [])
     responses = await handler(payload)
     total_time = time.time() - st_time
     logger.info(f"speech_function_predictor batch exec time: {total_time:.3f}s")

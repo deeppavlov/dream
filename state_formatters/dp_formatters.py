@@ -1177,7 +1177,7 @@ def speech_function_annotation(dialog: Dict):
 
 
 def speech_function_predictor_formatter(dialog: Dict):
-    return [dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])]
+    return [{"funcs": dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])}]
 
 
 def speech_function_hypotheses_predictor_formatter(dialog: Dict):
