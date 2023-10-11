@@ -107,7 +107,7 @@
                     "timeout": 5.0,
                     "url": "http://speech-function-predictor:8107/annotation"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:speech_function_predictor_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.speech_function_classifier"
