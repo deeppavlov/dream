@@ -1,5 +1,5 @@
 name: dff_journalist_helper_ru_prompted_skill
-display_name: Помощник Журналиста (Навык)
+display_name: Помощник Журналиста
 component_type: Generative
 model_type: NN-based
 is_customizable: true

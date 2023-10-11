@@ -1,5 +1,5 @@
 name: dff_casual_email_prompted_skill
-display_name: Causal Emails Skill
+display_name: Casual Emails Skill
 component_type: Generative
 model_type: NN-based
 is_customizable: true
