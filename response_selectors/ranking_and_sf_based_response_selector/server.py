@@ -93,8 +93,11 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
 
     # ---------------------------------------------------------------------------------------------------------
     # sfc-based scaling
-    speech_predictor = last_human_ann_uttr["annotations"].get("speech_function_predictor", [])
-    speech_annotation = last_human_ann_uttr["annotations"].get("speech_function_classifier", [])
+    try:
+        speech_predictor = last_human_ann_uttr["annotations"].get("speech_function_predictor", [])["batch"][0]
+        speech_annotation = last_human_ann_uttr["annotations"].get("speech_function_classifier", [])["batch"][0][0]
+    except Exception as e:
+        logger.error(f"speech functions failed: {e}")
     human_named_entities = get_entities(last_human_ann_uttr, only_named=True, with_labels=False)
     human_entities = get_entities(last_human_ann_uttr, only_named=False, with_labels=False)
 
@@ -116,8 +119,12 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
         _same_entities = len(get_common_tokens_in_lists_of_strings(hyp_entities, human_entities)) > 0
         _hyp_wants_to_chat_about_topic = if_chat_about_particular_topic(hyp) and "about it" not in hyp["text"].lower()
 
-        speech_predictor_hyps = [v["prediction"] for v in speech_predictor]
-        speech_predictor_scores = [v["confidence"] for v in speech_predictor]
+        try:
+            speech_predictor_hyps = [v["prediction"] for v in speech_predictor]
+            speech_predictor_scores = [v["confidence"] for v in speech_predictor]
+        except TypeError:
+            logger.error(f"Warning! The speech_predictor_classifier data is either empty or corrupt.")
+            return
         try:
             speech_index = speech_predictor_hyps.index(speech_annotation)
             scores[hyp_id] += speech_predictor_scores[speech_index]

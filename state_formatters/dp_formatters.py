@@ -1177,7 +1177,13 @@ def speech_function_annotation(dialog: Dict):
 
 
 def speech_function_predictor_formatter(dialog: Dict):
-    return [{"funcs": dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])}]
+    res = None
+    try:
+        res = dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])
+        res = res["batch"][0][0]
+    except Exception as e:
+        logger.error(f"Failed to format sfc output: {e}")
+    return [{"funcs": res}]
 
 
 def speech_function_hypotheses_predictor_formatter(dialog: Dict):
