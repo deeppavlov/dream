@@ -31,8 +31,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/BaSKxZCuhKjw.yml",
-                "service": "services/agent_services/service_configs/dff_knowledge_prompted_skill"
+                "component": "components/R8Ukzv8Gtlrv.yml",
+                "service": "services/agent_services/service_configs/dream_bot_kg_prompted"
             }
         },
         "timeout_service": {
@@ -59,8 +59,8 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/BaSKxZCuhKjw.yml",
-                "service": "services/agent_services/service_configs/dff_knowledge_prompted_skill"
+                "component": "components/R8Ukzv8Gtlrv.yml",
+                "service": "services/agent_services/service_configs/dream_bot_kg_prompted"
             }
         },
         "response_annotator_selectors": {
@@ -339,8 +339,8 @@
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YP8HHyQ2sOUE.yml",
-                    "service": "annotators/prompt_selector/service_configs/dff_knowledge_prompted_skill"
+                    "component": "components/YzRk6PoR5qnX.yml",
+                    "service": "annotators/prompt_selector/service_configs/dream_bot_kg_prompted"
                 }
             },
             "prompt_selector": {
@@ -358,7 +358,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/YP8HHyQ2sOUE.yml",
-                    "service": "annotators/prompt_selector/service_configs/dff_knowledge_prompted_skill"
+                    "service": "annotators/prompt_selector/service_configs/dream_bot_kg_prompted"
                 }
             }
         },
@@ -403,7 +403,7 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/JFUD8JiweWNIFGPtY562.yml",
+                    "component": "components/i0cdXc7vyhkjHLdpFzE4.yml",
                     "service": "skills/dff_knowledge_prompted_skill/service_configs/dff-bot-knowledge-prompted-skill"
                 }
             },

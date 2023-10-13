@@ -1,5 +1,5 @@
 SERVICE_PORT: 8135
 SERVICE_NAME: prompt_selector
 N_SENTENCES_TO_RETURN: 3
-PROMPTS_TO_CONSIDER: dream_persona
+PROMPTS_TO_CONSIDER: bot_knowledge
 FLASK_APP: server

@@ -2,10 +2,10 @@ name: agent
 endpoints:
 - respond
 compose:
-  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg_prompted/pipeline_conf.json'
+  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_bot_kg_prompted/pipeline_conf.json'
   environment:
     WAIT_HOSTS: ''
-    WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+    WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
     HIGH_PRIORITY_INTENTS: 1
     RESTRICTION_FOR_SENSITIVE_CASE: 1
     ALWAYS_TURN_ON_ALL_SKILLS: 0
