@@ -20,5 +20,5 @@ required_previous_services: null
 state_manager_method: add_annotation
 tags: null
 endpoint: respond
-service: annotators/prompt_selector/service_configs/dff_knowledge_prompted_skill
+service: annotators/prompt_selector/service_configs/dream_kg_prompted
 date_created: '2023-07-05T09:45:32'

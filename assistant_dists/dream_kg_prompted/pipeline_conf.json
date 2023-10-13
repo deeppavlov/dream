@@ -329,7 +329,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/YP8HHyQ2sOUE.yml",
-                    "service": "annotators/prompt_selector/service_configs/dff_knowledge_prompted_skill"
+                    "service": "annotators/prompt_selector/service_configs/dream_kg_prompted"
                 }
             },
             "prompt_selector": {
@@ -347,7 +347,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/YP8HHyQ2sOUE.yml",
-                    "service": "annotators/prompt_selector/service_configs/dff_knowledge_prompted_skill"
+                    "service": "annotators/prompt_selector/service_configs/dream_kg_prompted"
                 }
             }
         },
@@ -367,7 +367,7 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "component": "components/dfsw4bji8bgjq2.yml",
                     "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
                 }
             }
