@@ -243,7 +243,7 @@ services:
         TERMINUSDB_SERVER_PASSWORD: root
         TERMINUSDB_SERVER_TEAM: admin
         TERMINUSDB_SERVER_DB: user_knowledge_db
-        CONFIG: config.json
+        USER_KM_SERVICE_CONFIG: index_load_path.json
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
     command: flask run -h 0.0.0.0 -p 8027
