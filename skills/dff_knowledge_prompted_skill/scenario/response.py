@@ -124,10 +124,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     logger.info(f"bot_kg: {bot_kg}")
 
     if USE_BOT_KG_DATA and bot_kg and (kg_prompt := bot_kg["kg_prompt"]):
-        logger.info(f"USE_BOT_KG_DATA - {USE_BOT_KG_DATA}")
         logger.info(f"kg_prompt - {kg_prompt}")
-        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0].lower()).split(".")
-        kg_prompt = ",".join(kg_prompt[:-1])
+        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0]).split(".")
+        kg_prompt = ".".join(kg_prompt)
         prompt = (
             prompt
             + f" {kg_prompt}. INSTRUCTION: Now respond to a user. Be concise, but engaging. Answer in 1, 2 or 3 sentences."

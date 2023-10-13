@@ -475,7 +475,7 @@ def get_knowledge(bot_id):
     for entity in entity_values:
         for rel, id in relationship_entity_id_pair:
             if entity["@id"] == id:
-                bot_triplets.extend([("Bot", rel, entity.get("substr", entity.get("Name")))])
+                bot_triplets.extend([("I", rel, entity.get("substr", entity.get("Name")))])
 
     return bot_triplets
 
