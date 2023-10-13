@@ -236,17 +236,16 @@ def prepare_triplets(entities_in_index: dict, triplets: list, bot_id: str) -> Li
     Where value is got from triplets and entity_id is got from entities_in_index.
     """
     prepared_triplets = []
-    new_entities_in_index = {}
     for (entity_substr, _), entity_id in entities_in_index.items():
-        new_entities_in_index[entity_substr] = entity_id
-    for triplet in triplets:
-        prepared_triplets.append(
-            {
-                "subject": bot_id,
-                "relationship": triplet["relation"],
-                "object": new_entities_in_index.get(triplet["object"]),
-            }
-        )
+        for triplet in triplets:
+            if entity_substr == triplet["object"]:
+                prepared_triplets.append(
+                    {
+                        "subject": bot_id,
+                        "relationship": triplet["relation"],
+                        "object": entity_id,
+                    }
+                )
     return prepared_triplets
 
 
