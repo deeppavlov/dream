@@ -18,7 +18,8 @@ RUN apt-get update && \
 ENV TFHUB_CACHE_DIR tfhub_cache_dir
 
 COPY tests/requirements.txt .
-RUN pip install -r requirements.txt && \
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt && \
     python -c "import nltk; nltk.download('punkt')"
 
 COPY . .
