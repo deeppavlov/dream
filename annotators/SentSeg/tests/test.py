@@ -2,6 +2,8 @@ import allure
 import pytest
 import requests
 
+from typing import Dict, List
+
 
 @allure.description("""Base response test""")
 def test_response(url):
@@ -29,7 +31,7 @@ def test_response_wrong_structure(url: str):
         ({"sentences": [""]}, ""),
     ],
 )
-def test_sentseg_punctuation(url: str, sentences: dict, gold: str):
+def test_sentseg_punctuation(url: str, sentences: Dict, gold: str):
     response = requests.post(url, json=sentences)
     data = response.json()
     assert response.status_code == 200
@@ -45,7 +47,7 @@ def test_sentseg_punctuation(url: str, sentences: dict, gold: str):
         ({"sentences": ["Hello. How are you? I am fine!"]}, ["Hello.", "How are you?", "I am fine!"]),
     ],
 )
-def test_sentseg_split(url: str, sentences: dict, gold: list[str]):
+def test_sentseg_split(url: str, sentences: Dict, gold: List[str]):
     response = requests.post(url, json=sentences)
     data = response.json()
     assert response.status_code == 200
@@ -72,7 +74,7 @@ def test_sentseg_split(url: str, sentences: dict, gold: list[str]):
         ({"sentences": ["I wan na play."]}, "I want to play."),
     ],
 )
-def test_sentseg_preprocessing(url: str, sentences: dict, gold: str):
+def test_sentseg_preprocessing(url: str, sentences: Dict, gold: str):
     response = requests.post(url, json=sentences)
     data = response.json()
     assert response.status_code == 200
