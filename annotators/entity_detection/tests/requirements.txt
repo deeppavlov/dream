@@ -4,4 +4,4 @@ gunicorn==19.9.0
 sentry-sdk==0.12.3
 pyopenssl==23.0.0
 pytest==7.4.2
-allure==2.24.0
+allure-pytest==2.13.2

@@ -8,4 +8,4 @@ transformers==4.6.0
 datasets==1.11.0
 huggingface-hub==0.0.8
 pytest==7.4.2
-allure==2.24.0
+allure-pytest==2.13.2
