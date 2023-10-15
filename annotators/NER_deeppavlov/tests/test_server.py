@@ -1,7 +1,9 @@
+import allure
 import pytest
 import requests
 
 
+@allure.description("""Test NER""")
 @pytest.mark.parametrize(
     "request_data, gold_results",
     [
@@ -49,11 +51,6 @@ import requests
         )
     ],
 )
-def main(url: str, request_data: dict, gold_results: list):
+def test_ner(url: str, request_data: dict, gold_results: list):
     result = requests.post(url, json=request_data).json()
-    assert result == gold_results, print(result)
-    print("Success")
-
-
-if __name__ == "__main__":
-    main()
+    assert result == gold_results

@@ -255,7 +255,7 @@ services:
         LANGUAGE: RU
         FAST: 1
       context: ./
-      dockerfile: annotators/wiki_parser/Dockerfile
+      dockerfile: annotators/wiki_parser/Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8077
     environment:
       - CUDA_VISIBLE_DEVICES=''
