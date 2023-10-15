@@ -8,30 +8,11 @@ import pytest
 language = os.getenv("LANGUAGE", "EN")
 
 
-@allure.description("""Base text_qa answer test""")
+@allure.description("""Test text-qa with questions in English""")
+@pytest.mark.skipif(language="RU", reason="no need to test russian questions")
 @pytest.mark.parametrize(
-    "request_data, gold_results",
+    "request_data, gold_result",
     [
-        (
-            {
-                "RU": [
-                    {
-                        "question_raw": ["Где живут кенгуру?"],
-                        "top_facts": [["Кенгуру являются коренными обитателями Австралии."]],
-                    },
-                    {
-                        "question_raw": ["Кто придумал сверточную сеть?"],
-                        "top_facts": [
-                            [
-                                "Свёрточная нейронная сеть - архитектура искусственных нейронных сетей, "
-                                "предложенная Яном Лекуном в 1988 году."
-                            ]
-                        ],
-                    },
-                ],
-            },
-            {"RU": ["Австралии", "Яном Лекуном"]},
-        ),
         (
             {
                 "EN": [
@@ -60,14 +41,40 @@ language = os.getenv("LANGUAGE", "EN")
         ),
     ],
 )
-def test_text_qa(url: str, request_data, gold_results):
-    count = 0
-    for data, gold_ans in zip(request_data[language], gold_results[language]):
-        result = requests.post(url, json=data).json()
-        res_ans = result[0][0]
-        if res_ans == gold_ans:
-            count += 1
-        else:
-            print(f"Got {result}, but expected: {gold_ans}")
+def test_text_qa(url: str, request_data, gold_result):
+    result = requests.post(url, json=request_data[language]).json()
+    res_ans = result[0][0]
+    assert res_ans == gold_result
 
-    assert count == len(request_data)
+
+@allure.description("""Test text-qa with questions in Russian""")
+@pytest.mark.skipif(language="EN", reason="no need to test english questions")
+@pytest.mark.parametrize(
+    "request_data, gold_result",
+    [
+        (
+            {
+                "RU": [
+                    {
+                        "question_raw": ["Где живут кенгуру?"],
+                        "top_facts": [["Кенгуру являются коренными обитателями Австралии."]],
+                    },
+                    {
+                        "question_raw": ["Кто придумал сверточную сеть?"],
+                        "top_facts": [
+                            [
+                                "Свёрточная нейронная сеть - архитектура искусственных нейронных сетей, "
+                                "предложенная Яном Лекуном в 1988 году."
+                            ]
+                        ],
+                    },
+                ],
+            },
+            {"RU": ["Австралии", "Яном Лекуном"]},
+        ),
+    ],
+)
+def test_text_qa_ru(url: str, request_data, gold_result):
+    result = requests.post(url, json=request_data[language]).json()
+    res_ans = result[0][0]
+    assert res_ans == gold_result
