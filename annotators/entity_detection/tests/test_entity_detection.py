@@ -2,6 +2,8 @@ import allure
 import pytest
 import requests
 
+from typing import Dict, List
+
 
 @allure.description("""Test entities detection and labeling""")
 @pytest.mark.parametrize(
@@ -47,7 +49,7 @@ import requests
         ),
     ],
 )
-def test_entity_detection(url: str, request_data: dict[str, list], gold_results: list[dict]):
+def test_entity_detection(url: str, request_data: Dict[str, list], gold_results: List[Dict]):
     response = requests.post(url, json=request_data)
     result = response.json()
     assert response.status_code == 200

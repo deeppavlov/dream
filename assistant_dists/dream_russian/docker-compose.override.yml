@@ -432,7 +432,7 @@ services:
         SERVICE_NAME: text_qa
         CONFIG: qa_rus.json
       context: services/text_qa
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8078
     environment:
       - CUDA_VISIBLE_DEVICES=0
