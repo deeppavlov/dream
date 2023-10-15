@@ -17,7 +17,7 @@ services:
     env_file: [ .env ]
     build:
       context: ./annotators/SentSeg/
-      dockerfile: ./annotators/SentSeg/Dockerfile-test
+      dockerfile: Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8011
     environment:
       - FLASK_APP=server
