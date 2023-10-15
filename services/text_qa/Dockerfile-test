@@ -9,8 +9,8 @@ ARG SED_ARG=" | "
 ENV CONFIG=$CONFIG
 ENV SERVICE_PORT=$SERVICE_PORT
 
-COPY ./tests/requirements.txt /src/requirements.txt
 COPY . /src
+COPY ./tests/requirements.txt /src/requirements.txt
 WORKDIR /src
 
 RUN pip freeze | grep deeppavlov && \
