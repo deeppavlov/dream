@@ -192,7 +192,7 @@ services:
         SRC_DIR: annotators/entity_detection_rus
         LANGUAGE: RU
       context: ./
-      dockerfile: annotators/entity_detection_rus/Dockerfile
+      dockerfile: annotators/entity_detection_rus/Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8103
     environment:
       - FLASK_APP=server
@@ -413,7 +413,7 @@ services:
         SERVICE_PORT: 8110
         SRC_DIR: annotators/fact_retrieval_rus
       context: ./
-      dockerfile: annotators/fact_retrieval_rus/Dockerfile
+      dockerfile: annotators/fact_retrieval_rus/Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8110
     environment:
       - CUDA_VISIBLE_DEVICES=0
