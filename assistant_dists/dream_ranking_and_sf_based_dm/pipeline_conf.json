@@ -89,7 +89,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
-                    "url": "http://speech-function-classifier:8108/annotation"
+                    "url": "http://speech-function-classifier:8108/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -105,7 +105,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
-                    "url": "http://speech-function-predictor:8107/annotation"
+                    "url": "http://speech-function-predictor:8107/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_predictor_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -380,7 +380,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 5.0,
-                    "url": "http://speech-function-classifier:8108/annotation"
+                    "url": "http://speech-function-classifier:8108/respond_batch"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:speech_function_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

@@ -46,7 +46,28 @@ def handler(payload: List[Dict]):
     return responses
 
 
-@app.route("/annotation", methods=["POST"])
+@app.route("/respond", methods=["POST"])  # annotation
+def answer():
+    st_time = time.time()
+    phrases = request.json.get("phrase", [])
+    prev_phrases = [request.json.get("prev_phrase", [])]
+    prev_speech_funcs = [request.json.get("prev_speech_function", [])]
+    payloads = []
+    for phr, prev_phr, prev_speech_func in zip_longest(phrases, prev_phrases, prev_speech_funcs):
+        payloads.append(
+            {
+                "phrase": sent_tokenize(phr),
+                "prev_phrase": prev_phr,
+                "prev_speech_function": prev_speech_func
+            }
+        )
+    responses = handler(payloads)
+    total_time = time.time() - st_time
+    logger.info(f"speech_function_classifier model exec time: {total_time:.3f}s")
+    return jsonify(responses)
+
+
+@app.route("/respond_batch", methods=["POST"])  # candidate annotator
 def annotation():
     st_time = time.time()
     phrases = request.json.get("phrase", [])
@@ -60,7 +81,7 @@ def annotation():
                 "prev_phrase": prev_phr,
                 "prev_speech_function": prev_speech_func
             }
-    )
+        )
     responses = handler(payloads)
     total_time = time.time() - st_time
     logger.info(f"speech_function_classifier batch exec time: {total_time:.3f}s")

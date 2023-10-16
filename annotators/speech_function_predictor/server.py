@@ -48,16 +48,17 @@ def handler(payload: List[str]):
     return responses
 
 
-@app.route("/model", methods=["POST"])
-def answer(payload: List[str]):
+@app.route("/respond", methods=["POST"])
+def answer():
     st_time = time.time()
+    payload = request.json.get("funcs", [])
     responses = handler(payload)
     total_time = time.time() - st_time
     logger.info(f"speech_function_predictor model exec time: {total_time:.3f}s")
-    return responses
+    return jsonify(responses)
 
 
-@app.route("/annotation", methods=["POST"])
+@app.route("/respond_batch", methods=["POST"])  # /annotation & /model -> /respond_batch & /respond
 def annotation():
     st_time = time.time()
     payload = request.json.get("funcs", [])
