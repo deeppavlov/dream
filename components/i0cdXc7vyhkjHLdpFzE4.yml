@@ -13,7 +13,7 @@ group: skills
 connector:
   protocol: http
   timeout: 120.0
-  url: http://dff-bot-knowledge-prompted-skill:8137/respond
+  url: http://dff-bot-knowledge-prompted-skill:8051/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
   skill_name: dff_bot_knowledge_prompted_skill

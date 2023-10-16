@@ -29,7 +29,7 @@
 8025
 8026
 8027    user-knowledge-memorizer
-8028
+8028    bot-knowledge-memorizer
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
 8031	asr
@@ -52,7 +52,7 @@
 8048
 8049	emotion-skill
 8050
-8051
+8051    dff-bot-knowledge-prompted-skill
 8052	dummy-skill-dialog
 8053	comet-atomic
 8054	meta-script-skill

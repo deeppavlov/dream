@@ -234,7 +234,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 10.0,
-                    "url": "http://bot-knowledge-memorizer:8027/respond"
+                    "url": "http://bot-knowledge-memorizer:8028/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:bot_knowledge_memorizer_formatter_last_bot_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -388,7 +388,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 120.0,
-                    "url": "http://dff-bot-knowledge-prompted-skill:8137/respond"
+                    "url": "http://dff-bot-knowledge-prompted-skill:8051/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
