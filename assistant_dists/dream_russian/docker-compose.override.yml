@@ -93,6 +93,7 @@ services:
       args:
         CONFIG: sentseg_ru_bert_torch.json
       context: ./annotators/sentseg_ru
+      dockerfile: Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8011
     environment:
       - CUDA_VISIBLE_DEVICES=0
