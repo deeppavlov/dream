@@ -3,8 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_sfc/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, scripts-priority-selector:8009, personality-catcher:8010, ranking-and-sf-based-response-selector:8081,
-          intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
+          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, scripts-priority-selector:8009, personality-catcher:8010, intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
           sentrewrite:8017, ner:8021, dff-program-y-dangerous:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
           eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
@@ -46,31 +45,6 @@ services:
           memory: 2G
         reservations:
           memory: 2G
-
-  ranking-based-response-selector:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8081
-        SERVICE_NAME: response_selector
-        LANGUAGE: EN
-        SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
-        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
-        SENTENCE_RANKER_TIMEOUT: 3
-        N_UTTERANCES_CONTEXT: 5
-        FILTER_TOXIC_OR_BADLISTED: 1
-        FALLBACK_FILE: fallbacks_dream_en.json
-      context: .
-      dockerfile: ./response_selectors/ranking_and_sf_based_response_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8081
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
 
   spacy-nounphrases:
     env_file: [ .env ]

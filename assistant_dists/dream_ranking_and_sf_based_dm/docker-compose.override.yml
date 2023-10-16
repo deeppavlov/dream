@@ -9,8 +9,6 @@ services:
           entity-detection:8103, speech-function-classifier:8108, sentence-ranker:8128,
           property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
           openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059, speech-function-predictor:8107"
-
-
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1

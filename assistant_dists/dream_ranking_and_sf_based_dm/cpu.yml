@@ -25,3 +25,6 @@ services:
   intent-catcher:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  speech-function-classifier:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""

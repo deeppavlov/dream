@@ -1512,9 +1512,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://ranking-and-sf-based-response-selector:8081/respond"
+                    "url": "http://scripts-priority-selector:8009/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
@@ -1522,8 +1522,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ksDjnfoiwur902hriwnefkwfi2.yml",
-                    "service": "response_selectors/ranking_and_sf_based_response_selector/service_configs/ranking-and-sf-based-response-selector"
+                    "component": "components/3vsfbB89yVpQm5OVW0YcvQ.yml",
+                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/scripts-priority-selector"
                 }
             }
         }

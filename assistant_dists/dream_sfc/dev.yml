@@ -400,10 +400,4 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8107:8107
-  ranking-based-response-selector:
-    volumes:
-      - "./response_selectors/ranking_and_sf_based_response_selector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8081:8081
 version: "3.7"
