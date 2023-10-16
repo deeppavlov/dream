@@ -42,6 +42,7 @@ def handler(payload: List[str]):
     responses = [{}] * len(payload)
     try:
         responses = [predict(speech_function) for speech_function in payload]
+        logger.info(f"PREDICTED SCORE FOR SPEECH FUNC: {responses}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
