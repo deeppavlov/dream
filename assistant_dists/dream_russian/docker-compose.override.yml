@@ -7,8 +7,8 @@ services:
           ner-ru:8021, personal-info-ru-skill:8030, sentseg-ru:8011,
           spelling-preprocessing-ru:8074, entity-linking-ru:8075, wiki-parser-ru:8077, dff-generative-ru-skill:8092,
           dff-friendship-ru-skill:8086, entity-detection-ru:8103, dialogpt-ru:8125,
-          dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122, toxic-classification-ru:8118,
-          fact-retrieval-ru:8110, text-qa-ru:8078, summarization-annotator:8058, rut5-summarizer:8060"
+          dff-template-skill:8120, spacy-annotator-ru:8129, dialogrpt-ru:8122,
+          fact-retrieval-ru:8110, text-qa-ru:8078, summarization-annotator:8058, rut5-summarizer:8060, combined-classification-ru:8198"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -141,25 +141,24 @@ services:
         reservations:
           memory: 128M
 
-  toxic-classification-ru:
+  combined-classification-ru:
     env_file: [ .env_ru ]
     build:
-      context: ./annotators/toxic_classification_ru/
       args:
-        SERVICE_PORT: 8118
-        PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
-        LANGUAGE: RU
-    command: flask run -h 0.0.0.0 -p 8118
+        SERVICE_PORT: 8198
+        SERVICE_NAME: combined_classification_ru
+        CONFIG: combined_classifier_ru.json
+      context: .
+      dockerfile: ./annotators/combined_classification_ru/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8198 --timeout 600
     environment:
       - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
     deploy:
       resources:
         limits:
-          memory: 3G
+          memory: 2G
         reservations:
-          memory: 3G
-
+          memory: 2G
   ner-ru:
     env_file: [ .env_ru ]
     build:

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 import logging
 from os import getenv
@@ -6,6 +8,12 @@ from random import choice
 
 from common.custom_requests import request_triples_wikidata
 from common.factoid import FACTOID_THRESHOLD
+from common.combined_classes import combined_classes, TOPIC_GROUPS
+from common.join_pattern import *
+
+from common import food, books, music, news, travel
+from common import art, science, movies, animals, gaming, sport, gossip
+
 import sentry_sdk
 
 logger = logging.getLogger(__name__)
@@ -109,144 +117,6 @@ high_priority_intents = {
 
 low_priority_intents = {"dont_understand", "what_time", "choose_topic"}
 
-combined_classes = {  # ORDER MATTERS!!!! DO NOT CHANGE IT!!!!
-    "emotion_classification": ["anger", "fear", "joy", "disgust", "sadness", "surprise", "neutral"],
-    "sentiment_classification": ["positive", "neutral", "negative"],
-    "toxic_classification": [
-        "identity_hate",
-        "insult",
-        "obscene",
-        "severe_toxic",
-        "sexual_explicit",
-        "threat",
-        "toxic",
-        "not_toxic",
-    ],
-    "factoid_classification": ["is_factoid", "is_conversational"],
-    "midas_classification": [
-        "open_question_factual",
-        "open_question_opinion",
-        "open_question_personal",
-        "yes_no_question",
-        "clarifying_question",
-        "command",
-        "dev_command",
-        "appreciation",
-        "opinion",
-        "complaint",
-        "comment",
-        "statement",
-        "other_answers",
-        "pos_answer",
-        "neg_answer",
-    ],
-    "deeppavlov_topics": [
-        "Food",
-        "Books&Literature",
-        "Music",
-        "Gadgets",
-        "Movies&Tv",
-        "Leisure",
-        "Beauty",
-        "Clothes",
-        "Travel",
-        "News",
-        "Art&Hobbies",
-        "Videogames",
-        "Job",
-        "Home&Design",
-        "Depression",
-        "Celebrities&Events",
-        "Politics",
-        "Toys&Games",
-        "Animals&Pets",
-        "PersonalTransport",
-        "Garden",
-        "Family&Relationships",
-        "Health&Medicine",
-        "Religion",
-        "ArtificialIntelligence",
-        "Finance",
-        "Space",
-        "Disasters",
-        "Science&Technology",
-        "Psychology",
-        "MassTransit",
-        "Education",
-        "Sports",
-    ],
-    "cobot_topics": [
-        "Phatic",
-        "Other",
-        "Movies_TV",
-        "Music",
-        "SciTech",
-        "Literature",
-        "Travel_Geo",
-        "Celebrities",
-        "Games",
-        "Pets_Animals",
-        "Sports",
-        "Psychology",
-        "Religion",
-        "Weather_Time",
-        "Food_Drink",
-        "Politics",
-        "Sex_Profanity",
-        "Art_Event",
-        "Math",
-        "News",
-        "Entertainment",
-        "Fashion",
-    ],
-    "cobot_dialogact_topics": [
-        "Other",
-        "Phatic",
-        "Entertainment_Movies",
-        "Entertainment_Books",
-        "Entertainment_General",
-        "Interactive",
-        "Entertainment_Music",
-        "Science_and_Technology",
-        "Sports",
-        "Politics",
-        "Inappropriate_Content",
-    ],
-    "cobot_dialogact_intents": [
-        "Information_DeliveryIntent",
-        "General_ChatIntent",
-        "Information_RequestIntent",
-        "User_InstructionIntent",
-        "InteractiveIntent",
-        "Opinion_ExpressionIntent",
-        "OtherIntent",
-        "ClarificationIntent",
-        "Topic_SwitchIntent",
-        "Opinion_RequestIntent",
-        "Multiple_GoalsIntent",
-    ],
-}
-
-TOPIC_GROUPS = {
-    "food": ["Food", "Food_Drink"],
-    "books": ["Entertainment_Books", "Literature", "Books&Literature"],
-    "music": ["Music", "Entertainment_Music"],
-    "news": ["News"],
-    "politics": ["Politics"],
-    "sports": ["Sports"],
-    "religion": ["Religion"],
-    "movies": ["Entertainment_Movies", "Movies_TV", "Movies&Tv"],
-    "fashion": ["Clothes", "Fashion"],
-    "travel": ["Travel", "Travel_Geo"],
-    "celebrities": ["Celebrities", "Celebrities&Events"],
-    "art": ["Art_Event", "Art&Hobbies"],
-    "science": ["Science_and_Technology", "SciTech"],
-    "entertainment": ["Entertainment", "Entertainment_General"],
-    "games": ["Games", "Toys&Games", "Videogames"],
-    "animals": ["Pets_Animals", "Animals&Pets"],
-}
-
-
 MULTILABEL_TASKS = [
     "emotion_classification",
     "toxic_classification",
@@ -308,18 +178,6 @@ midas_classes = {
 }
 MIDAS_SEMANTIC_LABELS = sum([intent_list for intent_list in midas_classes["semantic_request"].values()], [])
 MIDAS_FUNCTIONAL_LABELS = sum([intent_list for intent_list in midas_classes["functional_request"].values()], [])
-
-
-def join_words_in_or_pattern(words):
-    return r"(" + r"|".join([r"\b%s\b" % word for word in words]) + r")"
-
-
-def join_word_beginnings_in_or_pattern(words):
-    return r"(" + r"|".join([r"\b%s" % word for word in words]) + r")"
-
-
-def join_sentences_in_or_pattern(sents):
-    return r"(" + r"|".join(sents) + r")"
 
 
 def get_skill_outputs_from_dialog(utterances, skill_name, activated=False):
@@ -892,15 +750,20 @@ def get_topics(annotated_utterance, probs=False, default_probs=None, default_lab
         dp_topics_probs, dp_topics_labels = _get_combined_annotations(
             annotated_utterance, model_name="deeppavlov_topics"
         )
+    topics_ru_probs, topics_ru_labels = {}, []
+    if "topics_ru" in annotations:
+        topics_ru_probs, topics_ru_labels = _get_combined_annotations(annotated_utterance, model_name="topics_ru")
     if which == "all":
-        answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels
-        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs}
+        answer_labels = cobot_topics_labels + cobot_da_topics_labels + dp_topics_labels + topics_ru_labels
+        answer_probs = {**cobot_topics_probs, **cobot_da_topics_probs, **dp_topics_probs, **topics_ru_probs}
     elif which == "cobot_topics":
         answer_probs, answer_labels = cobot_topics_probs, cobot_topics_labels
     elif which == "cobot_dialogact_topics":
         answer_probs, answer_labels = cobot_da_topics_probs, cobot_da_topics_labels
     elif which == "deeppavlov_topics":
         answer_probs, answer_labels = dp_topics_probs, dp_topics_labels
+    elif which == "topics_ru":
+        answer_probs, answer_labels = topics_ru_probs, topics_ru_labels
     else:
         logger.exception(f"Unknown input type in get_topics: {which}")
         answer_probs, answer_labels = default_probs, default_labels
@@ -1372,3 +1235,52 @@ def get_comet_conceptnet_annotations(annotated_utterance):
         return annotated_utterance.get("annotations", {}).get("conceptnet", {})
     else:
         return {}
+
+
+class Topic:
+    def __init__(self, topic_group=None, detecting_regexp=None, detecting_function=None):
+        self.topic_group = topic_group
+        self.detecting_regexp = detecting_regexp
+        self.detecting_function = detecting_function
+
+    def detect(self, annotated_utterance, only_one_topic=True, threshold=0.1, which="all"):
+        if only_one_topic:
+            found_topics = get_topics(annotated_utterance, probs=False, which=which)
+        else:
+            found_probs = get_topics(annotated_utterance, probs=True, which=which)
+            found_topics = [key for key in found_probs if found_probs[key] > threshold]
+        if any([target_topic in found_topics for target_topic in self.topic_group]):
+            return True
+        elif self.detecting_regexp is not None:
+            if re.findall(self.detecting_regexp, annotated_utterance["text"]):
+                return True
+        elif self.detecting_function is not None:  # Support for non-regexp methods
+            if self.detecting_function(annotated_utterance):
+                return True
+        return False
+
+
+TOPICS = {
+    "food": Topic(TOPIC_GROUPS["food"], food.FOOD_COMPILED_PATTERN),
+    "books": Topic(TOPIC_GROUPS["books"], books.BOOK_PATTERN),
+    "music": Topic(TOPIC_GROUPS["music"], music.MUSIC_COMPILED_PATTERN),
+    "news": Topic(TOPIC_GROUPS["news"], news.NEWS_COMPILED_PATTERN),
+    "politics": Topic(TOPIC_GROUPS["politics"]),
+    "sports": Topic(TOPIC_GROUPS["sports"], detecting_function=sport.about_sport),
+    "religion": Topic(TOPIC_GROUPS["religion"]),
+    "movies": Topic(TOPIC_GROUPS["movies"], movies.MOVIE_COMPILED_PATTERN),
+    "fashion": Topic(TOPIC_GROUPS["fashion"]),
+    "travel": Topic(TOPIC_GROUPS["travel"], travel.TRAVELLING_TEMPLATE),
+    "celebrities": Topic(TOPIC_GROUPS["celebrities"], gossip.GOSSIP_COMPILED_PATTERN),
+    "art": Topic(TOPIC_GROUPS["art"], art.ART_PATTERN),
+    "science": Topic(TOPIC_GROUPS["science"], science.SCIENCE_COMPILED_PATTERN),
+    "entertainment": Topic(TOPIC_GROUPS["entertainment"]),
+    "games": Topic(TOPIC_GROUPS["games"], gaming.VIDEO_GAME_WORDS_COMPILED_PATTERN),
+    "animals": Topic(TOPIC_GROUPS["animals"], animals.ANIMALS_FIND_TEMPLATE),
+    "sex": Topic(TOPIC_GROUPS["sex"]),
+    "weather": Topic(TOPIC_GROUPS["weather"]),
+}  # The list can be expanded according to the topic list supported
+
+
+def is_about(topic_name, annotated_utterance, **kwargs):
+    return TOPICS[topic_name].detect(annotated_utterance, **kwargs)

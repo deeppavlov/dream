@@ -98,6 +98,9 @@ class RuleBasedSkillSelectorConnector:
             dialog_len = len(dialog["human_utterances"])
             if user_uttr.get("attributes", {}).get("image") is not None:
                 skills_for_uttr.append("dff_image_skill")
+            if any(["image" in user_uttr.get("attributes", {}) for user_uttr in dialog["human_utterances"][-5:]]):
+                skills_for_uttr.append("dff_fromage_image_skill")
+
             exit_cond = "exit" in intent_catcher_intents and (
                 dialog_len == 1 or (dialog_len == 2 and len(user_uttr_text.split()) > 3)
             )

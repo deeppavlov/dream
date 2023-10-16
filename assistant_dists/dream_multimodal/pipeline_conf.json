@@ -58,22 +58,6 @@
             }
         },
         "annotators": {
-            "spelling_preprocessing": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spelling-preprocessing:8074/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
-                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
-                }
-            },
             "sentseg": {
                 "connector": {
                     "protocol": "http",
@@ -82,9 +66,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
@@ -100,9 +82,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
@@ -119,7 +99,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
@@ -129,19 +108,19 @@
                     "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher"
                 }
             },
-            "image_captioning": {
+            "fromage": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 3.0,
-                    "url": "http://image-captioning:8123/respond"
+                    "timeout": 90.0,
+                    "url": "http://fromage:8069/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:image_captioning_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/f2hECzXDTTfljm5mweoMFA.yml",
-                    "service": "services/image_captioning/service_configs/image-captioning"
+                    "component": "components/8iHHdjsnfhewkl.yml",
+                    "service": "services/fromage/service_configs/fromage"
                 }
             }
         },
@@ -314,13 +293,13 @@
                     "service": "services/dialogpt/service_configs/dialogpt"
                 }
             },
-            "dff_image_skill": {
+            "dff_fromage_image_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-image-skill:8124/respond"
+                    "url": "http://dff-fromage-image-skill:8070/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_image_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_fromage_image_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -328,8 +307,8 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/unB9cRBV3MRGqKtrbQDPA.yml",
-                    "service": "skills/dff_image_skill/service_configs/dff-image-skill"
+                    "component": "components/8jfFjmYnbdeH.yml",
+                    "service": "services/dff_fromage_image_skill/service_configs/dff-fromage-image-skill"
                 }
             }
         },
@@ -338,9 +317,9 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://convers-evaluation-selector:8009/respond"
+                    "url": "http://ranking-based-response-selector:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"
@@ -348,8 +327,8 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/ly2AVNtIcJpTWz1qJ1mvKQ.yml",
-                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector"
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
         }

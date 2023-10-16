@@ -1,5 +1,6 @@
 import re
-from common.utils import get_topics, TOPIC_GROUPS
+from common.combined_classes import TOPIC_GROUPS
+from common import utils
 
 
 ##################################################################################################################
@@ -145,7 +146,7 @@ LAST_CHANCE_TEMPLATE = [
 
 
 def about_sport(annotated_utterance):
-    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    found_topics = utils.get_topics(annotated_utterance, probs=False, which="all")
     if any([topic in found_topics for topic in TOPIC_GROUPS["sport"]]):
         return True
     elif re.findall(KIND_OF_SPORTS_TEMPLATE, annotated_utterance["text"]):

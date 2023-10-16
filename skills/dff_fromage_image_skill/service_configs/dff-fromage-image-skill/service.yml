@@ -1,0 +1,24 @@
+name: dff-fromage-image-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8070
+      SERVICE_NAME: dff_fromage_image_skill
+    context: .
+    dockerfile: ./skills/dff_fromage_image_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8070
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./skills/dff_fromage_image_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8070:8070
