@@ -1180,8 +1180,8 @@ def speech_function_predictor_formatter(dialog: Dict):
     res = None
     try:
         res = dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])
-        logger.info(f"formatter log sfp/sfc: {res}")
         res = [item[0] for item in res]
+        logger.info(f"formatter log sfp/sfc: {res}")
     except Exception as e:
         logger.error(f"Failed to format sfc output: {e}")
     return [{"funcs": res}]
