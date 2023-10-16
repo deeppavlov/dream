@@ -54,6 +54,7 @@ def answer():
     payload = request.json.get("funcs", [])
     responses = handler(payload)
     total_time = time.time() - st_time
+    logger.info(f"sfp RESULT: {responses}")
     logger.info(f"speech_function_predictor model exec time: {total_time:.3f}s")
     return jsonify(responses)
 

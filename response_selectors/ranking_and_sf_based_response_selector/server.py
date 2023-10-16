@@ -94,8 +94,8 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
     # ---------------------------------------------------------------------------------------------------------
     # sfc-based scaling
     try:
-        speech_predictor = last_human_ann_uttr["annotations"].get("speech_function_predictor", [])["batch"][0]
-        speech_annotation = last_human_ann_uttr["annotations"].get("speech_function_classifier", [])["batch"][0][0]
+        speech_predictor = last_human_ann_uttr["annotations"].get("speech_function_predictor", [])
+        speech_annotation = last_human_ann_uttr["annotations"].get("speech_function_classifier", [])
     except Exception as e:
         logger.error(f"speech functions failed: {e}")
     human_named_entities = get_entities(last_human_ann_uttr, only_named=True, with_labels=False)
