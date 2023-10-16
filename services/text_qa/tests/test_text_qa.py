@@ -9,7 +9,7 @@ language = os.getenv("LANGUAGE", "EN")
 
 
 @allure.description("""Test text-qa with questions in English""")
-@pytest.mark.skipif(language="RU", reason="no need to test russian questions")
+@pytest.mark.skipif(language == "RU", reason="no need to test russian questions")
 @pytest.mark.parametrize(
     "request_data, gold_result",
     [
@@ -48,7 +48,7 @@ def test_text_qa(url: str, request_data, gold_result):
 
 
 @allure.description("""Test text-qa with questions in Russian""")
-@pytest.mark.skipif(language="EN", reason="no need to test english questions")
+@pytest.mark.skipif(language == "EN", reason="no need to test english questions")
 @pytest.mark.parametrize(
     "request_data, gold_result",
     [

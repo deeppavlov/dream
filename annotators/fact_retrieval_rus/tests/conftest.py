@@ -2,8 +2,8 @@ import pytest
 
 
 def pytest_addoption(parser):
-    parser.addoption("--url", action="store", default="http://0.0.0.0")
-    parser.addoption("--port", action="store", default=8110)
+    parser.addoption("--uri", action="store", default="0.0.0.0")
+    parser.addoption("--port", action="store", default=8130)
     parser.addoption("--handle", action="store", default="model")
 
 
