@@ -117,6 +117,16 @@
                 "dialog_formatter": "state_formatters.dp_formatters:voice_formatter_service",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation"
+            },
+            "whisper_at_service": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 16, 
+                    "url": "http://whiper-at-service:8555/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:whisper_at_formatter_service",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation"
             }
         },
         "skill_selectors": {
@@ -204,7 +214,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2,
-                    "url": "http://dff-whisper-at-skill:8555/respond"
+                    "url": "http://dff-whisper-at-skill:8666/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_whisper_at_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",

@@ -16,9 +16,9 @@ RUN apt install build-essential -y
 RUN apt-get install ffmpeg -y
 RUN apt-get update && apt-get install git -y
 
-RUN conda remove PyYAML
-
+# RUN conda remove PyYAML
 RUN mkdir /whisper_at && \
+    git clone https://github.com/YuanGongND/whisper-at.git /whisper_at && \
     cd /whisper_at && \
     #requirements
     pip install numba numpy torch tqdm more-itertools tiktoken==0.3.3 && \ 

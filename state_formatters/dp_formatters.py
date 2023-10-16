@@ -1001,10 +1001,15 @@ def voice_formatter_service(dialog: Dict) -> List[Dict]:
             "sound_type": [dialog["human_utterances"][-1]["attributes"].get("sound_type")],
             "captions": [dialog["human_utterances"][-1]["attributes"].get("captions")]}]
 
-
 def dff_voice_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_voice_skill")
 
+
+def whisper_at_formatter_service(dialog: Dict) -> List[Dict]:
+   return [{"sound_path": [dialog["human_utterances"][-1]["attributes"].get("sound_path")],
+            "sound_duration": [dialog["human_utterances"][-1]["attributes"].get("sound_duration")],
+            "sound_type": [dialog["human_utterances"][-1]["attributes"].get("sound_type")],
+            "captions": [dialog["human_utterances"][-1]["attributes"].get("captions")]}]
 
 def dff_whisper_at_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_whisper_at_skill")
