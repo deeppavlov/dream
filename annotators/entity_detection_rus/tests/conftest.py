@@ -24,4 +24,4 @@ def handle(request) -> str:
 
 @pytest.fixture
 def url(uri, port, handle):
-    return f"http://{uri}:{port}/{handle}"
+    return f"{uri}:{port}/{handle}"
