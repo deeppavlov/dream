@@ -23,7 +23,7 @@ import requests
         )
     ],
 )
-def main(url: str, request_data: dict, gold_results: str):
+def test_fact_retrieval_rus(url: str, request_data: dict, gold_results: str):
     response = requests.post(url, data=request_data)
     result = response.json()
     assert response.status_code == 200
