@@ -70,9 +70,11 @@ def answer():
 @app.route("/respond_batch", methods=["POST"])  # candidate annotator
 def annotation():
     st_time = time.time()
-    phrases = request.json.get("phrase", [])
-    prev_phrases = [request.json.get("prev_phrase", [])]
-    prev_speech_funcs = [request.json.get("prev_speech_function", [])]
+    responses, phrases, prev_phrases, prev_speech_funcs = [], [], [], []
+    for payload in request.json:
+        phrases.append(payload["phrase"])
+        prev_phrases.append([payload["prev_phrase"]])
+        prev_speech_funcs.append([payload["prev_speech_function"]])
     payloads = []
     for phr, prev_phr, prev_speech_func in zip_longest(phrases, prev_phrases, prev_speech_funcs):
         payloads.append(
