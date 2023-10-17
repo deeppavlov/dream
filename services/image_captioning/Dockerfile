@@ -18,7 +18,8 @@ RUN conda remove PyYAML
 
 WORKDIR /ofa
 
-RUN git clone https://github.com/dariamitciuk/OFA.git && \
+RUN git clone https://github.com/dariamitciuk/OFA.git /ofa && \
+    cd /ofa && \
     pip install -r requirements.txt && \
     git checkout 153048138044edcbe0b099463810a971a7bf0057
 

@@ -1,5 +1,5 @@
 name: dff_storyteller_ru_prompted_skill
-display_name: Рассказчик Остросюжетных Историй (Навык)
+display_name: Рассказчик Остросюжетных Историй
 component_type: Generative
 model_type: NN-based
 is_customizable: true

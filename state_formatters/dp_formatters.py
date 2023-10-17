@@ -990,6 +990,14 @@ def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
 
+def dff_user_kg_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_user_kg_skill")
+
+
+def dff_travel_italy_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_travel_italy_skill")
+
+
 def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
     intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
     called_intents = {intent: False for intent in intents}
@@ -1054,6 +1062,29 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
+
+
+def dff_fromage_image_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_fromage_image_skill")
+
+
+def fromage_formatter(dialog: Dict) -> List:
+    # Used by: fromage
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+
+    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
+    utterances_history = 5
+    image_paths = image_paths[-utterances_history:]
+    human_text_uttr = dialog["human_utterances"][-1]["text"]
+    input_dict = {"sentences": [human_text_uttr if human_text_uttr else ""]}
+    for url in reversed(image_paths):
+        if url is not None and url.startswith("http"):
+            input_dict.update({"image_paths": [url]})
+            break
+        else:
+            input_dict.update({"image_paths": [None]})
+    return [input_dict]
 
 
 def dff_prompted_skill_formatter(dialog, skill_name=None):
@@ -1224,6 +1255,14 @@ def prompts_goals_collector_formatter(dialog: Dict) -> List[Dict]:
 def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     # Used by: image_captioning
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
+
+
+def last_human_annotated_utterance(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
+        }
+    ]
 
 
 def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:

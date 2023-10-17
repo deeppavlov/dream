@@ -1,5 +1,5 @@
 name: dff_official_letter_ru_prompted_skill
-display_name: Официальные Письма (Навык)
+display_name: Официальные Письма
 component_type: Generative
 model_type: NN-based
 is_customizable: true
