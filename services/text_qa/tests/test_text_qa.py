@@ -15,35 +15,33 @@ language = os.getenv("LANGUAGE", "EN")
     [
         (
             {
-                "EN":
-                    {
-                        "question_raw": ["Who was the first man in space?"],
-                        "top_facts": [
-                            [
-                                "Yuri Gagarin was a Russian pilot and cosmonaut who became the first human to "
-                                "journey into outer space."
-                            ]
-                        ],
-                    }
+                "EN": {
+                    "question_raw": ["Who was the first man in space?"],
+                    "top_facts": [
+                        [
+                            "Yuri Gagarin was a Russian pilot and cosmonaut who became the first human to "
+                            "journey into outer space."
+                        ]
+                    ],
+                }
             },
             ["Yuri Gagarin"],
         ),
         (
             {
-                "EN":
-                    {
-                        "question_raw": ["Who played Sheldon Cooper in The Big Bang Theory?"],
-                        "top_facts": [
-                            [
-                                "Sheldon Lee Cooper is a fictional character in the CBS television series "
-                                "The Big Bang Theory and its spinoff series Young Sheldon, portrayed by actors "
-                                "Jim Parsons in The Big Bang Theory."
-                            ]
-                        ],
-                    },
+                "EN": {
+                    "question_raw": ["Who played Sheldon Cooper in The Big Bang Theory?"],
+                    "top_facts": [
+                        [
+                            "Sheldon Lee Cooper is a fictional character in the CBS television series "
+                            "The Big Bang Theory and its spinoff series Young Sheldon, portrayed by actors "
+                            "Jim Parsons in The Big Bang Theory."
+                        ]
+                    ],
+                },
             },
-            ["Jim Parsons"]
-        )
+            ["Jim Parsons"],
+        ),
     ],
 )
 def test_text_qa(url: str, request_data, gold_result):
