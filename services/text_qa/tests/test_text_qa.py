@@ -15,7 +15,7 @@ language = os.getenv("LANGUAGE", "EN")
     [
         (
             {
-                "EN": [
+                "EN":
                     {
                         "question_raw": ["Who was the first man in space?"],
                         "top_facts": [
@@ -24,7 +24,13 @@ language = os.getenv("LANGUAGE", "EN")
                                 "journey into outer space."
                             ]
                         ],
-                    },
+                    }
+            },
+            ["Yuri Gagarin"],
+        ),
+        (
+            {
+                "EN":
                     {
                         "question_raw": ["Who played Sheldon Cooper in The Big Bang Theory?"],
                         "top_facts": [
@@ -35,14 +41,14 @@ language = os.getenv("LANGUAGE", "EN")
                             ]
                         ],
                     },
-                ],
             },
-            {"EN": ["Yuri Gagarin", "Jim Parsons"]},
-        ),
+            ["Jim Parsons"]
+        )
     ],
 )
 def test_text_qa(url: str, request_data, gold_result):
     result = requests.post(url, json=request_data[language]).json()
+    print(result)
     res_ans = result[0][0]
     assert res_ans == gold_result
 
