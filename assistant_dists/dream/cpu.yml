@@ -25,3 +25,6 @@ services:
   intent-catcher:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  dnnc-intents:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""      
