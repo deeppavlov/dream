@@ -32,9 +32,7 @@ DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_
 
 
 def compose_data_for_model(ctx, actor):
-    # consider N_UTTERANCES_CONTEXT last utterances
-    context = int_ctx.get_utterances(ctx, actor)[-N_UTTERANCES_CONTEXT:]
-    context = [uttr.get("text", "") for uttr in context]
+    context = [uttr.get("text", "") for uttr in int_ctx.get_utterances(ctx, actor)]
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
@@ -125,12 +123,17 @@ async def gather_responses(
                 if lm_service_config
                 else DEFAULT_LM_SERVICE_TIMEOUT
             )
+            n_utterances_context = (
+                lm_service_config.pop("n_utterances_context", N_UTTERANCES_CONTEXT)
+                if lm_service_config
+                else N_UTTERANCES_CONTEXT
+            )
 
             tasks.append(
                 asyncio.ensure_future(
                     async_request_to_prompted_generative_service(
                         session,
-                        dialog_context,
+                        dialog_context[-n_utterances_context:],
                         prompt,
                         lm_service_url,
                         lm_service_config,
@@ -151,7 +154,6 @@ async def gather_responses(
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context = compose_data_for_model(ctx, actor)
-    logger.info(f"dialog_context: {dialog_context}")
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
     # skill selector selects by display names!
     selected_skill_names = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("skill_selector", [])

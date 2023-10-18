@@ -53,7 +53,7 @@ def select_response_by_scores(hypotheses, scores):
 
 
 def select_response(dialog, hypotheses, human_uttr_attributes):
-    dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+    dialog_context = [uttr["text"] for uttr in dialog["utterances"]]
 
     _response_selector = human_uttr_attributes.get("response_selector", {})
     _is_prompt_based_selection = "prompt" in _response_selector
@@ -105,9 +105,14 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
             if lm_service_config
             else DEFAULT_LM_SERVICE_TIMEOUT
         )
+        n_utterances_context = (
+            lm_service_config.pop("n_utterances_context", N_UTTERANCES_CONTEXT)
+            if lm_service_config
+            else N_UTTERANCES_CONTEXT
+        )
 
         response = send_request_to_prompted_generative_service(
-            dialog_context,
+            dialog_context[-n_utterances_context:],
             curr_prompt,
             lm_service_url,
             lm_service_config,

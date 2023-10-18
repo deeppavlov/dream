@@ -32,7 +32,7 @@ def select_skills(dialog):
     selected_skills = []
     selected_skills += DEFAULT_SKILLS
 
-    dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+    dialog_context = [uttr["text"] for uttr in dialog["utterances"]]
     human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
 
     _skill_selector = human_uttr_attributes.get("skill_selector", {})
@@ -84,9 +84,14 @@ def select_skills(dialog):
             if lm_service_config
             else DEFAULT_LM_SERVICE_TIMEOUT
         )
+        n_utterances_context = (
+            lm_service_config.pop("n_utterances_context", N_UTTERANCES_CONTEXT)
+            if lm_service_config
+            else N_UTTERANCES_CONTEXT
+        )
 
         response = send_request_to_prompted_generative_service(
-            dialog_context,
+            dialog_context[-n_utterances_context:],
             prompt,
             lm_service_url,
             lm_service_config,

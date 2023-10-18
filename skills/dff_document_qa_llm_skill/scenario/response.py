@@ -37,17 +37,28 @@ DOCUMENT_PROMPT_FILE = os.getenv("DOCUMENT_PROMPT_FILE")
 assert GENERATIVE_SERVICE_URL, logger.error("Error: GENERATIVE_SERVICE_URL is not specified in env")
 assert DOCUMENT_PROMPT_FILE, logger.error("Error: DOCUMENT_PROMPT_FILE is not specified in env")
 
+GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
+
 GENERATIVE_TIMEOUT = float(os.getenv("GENERATIVE_TIMEOUT", 5))
-GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")  # add env!!!
+GENERATIVE_TIMEOUT = (
+    GENERATIVE_SERVICE_CONFIG.pop("timeout", GENERATIVE_TIMEOUT) if GENERATIVE_SERVICE_CONFIG else GENERATIVE_TIMEOUT
+)
+
 N_UTTERANCES_CONTEXT = int(os.getenv("N_UTTERANCES_CONTEXT", 3))
+N_UTTERANCES_CONTEXT = (
+    GENERATIVE_SERVICE_CONFIG.pop("n_utterances_context", N_UTTERANCES_CONTEXT)
+    if GENERATIVE_SERVICE_CONFIG
+    else N_UTTERANCES_CONTEXT
+)
+
 FILE_SERVER_TIMEOUT = float(os.getenv("FILE_SERVER_TIMEOUT", 30))
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 DEFAULT_SYSTEM_PROMPT = "Answer questions based on part of a text."
 with open(DOCUMENT_PROMPT_FILE, "r") as f:
     DOCUMENT_PROMPT_TEXT = json.load(f)["prompt"]
-if GENERATIVE_SERVICE_CONFIG:
-    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
-        GENERATIVE_SERVICE_CONFIG = json.load(f)
 
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")

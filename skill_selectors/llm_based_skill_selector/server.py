@@ -37,6 +37,11 @@ GENERATIVE_TIMEOUT = (
 )
 
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
+N_UTTERANCES_CONTEXT = (
+    GENERATIVE_SERVICE_CONFIG.pop("n_utterances_context", N_UTTERANCES_CONTEXT)
+    if GENERATIVE_SERVICE_CONFIG
+    else N_UTTERANCES_CONTEXT
+)
 PROMPT_FILE = getenv("PROMPT_FILE")
 assert PROMPT_FILE, logger.error("No prompt provided")
 with open(PROMPT_FILE, "r") as f:
