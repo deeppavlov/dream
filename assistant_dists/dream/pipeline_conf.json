@@ -248,6 +248,22 @@
                     "service": "annotators/wiki_parser/service_configs/wiki-parser"
                 }
             },
+            "dnnc_intents": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://dnnc-intents:8218/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/2JUPwwo1SZzxuj4RXjI350.yml",
+                    "service": "annotators/dnnc_intents/service_configs/dnnc-intents"
+                }
+            },
             "combined_classification": {
                 "connector": {
                     "protocol": "http",
