@@ -1,0 +1,5 @@
+{
+    "prompt": "Meeting transcript:\n{transcript_chunk}\nWrite the list of most important decisions made during the meeting.\nKeep it as short as possible.\nOnly include decisions about the project, product or the working process without any extra information.",
+    "prompt_concatenate": "Here is a list of key decisions made during a work meeting:\n{gpt_responses}\nFormat the list to use correct numbering. Delete unimportant items that include general statements and not decisions.\nIf several items can be merged into one, merge and abridge. Make the list as short as possible.",
+    "goals": "Extracts key decisions from meeting transcripts."
+}

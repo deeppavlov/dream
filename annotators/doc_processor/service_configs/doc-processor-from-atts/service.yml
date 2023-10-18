@@ -1,0 +1,30 @@
+name: doc-processor-from-atts
+endpoints:
+  - process_and_upload_doc
+compose:
+  env_file:
+    - .env
+  build:
+    args:
+      SERVICE_PORT: 8188
+      SERVICE_NAME: doc_processor
+      FILE_SERVER_TIMEOUT: 30.0
+      N_TURNS_TO_KEEP_DOC: 5
+    context: .
+    dockerfile: annotators/doc_processor/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8188
+  environment:
+    - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 500M
+      reservations:
+        memory: 500M
+  volumes:
+    - "./annotators/doc_processor:/src"
+    - "./common:/src/common"
+    - "./documents:/src/documents"
+  ports:
+    - 8188:8188
+proxy: null

@@ -5,9 +5,10 @@ import re
 import requests
 import sentry_sdk
 import time
-from typing import Any, List
+import copy
 
-from common.build_dataset import build_dataset
+from typing import Any
+from common.build_dataset import build_dataset, get_text_for_candidates
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
@@ -62,40 +63,35 @@ with open(DOCUMENT_PROMPT_FILE, "r") as f:
 
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
-FIND_ID = re.compile(r"file=([0-9a-zA-Z]*).txt")
+FIND_ID = re.compile(r"file=([0-9a-zA-Z_]*).txt")
 DEFAULT_CONFIDENCE = 0.9
 SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
 
 
-def get_text_for_candidates(dataset_path: str, raw_candidates: List[str]) -> str:
-    num_candidates = []
-    nums = 0
-    for f_name in raw_candidates:
-        nums += 1
-        with open(dataset_path + f_name) as f:
-            num_candidates.append(f"{nums}. {f.read()}")
-    return " ".join(num_candidates)
-
-
 def compose_data_for_model(ctx: Context, actor: Actor) -> str:
     if not os.path.exists("/data/documents"):
         os.mkdir("/data/documents")
+    filepaths_on_server, filepaths_in_container = [], []
+    final_candidates = ""
     dialog = int_ctx.get_dialog(ctx, actor)
     context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
     utterance_texts = [uttr.get("text", "") for uttr in context]
+    utterances_with_doc_text = copy.deepcopy(utterance_texts)
     if utterance_texts:
         raw_candidates = context[-1].get("annotations", {}).get("doc_retriever", {}).get("candidate_files", [])
-        filepaths_on_server = (
-            context[-1].get("user", {}).get("attributes", {}).get("documents_qa_model", {}).get("document_links", [])
-        )
-        filepaths_in_container = []
+        processed_docs = context[-1].get("user", {}).get("attributes", {}).get("documents_in_use", {})
+        if processed_docs:
+            filepaths_on_server = [
+                processed_docs[key].get("full_processed_text_link", "") for key in processed_docs.keys()
+            ]
         for filepath in filepaths_on_server:
             file_id = re.search(FIND_ID, filepath).group(1)
             filepath_container = f"/data/documents/{file_id}.txt"
-            orig_file = requests.get(filepath, timeout=FILE_SERVER_TIMEOUT)
-            with open(filepath_container, "wb") as f:
-                f.write(orig_file.content)
+            if not os.path.exists(filepath_container):  # if we don't have doc in container, download it from server
+                orig_file = requests.get(filepath, timeout=FILE_SERVER_TIMEOUT)
+                with open(filepath_container, "wb") as f:
+                    f.write(orig_file.content)
             filepaths_in_container.append(filepath_container)
         dataset_path = "/data/temporary_dataset/"
         if not os.path.exists(dataset_path):
@@ -107,9 +103,9 @@ filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}""
         build_dataset(dataset_path, filepaths_in_container)
         logger.info("Dataset built successfully")
         final_candidates = get_text_for_candidates(dataset_path, raw_candidates)
-        request = utterance_texts[-1]
-        utterance_texts[-1] = f"""Text: ### {final_candidates} ###\nUSER: {request}\n{DOCUMENT_PROMPT_TEXT}"""
-    return utterance_texts
+        request = utterances_with_doc_text[-1]
+        utterances_with_doc_text[-1] = f"""Text: ### {final_candidates} ###\n{DOCUMENT_PROMPT_TEXT}\nUser: {request}"""
+    return utterances_with_doc_text, utterance_texts, final_candidates
 
 
 def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
@@ -130,7 +126,8 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             curr_bot_attrs += [bot_attr]
             curr_attrs += [attr]
 
-    dialog_context = compose_data_for_model(ctx, actor)
+    dialog_context_to_send, dialog_context_for_logging, candidate_texts = compose_data_for_model(ctx, actor)
+    hyp_attrs = {"candidate_chunks_text": candidate_texts}  # saving raw texts of candidate answers to hyp attributes
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
     envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
     sending_variables = compose_sending_variables(
@@ -138,12 +135,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         envvars_to_send,
         human_uttr_attributes,
     )
+    logger.info(f"dialog_context: {dialog_context_for_logging}")
 
-    logger.info(f"dialog_context: {dialog_context}")
-    if len(dialog_context) > 0:
+    if len(dialog_context_to_send) > 0:
         try:
             hypotheses = send_request_to_prompted_generative_service(
-                dialog_context,
+                dialog_context_to_send,
                 DEFAULT_SYSTEM_PROMPT,
                 GENERATIVE_SERVICE_URL,
                 GENERATIVE_SERVICE_CONFIG,
@@ -164,6 +161,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             hyp += "."
             confidence = LOW_CONFIDENCE
         _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
+        _curr_attrs.update(hyp_attrs)
         gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:

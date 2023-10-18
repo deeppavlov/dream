@@ -1,0 +1,25 @@
+name: vectorize_documents
+display_name: Document Retriever (vectorize documents)
+component_type: null
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Performs TF-IDF vectorization of provided document chunks and saves the resulting files to the server.
+ram_usage: 10G
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 50.0
+  url: http://doc-retriever:8165/vectorize_documents
+dialog_formatter: state_formatters.dp_formatters:utt_non_punct_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.doc_processor
+required_previous_services:
+- annotators.doc_processor
+state_manager_method: add_annotation
+tags: null
+endpoint: vectorize_documents
+service: annotators/doc_retriever/service_configs/doc-retriever
+date_created: "2023-06-14T12:45:32"

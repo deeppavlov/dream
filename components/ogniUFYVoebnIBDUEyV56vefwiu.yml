@@ -4,11 +4,10 @@ component_type: Generative
 model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description:
-  ChatGPT-based generative skill that answers the user's questions about a given document.
-  Uses doc_retriever to select the most relevant parts of the document and ChatGPT
-  to generate the response based on the context, the question, and the selected parts.
-ram_usage: 150M
+description: This skill answers the user's questions about a given document or meeting transcript.
+  It only has access to most relevant parts of the document, not to the entire document. This skill is
+  always selected if a question is asked about the meeting.
+ram_usage: 128M
 gpu_usage: null
 group: skills
 connector:
@@ -21,7 +20,13 @@ dialog_formatter:
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
   - skill_selectors
-required_previous_services: null
+  - annotators.doc_processor
+  - annotators.vectorize_documents
+  - annotators.doc_retriever
+required_previous_services:
+  - annotators.doc_processor
+  - annotators.vectorize_documents
+  - annotators.doc_retriever
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond

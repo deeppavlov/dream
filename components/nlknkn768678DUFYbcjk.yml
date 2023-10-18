@@ -1,23 +1,25 @@
-name: doc_retriever
-display_name: Document Retriever
+name: doc_processor
+display_name: Document Processor (from arguments of Docker container)
 component_type: null
-model_type: ML-based
-is_customizable: true
+model_type: null
+is_customizable: false
 author: publisher@deeppavlov.ai
-description: Ranks chunks of the input document based on their relevance to the user's request and returns top N most relevant.
-ram_usage: 5G
-gpu_usage: 5G
+description: Processes documents (.pdf, .txt, .html) and meeting transcipts (.docx, Microsoft Teams format) to 
+  extract textual data and uploads the processed files to file server. Links to documents must be given as `DOC_PATHS_OR_LINKS` 
+  argument of Docker container.
+ram_usage: 500M
+gpu_usage: null
 group: annotators
 connector:
   protocol: http
-  timeout: 30.0
-  url: http://doc-retriever:8165/return_candidates
-dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+  timeout: 50.0
+  url: http://doc-processor-from-args:8188/process_and_upload_doc
+dialog_formatter: state_formatters.dp_formatters:cropped_dialog_skills_and_docs
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services: null
-required_previous_services: [annotators.train_and_upload_model]
-state_manager_method: add_annotation
+required_previous_services: null
+state_manager_method: update_attributes
 tags: null
-endpoint: return_candidates
-service: annotators/doc_retriever/service_configs/doc-retriever
+endpoint: process_and_upload_doc
+service: annotators/doc_processor/service_configs/doc-processor-from-args
 date_created: "2023-06-14T12:45:32"

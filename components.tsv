@@ -187,9 +187,9 @@
 8183	external-integration-skill
 8184	external-fake-server
 8185	dff-roles-prompted-skill
-8186
+8186	dff-meeting-analysis-skill
 8187	universal-llm-based-skill-selector
-8188
+8188	doc-processor-from-atts,doc-processor-from-args
 8189
 8190
 8191

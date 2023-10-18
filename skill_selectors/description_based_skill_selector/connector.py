@@ -81,7 +81,7 @@ class DescriptionBasedSkillSelectorConnector:
             not_prompted_skills.discard("dff_document_qa_llm_skill")
 
             not_prompted_skills = list(not_prompted_skills)
-            if dialog.get("bot", {}).get("attributes", {}).get("db_link", ""):
+            if dialog.get("bot", {}).get("attributes", {}).get("model_info", {}) != {}:
                 # adding dff_document_qa_llm_skill only if we have trained model files in this dialog
                 # (thus checking bot attributes)
                 skills_for_uttr.append("dff_document_qa_llm_skill")

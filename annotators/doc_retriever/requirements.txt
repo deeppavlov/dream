@@ -11,3 +11,5 @@ nltk==3.8.1
 spacy==3.5
 pypdfium2==4.16.0
 bs4==0.0.1
+python-docx==0.8.11
+simplify-docx==0.1.2

@@ -1,0 +1,5 @@
+SERVICE_PORT: 8188
+SERVICE_NAME: doc_processor
+DOC_PATHS_OR_LINKS: https://drive.google.com/uc?id=1eq99d7UBoyWoHz_04YHUDhikhp1YVO3Y,https://drive.google.com/uc?id=1SPyuKEVanBnz0zg600HeSXc7Ht2JxdPP
+FILE_SERVER_TIMEOUT: 30.0
+FLASK_APP: server

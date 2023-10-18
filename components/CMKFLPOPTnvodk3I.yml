@@ -1,0 +1,25 @@
+name: doc_processor
+display_name: Document Processor (from attributes of the last human utterance)
+component_type: null
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Processes documents (.pdf, .txt, .html) and meeting transcipts (.docx, Microsoft Teams format) 
+  to extract textual data and uploads the processed files to file server. Links to documents must be provided 
+  as `documents` attribute of the last human utterance.
+ram_usage: 500M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 50.0
+  url: http://doc-processor-from-atts:8188/process_and_upload_doc
+dialog_formatter: state_formatters.dp_formatters:cropped_dialog_skills_and_docs
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: update_attributes
+tags: null
+endpoint: process_and_upload_doc
+service: annotators/doc_processor/service_configs/doc-processor-from-atts
+date_created: "2023-06-14T12:45:32"

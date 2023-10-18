@@ -1,0 +1,5 @@
+{
+    "prompt": "Meeting transcript:\n{transcript_chunk}\nAnswer the following request based on the information from the meeting transcript. If the meeting transcript does not contain an answer, apologise and say that you cannot help. Request: {request}",
+    "prompt_concatenate": "Here is a list of answers based on different sources:\n{gpt_responses}\nCombine them to get a full answer to the following request: {request}\nIf there is no answer, apologise and say that you cannot help. If there is an answer in list of answers, you must provide this answer.",
+    "goals": "Answers questions based on the full text of meeting transcripts."
+}

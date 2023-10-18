@@ -18,6 +18,7 @@ DOCUMENT_PROMPT_FILE: file to get the instruction from (to insert into prompt gu
 ## Dependencies
 
 - LLM service provided in `GENERATIVE_SERVICE_URL`
+- annotator Document Processor
 - annotator Document Retriever (both endpoints)
 - API keys in environmental variables for key-required LLMs (OpenAI API, Anthropic API)
 

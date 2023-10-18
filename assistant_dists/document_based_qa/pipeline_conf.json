@@ -110,37 +110,63 @@
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
-            "train_and_upload_model": {
+            "doc_processor": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 50,
-                    "url": "http://doc-retriever:8165/train_and_upload_model"
+                    "timeout": 50.0,
+                    "url": "http://doc-processor-from-args:8188/process_and_upload_doc"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog_skills_and_docs",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [],
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/jkb98534UUIjfdn67IN.yml",
+                    "component": "components/nlknkn768678DUFYbcjk.yml",
+                    "service": "annotators/doc_processor/service_configs/doc-processor-from-args"
+                }
+            },
+            "vectorize_documents": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 50.0,
+                    "url": "http://doc-retriever:8165/vectorize_documents"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": [
+                    "annotators.doc_processor"
+                ],
+                "previous_services": [
+                    "annotators.doc_processor"
+                ],
+                "state_manager_method": "update_attributes",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/neioip84jnvOIHvl.yml",
                     "service": "annotators/doc_retriever/service_configs/doc-retriever"
                 }
             },
             "doc_retriever": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 30,
+                    "timeout": 30.0,
                     "url": "http://doc-retriever:8165/return_candidates"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "required_previous_services": [
+                    "annotators.doc_processor",
+                    "annotators.vectorize_documents"
+                ],
                 "previous_services": [
-                    "annotators.train_and_upload_model"
+                    "annotators.doc_processor",
+                    "annotators.vectorize_documents"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/nlknkn768678DUFYbcjk.yml",
+                    "component": "components/jkb98534UUIjfdn67IN.yml",
                     "service": "annotators/doc_retriever/service_configs/doc-retriever"
                 }
             }
@@ -177,7 +203,15 @@
                 "dialog_formatter": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
+                    "annotators.doc_processor",
+                    "annotators.vectorize_documents",
+                    "annotators.doc_retriever",
                     "skill_selectors"
+                ],
+                "required_previous_services": [
+                    "annotators.doc_processor",
+                    "annotators.vectorize_documents",
+                    "annotators.doc_retriever"
                 ],
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,

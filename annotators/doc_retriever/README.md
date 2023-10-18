@@ -4,9 +4,74 @@
 
 Document Retriever is an annotator with two endpoints used to retrieve `PARAGRAPHS_NUM` document parts most relevant to the user request.
 
-1. **train_and_upload_model** endpoint converts the documents provided by the user to txt format (if necessary) and splits them into chunks of ~100 words. Chunks are then transformed into a TF-IDF matrix; the resulting vectors and the vectorizer are saved for future use. This step is performed only once, in the beginning of the dialog.
-Documents (txt format), matrix, and vectorizer are uploaded to file server to be used by **return_candidates** endpoint and **dff_document_qa_llm** skill.
+1. **vectorize_documents** endpoint splits the documents provided by the user into chunks of ~100 words. Chunks are then transformed into a TF-IDF matrix; the resulting vectors and the vectorizer are saved for future use. This step is performed only once, in the beginning of the dialog.
+Documents (txt format), matrix, and vectorizer are uploaded to file server to be used by **return_candidates** endpoint and **dff_document_qa_llm_skill**.
 2. **return_candidates** endpoint downloads TF-IDF matrix and vectorizer from the file server. It then converts the user’s utterance into a TF-IDF vector and finds `PARAGRAPHS_NUM` candidates with highest cosine similarity among TF-IDF vectors of text chunks.
+
+## Dialog State
+
+Here is an example of what Document Retriever may add to the dialog state for both endpoints.
+
+### /vectorize_documents endpoint
+```
+{
+    "human": {
+        "attributes": {
+            "documents_in_use": {
+                "3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc": {
+                    "full_processed_text_link": "{FILE_SERVER_URL}/file?file=3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc.txt",
+                    "source_file_ids": ["MehiMaayiX_7ed546db9846ba7661ceda123837f7fc", "kmk02fOIf_7ed546db9846ba7661ceda123837f7fc"],
+                    "vectors_processed": True
+                },
+            }
+        }
+    }
+}
+```
+NB: `documents_in_use` were added earlier by Document Processor. Document Retriever only adds a new key `vectors_processed` item to each document in `documents_in_use`.
+
+`vectors_processed` shows whether the file was already vectorized by Document Retriever.
+
+```
+{
+    "bot": {
+        "attributes": {
+            "model_info": {
+                "db_link": "{FILE_SERVER_URL}/file?file=h7TbfZQO8C.db",
+                "matrix_link": "{FILE_SERVER_URL}/file?file=h7TbfZQO8C.npz"
+            }
+        }
+    }
+}
+```
+
+`db_link` is a link to the dataset for all vectorized `documents_in_use`.
+
+`matrix_link` is a link to the TF-IDF matrix for all vectorized `documents_in_use`.
+
+### /return_candidates endpoint
+
+```
+{
+    "utterances": [
+        {
+            "annotations": {
+                "doc_retriever": {
+                    "candidate_files": [
+                        "26.txt",
+                        "24.txt",
+                        "3.txt",
+                        "25.txt",
+                        "4.txt"
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
+`candidate_files` is a list of files (each file is a chunk of the given document or documents) most similar to the last user utterances in terms of cosine similarity over TF-IDF vectors. 
 
 ## Parameters
 
@@ -14,9 +79,9 @@ Documents (txt format), matrix, and vectorizer are uploaded to file server to be
 CONFIG_PATH: configuration file with parameters for doc_retriever model
 FILE_SERVER_TIMEOUT: timeout for request where files are stored
 PARAGRAPHS_NUM: number of most relevant chunks to retrieve. Don't make this number too large or the chunks won't fit into LLM context!
-DOC_PATH_OR_LINK: paths or link to the files to be use for Question Answering. If paths, those are paths to files in `documents` folder in dream. If links, those must point to a file, not an Internet page. NB: file paths/links must be separated by a comma and no whitespace. 
 ```
 
 ## Dependencies
 
-- **return_candidates** endpoint depends on **train_and_upload_model** endpoint
+- both **return_candidates** and **vectorize_documents** endpoints depend on **doc_processor** annotator
+- **return_candidates** endpoint depends on **vectorize_documents** endpoint

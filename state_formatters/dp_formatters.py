@@ -460,7 +460,7 @@ def dff_prompted_skill_formatter(dialog, skill_name=None):
         skill_name,
         bot_last_turns=5,
         types_utterances=["human_utterances", "bot_utterances", "utterances"],
-        wanted_keys=["text", "annotations", "active_skill", "user", "attributes"],
+        wanted_keys=["text", "annotations", "active_skill", "user", "attributes", "bot"],
     )
 
 
@@ -519,3 +519,22 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
     batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
+
+
+def cropped_dialog_skills_and_docs(dialog: Dict):
+    all_prev_active_skills = [uttr.get("active_skill", "") for uttr in dialog["bot_utterances"]]
+    all_prev_active_skills = [skill_name for skill_name in all_prev_active_skills if skill_name]
+    all_prev_used_docs = [
+        uttr.get("user", {}).get("attributes", {}).get("documents_in_use", []) for uttr in dialog["human_utterances"]
+    ]
+    all_prev_used_docs = [doc for doc in all_prev_used_docs if doc]
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    return [
+        {
+            "dialogs": [dialog],
+            "all_prev_active_skills": [all_prev_active_skills],
+            "all_prev_used_docs": [all_prev_used_docs],
+        }
+    ]

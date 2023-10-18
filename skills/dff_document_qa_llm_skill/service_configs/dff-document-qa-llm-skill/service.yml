@@ -12,7 +12,7 @@ compose:
       GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
       GENERATIVE_TIMEOUT: 120
       N_UTTERANCES_CONTEXT: 7
-      FILE_SERVER_TIMEOUT: 30
+      FILE_SERVER_TIMEOUT: 30.0
       DOCUMENT_PROMPT_FILE: common/prompts/document_qa_instruction.json
     context: .
     dockerfile: ./skills/dff_document_qa_llm_skill/Dockerfile

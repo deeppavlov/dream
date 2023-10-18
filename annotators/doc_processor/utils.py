@@ -1,0 +1,346 @@
+import requests
+import logging
+import os
+import re
+import docx
+import filetype
+import pypdfium2 as pdfium
+import io
+
+from typing import List, Dict, Union, Tuple
+from pathlib import PurePath
+from simplify_docx import simplify
+from bs4 import BeautifulSoup
+from common.files_and_folders_processing import upload_document, generate_unique_file_id
+
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
+FILE_SERVER_TIMEOUT = float(os.environ.get("FILE_SERVER_TIMEOUT"))
+HTTP_PATTERN = re.compile(r"https?://[a-zA-Z\-0-9]+[\.:].+")
+FIND_ID = re.compile(r"file=([0-9a-zA-Z]*).txt")
+
+
+def pdf_to_text(file: str) -> str:
+    """Extracts text data from the given .pdf file using pypdfium.
+
+    Args:
+        file: Path to pdf file or the file itself.
+
+    Returns:
+        The text of the pdf file as string.
+    """
+    pdf = pdfium.PdfDocument(file)
+    n_pages = len(pdf)
+    full_doc_text = ""
+    for page in range(n_pages):
+        page_index = pdf[page]
+        textpage = page_index.get_textpage()
+        text_all = textpage.get_text_range()
+        full_doc_text += text_all
+    return full_doc_text
+
+
+def html_to_text(file: str) -> str:
+    """Extracts text data from the given .html file using BeautifulSoup.
+
+    Args:
+        file: Path to html file or the file itself.
+
+    Returns:
+        The text of the html file as string.
+    """
+    soup = BeautifulSoup(file)
+    full_doc_text = soup.get_text(strip=True)
+    return full_doc_text
+
+
+def structure_data(meeting_transcipt: List[str]) -> Dict[str, Union[List[str], List[Dict[str, Union[str, list]]]]]:
+    """Structures meeting transcript for further processing by extracting people present and utterances.
+
+    Args:
+        meeting_transcipt: A list of chunks of an unprocessed meeting transcript.
+
+    Returns:
+        A dictionary with information about the given meeting:
+
+        {'people_present': ['A', 'B', 'C'],
+         'utterances': [{'time_start': '0:0:0.0', 'person': 'A', 'sentences': 'Hello'}]}
+    """
+    meeting_transcipt_dict = {"people_present": [], "utterances": []}
+    people = []
+    for item in meeting_transcipt:
+        if "   " in item or "\r" in item:
+            item = [x for x in re.split(r"   |\r", item) if x]
+            time = item[0]
+            person = item[1]
+            utts = " ".join(item[2:])
+            one_utt = {"time_start": time, "person": person, "sentences": utts}
+            meeting_transcipt_dict["utterances"].append(one_utt)
+            if person not in people:
+                people.append(person)
+    meeting_transcipt_dict["people_present"] = people
+    return meeting_transcipt_dict
+
+
+def concat_utterances(
+    utterances: List[Dict[str, Union[List[str], List[Dict[str, Union[str, list]]]]]]
+) -> List[Dict[str, str]]:
+    """Concatenates subsequent utterances of one person.
+
+    Args:
+        utterances: A list of dictionaries containing information about each utterance in a meeting.
+
+    Returns:
+        A dict with information about the given meeting and concatenated subsequent utterances:
+
+        [{'person': 'A', 'sentences': 'Hello. How are you?'},
+        {'person': 'B', 'sentences': 'Good. You?'}]
+    """
+    speaker = utterances[0]["person"]
+    concat_utt = utterances[0]["sentences"]
+    transcript_concat = []
+    for utt in utterances[1:]:
+        if speaker == utt["person"]:
+            concat_utt += f' {utt["sentences"]}'
+        else:
+            transcript_concat.append({"person": speaker, "sentences": concat_utt})
+            concat_utt = utt["sentences"]
+            speaker = utt["person"]
+    return transcript_concat
+
+
+def make_transcript(dict_data: Dict[str, Union[List[str], List[Dict[str, Union[str, list]]]]]) -> str:
+    """Creates a text transcript from a dictionary of separate utterances.
+
+    Args:
+        dict_data: A dictionary containing the information about the meeting -- people present
+            and list of all utterances with metainformation.
+
+    Returns:
+        A string with the text of the meeting transcript (speakers included). Utterances of different speakers
+            are separated with newlines.
+
+        'A: Hello!\nB: Hi!'
+    """
+    utterances = dict_data["utterances"] if "utterances" in dict_data else dict_data
+    transcript_concat = concat_utterances(utterances)
+    transcript_list = [f'{utt["person"]}: {utt["sentences"]}' for utt in transcript_concat]
+    transcript = "\n".join(transcript_list)
+    return transcript
+
+
+def teams_meeting_transcript_to_text(file: str) -> str:
+    """Transforms a .docx file of Teams meeting transcript into a string with the text of the meeting.
+
+    Args:
+        file: Path to docx file (Teams meeting transcript) or the file itself.
+
+    Returns:
+        A string with the text of the meeting transcript (speakers included). Utterances of different speakers
+            are separated with newlines:
+
+        'A: Hello!\nB: Hi!'
+    """
+    my_doc = docx.Document(file)
+    my_doc_as_json = simplify(my_doc)
+    list_data = [json_part["VALUE"][-1]["VALUE"] for json_part in my_doc_as_json["VALUE"][0]["VALUE"]]
+    dict_data = structure_data(list_data)
+    transcript = make_transcript(dict_data)
+    return transcript
+
+
+def get_text_from_filepath(filepath: str) -> str:
+    """Processes file of any format (.pdf, .html, .txt, .docs) to get plain text to work with.
+
+    Args:
+        filepath: Path to file (.pdf, .html, .txt, .docs).
+
+    Returns:
+        A string with the text of the file for further use.
+    """
+    file_extension = PurePath(filepath).suffix
+    if "pdf" in file_extension:
+        full_doc_text = pdf_to_text(filepath)
+    elif "html" in file_extension:
+        with open(filepath, "r") as f:
+            html_doc = f.read()
+        full_doc_text = html_to_text(html_doc)
+    elif "docx" in file_extension:
+        full_doc_text = teams_meeting_transcript_to_text(filepath)
+    else:
+        with open(filepath, "r") as f:
+            full_doc_text = f.read()
+    return full_doc_text
+
+
+def get_text_from_fileobject(file_object: str, file_extension: str) -> str:
+    """Processes file of any format (.pdf, .html, .txt, .docs) to get plain text to work with.
+
+    Args:
+        file_object: File object(.pdf, .html, .txt, .docs).
+
+    Returns:
+        A string with the text of the file for further use.
+    """
+    if "pdf" in file_extension:
+        full_doc_text = pdf_to_text(file_object.content)
+    elif "html" in file_extension:
+        full_doc_text = html_to_text(file_object.text)
+    elif "docx" in file_extension:
+        full_doc_text = teams_meeting_transcript_to_text(io.BytesIO(file_object.content))
+    else:
+        full_doc_text = file_object.text
+    return full_doc_text
+
+
+def get_docs_to_process(all_docs_to_check: List[str], all_docs_info: dict, docs_in_use_info: dict) -> Dict[str, str]:
+    """Selects the documents that need to be processed and returns their references and the types
+        of each reference. For docs that were processed before but are not in docs_in_use,
+        returns documents id to be used for getting link to processed doc.
+
+    Args:
+        all_docs_to_check: A list of all documents that we got from attributes or arguments.
+        all_docs_info: A dict with information about all docs that were ever processed.
+        docs_in_use_info: A dict with information about docs that are used now.
+
+    Returns:
+        A dict mapping document reference that needs to be processed to its type
+        (link, path, or, if already processed, id):
+
+        {'documents/example.txt': 'path',
+         'https://website.com/example.txt': 'link',
+         'https://other_website.com/example.pdf': 'MNpfn94j0j_7ed546db9846ba7661ceda123837f7fc'}
+    """
+    docs_to_process_types = {}
+    # all ids of processed docs and links to processed docs
+    processed_docs_links_and_ids = dict(
+        [(all_docs_info[file_id].get("initial_path_or_link", ""), file_id) for file_id in all_docs_info.keys()]
+    )
+    if docs_in_use_info:
+        # all ids of docs in use;
+        # now we always have 1 concat doc in use (with concatenated texts of all incoming docs) so taking [0]
+        concat_doc_in_use_id = list(docs_in_use_info.keys())[0]
+        source_docs_in_use_ids = docs_in_use_info[concat_doc_in_use_id].get("source_file_ids", [])
+        # all links to processed docs in use
+        docs_in_use_links = [
+            all_docs_info[file_id].get("initial_path_or_link", "") for file_id in source_docs_in_use_ids
+        ]
+    else:
+        docs_in_use_links = []
+    # check if the text of the doc we're using fully corresponds to docs coming from atts/args
+    if docs_in_use_links != all_docs_to_check:
+        # if no, for each doc get reference type (where to get text from) – link, path, or, if already processed, id
+        for doc_reference in all_docs_to_check:
+            # if not processed
+            if doc_reference not in processed_docs_links_and_ids.keys():
+                # file server http://files:3000 will also be found
+                if HTTP_PATTERN.search(doc_reference):
+                    docs_to_process_types[doc_reference] = "link"
+                else:
+                    docs_to_process_types[doc_reference] = "path"
+            # if processed
+            else:
+                docs_to_process_types[doc_reference] = processed_docs_links_and_ids[doc_reference]
+    return docs_to_process_types
+
+
+def upload_documents_save_info(
+    docs_in_atts: List[str], doc_paths_or_links: List[str], all_docs_info: dict, docs_in_use_info: dict, dialog_id: str
+) -> Tuple[dict, dict]:
+    """Processes the given documents to get plain text if they were not processed before,
+        uploads them to file server and returns information about each.
+        NB: If there are multiple documents, their text is concatenated and uploaded to server as one .txt file.
+
+    Args:
+        docs_in_atts: Doc references that we get from attributes of user utterance.
+        doc_paths_or_links: Doc references that we get from arguments of docker container.
+        all_docs_info: A dict with information about all docs that were ever processed.
+        docs_in_use_info: A dict with information about docs that are used now.
+
+    Returns:
+        A tuple of dicts: one mapping link to file with concatenated processed texts and
+        list with ids of source files:
+        {
+            'VfaQ7R82IL_7ed546db9846ba7661ceda123837f7fc':
+            {
+                'source_file_ids': [
+                    nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc,
+                    kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc
+                    ],
+                'full_processed_text_link':
+                '{FILE_SERVER_URL}/file?file=VfaQ7R82IL_7ed546db9846ba7661ceda123837f7fc.txt'
+                }
+        }
+
+        Another one mapping ids of source files and information about them (file source and
+        link to the file with processed text):
+        {
+            'nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc':
+            {
+                'initial_path_or_link': 'https://website.com/example.txt',
+                'processed_text_link': '{FILE_SERVER_URL}/file?file=nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc.txt'
+                },
+            'kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc':
+            {
+                'initial_path_or_link': 'https://website.com/other_example.pdf',
+                'processed_text_link': '{FILE_SERVER_URL}/file?file=kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc.txt'
+                }
+            }
+
+        NB: in the first dict, the file contains concatenated processed texts for all docs.
+        In the second dict, there are separate files with processed text for each doc.
+    """
+    # get docs we need to process
+    # (either fully unprocessed or processed sometime earlier but not yet present in current docs_in_use)
+    all_docs_to_check = list(set(docs_in_atts + doc_paths_or_links))
+    docs_and_types = get_docs_to_process(all_docs_to_check, all_docs_info, docs_in_use_info)
+    all_docs_text_concat, file_ids = [], []
+    all_docs_info_new, docs_in_use_info_new = {}, {}
+    # check if we need to process anything
+    if docs_and_types:
+        for file_source in docs_and_types.keys():
+            file_source_type = docs_and_types[file_source]
+            # if we have processed text for this file, file_source_type is its id
+            if file_source_type != "link" and file_source_type != "path":
+                file_id = file_source_type
+                doc_text_link = all_docs_info[file_id]["processed_text_link"]
+                orig_file = requests.get(doc_text_link, timeout=FILE_SERVER_TIMEOUT)
+                orig_file_text = get_text_from_fileobject(orig_file, "txt")
+            # if we don't have processed text for this file
+            else:
+                file_id = generate_unique_file_id(10, dialog_id)
+                all_docs_info_new[file_id] = {"initial_path_or_link": file_source}
+                if file_source_type == "link":
+                    orig_file = requests.get(file_source, timeout=FILE_SERVER_TIMEOUT)
+                    file_extension = PurePath(file_source).suffix
+                    if not file_extension:
+                        file_extension = filetype.guess(orig_file.content).extension
+                    orig_file_text = get_text_from_fileobject(orig_file, file_extension)
+                elif file_source_type == "path":
+                    orig_file_text = get_text_from_filepath(file_source)
+                doc_text_link = upload_document(
+                    orig_file_text, f"{file_id}.txt", FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text"
+                )
+                all_docs_info_new[file_id]["processed_text_link"] = doc_text_link
+            file_ids.append(file_id)
+            all_docs_text_concat.append(orig_file_text)
+        full_text = "\n".join(all_docs_text_concat)
+        # if we have only one file to be used on this step, we use it as docs_in_use as it is
+        if len(docs_and_types) == 1:
+            full_text_file_id = file_id
+            all_docs_text_link = doc_text_link
+            docs_in_use_info_new[full_text_file_id] = {"source_file_ids": [file_id]}
+        # if we have more than one file to be used on this step, we concatenate their texts and use it as docs_in_use
+        else:
+            full_text_file_id = generate_unique_file_id(10, dialog_id)
+            all_docs_text_link = upload_document(
+                full_text, f"{full_text_file_id}.txt", FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text"
+            )
+            docs_in_use_info_new[full_text_file_id] = {"source_file_ids": []}
+            for file_id in file_ids:
+                docs_in_use_info_new[full_text_file_id]["source_file_ids"].append(file_id)
+        docs_in_use_info_new[full_text_file_id]["full_processed_text_link"] = all_docs_text_link
+    return all_docs_info_new, docs_in_use_info_new

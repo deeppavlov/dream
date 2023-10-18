@@ -33,6 +33,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
+  doc-processor-from-args:
+    volumes:
+      - "./annotators/doc_processor:/src"
+      - "./common:/src/common"
+      - "./documents:/src/documents"
+    ports:
+      - 8188:8188
   doc-retriever:
     volumes:
       - "./annotators/doc_retriever:/src"

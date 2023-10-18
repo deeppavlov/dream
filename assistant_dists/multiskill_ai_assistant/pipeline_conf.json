@@ -79,7 +79,7 @@
                     "timeout": 10.0,
                     "url": "http://llm-based-skill-selector:8182/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog_skills_and_docs",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators"

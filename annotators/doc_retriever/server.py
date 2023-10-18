@@ -2,18 +2,13 @@ import logging
 import os
 import sentry_sdk
 import requests
+from pathlib import PurePath
 from deeppavlov import build_model
 from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov.core.common.file import read_json
-from utils import (
-    create_folders_if_not_exist,
-    find_and_download_docs_if_needed,
-    download_files_and_save_links,
-    move_files_and_save_paths,
-    train_upload_return_attributes,
-    remove_files_and_folders,
-)
+from utils import vectorize_upload_return_attributes, download_files, add_file_id_to_config
+from common.files_and_folders_processing import create_folders_if_not_exist
 
 # logging here because it conflicts with tf
 
@@ -24,16 +19,54 @@ app = Flask(__name__)
 
 PARAGRAPHS_NUM = int(os.environ.get("PARAGRAPHS_NUM", 5))
 FILE_SERVER_TIMEOUT = float(os.environ.get("FILE_SERVER_TIMEOUT", 30))
-DOC_PATH_OR_LINK = os.environ.get("DOC_PATH_OR_LINK", "")
-if DOC_PATH_OR_LINK and not isinstance(DOC_PATH_OR_LINK, list):
-    DOC_PATH_OR_LINK = DOC_PATH_OR_LINK.split(",")  # we may have multiple files
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
 SERVICE_PORT = os.environ.get("SERVICE_PORT", None)
 FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
+assert FILE_SERVER_URL, logger.error("Error: FILE_SERVER_URL is not specified in env")
 MODEL_CONFIG = read_json(CONFIG_PATH)
 MODEL_CONFIG["dataset_reader"]["dataset_format"] = "txt"
 MODEL_CONFIG["chainer"]["pipe"][1]["top_n"] = PARAGRAPHS_NUM
-MODEL_CONFIG["dataset_reader"]["data_path"] = "/data/temporary_dataset/"
+
+
+@app.route("/vectorize_documents", methods=["POST"])
+def vectorize_documents():
+    attributes_to_add = []
+    dialogs = request.json["dialogs"]
+    create_folders_if_not_exist(["/data/documents", "/data/odqa"])
+    for dialog in dialogs:
+        filepaths_in_container, files_to_vectorize = [], []
+        documents_in_use = dialog.get("human", {}).get("attributes", {}).get("documents_in_use", {})
+        dialog_id = dialog["dialog_id"]
+        if documents_in_use:  # vectorize documents if there are any documents_in_use
+            try:
+                for file_id in documents_in_use.keys():  # get links to all files that are not vectorized
+                    is_vectorised = documents_in_use[file_id].get("vectors_processed", False)
+                    if not is_vectorised:
+                        document_link = documents_in_use[file_id].get("full_processed_text_link", "")
+                        if document_link not in files_to_vectorize:
+                            files_to_vectorize.append(document_link)
+                if files_to_vectorize:  # vectorize files that are not vectorized if any
+                    filepaths_in_container = download_files(files_to_vectorize, filepaths_in_container)
+                    model_config = add_file_id_to_config(MODEL_CONFIG, file_id)
+                    model_info, documents_in_use = vectorize_upload_return_attributes(
+                        model_config, filepaths_in_container, documents_in_use, dialog_id
+                    )
+                    bot_and_human_atts = {
+                        "bot_attributes": {"model_info": {file_id: model_info}},
+                        "human_attributes": {"documents_in_use": documents_in_use},
+                    }
+                    attributes_to_add.append(bot_and_human_atts)
+                else:
+                    logger.info("All files are already vectorized. Skipping vectorization.")
+                    attributes_to_add.append({})
+            except Exception as e:
+                sentry_sdk.capture_exception(e)
+                logger.exception(e)
+                attributes_to_add.append({})
+        else:
+            logger.info("No documents in use found.")
+            attributes_to_add.append({})
+    return jsonify(attributes_to_add)
 
 
 @app.route("/return_candidates", methods=["POST"])
@@ -41,72 +74,62 @@ def return_candidates():
     candidates_list = []
     dialogs = request.json["dialogs"]
     for dialog in dialogs:
-        bot_attributes = dialog.get("bot", {}).get("attributes", {})
-        db_link = bot_attributes.get("db_link", "")  # where to download model files
-        matrix_link = bot_attributes.get("matrix_link", "")
-        try:
-            logger.info(f"Started downloading files from server (db_link: {db_link}, matrix_link: {matrix_link}).")
-            db_file = requests.get(db_link)
-            matrix_file = requests.get(matrix_link, timeout=FILE_SERVER_TIMEOUT)
-            with open("/data/odqa/userfile.db", "wb") as f:
-                f.write(db_file.content)
-            with open("/data/odqa/userfile_tfidf_matrix.npz", "wb") as f:
-                f.write(matrix_file.content)
-            logger.info("Files downloaded successfully.")
-            ranker_model = build_model(MODEL_CONFIG)
-            logger.info("Model loaded.")
-            utterances = dialog.get("human_utterances", [{}])[-1].get("text", "")
-            results = ranker_model([utterances])[0]
-            candidates_list.append({"candidate_files": results})
-        except Exception as e:
-            logger.error(e)
-            candidates_list.append({})
-        logger.info(f"Output candidate files: '{candidates_list}'.")
-    return jsonify(candidates_list)
-
-
-@app.route("/train_and_upload_model", methods=["POST"])
-def train_and_upload_model():
-    attributes_to_add = []
-    dialogs = request.json["dialogs"]
-    create_folders_if_not_exist(["/data/documents", "/data/odqa"])
-    for dialog in dialogs:
-        filepaths_in_container, document_links, docs_and_links = [], [], []
-        model_needs_train, doc_needs_upload = False, False
-        if dialog.get("human_attributes", [{}])[-1].get("documents", []):
-            document_links, model_needs_train = find_and_download_docs_if_needed(
-                dialog, model_needs_train, filepaths_in_container, docs_and_links
-            )
-        elif "document_links" not in dialog.get("bot", {}).get("attributes", {}):
-            model_needs_train, doc_needs_upload = True, True
-            if "http" in DOC_PATH_OR_LINK[0]:
-                logger.info(f"DOC_PATH_OR_LINK: {DOC_PATH_OR_LINK}")
-                download_files_and_save_links(DOC_PATH_OR_LINK, filepaths_in_container, docs_and_links)
+        create_folders_if_not_exist(["/data/documents", "/data/odqa"])
+        curr_docs = list(dialog.get("human", {}).get("attributes", {}).get("documents_in_use", {}).keys())
+        if curr_docs:
+            # now we always have one file in use (concatenated texts from several inputs) so taking first and only key
+            curr_doc = curr_docs[0]
+            model_info = dialog.get("bot", {}).get("attributes", {}).get("model_info", {})
+            # get vectorization results for our specific file in use
+            db_link = model_info.get(curr_doc, {}).get("db_link", "")
+            matrix_link = model_info.get(curr_doc, {}).get("matrix_link", "")
+            if db_link and matrix_link:
+                try:
+                    # ensure unique file names by adding ids, dblink format: "{FILE_SERVER_URL}/file?file={FILE_ID}.db"
+                    file_id = PurePath(db_link.split("=")[-1]).stem
+                    tfidf_matrix_path = f"/data/odqa/userfile_tfidf_matrix_{file_id}.npz"
+                    userfile_path = f"/data/odqa/userfile_{file_id}.db"
+                    if os.path.isfile(tfidf_matrix_path) and os.path.isfile(
+                        userfile_path
+                    ):  # check if we already have model files in container
+                        logger.info(
+                            f"{userfile_path} and {tfidf_matrix_path} are already in container, skipping downloading."
+                        )
+                    else:  # if no, download model files from server
+                        logger.info(
+                            f"""Downloading {db_link} to {userfile_path}, {matrix_link} to {tfidf_matrix_path})."""
+                        )
+                        db_file = requests.get(db_link, timeout=FILE_SERVER_TIMEOUT)
+                        matrix_file = requests.get(matrix_link, timeout=FILE_SERVER_TIMEOUT)
+                        with open(userfile_path, "wb") as f:
+                            f.write(db_file.content)
+                        with open(tfidf_matrix_path, "wb") as f:
+                            f.write(matrix_file.content)
+                        logger.info("Files downloaded successfully.")
+                    # adding our files' ids to model's config to ensure that we build it from the files we need
+                    model_config = add_file_id_to_config(MODEL_CONFIG, file_id)
+                    ranker_model = build_model(model_config)
+                    logger.info("Model loaded.")
+                    last_human_utterance = dialog.get("human_utterances", [{}])[-1].get("text", "")
+                    # get candidates that are closest to last user utterance
+                    # ranker_model([x]) processes batches and outputs [[result]], thus we take item [0]
+                    results = ranker_model([last_human_utterance])[0]
+                    candidates_list.append({"candidate_files": results})
+                except Exception as e:
+                    sentry_sdk.capture_exception(e)
+                    logger.exception(e)
+                    candidates_list.append({})
+                logger.info(f"Output candidate files: '{candidates_list}'.")
             else:
-                move_files_and_save_paths(DOC_PATH_OR_LINK, filepaths_in_container, docs_and_links)
-        logger.info(f"filepaths_in_container: {filepaths_in_container}")
-        if model_needs_train:
-            try:
-                bot_and_human_atts = train_upload_return_attributes(
-                    MODEL_CONFIG,
-                    filepaths_in_container,
-                    document_links,
-                    docs_and_links,
-                    doc_needs_upload=doc_needs_upload,
+                logger.info(
+                    "There are documents in use but they were not vectorized. \
+Check if doc-retriever /vectorize_documents endpoint works correctly."
                 )
-                files_to_remove = filepaths_in_container + [
-                    "/data/odqa/userfile.db",
-                    "/data/odqa/userfile_tfidf_matrix.npz",
-                ]
-                remove_files_and_folders(files_to_remove, ["/data/temporary_dataset/"])
-                attributes_to_add.append(bot_and_human_atts)
-                logger.info(f"Attributes in save_model: {attributes_to_add}")
-            except Exception as e:
-                logger.error(e)
-                attributes_to_add.append({})
+                candidates_list.append({})
         else:
-            attributes_to_add.append({})
-    return jsonify(attributes_to_add)
+            logger.info("No documents in use found.")
+            candidates_list.append({})
+    return jsonify(candidates_list)
 
 
 if __name__ == "__main__":
