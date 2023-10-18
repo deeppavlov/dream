@@ -4,7 +4,7 @@ from copy import deepcopy
 import re
 
 from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_intents, service_intents
+from common.utils import get_intents
 from common.grounding import BUT_PHRASE, REPEAT_PHRASE
 
 logger = logging.getLogger(__name__)
@@ -197,28 +197,6 @@ def last_n_human_utt_dialog_formatter(dialog: Dict, last_n_utts: int, only_last_
     return [{"sentences_batch": [human_utts], "intents": [detected_intents]}]
 
 
-def stop_formatter_dialog(dialog: Dict) -> List[Dict]:
-    # Used by: stop annotator, conv eval annotator
-    hypotheses = dialog["utterances"][-1]["hypotheses"]
-    utts = []
-    for h in hypotheses:
-        tmp_utts = [m["text"] for m in dialog["utterances"]]
-        tmp_utts.append(h["text"])
-        tmp_utts = " [SEP] ".join([j for j in tmp_utts])
-        utts.append(tmp_utts)
-    return [{"dialogs": utts}]
-
-
-def count_ongoing_skill_utterances(bot_utterances: List[Dict], skill: str) -> int:
-    i = 0
-    for utt in bot_utterances[::-1]:
-        if utt["active_skill"] == skill:
-            i += 1
-        else:
-            break
-    return i
-
-
 def dff_formatter(
     dialog: Dict,
     service_name: str,
@@ -287,31 +265,3 @@ def dff_formatter(
             "dialog_id_batch": [dialog["dialog_id"]],
         }
     ]
-
-
-def programy_post_formatter_dialog(dialog: Dict) -> Dict:
-    # Used by: program_y, program_y_dangerous, program_y_wide
-    # Look at skills/program_y*
-    dialog = get_last_n_turns(dialog, bot_last_turns=6)
-    first_uttr_hi = False
-    if len(dialog["human_utterances"]) == 1 and not if_chat_about_particular_topic(dialog["human_utterances"][-1]):
-        first_uttr_hi = True
-
-    dialog = remove_clarification_turns_from_dialog(dialog)
-    dialog = last_n_human_utt_dialog_formatter(dialog, last_n_utts=5)[0]
-    sentences = dialog["sentences_batch"][0]
-    intents = dialog["intents"][0]
-
-    # modify sentences with yes/no intents to yes/no phrase
-    # todo: sent may contain multiple sentence, logic here could be improved
-    prioritized_intents = service_intents - {"yes", "no"}
-    for i, (sent, ints) in enumerate(zip(sentences, intents)):
-        ints = set(ints)
-        if "?" not in sent and len(ints & prioritized_intents) == 0:
-            if "yes" in ints:
-                sentences[i] = "yes."
-            elif "no" in ints:
-                sentences[i] = "no."
-    if first_uttr_hi:
-        sentences = ["hi."]
-    return {"sentences_batch": [sentences]}

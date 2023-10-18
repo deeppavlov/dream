@@ -116,7 +116,7 @@
                     "timeout": 50,
                     "url": "http://doc-retriever:8165/train_and_upload_model"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [],
                 "state_manager_method": "update_attributes",
@@ -132,7 +132,7 @@
                     "timeout": 30,
                     "url": "http://doc-retriever:8165/return_candidates"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.train_and_upload_model"
@@ -191,7 +191,7 @@
                     "protocol": "python",
                     "class_name": "skills.dummy_skill.connector:DummySkillConnector"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
