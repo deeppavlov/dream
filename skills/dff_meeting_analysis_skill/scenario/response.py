@@ -202,11 +202,11 @@ def analyze_transcript(prompt_type: str):
                 docs_in_attributes
             ):  # if there are docs in human utt attributes, but no processed docs in use were found
                 hyp_excuse = """Sorry, I failed to process the file you provided. \
-Please, make sure that you provide a valid link to a valid file (.txt, .pdf, .docx, or .html) and try again."""
+Please, make sure that you provide a valid .docx file with Teams meeting transcript and try again."""
                 hypotheses = [hyp_excuse]
             else:
-                logger.info("No documents provided by user.")
-                hypotheses = []
+                hyp_request_for_doc = "Please, upload the transcript that you want to discuss."
+                hypotheses = [hyp_request_for_doc]
         else:
             hypotheses = []
         logger.info(f"generated hypotheses: {hypotheses}")

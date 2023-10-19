@@ -10,7 +10,6 @@ from flask import Flask, request, jsonify
 from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.selectors import collect_descriptions_from_components
-from common.files_and_folders_processing import SKILLS_USING_DOC
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -116,17 +115,11 @@ def select_skills(dialog: dict, all_prev_active_skills: List[str], all_prev_used
     all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
     # never changing all_skill_names, only changing all_available_skill_names
     all_available_skill_names = copy.deepcopy(all_skill_names)
-    # remove skills that deal with docs if no doc is in use now
     docs_in_use_info = dialog.get("human", {}).get("attributes", {}).get("documents_in_use", {})
-    if not docs_in_use_info:
-        all_available_skill_names = [skill for skill in all_available_skill_names if skill not in SKILLS_USING_DOC]
-        logger.info(f"No document in use found. Removing {SKILLS_USING_DOC} from all_skill_names.")
-    else:
-        # if we have doc in use now, remove dff_document_qa_llm_skill from skills to be sent to LLM
-        # in any case, this skill will be added later
-        all_available_skill_names = [
-            skill for skill in all_available_skill_names if skill != "dff_document_qa_llm_skill"
-        ]
+    # no matter if we have doc in use now, remove dff_document_qa_llm_skill from skills to be sent to LLM
+    # in any case, this skill will be added later
+    # NB: meeting analysis skill is not removed and can be chosen even if there is no doc
+    all_available_skill_names = [skill for skill in all_available_skill_names if skill != "dff_document_qa_llm_skill"]
     if human_uttr_attributes.get("selected_skills", None) in ["all", []]:
         logger.info(f"llm_based_skill_selector selected ALL skills:\n`{all_available_skill_names}`")
         return all_available_skill_names

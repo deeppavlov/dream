@@ -34,7 +34,7 @@ DECISIONS = re.compile(
 flows = {
     GLOBAL: {
         TRANSITIONS: {
-            ("service", "fallback", 1.7): loc_cnd.no_document_in_use(),
+            ("service", "no_document", 1.7): loc_cnd.no_document_in_use(),
             ("generation", "decisions", 1.5): cnd.regexp(DECISIONS),
             ("generation", "future_tasks", 1.5): cnd.regexp(FUTURE_TASKS),
             ("generation", "completed_tasks", 1.5): cnd.regexp(COMPLETED_TASKS),
@@ -49,6 +49,12 @@ flows = {
         },
         "fallback": {
             RESPONSE: "Sorry, I cannot help you with that.",
+            TRANSITIONS: {
+                lbl.repeat(0.2): cnd.true(),
+            },
+        },
+        "no_document": {
+            RESPONSE: "Please, upload the transcript that you want to discuss.",
             TRANSITIONS: {
                 lbl.repeat(0.2): cnd.true(),
             },
