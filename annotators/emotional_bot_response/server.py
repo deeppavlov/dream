@@ -39,62 +39,13 @@ available_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
 
 
 def make_prompt(sentence, emotion="neutral", mood="happy", intensity=7):
-    prompt = f"""You are a writer who needs to rewrite a sentence to express
-    specific emotions, moods, and intensity levels. Your task is to generate
-    a new sentence that conveys the desired emotions, moods, and emotion intensity
-    (0 represents minimal intensity and 10 represents maximum intensity)
-    while keeping the original meaning and vocabulary range.
-    Here's the information you have:
-
-    **Input:**
-    - Sentence: {sentence}
-    - Emotion Label: {emotion}
-    - Mood Label: {mood}
-    - Intensity Level: {intensity}
-
-    **Instructions:**
-    1. Read the given sentence and understand its meaning and context.
-    2. Rewrite the sentence to include the specified emotion, mood, and intensity.
-    Make changes to the wording, sentence structure, and choice of words as needed.
-    Ensure that the new sentence effectively conveys the desired emotions, moods,
-    and intensity but preserves vocabulary range of the original.
-    3. Pay attention to the overall tone, mood, and intensity of the sentence.
-    Adjust the sentence's tone and word choice to match the specified mood label
-    and intensity level, while considering the emotional undertones associated
-    with the selected emotion label.
-    4. Maintain the original meaning of the sentence. Although you can rephrase
-    and restructure the sentence, ensure that the core idea remains the same.
-
-    **Example:**
-
-    **Input:**
-    - Sentence: I quit my job.
-    - Emotion Label: anger
-    - Mood Label: frustrated
-    - Intensity Level: 5
-
-    **Instructions:**
-    1. Read the given sentence and understand its meaning and context:
-    The person decided to leave their job.
-    2. Rewrite the sentence to include the specified emotion, mood, and intensity.
-    3. Adjust the sentence's tone, word choice, and intensity level: Use stronger
-    and more impactful words that convey a high level of anger and frustration,
-    reflecting the intensity level specified.
-    4. Maintain the original meaning of the sentence: Ensure that the person still
-    expresses the decision to leave their job.
-
-    **Example Output:**
-    I've had it! I'm done with this pathetic excuse for a job!
-
-    Remember, your task is to rewrite sentences according to specified emotions,
-    moods, and intensity levels while keeping the original meaning and vocabulary range.
-    Feel free to adjust sentence structures and choose words that effectively convey
-    the desired emotions, moods, and intensity. Keep the language complexity simple.
-    Don't mention intensity level in the output. Preserve the type of the sentence
-    if it is a question.
-
-    **Output:**"""
-    return prompt
+    with open("emotion_change_prompt.txt", "r", encoding="utf-8") as f:
+        raw_prompt = f.read()
+    sent_prompt = raw_prompt.replace("{SENTENCE}", sentence)
+    emot_prompt = sent_prompt.replace("{EMOTION}", emotion)
+    mood_prompt = emot_prompt.replace("{MOOD}", mood)
+    inten_prompt = mood_prompt.replace("{INTENSITY}", intensity)
+    return inten_prompt
 
 
 def get_llm_emotional_response(prompt):
