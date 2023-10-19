@@ -1310,7 +1310,7 @@ def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
     return [
         {
             "sentences": hypots,
-            "bot_mood_label": bot_mood_labels,
-            "bot_emotion": bot_emotions,
+            "bot_mood_labels": bot_mood_labels,
+            "bot_emotions": bot_emotions,
         }
     ]

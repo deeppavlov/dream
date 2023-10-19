@@ -555,11 +555,11 @@
         }
     },
     "metadata": {
-        "display_name": "Dream",
+        "display_name": "Dream Emotion",
         "author": "DeepPavlov",
-        "description": "Main version of DeepPavlov Dream Socialbot",
+        "description": "Version of Dream with ability to respond according to mood and emotions",
         "version": "0.1.0",
-        "date_created": "2022-12-12T12:12:00",
+        "date_created": "2023-08-30T12:12:00",
         "ram_usage": "20 GB",
         "gpu_usage": "20 GB",
         "disk_usage": "20 GB"

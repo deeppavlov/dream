@@ -29,7 +29,7 @@ GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
+GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30.0))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
@@ -115,7 +115,7 @@ def get_llm_emotional_response(prompt):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        response = None
+        response = ""
 
     return response
 
@@ -129,7 +129,7 @@ def rewrite_sentences(sentence, bot_emotion, bot_mood_label):
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = {"hypotheses": "fallback standard response"}
+        result = {"hypotheses": ""}
     return result
 
 
@@ -138,12 +138,12 @@ def respond():
     st_time = time.time()
 
     sentences = request.json.get("sentences", [])
-    bot_mood_label = request.json.get("bot_mood_label", [])
-    bot_emotion = request.json.get("bot_emotion", [])
+    bot_mood_labels = request.json.get("bot_mood_labels", [])
+    bot_emotions = request.json.get("bot_emotions", [])
 
     results = []
-    for i in range(len(sentences)):
-        result = rewrite_sentences(sentences[i], bot_emotion[0], bot_mood_label[0])
+    for sentence, emotion, mood in zip(sentences, bot_emotions, bot_mood_labels):
+        result = rewrite_sentences(sentence, emotion, mood)
         results.append(result)
 
     total_time = time.time() - st_time
@@ -157,12 +157,12 @@ def respond_batch():
     st_time = time.time()
 
     sentences = request.json.get("sentences", [])
-    bot_mood_label = request.json.get("bot_mood_label", [])
-    bot_emotion = request.json.get("bot_emotion", [])
+    bot_mood_labels = request.json.get("bot_mood_labels", [])
+    bot_emotions = request.json.get("bot_emotions", [])
 
     results = []
-    for i in range(len(sentences)):
-        result = rewrite_sentences(sentences[i], bot_emotion[i], bot_mood_label[i])
+    for sentence, emotion, mood in zip(sentences, bot_emotions, bot_mood_labels):
+        result = rewrite_sentences(sentence, emotion, mood)
         results.append(result)
 
     total_time = time.time() - st_time
@@ -178,8 +178,8 @@ try:
     bot_mood_labels = ["angry"]
     bot_emotions = ["anger"]
     responses = rewrite_sentences(sentences, bot_mood_labels, bot_emotions)
-    logger.info("TEST. Sentences: {}".format(sentences))
-    logger.info("TEST. Emotional sentences: {}".format(responses))
+    logger.info(f"TEST. Sentences: {sentences}")
+    logger.info(f"TEST. Emotional sentences: {responses}")
 
     logger.info("emotional-bot-response is ready")
 except Exception as e:
