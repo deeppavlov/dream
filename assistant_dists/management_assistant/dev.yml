@@ -40,12 +40,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
-  dff-roles-prompted-skill:
+  dff-general-pm-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8185:8185
+      - 8189:8189
   dff-meeting-analysis-skill:
     volumes:
       - "./skills/dff_meeting_analysis_skill:/src"

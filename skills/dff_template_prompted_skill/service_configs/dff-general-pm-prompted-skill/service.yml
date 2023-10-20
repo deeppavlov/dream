@@ -1,0 +1,30 @@
+name: dff-general-pm-prompted-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  - .env_secret
+  build:
+    args:
+      SERVICE_PORT: 8189
+      SERVICE_NAME: dff_general_pm_prompted_skill
+      PROMPT_FILE: common/prompts/general_pm.json
+      GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+      GENERATIVE_SERVICE_CONFIG: openai-chatgpt-long.json
+      GENERATIVE_TIMEOUT: 120
+      N_UTTERANCES_CONTEXT: 7
+    context: .
+    dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/dff_template_prompted_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8189:8189
+proxy: null

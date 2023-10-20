@@ -1,0 +1,27 @@
+name: dff_general_pm_prompted_skill
+display_name: General PM Skill
+component_type: Generative
+model_type: NN-based
+is_customizable: true
+author: publisher@deeppavlov.ai
+description: This agent provides responses on all kind of questions (except of about meeting transcripts), 
+  greets user, gives fallbacks, explains abilities of the assistant, accepts feature requests.
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://dff-general-pm-prompted-skill:8189/respond
+dialog_formatter:
+  name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+  skill_name: dff_general_pm_prompted_skill
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_template_prompted_skill/service_configs/dff-general-pm-prompted-skill
+date_created: '2023-03-16T09:45:32'
