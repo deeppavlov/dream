@@ -80,13 +80,25 @@ def select_response_by_scores(hypotheses, scores):
 
 def select_response(dialog, hypotheses, human_uttr_attributes):
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+
+    if len(hypotheses) == 1:
+        logger.info("Found only one hypothesis. Return it.")
+        return hypotheses[0]["text"]
+
     try:
         ie_types = [
             "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
         ]
         curr_prompt = PROMPT.replace(
             "LIST_OF_HYPOTHESES",
-            "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)]),
+            "Hypotheses:\n"
+            + "\n".join(
+                [
+                    f'"{hyp["text"]}" [{ie}]'
+                    for hyp, ie in zip(hypotheses, ie_types)
+                    if hyp["skill_name"] != "dummy_skill"
+                ]
+            ),
         )
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")

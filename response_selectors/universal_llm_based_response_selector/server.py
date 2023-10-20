@@ -55,6 +55,10 @@ def select_response_by_scores(hypotheses, scores):
 def select_response(dialog, hypotheses, human_uttr_attributes):
     dialog_context = [uttr["text"] for uttr in dialog["utterances"]]
 
+    if len(hypotheses) == 1:
+        logger.info("Found only one hypothesis. Return it.")
+        return hypotheses[0]["text"]
+
     _response_selector = human_uttr_attributes.get("response_selector", {})
     _is_prompt_based_selection = "prompt" in _response_selector
 
@@ -82,7 +86,14 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
         ]
         curr_prompt = given_prompt.replace(
             "LIST_OF_HYPOTHESES",
-            "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hypotheses, ie_types)]),
+            "Hypotheses:\n"
+            + "\n".join(
+                [
+                    f'"{hyp["text"]}" [{ie}]'
+                    for hyp, ie in zip(hypotheses, ie_types)
+                    if hyp["skill_name"] != "dummy_skill"
+                ]
+            ),
         )
         logger.info(f"universal_llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"universal_llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
