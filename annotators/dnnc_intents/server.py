@@ -32,7 +32,7 @@ def respond():
     t = time.time()
     sentences = request.json.get("sentences", [" "])
     label_list = model(sentences)
-    ans=[]
+    ans = []
     for sentence in sentences:
         ans.append({dnnc_class: 1 for dnnc_class in label_list})
     logger.debug(f"dnnc result: {ans}")
