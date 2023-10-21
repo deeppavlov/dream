@@ -498,9 +498,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4G
+          memory: 8G
         reservations:
-          memory: 4G
+          memory: 8G
 
 
 version: '3.7'
