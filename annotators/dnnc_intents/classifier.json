@@ -1,7 +1,6 @@
 {
   "chainer": {
-    "in": ["texts"],
-    "in_y": ["y_true"],
+    "in": ["text"],
     "pipe": [
       {
         "class_name": "dnnc_preparer",
