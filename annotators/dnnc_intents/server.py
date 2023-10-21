@@ -35,5 +35,5 @@ def respond():
     label_list = model(sentences)
     ans=[]
     for sentence in sentences:
-        ans.append({dnnc_class:1 for dnnc_class in label_list}
+        ans.append({dnnc_class:1 for dnnc_class in label_list})
     return jsonify(ans)
