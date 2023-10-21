@@ -125,6 +125,7 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8136
       - PORT=8136
+
   dnnc-intents:
     command: [ "nginx", "-g", "daemon off;" ]
     build:
