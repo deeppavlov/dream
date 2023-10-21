@@ -19,4 +19,4 @@ class QuickstartUser(HttpUser):
             print(ans.status_code, ans.text)
 
     def on_start(self):
-        self.batch_index = 
+        self.batch_index = 0
