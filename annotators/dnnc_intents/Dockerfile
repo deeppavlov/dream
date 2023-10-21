@@ -1,4 +1,6 @@
-FROM deeppavlov/deeppavlov:1.3.0-gpu
+FROM deeppavlov/deeppavlov:1.2.0-gpu
+
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@1.3.0
 
 WORKDIR /base/DeepPavlov
 
