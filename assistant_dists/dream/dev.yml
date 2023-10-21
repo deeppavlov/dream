@@ -159,7 +159,7 @@ services:
       - 8167:8167
   dnnc-intents:
     volumes:
-      - "./services/dnnc_intents:/src"
+      - "./annotators/dnnc_intents:/src"
       - "./common:/src/common"
     ports:
       - 8218:8218
