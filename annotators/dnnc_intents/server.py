@@ -32,8 +32,8 @@ app = Flask(__name__)
 def respond():
     t = time.time()
     sentences = request.json.get("sentences", [" "])
-    label_lists, sim_scores_lists = model(sentences)
+    label_list = model(sentences)
     ans=[]
-    for sim_score_list in sin_scores_lists:
-        ans.append({dnnc_class:prob for dnnc_class,prob in zip(dnnc_classes, sim_score_list)}
+    for sentence in sentences:
+        ans.append({dnnc_class:1 for dnnc_class in label_list}
     return jsonify(ans)
