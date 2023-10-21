@@ -4,7 +4,7 @@
     "in_y": ["y_true"],
     "pipe": [
       {
-        "class_name": "utils:dnnc_batch_preprocessor",
+        "class_name": "dnnc_batch_preprocessor",
         "in": ["text"],
         "out": ["texts","dataset"]
       },
@@ -51,7 +51,7 @@
       "BINARY_CLASSIFICATION": true,
       "BASE_MODEL": "roberta-base"
     },
-    "imports":["utils.py"],
+    "imports":["utils"],
     "download": [
       {
         "url": "http://files.deeppavlov.ai/v1/classifiers/fewshot/roberta_nli_mrpc_1_10.tar.gz",
