@@ -161,6 +161,8 @@ services:
     volumes:
       - "./annotators/dnnc_intents:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8218:8218
 version: "3.7"

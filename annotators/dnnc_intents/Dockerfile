@@ -2,7 +2,6 @@ FROM deeppavlov/deeppavlov:1.2.0-gpu
 
 WORKDIR /base/DeepPavlov
 
-
 WORKDIR /src
 RUN mkdir common
 
