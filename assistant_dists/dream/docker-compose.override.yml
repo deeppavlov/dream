@@ -490,7 +490,7 @@ services:
       args:
         SERVICE_PORT: 8218
         SERVICE_NAME: dnnc_intents
-      context: ./services/dnnc_intents/
+      context: ./annotators/dnnc_intents/
     command: flask run -h 0.0.0.0 -p 8218
     environment:
       - CUDA_VISIBLE_DEVICES=0
