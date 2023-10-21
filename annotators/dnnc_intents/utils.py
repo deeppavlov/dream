@@ -6,6 +6,16 @@ from typing import Dict, Union, List
 import json
 import numpy as np
 import torch
+import logging
+
+from flask import Flask, request, jsonify
+import sentry_sdk
+
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
+
+logger = logging.getLogger(__name__)
 
 
 @register("dnnc_preparer")
@@ -31,6 +41,7 @@ class TorchTransformersClassifierModelBatch1(TorchTransformersClassifierModel):
 
         """
         answer = []
+        logger.info(len(features))
         for i in range(len(features)):
             _input = {key: value[i].unsqueeze(0).to(self.device)
                       for key, value in features.items()}
@@ -59,4 +70,6 @@ class TorchTransformersClassifierModelBatch1(TorchTransformersClassifierModel):
                 pred = logits.squeeze(-1).detach().cpu().numpy()
             answer.append(pred)
         answer = np.concatenate(answer)
+        logger.info(answer)
+        logger.info(answer.shape)
         return answer
