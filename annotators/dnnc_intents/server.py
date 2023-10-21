@@ -16,9 +16,9 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logger = logging.getLogger(__name__)
 
 try:
-    model = build_model("combined_classifier.json", download=True)
+    model = build_model("classifier.json", download=True)
     logger.info("Making test res")
-    test_res = get_result(["a"], ["a"])
+    test_res = model(["a"])
     logger.info("model loaded, test query processed")
 except Exception as e:
     sentry_sdk.capture_exception(e)
