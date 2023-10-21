@@ -4,7 +4,7 @@
     "in_y": ["y_true"],
     "pipe": [
       {
-        "class_name": "dnnc_batch_preprocessor",
+        "class_name": "dnnc_preparer",
         "in": ["text"],
         "out": ["texts","dataset"]
       },
