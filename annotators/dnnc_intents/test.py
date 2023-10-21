@@ -4,11 +4,11 @@ from time import time
 
 def main_test():
     url = "http://0.0.0.0:8218/model"
-    configs = [{"sentences": ["what is saas marketing"], "answers_dnnc": ["oos"]},
-               {"sentences": ["what day is it gonna be in twenty-one days"],
-                "answers_dnnc": ["date"]},
-               {"sentences": ["how long will it take me to make baked chicken"],
-                "answers_dnnc": ["cook_time"]}]
+    configs = [
+        {"sentences": ["what is saas marketing"], "answers_dnnc": ["oos"]},
+        {"sentences": ["what day is it gonna be in twenty-one days"], "answers_dnnc": ["date"]},
+        {"sentences": ["how long will it take me to make baked chicken"], "answers_dnnc": ["cook_time"]},
+    ]
     t = time()
     for config in configs:
         responses = requests.post(url, json=config).json()
