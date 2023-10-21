@@ -9,7 +9,6 @@ from random import choice
 from common.custom_requests import request_triples_wikidata
 from common.factoid import FACTOID_THRESHOLD
 from common.combined_classes import combined_classes, TOPIC_GROUPS
-from common.dnnc_classes import dnnc_classes
 from common.join_pattern import *
 
 from common import food, books, music, news, travel
@@ -852,7 +851,7 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     cobot_da_intent_labels = _process_text(cobot_da_intent_labels)
     if not cobot_da_intent_probs:
         cobot_da_intent_probs = _labels_to_probs(cobot_da_intent_labels, combined_classes["cobot_dialogact_intents"])
-    dnnc_intent_probs = annotated_utterance["annotations"].get("dnnc_intents",[])
+    dnnc_intent_probs = annotated_utterance["annotations"].get("dnnc_intents", [])
     dnnc_intents = [intent for intent in dnnc_intent_probs if dnnc_intent_probs[intent] == 1]
     if which == "all":
         answer_probs = {**detected_intent_probs, **cobot_da_intent_probs, **midas_intent_probs, **dnnc_intent_probs}
