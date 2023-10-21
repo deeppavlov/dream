@@ -1,6 +1,6 @@
 from deeppavlov.core.models.component import Component
 from deeppavlov.core.common.registry import register
-from deeppavlov.models.torch_bert import TorchTransformersClassifierModel
+from deeppavlov.models.torch_bert.torch_transformers_classifier import TorchTransformersClassifierModel
 import json
 
 
