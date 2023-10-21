@@ -5,7 +5,7 @@ import json
 
 @register("dnnc_preparer")
 class dnnc_preparer(Component):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.data = json.load(open("data_full.json", "r"))
 
     def __call__(self, texts):
