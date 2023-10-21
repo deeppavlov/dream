@@ -22,7 +22,7 @@
         "max_seq_length": 128
       },
       {
-        "class_name": "torch_transformers_classifier",
+        "class_name": "torch_transformers_classifier_batch1",
         "main": true,
         "in": ["bert_features"],
         "out": ["simmilarity_scores"],
