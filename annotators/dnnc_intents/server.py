@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -6,8 +7,6 @@ import sentry_sdk
 
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
-from common.combined_classes import combined_classes
-from common.dnnc_classes import dnnc_classes
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
@@ -35,5 +34,7 @@ def respond():
     label_list = model(sentences)
     ans=[]
     for sentence in sentences:
-        ans.append({dnnc_class:1 for dnnc_class in label_list})
+        ans.append({dnnc_class: 1 for dnnc_class in label_list})
+    logger.debug(f"dnnc result: {ans}")
+    logger.info(f"dnnc exec time: {time.time() - t}")
     return jsonify(ans)
