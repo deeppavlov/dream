@@ -11,6 +11,7 @@ import logging
 
 from flask import Flask, request, jsonify
 import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
