@@ -1,4 +1,4 @@
-FROM deeppavlov/deeppavlov:0.17.5
+FROM deeppavlov/base-gpu:0.17.5
 
 RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@1.3.0
 
