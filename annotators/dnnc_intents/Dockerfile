@@ -1,4 +1,4 @@
-FROM deeppavlov/deeppavlov:1.2.0-gpu
+FROM deeppavlov/deeppavlov:1.3.0-gpu
 
 WORKDIR /base/DeepPavlov
 
