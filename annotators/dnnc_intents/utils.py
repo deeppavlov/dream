@@ -50,12 +50,13 @@ class TorchTransformersClassifierModelBatch1(TorchTransformersClassifierModel):
                     pred = torch.nn.functional.softmax(logits, dim=-1)
                 else:
                     pred = torch.nn.functional.sigmoid(logits)
-                pred = pred.detach().cpu().numpy()[0]
+                pred = pred.detach().cpu().numpy()
             elif self.n_classes > 1:
                 logits = logits.detach().cpu().numpy()
-                pred = np.argmax(logits, axis=1)[0]
+                pred = np.argmax(logits, axis=1)
             # regression
             else:
-                pred = logits.squeeze(-1).detach().cpu().numpy()[0]
+                pred = logits.squeeze(-1).detach().cpu().numpy()
             answer.append(pred)
+        answer = np.concatenate(answer)
         return answer
