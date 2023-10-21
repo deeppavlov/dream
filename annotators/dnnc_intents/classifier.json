@@ -6,7 +6,7 @@
       {
         "class_name": "utils:dnnc_batch_preprocessor",
         "in": ["text"],
-        "out": ["texts","dataset"],
+        "out": ["texts","dataset"]
       },
       {
         "class_name": "dnnc_pair_generator",
