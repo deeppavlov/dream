@@ -5,8 +5,8 @@ model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
 description: Model for DNNC intent classification from DeepPavlov
-ram_usage: 1.5G
-gpu_usage: 3.5G
+ram_usage: 3G
+gpu_usage: 7G
 group: annotators
 connector:
   protocol: http
