@@ -15,7 +15,7 @@ import requests
                 "entity_pages": [[["Россия"]]],
             },
             "Росси́я или Росси́йская Федера́ция (РФ), — государство в Восточной Европе"
-            "и Северной Азии. Территория России"
+            " и Северной Азии. Территория России"
             " в её конституционных границах составляет км²; население страны (в пределах её заявленной территории) "
             "составляет чел. (). Занимает первое место в мире по территории, шестое — по объёму ВВП по ППС, и девятое "
             "— по численности населения. Столица — Москва. Государственный язык — русский. Денежная единица — "
@@ -24,7 +24,7 @@ import requests
     ],
 )
 def test_fact_retrieval_rus(url: str, request_data: dict, gold_results: str):
-    response = requests.post(url, data=request_data)
+    response = requests.post(url, json=request_data)
     result = response.json()
     assert response.status_code == 200
-    assert result[0][0][0] == gold_results
+    assert result[0] and result[0][0] and result[0][0][0] == gold_results
