@@ -44,15 +44,6 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8103
       - PORT=8103
-
-  spacy-nounphrases:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8006
-      - PORT=8006
       
   sentence-ranker:
     command: [ "nginx", "-g", "daemon off;" ]

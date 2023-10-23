@@ -2,31 +2,16 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg_prompted/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002, 
+      WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, 
           ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb-server:6363, 
           user-knowledge-memorizer:8027, property-extraction:8131, custom-entity-linking:8153, dff-knowledge-prompted-skill:8050, 
-          sentence-ranker:8128, prompt-selector:8135"
+          sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
-
-  spacy-nounphrases:
-    env_file: [.env]
-    build:
-      context: .
-      dockerfile: ./annotators/spacy_nounphrases/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8006
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   sentseg:
     env_file: [.env]
