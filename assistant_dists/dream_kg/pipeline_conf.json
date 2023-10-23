@@ -69,22 +69,6 @@
             }
         },
         "annotators": {
-            "spelling_preprocessing": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spelling-preprocessing:8074/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "add_annotation_and_reset_human_attributes_for_first_turn",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/pGxj32ic41pvquRXUdqc7A.yml",
-                    "service": "annotators/spelling_preprocessing/service_configs/spelling-preprocessing"
-                }
-            },
             "sentseg": {
                 "connector": {
                     "protocol": "http",
@@ -93,32 +77,12 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
                     "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
                     "service": "annotators/SentSeg/service_configs/sentseg"
-                }
-            },
-            "spacy_nounphrases": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spacy-nounphrases:8006/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/dswI5sRZbFPmgcNQKH5iPg.yml",
-                    "service": "annotators/spacy_nounphrases/service_configs/spacy-nounphrases"
                 }
             },
             "ner": {
@@ -130,7 +94,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
@@ -149,7 +112,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:entity_detection_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
@@ -169,8 +131,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.ner",
-                    "annotators.entity_detection",
-                    "annotators.spacy_nounphrases"
+                    "annotators.entity_detection"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
@@ -208,7 +169,6 @@
                 "previous_services": [
                     "annotators.ner",
                     "annotators.entity_detection",
-                    "annotators.spacy_nounphrases",
                     "annotators.property_extraction"
                 ],
                 "state_manager_method": "add_annotation",
@@ -226,9 +186,7 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog_w_hist",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.spelling_preprocessing"
-                ],
+                "previous_services": [],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
@@ -274,24 +232,6 @@
                     "component": "components/3RDNPBdybjBlSQZqcc7nGQ.yml",
                     "service": "annotators/NER_deeppavlov/service_configs/ner"
                 }
-            },
-            "spacy_nounphrases": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spacy-nounphrases:8006/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/dswI5sRZbFPmgcNQKH5iPg.yml",
-                    "service": "annotators/spacy_nounphrases/service_configs/spacy-nounphrases"
-                }
             }
         },
         "response_annotator_selectors": {
@@ -300,8 +240,7 @@
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
                 "annotator_names": [
                     "sentseg",
-                    "ner",
-                    "spacy_nounphrases"
+                    "ner"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -331,24 +270,6 @@
                 "source": {
                     "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
                     "service": "services/sentence_ranker/service_configs/sentence-ranker"
-                }
-            },
-            "spacy_nounphrases": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://spacy-nounphrases:8006/respond_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/dswI5sRZbFPmgcNQKH5iPg.yml",
-                    "service": "annotators/spacy_nounphrases/service_configs/spacy-nounphrases"
                 }
             },
             "entity_detection": {
