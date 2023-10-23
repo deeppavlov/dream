@@ -6,7 +6,7 @@ def main_test():
     url = "http://0.0.0.0:8218/model"
     configs = [
         {"sentences": ["i want to hear anything you have that's funny"], "answers_dnnc": [["tell_joke"]]},
-        {"sentences": ["i would like to know if you are a robot"], "answers_dnnc": [["are_you_a_bot"]]}
+        {"sentences": ["i would like to know if you are a robot"], "answers_dnnc": [["are_you_a_bot"]]},
     ]
     t = time()
     for config in configs:

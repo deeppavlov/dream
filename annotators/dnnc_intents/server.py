@@ -26,8 +26,8 @@ except Exception as e:
 
 app = Flask(__name__)
 
-labels = [k.split("\t")[0] 
-          for k in open('classes.dict', 'r').readlines()]
+labels = [k.split("\t")[0] for k in open("classes.dict", "r").readlines()]
+
 
 @app.route("/model", methods=["POST"])
 def respond():
@@ -36,8 +36,7 @@ def respond():
     pred_probs_lists = model(sentences)
     ans = []
     for pred_probs in pred_probs_lists:
-        ans.append({dnnc_class: prob
-                    for dnnc_class, prob in zip(labels, pred_probs)})
+        ans.append({dnnc_class: prob for dnnc_class, prob in zip(labels, pred_probs)})
     # roberta config predicted list of class names only - to use it, modify this line
     logger.debug(f"dnnc result: {ans}")
     logger.info(f"dnnc exec time: {time.time() - t}")
