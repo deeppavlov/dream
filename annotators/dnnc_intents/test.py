@@ -8,7 +8,7 @@ def main_test():
         {"sentences": ["i want to hear anything you have that's funny"], "answers_dnnc": [["tell_joke"]]},
         {"sentences": ["what do you think life is really about"], "answers_dnnc": [["meaning_of_life"]]},
         {"sentences": ["i would like to know if you are a robot"], "answers_dnnc": [["are_you_a_bot"]]},
-        {"sentences": ["what is saas marketing"], "answers_dnnc": [["oos"]]},  
+        {"sentences": ["what is saas marketing"], "answers_dnnc": [["oos"]]},
     ]
     t = time()
     for config in configs:
