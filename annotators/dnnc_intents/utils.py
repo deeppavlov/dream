@@ -23,25 +23,30 @@ logger = logging.getLogger(__name__)
 
 supported_intents = ["tell_joke", "are_you_a_bot", "meaning_of_life", "oos"]
 
+
 @register("dnnc_preparer")
 class dnnc_preparer(Component):
     def __init__(self, thr_class=10, thr_oos=50, **kwargs):
         self.data = json.load(open("data_full.json", "r"))
-        cnt=dict()
-        train_data=[]
-        for elem in self.data['val'] + self.data['oos_val']:
-            class_=elem[1]
-            if any([cnt.get(class_, 0)<thr_class and class_ in supported_intents,
-               (class_=='oos' and cnt.get(class_, 0) < thr_oos)]):
+        cnt = dict()
+        train_data = []
+        for elem in self.data["val"] + self.data["oos_val"]:
+            class_ = elem[1]
+            if any(
+                [
+                    cnt.get(class_, 0) < thr_class and class_ in supported_intents,
+                    (class_ == "oos" and cnt.get(class_, 0) < thr_oos),
+                ]
+            ):
                 train_data.append(elem)
-            cnt[class_]=cnt.get(class_, 0) + 1
+            cnt[class_] = cnt.get(class_, 0) + 1
         self.data = train_data
-        
+
     def __call__(self, texts):
         return texts, self.data
 
 
-@register('torch_transformers_classifier_batch1')
+@register("torch_transformers_classifier_batch1")
 class TorchTransformersClassifierModelBatch1(TorchTransformersClassifierModel):
     def __call__(self, features: Dict[str, torch.tensor]) -> Union[List[int], List[List[float]]]:
         """Make prediction for given features (texts).
@@ -54,20 +59,18 @@ class TorchTransformersClassifierModelBatch1(TorchTransformersClassifierModel):
 
         """
         answer = []
-        logger.debug(len(features['input_ids']))
+        logger.debug(len(features["input_ids"]))
         t = time.time()
-        for i in range(len(features['input_ids'])):
-            _input = {key: value[i].unsqueeze(0).to(self.device)
-                      for key, value in features.items()}
-    
+        for i in range(len(features["input_ids"])):
+            _input = {key: value[i].unsqueeze(0).to(self.device) for key, value in features.items()}
+
             with torch.no_grad():
-                tokenized = {key: value for (key, value) in _input.items()
-                             if key in self.accepted_keys}
-    
+                tokenized = {key: value for (key, value) in _input.items() if key in self.accepted_keys}
+
                 # Forward pass, calculate logit predictions
                 logits = self.model(**tokenized)
                 logits = logits[0]
-    
+
             if self.return_probas:
                 if self.is_binary:
                     pred = torch.sigmoid(logits).squeeze(1)
@@ -83,16 +86,16 @@ class TorchTransformersClassifierModelBatch1(TorchTransformersClassifierModel):
             else:
                 pred = logits.squeeze(-1).detach().cpu().numpy()
             answer.append(pred)
-        logger.debug(time.time()-t)
+        logger.debug(time.time() - t)
         answer = np.concatenate(answer)
         return answer
 
 
-@register('dnnc_pairgenerator')
+@register("dnnc_pairgenerator")
 class PairGenerator(Component):
     """
     Generates all possible ordered pairs from 'texts_batch' and 'support_dataset'
-    
+
     Args:
         bidirectional: adds pairs in reverse order
     """
@@ -100,15 +103,17 @@ class PairGenerator(Component):
     def __init__(self, bidirectional: bool = False, **kwargs) -> None:
         self.bidirectional = bidirectional
 
-    def __call__(self,
-                 texts: List[str],
-                 dataset: List[List[str]],
-                ) -> Tuple[List[str], List[str], List[str], List[str]]:
+    def __call__(
+        self,
+        texts: List[str],
+        dataset: List[List[str]],
+    ) -> Tuple[List[str], List[str], List[str], List[str]]:
         hypotesis_batch = []
         premise_batch = []
         hypotesis_labels_batch = []
-        for [premise, [hypotesis, hypotesis_labels]] in zip(texts * len(dataset),
-                                                            np.repeat(dataset, len(texts), axis=0)):
+        for [premise, [hypotesis, hypotesis_labels]] in zip(
+            texts * len(dataset), np.repeat(dataset, len(texts), axis=0)
+        ):
             premise_batch.append(premise)
             hypotesis_batch.append(hypotesis)
             hypotesis_labels_batch.append(hypotesis_labels)
