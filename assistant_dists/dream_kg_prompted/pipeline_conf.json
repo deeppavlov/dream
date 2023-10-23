@@ -74,8 +74,7 @@
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
                 "annotator_names": [
                     "sentseg",
-                    "ner",
-                    "spacy_nounphrases"
+                    "ner"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -172,7 +171,6 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.sentseg",
-                    "annotators.spacy_nounphrases",
                     "annotators.ner"
                 ],
                 "state_manager_method": "add_annotation",
@@ -192,8 +190,7 @@
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.ner",
-                    "annotators.entity_detection",
-                    "annotators.spacy_nounphrases"
+                    "annotators.entity_detection"
                 ],
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
@@ -232,7 +229,6 @@
                 "previous_services": [
                     "annotators.ner",
                     "annotators.entity_detection",
-                    "annotators.spacy_nounphrases",
                     "annotators.property_extraction"
                 ],
                 "state_manager_method": "add_annotation",
