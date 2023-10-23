@@ -8,10 +8,10 @@
         "out": ["texts","dataset"]
       },
       {
-        "class_name": "dnnc_pair_generator",
+        "class_name": "dnnc_pairgenerator",
         "in": ["texts", "dataset"],
         "out": ["x", "x_support", "x_populated", "y_support"],
-        "bidirectional": true
+        "bidirectional": false
       },
       {
         "class_name": "torch_transformers_preprocessor",
