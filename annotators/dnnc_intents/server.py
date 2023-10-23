@@ -26,15 +26,19 @@ except Exception as e:
 
 app = Flask(__name__)
 
+labels = [k.split("\t")[0] 
+          for k in open('classes.dict', 'r').readlines()]
 
 @app.route("/model", methods=["POST"])
 def respond():
     t = time.time()
     sentences = request.json.get("sentences", [" "])
-    label_list = model(sentences)
+    pred_probs_lists = model(sentences)
     ans = []
-    for sentence in sentences:
-        ans.append({dnnc_class: 1 for dnnc_class in label_list})
+    for pred_probs in pred_probs_lists:
+        ans.append({dnnc_class: prob
+                    for dnnc_class, prob in zip(labels, pred_probs)})
+    # roberta config predicted list of class names only - to use it, modify this line
     logger.debug(f"dnnc result: {ans}")
     logger.info(f"dnnc exec time: {time.time() - t}")
     return jsonify(ans)

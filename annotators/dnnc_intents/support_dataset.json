@@ -1,0 +1,3008 @@
+{
+    "columns": [
+        "text",
+        "category"
+    ],
+    "data": [
+        [
+            "positive",
+            "yes"
+        ],
+        [
+            "i need to know my bill total for my verizon payment due this month",
+            "bill_balance"
+        ],
+        [
+            "will i get charged extra if i use my card while in italy",
+            "international_fees"
+        ],
+        [
+            "i wanna change my pin number for my credit acount",
+            "pin_change"
+        ],
+        [
+            "i want to change my credit limit",
+            "credit_limit_change"
+        ],
+        [
+            "can i change your name to buttercup",
+            "change_ai_name"
+        ],
+        [
+            "does my bank of the west card have international transaction fees",
+            "international_fees"
+        ],
+        [
+            "when will my order be here",
+            "order_status"
+        ],
+        [
+            "forget it",
+            "cancel"
+        ],
+        [
+            "think about if you could only say one or the other, which animal do you see yourself choosing, cats or dogs",
+            "do_you_have_pets"
+        ],
+        [
+            "who is your creator",
+            "who_made_you"
+        ],
+        [
+            "tell me when i will next have the day off",
+            "next_holiday"
+        ],
+        [
+            "how long does cottage cheese keep in the fridge",
+            "food_last"
+        ],
+        [
+            "i'd like to revert to factory settings",
+            "reset_settings"
+        ],
+        [
+            "i would like to know the amount of gas i have",
+            "gas"
+        ],
+        [
+            "given my time, what time is it in mst",
+            "time"
+        ],
+        [
+            "can you tell me what time it is please",
+            "time"
+        ],
+        [
+            "what are some fun things to do in butte, montana",
+            "travel_suggestion"
+        ],
+        [
+            "switch over from female to the male voice",
+            "change_accent"
+        ],
+        [
+            "when don't i have to work next",
+            "next_holiday"
+        ],
+        [
+            "are pasta dishes healthy",
+            "nutrition_info"
+        ],
+        [
+            "could you let me know what names you have for me",
+            "user_name"
+        ],
+        [
+            "i have credit card points but don't know how to use them",
+            "redeem_rewards"
+        ],
+        [
+            "find out how long it has been since my car was last in the shop",
+            "last_maintenance"
+        ],
+        [
+            "does my life have meaning",
+            "meaning_of_life"
+        ],
+        [
+            "i need to let my bank know i am traveling to detroit",
+            "travel_notification"
+        ],
+        [
+            "give me the status of my vacation request",
+            "pto_request_status"
+        ],
+        [
+            "please tell my location to bob",
+            "share_location"
+        ],
+        [
+            "i have to get going",
+            "goodbye"
+        ],
+        [
+            "what is the value of my bank accounts",
+            "balance"
+        ],
+        [
+            "reserve a table for two for 7:30 pm at dibruno's under patrick donoghue",
+            "restaurant_reservation"
+        ],
+        [
+            "tell me my current savings account's interest rate",
+            "interest_rate"
+        ],
+        [
+            "can i substitute milk for almond milk",
+            "ingredient_substitution"
+        ],
+        [
+            "how do i jump start a battery",
+            "jump_start"
+        ],
+        [
+            "how many ounces in a gallon",
+            "measurement_conversion"
+        ],
+        [
+            "i wanna know your name",
+            "what_is_your_name"
+        ],
+        [
+            "is my 10am village inn reservation valid",
+            "confirm_reservation"
+        ],
+        [
+            "look me up on the map",
+            "current_location"
+        ],
+        [
+            "my phone cannot be found",
+            "find_phone"
+        ],
+        [
+            "how do i change the oil in my car",
+            "oil_change_how"
+        ],
+        [
+            "is there a way to change your name to betty",
+            "change_ai_name"
+        ],
+        [
+            "what's the nutrient make up of a plate of spaghetti",
+            "nutrition_info"
+        ],
+        [
+            "set the volume to 4 now",
+            "change_volume"
+        ],
+        [
+            "is traffic bad on my way to the next mcdonalds",
+            "traffic"
+        ],
+        [
+            "what is the process i need to follow to get a new credit card",
+            "new_card"
+        ],
+        [
+            "start a new text",
+            "text"
+        ],
+        [
+            "can i harm my credit if i miss a car payment",
+            "improve_credit_score"
+        ],
+        [
+            "how about a reminder",
+            "reminder_update"
+        ],
+        [
+            "i'd like the number for my credit score",
+            "credit_score"
+        ],
+        [
+            "what does \"rescind\" mean",
+            "definition"
+        ],
+        [
+            "what's the currency conversion between usd and pounds",
+            "exchange_rate"
+        ],
+        [
+            "tell me if you like cats or dogs",
+            "do_you_have_pets"
+        ],
+        [
+            "how many days off did i use so far",
+            "pto_used"
+        ],
+        [
+            "i would like you to put a stop on my bank account",
+            "freeze_account"
+        ],
+        [
+            "what do my state taxes amount to",
+            "taxes"
+        ],
+        [
+            "i wanna know my current location",
+            "current_location"
+        ],
+        [
+            "i don't have checks, so can i get new ones",
+            "order_checks"
+        ],
+        [
+            "return it back to the original settings",
+            "reset_settings"
+        ],
+        [
+            "search for carry on rules for flights on delta airlines",
+            "carry_on"
+        ],
+        [
+            "using this playlist, play next song",
+            "next_song"
+        ],
+        [
+            "when will we begin to board my scheduled flight",
+            "flight_status"
+        ],
+        [
+            "i need ten dollars sent from b of a to washington mutual",
+            "transfer"
+        ],
+        [
+            "is there a way to go by bus to olympia",
+            "directions"
+        ],
+        [
+            "change my credit limit, please",
+            "credit_limit_change"
+        ],
+        [
+            "filp a coin, i call heads",
+            "flip_coin"
+        ],
+        [
+            "make a reservation at 5 pm today for 2 at olive garden",
+            "restaurant_reservation"
+        ],
+        [
+            "i have no idea what the pin is for my checking account",
+            "pin_change"
+        ],
+        [
+            "i need to delete tomatoes from my shopping list and add onions instead",
+            "shopping_list_update"
+        ],
+        [
+            "provide me the name of who programmed you",
+            "who_made_you"
+        ],
+        [
+            "can you translate bat into russian for me",
+            "translate"
+        ],
+        [
+            "i would have to say the answer to that is no",
+            "no"
+        ],
+        [
+            "what is the time right now",
+            "time"
+        ],
+        [
+            "tell me why my card was declined yesterday",
+            "card_declined"
+        ],
+        [
+            "yeah, that's how it is",
+            "yes"
+        ],
+        [
+            "how do i handle the situation if i lost my luggage",
+            "lost_luggage"
+        ],
+        [
+            "please repeat over what you said",
+            "repeat"
+        ],
+        [
+            "read me some fun facts",
+            "fun_fact"
+        ],
+        [
+            "is my card set to expire soon",
+            "expiration_date"
+        ],
+        [
+            "how is my ai doing",
+            "greeting"
+        ],
+        [
+            "i would like to hear what ideas you have about making dinner tonight",
+            "meal_suggestion"
+        ],
+        [
+            "should i get any vaccines before going over to the uk",
+            "vaccines"
+        ],
+        [
+            "how is miami time zone like",
+            "timezone"
+        ],
+        [
+            "your efforts don't go unnoticed",
+            "thank_you"
+        ],
+        [
+            "i have a new job, help me with my 401k rollover",
+            "rollover_401k"
+        ],
+        [
+            "tell me your birthday",
+            "how_old_are_you"
+        ],
+        [
+            "can you check the balance on the water bill",
+            "bill_balance"
+        ],
+        [
+            "how healthy is pho",
+            "nutrition_info"
+        ],
+        [
+            "list all the shots i need to travel to france",
+            "vaccines"
+        ],
+        [
+            "i am john",
+            "change_user_name"
+        ],
+        [
+            "the next time i change my oil, when should it be",
+            "oil_change_when"
+        ],
+        [
+            "how many miles per gallon does it get on the highway",
+            "mpg"
+        ],
+        [
+            "take lunch off my calendar on the 3rd",
+            "calendar_update"
+        ],
+        [
+            "can you tell me about the traffic typically at noon on the route the hospital",
+            "traffic"
+        ],
+        [
+            "just call me dennis",
+            "change_user_name"
+        ],
+        [
+            "how can i check my credit card limit",
+            "credit_limit"
+        ],
+        [
+            "i need to know my bank of america account routing number",
+            "routing"
+        ],
+        [
+            "how much tax do i owe",
+            "taxes"
+        ],
+        [
+            "what's on the calendar for march 4th",
+            "calendar"
+        ],
+        [
+            "how many days till i get a new card to replace the stolen one",
+            "replacement_card_duration"
+        ],
+        [
+            "whats the due date for z bill",
+            "bill_due"
+        ],
+        [
+            "where can i pick up a good burger near where i am",
+            "restaurant_suggestion"
+        ],
+        [
+            "why is my bank account stopping all transactions from going through",
+            "account_blocked"
+        ],
+        [
+            "can i substitute rice milk for milk",
+            "ingredient_substitution"
+        ],
+        [
+            "how many vacation days do i still have",
+            "pto_balance"
+        ],
+        [
+            "i need to get a hold of my w-2 right now",
+            "w2"
+        ],
+        [
+            "tell me all about the creatures you own",
+            "do_you_have_pets"
+        ],
+        [
+            "i'll talk to you later ai",
+            "goodbye"
+        ],
+        [
+            "how do i fry pork chops",
+            "recipe"
+        ],
+        [
+            "can you check how much pto i have already used",
+            "pto_used"
+        ],
+        [
+            "it would be great if you could tell me my credit card's apr",
+            "apr"
+        ],
+        [
+            "just call me sam",
+            "change_user_name"
+        ],
+        [
+            "i didnt understand what you just said, can you say it again",
+            "repeat"
+        ],
+        [
+            "can i make reservations at applebee's or no",
+            "accept_reservations"
+        ],
+        [
+            "i am going to australia and want to be notified of any travel alerts",
+            "travel_alert"
+        ],
+        [
+            "i want a timer set",
+            "timer"
+        ],
+        [
+            "how much time to reach doctors office",
+            "distance"
+        ],
+        [
+            "do i have to have a visa to go to denmark",
+            "international_visa"
+        ],
+        [
+            "whats lifes meaning exactly",
+            "meaning_of_life"
+        ],
+        [
+            "when was the car in the shop",
+            "last_maintenance"
+        ],
+        [
+            "do you want me to shop for peanut butter",
+            "shopping_list"
+        ],
+        [
+            "can you make a reservation at the restaurant for tonight",
+            "restaurant_reservation"
+        ],
+        [
+            "what types of things do you like to do in your spare time",
+            "what_are_your_hobbies"
+        ],
+        [
+            "write text message to someone",
+            "text"
+        ],
+        [
+            "does acero in maplewood allow reservations",
+            "accept_reservations"
+        ],
+        [
+            "i'd like to know what's on the shopping list",
+            "shopping_list"
+        ],
+        [
+            "stop that",
+            "cancel"
+        ],
+        [
+            "find out what my water bill costs please",
+            "bill_balance"
+        ],
+        [
+            "do i have enough vacation to take a european trip",
+            "pto_balance"
+        ],
+        [
+            "has my supervisor approved my vacation",
+            "pto_request_status"
+        ],
+        [
+            "what is the traffic situation at the olive garden restaurant",
+            "traffic"
+        ],
+        [
+            "can you do algebra",
+            "calculator"
+        ],
+        [
+            "what date did i receive my last paycheck",
+            "payday"
+        ],
+        [
+            "can i schedule a car repair",
+            "schedule_maintenance"
+        ],
+        [
+            "tell me the name of this song",
+            "what_song"
+        ],
+        [
+            "how is the traffic like on my way to fairfield",
+            "traffic"
+        ],
+        [
+            "can see you see if there are meeting rooms available between 9:00 am and 11:00 am",
+            "schedule_meeting"
+        ],
+        [
+            "find a good recipe for meatloaf",
+            "recipe"
+        ],
+        [
+            "please roll the dice",
+            "roll_dice"
+        ],
+        [
+            "can you please turn the fan on",
+            "smart_home"
+        ],
+        [
+            "i need to know the bill's minimum payment",
+            "min_payment"
+        ],
+        [
+            "i need to know when my oil was last changed",
+            "last_maintenance"
+        ],
+        [
+            "help me modify my insurance policy",
+            "insurance_change"
+        ],
+        [
+            "please confirm my reservation for kevin at red robin",
+            "confirm_reservation"
+        ],
+        [
+            "may i get all of the food transactions that were made last month",
+            "transactions"
+        ],
+        [
+            "please report my stolen card",
+            "report_lost_card"
+        ],
+        [
+            "volume should be set at 4",
+            "change_volume"
+        ],
+        [
+            "maybe yes, maybe no",
+            "maybe"
+        ],
+        [
+            "would you like to live with a cat or a dog",
+            "do_you_have_pets"
+        ],
+        [
+            "what is the wait time at this restaurant",
+            "how_busy"
+        ],
+        [
+            "i'd like to find a place that rents flashy sports cars in tampa",
+            "car_rental"
+        ],
+        [
+            "i no longer need milk, so forget that",
+            "shopping_list_update"
+        ],
+        [
+            "what would five pounds be in kilos",
+            "measurement_conversion"
+        ],
+        [
+            "what type of gas does the car use",
+            "gas_type"
+        ],
+        [
+            "does kentucky have any good restaurants that serve sushi",
+            "restaurant_suggestion"
+        ],
+        [
+            "i need for you to get bananas added to my shopping list; i'm out",
+            "shopping_list_update"
+        ],
+        [
+            "is there an open meeting room between 2 and 4",
+            "schedule_meeting"
+        ],
+        [
+            "when is my paycheck coming",
+            "payday"
+        ],
+        [
+            "help, my account is blocked",
+            "account_blocked"
+        ],
+        [
+            "please put in a pto request for june 5th and 6th",
+            "pto_request"
+        ],
+        [
+            "can you help me with my 401k rollover since i got a new job",
+            "rollover_401k"
+        ],
+        [
+            "tell me the number of vacation days i have stored",
+            "pto_balance"
+        ],
+        [
+            "i'm famished so give me some places to eat!",
+            "restaurant_suggestion"
+        ],
+        [
+            "what holiday is coming up next",
+            "next_holiday"
+        ],
+        [
+            "salutations!",
+            "greeting"
+        ],
+        [
+            "what time zone is ireland in",
+            "timezone"
+        ],
+        [
+            "for the shopping list, add ham as well",
+            "shopping_list_update"
+        ],
+        [
+            "i want you to switch to whisper mode",
+            "whisper_mode"
+        ],
+        [
+            "please change the name of you to tim",
+            "change_ai_name"
+        ],
+        [
+            "hey, slow down and take your time",
+            "change_speed"
+        ],
+        [
+            "what duration of time should i wait before i change my oil",
+            "oil_change_when"
+        ],
+        [
+            "do i need a visa to travel to mexico",
+            "international_visa"
+        ],
+        [
+            "please make a reservation for us at joy bar for 4 adults",
+            "restaurant_reservation"
+        ],
+        [
+            "what's the possibility of getting a credit limit increase on my visa",
+            "credit_limit_change"
+        ],
+        [
+            "tell me how good the apr is on my card please",
+            "apr"
+        ],
+        [
+            "how much money do i have in checking",
+            "balance"
+        ],
+        [
+            "i need you to roll dice now",
+            "roll_dice"
+        ],
+        [
+            "turn lights on in my bedroom",
+            "smart_home"
+        ],
+        [
+            "can you tell me what 30% off 279 is, please",
+            "calculator"
+        ],
+        [
+            "can you find me a recipe for pasta",
+            "recipe"
+        ],
+        [
+            "i need to know five dollars in yen and rubles",
+            "exchange_rate"
+        ],
+        [
+            "is there enough fuel to make it to the walmart",
+            "gas"
+        ],
+        [
+            "what oil do i need and how is it changed",
+            "oil_change_how"
+        ],
+        [
+            "online order: status",
+            "order_status"
+        ],
+        [
+            "is there a certain type of gas i need to use for this car",
+            "gas_type"
+        ],
+        [
+            "am i your boss",
+            "who_do_you_work_for"
+        ],
+        [
+            "do the tires look a little low on pressure",
+            "tire_pressure"
+        ],
+        [
+            "tell me who is by the garage door",
+            "smart_home"
+        ],
+        [
+            "i want to practive changing oil",
+            "oil_change_how"
+        ],
+        [
+            "can you walk me through the various tasks on my to do list",
+            "todo_list"
+        ],
+        [
+            "tell me where a w2 is available please",
+            "w2"
+        ],
+        [
+            "i advise you to quit talking",
+            "cancel"
+        ],
+        [
+            "how about a coin flip",
+            "flip_coin"
+        ],
+        [
+            "what's the expiry month of my card",
+            "expiration_date"
+        ],
+        [
+            "go shopping and order everything on the list",
+            "order"
+        ],
+        [
+            "i need you to skip this song and play the next one",
+            "next_song"
+        ],
+        [
+            "what's my name saved under",
+            "user_name"
+        ],
+        [
+            "i want to know if you are a real person or an ai",
+            "are_you_a_bot"
+        ],
+        [
+            "what's 11 yen in pounds",
+            "exchange_rate"
+        ],
+        [
+            "let me know the traffic in tempe",
+            "traffic"
+        ],
+        [
+            "i'd like help finding my fon",
+            "find_phone"
+        ],
+        [
+            "i must set a timer",
+            "timer"
+        ],
+        [
+            "how many calories are in a cup of white rice",
+            "calories"
+        ],
+        [
+            "any idea where flight dl123 is right now",
+            "flight_status"
+        ],
+        [
+            "i'm going to be in thailand from october 15th until october 23rd",
+            "travel_notification"
+        ],
+        [
+            "i have no clue",
+            "maybe"
+        ],
+        [
+            "i need help acquiring new insurance",
+            "insurance_change"
+        ],
+        [
+            "how much do i have in the bank",
+            "balance"
+        ],
+        [
+            "i bent my card, can you report it to my bank",
+            "damaged_card"
+        ],
+        [
+            "what's the title of this tune",
+            "what_song"
+        ],
+        [
+            "i believe that there is some fraudulent activity on my capital one account",
+            "report_fraud"
+        ],
+        [
+            "what hobbies do you like",
+            "what_are_your_hobbies"
+        ],
+        [
+            "ai please repeat",
+            "repeat"
+        ],
+        [
+            "how long has it been since my car was looked at",
+            "last_maintenance"
+        ],
+        [
+            "my car needs maintenance prepared",
+            "schedule_maintenance"
+        ],
+        [
+            "is it possible to make an order for more checkbooks for my chase bank account",
+            "order_checks"
+        ],
+        [
+            "is there a meaning in life",
+            "meaning_of_life"
+        ],
+        [
+            "where is a beef recipe",
+            "recipe"
+        ],
+        [
+            "direct me to the closest starbucks near home",
+            "directions"
+        ],
+        [
+            "what is it is all relative mean",
+            "definition"
+        ],
+        [
+            "check to see if picking up glenn from the airport is on my list of reminders",
+            "reminder"
+        ],
+        [
+            "i lost my luggage",
+            "lost_luggage"
+        ],
+        [
+            "can i substitute ketchup for mustard",
+            "ingredient_substitution"
+        ],
+        [
+            "please set the volume to 4",
+            "change_volume"
+        ],
+        [
+            "call dave",
+            "make_call"
+        ],
+        [
+            "what's the eta for a new card to come in the mail",
+            "replacement_card_duration"
+        ],
+        [
+            "please look up if i can rent a car in houston from march 25 to march 29",
+            "car_rental"
+        ],
+        [
+            "can you talk to me in french",
+            "change_language"
+        ],
+        [
+            "will you roll a 3 sided dice",
+            "roll_dice"
+        ],
+        [
+            "tell me today's scheduled conferences from noon on wards",
+            "meeting_schedule"
+        ],
+        [
+            "how long would a bus to the empire state building take",
+            "distance"
+        ],
+        [
+            "is it acceptable to swap chicken for pork",
+            "ingredient_substitution"
+        ],
+        [
+            "play the song called tiny dancer",
+            "play_music"
+        ],
+        [
+            "what's tomorrow on the calender",
+            "date"
+        ],
+        [
+            "minimum payment of my bill please",
+            "min_payment"
+        ],
+        [
+            "how many days old are you",
+            "how_old_are_you"
+        ],
+        [
+            "how do i get my paycheck direct deposited to my chase account",
+            "direct_deposit"
+        ],
+        [
+            "where should i travel if i want to visit some history museums",
+            "travel_suggestion"
+        ],
+        [
+            "play some music for me",
+            "play_music"
+        ],
+        [
+            "i need to make sure there is a reservation for george at connor oneil's",
+            "confirm_reservation"
+        ],
+        [
+            "see you in a while",
+            "goodbye"
+        ],
+        [
+            "how long have you been alive for",
+            "how_old_are_you"
+        ],
+        [
+            "switch to the next song on this playlist please",
+            "next_song"
+        ],
+        [
+            "can i get paychecks directly deposited to my bank of america account",
+            "direct_deposit"
+        ],
+        [
+            "what kinds of fun things are there in boston for tourists",
+            "travel_suggestion"
+        ],
+        [
+            "please use male voice instead",
+            "change_accent"
+        ],
+        [
+            "remind me to clean room",
+            "reminder_update"
+        ],
+        [
+            "how many centimeters are in 5 yards",
+            "measurement_conversion"
+        ],
+        [
+            "i need to know what this song is called",
+            "what_song"
+        ],
+        [
+            "hey, stop talking like you're a stretch taped",
+            "change_speed"
+        ],
+        [
+            "what is 55 times 300",
+            "calculator"
+        ],
+        [
+            "tell how many a's are in the word happiness",
+            "spelling"
+        ],
+        [
+            "what is the credit card apr please",
+            "apr"
+        ],
+        [
+            "add washing dishes to my to do list",
+            "todo_list_update"
+        ],
+        [
+            "how long can i go before changing my oil",
+            "oil_change_when"
+        ],
+        [
+            "schedule an uber to the bean",
+            "uber"
+        ],
+        [
+            "so how long can pizza last in the fridge",
+            "food_last"
+        ],
+        [
+            "tell my bank that i'll be in canada this weekend",
+            "travel_notification"
+        ],
+        [
+            "place a phone call to yiming",
+            "make_call"
+        ],
+        [
+            "get rid of my 4 pm reservation at the steakhouse please",
+            "cancel_reservation"
+        ],
+        [
+            "are you able to get my shopping list and order everything on it",
+            "order"
+        ],
+        [
+            "how much money do i pay in taxes, please",
+            "taxes"
+        ],
+        [
+            "my stolen card needs to be reported",
+            "report_lost_card"
+        ],
+        [
+            "time zone in france",
+            "timezone"
+        ],
+        [
+            "during which month will my card expire",
+            "expiration_date"
+        ],
+        [
+            "i need to know what my to-do list is looking like",
+            "todo_list"
+        ],
+        [
+            "what do i need if i want to make lasagna",
+            "ingredients_list"
+        ],
+        [
+            "do i need to fill up my tires",
+            "tire_pressure"
+        ],
+        [
+            "could you schedule a meeting with john smith at 1 pm tomorrow",
+            "schedule_meeting"
+        ],
+        [
+            "can you explain to me why my bank account might be frozen",
+            "account_blocked"
+        ],
+        [
+            "let me know what's on my list of reminders",
+            "reminder"
+        ],
+        [
+            "can i have my credit limit changed",
+            "credit_limit_change"
+        ],
+        [
+            "what date will my replacement card arrive on",
+            "replacement_card_duration"
+        ],
+        [
+            "what sorts of subjects do you know about",
+            "what_can_i_ask_you"
+        ],
+        [
+            "what are the nutrition facts for a mcdouble at mcdonalds",
+            "nutrition_info"
+        ],
+        [
+            "is there a time limit on leaving pork in the fridge",
+            "food_last"
+        ],
+        [
+            "read me the current weather report for tallahassee",
+            "weather"
+        ],
+        [
+            "is there an insurance plan for my health",
+            "insurance"
+        ],
+        [
+            "on my list of reminders is what",
+            "reminder"
+        ],
+        [
+            "can you tell me my checking account balance",
+            "balance"
+        ],
+        [
+            "please add to \"kids\" playlist",
+            "update_playlist"
+        ],
+        [
+            "what\u2019s the answer to 5-6=",
+            "calculator"
+        ],
+        [
+            "can you block my chase account right away please",
+            "freeze_account"
+        ],
+        [
+            "what was the date when i last had my car inspected",
+            "last_maintenance"
+        ],
+        [
+            "set a four minute timer",
+            "timer"
+        ],
+        [
+            "what's my health plan",
+            "insurance"
+        ],
+        [
+            "i'm unaware of that",
+            "maybe"
+        ],
+        [
+            "that's a yes from me",
+            "yes"
+        ],
+        [
+            "you have what name for me",
+            "user_name"
+        ],
+        [
+            "when i go to mexico, what kind of plugs do i need",
+            "plug_type"
+        ],
+        [
+            "i want whisper mode",
+            "whisper_mode"
+        ],
+        [
+            "do you charge me if i use my card in japan",
+            "international_fees"
+        ],
+        [
+            "i'd like you to give me an idea for a meal from iceland",
+            "meal_suggestion"
+        ],
+        [
+            "what\u2019s your favorite funny joke",
+            "tell_joke"
+        ],
+        [
+            "can you explain my benefits",
+            "insurance"
+        ],
+        [
+            "how long can i expect chicken breast to be good for before expiration",
+            "food_last"
+        ],
+        [
+            "how many calories do cheetos have",
+            "calories"
+        ],
+        [
+            "please transfer $250 from checking to savings",
+            "transfer"
+        ],
+        [
+            "can you find my credit score",
+            "credit_score"
+        ],
+        [
+            "i am needing to know the current time in the eastern timezone",
+            "time"
+        ],
+        [
+            "let sal know by text i will be attending",
+            "text"
+        ],
+        [
+            "do i need to get a visa to visit canada",
+            "international_visa"
+        ],
+        [
+            "can i change what you call me",
+            "change_user_name"
+        ],
+        [
+            "how do i report a lost card",
+            "report_lost_card"
+        ],
+        [
+            "decrease volume level",
+            "change_volume"
+        ],
+        [
+            "how long have you been alive",
+            "how_old_are_you"
+        ],
+        [
+            "i want to listen to the next song on this playlist instead",
+            "next_song"
+        ],
+        [
+            "start the timer now and stop at thirty minutes",
+            "timer"
+        ],
+        [
+            "does applebees have alright reviews",
+            "restaurant_reviews"
+        ],
+        [
+            "are you real or an ai",
+            "are_you_a_bot"
+        ],
+        [
+            "i need you to block my chase account immediately",
+            "freeze_account"
+        ],
+        [
+            "tell me my miles per gallon on my car",
+            "mpg"
+        ],
+        [
+            "ai, please stop your current task",
+            "cancel"
+        ],
+        [
+            "tell me my current location please",
+            "current_location"
+        ],
+        [
+            "how much time off do i have left",
+            "pto_balance"
+        ],
+        [
+            "check to see how many days off i have used in total so far",
+            "pto_used"
+        ],
+        [
+            "tell me why am i locked out of my bank account",
+            "account_blocked"
+        ],
+        [
+            "where can i get the form i need to do my taxes",
+            "w2"
+        ],
+        [
+            "how much do i owe for state taxes",
+            "taxes"
+        ],
+        [
+            "is it possible for you to use the whisper voice",
+            "whisper_mode"
+        ],
+        [
+            "how many delta miles are on my card right now",
+            "rewards_balance"
+        ],
+        [
+            "could you please let me apply for a new credit card",
+            "new_card"
+        ],
+        [
+            "in nashville, i need a rental car booked",
+            "car_rental"
+        ],
+        [
+            "is the pressure in my tires optimal",
+            "tire_pressure"
+        ],
+        [
+            "should i call you something in particular",
+            "what_is_your_name"
+        ],
+        [
+            "how much are my xfinity and dte bills",
+            "bill_balance"
+        ],
+        [
+            "i need help cause my check engine light came on",
+            "schedule_maintenance"
+        ],
+        [
+            "what's your nationality",
+            "where_are_you_from"
+        ],
+        [
+            "when do i take my car in for a tire change",
+            "tire_change"
+        ],
+        [
+            "can i set a reminder",
+            "reminder_update"
+        ],
+        [
+            "how many points have been earned on my amex",
+            "rewards_balance"
+        ],
+        [
+            "how do i get to the nearest post office",
+            "directions"
+        ],
+        [
+            "i need to know today's date",
+            "date"
+        ],
+        [
+            "the answer to that is a resounding yes",
+            "yes"
+        ],
+        [
+            "how come my card was declined at rosses",
+            "card_declined"
+        ],
+        [
+            "thank you very much for the answer",
+            "thank_you"
+        ],
+        [
+            "what kind of activities do you enjoy",
+            "what_are_your_hobbies"
+        ],
+        [
+            "get me a flight for tuesday on spiritcom to las vegas from chicago",
+            "book_flight"
+        ],
+        [
+            "i want you to help me make a decision by flipping a coin",
+            "flip_coin"
+        ],
+        [
+            "give me a reminder for calling bill",
+            "reminder_update"
+        ],
+        [
+            "please start using female voice",
+            "change_accent"
+        ],
+        [
+            "has my credit card application been processed yet",
+            "application_status"
+        ],
+        [
+            "resume my metal playlist",
+            "play_music"
+        ],
+        [
+            "how do they say \"who is your father\" in german",
+            "translate"
+        ],
+        [
+            "which days did i take off work",
+            "pto_used"
+        ],
+        [
+            "could you connect to my phone",
+            "sync_device"
+        ],
+        [
+            "what are the foreign transaction fees for cuba",
+            "international_fees"
+        ],
+        [
+            "how many total meetings will i have between 2 and 5",
+            "meeting_schedule"
+        ],
+        [
+            "is there any meaning to being alive",
+            "meaning_of_life"
+        ],
+        [
+            "yes, that's affirmative",
+            "yes"
+        ],
+        [
+            "i have to say goodbye",
+            "goodbye"
+        ],
+        [
+            "i need you to tell my what my routing number is for my first county account",
+            "routing"
+        ],
+        [
+            "are there any alerts for travelling to beirut",
+            "travel_alert"
+        ],
+        [
+            "will i need vaccines for my trip",
+            "vaccines"
+        ],
+        [
+            "change your settings so that your respond to the name marion",
+            "change_ai_name"
+        ],
+        [
+            "i'd like to know where i am",
+            "current_location"
+        ],
+        [
+            "undo the last event on my calendar",
+            "calendar_update"
+        ],
+        [
+            "where can i find my credit card's expiration date",
+            "expiration_date"
+        ],
+        [
+            "can you change the way you talk to a male british voice",
+            "change_accent"
+        ],
+        [
+            "book an uber to school",
+            "uber"
+        ],
+        [
+            "i would like to see the transactions i made last week",
+            "transactions"
+        ],
+        [
+            "call the card company and ask them to replace my card",
+            "damaged_card"
+        ],
+        [
+            "how expensive was my most recent transaction",
+            "transactions"
+        ],
+        [
+            "weather",
+            "weather"
+        ],
+        [
+            "can you increase the speaker volume",
+            "change_volume"
+        ],
+        [
+            "see if my form submission for an american express card has been seen",
+            "application_status"
+        ],
+        [
+            "do you know if bahama breeze does reservations",
+            "accept_reservations"
+        ],
+        [
+            "is it time for an oil change",
+            "oil_change_when"
+        ],
+        [
+            "what is 25 percent of 6999",
+            "calculator"
+        ],
+        [
+            "i'd like you to disconnect from my phone",
+            "sync_device"
+        ],
+        [
+            "how much gas to i have left",
+            "gas"
+        ],
+        [
+            "yellow by coldplay to my playlist please",
+            "update_playlist"
+        ],
+        [
+            "i need to uber somewhere",
+            "uber"
+        ],
+        [
+            "use my savings account to the pay the rent",
+            "pay_bill"
+        ],
+        [
+            "tell me how many meetings with pete i have for today",
+            "meeting_schedule"
+        ],
+        [
+            "look up the status of the order i placed online",
+            "order_status"
+        ],
+        [
+            "what name should i refer to you as",
+            "what_is_your_name"
+        ],
+        [
+            "negative for sure",
+            "no"
+        ],
+        [
+            "how do i get a personal w2 form",
+            "w2"
+        ],
+        [
+            "what name do you have saved for me",
+            "user_name"
+        ],
+        [
+            "what is the reason i am locked out of my bank account",
+            "account_blocked"
+        ],
+        [
+            "tell me what is on my calendar for march 2",
+            "calendar"
+        ],
+        [
+            "help me find a hotel in that has good reviews in columbus",
+            "book_hotel"
+        ],
+        [
+            "traveling to the uk am i going to need any specific shots",
+            "vaccines"
+        ],
+        [
+            "book delta ticket madison to atlanta",
+            "book_flight"
+        ],
+        [
+            "i need a pto request put in for the weekend of june 1st to june 2nd",
+            "pto_request"
+        ],
+        [
+            "what kinds of things can you do",
+            "what_can_i_ask_you"
+        ],
+        [
+            "looking at january, show all wine purchases",
+            "transactions"
+        ],
+        [
+            "please show me how to order more checks for my savings account",
+            "order_checks"
+        ],
+        [
+            "show me the last month of transactions",
+            "transactions"
+        ],
+        [
+            "tell lydia and laura where i am located",
+            "share_location"
+        ],
+        [
+            "how do i say you're welcome in chinese",
+            "translate"
+        ],
+        [
+            "what can i use you to help me with",
+            "what_can_i_ask_you"
+        ],
+        [
+            "mark down that i will be in rome from february 1 to march 1 and notify my bank",
+            "travel_notification"
+        ],
+        [
+            "who is in charge of you",
+            "who_do_you_work_for"
+        ],
+        [
+            "make the lights dimmer please",
+            "smart_home"
+        ],
+        [
+            "suggest a meal from india to me",
+            "meal_suggestion"
+        ],
+        [
+            "where is my order",
+            "order_status"
+        ],
+        [
+            "can you update me on the status of my american express card application",
+            "application_status"
+        ],
+        [
+            "what is the definition of zesty",
+            "definition"
+        ],
+        [
+            "my insurance plan needs to be changed",
+            "insurance_change"
+        ],
+        [
+            "i need a hotel in austin near south congress from 3/5 until 3/10",
+            "book_hotel"
+        ],
+        [
+            "please transfer $x from checking to saving",
+            "transfer"
+        ],
+        [
+            "i need some work done on my car so need to schedule auto mechanic for maintenance",
+            "schedule_maintenance"
+        ],
+        [
+            "can i get a higher credit limit on my american express",
+            "credit_limit_change"
+        ],
+        [
+            "how long is it acceptable to carmelize onions",
+            "cook_time"
+        ],
+        [
+            "i can't figure out how to spell superficial",
+            "spelling"
+        ],
+        [
+            "i think my luggage was misplaced or has been lost",
+            "lost_luggage"
+        ],
+        [
+            "put a hundred dollars in my ally account from bluebird",
+            "transfer"
+        ],
+        [
+            "please tell me your name",
+            "what_is_your_name"
+        ],
+        [
+            "i would like an uber going to the train station, please",
+            "uber"
+        ],
+        [
+            "book me a hotel room in memphis for 3 people from 3/6 until 3/10",
+            "book_hotel"
+        ],
+        [
+            "i have to get my 401k rollover because i just got a new job",
+            "rollover_401k"
+        ],
+        [
+            "please check and tell me the amount i spent on food last month",
+            "spending_history"
+        ],
+        [
+            "tell the restaurant to cancel my reservation",
+            "cancel_reservation"
+        ],
+        [
+            "what's 50 euro in dollars",
+            "exchange_rate"
+        ],
+        [
+            "what is 10 ounces in grams",
+            "measurement_conversion"
+        ],
+        [
+            "tell me what the date is today",
+            "date"
+        ],
+        [
+            "i got to report fraudulent activity on my credit card",
+            "report_fraud"
+        ],
+        [
+            "tell me when my meeting is scheduled with roger",
+            "meeting_schedule"
+        ],
+        [
+            "i'd like to set up a direct deposit for my paycheck",
+            "direct_deposit"
+        ],
+        [
+            "call someone for me",
+            "make_call"
+        ],
+        [
+            "i need a hotel room for 4 people in lakewood from monday to wednesday",
+            "book_hotel"
+        ],
+        [
+            "i need to know when the next holiday will be",
+            "next_holiday"
+        ],
+        [
+            "i would like to know how to rollover my 401k",
+            "rollover_401k"
+        ],
+        [
+            "i need to add dusting the bookshelf to my to do list",
+            "todo_list_update"
+        ],
+        [
+            "does spain expect any travel alerts",
+            "travel_alert"
+        ],
+        [
+            "change language setting to english",
+            "change_language"
+        ],
+        [
+            "i need to let my bank know i am traveling to la",
+            "travel_notification"
+        ],
+        [
+            "are there any reputable car rental places in seattle",
+            "car_rental"
+        ],
+        [
+            "how many miles do i drive before i have to get new tires i replaced them four years ago",
+            "tire_change"
+        ],
+        [
+            "i want you to guess my name",
+            "user_name"
+        ],
+        [
+            "where are you from",
+            "where_are_you_from"
+        ],
+        [
+            "tell me a little more about the status of my credit card application",
+            "application_status"
+        ],
+        [
+            "i'd love to hear a joke",
+            "tell_joke"
+        ],
+        [
+            "is it recommended to get any specific shots before i travel to japan",
+            "vaccines"
+        ],
+        [
+            "can you translate bowl into russian for me",
+            "translate"
+        ],
+        [
+            "are you actually a bot",
+            "are_you_a_bot"
+        ],
+        [
+            "who would you say that you are employed by",
+            "who_do_you_work_for"
+        ],
+        [
+            "i want to know what kinds of pets you have",
+            "do_you_have_pets"
+        ],
+        [
+            "what's your hobbies",
+            "what_are_your_hobbies"
+        ],
+        [
+            "tomorrow, what will the date be",
+            "date"
+        ],
+        [
+            "where is the closest gas station",
+            "distance"
+        ],
+        [
+            "share my location with sarah",
+            "share_location"
+        ],
+        [
+            "is changing the water filter on my to do list right now",
+            "todo_list"
+        ],
+        [
+            "can you give me a thai meal suggestion",
+            "meal_suggestion"
+        ],
+        [
+            "how old are you, ai",
+            "how_old_are_you"
+        ],
+        [
+            "can i convert my credit card points to milage",
+            "redeem_rewards"
+        ],
+        [
+            "i would like to know the time",
+            "time"
+        ],
+        [
+            "what have i spent on food recently",
+            "spending_history"
+        ],
+        [
+            "tell me things i can do in chicago",
+            "travel_suggestion"
+        ],
+        [
+            "what words would i use to tell someone i am lost if i were japanese",
+            "translate"
+        ],
+        [
+            "what's the timezone for san diego",
+            "timezone"
+        ],
+        [
+            "what kind of pto have i used",
+            "pto_used"
+        ],
+        [
+            "when's the gas bill due",
+            "bill_due"
+        ],
+        [
+            "does mcdonalds have good reviews",
+            "restaurant_reviews"
+        ],
+        [
+            "is there another company you work for",
+            "who_do_you_work_for"
+        ],
+        [
+            "what do i need to make a cake",
+            "ingredients_list"
+        ],
+        [
+            "i'd like to go on vacation",
+            "pto_request"
+        ],
+        [
+            "i need to know my earnings",
+            "income"
+        ],
+        [
+            "help me get my pin on my capitol one account changed to 3892",
+            "pin_change"
+        ],
+        [
+            "what kind of items are on my shopping list",
+            "shopping_list"
+        ],
+        [
+            "please speak to me in chinese",
+            "change_language"
+        ],
+        [
+            "can you tell me my current interest rate",
+            "interest_rate"
+        ],
+        [
+            "is there any good place for vietnamese food on the east side of the island",
+            "restaurant_suggestion"
+        ],
+        [
+            "cancel my reservation for chris at jp field's",
+            "cancel_reservation"
+        ],
+        [
+            "what's on my calendar for march 01",
+            "calendar"
+        ],
+        [
+            "what amount of time do i need to cook lobster for",
+            "cook_time"
+        ],
+        [
+            "i want an alarm at 5pm",
+            "alarm"
+        ],
+        [
+            "what type of fuel does my car use",
+            "gas_type"
+        ],
+        [
+            "how long does it take to get to applebees in new york",
+            "distance"
+        ],
+        [
+            "the card is torn, let's report it",
+            "damaged_card"
+        ],
+        [
+            "change the pin on my wells fargo account to be 1234",
+            "pin_change"
+        ],
+        [
+            "tell me what edict means",
+            "definition"
+        ],
+        [
+            "how much have i lately spent on eating out",
+            "spending_history"
+        ],
+        [
+            "set up a timer",
+            "timer"
+        ],
+        [
+            "how long can you go between oil changes",
+            "oil_change_when"
+        ],
+        [
+            "can you find me a recipe for ribs",
+            "recipe"
+        ],
+        [
+            "what are all the things on the shopping list",
+            "shopping_list"
+        ],
+        [
+            "how high is the apr on my mastercard",
+            "apr"
+        ],
+        [
+            "what is my bill's minimum payment",
+            "min_payment"
+        ],
+        [
+            "how long should i expect to wait at the cheesecake factory before getting seated",
+            "how_busy"
+        ],
+        [
+            "i go by the name jim",
+            "change_user_name"
+        ],
+        [
+            "what are some funny things about food",
+            "tell_joke"
+        ],
+        [
+            "i need to report a new card please the atm hurt mine",
+            "damaged_card"
+        ],
+        [
+            "i want your language changed to chinese",
+            "change_language"
+        ],
+        [
+            "i want to cook a quick breakfast what ingredients do i need",
+            "ingredients_list"
+        ],
+        [
+            "what topics can i ask you about",
+            "what_can_i_ask_you"
+        ],
+        [
+            "how long do you cook pasta for",
+            "cook_time"
+        ],
+        [
+            "when's the ac bill due",
+            "bill_due"
+        ],
+        [
+            "i need to change my pin number for my checking account",
+            "pin_change"
+        ],
+        [
+            "tell me what company programmed you",
+            "who_made_you"
+        ],
+        [
+            "do my tires seem too low on air",
+            "tire_pressure"
+        ],
+        [
+            "what percentage gas do i need",
+            "gas_type"
+        ],
+        [
+            "are you able to get into my phone at the moment",
+            "sync_device"
+        ],
+        [
+            "how many vacation days do i have left",
+            "pto_balance"
+        ],
+        [
+            "how long should i cook the pasta for",
+            "cook_time"
+        ],
+        [
+            "mind sharing a joke",
+            "tell_joke"
+        ],
+        [
+            "where can i find the mall closest to here",
+            "directions"
+        ],
+        [
+            "make an alarm 6am",
+            "alarm"
+        ],
+        [
+            "i need you to freeze my account",
+            "freeze_account"
+        ],
+        [
+            "how low is my gas tank",
+            "gas"
+        ],
+        [
+            "hey ai, reduce your speed of speaking",
+            "change_speed"
+        ],
+        [
+            "i would like to get some more checkbooks mailed to me",
+            "order_checks"
+        ],
+        [
+            "i think there's a fraudulent transaction on my account",
+            "report_fraud"
+        ],
+        [
+            "can you give me a vietnamese dinner suggestion",
+            "meal_suggestion"
+        ],
+        [
+            "i need you to order some more lysol for me,please",
+            "order"
+        ],
+        [
+            "please help me figure out where my lost phone is",
+            "find_phone"
+        ],
+        [
+            "is the sushi well-received at yakamoto",
+            "restaurant_reviews"
+        ],
+        [
+            "take $40 and transfer it to account a from b",
+            "transfer"
+        ],
+        [
+            "i want to pay my bill, please",
+            "pay_bill"
+        ],
+        [
+            "does the bleu olive have decent reviews",
+            "restaurant_reviews"
+        ],
+        [
+            "will you tell me my interest rate",
+            "interest_rate"
+        ],
+        [
+            "what are delta's carry-on restrictions",
+            "carry_on"
+        ],
+        [
+            "closest auto parts store to find replace for dead car battery",
+            "jump_start"
+        ],
+        [
+            "i can't find my student id card and i want to report it as lost",
+            "report_lost_card"
+        ],
+        [
+            "i want to know if there are meeting rooms available between 9:00 am and 11:00 am",
+            "schedule_meeting"
+        ],
+        [
+            "whats the most recent status for my virgin air flight",
+            "flight_status"
+        ],
+        [
+            "what has my income been like",
+            "income"
+        ],
+        [
+            "what sort of gas should i get for my car",
+            "gas_type"
+        ],
+        [
+            "remind me of the date of my last paycheck",
+            "payday"
+        ],
+        [
+            "take the event called surprise party off my calendar for june 2",
+            "calendar_update"
+        ],
+        [
+            "my card was not accepted for buying a computer at best buy",
+            "card_declined"
+        ],
+        [
+            "what do you make in a year",
+            "income"
+        ],
+        [
+            "is there a quick way to improve my credit score",
+            "improve_credit_score"
+        ],
+        [
+            "could you roll a 6 sided dice",
+            "roll_dice"
+        ],
+        [
+            "what is the definition of succumb",
+            "definition"
+        ],
+        [
+            "what steps do i need to do to set up direct deposit",
+            "direct_deposit"
+        ],
+        [
+            "tell me the status of my vacation request",
+            "pto_request_status"
+        ],
+        [
+            "we no longer need fries on the shopping lisr",
+            "shopping_list_update"
+        ],
+        [
+            "find all the \"a\"s in happiness",
+            "spelling"
+        ],
+        [
+            "is flight dl123 coming in on time",
+            "flight_status"
+        ],
+        [
+            "what timezone is miami in",
+            "timezone"
+        ],
+        [
+            "what is the due date for a bill",
+            "bill_due"
+        ],
+        [
+            "can i get a car to the baseball field for 12",
+            "uber"
+        ],
+        [
+            "will you repeat what you just said",
+            "repeat"
+        ],
+        [
+            "what's my limit on my amex card",
+            "credit_limit"
+        ],
+        [
+            "please help me apply for a silver card",
+            "new_card"
+        ],
+        [
+            "how long will the wait be at noon if we went to nagomi",
+            "how_busy"
+        ],
+        [
+            "what is the total amount of my paychecks over the last year",
+            "income"
+        ],
+        [
+            "let me know how many carry ons i can take on a flight with southwest airlines to dallas",
+            "carry_on"
+        ],
+        [
+            "get rid of my dinner reservation",
+            "cancel_reservation"
+        ],
+        [
+            "how many stars does la vignette have",
+            "restaurant_reviews"
+        ],
+        [
+            "will you check there is a reservation for laura at black pearl",
+            "confirm_reservation"
+        ],
+        [
+            "delete my to do list",
+            "todo_list_update"
+        ],
+        [
+            "how far can i go on one tank of gas",
+            "mpg"
+        ],
+        [
+            "are there meetings schedules today between noon and one",
+            "meeting_schedule"
+        ],
+        [
+            "my luggage appears to be missing",
+            "lost_luggage"
+        ],
+        [
+            "cleaning needs to be on my to do list",
+            "todo_list_update"
+        ],
+        [
+            "what is the minimum required payment for my cell phone bill",
+            "min_payment"
+        ],
+        [
+            "discover card reporting fraud",
+            "report_fraud"
+        ],
+        [
+            "what is the amount of money that i have to pay in taxes",
+            "taxes"
+        ],
+        [
+            "where can i get my w2 from for tax reasons",
+            "w2"
+        ],
+        [
+            "i need new insurance, how do i get it",
+            "insurance_change"
+        ],
+        [
+            "for the calendar, on february 8 add moms birthday",
+            "calendar_update"
+        ],
+        [
+            "i was at trader joe's trying to buy groceries and my card got declined",
+            "card_declined"
+        ],
+        [
+            "compare prices for flights from recife to miami leaving may 20 returning june 5",
+            "book_flight"
+        ],
+        [
+            "my card was malfunctioning and was returned to me",
+            "card_declined"
+        ],
+        [
+            "make a reservation for 2 at red lobster at 8pm",
+            "restaurant_reservation"
+        ],
+        [
+            "hey, how's it going",
+            "greeting"
+        ],
+        [
+            "how do you spell antipathy",
+            "spelling"
+        ],
+        [
+            "what apr does this credit card have",
+            "apr"
+        ],
+        [
+            "let me thank you",
+            "thank_you"
+        ],
+        [
+            "can i get a reservation at champs",
+            "accept_reservations"
+        ],
+        [
+            "tell me what song this is",
+            "what_song"
+        ],
+        [
+            "my car battery is dead, how do i charge it",
+            "jump_start"
+        ],
+        [
+            "at this location what are my gps coordinates",
+            "current_location"
+        ],
+        [
+            "go back to your original settings",
+            "reset_settings"
+        ],
+        [
+            "what car rental choices are there in calgary",
+            "car_rental"
+        ],
+        [
+            "speed up your talking please",
+            "change_speed"
+        ],
+        [
+            "how long do you need to bake chicken for it to be safe to eat",
+            "cook_time"
+        ],
+        [
+            "at 5:30 pm, how busy can i expect olive garden to be",
+            "how_busy"
+        ],
+        [
+            "thanks for the help",
+            "thank_you"
+        ],
+        [
+            "please set two alarms, one at 12 pm and the next at 1 pm",
+            "alarm"
+        ],
+        [
+            "what is the caloric total in these muffins",
+            "calories"
+        ],
+        [
+            "what's the weekend forecast",
+            "weather"
+        ],
+        [
+            "would you tell me about my income",
+            "income"
+        ],
+        [
+            "turn lights on in the garage",
+            "smart_home"
+        ],
+        [
+            "can you create a reminder",
+            "reminder_update"
+        ],
+        [
+            "could you please get out of whisper mode",
+            "whisper_mode"
+        ],
+        [
+            "where was it you were made",
+            "where_are_you_from"
+        ],
+        [
+            "undo",
+            "cancel"
+        ],
+        [
+            "when does my capital one visa expire",
+            "expiration_date"
+        ],
+        [
+            "can you remember the nutritional info for macaroni and cheese",
+            "nutrition_info"
+        ],
+        [
+            "can you help me pay a bill",
+            "pay_bill"
+        ],
+        [
+            "call macy",
+            "make_call"
+        ],
+        [
+            "how do i report a lost discover credit card",
+            "report_lost_card"
+        ],
+        [
+            "talk slower, please",
+            "change_speed"
+        ],
+        [
+            "put in a pto request for march 4 to march 6",
+            "pto_request"
+        ],
+        [
+            "i want to pay my insurance bill",
+            "pay_bill"
+        ],
+        [
+            "will i have to wait for long before being seated at the cheese cake factory",
+            "how_busy"
+        ],
+        [
+            "i would love to hear a joke about the dmv",
+            "tell_joke"
+        ],
+        [
+            "change the native language",
+            "change_language"
+        ],
+        [
+            "what's on my schedule for may 3",
+            "calendar"
+        ],
+        [
+            "send bill a text for me and tell him i will be 30 minutes late",
+            "text"
+        ],
+        [
+            "how's the fuel efficiency for city driving for this car",
+            "mpg"
+        ],
+        [
+            "remind me of what i asked you to remember",
+            "reminder"
+        ],
+        [
+            "how can i cash in my credit card points",
+            "redeem_rewards"
+        ],
+        [
+            "update me on my vacation request",
+            "pto_request_status"
+        ],
+        [
+            "what's going on",
+            "greeting"
+        ],
+        [
+            "how to keep my credit up",
+            "improve_credit_score"
+        ],
+        [
+            "hmmm, either could be a choice",
+            "maybe"
+        ],
+        [
+            "what is the routing number of cadence",
+            "routing"
+        ],
+        [
+            "inform me of my credit score",
+            "credit_score"
+        ],
+        [
+            "in which area were you made",
+            "where_are_you_from"
+        ],
+        [
+            "what ingredients are required for chicken noodle soup",
+            "ingredients_list"
+        ],
+        [
+            "go to next song, please",
+            "next_song"
+        ],
+        [
+            "i'm looking for a roundtrip flight from afw to dgb for tomorrow until next week",
+            "book_flight"
+        ],
+        [
+            "what are some things i can do in portland",
+            "travel_suggestion"
+        ],
+        [
+            "what's the balance in my checking",
+            "balance"
+        ],
+        [
+            "do i have a lot of gas left",
+            "gas"
+        ],
+        [
+            "i need to locate my phone",
+            "find_phone"
+        ],
+        [
+            "can i obtain health benefits",
+            "insurance"
+        ],
+        [
+            "tell me how to apply for an american express card",
+            "new_card"
+        ],
+        [
+            "what is the way to change motor oil",
+            "oil_change_how"
+        ],
+        [
+            "do you need a special outlet converter in sweden",
+            "plug_type"
+        ],
+        [
+            "will it snow this weekend",
+            "weather"
+        ],
+        [
+            "does international travel always require a visa",
+            "international_visa"
+        ],
+        [
+            "what type of plug do they use in mexico",
+            "plug_type"
+        ],
+        [
+            "what is my car's tire pressure",
+            "tire_pressure"
+        ],
+        [
+            "how many carry ons can i take on a flight with american airlines to seattle",
+            "carry_on"
+        ],
+        [
+            "what's my going out to eat tab this month vs last month",
+            "spending_history"
+        ],
+        [
+            "could you tell me your name",
+            "what_is_your_name"
+        ],
+        [
+            "are you a computer or a real person",
+            "are_you_a_bot"
+        ],
+        [
+            "you should reset your factory settings",
+            "reset_settings"
+        ],
+        [
+            "are you working for me or what",
+            "who_do_you_work_for"
+        ],
+        [
+            "where is the closest starbucks",
+            "directions"
+        ],
+        [
+            "can you see where my package is",
+            "order_status"
+        ],
+        [
+            "what's the due date for the credit card",
+            "bill_due"
+        ],
+        [
+            "hey do you know how to jump start a car battery",
+            "jump_start"
+        ],
+        [
+            "cancel my 6:00 reservation at the cheesecake factory",
+            "cancel_reservation"
+        ],
+        [
+            "how can i track the progress of my credit card application",
+            "application_status"
+        ],
+        [
+            "what kind of things can you answer",
+            "what_can_i_ask_you"
+        ],
+        [
+            "can you put in a pto request for march 4 to march 6 for me",
+            "pto_request"
+        ],
+        [
+            "what's my rewards balance on my discover",
+            "rewards_balance"
+        ],
+        [
+            "the tasks for today, what are they",
+            "todo_list"
+        ],
+        [
+            "how long it takes to get a new replacement card",
+            "replacement_card_duration"
+        ],
+        [
+            "what is the average time to get to walmart in mays landing",
+            "distance"
+        ],
+        [
+            "are you able to purchase underpants for me",
+            "order"
+        ],
+        [
+            "what's my current limit on my visa",
+            "credit_limit"
+        ],
+        [
+            "what is my routing number for marine bank",
+            "routing"
+        ],
+        [
+            "do i need to get milk",
+            "shopping_list"
+        ],
+        [
+            "spell potato",
+            "spelling"
+        ],
+        [
+            "what's the minimum payment on my phone bill",
+            "min_payment"
+        ],
+        [
+            "what is the most unique piece of trivia relating to cameras",
+            "fun_fact"
+        ],
+        [
+            "how do i redirect my 401k",
+            "rollover_401k"
+        ],
+        [
+            "can i swap cayenne pepper for black pepper",
+            "ingredient_substitution"
+        ],
+        [
+            "what ingredients are in cake",
+            "ingredients_list"
+        ],
+        [
+            "what actions do i take to change a car's oil",
+            "oil_change_how"
+        ],
+        [
+            "add the next song to my playlist - broken by evanescence",
+            "update_playlist"
+        ],
+        [
+            "did i put an item on the calendar to get the dog neutered",
+            "calendar"
+        ],
+        [
+            "i want to hear my to do list please",
+            "todo_list"
+        ],
+        [
+            "maybe is my answer",
+            "maybe"
+        ],
+        [
+            "did i spend a lot on shoes recently",
+            "spending_history"
+        ],
+        [
+            "does medical debt hurt my credit score",
+            "improve_credit_score"
+        ],
+        [
+            "whats the cars fuel mileage like",
+            "mpg"
+        ],
+        [
+            "have an alarm set for three in the morning",
+            "alarm"
+        ],
+        [
+            "tell me the number of calories in a banana",
+            "calories"
+        ],
+        [
+            "what kind of hobbies do you have",
+            "what_are_your_hobbies"
+        ],
+        [
+            "i want to switch out of whisper mode",
+            "whisper_mode"
+        ],
+        [
+            "that\u2019s actually wrong",
+            "no"
+        ],
+        [
+            "goodbye for now ai",
+            "goodbye"
+        ],
+        [
+            "you were built by who",
+            "who_made_you"
+        ],
+        [
+            "share my location wtih amanda now",
+            "share_location"
+        ],
+        [
+            "could you tell me today's date",
+            "date"
+        ],
+        [
+            "does buffalo wild wings do reservations",
+            "accept_reservations"
+        ],
+        [
+            "help me figure out getting new insurance",
+            "insurance_change"
+        ],
+        [
+            "can you play music by led zeppelin",
+            "play_music"
+        ],
+        [
+            "provide me with my credit score",
+            "credit_score"
+        ],
+        [
+            "clear my calendar on march 1st",
+            "calendar_update"
+        ],
+        [
+            "can you help me find out how to get a new credit card",
+            "new_card"
+        ],
+        [
+            "my luggage was lost so what do i do",
+            "lost_luggage"
+        ],
+        [
+            "can you sign me up for a meeting in the blue room on friday",
+            "schedule_meeting"
+        ],
+        [
+            "tell me something interesting about sperm whales",
+            "fun_fact"
+        ],
+        [
+            "what interest rate will regions give me",
+            "interest_rate"
+        ],
+        [
+            "do they use weird plugs in australia where i'd need some kind of socket converter",
+            "plug_type"
+        ],
+        [
+            "i am going to russia and am wondering if i need a visa",
+            "international_visa"
+        ],
+        [
+            "do you know of any good mexican restaurants in seattle",
+            "restaurant_suggestion"
+        ],
+        [
+            "how long is it until payday",
+            "payday"
+        ],
+        [
+            "how soon should i replace my tires from yesterday",
+            "tire_change"
+        ],
+        [
+            "how are you this fine day",
+            "greeting"
+        ],
+        [
+            "i gotta pay my cable bill",
+            "pay_bill"
+        ],
+        [
+            "disconnect from my phone",
+            "sync_device"
+        ],
+        [
+            "what's the point of this dumpster fire known as life",
+            "meaning_of_life"
+        ],
+        [
+            "i think someone's using my visa card without my permission",
+            "report_fraud"
+        ],
+        [
+            "how do i know if you are a real person",
+            "are_you_a_bot"
+        ],
+        [
+            "how many centimeters are one inch",
+            "measurement_conversion"
+        ],
+        [
+            "how much it the credit limit on my visa card",
+            "credit_limit"
+        ],
+        [
+            "where in the world is there a travel alert",
+            "travel_alert"
+        ],
+        [
+            "what day is our next free day, please",
+            "next_holiday"
+        ],
+        [
+            "what are the calories in a cookie",
+            "calories"
+        ],
+        [
+            "heads or tails",
+            "flip_coin"
+        ],
+        [
+            "tell me a fun fact about mt everest",
+            "fun_fact"
+        ],
+        [
+            "how do i figure out my intetest rate",
+            "interest_rate"
+        ],
+        [
+            "i need to add this song to my playlist of rock",
+            "update_playlist"
+        ],
+        [
+            "tell me my reminders",
+            "reminder"
+        ],
+        [
+            "which company can i credit your design to",
+            "who_made_you"
+        ],
+        [
+            "whats the update on flight dl123",
+            "flight_status"
+        ],
+        [
+            "text my boss for me and tell them i will be a little bit late",
+            "text"
+        ],
+        [
+            "please do me a favor and call brother mario",
+            "make_call"
+        ],
+        [
+            "when i am in spain using my cmaden card, is there any transaction fee",
+            "international_fees"
+        ],
+        [
+            "can you confirm i have a reservation at 5 pm on march 13th",
+            "confirm_reservation"
+        ],
+        [
+            "i would like you to repeat yourself",
+            "repeat"
+        ],
+        [
+            "how high is my credit limit for my walmart card",
+            "credit_limit"
+        ],
+        [
+            "i want to to schedule maintenance on my vehicle",
+            "schedule_maintenance"
+        ],
+        [
+            "when do you think i should replace my tires because i replaced them on 12/21/17",
+            "tire_change"
+        ],
+        [
+            "when's the last time i got a paycheck",
+            "payday"
+        ],
+        [
+            "my card isn't working",
+            "damaged_card"
+        ],
+        [
+            "how long does it take you to mail me a new card",
+            "replacement_card_duration"
+        ],
+        [
+            "find if there are any travel alerts for canada",
+            "travel_alert"
+        ],
+        [
+            "play rock playlist",
+            "play_music"
+        ],
+        [
+            "you got to go back to factory settings now",
+            "reset_settings"
+        ],
+        [
+            "my friend steve needs my gps coordinates send them to him",
+            "share_location"
+        ],
+        [
+            "tell me a fact i may not know",
+            "fun_fact"
+        ],
+        [
+            "what are my options for jump starting my battery",
+            "jump_start"
+        ],
+        [
+            "what is the process of finding my credit score",
+            "credit_score"
+        ],
+        [
+            "roll a dice",
+            "roll_dice"
+        ],
+        [
+            "set the alarm to go off at 9 tomorrow",
+            "alarm"
+        ],
+        [
+            "put clean refrigerator on my spring cleaning to do list",
+            "todo_list_update"
+        ],
+        [
+            "can you put a block on my visa account right away",
+            "freeze_account"
+        ],
+        [
+            "what are the carry-on rules",
+            "carry_on"
+        ],
+        [
+            "is it safe to eat chicken that has been in the fridge since monday",
+            "food_last"
+        ],
+        [
+            "would being late hurt my credit",
+            "improve_credit_score"
+        ],
+        [
+            "has anyone approved my day off request",
+            "pto_request_status"
+        ],
+        [
+            "thanks again!",
+            "thank_you"
+        ],
+        [
+            "i would like to know where my phone is",
+            "find_phone"
+        ],
+        [
+            "purchase a computer for me",
+            "order"
+        ],
+        [
+            "what are some roundtrip flights from dallas to los angeles from march 2 to march 10",
+            "book_flight"
+        ],
+        [
+            "can you tell me what is included in my health benefits",
+            "insurance"
+        ],
+        [
+            "how much is 500 dollars in pesos",
+            "exchange_rate"
+        ],
+        [
+            "can you do a coin flip for me",
+            "flip_coin"
+        ],
+        [
+            "book me a hotel with good ratings in nashville",
+            "book_hotel"
+        ],
+        [
+            "please change to the female voice",
+            "change_accent"
+        ],
+        [
+            "have i earned a lot of points on my capital one card",
+            "rewards_balance"
+        ],
+        [
+            "what's playing right now",
+            "what_song"
+        ],
+        [
+            "i don't have any checks left; please order some",
+            "order_checks"
+        ],
+        [
+            "please add this song to my alternative playlist",
+            "update_playlist"
+        ],
+        [
+            "what is the easiest way to check my bank rewards card",
+            "rewards_balance"
+        ],
+        [
+            "do i need a power adapter in mexico",
+            "plug_type"
+        ],
+        [
+            "let me use my credit card points",
+            "redeem_rewards"
+        ],
+        [
+            "your name is roman",
+            "change_ai_name"
+        ],
+        [
+            "search google for how to set up direct deposit",
+            "direct_deposit"
+        ],
+        [
+            "where were you before moving here",
+            "where_are_you_from"
+        ],
+        [
+            "when should i replace my tires next if i last replaced them on july 15th",
+            "tire_change"
+        ],
+        [
+            "can you connect to my phone, please",
+            "sync_device"
+        ],
+        [
+            "what is the cost of water and electric this month",
+            "bill_balance"
+        ],
+        [
+            "can you tell me what the weather will be please",
+            "weather"
+        ],
+        [
+            "i would like to use my credit card points to acquire a new laptop",
+            "redeem_rewards"
+        ],
+        [
+            "what is the routing number for royal",
+            "routing"
+        ],
+        [
+            "i don't like that, no",
+            "no"
+        ],
+        [
+            "no that is not right",
+            "no"
+        ]
+    ]
+}

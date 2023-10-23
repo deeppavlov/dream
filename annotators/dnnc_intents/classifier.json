@@ -1,61 +1,74 @@
 {
   "chainer": {
-    "in": ["text"],
+    "in": ["x"],
     "pipe": [
-      {
-        "class_name": "dnnc_preparer",
-        "in": ["text"],
-        "out": ["texts","dataset"]
-      },
-      {
-        "class_name": "dnnc_pairgenerator",
-        "in": ["texts", "dataset"],
-        "out": ["x", "x_support", "x_populated", "y_support"],
-        "bidirectional": false
-      },
-      {
-        "class_name": "torch_transformers_preprocessor",
-        "in": ["x_populated", "x_support"],
-        "out": ["bert_features"],
-        "vocab_file": "{BASE_MODEL}",
-        "do_lower_case": true,
-        "max_seq_length": 128
-      },
-      {
-        "class_name": "torch_transformers_classifier_batch1",
-        "main": true,
-        "in": ["bert_features"],
-        "out": ["simmilarity_scores"],
-        "n_classes": 2,
-        "return_probas": true,
-        "pretrained_bert": "{BASE_MODEL}",
-        "save_path": "{MODEL_PATH}/model",
-        "load_path": "{MODEL_PATH}/model",
-        "is_binary": "{BINARY_CLASSIFICATION}"
-      },
-      {
-        "class_name": "dnnc_proba2labels",
-        "is_binary": "{BINARY_CLASSIFICATION}",
-        "in": ["simmilarity_scores", "x", "x_populated", "x_support", "y_support"],
-        "out": ["y_pred"],
-        "confidence_threshold": 0.0
-      }
+       {
+        "class_name": "stream_spacy_tokenizer",
+                "in": [
+                    "x"
+                ],
+                "id": "my_tokenizer",
+                "lemmas": false,
+                "out": "token_lemmas",
+                "spacy_model": "en_core_web_sm",
+                "support_load_path": "/src/support_dataset.json"
+            },
+            {
+                "ref": "my_tokenizer",
+                "in": [
+                    "token_lemmas"
+                ],
+                "out": [
+                    "text_lem"
+                ]
+            },
+            {
+                "class_name": "fasttext",
+                "in": [
+                    "token_lemmas"
+                ],
+                "load_path": "{DOWNLOADS_PATH}/embeddings/fasttext/{LANGUAGE}.bin",
+                "mean": true,
+                "out": [
+                    "text_vector"
+                ]
+            },
+            {
+                "in": [
+                    "text_vector"
+                ],
+                "out": [
+                    "y_pred_probas"
+                ],
+                "class_name": "sklearn_component",
+                "main": true,
+                "save_path": "/src/model.pkl",
+                "load_path": "/src/model.pkl",
+                "model_class": "sklearn.linear_model:LogisticRegression",
+                "infer_method": "predict_proba",
+                "C": 10,
+                "penalty": "l2"
+            }
     ],
-    "out": ["y_pred"]
+    "out": ["y_pred_probas"]
   },
   "metadata": {
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
-      "MODEL_PATH": "{ROOT_PATH}/models/fewshot/roberta_nli_mrpc_1_10",
-      "BINARY_CLASSIFICATION": true,
-      "BASE_MODEL": "roberta-base"
+      "DOWNLOADS_PATH":"{ROOT_PATH}/downloads",
+      "MODEL_PATH": "{ROOT_PATH}/models/",
+      "LANGUAGE":"en"
     },
     "imports":["utils"],
     "download": [
-      {
-        "url": "http://files.deeppavlov.ai/v1/classifiers/fewshot/roberta_nli_mrpc_1_10.tar.gz",
-        "subdir": "{MODEL_PATH}"
-      }
+            {
+                "url": "http://files.deeppavlov.ai/embeddings/fasttext/{LANGUAGE}.bin",
+                "subdir": "{DOWNLOADS_PATH}/embeddings/fasttext"
+            },
+            {
+                "url": "https://files.deeppavlov.ai/faq/fasttext_logreg_{LANGUAGE}.tar.gz",
+                "subdir": "{MODEL_PATH}"
+            }
     ]
   }
 }
