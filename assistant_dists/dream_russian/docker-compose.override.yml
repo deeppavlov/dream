@@ -93,6 +93,7 @@ services:
       args:
         CONFIG: sentseg_ru_bert_torch.json
       context: ./annotators/sentseg_ru
+      dockerfile: Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8011
     environment:
       - CUDA_VISIBLE_DEVICES=0
@@ -190,7 +191,7 @@ services:
         SRC_DIR: annotators/entity_detection_rus
         LANGUAGE: RU
       context: ./
-      dockerfile: annotators/entity_detection_rus/Dockerfile
+      dockerfile: annotators/entity_detection_rus/Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8103
     environment:
       - FLASK_APP=server
@@ -254,7 +255,7 @@ services:
         LANGUAGE: RU
         FAST: 1
       context: ./
-      dockerfile: annotators/wiki_parser/Dockerfile
+      dockerfile: annotators/wiki_parser/Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8077
     environment:
       - CUDA_VISIBLE_DEVICES=''
@@ -411,7 +412,7 @@ services:
         SERVICE_PORT: 8110
         SRC_DIR: annotators/fact_retrieval_rus
       context: ./
-      dockerfile: annotators/fact_retrieval_rus/Dockerfile
+      dockerfile: annotators/fact_retrieval_rus/Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8110
     environment:
       - CUDA_VISIBLE_DEVICES=0
@@ -431,7 +432,7 @@ services:
         SERVICE_NAME: text_qa
         CONFIG: qa_rus.json
       context: services/text_qa
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-test
     command: flask run -h 0.0.0.0 -p 8078
     environment:
       - CUDA_VISIBLE_DEVICES=0
