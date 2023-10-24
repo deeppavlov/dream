@@ -5,6 +5,7 @@ import os
 import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
+from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoModel, AutoTokenizer
@@ -77,6 +78,7 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 

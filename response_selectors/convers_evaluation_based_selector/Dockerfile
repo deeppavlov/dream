@@ -52,4 +52,7 @@ ENV LANGUAGE ${LANGUAGE}
 COPY ./response_selectors/convers_evaluation_based_selector/ ./
 COPY ./common/ ./common/
 
+# wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
+HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
+
 CMD gunicorn --workers=2 server:app

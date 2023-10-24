@@ -2,9 +2,9 @@ import logging
 import os
 import time
 
-from flask import Flask, request, jsonify
 import sentry_sdk
-
+from flask import Flask, request, jsonify
+from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
 from common.utils import combined_classes
@@ -66,6 +66,7 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
 
 
 @app.route("/model", methods=["POST"])

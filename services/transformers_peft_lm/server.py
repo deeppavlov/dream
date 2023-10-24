@@ -6,6 +6,7 @@ import time
 import sentry_sdk
 import torch
 from flask import Flask, request, jsonify
+from healthcheck import HealthCheck
 from peft import PeftModel, PeftConfig
 from sentry_sdk.integrations.flask import FlaskIntegration
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
@@ -28,6 +29,7 @@ NAMING = {
 }
 
 app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 DEFAULT_CONFIGS = {

@@ -5,9 +5,10 @@ import numpy as np
 import time
 import requests
 
-from flask import Flask, request, jsonify
-from os import getenv
 import sentry_sdk
+from flask import Flask, request, jsonify
+from healthcheck import HealthCheck
+from os import getenv
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -16,6 +17,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
 
 BADLIST_URL = getenv("BADLIST_ANNOTATOR_URL", "http://badlisted-words:8018/badlisted_words_batch")
 FILTER_BADLISTED_WORDS = getenv("FILTER_BADLISTED_WORDS", 0)

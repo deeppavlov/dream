@@ -1,14 +1,16 @@
 import logging
 import os
-import sentry_sdk
-import requests
 from pathlib import PurePath
-from deeppavlov import build_model
-from flask import Flask, jsonify, request
-from sentry_sdk.integrations.flask import FlaskIntegration
-from deeppavlov.core.common.file import read_json
-from utils import vectorize_upload_return_attributes, download_files, add_file_id_to_config
+
+import requests
+import sentry_sdk
 from common.files_and_folders_processing import create_folders_if_not_exist
+from deeppavlov import build_model
+from deeppavlov.core.common.file import read_json
+from flask import Flask, jsonify, request
+from healthcheck import HealthCheck
+from sentry_sdk.integrations.flask import FlaskIntegration
+from utils import vectorize_upload_return_attributes, download_files, add_file_id_to_config
 
 # logging here because it conflicts with tf
 
@@ -16,6 +18,7 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
 
 PARAGRAPHS_NUM = int(os.environ.get("PARAGRAPHS_NUM", 5))
 FILE_SERVER_TIMEOUT = float(os.environ.get("FILE_SERVER_TIMEOUT", 30))

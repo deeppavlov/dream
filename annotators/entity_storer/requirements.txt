@@ -2,6 +2,7 @@ sentry_sdk[flask]==1.19.1
 flask==2.2.3
 itsdangerous==2.0.1
 gunicorn==20.1.0
+six==1.16.0
 healthcheck==1.3.3
 six==1.15.0
 spacy==3.5.1

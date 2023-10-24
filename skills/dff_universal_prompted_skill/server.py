@@ -7,6 +7,7 @@ import random
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from healthcheck import HealthCheck
 from sentry_sdk.integrations.logging import ignore_logger
 
 from common.dff.integration.actor import load_ctxs, get_response
@@ -30,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 app = Flask(__name__)
+health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 
 
