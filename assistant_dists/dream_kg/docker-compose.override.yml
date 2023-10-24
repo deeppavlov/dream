@@ -2,12 +2,9 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_kg/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentence-ranker:8128,
-          spacy-nounphrases:8006, sentseg:8011, ranking-based-response-selector:8002,
-          ner:8021, spelling-preprocessing:8074, entity-linking:8075,
-          combined-classification:8087, entity-detection:8103,
-          property-extraction:8136, custom-entity-linking:8153,
-          terminusdb-server:6363, user-knowledge-memorizer:8027,
+      WAIT_HOSTS: "sentence-ranker:8128, sentseg:8011, ranking-based-response-selector:8002,
+          ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103,
+          property-extraction:8136, custom-entity-linking:8153, terminusdb-server:6363, user-knowledge-memorizer:8027,
           dff-user-kg-skill:8028, dff-travel-italy-skill:8025"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
@@ -34,24 +31,6 @@ services:
           memory: 3G
         reservations:
           memory: 3G
-
-  spacy-nounphrases:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8006
-        SERVICE_NAME: spacy_nounphrases
-      context: .
-      dockerfile: ./annotators/spacy_nounphrases/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8006
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   sentseg:
     env_file: [ .env ]
@@ -132,23 +111,6 @@ services:
         reservations:
           memory: 2.5G
 
-  spelling-preprocessing:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8074
-        SERVICE_NAME: spelling_preprocessing
-      context: ./annotators/spelling_preprocessing/
-    command: flask run -h 0.0.0.0 -p 8074
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
-
   combined-classification:
     env_file: [ .env ]
     build:
@@ -218,7 +180,7 @@ services:
     build:
       args:
         CONFIG: custom_entity_linking.json
-        PORT: 8153
+        SERVICE_PORT: 8153
         SRC_DIR: annotators/custom_entity_linking
       context: ./
       dockerfile: annotators/custom_entity_linking/Dockerfile
@@ -243,7 +205,7 @@ services:
         TERMINUSDB_SERVER_PASSWORD: root
         TERMINUSDB_SERVER_TEAM: admin
         TERMINUSDB_SERVER_DB: user_knowledge_db
-        CONFIG: config.json
+        USER_KM_SERVICE_CONFIG: index_load_path.json
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
     command: flask run -h 0.0.0.0 -p 8027
