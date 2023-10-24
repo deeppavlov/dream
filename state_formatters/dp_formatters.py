@@ -140,16 +140,15 @@ def last_utt_dialog(dialog: Dict) -> List[Dict]:
 
 def preproc_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    return utils.dream_formatter(
-        dialog,
-        ["speeches"],
-        additional_params={
-            "utterance_type": "human_utterances",
-            "annotation_attribute": "spelling_preprocessing",
-            "def_subresult": dialog["human_utterances"][-1]["text"],
-            "last_n_utts": 1,
-        },
-    )
+    return [
+        {
+            "sentences": [
+                dialog["human_utterances"][-1]["annotations"].get(
+                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+                )
+            ]
+        }
+    ]
 
 
 def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
@@ -223,16 +222,23 @@ def last_human_bot_annotated_utterance(dialog: Dict) -> List[Dict]:
 
 
 def hypothesis_histories_list(dialog: Dict):
-    return utils.dream_formatter(
-        dialog=dialog,
-        result_keys=["utterances_with_histories"],
-        preprocess=True,
-        preprocess_params={
-            "mode": "segments",
-            "remove_clarification": True,
-            "replace_utterances": True,
-        },
-    )
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="segments")
+    utterances_histories_batch = []
+    for hyp in hypotheses:
+        utterances_histories = []
+        for utt in dialog["utterances"]:
+            utt_text = utt["text"]
+            if isinstance(utt_text, list):
+                utt_text = " ".join(utt_text)
+            utterances_histories.append(utt_text)
+        # hyp["text"] is a string. We need to pass here list of strings.
+        utterances_histories.append(hyp["text"])
+        utterances_histories_batch.append(utterances_histories)
+
+    return [{"utterances_with_histories": utterances_histories_batch}]
 
 
 def last_utt_and_history_dialog(dialog: Dict) -> List[Dict]:
