@@ -1,6 +1,9 @@
 # BadlistedWordsDetector
 
 ## Description
+component_type: annotator
+is_customizable: true
+
 Spacy-based user utterance annotator that detects words and phrases from the badlist
 
 ## I/O

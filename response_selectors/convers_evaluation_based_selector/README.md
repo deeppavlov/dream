@@ -56,4 +56,3 @@ python response_selectors/convers_evaluation_based_selector/measure_quality.py \
                    --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/  \
                    --url http://0.0.0.0:8009/respond
 ```
-## Dependencies
