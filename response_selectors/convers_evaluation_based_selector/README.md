@@ -41,6 +41,19 @@ FALLBACK_FILE: a file name with fallbacks from `dream/common/fallbacks/`
 ## Input/Output
 **Input:** a list of hypotheses with their scores and metadata
 **Output:** a list of selected hypotheses with their scores and metadata
+### How to run conversation evaluator locally
+
+`docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f one_worker.yml up toxic_classification badlisted_words convers_evaluation_selector`
+
+Then use `--url`.
+
+Example of usage with url:
 
 ## Dependencies
 none
+```
+python response_selectors/convers_evaluation_based_selector/measure_quality.py \
+                   --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/  \
+                   --url http://0.0.0.0:8009/respond
+```
+## Dependencies
