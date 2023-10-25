@@ -10,7 +10,6 @@ from typing import List
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
 from common.universal_templates import (
     is_any_question_sentence_in_utterance,
     if_chat_about_particular_topic,
@@ -32,8 +31,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 SENTENCE_RANKER_ANNOTATION_NAME = getenv("SENTENCE_RANKER_ANNOTATION_NAME")
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")

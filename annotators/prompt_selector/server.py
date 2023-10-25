@@ -10,15 +10,12 @@ from pathlib import Path
 import numpy as np
 import sentry_sdk
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 logger.info(f"prompt-selector considered ranker: {SENTENCE_RANKER_SERVICE_URL}")

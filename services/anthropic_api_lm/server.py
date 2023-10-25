@@ -8,7 +8,6 @@ import sentry_sdk
 from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 
@@ -23,7 +22,6 @@ logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 NAMING = [anthropic.AI_PROMPT, anthropic.HUMAN_PROMPT]
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
     "claude-1": json.load(open("common/generative_configs/anthropic_generative_config.json", "r")),

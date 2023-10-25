@@ -3,7 +3,6 @@ itsdangerous==2.0.1
 gunicorn==19.9.0
 requests==2.22.0
 sentry-sdk[flask]==0.14.1
-six==1.16.0
 healthcheck==1.3.3
 jinja2<=3.0.3
 Werkzeug<=2.0.3
@@ -14,5 +13,3 @@ pypdfium2==4.16.0
 bs4==0.0.1
 python-docx==0.8.11
 simplify-docx==0.1.2
-six==1.16.0
-healthcheck==1.3.3

@@ -1,12 +1,10 @@
 import logging
 import os
-
 import sentry_sdk
-from common.files_and_folders_processing import SKILLS_USING_DOC
 from flask import Flask, jsonify, request
-from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 from utils import upload_documents_save_info
+from common.files_and_folders_processing import SKILLS_USING_DOC
 
 # logging here because it conflicts with tf
 
@@ -14,8 +12,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 DOC_PATHS_OR_LINKS = os.environ.get("DOC_PATHS_OR_LINKS")
 if DOC_PATHS_OR_LINKS:
