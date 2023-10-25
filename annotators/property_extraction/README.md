@@ -21,12 +21,18 @@ import requests
 
 utterances = [["I love going for a walk with my two dogs every day."], ["I like travelling in Italy with my husband. And you?"]]
 requests.post("http://0.0.0.0:8136/respond", json = {"utterances": utterances}).json()
+```
 
->>> [
+**Output example**
+```
+[
     {"triplets": [{"subject": "user", "relation": "like activity", "object": "walking"}, {"subject": "user", "relation": "have pet", "object": "two dogs"}]}, 
     {"triplets": [{"subject": "user", "property": "marital status", "object": "husband"}, {"subject": "user", "relation": "like activity", "object": "travel"}]}
     ]
 ```
+
+## Dependencies
+none
 
 **Output**
 
