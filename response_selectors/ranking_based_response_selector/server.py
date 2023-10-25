@@ -9,8 +9,6 @@ from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
-
 from common.utils import is_toxic_or_badlisted_utterance
 
 
@@ -20,7 +18,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
 
 SENTENCE_RANKER_ANNOTATION_NAME = getenv("SENTENCE_RANKER_ANNOTATION_NAME")
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")

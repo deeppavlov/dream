@@ -7,8 +7,6 @@ from typing import List
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
-
 from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.selectors import collect_descriptions_from_components
@@ -19,7 +17,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 while True:

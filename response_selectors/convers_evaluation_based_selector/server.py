@@ -10,7 +10,6 @@ from os import getenv
 import numpy as np
 import sentry_sdk
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
 from nltk.tokenize import sent_tokenize
 
 from common.greeting import greeting_spec, HI_THIS_IS_DREAM
@@ -42,7 +41,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
 
 CALL_BY_NAME_PROBABILITY = float(getenv("CALL_BY_NAME_PROBABILITY", 0.5))  # if name is already known
 TAG_BASED_SELECTION = getenv("TAG_BASED_SELECTION", False)

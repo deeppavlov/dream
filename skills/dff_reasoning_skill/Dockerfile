@@ -36,7 +36,5 @@ COPY ./common/ ./common/
 COPY ./skills/dff_weather_skill/tools/ ./tools/
 COPY ./skills/dff_weather_skill/data/ ./data/
 
-# wait for a server answer ( INTERVAL + TIMEOUT ) * RETRIES seconds after that change stutus to unhealthy
-HEALTHCHECK --interval=5s --timeout=5s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 
 CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout ${GENERATIVE_TIMEOUT:-120}

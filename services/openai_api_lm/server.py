@@ -9,7 +9,6 @@ import tiktoken
 from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
-from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 
@@ -25,7 +24,6 @@ NAMING = ["AI", "Human"]
 CHATGPT_ROLES = ["assistant", "user"]
 
 app = Flask(__name__)
-health = HealthCheck(app, "/healthcheck")
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
     "text-davinci-003": json.load(open("common/generative_configs/openai-text-davinci-003.json", "r")),
