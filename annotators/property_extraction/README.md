@@ -27,3 +27,7 @@ requests.post("http://0.0.0.0:8136/respond", json = {"utterances": utterances}).
     {"triplets": [{"subject": "user", "property": "marital status", "object": "husband"}, {"subject": "user", "relation": "like activity", "object": "travel"}]}
     ]
 ```
+
+**Output**
+
+## Dependencies
