@@ -50,7 +50,6 @@ Then use `--url`.
 Example of usage with url:
 
 ## Dependencies
-none
 ```
 python response_selectors/convers_evaluation_based_selector/measure_quality.py \
                    --data_dir response_selectors/convers_evaluation_based_selector/labeled_data/  \
