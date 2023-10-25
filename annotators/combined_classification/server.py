@@ -67,6 +67,7 @@ except Exception as e:
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 
 @app.route("/model", methods=["POST"])

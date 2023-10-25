@@ -43,6 +43,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 CALL_BY_NAME_PROBABILITY = float(getenv("CALL_BY_NAME_PROBABILITY", 0.5))  # if name is already known
 TAG_BASED_SELECTION = getenv("TAG_BASED_SELECTION", False)

@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 BADLIST_URL = getenv("BADLIST_ANNOTATOR_URL", "http://badlisted-words:8018/badlisted_words_batch")
 FILTER_BADLISTED_WORDS = getenv("FILTER_BADLISTED_WORDS", 0)

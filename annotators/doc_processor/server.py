@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
+logging.getLogger("werkzeug").setLevel("WARNING")
 
 DOC_PATHS_OR_LINKS = os.environ.get("DOC_PATHS_OR_LINKS")
 if DOC_PATHS_OR_LINKS:
