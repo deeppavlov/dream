@@ -20,7 +20,6 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 while True:

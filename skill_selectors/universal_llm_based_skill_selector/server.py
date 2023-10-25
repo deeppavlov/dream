@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 DEFAULT_LM_SERVICE_TIMEOUT = float(getenv("DEFAULT_LM_SERVICE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))

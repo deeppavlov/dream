@@ -24,7 +24,6 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 DEFAULT_LM_SERVICE_TIMEOUT = float(getenv("DEFAULT_LM_SERVICE_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))

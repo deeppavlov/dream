@@ -18,7 +18,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 health = HealthCheck(app, "/healthcheck")
-logging.getLogger("werkzeug").setLevel("WARNING")
 
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 logger.info(f"prompt-selector considered ranker: {SENTENCE_RANKER_SERVICE_URL}")
