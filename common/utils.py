@@ -852,7 +852,7 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     if not cobot_da_intent_probs:
         cobot_da_intent_probs = _labels_to_probs(cobot_da_intent_labels, combined_classes["cobot_dialogact_intents"])
     dnnc_intent_probs = annotated_utterance["annotations"].get("dnnc_intents", {"oos": 1})
-    dnnc_intents = [intent for intent in dnnc_intent_probs if dnnc_intent_probs.get(intent, 0) == 1]
+    dnnc_intent_labels = [intent for intent in dnnc_intent_probs if dnnc_intent_probs.get(intent, 0) == 1]
     if which == "all":
         answer_probs = {**detected_intent_probs, **cobot_da_intent_probs, **midas_intent_probs, **dnnc_intent_probs}
         answer_labels = detected_intents + cobot_da_intent_labels + midas_intent_labels + dnnc_intent_labels
