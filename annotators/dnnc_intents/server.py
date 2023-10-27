@@ -13,9 +13,9 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logger = logging.getLogger(__name__)
-
+logger.info(os.listdir('/root/.deeppavlov/downloads/logreg_files'))
 try:
-    model = build_model("classifier.json", download=True)
+    model = build_model(os.getenv("CONFIG"), download=True)
     logger.info("Making test res")
     test_res = model(["a"])
     logger.info("model loaded, test query processed")
@@ -25,8 +25,8 @@ except Exception as e:
     raise e
 
 app = Flask(__name__)
-
-labels = [k.split("\t")[0] for k in open("classes.dict", "r").readlines()]
+if os.getenv("CONFIG") == "classifier.json":
+    labels = [k.split("\t")[0] for k in open("~/.deeppavlov/downloads/logreg_files/classes.dict", "r").readlines()]
 
 
 @app.route("/model", methods=["POST"])
@@ -35,8 +35,12 @@ def respond():
     sentences = request.json.get("sentences", [" "])
     pred_probs_lists = model(sentences)
     ans = []
-    for pred_probs in pred_probs_lists:
-        ans.append({dnnc_class: prob for dnnc_class, prob in zip(labels, pred_probs)})
+    if os.getenv("CONFIG") == "classifier.json":
+        for pred_probs in pred_probs_lists:
+            ans.append({dnnc_class: prob for dnnc_class, prob in zip(labels, pred_probs)})
+    else:
+        for pred_classes in pred_prob_list:
+            ans.append({pred_class: 1 for pred_class in pred_classes})
     # roberta config predicted list of class names only - to use it, modify this line
     logger.debug(f"dnnc result: {ans}")
     logger.info(f"dnnc exec time: {time.time() - t}")

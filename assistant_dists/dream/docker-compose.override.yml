@@ -490,9 +490,13 @@ services:
       args:
         SERVICE_PORT: 8218
         SERVICE_NAME: dnnc_intents
+        CONFIG: classifier.json
       context: .
       dockerfile: ./annotators/dnnc_intents/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8218 --timeout 600
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
     deploy:
       resources:
         limits:

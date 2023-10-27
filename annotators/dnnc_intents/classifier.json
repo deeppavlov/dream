@@ -11,7 +11,7 @@
                 "lemmas": false,
                 "out": "token_lemmas",
                 "spacy_model": "en_core_web_sm",
-                "support_load_path": "/src/support_dataset.json"
+                "support_load_path": "{DOWNLOADS_PATH}/logreg_files/support_dataset.json"
             },
             {
                 "ref": "my_tokenizer",
@@ -42,8 +42,8 @@
                 ],
                 "class_name": "sklearn_component",
                 "main": true,
-                "save_path": "/src/model.pkl",
-                "load_path": "/src/model.pkl",
+                "save_path": "{DOWNLOADS_PATH}/logreg_files/model.pkl",
+                "load_path": "{DOWNLOADS_PATH}/logreg_files/model.pkl",
                 "model_class": "sklearn.linear_model:LogisticRegression",
                 "infer_method": "predict_proba",
                 "C": 10,
@@ -56,7 +56,7 @@
     "variables": {
       "ROOT_PATH": "~/.deeppavlov",
       "DOWNLOADS_PATH":"{ROOT_PATH}/downloads",
-      "MODEL_PATH": "{ROOT_PATH}/models/",
+      "LOGREG_PATH": "{DOWNLOADS_PATH}/logreg_files",
       "LANGUAGE":"en"
     },
     "imports":["utils"],
@@ -66,9 +66,10 @@
                 "subdir": "{DOWNLOADS_PATH}/embeddings/fasttext"
             },
             {
-                "url": "https://files.deeppavlov.ai/faq/fasttext_logreg_{LANGUAGE}.tar.gz",
-                "subdir": "{MODEL_PATH}"
+                "url": "https://files.deeppavlov.ai/dream_data/dnnc_intents/logreg_files.tar.gz",
+                "subdir": "{LOGREG_PATH}"
             }
+            
     ]
   }
 }

@@ -50,7 +50,7 @@
       "BINARY_CLASSIFICATION": true,
       "BASE_MODEL": "roberta-base"
     },
-    "imports":["utils_old_roberta"],
+    "imports":["utils_roberta"],
     "download": [
       {
         "url": "http://files.deeppavlov.ai/v1/classifiers/fewshot/roberta_nli_mrpc_1_10.tar.gz",
