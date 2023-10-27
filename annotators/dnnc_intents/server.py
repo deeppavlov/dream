@@ -13,7 +13,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logger = logging.getLogger(__name__)
-logger.info(os.listdir('/root/.deeppavlov/downloads/logreg_files'))
 try:
     model = build_model(os.getenv("CONFIG"), download=True)
     logger.info("Making test res")
@@ -39,7 +38,7 @@ def respond():
         for pred_probs in pred_probs_lists:
             ans.append({dnnc_class: prob for dnnc_class, prob in zip(labels, pred_probs)})
     else:
-        for pred_classes in pred_prob_list:
+        for pred_classes in pred_prob_lists:
             ans.append({pred_class: 1 for pred_class in pred_classes})
     # roberta config predicted list of class names only - to use it, modify this line
     logger.debug(f"dnnc result: {ans}")
