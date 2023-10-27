@@ -43,3 +43,4 @@ jobs:
       PORTAINER_KEY: ${{ secrets.ALPHA_PORTAINER_KEY }}
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
       PROXY_HOST: ${{ secrets.PROXY_HOST }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
