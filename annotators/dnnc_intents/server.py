@@ -13,7 +13,8 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logger = logging.getLogger(__name__)
-logger.info(os.listdir("/root/.deeppavlov/downloads/logreg_files"))  # to del
+
+LOGREG_DIR = "/root/.deeppavlov/downloads/logreg_files"
 try:
     model = build_model(os.getenv("CONFIG"), download=True)
     logger.info("Making test res")
@@ -26,7 +27,7 @@ except Exception as e:
 
 app = Flask(__name__)
 if os.getenv("CONFIG") == "classifier.json":
-    labels = [k.split("\t")[0] for k in open("~/.deeppavlov/downloads/logreg_files/classes.dict", "r").readlines()]
+    labels = [k.split("\t")[0] for k in open(f"{LOGREG_DIR}/classes.dict", "r").readlines()]
 
 
 @app.route("/model", methods=["POST"])
