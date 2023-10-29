@@ -185,16 +185,23 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def preproc_last_human_utt_dialog_w_hist(dialog: Dict) -> List[Dict]:
     # Used by: sentseg over human uttrs
-    return utils.dream_formatter(
-        dialog,
-        ["sentences", "sentences_with_history"],
-        additional_params={
-            "utterance_type": "human_utterances",
-            "last_n_utts": 1,
-            "annotation_attribute": "spelling_preprocessing",
-            "def_subresult": dialog["human_utterances"][-1]["text"],
-        },
+    last_human_utt = dialog["human_utterances"][-1]["annotations"].get(
+        "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
     )
+    if dialog["bot_utterances"]:
+        # h sep b sep h sep b sep h
+        prev_bot_utts = [k["text"] for k in dialog["bot_utterances"][-2:]]
+        prev_human_utts = [
+            utt["annotations"].get("spelling_preprocessing", utt["text"]) for utt in dialog["human_utterances"][-3:-1]
+        ]
+        prev_utts = []
+        for human_utt, bot_utt in zip(prev_human_utts, prev_bot_utts):
+            prev_utts.append(human_utt)
+            prev_utts.append(bot_utt)
+        sentence_w_history = " [SEP] ".join(prev_utts + [last_human_utt])
+    else:
+        sentence_w_history = last_human_utt
+    return [{"sentences": [last_human_utt], "sentences_with_history": [sentence_w_history]}]
 
 
 def preproc_and_tokenized_last_human_utt_dialog(dialog: Dict) -> List[Dict]:
@@ -350,10 +357,6 @@ def utt_sentrewrite_modified_last_dialog_emotion_skill(dialog: Dict):
     )
 
 
-def el_formatter_dialog(dialog: Dict):
-    return utils.dream_formatter(dialog, result_keys=["entity_substr", "entity_tags"])
-
-
 def prepare_el_input(dialog: Dict):
     num_last_utterances = 2
     entities_with_labels = get_entities(dialog["human_utterances"][-1], only_named=False, with_labels=True)
@@ -373,6 +376,18 @@ def prepare_el_input(dialog: Dict):
     context = [uttr["text"] for uttr in dialog["utterances"][-num_last_utterances:]]
 
     return entity_substr_list, entity_tags_list, context
+
+
+def el_formatter_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
+    return [
+        {
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "context": [context],
+        }
+    ]
 
 
 def custom_el_formatter_dialog(dialog: Dict):
