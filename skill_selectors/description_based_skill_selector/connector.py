@@ -6,6 +6,7 @@ from typing import Dict, Callable
 
 import sentry_sdk
 
+from common.doc_based_skills_for_skills_selector import turn_on_doc_based_skills
 from common.link import get_previously_active_skill
 from common.robot import command_intents
 from common.universal_templates import is_any_question_sentence_in_utterance
@@ -79,12 +80,9 @@ class DescriptionBasedSkillSelectorConnector:
             not_prompted_skills.discard("factoid_qa")
             not_prompted_skills.discard("dff_google_api_skill")
             not_prompted_skills.discard("dff_document_qa_llm_skill")
+            not_prompted_skills.discard("dff_meeting_analysis_skill")
 
             not_prompted_skills = list(not_prompted_skills)
-            if dialog.get("bot", {}).get("attributes", {}).get("model_info", {}) != {}:
-                # adding dff_document_qa_llm_skill only if we have trained model files in this dialog
-                # (thus checking bot attributes)
-                skills_for_uttr.append("dff_document_qa_llm_skill")
             is_factoid = "is_factoid" in get_factoid(user_uttr, probs=False)
 
             if user_uttr_text == "/get_dialog_id":
@@ -116,6 +114,9 @@ class DescriptionBasedSkillSelectorConnector:
                 # turn on all other skills from pipeline that are not prompted
                 skills_for_uttr.extend(not_prompted_skills)
 
+            # turn on skills that use documents (dff_document_qa_llm_skill, dff_meeting_analysis_skill)
+            # if we have active documents in use
+            skills_for_uttr = turn_on_doc_based_skills(dialog, all_skill_names, skills_for_uttr)
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"description_based_skill_selector exec time = {total_time:.3f}s")

@@ -2,9 +2,11 @@ import json
 import logging
 import time
 from os import getenv
+from typing import List
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.doc_based_skills_for_skills_selector import turn_on_doc_based_skills
 from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.selectors import collect_descriptions_from_components
@@ -27,14 +29,22 @@ DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_
 DEFAULT_SKILLS = ["dummy_skill"]
 
 
-def select_skills(dialog):
+def get_all_skill_names(dialog: dict) -> List[str]:
+    human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
+    all_skill_names = [skill["name"] for skill in human_uttr_attributes["skills"]]
+    return all_skill_names
+
+
+def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: List[str]) -> List[str]:
     global DEFAULT_PROMPT, N_UTTERANCES_CONTEXT
     selected_skills = []
     selected_skills += DEFAULT_SKILLS
 
     dialog_context = [uttr["text"] for uttr in dialog["utterances"]]
+    dialog_context[-1] = f"{dialog_context[-1]}\nSelected skills/agents for this dialog context:"
     human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
 
+    all_skill_names = get_all_skill_names(dialog)
     _skill_selector = human_uttr_attributes.get("skill_selector", {})
     _is_prompt_based_selection = "prompt" in _skill_selector
     # if debugging response selector (selected_skills=all and skill_selector_prompt is not given):
@@ -47,25 +57,26 @@ def select_skills(dialog):
     if human_uttr_attributes.get("selected_skills", None) in ["all", []] and not _is_prompt_based_selection:
         # MODE: debugging response selector
         # TURN ON: all skills from pipeline
-        pipeline = dialog.get("attributes", {}).get("pipeline", [])
-        all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
+        all_skill_names += ["dff_universal_prompted_skill"] + DEFAULT_SKILLS
         logger.info(f"universal_llm_based_skill_selector selected ALL skills:\n`{all_skill_names}`")
         return all_skill_names
+
+    # no matter if we have doc in use now, remove dff_document_qa_llm_skill from skills to be sent to LLM
+    # in any case, this skill will be added later
+    # NB: meeting analysis skill is not removed and can be chosen even if there is no doc
+    all_available_skill_names = [skill for skill in all_skill_names if skill != "dff_document_qa_llm_skill"]
 
     # MODE: debugging skill selector
     # TURN ON: all skills & turn on skills selected by LLM via prompt
     try:
-        logger.info(f"universal_llm_based_skill_selector sends dialog context to llm:\n`{dialog_context}`")
+        skills = [skill for skill in human_uttr_attributes["skills"] if skill["name"] in all_available_skill_names]
+        skill_descriptions_list, display_names_mapping = collect_descriptions_from_components(skills)
         prompt = _skill_selector.get("prompt", DEFAULT_PROMPT)
-        skill_descriptions_list, display_names_mapping = collect_descriptions_from_components(
-            human_uttr_attributes.get("skills", [])
-        )
         if "LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS" in prompt:
             # need to add skill descriptions in prompt in replacement of `LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS`
             skill_descriptions = "Skills:\n"
             skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descriptions_list])
             prompt = prompt.replace("LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS", skill_descriptions)
-        logger.info(f"prompt: {prompt}")
 
         lm_service_url = _skill_selector.get("lm_service", {}).get("url", DEFAULT_LM_SERVICE_URL)
         logger.info(f"lm_service_url: {lm_service_url}")
@@ -90,6 +101,9 @@ def select_skills(dialog):
             else N_UTTERANCES_CONTEXT
         )
 
+        logger.debug(f"universal_llm_based_skill_selector dialog context:\n`{dialog_context[-n_utterances_context:]}`")
+        logger.debug(f"universal_llm_based_skill_selector prompt:\n`{prompt}`")
+
         response = send_request_to_prompted_generative_service(
             dialog_context[-n_utterances_context:],
             prompt,
@@ -106,20 +120,26 @@ def select_skills(dialog):
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         logger.info("Exception in LLM's invocation. Turn on all skills from pipeline.")
-    # so, now we have selected_skills containing skills from human utterance attributes skill names (not deployed)
 
+    if selected_skills == DEFAULT_SKILLS:
+        logger.info("Selected only Dummy Skill. Turn on all skills from pipeline.")
+        selected_skills.extend(all_skill_names)
+
+    # now we also turn on document-based skills based on specific conditions
+    # all_skill_names (available skills) are taken from human utt attributes
+    selected_skills = turn_on_doc_based_skills(
+        dialog,
+        all_skill_names,
+        selected_skills,
+        prev_used_docs,
+        prev_active_skills,
+        auto_turn_on_meeting_analysis_when_doc_in_use=False,
+    )
+    # so, now we have selected_skills containing skills from human utterance attributes skill names (not deployed)
     # we need to add dff_universal_skill to generate prompt-based hypotheses
     selected_skills += ["dff_universal_prompted_skill"]
     selected_skills = list(set(selected_skills))
     logger.info(f"universal_llm_based_skill_selector selected:\n`{selected_skills}`")
-
-    selected_skills = list(set(selected_skills))
-    if selected_skills == ["dummy_skill"]:
-        logger.info("Selected only Dummy Skill. Turn on all skills from pipeline.")
-        pipeline = dialog.get("attributes", {}).get("pipeline", [])
-        all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
-        selected_skills = list(set(selected_skills))
-        selected_skills.extend(all_skill_names)
     return selected_skills
 
 
@@ -127,10 +147,14 @@ def select_skills(dialog):
 def respond():
     st_time = time.time()
     dialogs = request.json.get("dialogs", [])
+    all_prev_active_skills = request.json.get("all_prev_active_skills")
+    all_prev_active_skills = [None for _ in dialogs] if all_prev_active_skills is None else all_prev_active_skills
+    all_prev_used_docs = request.json.get("all_prev_used_docs")
+    all_prev_used_docs = [None for _ in dialogs] if all_prev_used_docs is None else all_prev_used_docs
     responses = []
 
-    for dialog in dialogs:
-        responses.append(select_skills(dialog))
+    for dialog, prev_active_skills, prev_used_docs in zip(dialogs, all_prev_active_skills, all_prev_used_docs):
+        responses.append(select_skills(dialog, prev_active_skills, prev_used_docs))
 
     total_time = time.time() - st_time
     logger.info(f"universal_llm_based_skill_selector exec time = {total_time:.3f}s")
