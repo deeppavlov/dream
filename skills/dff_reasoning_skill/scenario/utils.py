@@ -88,10 +88,9 @@ Form an input to the {api2use} tool to achieve the goal. \
 Input format: {input_template}"""
             )
         human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
         sending_variables = compose_sending_variables(
             {},
-            envvars_to_send,
+            ENVVARS_TO_SEND,
             human_uttr_attributes,
         )
         try:

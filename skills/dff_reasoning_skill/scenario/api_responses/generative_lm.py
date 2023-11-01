@@ -57,10 +57,9 @@ def generative_lm_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     dialog_context = compose_data_for_model(ctx, actor)
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
     sending_variables = compose_sending_variables(
         {},
-        envvars_to_send,
+        ENVVARS_TO_SEND,
         human_uttr_attributes,
     )
     prompt = compose_input_for_API(ctx, actor)

@@ -91,13 +91,14 @@ def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: L
             skill_descriptions = "Skills:\n"
             skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descriptions_list])
             prompt = PROMPT.replace("LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS", skill_descriptions)
+        else:
+            prompt = PROMPT
 
         lm_service_kwargs = human_uttr_attributes.get("skill_selector", {}).get("lm_service", {}).get("kwargs", None)
         lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
-        envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
         sending_variables = compose_sending_variables(
             lm_service_kwargs,
-            envvars_to_send,
+            ENVVARS_TO_SEND,
             human_uttr_attributes,
         )
         logger.debug(f"llm_based_skill_selector dialog context:\n`{dialog_context[-N_UTTERANCES_CONTEXT:]}`")
