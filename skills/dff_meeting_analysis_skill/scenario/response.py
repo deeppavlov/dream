@@ -43,6 +43,9 @@ if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 
+with open("common/prompts/management_assistant/default_system_prompt_assistant.json", "r") as f:
+    DEFAULT_SYSTEM_PROMPT = json.load(f)["prompt"]
+
 GENERATIVE_TIMEOUT = float(os.getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_TIMEOUT = (
     GENERATIVE_SERVICE_CONFIG.pop("timeout", GENERATIVE_TIMEOUT) if GENERATIVE_SERVICE_CONFIG else GENERATIVE_TIMEOUT
@@ -50,7 +53,6 @@ GENERATIVE_TIMEOUT = (
 N_UTTERANCES_CONTEXT = int(os.getenv("N_UTTERANCES_CONTEXT"))
 FILE_SERVER_URL = os.getenv("FILE_SERVER_URL")
 FILE_SERVER_TIMEOUT = float(os.getenv("FILE_SERVER_TIMEOUT"))
-DEFAULT_SYSTEM_PROMPT = "You are office worker assistant that analyses meeting transcripts based on user requests."
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 INCLUDE_INTO_REPORT = ["progress_by_areas", "problems", "summary"]
 SEP_FOR_DOC_RESPONSES = "\n****************\n"

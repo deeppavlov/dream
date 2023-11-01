@@ -54,7 +54,7 @@ flows = {
             ("generation", "progress_by_areas", 1.5): cnd.regexp(PROGRESS_BY_AREAS),
             ("generation", "full_report", 1.5): cnd.regexp(FULL_REPORT),
             ("generation", "weekly_report", 1.5): cnd.regexp(WEEKLY_REPORT),
-            ("generation", "question_answering", 1.1): cnd.true(),
+            ("generation", "question_answering", 1.1): loc_cnd.go_to_question_answering(),
         }
     },
     "service": {

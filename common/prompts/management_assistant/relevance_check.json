@@ -1,0 +1,4 @@
+{
+    "prompt": "Document summary:\n{summary}\nUser request:\n{request}\nCan User request be relevant to the Document? Only answer Yes or No. Do not give any explanations.",
+    "goals": "Determine if User request is relevant to some Document."
+}
