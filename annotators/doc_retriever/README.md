@@ -34,11 +34,12 @@ NB: `documents_in_use` were added earlier by Document Processor. Document Retrie
 
 ```
 {
-    "bot": {
+    "human": {
         "attributes": {
             "model_info": {
-                "db_link": "{FILE_SERVER_URL}/file?file=h7TbfZQO8C.db",
-                "matrix_link": "{FILE_SERVER_URL}/file?file=h7TbfZQO8C.npz"
+                "db_link": "{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.db",
+                "matrix_link": "{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.npz",
+                "file_ids": ["nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc", "kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc"]
             }
         }
     }
@@ -48,6 +49,8 @@ NB: `documents_in_use` were added earlier by Document Processor. Document Retrie
 `db_link` is a link to the dataset for all vectorized `documents_in_use`.
 
 `matrix_link` is a link to the TF-IDF matrix for all vectorized `documents_in_use`.
+
+`file_ids` are ids of files that were used to fit the vectorizer. Information about these files can be found in `documents_in_use`, in which their ids are dictionary keys.
 
 ### /return_candidates endpoint
 

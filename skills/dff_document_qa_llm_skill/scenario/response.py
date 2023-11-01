@@ -7,6 +7,7 @@ import sentry_sdk
 import time
 import copy
 
+from pathlib import PurePath
 from typing import Any
 from common.build_dataset import build_dataset, get_text_for_candidates
 import common.dff.integration.context as int_ctx
@@ -80,31 +81,39 @@ def compose_data_for_model(ctx: Context, actor: Actor) -> str:
     utterances_with_doc_text = copy.deepcopy(utterance_texts)
     if utterance_texts:
         raw_candidates = context[-1].get("annotations", {}).get("doc_retriever", {}).get("candidate_files", [])
-        processed_docs = context[-1].get("user", {}).get("attributes", {}).get("documents_in_use", {})
-        if processed_docs:
-            filepaths_on_server = [
-                processed_docs[key].get("full_processed_text_link", "") for key in processed_docs.keys()
-            ]
-        for filepath in filepaths_on_server:
-            file_id = re.search(FIND_ID, filepath).group(1)
-            filepath_container = f"/data/documents/{file_id}.txt"
-            if not os.path.exists(filepath_container):  # if we don't have doc in container, download it from server
-                orig_file = requests.get(filepath, timeout=FILE_SERVER_TIMEOUT)
-                with open(filepath_container, "wb") as f:
-                    f.write(orig_file.content)
-            filepaths_in_container.append(filepath_container)
-        dataset_path = "/data/temporary_dataset/"
-        if not os.path.exists(dataset_path):
-            os.mkdir(dataset_path)
-        logger.info(
-            f"""Building dataset to get candidate texts. raw_candidates: {raw_candidates},
-filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}"""
-        )
-        build_dataset(dataset_path, filepaths_in_container)
-        logger.info("Dataset built successfully")
-        final_candidates = get_text_for_candidates(dataset_path, raw_candidates)
-        request = utterances_with_doc_text[-1]
-        utterances_with_doc_text[-1] = f"""Text: ### {final_candidates} ###\n{DOCUMENT_PROMPT_TEXT}\nUser: {request}"""
+        processed_docs = context[-1].get("user", {}).get("attributes", {}).get("processed_documents", {})
+        docs_in_use = context[-1].get("user", {}).get("attributes", {}).get("documents_in_use", [])
+        db_link = context[-1].get("user", {}).get("attributes", {}).get("model_info", {}).get("db_link", "")
+        model_id = PurePath(db_link.split("=")[-1]).stem
+        if docs_in_use:
+            dataset_path = f"/data/temporary_dataset_{model_id}/"
+            if not os.path.exists(dataset_path):
+                os.mkdir(dataset_path)
+                filepaths_on_server = [
+                    processed_docs[file_id].get("processed_text_link", "") for file_id in docs_in_use
+                ]
+                for filepath in filepaths_on_server:
+                    file_id = re.search(FIND_ID, filepath).group(1)
+                    filepath_container = f"/data/documents/{file_id}.txt"
+                    # if we don't have doc in container, download it from server
+                    if not os.path.exists(filepath_container):
+                        orig_file = requests.get(filepath, timeout=FILE_SERVER_TIMEOUT)
+                        with open(filepath_container, "wb") as f:
+                            f.write(orig_file.content)
+                    filepaths_in_container.append(filepath_container)
+                logger.info(
+                    f"Building dataset /data/temporary_dataset_{model_id} to get candidate texts. \
+raw_candidates: {raw_candidates}, filepaths_in_container: {filepaths_in_container}, dataset_path: {dataset_path}"
+                )
+                build_dataset(dataset_path, filepaths_in_container)
+                logger.info("Dataset built successfully")
+            else:
+                logger.info(f"Dataset /data/temporary_dataset_{model_id} already exists in container.")
+            final_candidates = get_text_for_candidates(dataset_path, raw_candidates)
+            request = utterances_with_doc_text[-1]
+            utterances_with_doc_text[
+                -1
+            ] = f"""Text: ### {final_candidates} ###\n{DOCUMENT_PROMPT_TEXT}\nUser: {request}"""
     return utterances_with_doc_text, utterance_texts, final_candidates
 
 
@@ -129,10 +138,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     dialog_context_to_send, dialog_context_for_logging, candidate_texts = compose_data_for_model(ctx, actor)
     hyp_attrs = {"candidate_chunks_text": candidate_texts}  # saving raw texts of candidate answers to hyp attributes
     human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
-    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
     sending_variables = compose_sending_variables(
         {},
-        envvars_to_send,
+        ENVVARS_TO_SEND,
         human_uttr_attributes,
     )
     logger.info(f"dialog_context: {dialog_context_for_logging}")

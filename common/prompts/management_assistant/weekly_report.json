@@ -1,0 +1,5 @@
+{
+    "prompt": "Here are summaries of daily meetings:\n{transcript_chunk}\nCombine them to provide an overview of the weekly progress. Preserve the sections.\nYour overview must include all the information from daily meetings, while also summarizing it and making conclusions to provide an informative weekly progress report. Start with a title stating the dates that the report covers.",
+    "prompt_concatenate": "Here are parts of weekly reports:\n{gpt_responses}\nCombine the parts to obtain one complete weekly report.",
+    "goals": "Forms a weekly report based on daily reports."
+}

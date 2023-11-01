@@ -52,6 +52,8 @@ FILE_SERVER_URL = os.getenv("FILE_SERVER_URL")
 FILE_SERVER_TIMEOUT = float(os.getenv("FILE_SERVER_TIMEOUT"))
 DEFAULT_SYSTEM_PROMPT = "You are office worker assistant that analyses meeting transcripts based on user requests."
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
+INCLUDE_INTO_REPORT = ["progress_by_areas", "problems", "summary"]
+SEP_FOR_DOC_RESPONSES = "\n****************\n"
 
 DEFAULT_CONFIDENCE = 0.9
 SUPER_CONFIDENCE = 1.0
@@ -63,6 +65,10 @@ management_prompts_dict = {
     "completed_tasks": {},
     "decisions": {},
     "question_answering": {},
+    "progress_by_areas": {},
+    "weekly_report": {},
+    "problems": {},
+    "combine_responses": {},
 }
 
 for key in management_prompts_dict.keys():
@@ -72,27 +78,16 @@ for key in management_prompts_dict.keys():
         management_prompts_dict[key]["prompt_concatenate"] = prompt_dict["prompt_concatenate"]
 
 
-def get_response_for_prompt_type(
-    doc_links: list, prompt_type: str, dialog_context: List[str], sending_variables
+def get_response_for_prompts(
+    transcript_chunks: list, prompt_type: str, dialog_context: list, sending_variables: dict
 ) -> str:
-    all_texts = []
     all_gpt_responses = []
-    request = dialog_context[-1]
-    for filepath in doc_links:
-        orig_file = requests.get(filepath, timeout=FILE_SERVER_TIMEOUT)
-        orig_text = orig_file.text
-        all_texts.append(orig_text)
-    last_transcript = all_texts[-1]  # for now working only with the last transcript
-    token_limit = (
-        get_max_tokens_for_llm(GENERATIVE_SERVICE_URL) - 1000
-    )  # hard-coded limit: we preserve 1000 tokens for LLM answer
-    break_points = decide_where_to_break(last_transcript, limit=token_limit)
-    transcript_chunks = split_transcript_into_chunks(last_transcript, break_points)
     # this is prompt for processing each separate chunk of text
     prompt = management_prompts_dict[prompt_type]["prompt"]
     # this is prompt for processing the results for all chunks to get the final response
     # only used if the document is longer than the model's context window - 1000
     prompt_final = management_prompts_dict[prompt_type]["prompt_concatenate"]
+    request = dialog_context[-1]
     for n, chunk in enumerate(transcript_chunks):
         prompt_to_send = prompt.replace("{transcript_chunk}", chunk)
         dialog_context[-1] = prompt_to_send.replace("{request}", request)
@@ -120,12 +115,74 @@ def get_response_for_prompt_type(
             sending_variables,
         )
         all_gpt_responses += final_response
-    return [all_gpt_responses[-1]]
+    return all_gpt_responses[-1]
+
+
+def upload_generated_item_return_link(hypothesis: str, prompt_type_and_id: str):
+    filename = f"{prompt_type_and_id}.txt"
+    uploaded_doc_link = upload_document(hypothesis, filename, FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text")
+    return uploaded_doc_link
+
+
+def compose_and_upload_final_response(
+    hyps_all_docs: list,
+    prompt_type_and_id: str,
+    dialog_context: List[str],
+    sending_variables: dict,
+    bot_attrs_files: dict,
+):
+    # note that we are joining responses for all docs by a special character SEP_FOR_DOC_RESPONSES
+    # when we are sending them to LLM, if we need to split the info into chunks, we
+    # will do that by SEP_FOR_DOC_RESPONSES, not by newline
+    info_from_all_docs = SEP_FOR_DOC_RESPONSES.join(hyps_all_docs)
+    if "weekly_report" not in prompt_type_and_id:
+        prompt_type_and_id = f"combine_responses__{prompt_type_and_id.split('__')[1]}"
+    hyp_week, bot_attrs_files = get_and_upload_response_for_one_doc(
+        info_from_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
+    )
+    return hyp_week, bot_attrs_files
+
+
+def get_and_upload_response_for_one_doc(
+    orig_text: str, prompt_type_and_id: str, dialog_context: List[str], sending_variables: dict, bot_attrs_files: dict
+) -> str:
+    prompt_type = prompt_type_and_id.split("__")[0]
+    document_in_use_id = prompt_type_and_id.split("__")[1]
+    # hard-coded limit: we preserve 1000 tokens for LLM answer
+    token_limit = get_max_tokens_for_llm(GENERATIVE_SERVICE_URL) - 1000
+
+    # if we have multiple docs, we would like not to split one doc into two
+    # so in this case we split by special separator
+    if prompt_type == "weekly_report" or prompt_type == "combine_responses":
+        break_points = decide_where_to_break(orig_text, limit=token_limit, sep=SEP_FOR_DOC_RESPONSES)
+    else:
+        break_points = decide_where_to_break(orig_text, limit=token_limit)
+    transcript_chunks = split_transcript_into_chunks(orig_text, break_points)
+
+    # if asked for full report, we get parts of it separately and then just concatenate them
+    if prompt_type == "full_report":
+        hypothesis = ""
+        for item in INCLUDE_INTO_REPORT:
+            item_type_and_id = f"{item}__{document_in_use_id}"
+            part_of_report = get_response_for_prompts(transcript_chunks, item, dialog_context, sending_variables)
+            uploaded_doc_link = upload_generated_item_return_link(part_of_report, item_type_and_id)
+            bot_attrs_files[item_type_and_id] = uploaded_doc_link
+            hypothesis += f"{part_of_report}\n\n"
+    else:
+        hypothesis = get_response_for_prompts(transcript_chunks, prompt_type, dialog_context, sending_variables)
+
+    # we save each hyp to server under the name of the request and doc_in_use id
+    # except for question_answering and combine_responses which we don't save as questions may vary
+    if prompt_type != "question_answering" and prompt_type != "combine_responses":
+        uploaded_doc_link = upload_generated_item_return_link(hypothesis, prompt_type_and_id)
+        bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
+    return [hypothesis], bot_attrs_files
 
 
 def analyze_transcript(prompt_type: str):
     """
-    prompt_type:  "summary", "future_tasks", "completed_tasks", "decisions", "question_answering"
+    prompt_type:  "summary", "future_tasks", "completed_tasks",
+        "decisions", "question_answering", "progress_by_areas", "full_report"
     """
 
     def transcript_analysis_handler(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
@@ -150,57 +207,61 @@ def analyze_transcript(prompt_type: str):
             human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
             docs_in_attributes = human_uttr_attributes.get("documents", [])
             if bot_utts:
-                bot_attrs_files = (
-                    dialog.get("bot_utterances", [{}])[-1]
-                    .get("user", {})
-                    .get("attributes", {})
-                    .get("related_files", {})
-                )
+                bot_attrs_files = bot_utts[-1].get("user", {}).get("attributes", {}).get("related_files", {})
             # check if we already received such request before and saved hyp for it to server
-            documents_in_use = context[-1].get("user", {}).get("attributes", {}).get("documents_in_use", {})
+            documents_in_use = context[-1].get("user", {}).get("attributes", {}).get("documents_in_use", [])
+            all_docs_info = context[-1].get("user", {}).get("attributes", {}).get("processed_documents", {})
+            hyps_all_docs = []
             if documents_in_use:
-                # now we always have one document in use (with concatenated texts), so we can always get it as [0]
-                document_in_use_id = list(documents_in_use.keys())[0]
-                prompt_type_and_id = f"{prompt_type}__{document_in_use_id}"
-                if prompt_type_and_id in bot_attrs_files.keys():
-                    hypothesis_link = bot_attrs_files[prompt_type_and_id]
-                    hypothesis = requests.get(hypothesis_link, timeout=FILE_SERVER_TIMEOUT).text
-                    hypotheses = [hypothesis]
-                    logger.info(f"Found and downloaded {prompt_type_and_id} generated earlier.")
-                else:
-                    filepaths_on_server = [
-                        documents_in_use[key].get("full_processed_text_link", "") for key in documents_in_use.keys()
-                    ]
-                    envvars_to_send = (
-                        ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
-                    )
-                    sending_variables = compose_sending_variables({}, envvars_to_send, human_uttr_attributes)
-                    logger.info(
-                        f"""No earlier {prompt_type_and_id} found. Got transcript text from \
-{filepaths_on_server}, now sending request to generative model."""
-                    )  # сделать чтоб не скачивали уже скачанное
-                    if filepaths_on_server:
-                        try:
-                            hypotheses = get_response_for_prompt_type(
-                                filepaths_on_server, prompt_type, dialog_context, sending_variables
-                            )
-                            # we save each hyp to server under the name of the request and doc_in_use id
-                            # except for question answerinf which we don't save as questions may vary
-                            if prompt_type != "question_answering":
-                                filename = f"{prompt_type_and_id}.txt"
-                                uploaded_doc_link = upload_document(
-                                    hypotheses[0], filename, FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text"
-                                )
-                                bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
-                        except Exception as e:
-                            sentry_sdk.capture_exception(e)
-                            logger.exception(e)
-                            hypotheses = []
+                for document_in_use_id in documents_in_use:
+                    # if we need a weekly report, on this step we gather separate daily reports for each doc
+                    if prompt_type == "weekly_report":
+                        prompt_type_and_id = f"full_report__{document_in_use_id}"
                     else:
-                        hypotheses = []
-            elif (
-                docs_in_attributes
-            ):  # if there are docs in human utt attributes, but no processed docs in use were found
+                        prompt_type_and_id = f"{prompt_type}__{document_in_use_id}"
+
+                    # here we check if we already generated sth for the same request and the same doc
+                    if prompt_type_and_id in bot_attrs_files.keys():
+                        hypothesis_link = bot_attrs_files[prompt_type_and_id]
+                        hyp_one_doc = [requests.get(hypothesis_link, timeout=FILE_SERVER_TIMEOUT).text]
+                        logger.info(f"Found and downloaded {prompt_type_and_id} generated earlier.")
+                    # if no, let's generate it
+                    else:
+                        logger.info(
+                            f"""No earlier {prompt_type_and_id} found. Got transcript text from \
+{filepaths_on_server}, now sending request to generative model."""
+                        )
+                        transcript_link = all_docs_info[document_in_use_id].get("processed_text_link", "")
+                        sending_variables = compose_sending_variables({}, ENVVARS_TO_SEND, human_uttr_attributes)
+                        if transcript_link:
+                            try:
+                                orig_file = requests.get(transcript_link, timeout=FILE_SERVER_TIMEOUT)
+                                orig_text = orig_file.text
+                                hyp_one_doc, bot_attrs_files = get_and_upload_response_for_one_doc(
+                                    orig_text, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
+                                )
+                            except Exception as e:
+                                sentry_sdk.capture_exception(e)
+                                logger.exception(e)
+                                hyp_one_doc = []
+                        else:
+                            hyp_one_doc = []
+                    hyps_all_docs += hyp_one_doc
+
+                # having got responses for all docs, let's make one response from it
+
+                # just return the response if we have one document and one response
+                if len(hyps_all_docs) == 1:
+                    hypotheses = hyps_all_docs
+                else:
+                    # earlier we set prompt_type_and_id for weekly_analysis to full report for each doc,
+                    # now we need it to set it back
+                    prompt_type_and_id = f"{prompt_type}__{document_in_use_id}"
+                    hypotheses, bot_attrs_files = compose_and_upload_final_response(
+                        hyps_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
+                    )
+            # if there are docs in human utt attributes, but no processed docs in use were found
+            elif docs_in_attributes:
                 hyp_excuse = """Sorry, I failed to process the file you provided. \
 Please, make sure that you provide a valid .docx file with Teams meeting transcript and try again."""
                 hypotheses = [hyp_excuse]

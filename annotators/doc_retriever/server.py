@@ -8,7 +8,7 @@ from flask import Flask, jsonify, request
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov.core.common.file import read_json
 from utils import vectorize_upload_return_attributes, download_files, add_file_id_to_config
-from common.files_and_folders_processing import create_folders_if_not_exist
+from common.files_and_folders_processing import create_folders_if_not_exist, generate_unique_file_id
 
 # logging here because it conflicts with tf
 
@@ -35,27 +35,32 @@ def vectorize_documents():
     create_folders_if_not_exist(["/data/documents", "/data/odqa"])
     for dialog in dialogs:
         filepaths_in_container, files_to_vectorize = [], []
-        documents_in_use = dialog.get("human", {}).get("attributes", {}).get("documents_in_use", {})
-        dialog_id = dialog["dialog_id"]
-        if documents_in_use:  # vectorize documents if there are any documents_in_use
+        docs_in_use = dialog.get("human", {}).get("attributes", {}).get("documents_in_use", [])
+        processed_documents = dialog.get("human", {}).get("attributes", {}).get("processed_documents", {})
+        model_info = dialog.get("human", {}).get("attributes", {}).get("model_info", {})
+        docs_in_model = model_info.get("file_ids", [])
+        dialog_id = dialog.get("dialog_id", "")
+        # vectorize documents if there are any docs_in_use
+        # and if the current model does not feature these docs_in_use
+        if docs_in_use and docs_in_use != docs_in_model:
             try:
-                for file_id in documents_in_use.keys():  # get links to all files that are not vectorized
-                    is_vectorised = documents_in_use[file_id].get("vectors_processed", False)
-                    if not is_vectorised:
-                        document_link = documents_in_use[file_id].get("full_processed_text_link", "")
-                        if document_link not in files_to_vectorize:
-                            files_to_vectorize.append(document_link)
-                if files_to_vectorize:  # vectorize files that are not vectorized if any
+                for file_id in docs_in_use:
+                    document_link = processed_documents[file_id].get("processed_text_link", "")
+                    if document_link not in files_to_vectorize:
+                        files_to_vectorize.append(document_link)
+                # vectorize files that are not vectorized if any
+                if files_to_vectorize:
+                    # download files to container
                     filepaths_in_container = download_files(files_to_vectorize, filepaths_in_container)
-                    model_config = add_file_id_to_config(MODEL_CONFIG, file_id)
-                    model_info, documents_in_use = vectorize_upload_return_attributes(
-                        model_config, filepaths_in_container, documents_in_use, dialog_id
+                    # model id = random id that will be used in model filenames
+                    model_id = generate_unique_file_id(10, dialog_id)
+                    model_config = add_file_id_to_config(MODEL_CONFIG, model_id)
+                    # build model and vectorize filepaths_in_container (downloaded on previous step)
+                    model_info = vectorize_upload_return_attributes(
+                        model_config, filepaths_in_container, docs_in_use, model_id
                     )
-                    bot_and_human_atts = {
-                        "bot_attributes": {"model_info": {file_id: model_info}},
-                        "human_attributes": {"documents_in_use": documents_in_use},
-                    }
-                    attributes_to_add.append(bot_and_human_atts)
+                    human_atts = {"human_attributes": {"model_info": model_info}}
+                    attributes_to_add.append(human_atts)
                 else:
                     logger.info("All files are already vectorized. Skipping vectorization.")
                     attributes_to_add.append({})
@@ -75,20 +80,19 @@ def return_candidates():
     dialogs = request.json["dialogs"]
     for dialog in dialogs:
         create_folders_if_not_exist(["/data/documents", "/data/odqa"])
-        curr_docs = list(dialog.get("human", {}).get("attributes", {}).get("documents_in_use", {}).keys())
-        if curr_docs:
-            # now we always have one file in use (concatenated texts from several inputs) so taking first and only key
-            curr_doc = curr_docs[0]
-            model_info = dialog.get("bot", {}).get("attributes", {}).get("model_info", {})
+        docs_in_use = dialog.get("human", {}).get("attributes", {}).get("documents_in_use", [])
+        if docs_in_use:
+            model_info = dialog.get("human", {}).get("attributes", {}).get("model_info", {})
             # get vectorization results for our specific file in use
-            db_link = model_info.get(curr_doc, {}).get("db_link", "")
-            matrix_link = model_info.get(curr_doc, {}).get("matrix_link", "")
+            db_link = model_info.get("db_link", "")
+            matrix_link = model_info.get("matrix_link", "")
             if db_link and matrix_link:
                 try:
-                    # ensure unique file names by adding ids, dblink format: "{FILE_SERVER_URL}/file?file={FILE_ID}.db"
-                    file_id = PurePath(db_link.split("=")[-1]).stem
-                    tfidf_matrix_path = f"/data/odqa/userfile_tfidf_matrix_{file_id}.npz"
-                    userfile_path = f"/data/odqa/userfile_{file_id}.db"
+                    # ensure unique file names by adding ids
+                    # dblink format: "{FILE_SERVER_URL}/file?file={MODEL_ID}.db"
+                    model_id = PurePath(db_link.split("=")[-1]).stem
+                    tfidf_matrix_path = f"/data/odqa/userfile_tfidf_matrix_{model_id}.npz"
+                    userfile_path = f"/data/odqa/userfile_{model_id}.db"
                     if os.path.isfile(tfidf_matrix_path) and os.path.isfile(
                         userfile_path
                     ):  # check if we already have model files in container
@@ -107,7 +111,7 @@ def return_candidates():
                             f.write(matrix_file.content)
                         logger.info("Files downloaded successfully.")
                     # adding our files' ids to model's config to ensure that we build it from the files we need
-                    model_config = add_file_id_to_config(MODEL_CONFIG, file_id)
+                    model_config = add_file_id_to_config(MODEL_CONFIG, model_id)
                     ranker_model = build_model(model_config)
                     logger.info("Model loaded.")
                     last_human_utterance = dialog.get("human_utterances", [{}])[-1].get("text", "")

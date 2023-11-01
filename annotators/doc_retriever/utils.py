@@ -5,7 +5,7 @@ import os
 from pathlib import PurePath
 from deeppavlov import train_model
 from common.build_dataset import build_dataset
-from common.files_and_folders_processing import upload_document, generate_unique_file_id
+from common.files_and_folders_processing import upload_document
 from typing import List, Dict, Tuple
 
 
@@ -16,7 +16,7 @@ FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
 FILE_SERVER_TIMEOUT = float(os.environ.get("FILE_SERVER_TIMEOUT", 30))
 
 
-def upload_model_return_id_and_links(db_file: str, matrix_file: str, dialog_id: str) -> Tuple[str, str]:
+def upload_model_return_id_and_links(db_file: str, matrix_file: str, model_id: str) -> Tuple[str, str]:
     """Uploads the model files to server and returns their ids and links to them.
 
     Args:
@@ -32,7 +32,6 @@ def upload_model_return_id_and_links(db_file: str, matrix_file: str, dialog_id: 
 
         '{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.npz'
     """
-    model_id = generate_unique_file_id(10, dialog_id)
     db_link = upload_document(db_file, f"{model_id}.db", FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="file")
     matrix_link = upload_document(matrix_file, f"{model_id}.npz", FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="file")
     return db_link, matrix_link
@@ -93,7 +92,7 @@ def add_file_id_to_config(model_config, file_id):
 
 
 def vectorize_upload_return_attributes(
-    model_config: dict, filepaths_in_container: List[str], processed_docs: Dict[str, Dict[str, str]], dialog_id: str
+    model_config: dict, filepaths_in_container: List[str], documents_in_use: List[str], model_id: str
 ) -> Tuple[Dict[str, str], Dict[str, Dict[str, str]]]:
     """Vectorizes given dataset files using TF-IDF, uploads the resulting files to server
         and saves information about them.
@@ -105,30 +104,16 @@ def vectorize_upload_return_attributes(
 
     Returns:
         A tuple of dicts: one with information about the model files uploaded to server:
-        {
+        model_info = {
             'db_link': '{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.db',
-            'matrix_link': '{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.npz'
-            }
-
-        Another with information about processed documents (new key stating that the docs are now vectorized):
-        {
-            'Onfkl093fj':
-            {
-                'full_processed_text_link':
-                '{FILE_SERVER_URL}/file?file=Onfkl093fj_7ed546db9846ba7661ceda123837f7fc.txt',
-                'source_file_ids':
-                [nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc, kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc],
-                'n_steps_discussed': 1,
-                'vectors_processed': True
-                }
+            'matrix_link': '{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.npz',
+            'file_ids': ["nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc", "kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc"]
             }
     """
     userfile_path = model_config["dataset_iterator"]["load_path"]
     tfidf_matrix_path = model_config["chainer"]["pipe"][0]["load_path"]
     build_dataset_and_train_model(model_config, filepaths_in_container)
     logger.info("Started writing vectorized files to server.")
-    db_link, matrix_link = upload_model_return_id_and_links(userfile_path, tfidf_matrix_path, dialog_id)
-    for key in processed_docs.keys():
-        processed_docs[key]["vectors_processed"] = True
-    model_info = {"db_link": db_link, "matrix_link": matrix_link}
-    return model_info, processed_docs
+    db_link, matrix_link = upload_model_return_id_and_links(userfile_path, tfidf_matrix_path, model_id)
+    model_info = {"db_link": db_link, "matrix_link": matrix_link, "file_ids": documents_in_use}
+    return model_info

@@ -25,7 +25,19 @@ COMPLETED_TASKS = re.compile(
     re.IGNORECASE,
 )
 DECISIONS = re.compile(
-    r"(decide)|(decision)",
+    r"decisions?",
+    re.IGNORECASE,
+)
+PROGRESS_BY_AREAS = re.compile(
+    r"progress ((made )?(by))?((did)|(have))? (((.* )?teams?)|(areas))",
+    re.IGNORECASE,
+)
+WEEKLY_REPORT = re.compile(
+    r"weekly report",
+    re.IGNORECASE,
+)
+FULL_REPORT = re.compile(
+    r"((full)|(complete)|(entire)) ((report)|(overview))",
     re.IGNORECASE,
 )
 # тут можно еще спрашивать ллмку. но пока оставляем в таком виде, только побольше вариантов.
@@ -39,6 +51,9 @@ flows = {
             ("generation", "future_tasks", 1.5): cnd.regexp(FUTURE_TASKS),
             ("generation", "completed_tasks", 1.5): cnd.regexp(COMPLETED_TASKS),
             ("generation", "summary", 1.5): cnd.regexp(SUMMARY),
+            ("generation", "progress_by_areas", 1.5): cnd.regexp(PROGRESS_BY_AREAS),
+            ("generation", "full_report", 1.5): cnd.regexp(FULL_REPORT),
+            ("generation", "weekly_report", 1.5): cnd.regexp(WEEKLY_REPORT),
             ("generation", "question_answering", 1.1): cnd.true(),
         }
     },
@@ -75,6 +90,18 @@ flows = {
         },
         "decisions": {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="decisions"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+        "progress_by_areas": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="progress_by_areas"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+        "full_report": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="full_report"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+        "weekly_report": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="weekly_report"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
         },
         "question_answering": {

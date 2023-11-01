@@ -8,10 +8,10 @@ def check_token_number(text, model_name="gpt-3.5-turbo", enc=None):
     return len_text
 
 
-def decide_where_to_break(transcript, model_name="gpt-3.5-turbo", limit=3000):
+def decide_where_to_break(transcript, model_name="gpt-3.5-turbo", limit=3000, sep="\n"):
     # the list of models with available encoders, see to define what model_name you need:
     # https://github.com/openai/tiktoken/blob/39f29cecdb6fc38d9a3434e5dd15e4de58cf3c80/tiktoken/model.py#L19
-    transcript_list = transcript.split("\n")
+    transcript_list = transcript.split(sep)
     enc = tiktoken.encoding_for_model(model_name)
     len_tokens = 0
     break_points = []

@@ -4,18 +4,19 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: This skill analyses meeting transcripts. It is always selected when summary, decisions, current and completed tasks 
-  are requested. It is also selected when any questions about the meeting content are asked.
+description: This skill analyses meeting transcripts. Only this skill must be selected when summary, decisions,
+  current or completed tasks are requested. It must also be selected when any questions about 
+  the meeting content or progress are asked.
 ram_usage: 500M
 gpu_usage: null
 group: skills
 connector:
   protocol: http
-  timeout: 120.0
+  timeout: 600.0
   url: http://dff-meeting-analysis-skill:8186/respond
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter,
-  skill_name: dff_meeting_analysis_skill_formatter
+  skill_name: dff_meeting_analysis_skill
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors

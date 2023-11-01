@@ -10,11 +10,30 @@ def main():
     test_file = "http://files.deeppavlov.ai/dream_data/documents_for_qa/tiny_test_file.txt"
     result_train = requests.post(
         url=url_vectorize_documents,
-        json={"dialogs": [{"human_attributes": [{"documents": [test_file]}]}]},
+        json={
+            "dialogs": [
+                {
+                    "human_utterances": ["Hi!"],
+                    "human": {
+                        "attributes": {
+                            "documents_in_use": ["3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc"],
+                            "processed_documents": {
+                                "3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc": {
+                                    "initial_path_or_link": test_file,
+                                    "processed_text_link": test_file,
+                                    "filename": "tiny_test_file",
+                                }
+                            },
+                        }
+                    },
+                }
+            ]
+        },
     )
     assert result_train.ok, "Failed to reach host. Check if it's up and healthy."
     result_train = result_train.json()[0]
-    model_info = result_train.get("bot_attributes", {}).get("model_info", {})
+    print(result_train)
+    model_info = result_train.get("human_attributes", {}).get("model_info", {})
     assert model_info != {}, f"Got\n{result_train}\n, something is wrong"
     print("vectorize_documents endpoint: success!")
     result_return = requests.post(
@@ -22,17 +41,25 @@ def main():
         json={
             "dialogs": [
                 {
-                    "bot": {
+                    "human_utterances": [{"text": "Hi!"}],
+                    "human": {
                         "attributes": {
-                            "db_link": model_info.get("db_link", ""),
-                            "matrix_link": model_info.get("matrix_link", ""),
+                            "documents_in_use": ["3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc"],
+                            "processed_documents": {
+                                "3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc": {
+                                    "initial_path_or_link": test_file,
+                                    "processed_text_link": test_file,
+                                    "filename": "tiny_test_file",
+                                }
+                            },
+                            "model_info": model_info,
                         }
                     },
-                    "human_utterances": [{"text": "What did the boy draw?"}],
                 }
             ]
         },
-    ).json()[0]
+    )
+    result_return = result_return.json()[0]
     assert result_return.get("candidate_files", []) == [
         "1.txt",
         "2.txt",

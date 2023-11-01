@@ -11,20 +11,25 @@ Here is an example of what Document Processor may add to the dialog state:
 {
     "human": {
         "attributes": {
-            "documents_in_use": {
-                "3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc": {
-                    "full_processed_text_link": "{FILE_SERVER_URL}/file?file=3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc.txt",
-                    "source_file_ids": ["MehiMaayiX_7ed546db9846ba7661ceda123837f7fc", "kmk02fOIf_7ed546db9846ba7661ceda123837f7fc"]
+            "documents_in_use" = ["nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc", "kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc"]
+            "processed_documents" = {
+            "nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc":
+            {
+                "initial_path_or_link": "https://website.com/example.txt",
+                "processed_text_link": "{FILE_SERVER_URL}/file?file=nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc.txt",
+                "filename": "example"
                 },
-            },
-            "processed_documents": {
-                "MehiMaayiX_7ed546db9846ba7661ceda123837f7fc": {
-                    "initial_path_or_link": "https://website.com/example.pdf",
-                    "processed_text_link": "{FILE_SERVER_URL}/file?file=MehiMaayiX_7ed546db9846ba7661ceda123837f7fc.txt"
+            "kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc":
+            {
+                "initial_path_or_link": "https://website.com/other_example.pdf",
+                "processed_text_link": "{FILE_SERVER_URL}/file?file=kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc.txt"
+                "filename": "other_example"
                 },
-                "kmk02fOIf_7ed546db9846ba7661ceda123837f7fc": {
-                    "initial_path_or_link": "https://another_website.com/example.docx",
-                    "processed_text_link": "{FILE_SERVER_URL}/file?file=kmk02fOIf_7ed546db9846ba7661ceda123837f7fc.txt"
+            "lrfmovor99_jdcn096db9846ba681ceda398kewn93":
+            {
+                "initial_path_or_link": "https://website.com/another_example.docx",
+                "processed_text_link": "{FILE_SERVER_URL}/file?file=lrfmovor99_jdcn096db9846ba681ceda398kewn93.txt"
+                "filename": "another_example"
                 }
             }
         }
@@ -34,7 +39,7 @@ Here is an example of what Document Processor may add to the dialog state:
 
 `documents_in_use` are the documents that are being discussed on this step of the dialog. These are typically the documents specified in the attributes of the last human utterance or the arguments of doc-processor docker container.
 
-`processed_documents` are all documents that were given by the user during the dialog and processed by system. `processed_documents` always include `documents_in_use` and may include previously discussed documents if there are any.
+`processed_documents` are all documents that were given by the user during the dialog and processed by system with all the information available about these documents. `processed_documents` always include `documents_in_use` and may include previously discussed documents if there are any.
 
 ## Parameters
 

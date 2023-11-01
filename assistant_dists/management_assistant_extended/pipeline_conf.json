@@ -90,7 +90,7 @@
                     "timeout": 50.0,
                     "url": "http://doc-retriever:8165/vectorize_documents"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.doc_processor"
@@ -111,7 +111,7 @@
                     "timeout": 30.0,
                     "url": "http://doc-retriever:8165/return_candidates"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_sentseg_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
                     "annotators.doc_processor",
@@ -185,12 +185,12 @@
             "dff_meeting_analysis_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 120.0,
+                    "timeout": 600.0,
                     "url": "http://dff-meeting-analysis-skill:8186/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_meeting_analysis_skill_formatter"
+                    "skill_name": "dff_meeting_analysis_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [

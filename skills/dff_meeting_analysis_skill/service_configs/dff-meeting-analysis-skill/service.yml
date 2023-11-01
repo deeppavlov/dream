@@ -16,7 +16,7 @@ compose:
       FILE_SERVER_TIMEOUT: 30.0
     context: .
     dockerfile: ./skills/dff_meeting_analysis_skill/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:8186 --reload
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8186 --reload --timeout 600
   deploy:
     resources:
       limits:

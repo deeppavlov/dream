@@ -1,0 +1,5 @@
+{
+    "prompt": "Meeting transcript:\n{transcript_chunk}\nWrite the list of problems that the team faced and discussed.\nKeep it as short as possible.\nOnly include problems that have to do with the project, product or the working process without any extra information. Provide only the list with title 'Problems encountered by the team' and no additional comments.",
+    "prompt_concatenate": "Here is a list of problems that the team faced and discussed during a work meeting:\n{gpt_responses}\nFormat the list to use correct numbering. Delete unimportant items that include general statements and not problems.\nIf several items can be merged into one, merge and abridge. Make the list as short as possible. Provide only the list with title 'Problems encountered by the team' and no additional comments.",
+    "goals": "Extracts problems that the team faced and discussed from meeting transcripts."
+}

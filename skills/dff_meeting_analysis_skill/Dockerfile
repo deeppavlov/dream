@@ -34,4 +34,4 @@ COPY skills/dff_meeting_analysis_skill/ /src
 COPY documents /src/documents
 COPY common /src/common
 
-CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout ${GENERATIVE_TIMEOUT:-120}
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --reload --timeout 600

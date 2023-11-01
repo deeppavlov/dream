@@ -6,7 +6,7 @@ is_customizable: true
 author: publisher@deeppavlov.ai
 description: This skill only answers questions about roles and responsibilities of team members. 
   This skill is always selected when there is a question about roles and responsibilities of team members in general.
-  This skill must never be selected when there is a question about current or completed tasks.
+  This skill must never be selected when asked about progress, current or completed tasks.
 ram_usage: 100M
 gpu_usage: null
 group: skills

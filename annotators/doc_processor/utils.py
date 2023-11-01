@@ -21,6 +21,7 @@ FILE_SERVER_URL = os.environ.get("FILE_SERVER_URL", None)
 FILE_SERVER_TIMEOUT = float(os.environ.get("FILE_SERVER_TIMEOUT"))
 HTTP_PATTERN = re.compile(r"https?://[a-zA-Z\-0-9]+[\.:].+")
 FIND_ID = re.compile(r"file=([0-9a-zA-Z]*).txt")
+FIND_FILENAME = re.compile(r"filename=\"?(.+)\"?(;|\b)")
 
 
 def pdf_to_text(file: str) -> str:
@@ -220,14 +221,8 @@ def get_docs_to_process(all_docs_to_check: List[str], all_docs_info: dict, docs_
         [(all_docs_info[file_id].get("initial_path_or_link", ""), file_id) for file_id in all_docs_info.keys()]
     )
     if docs_in_use_info:
-        # all ids of docs in use;
-        # now we always have 1 concat doc in use (with concatenated texts of all incoming docs) so taking [0]
-        concat_doc_in_use_id = list(docs_in_use_info.keys())[0]
-        source_docs_in_use_ids = docs_in_use_info[concat_doc_in_use_id].get("source_file_ids", [])
         # all links to processed docs in use
-        docs_in_use_links = [
-            all_docs_info[file_id].get("initial_path_or_link", "") for file_id in source_docs_in_use_ids
-        ]
+        docs_in_use_links = [all_docs_info[file_id].get("initial_path_or_link", "") for file_id in docs_in_use_info]
     else:
         docs_in_use_links = []
     # check if the text of the doc we're using fully corresponds to docs coming from atts/args
@@ -261,32 +256,24 @@ def upload_documents_save_info(
         docs_in_use_info: A dict with information about docs that are used now.
 
     Returns:
-        A tuple of dicts: one mapping link to file with concatenated processed texts and
-        list with ids of source files:
-        {
-            'VfaQ7R82IL_7ed546db9846ba7661ceda123837f7fc':
-            {
-                'source_file_ids': [
-                    nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc,
-                    kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc
-                    ],
-                'full_processed_text_link':
-                '{FILE_SERVER_URL}/file?file=VfaQ7R82IL_7ed546db9846ba7661ceda123837f7fc.txt'
-                }
-        }
+        A list containing ids of all files currently in use:
+        documents_in_use = ['nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc',
+        'kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc']
 
-        Another one mapping ids of source files and information about them (file source and
-        link to the file with processed text):
-        {
+        Another one mapping ids of all files that were ever used and information about them, such as
+        file source and link to the file with processed text:
+        processed_documents = {
             'nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc':
             {
                 'initial_path_or_link': 'https://website.com/example.txt',
-                'processed_text_link': '{FILE_SERVER_URL}/file?file=nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc.txt'
+                'processed_text_link': '{FILE_SERVER_URL}/file?file=nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc.txt',
+                'filename': 'Daily Syncup_24-09-2020'
                 },
             'kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc':
             {
                 'initial_path_or_link': 'https://website.com/other_example.pdf',
                 'processed_text_link': '{FILE_SERVER_URL}/file?file=kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc.txt'
+                'filename': 'Example_PDF_File_Name'
                 }
             }
 
@@ -297,50 +284,46 @@ def upload_documents_save_info(
     # (either fully unprocessed or processed sometime earlier but not yet present in current docs_in_use)
     all_docs_to_check = list(set(docs_in_atts + doc_paths_or_links))
     docs_and_types = get_docs_to_process(all_docs_to_check, all_docs_info, docs_in_use_info)
-    all_docs_text_concat, file_ids = [], []
-    all_docs_info_new, docs_in_use_info_new = {}, {}
+    all_docs_info_new = {}
+    docs_in_use_info_new = []
     # check if we need to process anything
     if docs_and_types:
         for file_source in docs_and_types.keys():
             file_source_type = docs_and_types[file_source]
             # if we have processed text for this file, file_source_type is its id
+            # then we just save the id of existing processed file to add it to docs_in_use later
             if file_source_type != "link" and file_source_type != "path":
                 file_id = file_source_type
-                doc_text_link = all_docs_info[file_id]["processed_text_link"]
-                orig_file = requests.get(doc_text_link, timeout=FILE_SERVER_TIMEOUT)
-                orig_file_text = get_text_from_fileobject(orig_file, "txt")
             # if we don't have processed text for this file
             else:
                 file_id = generate_unique_file_id(10, dialog_id)
                 all_docs_info_new[file_id] = {"initial_path_or_link": file_source}
                 if file_source_type == "link":
                     orig_file = requests.get(file_source, timeout=FILE_SERVER_TIMEOUT)
+                    content_headers = orig_file.headers.get("Content-disposition", "filename=NoNameFile")
+                    filename = re.search(FIND_FILENAME, content_headers)
+                    if filename:
+                        filename = filename.group(1)
+                    else:
+                        filename = "No Name (filename possibly lost)"
                     file_extension = PurePath(file_source).suffix
                     if not file_extension:
-                        file_extension = filetype.guess(orig_file.content).extension
+                        try:
+                            file_extension = filetype.guess(orig_file.content).extension
+                        # for some reason filetype always fails to get extension for .txt files
+                        # thus if we didn't get an extension, we just assume that the file is .txt
+                        except Exception:
+                            file_extension = "txt"
                     orig_file_text = get_text_from_fileobject(orig_file, file_extension)
+                    file_text_with_filename = f"***FILENAME: {filename}***\n{orig_file_text}"
                 elif file_source_type == "path":
                     orig_file_text = get_text_from_filepath(file_source)
+                    filename = PurePath(file_source).stem
+                    file_text_with_filename = f"***FILENAME: {filename}***\n{orig_file_text}"
                 doc_text_link = upload_document(
-                    orig_file_text, f"{file_id}.txt", FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text"
+                    file_text_with_filename, f"{file_id}.txt", FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text"
                 )
                 all_docs_info_new[file_id]["processed_text_link"] = doc_text_link
-            file_ids.append(file_id)
-            all_docs_text_concat.append(orig_file_text)
-        full_text = "\n".join(all_docs_text_concat)
-        # if we have only one file to be used on this step, we use it as docs_in_use as it is
-        if len(docs_and_types) == 1:
-            full_text_file_id = file_id
-            all_docs_text_link = doc_text_link
-            docs_in_use_info_new[full_text_file_id] = {"source_file_ids": [file_id]}
-        # if we have more than one file to be used on this step, we concatenate their texts and use it as docs_in_use
-        else:
-            full_text_file_id = generate_unique_file_id(10, dialog_id)
-            all_docs_text_link = upload_document(
-                full_text, f"{full_text_file_id}.txt", FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text"
-            )
-            docs_in_use_info_new[full_text_file_id] = {"source_file_ids": []}
-            for file_id in file_ids:
-                docs_in_use_info_new[full_text_file_id]["source_file_ids"].append(file_id)
-        docs_in_use_info_new[full_text_file_id]["full_processed_text_link"] = all_docs_text_link
-    return all_docs_info_new, docs_in_use_info_new
+                all_docs_info_new[file_id]["filename"] = filename
+            docs_in_use_info_new.append(file_id)
+    return docs_in_use_info_new, all_docs_info_new
