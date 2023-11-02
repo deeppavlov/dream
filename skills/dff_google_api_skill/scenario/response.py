@@ -15,9 +15,7 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
-ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-sending_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
+sending_variables = {f"{var}": getenv(var, None) for var in ["OPENAI_API_KEY", "GOOGLE_CSE_ID", "GOOGLE_API_KEY"]}
 # check if at least one of the env variables is not None
 if len(sending_variables.keys()) > 0 and all([var_value is None for var_value in sending_variables.values()]):
     raise NotImplementedError(
