@@ -29,7 +29,7 @@ GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30.0))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 30.0))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
@@ -44,7 +44,7 @@ def make_prompt(sentence, emotion="neutral", mood="happy", intensity=7):
     sent_prompt = raw_prompt.replace("{SENTENCE}", sentence)
     emot_prompt = sent_prompt.replace("{EMOTION}", emotion)
     mood_prompt = emot_prompt.replace("{MOOD}", mood)
-    inten_prompt = mood_prompt.replace("{INTENSITY}", intensity)
+    inten_prompt = mood_prompt.replace("{INTENSITY}", str(intensity))
     return inten_prompt
 
 
@@ -55,7 +55,7 @@ def get_llm_emotional_response(prompt):
     )
     try:
         hypotheses = send_request_to_prompted_generative_service(
-            "",
+            [""],
             prompt,
             GENERATIVE_SERVICE_URL,
             GENERATIVE_SERVICE_CONFIG,
@@ -82,25 +82,6 @@ def rewrite_sentences(sentence, bot_emotion, bot_mood_label):
         sentry_sdk.capture_exception(exc)
         result = {"hypotheses": ""}
     return result
-
-
-@app.route("/respond", methods=["POST"])
-def respond():
-    st_time = time.time()
-
-    sentences = request.json.get("sentences", [])
-    bot_mood_labels = request.json.get("bot_mood_labels", [])
-    bot_emotions = request.json.get("bot_emotions", [])
-
-    results = []
-    for sentence, emotion, mood in zip(sentences, bot_emotions, bot_mood_labels):
-        result = rewrite_sentences(sentence, emotion, mood)
-        results.append(result)
-
-    total_time = time.time() - st_time
-    logger.info(f"emotional-bot-response exec time: {total_time:.3f}s")
-
-    return jsonify(results)
 
 
 @app.route("/respond_batch", methods=["POST"])

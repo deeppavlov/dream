@@ -352,18 +352,9 @@ def respond():
     annotated_utterances = request.json.get("annotated_utterances", [])
     bot_moods = request.json.get("bot_mood", [])
 
-    for i in range(len(sentences)):
-        sentence = sentences[i]
-        annotated_utterance = annotated_utterances[i]
-        bot_mood = bot_moods[i]
-
+    for sentence, annotated_utterance, bot_mood in zip(sentences, annotated_utterances, bot_moods):
         user_emotion = get_emotions(annotated_utterance, probs=False)[0]
         sentiment = get_sentiment(annotated_utterance, probs=False)[0]
-
-        print("SENTENCE:", sentence)
-        print("USER EMOTION: ", user_emotion)
-        print("SENTIMENT: ", sentiment)
-        print("OLD BOT MOOD: ", bot_mood)
 
         logger.info("User's utterance: {}".format(sentence))
         logger.info("User emotion: {}".format(user_emotion))
