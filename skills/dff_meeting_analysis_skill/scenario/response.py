@@ -3,6 +3,7 @@ import logging
 import sentry_sdk
 import os
 from typing import Any, List
+import re
 import requests
 import time
 
@@ -56,6 +57,8 @@ FILE_SERVER_TIMEOUT = float(os.getenv("FILE_SERVER_TIMEOUT"))
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 INCLUDE_INTO_REPORT = ["progress_by_areas", "problems", "summary"]
 SEP_FOR_DOC_RESPONSES = "\n****************\n"
+LONG_SUMMARY_REQUEST = re.compile(r"(detailed)|(long)", flags=re.IGNORECASE)
+SHORT_SUMMARY_REQUEST = re.compile(r"(short)|(concise)", flags=re.IGNORECASE)
 
 DEFAULT_CONFIDENCE = 0.9
 SUPER_CONFIDENCE = 1.0
@@ -83,6 +86,17 @@ for key in management_prompts_dict.keys():
 def get_response_for_prompts(
     transcript_chunks: list, prompt_type: str, dialog_context: list, sending_variables: dict
 ) -> str:
+    if "summary" in prompt_type:
+        if "summary_short" in prompt_type:
+            length_request = " Your summary must be very concise. Make it as short as possible."
+        elif "summary_long" in prompt_type:
+            length_request = " Your summary must be as detailed as possible. Cover all aspects of the discussions."
+        else:
+            length_request = " Be concise but mention all important details. Leave out minor detailes when possible."
+        prompt_type = "summary"
+    else:
+        length_request = ""
+    logger.info(f"length_request {length_request}")
     all_gpt_responses = []
     # this is prompt for processing each separate chunk of text
     prompt = management_prompts_dict[prompt_type]["prompt"]
@@ -92,6 +106,7 @@ def get_response_for_prompts(
     request = dialog_context[-1]
     for n, chunk in enumerate(transcript_chunks):
         prompt_to_send = prompt.replace("{transcript_chunk}", chunk)
+        prompt_to_send += length_request
         dialog_context[-1] = prompt_to_send.replace("{request}", request)
         response = send_request_to_prompted_generative_service(
             dialog_context,
@@ -107,6 +122,7 @@ def get_response_for_prompts(
         logger.info("Processing multiple LLM's responses to get the final answer.")
         gpt_responses = "\n".join(all_gpt_responses)
         prompt_final_to_send = prompt_final.replace("{gpt_responses}", gpt_responses)
+        prompt_final_to_send += length_request
         dialog_context[-1] = prompt_final_to_send.replace("{request}", request)
         final_response = send_request_to_prompted_generative_service(
             dialog_context,
@@ -199,12 +215,14 @@ def analyze_transcript(prompt_type: str):
                 curr_bot_attrs += [bot_attr]
                 curr_attrs += [attr]
 
+        prompt_type_local = prompt_type
         dialog = int_ctx.get_dialog(ctx, actor)
         context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
         bot_attrs_files = {}
         filepaths_on_server = []
         if context:
             dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+            request = dialog_context[-1]
             bot_utts = dialog.get("bot_utterances", [{}])
             human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
             docs_in_attributes = human_uttr_attributes.get("documents", [])
@@ -217,10 +235,18 @@ def analyze_transcript(prompt_type: str):
             if documents_in_use:
                 for document_in_use_id in documents_in_use:
                     # if we need a weekly report, on this step we gather separate daily reports for each doc
-                    if prompt_type == "weekly_report":
+                    if prompt_type_local == "weekly_report":
                         prompt_type_and_id = f"full_report__{document_in_use_id}"
+                    elif prompt_type_local == "summary":
+                        is_long_request = LONG_SUMMARY_REQUEST.search(request)
+                        is_short_request = SHORT_SUMMARY_REQUEST.search(request)
+                        if is_long_request:
+                            prompt_type_local += "_long"
+                        elif is_short_request:
+                            prompt_type_local += "_short"
+                        prompt_type_and_id = f"{prompt_type_local}__{document_in_use_id}"
                     else:
-                        prompt_type_and_id = f"{prompt_type}__{document_in_use_id}"
+                        prompt_type_and_id = f"{prompt_type_local}__{document_in_use_id}"
 
                     # here we check if we already generated sth for the same request and the same doc
                     if prompt_type_and_id in bot_attrs_files.keys():
@@ -258,7 +284,7 @@ def analyze_transcript(prompt_type: str):
                 else:
                     # earlier we set prompt_type_and_id for weekly_analysis to full report for each doc,
                     # now we need it to set it back
-                    prompt_type_and_id = f"{prompt_type}__{document_in_use_id}"
+                    prompt_type_and_id = f"{prompt_type_local}__{document_in_use_id}"
                     hypotheses, bot_attrs_files = compose_and_upload_final_response(
                         hyps_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
                     )

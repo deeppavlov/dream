@@ -1,5 +1,5 @@
 {
-    "prompt": "Meeting transcript:\n{transcript_chunk}\nProvide a full summary of the meeting based on the meeting transcript.\nBe concise but mention all important details. Do not include tasks separately.",
-    "prompt_concatenate": "Here are parts of a summary of a work meeting:\n{gpt_responses}\nCombine them to provide a complete and coherent summary.\nIt must include all the information from the parts above.\nYou should abridge the text and leave out minor detailes when possible.",
+    "prompt": "Meeting transcript:\n{transcript_chunk}\nProvide a full summary of the meeting based on the meeting transcript.\nDo not include tasks separately.",
+    "prompt_concatenate": "Here are parts of a summary of a work meeting:\n{gpt_responses}\nCombine them to provide a complete and coherent summary.\nIt must include all the information from the parts above. Remove repetitions if necessary.",
     "goals": "Summarizes meeting transcripts to provide a detailed overview of what was discussed."
 }
