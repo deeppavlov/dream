@@ -10,7 +10,7 @@ gpu_usage: null
 group: candidate_annotators
 connector:
   protocol: http
-  timeout: 15.0
+  timeout: 30.0
   url: http://emotional-bot-response:8050/respond_batch
 dialog_formatter: state_formatters.dp_formatters:bot_mood_emotion_formatter
 response_formatter: state_formatters.dp_formatters:simple_formatter_service

@@ -6,18 +6,6 @@ services:
       - ".:/dp-agent"
     ports:
       - ${AGENT_PORT}:4242
-  kbqa:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
-  text-qa:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=5
   combined-classification:
     restart: unless-stopped
     environment:
@@ -31,48 +19,10 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
     restart: unless-stopped
-  ranking-based-response-selector:
+  emotion-ranking-based-response-selector:
     restart: unless-stopped
-  dff-intent-responder-skill:
-    restart: unless-stopped
-  intent-catcher:
-    restart: unless-stopped
-    environment:
-      - CUDA_VISIBLE_DEVICES=9
-  ner:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=7
-  factoid-qa:
-    restart: unless-stopped
-  entity-linking:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-  wiki-parser:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-  fact-retrieval:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
-  entity-detection:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=9
   sentence-ranker:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=9
-  property-extraction:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
 version: '3.7'

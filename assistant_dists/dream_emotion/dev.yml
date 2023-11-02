@@ -17,65 +17,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8048:8048
-  dff-intent-responder-skill:
-    volumes:
-      - "./skills/dff_intent_responder_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8012:8012
-  intent-catcher:
-    volumes:
-      - "./annotators/IntentCatcherTransformers:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8014:8014
-  ner:
-    volumes:
-      - './annotators/NER_deeppavlov:/src'
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8021:8021
-  factoid-qa:
-    volumes:
-      - "./skills/factoid_qa:/src"
-      - "./common:/src/common"
-    ports:
-      - 8071:8071
-  kbqa:
-    volumes:
-      - "./annotators/kbqa:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8072:8072
-  entity-linking:
-    volumes:
-      - "./annotators/entity_linking:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8075:8075
-  wiki-parser:
-    volumes:
-      - "./annotators/wiki_parser:/src"
-      - "./common:/src/common"
-    ports:
-      - 8077:8077
   mongo:
     ports:
       - 27017:27017
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  text-qa:
-    volumes:
-      - "./services/text_qa:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8078:8078
   combined-classification:
     volumes:
       - "./common:/src/common"
@@ -84,21 +31,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8087:8087
-  fact-retrieval:
-    volumes:
-      - "./annotators/fact_retrieval:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8100:8100
-  entity-detection:
-    volumes:
-      - "./annotators/entity_detection:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8103:8103
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
@@ -123,12 +55,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8137:8137
-  property-extraction:
-    volumes:
-      - "./annotators/property_extraction:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8136:8136
   dff-dream-faq-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
