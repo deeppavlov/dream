@@ -10,7 +10,7 @@ services:
       - 3000:3000
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
-  llm-based-response-selector:
+  llm-based-response-selector-gpt4:
     volumes:
       - "./response_selectors/llm_based_response_selector:/src"
       - "./common:/src/common"
@@ -40,6 +40,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
+  openai-api-gpt4:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8159:8159
   dff-roles-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
