@@ -38,7 +38,7 @@ assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in e
 
 SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
 SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
-THRESHOLD = 0.5
+RELEVANT_KNOWLEDGE_THRESHOLD = float(os.getenv("RELEVANT_KNOWLEDGE_THRESHOLD", 0.5))
 
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
@@ -520,9 +520,9 @@ def relativity_filter(user_knowledge: List[str], last_utt: List[str]) -> List[st
         res = list(zip(user_knowledge, res))
         user_related_knowledge = []
         for knowledge, score in res:
-            # logger.info(f"knowledge -- {knowledge}")
-            # logger.info(f"score -- {score}")
-            if score >= THRESHOLD:
+            logger.info(f"knowledge -- {knowledge}")
+            logger.info(f"score -- {score}")
+            if score >= RELEVANT_KNOWLEDGE_THRESHOLD:
                 user_related_knowledge.append(knowledge)
     except Exception as e:
         sentry_sdk.capture_exception(e)
@@ -562,7 +562,7 @@ def memorize(graph, uttrs):
                         )
 
         user_triplets = get_knowledge(user_id)
-        # logger.info(f"user triplets -- {user_triplets}")
+        logger.info(f"user triplets -- {user_triplets}")
 
         # Convert triplets into natural language
         if user_triplets and USE_KG_DATA:
@@ -570,7 +570,7 @@ def memorize(graph, uttrs):
         else:
             user_knowledge = []
 
-        # logger.info(f"user knowledge -- {user_knowledge}")
+        logger.info(f"user knowledge -- {user_knowledge}")
         # Generate prompt with related knowledge about user
         if user_knowledge:
             user_knowledge = user_knowledge[0].split(".")[:-1]
