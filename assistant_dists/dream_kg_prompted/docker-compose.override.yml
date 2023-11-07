@@ -189,6 +189,7 @@ services:
         SENTENCE_RANKER_URL: http://sentence-ranker:8128/respond
         SENTENCE_RANKER_TIMEOUT: 5
         RELEVANT_KNOWLEDGE_THRESHOLD: 0.5
+        ENVVARS_TO_SEND: OPENAI_API_KEY
         USE_KG_DATA: 1
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
