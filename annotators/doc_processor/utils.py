@@ -299,7 +299,8 @@ def upload_documents_save_info(
                 file_id = generate_unique_file_id(10, dialog_id)
                 all_docs_info_new[file_id] = {"initial_path_or_link": file_source}
                 if file_source_type == "link":
-                    orig_file = requests.get(file_source, timeout=FILE_SERVER_TIMEOUT)
+                    # without verify=False, downloading files from our service does not work
+                    orig_file = requests.get(file_source, timeout=FILE_SERVER_TIMEOUT, verify=False)
                     content_headers = orig_file.headers.get("Content-disposition", "filename=NoNameFile")
                     filename = re.search(FIND_FILENAME, content_headers)
                     if filename:

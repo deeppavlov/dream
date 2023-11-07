@@ -4,8 +4,8 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: This skill analyses meeting transcripts. Only this skill must be selected when summary, decisions,
-  current or completed tasks are requested. It must also be selected when any questions about 
+description: This skill analyses meeting transcripts. Only this skill must be selected when full or weekly report, 
+  summary, decisions, current or completed tasks are requested. It must also be selected when any questions about 
   the meeting content or progress are asked.
 ram_usage: 500M
 gpu_usage: null
