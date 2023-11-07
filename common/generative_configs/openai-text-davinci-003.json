@@ -1,5 +1,5 @@
 {
-  "max_tokens": 64,
+  "max_tokens": 256,
   "temperature": 0.4,
   "top_p": 1.0,
   "frequency_penalty": 0,
