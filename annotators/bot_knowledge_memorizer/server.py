@@ -32,8 +32,9 @@ if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
+ENVVARS_TO_SEND = os.getenv("ENVVARS_TO_SEND")
+envvars_to_send = os.getenv(ENVVARS_TO_SEND)
+assert envvars_to_send, logger.error("Error: OpenAI API key is not specified in env")
 
 SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
 SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
@@ -497,7 +498,7 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
                 "dialog_contexts": contexts,
                 "prompts": prompts,
                 "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
-                "openai_api_keys": [OPENAI_API_KEY] * len(contexts),
+                "openai_api_keys": [envvars_to_send] * len(contexts),
             },
             timeout=120,
         )
