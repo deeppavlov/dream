@@ -27,10 +27,13 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=7
-  openai-api-chatgpt:
+  transformers-lm-mistral-7b-128k:
     volumes:
-      - "./services/openai_api_lm:/src"
+      - "./services/transformers_lm:/src"
       - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=1
   doc-retriever:
     volumes:
       - "./annotators/doc_retriever:/src"
