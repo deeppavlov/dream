@@ -24,6 +24,9 @@ logger = logging.getLogger(__name__)
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 HALF_PRECISION = os.environ.get("HALF_PRECISION", 0)
 HALF_PRECISION = 0 if HALF_PRECISION is None else bool(int(HALF_PRECISION))
+USE_FLASH_ATTENTION_2 = os.environ.get("USE_FLASH_ATTENTION_2", 0)
+USE_FLASH_ATTENTION_2 = 0 if USE_FLASH_ATTENTION_2 is None else bool(int(USE_FLASH_ATTENTION_2))
+
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
 LANGUAGE = os.getenv("LANGUAGE", "EN")
 HF_ACCESS_TOKEN = os.environ.get("HF_ACCESS_TOKEN", None)
@@ -155,6 +158,10 @@ try:
 
     if HALF_PRECISION:
         additional_kwargs["torch_dtype"] = torch.float16
+    if USE_FLASH_ATTENTION_2:
+        additional_kwargs["use_flash_attention_2"] = True
+        additional_kwargs["trust_remote_code"] = True
+
     model = AutoModelForCausalLM.from_pretrained(PRETRAINED_MODEL_NAME_OR_PATH, **additional_kwargs)
     if torch.cuda.is_available():
         model.to("cuda")
