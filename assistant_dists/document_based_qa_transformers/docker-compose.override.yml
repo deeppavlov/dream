@@ -117,7 +117,7 @@ services:
     build:
       args:
         SERVICE_PORT: 8185
-        SERVICE_NAME: cc
+        SERVICE_NAME: transformers_lm_mistral_7b_128k
         PRETRAINED_MODEL_NAME_OR_PATH: NousResearch/Yarn-Mistral-7b-128k
         HALF_PRECISION: 1
         USE_FLASH_ATTENTION_2: 1
