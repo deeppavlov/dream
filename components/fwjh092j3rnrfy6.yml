@@ -5,8 +5,8 @@ model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
 description:
-  ChatGPT-based generative skill that answers the user's questions about a given document.
-  Uses doc_retriever to select the most relevant parts of the document and ChatGPT
+  Transformers-based generative skill that answers the user's questions about a given document.
+  Uses doc_retriever to select the most relevant parts of the document and Transformers LLM
   to generate the response based on the context, the question, and the selected parts.
 ram_usage: 150M
 gpu_usage: null
