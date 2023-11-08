@@ -36,6 +36,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 assert OPENAI_API_KEY, logger.error("Error: OpenAI API key is not specified in env")
 
 SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
+SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
+RELEVANT_KNOWLEDGE_THRESHOLD = float(os.getenv("RELEVANT_KNOWLEDGE_THRESHOLD", 0.2))
 
 BOT_ID = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
@@ -416,13 +418,13 @@ def check_abstract_triplets(
 
     if kinds_to_add:
         try:
-            graph.ontology.create_entity_kinds(set(kinds_to_add, parents))
+            graph.ontology.create_entity_kinds(kinds_to_add, parents)
         except ValueError:
             logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
         except Exception:  # TODO: replace with Terminusdb DatabaseError
             graph.ontology.create_entity_kinds(parents)
             try:
-                graph.ontology.create_entity_kinds(set(kinds_to_add, parents))
+                graph.ontology.create_entity_kinds(kinds_to_add, parents)
             except ValueError:
                 logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
     return abstract_triplets, non_abstract_triplets
@@ -509,16 +511,17 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
 
 
 def relativity_filter(bot_knowledge: List[str], last_utt: List[str]) -> List[str]:
-    THRESHOLD = 0.2
     requested_data = {"sentence_pairs": list(zip(bot_knowledge, last_utt))}
     try:
-        res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=120).json()[0]["batch"]
+        res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=SENTENCE_RANKER_TIMEOUT).json()[0][
+            "batch"
+        ]
         res = list(zip(bot_knowledge, res))
         bot_related_knowledge = []
         for knowledge, score in res:
             logger.info(f"knowledge -- {knowledge}")
             logger.info(f"score -- {score}")
-            if score >= THRESHOLD:
+            if score >= RELEVANT_KNOWLEDGE_THRESHOLD:
                 bot_related_knowledge.append(knowledge)
     except Exception as e:
         sentry_sdk.capture_exception(e)
