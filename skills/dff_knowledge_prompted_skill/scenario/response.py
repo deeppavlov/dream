@@ -27,7 +27,6 @@ if GENERATIVE_SERVICE_CONFIG:
 
 PROMPT_FILE = getenv("PROMPT_FILE")  # set prompt in docker-compose?
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
-ALLOW_PROMPT_RESET = int(getenv("ALLOW_PROMPT_RESET", 0))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
@@ -53,15 +52,6 @@ def compose_data_for_model(ctx, actor):
 
     if context:
         context = [re.sub(FIX_PUNCTUATION, "", x) for x in context]
-
-    history = int_ctx.get_utterances(ctx, actor)
-    for i in range(1, len(history) + 1, 2):
-        is_new_prompt = re.search(PROMPT_REPLACEMENT_COMMAND, history[-i].get("text", ""))
-        is_reset_prompt = re.search(PROMPT_RESET_COMMAND, history[-i].get("text", ""))
-        if ALLOW_PROMPT_RESET and (is_new_prompt or is_reset_prompt):
-            # cut context on the last user utterance utilizing the current prompt
-            context = context[-i + 2 :]
-            break
 
     return context
 
@@ -99,20 +89,32 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     shared_memory = int_ctx.get_shared_memory(ctx, actor)
     prompt = shared_memory.get("prompt", "")
-    prompt = prompt if len(prompt) > 0 and ALLOW_PROMPT_RESET else PROMPT
+    prompt = PROMPT
 
-    # # To use knowledge about user
-    # custom_el = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("custom_entity_linking")
-    # user_kg = ctx.misc.get("agent", {}).get("dialog", {}).get("human_utterances", [{}])[-1].get("annotations", {}).get("user_knowledge_graph")
-    # logger.info(f"custom_el: {custom_el}")
-    # logger.info(f"user_kg: {user_kg}")
+    # To use knowledge about user
+    custom_el = (
+        ctx.misc.get("agent", {})
+        .get("dialog", {})
+        .get("human_utterances", [{}])[-1]
+        .get("annotations", {})
+        .get("custom_entity_linking")
+    )
+    user_kg = (
+        ctx.misc.get("agent", {})
+        .get("dialog", {})
+        .get("human_utterances", [{}])[-1]
+        .get("annotations", {})
+        .get("user_knowledge_graph")
+    )
+    logger.info(f"custom_el: {custom_el}")
+    logger.info(f"user_kg: {user_kg}")
 
-    # if USE_KG_DATA and user_kg and (kg_prompt:=user_kg["kg_prompt"]):
-    #     kg_prompt = re.sub(r'[-\n]', '', kg_prompt[0][0].lower()).split('.')
-    #     kg_prompt = ",".join(kg_prompt[:-1])
-    #     prompt = prompt + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
+    if USE_KG_DATA and user_kg and (kg_prompt := user_kg["kg_prompt"]):
+        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0][0].lower()).split(".")
+        kg_prompt = ",".join(kg_prompt[:-1])
+        prompt = prompt + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
 
-    # # To use knowledge abaout bot
+    # To use knowledge about bot
     bot_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("bot_utterances", [{}])
     if bot_utterances:
         custom_el = bot_utterances[-1].get("annotations", {}).get("custom_entity_linking")
@@ -129,7 +131,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         kg_prompt = ".".join(kg_prompt)
         prompt = (
             prompt
-            + f" {kg_prompt}. INSTRUCTION: Now respond to a user. Be concise, but engaging. Answer in 1, 2 or 3 sentences."
+            + f"{kg_prompt}. INSTRUCTION: Now respond to user. Be concise, but engaging. Answer in 1, 2 or 3 sentences."
         )
 
     logger.info(f"prompt: {prompt}")

@@ -520,8 +520,8 @@ def relativity_filter(bot_knowledge: List[str], last_utt: List[str]) -> List[str
         res = list(zip(bot_knowledge, res))
         bot_related_knowledge = []
         for knowledge, score in res:
-            logger.info(f"knowledge -- {knowledge}")
-            logger.info(f"score -- {score}")
+            # logger.info(f"knowledge -- {knowledge}")
+            # logger.info(f"score -- {score}")
             if score >= RELEVANT_KNOWLEDGE_THRESHOLD:
                 bot_related_knowledge.append(knowledge)
     except Exception as e:
@@ -537,7 +537,7 @@ def relativity_filter(bot_knowledge: List[str], last_utt: List[str]) -> List[str
 
 def create_kg_prompt(bot_id: str, last_human_utt: str) -> List[str]:
     bot_triplets = get_knowledge(bot_id)
-    logger.info(f"bot triplets -- {bot_triplets}")
+    # logger.info(f"bot triplets -- {bot_triplets}")
     if bot_triplets and USE_BOT_KG_DATA:
         bot_knowledge = convert_triplets_to_natural_language(bot_triplets)
     else:
@@ -548,11 +548,11 @@ def create_kg_prompt(bot_id: str, last_human_utt: str) -> List[str]:
         bot_knowledge = bot_knowledge[0].split(".")[:-1]
         # logger.info(f"bot_knowledge -- {bot_knowledge}")
         last_utt_to_compare = [last_human_utt] * len(bot_knowledge)
-        logger.info(f"last_utt_to_compare -- {last_utt_to_compare}")
+        # logger.info(f"last_utt_to_compare -- {last_utt_to_compare}")
         related_knowledge = relativity_filter(bot_knowledge, last_utt_to_compare)
     else:
         related_knowledge = []
-    logger.info(f"related knowledge -- {related_knowledge}")
+    # logger.info(f"related knowledge -- {related_knowledge}")
 
     return related_knowledge
 
@@ -566,7 +566,7 @@ def memorize(graph, utt, last_human_utt):
     logger.info(f"last_utt --  {last_utt}")
     annotations = utt.get("annotations", {})
     custom_el_annotations = annotations.get("custom_entity_linking", [])
-    logger.info(f"custom_el_annotations --  {custom_el_annotations}")
+    # logger.info(f"custom_el_annotations --  {custom_el_annotations}")
 
     # To get mentions from custom-el, if needed (to be decided)
 
@@ -592,6 +592,7 @@ def memorize(graph, utt, last_human_utt):
                     )
 
     related_knowledge = create_kg_prompt(bot_id, last_human_utt)
+    logger.info(f"related knowledge -- {related_knowledge}")
 
     create_entities(graph, [(bot_external_id, "Bot")], has_name_property=True, entity_ids=[bot_id])
 
