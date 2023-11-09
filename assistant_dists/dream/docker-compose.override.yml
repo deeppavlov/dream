@@ -491,6 +491,7 @@ services:
         SERVICE_PORT: 8218
         SERVICE_NAME: dnnc_intents
         CONFIG: classifier.json
+        CLASSES: tell_joke,are_you_a_bot,meaning_of_life,oos
       context: .
       dockerfile: ./annotators/dnnc_intents/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8218 --timeout 600
