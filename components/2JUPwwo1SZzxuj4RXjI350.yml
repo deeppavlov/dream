@@ -14,7 +14,6 @@ connector:
   url: http://dnnc-intents:8218/model
 dialog_formatter:
   name: state_formatters.dp_formatters:preproc_last_human_utt_dialog
-  skill_name: dnnc_intents
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services: null
 required_previous_services: null
