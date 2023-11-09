@@ -108,16 +108,6 @@
                     "annotators.sentseg"
                 ]
             },
-            "voice_service": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 16, 
-                    "url": "http://voice-service:8333/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:voice_formatter_service",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation"
-            },
             "whisper_at_service": {
                 "connector": {
                     "protocol": "http",
@@ -191,19 +181,6 @@
                     "url": "http://dialogpt:8125/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
-            "dff_voice_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 5, 
-                    "url": "http://dff-voice-skill:8444/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_voice_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"

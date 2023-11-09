@@ -4,11 +4,11 @@ services:
     environment:
       # WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
       #     dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
-      #     spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188"
+      #     spelling-preprocessing:8074, dialogpt:8125, sentence-ranker:8128, image-captioning:8123, dff-image-skill:8188, 
+      # voice-service:8333, dff-voice-skill:8444,"
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           dialogpt:8125, sentence-ranker:8128,
-          voice-service:8333, dff-voice-skill:8444,
           whisper-at-service:8555, dff-whisper-at-skill: 8666"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
@@ -216,37 +216,57 @@ services:
   #       reservations:
   #         memory: 1024M
 
-  voice-service:
-    ports:
-        - "8333:8333"
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8333
-        SERVICE_NAME: voice_service
-      context: ./services/voice_service/
-    command: python -m flask run -h 0.0.0.0 -p 8333
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 5G
-        reservations:
-          memory: 5G
+  # voice-service:
+  #   ports:
+  #       - "8333:8333"
+  #   env_file: [ .env ]
+  #   build:
+  #     args:
+  #       SERVICE_PORT: 8333
+  #       SERVICE_NAME: voice_service
+  #     context: ./services/voice_service/
+  #   command: python -m flask run -h 0.0.0.0 -p 8333
+  #   environment:
+  #     - CUDA_VISIBLE_DEVICES=0
+  #     - FLASK_APP=server
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 5G
+  #       reservations:
+  #         memory: 5G
 
-  dff-voice-skill:
+  # dff-voice-skill:
+  #   ports:
+  #       - "8444:8444"
+  #   env_file: [ .env ]
+  #   build:
+  #     args:
+  #       SERVICE_PORT: 8444
+  #       SERVICE_NAME: dff_voice_skill
+  #     context: .
+  #     dockerfile: ./skills/dff_voice_skill/Dockerfile
+  #   command: gunicorn --workers=1 server:app -b 0.0.0.0:8444 --reload
+  #   environment:
+  #     - CUDA_VISIBLE_DEVICES=0
+  #     - FLASK_APP=server
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 5G
+  #       reservations:
+  #         memory: 5G
+  
+  whisper-at-service:
     ports:
-        - "8444:8444"
+      - "8555:8555"
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8444
-        SERVICE_NAME: dff_voice_skill
-      context: .
-      dockerfile: ./skills/dff_voice_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8444 --reload
+        SERVICE_PORT: 8555
+        SERVICE_NAME: whisper_at_service
+      context: ./services/whisper_at_service/
+    command: python -m flask run -h 0.0.0.0 -p 8555
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -261,11 +281,11 @@ services:
     env_file: [.env]
     build:
       args:
-        SERVICE_PORT: 8555
+        SERVICE_PORT: 8666
         SERVICE_NAME: dff_whisper_at_skill
       context: .
       dockerfile: ./skills/dff_whisper_at_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8555 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8666 --reload
     deploy:
       resources:
         limits:

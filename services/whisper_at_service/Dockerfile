@@ -17,22 +17,19 @@ RUN apt-get install ffmpeg -y
 RUN apt-get update && apt-get install git -y
 
 # RUN conda remove PyYAML
-RUN mkdir /whisper_at && \
-    git clone https://github.com/YuanGongND/whisper-at.git /whisper_at && \
-    cd /whisper_at && \
-    #requirements
-    pip install numba numpy torch tqdm more-itertools tiktoken==0.3.3 && \ 
-    #whisper-at
-    pip install --no-deps whisper-at  
+RUN mkdir /whisper_at 
+RUN git clone https://github.com/YuanGongND/whisper-at.git /whisper_at 
+RUN cd /whisper_at
+RUN pwd
 
 WORKDIR /whisper_at
 
 RUN apt-get install wget -y
 
-RUN wget https://www.dropbox.com/s/4vn2oatda321y7h/base_ori.pth?dl=1 -O /whisper_at/model.pt
+RUN wget https://www.dropbox.com/s/4vn2oatda321y7h/base_ori.pth?dl=1 -O /whisper_at/model.pth
 
 COPY . /whisper_at
 
 # HEALTHCHECK --interval=5s --timeout=90s --retries=3 CMD curl --fail 127.0.0.1:${SERVICE_PORT}/healthcheck || exit 1
 
-# CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200
+CMD gunicorn --workers=1 server:app -b 0.0.0.0:${SERVICE_PORT} --timeout=1200

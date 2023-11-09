@@ -71,16 +71,16 @@ services:
   #     - "./common:/src/common"
   #   ports:
   #     - 8188:8188
-  voice-service:
-    volumes:
-      - "~/.deeppavlov/file_server:/tmp"
-    ports:
-      - 8333:8333
-  dff-voice-skill:
-    volumes:
-      - "~/.deeppavlov/file_server:/tmp"
-    ports:
-      - 8444:8444
+  # voice-service:
+  #   volumes:
+  #     - "~/.deeppavlov/file_server:/tmp"
+  #   ports:
+  #     - 8333:8333
+  # dff-voice-skill:
+  #   volumes:
+  #     - "~/.deeppavlov/file_server:/tmp"
+  #   ports:
+  #     - 8444:8444
 
   whisper-at-service:
     volumes:

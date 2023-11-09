@@ -10,8 +10,8 @@ from urllib.request import urlopen, URLopener
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 CAP_ERR_MSG = "The audiofile format is not supported"
-AUDIO_DIR = "/src/aux_files/data/clotho_audio_files/"
-MODEL_PATH = "/src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth"
+AUDIO_DIR = "/whisper_at/data"
+MODEL_PATH = "/whisper_at/model.pth"
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -67,8 +67,8 @@ def respond():
     # except:
     #     responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
 
-    logger.info(f"VOICE_SERVICE RESPONSE: {responses}")
+    logger.info(f"WHISPER_SERVICE RESPONSE: {responses}")
 
     total_time = time.time() - st_time
-    logger.info(f"voice_service exec time: {total_time:.3f}s")
+    # logger.info(f"voice_service exec time: {total_time:.3f}s")
     return jsonify(responses)
