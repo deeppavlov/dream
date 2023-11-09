@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Add .env_secret file
-      run: touch .env_secret
+      run: touch .env_secret .env_secret_azure
 
     - name: Add google api keys
       run: ./tests/test.sh MODE=add-google
@@ -63,3 +63,7 @@ jobs:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       GOOGLE_CSE_ID: ${{ secrets.GOOGLE_CSE_ID }}
+      AZURE_API_KEY: ${{ secrets.AZURE_API_KEY }}
+      OPENAI_API_TYPE: ${{ secrets.OPENAI_API_TYPE }}
+      OPENAI_API_VERSION: ${{ secrets.OPENAI_API_VERSION }}
+      OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}

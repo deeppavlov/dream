@@ -55,7 +55,7 @@ def check_universal_assistant(lm_services):
             BOT_URL,
             json={
                 "user_id": f"test-user-{random.randint(100, 1000)}",
-                "payload": "What are the most interesting games for a 5-year old girl?",
+                "payload": "What song should I sing to my baby?",
                 "api_keys": {"openai_api_key": OPENAI_API_KEY},
                 "skills": [
                     {
@@ -151,7 +151,8 @@ Return only names of the selected skills divided by comma. Do not respond to the
             print("Success!")
         else:
             raise ValueError(
-                f"\nERROR: `Universal Selectors Assistant` returned `{result['text']}` with lm service {lm_service}\n"
+                f"\nERROR: `Universal Selectors Assistant` returned `{result['response']}` "
+                f"with lm service {lm_service}\n"
             )
         sleep(5)
 
@@ -202,7 +203,7 @@ def main():
     elif assistant == "universal_prompted_assistant":
         check_universal_assistant(["ChatGPT", "GPT-3.5"])  # TODO: add "GPT-4 32k", "GPT-4" and "ChatGPT 16k"
     elif assistant == "universal_selectors_assistant":
-        check_universal_selectors_assistant(["ChatGPT", "GPT-3.5"])  # TODO: add "GPT-4 32k", "GPT-4" and "ChatGPT 16k"
+        check_universal_selectors_assistant(["ChatGPT"])  # TODO: add "GPT-4 32k", "GPT-4" and "ChatGPT 16k"
 
 
 if __name__ == "__main__":

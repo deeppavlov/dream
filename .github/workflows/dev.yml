@@ -47,3 +47,7 @@ jobs:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
       PROXY_HOST: ${{ secrets.PROXY_HOST }}
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      AZURE_API_KEY: ${{ secrets.AZURE_API_KEY }}
+      OPENAI_API_TYPE: ${{ secrets.OPENAI_API_TYPE }}
+      OPENAI_API_VERSION: ${{ secrets.OPENAI_API_VERSION }}
+      OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}

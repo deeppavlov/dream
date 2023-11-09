@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     google_cse_id: str
     google_api_key: str
     sentry_dsn: str
+    openai_api_base: str
+    openai_api_type: str
+    openai_api_version: str
+    azure_api_key: str
 
 
 settings = Settings()
@@ -170,6 +174,12 @@ def main():
     dotenv.set_key(DREAM_ROOT_PATH / ".env", "GOOGLE_CSE_ID", settings.google_cse_id)
     dotenv.set_key(DREAM_ROOT_PATH / ".env", "GOOGLE_API_KEY", settings.google_api_key)
     dotenv.set_key(DREAM_ROOT_PATH / ".env", "SENTRY_DSN", settings.sentry_dsn)
+
+    dotenv.set_key(DREAM_ROOT_PATH / ".env_secret_azure", "OPENAI_API_BASE", settings.openai_api_base)
+    dotenv.set_key(DREAM_ROOT_PATH / ".env_secret_azure", "OPENAI_API_TYPE", settings.openai_api_type)
+    dotenv.set_key(DREAM_ROOT_PATH / ".env_secret_azure", "OPENAI_API_VERSION", settings.openai_api_version)
+    dotenv.set_key(DREAM_ROOT_PATH / ".env_secret_azure", "OPENAI_API_KEY", settings.azure_api_key)
+
     deploy(universal_bot)
     dotenv.set_key(DREAM_ROOT_PATH / ".env", "OPENAI_API_KEY", settings.openai_api_key)
     deploy(multi_bot)

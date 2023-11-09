@@ -146,3 +146,4 @@ docker-compose-one-replica.yml
 # personal env keys and tokens
 *.env_secret
 *.env_secret_ru
+*.env_secret_azure

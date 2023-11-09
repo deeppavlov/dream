@@ -27,6 +27,7 @@ app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
     "text-davinci-003": json.load(open("common/generative_configs/openai-text-davinci-003.json", "r")),
+    "davinci-002": json.load(open("common/generative_configs/davinci-002.json", "r")),
     "gpt-3.5-turbo": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-3.5-turbo-16k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-4": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
@@ -35,6 +36,7 @@ DEFAULT_CONFIGS = {
 CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"]
 MAX_TOKENS = {
     "text-davinci-003": 4097,
+    "davinci-002": 4097,
     "gpt-3.5-turbo": 4096,
     "gpt-3.5-turbo-16k": 16384,
     "gpt-4": 8192,
@@ -61,7 +63,12 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     len_context = len(ENCODER.encode(prompt)) + sum([len(ENCODER.encode(uttr)) for uttr in context])
     if _max_tokens and len_context + _max_tokens >= MAX_TOKENS[PRETRAINED_MODEL_NAME_OR_PATH]:
         _max_tokens = None
-
+    if openai.api_type == "azure":
+        if "." in PRETRAINED_MODEL_NAME_OR_PATH:
+            logger.info(f'Removing dots from model name "{PRETRAINED_MODEL_NAME_OR_PATH}".')
+        generation_params["engine"] = PRETRAINED_MODEL_NAME_OR_PATH.replace(".", "")
+    else:
+        generation_params["model"] = PRETRAINED_MODEL_NAME_OR_PATH
     if PRETRAINED_MODEL_NAME_OR_PATH in CHAT_COMPLETION_MODELS:
         logger.info("Use special chat completion endpoint")
         s = len(context) % 2
@@ -76,9 +83,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
             for uttr_id, uttr in enumerate(context)
         ]
         logger.info(f"context inside generate_responses seen as: {messages}")
-        response = openai.ChatCompletion.create(
-            model=PRETRAINED_MODEL_NAME_OR_PATH, messages=messages, max_tokens=_max_tokens, **generation_params
-        )
+        response = openai.ChatCompletion.create(messages=messages, max_tokens=_max_tokens, **generation_params)
     else:
         dialog_context = ""
         if prompt:
@@ -90,18 +95,17 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
         else:
             dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
         logger.info(f"context inside generate_responses seen as: {dialog_context}")
-        response = openai.Completion.create(
-            model=PRETRAINED_MODEL_NAME_OR_PATH,
-            prompt=dialog_context,
-            max_tokens=_max_tokens,
-            **generation_params,
-        )
+        response = openai.Completion.create(prompt=dialog_context, max_tokens=_max_tokens, **generation_params)
 
     if isinstance(response, dict) and "choices" in response:
-        outputs = [
-            resp["message"]["content"].strip() if "message" in resp else resp.get("text", "").strip()
-            for resp in response["choices"]
-        ]
+        try:
+            outputs = [
+                resp["message"]["content"].strip() if "message" in resp else resp.get("text", "").strip()
+                for resp in response["choices"]
+            ]
+        except KeyError as e:
+            logger.error(f"response: {response}")
+            raise e
     elif isinstance(response, str):
         outputs = [response.strip()]
 

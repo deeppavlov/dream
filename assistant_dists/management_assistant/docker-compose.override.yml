@@ -16,7 +16,7 @@ services:
     image: julienmeerschart/simple-file-upload-download-server
 
   llm-based-skill-selector:
-    env_file: [ .env, .env_secret ]
+    env_file: [ .env, .env_secret_azure ]
     build:
       args:
         SERVICE_PORT: 8182
@@ -77,7 +77,7 @@ services:
           memory: 2G
 
   llm-based-response-selector-gpt4:
-    env_file: [ .env, .env_secret ]
+    env_file: [ .env, .env_secret_azure ]
     build:
       args:
         SERVICE_PORT: 8003
@@ -141,7 +141,7 @@ services:
           memory: 3G
 
   openai-api-chatgpt:
-    env_file: [ .env ]
+    env_file: [ .env_azure ]
     build:
       args:
         SERVICE_PORT: 8145
@@ -161,7 +161,7 @@ services:
           memory: 100M
 
   openai-api-gpt4:
-    env_file: [ .env ]
+    env_file: [ .env_azure ]
     build:
       args:
         SERVICE_PORT: 8159
@@ -178,9 +178,9 @@ services:
           memory: 500M
         reservations:
           memory: 100M
-          
+
   dff-general-pm-prompted-skill:
-    env_file: [ .env, .env_secret ]
+    env_file: [ .env, .env_secret_azure ]
     build:
       args:
         SERVICE_PORT: 8189
@@ -200,7 +200,7 @@ services:
           memory: 128M
 
   dff-meeting-analysis-skill:
-    env_file: [ .env, .env_secret ]
+    env_file: [ .env, .env_secret_azure ]
     build:
       args:
         SERVICE_PORT: 8186

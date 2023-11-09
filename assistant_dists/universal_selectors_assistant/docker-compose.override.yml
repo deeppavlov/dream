@@ -95,7 +95,7 @@ services:
           memory: 3G
 
   openai-api-chatgpt:
-    env_file: [ .env ]
+    env_file: [ .env_azure ]
     build:
       args:
         SERVICE_PORT: 8145
@@ -114,12 +114,12 @@ services:
           memory: 100M
 
   openai-api-davinci3:
-    env_file: [ .env ]
+    env_file: [ .env_azure ]
     build:
       args:
         SERVICE_PORT: 8131
         SERVICE_NAME: openai_api_davinci3
-        PRETRAINED_MODEL_NAME_OR_PATH: text-davinci-003
+        PRETRAINED_MODEL_NAME_OR_PATH: davinci-002
       context: .
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8131
@@ -133,7 +133,7 @@ services:
           memory: 100M
 
   openai-api-gpt4:
-    env_file: [ .env ]
+    env_file: [ .env_azure ]
     build:
       args:
         SERVICE_PORT: 8159
@@ -152,7 +152,7 @@ services:
           memory: 100M
 
   openai-api-gpt4-32k:
-    env_file: [ .env ]
+    env_file: [ .env_azure ]
     build:
       args:
         SERVICE_PORT: 8160
@@ -171,7 +171,7 @@ services:
           memory: 100M
 
   openai-api-chatgpt-16k:
-    env_file: [ .env ]
+    env_file: [ .env_azure ]
     build:
       args:
         SERVICE_PORT: 8167
