@@ -121,7 +121,7 @@ services:
           memory: 3G
 
   openai-api-chatgpt:
-    env_file: [ .env_azure ]
+    env_file: [ .env,  .env_azure ]
     build:
       args:
         SERVICE_PORT: 8145
