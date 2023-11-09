@@ -20,7 +20,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logger = logging.getLogger(__name__)
 
 
-supported_intents = os.getenv('CLASSES').split(',')
+supported_intents = os.getenv("CLASSES").split(",")
 
 
 @register("dnnc_preparer")
