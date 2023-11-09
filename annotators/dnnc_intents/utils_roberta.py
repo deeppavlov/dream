@@ -20,7 +20,7 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logger = logging.getLogger(__name__)
 
 
-supported_intents = ["tell_joke", "are_you_a_bot", "meaning_of_life", "oos"]
+supported_intents = os.getenv('CLASSES').split(',')
 
 
 @register("dnnc_preparer")
