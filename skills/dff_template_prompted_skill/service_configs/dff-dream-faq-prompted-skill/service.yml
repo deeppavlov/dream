@@ -3,7 +3,8 @@ endpoints:
 - respond
 compose:
   env_file:
-  - .env,.env_secret
+  - .env
+  - .env_secret
   build:
     args:
       SERVICE_PORT: 8170

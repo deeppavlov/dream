@@ -8,6 +8,7 @@ endpoints:
 compose:
   env_file:
   - .env
+  - .env_azure
   build:
     args:
       SERVICE_PORT: 8145
