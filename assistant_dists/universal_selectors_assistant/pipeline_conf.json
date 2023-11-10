@@ -40,7 +40,7 @@
             "skill_selector": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 10.0,
+                    "timeout": 15.0,
                     "url": "http://universal-llm-based-skill-selector:8187/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog_skills_and_docs",
