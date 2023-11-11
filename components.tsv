@@ -135,14 +135,14 @@
 8130	transformers-lm-gptj
 8131	openai-api-davinci3
 8132	gpt2-multilingual
-8133	relative-persona-extractor
+8133	relative-persona-extractor,relative-persona-extractor-ru
 8134	dff-dream-persona-gpt-j-prompted-skill
 8135	prompt-selector,prompt-selector-ru
 8136	property-extraction
 8137	dff-dream-persona-chatgpt-prompted-skill
 8138	dff-marketing-prompted-skill
 8139	dff-fairytale-prompted-skill
-8140	seq2seq-persona-based
+8140	seq2seq-persona-based,seq2seq-persona-based-ru
 8141	dff-nutrition-prompted-skill
 8142	dff-life-coaching-prompted-skill
 8143	dff-ai-faq-prompted-skill

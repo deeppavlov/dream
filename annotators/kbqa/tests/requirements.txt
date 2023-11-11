@@ -1,0 +1,13 @@
+cryptography==38.0.4
+pyopenssl==23.0.0
+sentry-sdk[flask]==0.14.1
+gunicorn==19.9.0
+transformers==4.6.0
+datasets==1.2.0
+git+https://github.com/deeppavlov/bert.git@feat/multi_gpu
+pybind11==2.2.4
+tensorflow==1.13.1
+protobuf==3.20.1
+click==7.1.2
+pytest==7.4.2
+allure-pytest==2.13.2

@@ -1,0 +1,39 @@
+FROM python:3.9.16
+
+ARG CONFIG
+ARG COMMIT
+ARG FAST=1
+ARG SERVICE_PORT
+ARG SRC_DIR
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
+ENV CONFIG=$CONFIG
+ENV FAST=$FAST
+ENV SERVICE_PORT=$SERVICE_PORT
+ENV COMMIT=$COMMIT
+ENV LANGUAGE=$LANGUAGE
+
+COPY ./annotators/wiki_parser/tests/requirements.txt /src/requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r /src/requirements.txt && \
+    echo export PYTHONPATH=$(PYTHONPATH):/home/3.9/pybind11 && \
+    pip install hdt==2.3
+
+ARG WIKI_LITE_DB
+ENV WIKI_LITE_DB ${WIKI_LITE_DB}
+ARG WIKI_LITE_INDEX_DB
+ENV WIKI_LITE_INDEX_DB ${WIKI_LITE_INDEX_DB}
+ARG WIKI_CACHE_DB
+ENV WIKI_CACHE_DB ${WIKI_CACHE_DB}
+
+RUN mkdir -p /root/.deeppavlov/downloads/wikidata
+RUN wget -q -P /root/.deeppavlov/downloads/wikidata ${WIKI_LITE_DB} && \
+    wget -q -P /root/.deeppavlov/downloads/wikidata ${WIKI_LITE_INDEX_DB} && \
+    wget -q -P /root/.deeppavlov/downloads/wikidata ${WIKI_CACHE_DB}
+
+COPY $SRC_DIR /src
+WORKDIR /src
+COPY ./common/ ./common/
+
+CMD gunicorn  --workers=1 --timeout 500 --graceful-timeout 500 server:app -b 0.0.0.0:8077

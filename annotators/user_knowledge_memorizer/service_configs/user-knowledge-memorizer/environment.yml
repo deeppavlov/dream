@@ -6,4 +6,4 @@ TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
 TERMINUSDB_SERVER_PASSWORD: root
 TERMINUSDB_SERVER_TEAM: admin
 TERMINUSDB_SERVER_DB: user_knowledge_db
-CONFIG: config.json
+USER_KM_SERVICE_CONFIG: index_load_path.json

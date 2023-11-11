@@ -11,12 +11,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  spacy-nounphrases:
-    volumes:
-      - "./annotators/spacy_nounphrases:/src"
-      - "./common:/src/common"
-    ports:
-      - 8006:8006
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
@@ -47,11 +41,6 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
   combined-classification:
     volumes:
       - "./common:/src/common"
