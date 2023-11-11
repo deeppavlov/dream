@@ -107,8 +107,15 @@ def respond():
             best_id = hypotheses.index(selected_resp)
 
             if EMOTIONAL_RESPONSES:
-                emotional_hypotheses = hypotheses[best_id].get("annotations").get("emotional_bot_response")
-                selected_responses.append(emotional_hypotheses.pop("hypotheses"))
+                annotations = hypotheses[best_id].get("annotations")
+                current_response = hypotheses[best_id].pop("text")
+
+                if "emotional_bot_response" in annotations:
+                    emotional_hypotheses = annotations.get("emotional_bot_response")
+                    if "hypotheses" in emotional_hypotheses:
+                        if len(emotional_hypotheses.get("hypotheses")) != 0:
+                            current_response = emotional_hypotheses.get("hypotheses")
+                selected_responses.append(current_response)
             else:
                 selected_responses.append(hypotheses[best_id].pop("text"))
             selected_skill_names.append(hypotheses[best_id].pop("skill_name"))
