@@ -1,0 +1,387 @@
+{
+    "connectors": {
+        "sentseg": {
+            "protocol": "http",
+            "timeout": 1.5,
+            "url": "http://sentseg-ru:8011/sentseg"
+        },
+        "ner": {
+            "protocol": "http",
+            "timeout": 1.5,
+            "url": "http://ner-ru:8021/ner"
+        }
+    },
+    "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                        "segments": [
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
+                        ]
+                    },
+                    "ner": [
+                        []
+                    ]
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/sdjkfn90234rnklcg.yml",
+                "service": "services/agent_services/service_configs/dream_russian_persona_based"
+            }
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Извини, что-то пошло не так в моем мозгу. Пожалуйста, повтори предыдущую реплику.",
+                        "segments": [
+                            "Извини, что-то пошло не так в моем мозгу.",
+                            "Пожалуйста, повтори предыдущую реплику."
+                        ]
+                    },
+                    "ner": [
+                        []
+                    ]
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/SDKFjnoqikjh8v7gdsf.yml",
+                "service": "services/agent_services/service_configs/dream_russian_persona_based"
+            }
+        },
+        "annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg-ru:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/Nw2SnrS4DGoALg6Cu58Zw.yml",
+                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
+                }
+            },
+            "badlisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://badlisted-words-ru:8018/badlisted_words"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_and_tokenized_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.spacy_annotator"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/WzIX0HJ0Xyo4V8ItwLew.yml",
+                    "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
+                }
+            },
+            "combined_classification_ru": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://combined-classification-ru:8198/model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/3dcc0944c3e0.yml",
+                    "service": "annotators/combined_classification_ru/service_configs/combined-classification-ru"
+                }
+            },
+            "intent_catcher": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://intent-catcher-ru:8014/detect"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing",
+                    "annotators.sentseg"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/v2RpT5Ryi2ke97ANZxRnJg.yml",
+                    "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher-ru"
+                }
+            },
+            "relative_persona_extractor": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://relative-persona-extractor-ru:8133/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.spelling_preprocessing"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/jkbn98dsfhg3qtfi.yml",
+                    "service": "annotators/relative_persona_extractor/service_configs/relative-persona-extractor-ru"
+                }
+            }
+        },
+        "response_annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg-ru:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/4SJxJlf3E8TTM94Uiqt5Xg.yml",
+                    "service": "annotators/sentseg_ru/service_configs/sentseg-ru"
+                }
+            }
+        },
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
+            }
+        },
+        "candidate_annotators": {
+            "badlisted_words": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://badlisted-words-ru:8018/badlisted_words_batch"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "candidate_annotators.spacy_annotator"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
+                    "service": "annotators/BadlistedWordsDetector_ru/service_configs/badlisted-words-ru"
+                }
+            },
+            "combined_classification_ru": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://combined-classification-ru:8198/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/5eb485871be3.yml",
+                    "service": "annotators/combined_classification_ru/service_configs/combined-classification-ru"
+                }
+            },
+            "dialogrpt": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://dialogrpt-ru:8122/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_with_context_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/DUW2u7FwPMyhBOWrK1HTg.yml",
+                    "service": "services/dialogrpt_ru/service_configs/dialogrpt-ru"
+                }
+            }
+        },
+        "skill_selectors": {
+            "rule_based_selector": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.rule_based_selector.connector:RuleBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ],
+                "is_enabled": true,
+                "source": {
+                    "component": "components/xSwFvtAUdvtQosvzpb7oMg.yml",
+                    "service": "skill_selectors/rule_based_selector/service_configs/agent"
+                }
+            }
+        },
+        "skills": {
+            "dff_intent_responder_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://dff-intent-responder-ru-skill:8012/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_intent_responder_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/qJPPqfjKviUyvDTCn2Xw.yml",
+                    "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-ru-skill"
+                }
+            },
+            "dummy_skill": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
+            },
+            "dff_generative_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 4.0,
+                    "url": "http://dff-generative-ru-skill:8092/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:dff_generative_skill_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/FJpakzPR4IC8F1sos7FSg.yml",
+                    "service": "skills/dff_generative_skill/service_configs/dff-generative-ru-skill"
+                }
+            },
+            "seq2seq_persona_based": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 3.0,
+                    "url": "http://seq2seq-persona-based-ru:8140/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:persona_bot_formatter",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/askjdfh9023rhuidfg.yml",
+                    "service": "services/seq2seq_persona_based/service_configs/seq2seq-persona-based-ru"
+                }
+            }
+        },
+        "response_selectors": {
+            "response_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://convers-evaluation-selector-ru:8009/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "candidate_annotators"
+                ],
+                "tags": [
+                    "selector"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/SFiPofc4cGq6IRlit38e8A.yml",
+                    "service": "response_selectors/convers_evaluation_based_selector/service_configs/convers-evaluation-selector-ru"
+                }
+            }
+        }
+    },
+    "metadata": {
+        "display_name": "Dream Russian Persona-based",
+        "author": "DeepPavlov",
+        "description": "Russian version of DeepPavlov Dream Socialbot. This is a generative-based socialbot that uses Russian DialoGPT by DeepPavlov to generate most of the responses. It also contains intent catcher and responder components to cover special user requests.",
+        "version": "0.1.0",
+        "date_created": "2022-12-12T12:12:00",
+        "ram_usage": "50 GB",
+        "gpu_usage": "50 GB",
+        "disk_usage": "50 GB"
+    }
+}

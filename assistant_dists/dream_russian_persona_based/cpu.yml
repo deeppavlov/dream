@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  dialogpt-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  dialogrpt-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  sentseg-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  combined-classification-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  intent-catcher-ru:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
+  seq2seq-persona-based-ru:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
