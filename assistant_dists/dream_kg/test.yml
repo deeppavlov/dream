@@ -13,10 +13,7 @@ services:
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
-  spacy-nounphrases:
   sentseg:
-  convers-evaluation-selector:
-  badlisted-words:
   ner:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
@@ -27,18 +24,13 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=9
-  spelling-preprocessing:
   entity-detection:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  convers-evaluator-annotator:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=8
-  dff-template-skill:
+  dff-user-kg-skill:
+  dff-travel-italy-skill:
   property-extraction:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
