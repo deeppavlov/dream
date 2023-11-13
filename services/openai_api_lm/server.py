@@ -55,9 +55,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
         ]
         logger.info(f"context inside generate_responses seen as: {messages}")
         response = client.chat.completions.create(
-            model=PRETRAINED_MODEL_NAME_OR_PATH,
-            messages=messages,
-            **generation_params
+            model=PRETRAINED_MODEL_NAME_OR_PATH, messages=messages, **generation_params
         )
     else:
         dialog_context = ""
@@ -71,12 +69,10 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
             dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
         logger.info(f"context inside generate_responses seen as: {dialog_context}")
         response = client.completions.create(
-            model=PRETRAINED_MODEL_NAME_OR_PATH,
-            prompt=dialog_context,
-            **generation_params
+            model=PRETRAINED_MODEL_NAME_OR_PATH, prompt=dialog_context, **generation_params
         )
 
-    response = dict(response)
+    response = response.model_dump()
     outputs = [
         resp["message"]["content"].strip() if "message" in resp else resp.get("text", "").strip()
         for resp in response["choices"]
