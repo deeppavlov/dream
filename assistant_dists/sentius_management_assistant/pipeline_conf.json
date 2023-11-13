@@ -1,0 +1,270 @@
+{
+    "connectors": {},
+    "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {}
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ],
+            "source": {
+                "component": "components/pfo09jnowfeoOInv.yml",
+                "service": "services/agent_services/service_configs/sentius_management_assistant"
+            }
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "annotations": {}
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ],
+            "source": {
+                "component": "components/09jbriowbnOIN0.yml",
+                "service": "services/agent_services/service_configs/sentius_management_assistant"
+            }
+        },
+        "annotators": {
+            "prompt_goals_collector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/collect_goals"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "update_attributes",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pSQhVbMPcWjL.yml",
+                    "service": "annotators/prompt_selector/service_configs/management_assistant"
+                }
+            },
+            "prompt_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.prompt_goals_collector"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/pSQhVbMPcWjL.yml",
+                    "service": "annotators/prompt_selector/service_configs/management_assistant"
+                }
+            },
+            "doc_processor": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 50.0,
+                    "url": "http://doc-processor-from-atts:8188/process_and_upload_doc"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog_skills_and_docs",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "update_attributes",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/CMKFLPOPTnvodk3I.yml",
+                    "service": "annotators/doc_processor/service_configs/doc-processor-from-atts"
+                }
+            }
+        },
+        "skill_selectors": {
+            "skill_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 10.0,
+                    "url": "http://llm-based-skill-selector:8182/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog_skills_and_docs",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "state_manager_method": "add_annotation",
+                "tags": [
+                    "selector"
+                ],
+                "is_enabled": true,
+                "source": {
+                    "component": "components/sdikfjoisah4nr.yml",
+                    "service": "skill_selectors/llm_based_skill_selector/service_configs/llm-based-skill-selector"
+                }
+            }
+        },
+        "skills": {
+            "dff_meeting_analysis_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 600.0,
+                    "url": "http://dff-meeting-analysis-skill:8186/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_meeting_analysis_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "annotators.doc_processor",
+                    "skill_selectors"
+                ],
+                "required_previous_services": [
+                    "annotators.doc_processor"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/OFinvkfdeoih3849onv.yml",
+                    "service": "skills/dff_meeting_analysis_skill/service_configs/dff-meeting-analysis-skill"
+                }
+            },
+            "dff_roles_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-roles-prompted-skill:8185/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_roles_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/skjdfhiskenr203r.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-roles-prompted-skill"
+                }
+            },
+            "dff_general_pm_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-general-pm-prompted-skill:8189/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_general_pm_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/sdgvjhse8fgy3wq4.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-general-pm-prompted-skill"
+                }
+            },
+            "dummy_skill": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
+            }
+        },
+        "candidate_annotators": {
+            "combined_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://combined-classification:8087/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
+                }
+            },
+            "sentence_ranker": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://sentence-ranker:8128/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
+                }
+            }
+        },
+        "response_selectors": {
+            "response_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://llm-based-response-selector-gpt4:8003/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "skills",
+                    "candidate_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "tags": [
+                    "selector"
+                ],
+                "is_enabled": true,
+                "source": {
+                    "component": "components/lkmklmmPONklev0.yml",
+                    "service": "response_selectors/llm_based_response_selector/service_configs/llm-based-response-selector-gpt4"
+                }
+            }
+        }
+    },
+    "metadata": {
+        "display_name": "Management Assistant",
+        "author": "Sentius",
+        "description": "This Assistant is designed to help managers to handle meeting scripts, customer developments, tasks assignment, priorities. It is designed for Sentius company and features information about Sentius' team members.",
+        "version": "0.0.1",
+        "date_created": "2023-08-23T02:00:00",
+        "ram_usage": "4 GB",
+        "gpu_usage": "3 GB",
+        "disk_usage": "10 GB"
+    }
+}
