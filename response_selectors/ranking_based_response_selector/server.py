@@ -23,10 +23,19 @@ SENTENCE_RANKER_ANNOTATION_NAME = getenv("SENTENCE_RANKER_ANNOTATION_NAME")
 SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 SENTENCE_RANKER_TIMEOUT = float(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
+ENABLE_FACT_CHECKING = int(getenv("ENABLE_FACT_CHECKING"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
+FACTUAL_CONFORMITY_SERVICE_URL = getenv("FACTUAL_CONFORMITY_SERVICE_URL")
+FACTUAL_CONFORMITY_SERVICE_TIMEOUT = int(getenv("FACTUAL_CONFORMITY_SERVICE_TIMEOUT"))
+FACTUAL_CONFORMITY_ANNOTATION_NAME = getenv("FACTUAL_CONFORMITY_ANNOTATION_NAME")
+
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
     "Ranker service URL or annotator name should be given"
 )
+if ENABLE_FACT_CHECKING:
+    assert FACTUAL_CONFORMITY_ANNOTATION_NAME or FACTUAL_CONFORMITY_SERVICE_URL, logger.error(
+        "Fact-checker service URL or annotator name should be given"
+    )
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
@@ -69,6 +78,36 @@ def get_scores(dialog_context, hypotheses):
     return scores
 
 
+def filter_out_factually_incorrect(hypotheses, human_uttr_attributes):
+    if all([FACTUAL_CONFORMITY_ANNOTATION_NAME in hyp.get("annotations", {}) for hyp in hypotheses]):
+        fact_check_result = [
+            hyp.get("annotations", {}).get(FACTUAL_CONFORMITY_ANNOTATION_NAME, "Correct") for hyp in hypotheses
+        ]
+        logger.info(f"Got annotations from {FACTUAL_CONFORMITY_ANNOTATION_NAME}.")
+    else:
+        try:
+            fact_check_result = requests.post(
+                FACTUAL_CONFORMITY_SERVICE_URL,
+                json={"hypotheses": hypotheses, "human_uttr_attributes": human_uttr_attributes},
+                timeout=FACTUAL_CONFORMITY_SERVICE_TIMEOUT,
+            ).json()
+            fact_check_result = fact_check_result[0]["batch"]
+            logger.info(f"Annotated hypotheses via {FACTUAL_CONFORMITY_SERVICE_URL}.")
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            fact_check_result = ["Correct" for _ in hypotheses]
+            logger.exception(e)
+            logger.info("Error. Marking all hypotheses as correct.")
+    clean_hypotheses = [hyp for hyp, res in zip(hypotheses, fact_check_result) if res == "Correct"]
+    hypotheses_text = [hyp["text"] for hyp in hypotheses]
+    clean_hypotheses_text = [hyp["text"] for hyp in clean_hypotheses]
+    logger.info(
+        f"""Filtered out incorrect candidates: {'; '.join(set(hypotheses_text) - set(clean_hypotheses_text))}
+Remaining candidates: {clean_hypotheses_text}"""
+    )
+    return clean_hypotheses
+
+
 def select_response(dialog_context, hypotheses):
     scores = get_scores(dialog_context, hypotheses)
     scores = [score if hyp["skill_name"] != "dummy_skill" else score - 1 for score, hyp in zip(scores, hypotheses)]
@@ -94,8 +133,11 @@ def respond():
 
     for i, dialog in enumerate(dialogs):
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
+        human_uttr_attributes = [dialog["human_utterances"][-1]["annotations"] for _ in hypotheses]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
+        if ENABLE_FACT_CHECKING:
+            hypotheses = filter_out_factually_incorrect(hypotheses, human_uttr_attributes)
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]

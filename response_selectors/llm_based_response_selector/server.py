@@ -12,6 +12,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.utils import is_toxic_or_badlisted_utterance
+from common.response_selection import EXTERNAL_SKILLS
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -38,7 +39,6 @@ PROMPT = (
 )
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
 
 assert GENERATIVE_SERVICE_URL
 

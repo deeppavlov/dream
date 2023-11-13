@@ -1291,3 +1291,9 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
     batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
+
+
+def hypotheses_and_attributes(dialog: Dict) -> List[Dict]:
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    human_uttr_attributes = [dialog["human_utterances"][-1]["annotations"] for _ in hypotheses]
+    return [{"hypotheses": hypotheses, "human_uttr_attributes": human_uttr_attributes}]

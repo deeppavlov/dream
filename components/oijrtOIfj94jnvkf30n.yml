@@ -1,0 +1,26 @@
+name: fact_checking
+display_name: Fact Checking
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Performs basic fact-checking of internal hypotheses 
+  by using an LLM to determine whether they contradict any of the hypotheses
+  that rely on external knowledge sources.
+ram_usage: 128M
+gpu_usage: null
+group: candidate_annotators
+connector:
+  protocol: http
+  timeout: 5.0
+  url: http://fact-checking:8182/respond_batch
+dialog_formatter: state_formatters.dp_formatters:hypotheses_and_attributes
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- skills
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: respond_batch
+service: annotators/fact_checking/service_configs/fact-checking
+date_created: '2023-08-15T17:06:52'

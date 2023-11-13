@@ -5,13 +5,12 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  ranking-based-response-selector:
+  ranking-based-response-selector-fact-checking:
     volumes:
       - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
@@ -157,4 +156,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8167:8167
+  fact-checking:
+    volumes:
+      - "./annotators/fact_checking:/src"
+      - "./common:/src/common"
+    ports:
+      - 8182:8182
 version: "3.7"
