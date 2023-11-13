@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python test_text_qa.py
+python -m pytest tests/test_text_qa.py
