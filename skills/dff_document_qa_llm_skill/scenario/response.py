@@ -8,7 +8,7 @@ import time
 import copy
 
 from pathlib import PurePath
-from typing import Any
+from typing import Any, Tuple
 from common.build_dataset import build_dataset, get_text_for_candidates
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
@@ -70,7 +70,7 @@ SUPER_CONFIDENCE = 1.0
 LOW_CONFIDENCE = 0.7
 
 
-def compose_data_for_model(ctx: Context, actor: Actor) -> str:
+def compose_data_for_model(ctx: Context, actor: Actor) -> Tuple[list, list, str]:
     if not os.path.exists("/data/documents"):
         os.mkdir("/data/documents")
     filepaths_on_server, filepaths_in_container = [], []
@@ -168,7 +168,15 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp) and hyp[-1] not in [".", "?", "!"]:
             hyp += "."
             confidence = LOW_CONFIDENCE
-        _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
+        _curr_attrs = {
+            "can_continue": CAN_NOT_CONTINUE,
+            "llm_requests": {
+                "llm_url": GENERATIVE_SERVICE_URL,
+                "n_requests": GENERATIVE_SERVICE_CONFIG.get("num_return_sequences", 1)
+                if GENERATIVE_SERVICE_CONFIG
+                else 1,
+            },
+        }
         _curr_attrs.update(hyp_attrs)
         gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 

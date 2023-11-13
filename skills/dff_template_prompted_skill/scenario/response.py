@@ -164,9 +164,19 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         if len(hyp) and hyp[-1] not in [".", "?", "!"]:
             hyp += "."
             confidence = LOW_CONFIDENCE
-        _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
+        _curr_attrs = {
+            "can_continue": CAN_NOT_CONTINUE,
+            "llm_requests": {
+                "llm_url": GENERATIVE_SERVICE_URL,
+                "n_requests": GENERATIVE_SERVICE_CONFIG.get("num_return_sequences", 1)
+                if GENERATIVE_SERVICE_CONFIG
+                else 1,
+                "goals_request": 0,
+            },
+        }
         if goals_from_prompt:
             _curr_attrs["prompts_goals"] = {prompt_name: goals_from_prompt}
+            _curr_attrs["llm_requests"]["goals_request"] = 1
         gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:

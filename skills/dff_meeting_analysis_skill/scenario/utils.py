@@ -4,7 +4,7 @@ import logging
 import sentry_sdk
 import requests
 import os
-from typing import List
+from typing import List, Tuple
 from common.text_processing_for_prompts import (
     check_token_number,
     decide_where_to_break,
@@ -122,7 +122,7 @@ def postprocess_formatting(hypotheses: List[str], prompt_type: str = "full_repor
 
 def get_response_for_prompt_type(
     transcript_chunks: list, prompt_type: str, dialog_context: list, sending_variables: dict
-) -> str:
+) -> Tuple[str, int]:
     if "summary" in prompt_type:
         if "summary_short" in prompt_type:
             length_request = " Your summary must be very concise. Make it as short as possible. \
@@ -172,7 +172,7 @@ The summary must be two or three paragraphs."
             sending_variables,
         )
         all_gpt_responses += final_response
-    return all_gpt_responses[-1]
+    return all_gpt_responses[-1], len(all_gpt_responses)
 
 
 def upload_generated_item_return_link(hypothesis: str, prompt_type_and_id: str):
@@ -187,17 +187,17 @@ def compose_and_upload_final_response(
     dialog_context: List[str],
     sending_variables: dict,
     bot_attrs_files: dict,
-):
+) -> Tuple[List[str], dict, int]:
     # note that we are joining responses for all docs by a special character SEP_FOR_DOC_RESPONSES
     # when we are sending them to LLM, if we need to split the info into chunks, we
     # will do that by SEP_FOR_DOC_RESPONSES, not by newline
     info_from_all_docs = SEP_FOR_DOC_RESPONSES.join(hyps_all_docs)
     if "weekly_report" not in prompt_type_and_id:
         prompt_type_and_id = f"combine_responses__{prompt_type_and_id.split('__')[1]}"
-    hyp_week, bot_attrs_files = get_and_upload_response_for_one_doc(
+    hyp_week, bot_attrs_files, n_requests = get_and_upload_response_for_one_doc(
         info_from_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
     )
-    return hyp_week, bot_attrs_files
+    return hyp_week, bot_attrs_files, n_requests
 
 
 def get_and_upload_response_for_one_doc(
@@ -206,7 +206,7 @@ def get_and_upload_response_for_one_doc(
     dialog_context: List[str],
     sending_variables: dict,
     bot_attrs_files: dict,
-) -> str:
+) -> Tuple[List[str], dict, int]:
     orig_file = requests.get(transcript_link, timeout=FILE_SERVER_TIMEOUT)
     orig_text = orig_file.text
     prompt_type = prompt_type_and_id.split("__")[0]
@@ -225,25 +225,30 @@ def get_and_upload_response_for_one_doc(
     # if asked for full report, we get parts of it separately and then just concatenate them
     if prompt_type == "full_report":
         hypothesis = ""
+        n_requests = 0
         for item in INCLUDE_INTO_REPORT:
             item_type_and_id = f"{item}__{document_in_use_id}"
             if item_type_and_id in bot_attrs_files.keys():
                 part_of_report = get_older_gen_response(item_type_and_id, bot_attrs_files)
                 hypothesis += f"{part_of_report}\n\n"
+                n_requests += 0
             else:
                 logger.info(f"""No earlier {item_type_and_id} for full_report found.""")
-                part_of_report = get_response_for_prompt_type(
+                part_of_report, _n_requests = get_response_for_prompt_type(
                     transcript_chunks, item, dialog_context, sending_variables
                 )
+                n_requests += _n_requests
                 uploaded_doc_link = upload_generated_item_return_link(part_of_report, item_type_and_id)
                 bot_attrs_files[item_type_and_id] = uploaded_doc_link
                 hypothesis += f"{part_of_report}\n\n"
     else:
-        hypothesis = get_response_for_prompt_type(transcript_chunks, prompt_type, dialog_context, sending_variables)
+        hypothesis, n_requests = get_response_for_prompt_type(
+            transcript_chunks, prompt_type, dialog_context, sending_variables
+        )
 
     # we save each hyp to server under the name of the request and doc_in_use id
     # except for question_answering and combine_responses which we don't save as questions may vary
     if prompt_type != "question_answering" and prompt_type != "combine_responses":
         uploaded_doc_link = upload_generated_item_return_link(hypothesis, prompt_type_and_id)
         bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
-    return [hypothesis], bot_attrs_files
+    return [hypothesis], bot_attrs_files, n_requests

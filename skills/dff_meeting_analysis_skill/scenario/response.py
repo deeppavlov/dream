@@ -77,6 +77,7 @@ def analyze_transcript(prompt_type: str):
         dialog = int_ctx.get_dialog(ctx, actor)
         context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
         bot_attrs_files = {}
+        n_requests = 0
         if context:
             dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
             request = dialog_context[-1]
@@ -88,10 +89,14 @@ def analyze_transcript(prompt_type: str):
             # check if we already received such request before and saved hyp for it to server
             documents_in_use = context[-1].get("user", {}).get("attributes", {}).get("documents_in_use", [])
             all_docs_info = context[-1].get("user", {}).get("attributes", {}).get("processed_documents", {})
+            related_files = bot_utts[-1].get("user", {}).get("attributes", {}).get("related_files", {})
             sending_variables = compose_sending_variables({}, ENVVARS_TO_SEND, human_uttr_attributes)
             hyps_all_docs = []
             if documents_in_use:
+                _all_docs_have_summary = True
                 for document_in_use_id in documents_in_use:
+                    if related_files.get(f"summary__{document_in_use_id}", None) is None:
+                        _all_docs_have_summary = False
                     # if we need a weekly report, on this step we gather separate daily reports for each doc
                     # also here we change the type of summary prompt based on summary length request
                     prompt_type_local, prompt_type_and_id = set_correct_type_and_id(
@@ -110,13 +115,14 @@ Sending request to generative model."
                         transcript_link = all_docs_info[document_in_use_id].get("processed_text_link", "")
                         if transcript_link:
                             try:
-                                hyp_one_doc, bot_attrs_files = get_and_upload_response_for_one_doc(
+                                hyp_one_doc, bot_attrs_files, _n_requests = get_and_upload_response_for_one_doc(
                                     transcript_link,
                                     prompt_type_and_id,
                                     dialog_context,
                                     sending_variables,
                                     bot_attrs_files,
                                 )
+                                n_requests += _n_requests
                             except Exception as e:
                                 sentry_sdk.capture_exception(e)
                                 logger.exception(e)
@@ -125,6 +131,10 @@ Sending request to generative model."
                             hyp_one_doc = []
                     hyps_all_docs += hyp_one_doc
 
+                if prompt_type == "question_answering" and _all_docs_have_summary:
+                    # if we are in `question_answering` node then
+                    # the condition `go_to_question_answering` was requested once
+                    n_requests += 1
                 # having got responses for all docs, let's make one response from it
                 # just return the response if we have one document and one response
                 if len(hyps_all_docs) == 1 and prompt_type_local != "weekly_report":
@@ -134,9 +144,10 @@ Sending request to generative model."
                     # now we need it to set it back
                     prompt_type_and_id = f"{prompt_type_local}__{document_in_use_id}"
                     try:
-                        hypotheses, bot_attrs_files = compose_and_upload_final_response(
+                        hypotheses, bot_attrs_files, _n_requests = compose_and_upload_final_response(
                             hyps_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
                         )
+                        n_requests += _n_requests
                     except Exception as e:
                         sentry_sdk.capture_exception(e)
                         logger.exception(e)
@@ -163,7 +174,10 @@ Please, make sure that you provide a valid .docx file with Teams meeting transcr
             if len(hyp) and hyp[-1] not in [".", "?", "!"]:
                 hyp += "."
                 confidence = LOW_CONFIDENCE
-            _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
+            _curr_attrs = {
+                "can_continue": CAN_NOT_CONTINUE,
+                "llm_requests": {"llm_url": GENERATIVE_SERVICE_URL, "n_requests": n_requests},
+            }
             gathering_responses(hyp, confidence, {}, bot_attrs, _curr_attrs)
 
         if len(curr_responses) == 0:

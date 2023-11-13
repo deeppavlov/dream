@@ -91,12 +91,12 @@ async def async_request_to_prompted_generative_service(
         if hyp and confidence:
             curr_responses.append(hyp)
             curr_confidences.append(confidence)
-            curr_attrs.append(
-                {
-                    "can_continue": CAN_NOT_CONTINUE,
-                    "skill_name": skill_name or "dff_universal_prompted_skill",
-                }
-            )
+            _curr_attrs = {
+                "can_continue": CAN_NOT_CONTINUE,
+                "skill_name": skill_name or "dff_universal_prompted_skill",
+                "llm_requests": {"llm_url": url, "n_requests": config.get("num_return_sequences", 1) if config else 1},
+            }
+            curr_attrs.append(_curr_attrs)
     return curr_responses, curr_confidences, curr_attrs
 
 
