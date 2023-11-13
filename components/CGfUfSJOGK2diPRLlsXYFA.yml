@@ -12,7 +12,7 @@ connector:
   protocol: python
   class_name: skills.alexa_handler.connector:AlexaHandlerConnector
 dialog_formatter: state_formatters.dp_formatters:last_utt_dialog
-response_formatter: state_formatters.dp_formatters:cobot_qa_formatter_service
+response_formatter: state_formatters.dp_formatters:cobot_asr_formatter_service
 previous_services:
 - skill_selectors
 required_previous_services: null
