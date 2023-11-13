@@ -2,9 +2,9 @@ import json
 import logging
 import os
 import time
-
-import openai
 import sentry_sdk
+
+from openai import OpenAI
 from common.prompts import META_GOALS_PROMPT
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
@@ -38,8 +38,7 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     outputs = []
 
     assert openai_api_key, logger.error("Error: OpenAI API key is not specified in env")
-    openai.api_key = openai_api_key
-    openai.organization = openai_org if openai_org else None
+    client = OpenAI(api_key=openai_api_key, organization=openai_org if openai_org else None)
 
     if PRETRAINED_MODEL_NAME_OR_PATH in CHAT_COMPLETION_MODELS:
         logger.info("Use special chat completion endpoint")
@@ -55,8 +54,10 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
             for uttr_id, uttr in enumerate(context)
         ]
         logger.info(f"context inside generate_responses seen as: {messages}")
-        response = openai.ChatCompletion.create(
-            model=PRETRAINED_MODEL_NAME_OR_PATH, messages=messages, **generation_params
+        response = client.chat.completions.create(
+            model=PRETRAINED_MODEL_NAME_OR_PATH,
+            messages=messages,
+            **generation_params
         )
     else:
         dialog_context = ""
@@ -69,19 +70,17 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
         else:
             dialog_context += "\n".join(context) + f"\n{NAMING[0]}:"
         logger.info(f"context inside generate_responses seen as: {dialog_context}")
-        response = openai.Completion.create(
+        response = client.completions.create(
             model=PRETRAINED_MODEL_NAME_OR_PATH,
             prompt=dialog_context,
-            **generation_params,
+            **generation_params
         )
 
-    if isinstance(response, dict) and "choices" in response:
-        outputs = [
-            resp["message"]["content"].strip() if "message" in resp else resp.get("text", "").strip()
-            for resp in response["choices"]
-        ]
-    elif isinstance(response, str):
-        outputs = [response.strip()]
+    response = dict(response)
+    outputs = [
+        resp["message"]["content"].strip() if "message" in resp else resp.get("text", "").strip()
+        for resp in response["choices"]
+    ]
 
     if PRETRAINED_MODEL_NAME_OR_PATH not in CHAT_COMPLETION_MODELS:
         # post-processing of the responses by all models except of ChatGPT
