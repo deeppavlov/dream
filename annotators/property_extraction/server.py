@@ -2,6 +2,7 @@ import logging
 import os
 import re
 import time
+import string
 import pickle
 import itertools
 import json
@@ -116,6 +117,8 @@ def postprocess_triplets(triplets_init, scores_init, uttr):
             if triplet[0] in ["i", "my"]:
                 triplet[0] = "user"
             obj = triplet[2]
+            for punc in string.punctuation:
+                obj = obj.replace(punc, "")
             if obj in existing_obj:
                 prev_triplet, prev_score = scores_dict[obj]
                 if score > prev_score:
