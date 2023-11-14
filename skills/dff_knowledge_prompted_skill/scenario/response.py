@@ -3,13 +3,12 @@ import logging
 import re
 import sentry_sdk
 from os import getenv
-from pathlib import Path
 from typing import Any
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, compose_sending_variables
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from df_engine.core import Context, Actor
 
 
@@ -37,7 +36,6 @@ assert USER_KG_SERVICE_URL
 with open(PROMPT_FILE, "r") as f:
     PROMPT_DICT = json.load(f)
 PROMPT = PROMPT_DICT["prompt"]
-GOALS_FROM_PROMPT = PROMPT_DICT.get("goals", "")
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
@@ -136,33 +134,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
 
-    # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
-    goals_from_prompt = ""
-    prompt_name = Path(PROMPT_FILE).stem
-    if not GOALS_FROM_PROMPT:
-        # get already collected goals from prompts from human attributes
-        prev_prompts_goals = int_ctx.get_prompts_goals(ctx, actor)
-        goals_from_prompt = prev_prompts_goals.get(prompt_name, "")
-        if not goals_from_prompt:
-            # if current prompt's goals are empty in human attributes, generate them!
-            goals_from_prompt = get_goals_from_prompt(
-                prompt=PROMPT,
-                url=GENERATIVE_SERVICE_URL,
-                generative_timeout=GENERATIVE_TIMEOUT,
-                sending_variables=sending_variables,
-            )
-            logger.info(f"Generated goals for prompt using generative service:\n{goals_from_prompt}")
-        else:
-            logger.info("Found goals for prompt from the human attributes")
-
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
         if len(hyp) and hyp[-1] not in [".", "?", "!"]:
             hyp += "."
             confidence = LOW_CONFIDENCE
         _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
-        if goals_from_prompt:
-            _curr_attrs["prompts_goals"] = {prompt_name: goals_from_prompt}
         gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:

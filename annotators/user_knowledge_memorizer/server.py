@@ -523,8 +523,8 @@ def relativity_filter(user_knowledge: List[str], last_utt: List[str]) -> List[st
         res = list(zip(user_knowledge, res))
         user_related_knowledge = []
         for knowledge, score in res:
-            logger.info(f"knowledge -- {knowledge}")
-            logger.info(f"score -- {score}")
+            # logger.info(f"knowledge -- {knowledge}")
+            # logger.info(f"score -- {score}")
             if score >= RELEVANT_KNOWLEDGE_THRESHOLD:
                 user_related_knowledge.append(knowledge)
     except Exception as e:
