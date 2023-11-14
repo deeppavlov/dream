@@ -32,8 +32,10 @@ DEFAULT_CONFIGS = {
     "gpt-3.5-turbo-16k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-4": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-4-32k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
+    # that is gpt-4-turbo
+    "gpt-4-1106-preview": json.load(open("common/generative_configs/openai-chatgpt-long.json", "r")),
 }
-CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"]
+CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k", "gpt-4-1106-preview"]
 MAX_TOKENS = {
     "text-davinci-003": 4097,
     "davinci-002": 4097,
@@ -41,6 +43,9 @@ MAX_TOKENS = {
     "gpt-3.5-turbo-16k": 16384,
     "gpt-4": 8192,
     "gpt-4-32k": 32768,
+    # gpt4-turbo set to 64k instead of 128k on purpose
+    # as it was shown to perform worse for longer sequences
+    "gpt-4-1106-preview": 64000,
 }
 try:
     ENCODER = tiktoken.encoding_for_model(PRETRAINED_MODEL_NAME_OR_PATH)

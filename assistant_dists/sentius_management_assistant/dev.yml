@@ -40,24 +40,24 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
-  openai-api-gpt4:
+  openai-api-gpt4-turbo:
     volumes:
       - "./services/openai_api_lm:/src"
       - "./common:/src/common"
     ports:
-      - 8159:8159
-  dff-roles-prompted-skill:
-    volumes:
-      - "./skills/dff_template_prompted_skill:/src"
-      - "./common:/src/common"
-    ports:
-      - 8185:8185
+      - 8190:8190
   dff-general-pm-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
       - 8189:8189
+  dff-roles-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8185:8185
   dff-meeting-analysis-skill:
     volumes:
       - "./skills/dff_meeting_analysis_skill:/src"

@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "llm-based-response-selector-gpt4:8003, combined-classification:8087, sentence-ranker:8128, 
         prompt-selector:8135, openai-api-chatgpt:8145, dff-general-pm-prompted-skill:8189, dff-meeting-analysis-skill:8186, 
         doc-processor-from-atts:8188, dff-roles-prompted-skill:8185, llm-based-skill-selector:8182,
-        openai-api-gpt4:8159"
+        openai-api-gpt4-turbo:8190"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -85,11 +85,11 @@ services:
         SERVICE_PORT: 8003
         SERVICE_NAME: response_selector
         LANGUAGE: EN
-        GENERATIVE_SERVICE_URL: http://openai-api-gpt4:8159/respond
-        GENERATIVE_SERVICE_CONFIG: openai-gpt4-long.json
+        GENERATIVE_SERVICE_URL: http://openai-api-gpt4-turbo:8190/respond
+        GENERATIVE_SERVICE_CONFIG: openai-chatgpt-long.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 1
-        FILTER_TOXIC_OR_BADLISTED: 1
+        FILTER_TOXIC_OR_BADLISTED: 0
         PROMPT_FILE: common/prompts/response_selector_uncropped.json
       context: .
       dockerfile: ./response_selectors/llm_based_response_selector/Dockerfile
@@ -208,8 +208,8 @@ services:
       args:
         SERVICE_PORT: 8186
         SERVICE_NAME: dff_meeting_analysis_skill
-        GENERATIVE_SERVICE_URL: http://openai-api-gpt4:8159/respond
-        GENERATIVE_SERVICE_CONFIG: openai-gpt4-long.json
+        GENERATIVE_SERVICE_URL: http://openai-api-gpt4-turbo:8190/respond
+        GENERATIVE_SERVICE_CONFIG: openai-chatgpt-long.json
         GENERATIVE_TIMEOUT: 120
         SHORT_GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
         SHORT_GENERATIVE_SERVICE_CONFIG: openai-chatgpt-long.json
@@ -225,16 +225,16 @@ services:
         reservations:
           memory: 500M
 
-  openai-api-gpt4:
+  openai-api-gpt4-turbo:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8159
-        SERVICE_NAME: openai_api_gpt4
-        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4
+        SERVICE_PORT: 8190
+        SERVICE_NAME: openai_api_gpt4_turbo
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-1106-preview
       context: .
       dockerfile: ./services/openai_api_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8159
+    command: flask run -h 0.0.0.0 -p 8190
     environment:
       - FLASK_APP=server
     deploy:

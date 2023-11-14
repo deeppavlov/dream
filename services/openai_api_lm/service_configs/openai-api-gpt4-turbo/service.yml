@@ -1,4 +1,4 @@
-name: openai-api-chatgpt
+name: openai-api-gpt4-turbo
 endpoints:
 - ping
 - envvars_to_send
@@ -11,13 +11,13 @@ compose:
   - .env_azure
   build:
     args:
-      SERVICE_PORT: 8145
-      SERVICE_NAME: openai_api_chatgpt
-      PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
+      SERVICE_PORT: 8190
+      SERVICE_NAME: openai_api_gpt4_turbo
+      PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-1106-preview
       FLASK_APP: server
     context: .
     dockerfile: ./services/openai_api_lm/Dockerfile
-  command: flask run -h 0.0.0.0 -p 8145
+  command: flask run -h 0.0.0.0 -p 8190
   environment:
   - FLASK_APP=server
   deploy:
@@ -30,5 +30,5 @@ compose:
   - ./services/openai_api_lm:/src
   - ./common:/src/common
   ports:
-  - 8145:8145
+  - 8190:8190
 proxy: null
