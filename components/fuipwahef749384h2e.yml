@@ -4,7 +4,7 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: Propose alternative hypotheses with specified emotional color.
+description: Change hypotheses texts according to specified emotions.
 ram_usage: 500M
 gpu_usage: null
 group: candidate_annotators
