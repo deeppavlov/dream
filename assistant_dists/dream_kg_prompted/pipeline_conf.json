@@ -36,7 +36,7 @@
             ],
             "is_enabled": true,
             "source": {
-                "component": "components/Y6UQfrQSIset.yml",
+                "component": "components/qvOV47eyt31I.yml",
                 "service": "services/agent_services/service_configs/dream_kg_prompted"
             }
         },
