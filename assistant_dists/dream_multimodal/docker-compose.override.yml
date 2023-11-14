@@ -8,7 +8,8 @@ services:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           dialogpt:8125, sentence-ranker:8128,
-          voice-service:8333, dff-voice-skill:8444"
+          voice-service:8333, dff-voice-skill:8444,
+          fromage:8069, dff-fromage-image-skill:8070"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1

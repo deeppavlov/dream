@@ -81,4 +81,17 @@ services:
       - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8444:8444
+  fromage:
+    volumes:
+      - "./services/fromage:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8069:8069
+  dff-fromage-image-skill:
+    volumes:
+      - "./skills/dff_fromage_image_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8070:8070
 version: "3.7"
