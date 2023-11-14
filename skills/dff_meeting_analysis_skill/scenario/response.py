@@ -17,6 +17,7 @@ from .utils import (
     set_correct_type_and_id,
     compose_and_upload_final_response,
     get_older_gen_response,
+    get_name_and_text_from_file,
 )
 
 
@@ -76,7 +77,7 @@ def analyze_transcript(prompt_type: str):
         prompt_type_local = prompt_type
         dialog = int_ctx.get_dialog(ctx, actor)
         context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
-        bot_attrs_files = {}
+        related_files = {}
         n_requests = 0
         if context:
             dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
@@ -85,13 +86,12 @@ def analyze_transcript(prompt_type: str):
             human_uttr_attributes = int_ctx.get_last_human_utterance(ctx, actor).get("attributes", {})
             docs_in_attributes = human_uttr_attributes.get("documents", [])
             if bot_utts:
-                bot_attrs_files = bot_utts[-1].get("user", {}).get("attributes", {}).get("related_files", {})
+                related_files = bot_utts[-1].get("user", {}).get("attributes", {}).get("related_files", {})
             # check if we already received such request before and saved hyp for it to server
             documents_in_use = context[-1].get("user", {}).get("attributes", {}).get("documents_in_use", [])
             all_docs_info = context[-1].get("user", {}).get("attributes", {}).get("processed_documents", {})
-            related_files = bot_utts[-1].get("user", {}).get("attributes", {}).get("related_files", {})
             sending_variables = compose_sending_variables({}, ENVVARS_TO_SEND, human_uttr_attributes)
-            hyps_all_docs = []
+            hyps_and_names_all_docs = []
             if documents_in_use:
                 _all_docs_have_summary = True
                 for document_in_use_id in documents_in_use:
@@ -102,34 +102,40 @@ def analyze_transcript(prompt_type: str):
                     prompt_type_local, prompt_type_and_id = set_correct_type_and_id(
                         request, prompt_type_local, document_in_use_id
                     )
-
-                    # here we check if we already generated sth for the same request and the same doc
-                    if prompt_type_and_id in bot_attrs_files.keys():
-                        hyp_one_doc = [get_older_gen_response(prompt_type_and_id, bot_attrs_files)]
-                    # if no, let's generate it
-                    else:
-                        logger.info(
-                            f"No earlier {prompt_type_and_id} found. \
+                    # we do not do anything unless we have the link to our file(s) in use
+                    transcript_link = all_docs_info[document_in_use_id].get("processed_text_link", "")
+                    if transcript_link:
+                        # here we check if we already generated sth for the same request and the same doc
+                        if prompt_type_and_id in related_files.keys():
+                            # in the future, it is better to store filenames in related_files
+                            # to avoid extra requests to file server
+                            filename, _ = get_name_and_text_from_file(transcript_link)
+                            older_response = get_older_gen_response(prompt_type_and_id, related_files)
+                            hyp_and_name_one_doc = [(filename, older_response)]
+                        # if no, let's generate it
+                        else:
+                            logger.info(
+                                f"No earlier {prompt_type_and_id} found. \
 Sending request to generative model."
-                        )
-                        transcript_link = all_docs_info[document_in_use_id].get("processed_text_link", "")
-                        if transcript_link:
+                            )
                             try:
-                                hyp_one_doc, bot_attrs_files, _n_requests = get_and_upload_response_for_one_doc(
-                                    transcript_link,
+                                filename, orig_text = get_name_and_text_from_file(transcript_link)
+                                hyp_one_doc, related_files, _n_requests = get_and_upload_response_for_one_doc(
+                                    orig_text,
                                     prompt_type_and_id,
                                     dialog_context,
                                     sending_variables,
-                                    bot_attrs_files,
+                                    related_files,
                                 )
+                                hyp_and_name_one_doc = [(filename, hyp_one_doc)]
                                 n_requests += _n_requests
                             except Exception as e:
                                 sentry_sdk.capture_exception(e)
                                 logger.exception(e)
-                                hyp_one_doc = []
-                        else:
-                            hyp_one_doc = []
-                    hyps_all_docs += hyp_one_doc
+                                hyp_and_name_one_doc = []
+                    else:
+                        hyp_and_name_one_doc = []
+                    hyps_and_names_all_docs += hyp_and_name_one_doc
 
                 if prompt_type == "question_answering" and _all_docs_have_summary:
                     # if we are in `question_answering` node then
@@ -137,15 +143,22 @@ Sending request to generative model."
                     n_requests += 1
                 # having got responses for all docs, let's make one response from it
                 # just return the response if we have one document and one response
-                if len(hyps_all_docs) == 1 and prompt_type_local != "weekly_report":
-                    hypotheses = hyps_all_docs
+                if len(hyps_and_names_all_docs) == 1 and prompt_type_local != "weekly_report":
+                    hypotheses = [hyps_and_names_all_docs[0][1]]
                 else:
                     # earlier we set prompt_type_and_id for weekly_analysis to full report for each doc,
                     # now we need it to set it back
                     prompt_type_and_id = f"{prompt_type_local}__{document_in_use_id}"
                     try:
-                        hypotheses, bot_attrs_files, _n_requests = compose_and_upload_final_response(
-                            hyps_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
+                        # now by default we are passing filenames to LLM together with hypothesis for each file
+                        # you can choose to pass only hypotheses (no filenames) by setting use_filenames=False
+                        # when calling compose_and_upload_final_response()
+                        hypotheses, related_files, _n_requests = compose_and_upload_final_response(
+                            hyps_and_names_all_docs,
+                            prompt_type_and_id,
+                            dialog_context,
+                            sending_variables,
+                            related_files,
                         )
                         n_requests += _n_requests
                     except Exception as e:
@@ -167,7 +180,7 @@ Please, make sure that you provide a valid .docx file with Teams meeting transcr
         else:
             hypotheses = []
         logger.info(f"generated hypotheses: {hypotheses}")
-        bot_attrs = {"related_files": bot_attrs_files}
+        bot_attrs = {"related_files": related_files}
 
         for hyp in hypotheses:
             confidence = DEFAULT_CONFIDENCE

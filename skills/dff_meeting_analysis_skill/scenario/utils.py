@@ -32,6 +32,7 @@ TYPES_AND_TITLES = {
 SEP_FOR_DOC_RESPONSES = "\n****************\n"
 LONG_SUMMARY_REQUEST = re.compile(r"(detailed)|(long)", flags=re.IGNORECASE)
 SHORT_SUMMARY_REQUEST = re.compile(r"(short)|(concise)", flags=re.IGNORECASE)
+FILENAME = re.compile(r"\*\*\*FILENAME: (.*)\*\*\*")
 GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
@@ -182,33 +183,37 @@ def upload_generated_item_return_link(hypothesis: str, prompt_type_and_id: str):
 
 
 def compose_and_upload_final_response(
-    hyps_all_docs: list,
+    hyps_and_names_all_docs: list,
     prompt_type_and_id: str,
     dialog_context: List[str],
     sending_variables: dict,
     bot_attrs_files: dict,
+    use_filenames: True = bool,
 ) -> Tuple[List[str], dict, int]:
     # note that we are joining responses for all docs by a special character SEP_FOR_DOC_RESPONSES
     # when we are sending them to LLM, if we need to split the info into chunks, we
     # will do that by SEP_FOR_DOC_RESPONSES, not by newline
-    info_from_all_docs = SEP_FOR_DOC_RESPONSES.join(hyps_all_docs)
+    if use_filenames:
+        newline = "\n"
+        info_to_provide_to_llm = [f"FILENAME: {hyps[0]}{newline}{hyps[1]}" for hyps in hyps_and_names_all_docs]
+    else:
+        info_to_provide_to_llm = [hyps[1] for hyps in hyps_and_names_all_docs]
+    hyps_from_all_docs = SEP_FOR_DOC_RESPONSES.join(info_to_provide_to_llm)
     if "weekly_report" not in prompt_type_and_id:
         prompt_type_and_id = f"combine_responses__{prompt_type_and_id.split('__')[1]}"
-    hyp_week, bot_attrs_files, n_requests = get_and_upload_response_for_one_doc(
-        info_from_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
+    hyp_combined, bot_attrs_files, n_requests = get_and_upload_response_for_one_doc(
+        hyps_from_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
     )
-    return hyp_week, bot_attrs_files, n_requests
+    return [hyp_combined], bot_attrs_files, n_requests
 
 
 def get_and_upload_response_for_one_doc(
-    transcript_link: str,
+    orig_text: str,
     prompt_type_and_id: str,
     dialog_context: List[str],
     sending_variables: dict,
     bot_attrs_files: dict,
-) -> Tuple[List[str], dict, int]:
-    orig_file = requests.get(transcript_link, timeout=FILE_SERVER_TIMEOUT)
-    orig_text = orig_file.text
+) -> Tuple[str, dict, int]:
     prompt_type = prompt_type_and_id.split("__")[0]
     document_in_use_id = prompt_type_and_id.split("__")[1]
     # hard-coded limit: we preserve 1000 tokens for LLM answer
@@ -233,7 +238,7 @@ def get_and_upload_response_for_one_doc(
                 hypothesis += f"{part_of_report}\n\n"
                 n_requests += 0
             else:
-                logger.info(f"""No earlier {item_type_and_id} for full_report found.""")
+                logger.info(f"No earlier {item_type_and_id} for full_report found.")
                 part_of_report, _n_requests = get_response_for_prompt_type(
                     transcript_chunks, item, dialog_context, sending_variables
                 )
@@ -249,6 +254,14 @@ def get_and_upload_response_for_one_doc(
     # we save each hyp to server under the name of the request and doc_in_use id
     # except for question_answering and combine_responses which we don't save as questions may vary
     if prompt_type != "question_answering" and prompt_type != "combine_responses":
+        logger.info(f"Saving {prompt_type_and_id} to related_files.")
         uploaded_doc_link = upload_generated_item_return_link(hypothesis, prompt_type_and_id)
         bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
-    return [hypothesis], bot_attrs_files, n_requests
+    return hypothesis, bot_attrs_files, n_requests
+
+
+def get_name_and_text_from_file(transcript_link):
+    orig_file = requests.get(transcript_link, timeout=FILE_SERVER_TIMEOUT)
+    orig_text = orig_file.text
+    filename = FILENAME.search(orig_text).group(1)
+    return filename, orig_text
