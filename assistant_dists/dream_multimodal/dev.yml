@@ -59,18 +59,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  # image-captioning:
-  #   volumes:
-  #     - "./services/image_captioning:/src"
-  #     - "~/.deeppavlov/file_server:/tmp"
-  #   ports:
-  #     - 8123:8123
-  # dff-image-skill:
-  #   volumes:
-  #     - "./skills/dff_image_skill:/src"
-  #     - "./common:/src/common"
-  #   ports:
-  #     - 8124:8124
   voice-service:
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
