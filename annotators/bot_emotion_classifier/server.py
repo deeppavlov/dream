@@ -378,8 +378,8 @@ def respond():
             "bot_mood": new_bot_mood,
             "bot_mood_label": new_bot_mood_label,
             "bot_emotion": bot_emotion
-            }
-        
+        }
+
         results.append(current_result)
 
     return jsonify(results)
