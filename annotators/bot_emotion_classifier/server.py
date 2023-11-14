@@ -352,6 +352,7 @@ def respond():
     annotated_utterances = request.json.get("annotated_utterances", [])
     bot_moods = request.json.get("bot_mood", [])
 
+    results = []
     for sentence, annotated_utterance, bot_mood in zip(sentences, annotated_utterances, bot_moods):
         user_emotion = get_emotions(annotated_utterance, probs=False)[0]
         sentiment = get_sentiment(annotated_utterance, probs=False)[0]
@@ -373,15 +374,15 @@ def respond():
         logger.info("New bot mood label: {}".format(new_bot_mood_label))
         print("NEW BOT MOOD LABEL: ", new_bot_mood_label)
 
-    return jsonify(
-        [
-            {
-                "bot_mood": new_bot_mood,
-                "bot_mood_label": new_bot_mood_label,
-                "bot_emotion": bot_emotion,
+        current_result = {
+            "bot_mood": new_bot_mood,
+            "bot_mood_label": new_bot_mood_label,
+            "bot_emotion": bot_emotion
             }
-        ]
-    )
+        
+        results.append(current_result)
+
+    return jsonify(results)
 
 
 try:
