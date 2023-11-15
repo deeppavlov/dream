@@ -180,41 +180,6 @@ services:
         reservations:
           memory: 3G
 
-  # image-captioning:
-  #   env_file: [ .env ]
-  #   build:
-  #     args:
-  #       SERVICE_PORT: 8123
-  #       SERVICE_NAME: image_captioning
-  #     context: ./services/image_captioning/
-  #   command: flask run -h 0.0.0.0 -p 8123
-  #   environment:
-  #     - CUDA_VISIBLE_DEVICES=0
-  #     - FLASK_APP=server
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 5G
-  #       reservations:
-  #         memory: 5G
-
-  # dff-image-skill:
-  #   env_file: [.env]
-  #   build:
-  #     args:
-  #       SERVICE_PORT: 8124
-  #       SERVICE_NAME: dff_image_skill
-  #       LANGUAGE: EN
-  #     context: .
-  #     dockerfile: ./skills/dff_image_skill/Dockerfile
-  #   command: gunicorn --workers=1 server:app -b 0.0.0.0:8124 --reload
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 1024M
-  #       reservations:
-  #         memory: 1024M
-
   voice-service:
     ports:
         - "8333:8333"
@@ -254,6 +219,5 @@ services:
         limits:
           memory: 5G
         reservations:
-          memory: 5G
-          
+          memory: 5G       
 version: '3.7'

@@ -16,23 +16,6 @@ services:
   files:
     image: julienmeerschart/simple-file-upload-download-server
  
-  dff-program-y-skill:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8008
-        SERVICE_NAME: dff_program_y_skill
-        LANGUAGE: EN
-      context: .
-      dockerfile: ./skills/dff_program_y_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 1024M
-        reservations:
-          memory: 1024M
-
   ranking-based-response-selector:
     env_file: [ .env ]
     build:
@@ -57,8 +40,9 @@ services:
           memory: 100M
         reservations:
           memory: 100M
+
   sentseg:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: ./annotators/SentSeg/
     command: flask run -h 0.0.0.0 -p 8011
@@ -70,6 +54,23 @@ services:
           memory: 1.5G
         reservations:
           memory: 1.5G
+
+  dff-program-y-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8008
+        SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: EN
+      context: .
+      dockerfile: ./skills/dff_program_y_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 1024M
 
   dff-intent-responder-skill:
     env_file: [ .env ]
@@ -166,7 +167,7 @@ services:
           memory: 3G
         reservations:
           memory: 3G
-          
+
   fromage:
     env_file: [ .env ]
     build:
@@ -183,9 +184,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 5G
+          memory: 45G
         reservations:
-          memory: 5G
+          memory: 45G
 
   dff-fromage-image-skill:
     env_file: [.env]
@@ -202,5 +203,4 @@ services:
           memory: 100M
         reservations:
           memory: 100M
-          
 version: '3.7'
