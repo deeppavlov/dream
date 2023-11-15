@@ -15,6 +15,23 @@ services:
 
   files:
     image: julienmeerschart/simple-file-upload-download-server
+ 
+  dff-program-y-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 8008
+        SERVICE_NAME: dff_program_y_skill
+        LANGUAGE: EN
+      context: .
+      dockerfile: ./skills/dff_program_y_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 1024M
 
   ranking-based-response-selector:
     env_file: [ .env ]
@@ -40,24 +57,6 @@ services:
           memory: 100M
         reservations:
           memory: 100M
- 
-  dff-program-y-skill:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8008
-        SERVICE_NAME: dff_program_y_skill
-        LANGUAGE: EN
-      context: .
-      dockerfile: ./skills/dff_program_y_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8008 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 1024M
-        reservations:
-          memory: 1024M
-
   sentseg:
     env_file: [.env]
     build:
@@ -203,4 +202,5 @@ services:
           memory: 100M
         reservations:
           memory: 100M
+          
 version: '3.7'
