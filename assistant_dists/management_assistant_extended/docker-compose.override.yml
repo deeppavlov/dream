@@ -11,7 +11,8 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
-      FALLBACK_FILE: fallbacks_dream_en.json
+      FALLBACK_FILE: fallbacks_sentius_en.json
+      FALLBACK_TO_DOCS_FILE: fallbacks_sentius_en_docs.json
 
   files:
     image: julienmeerschart/simple-file-upload-download-server

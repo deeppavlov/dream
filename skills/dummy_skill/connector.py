@@ -43,6 +43,10 @@ LINK_TO_PROB = 0.5
 LINK_TO_PHRASES = sum([list(list_el) for list_el in skills_phrases_map.values()], [])
 FALLBACK_FILE = getenv("FALLBACK_FILE", "fallbacks_dream_en.json")
 DUMMY_DONTKNOW_RESPONSES = json.load(open(f"common/fallbacks/{FALLBACK_FILE}", "r"))
+
+FALLBACK_TO_DOCS_FILE = getenv("FALLBACK_TO_DOCS_FILE", "fallbacks_sentius_en_docs.json")
+DUMMY_DOCS_RESPONSES = json.load(open(f"common/fallbacks/{FALLBACK_TO_DOCS_FILE}", "r"))
+
 LANGUAGE = getenv("LANGUAGE", "EN")
 ENABLE_NP_QUESTIONS = int(getenv("ENABLE_NP_QUESTIONS", 0))
 ENABLE_SWITCH_TOPIC = int(getenv("ENABLE_SWITCH_TOPIC", 0))
@@ -60,7 +64,6 @@ rm_spaces_expr = re.compile(r"\s\s+")
 ASK_ME_QUESTION_PATTERN = re.compile(
     r"^(do you have (a )?question|(can you|could you)?ask me (something|anything|[a-z ]+question))", re.IGNORECASE
 )
-
 
 with open("skills/dummy_skill/questions_map.json", "r") as f:
     QUESTIONS_MAP = json.load(f)
@@ -343,8 +346,12 @@ class DummySkillConnector:
             is_no_initiative = no_initiative(dialog)
             is_long_dialog = len(dialog["utterances"]) > 14
 
-            hyps_with_attrs = [[choice(DUMMY_DONTKNOW_RESPONSES)], [0.5], [{"type": "dummy"}], [{}], [{}]]
             # always append at least basic dummy response
+            if dialog["human_utterances"][-1].get("attributes", {}).get("documents", []):
+                # if docs attached, append special dummy response
+                hyps_with_attrs = [[choice(DUMMY_DOCS_RESPONSES)], [0.5], [{"type": "dummy"}], [{}], [{}]]
+            else:
+                hyps_with_attrs = [[choice(DUMMY_DONTKNOW_RESPONSES)], [0.5], [{"type": "dummy"}], [{}], [{}]]
 
             if ENABLE_NP_QUESTIONS and is_long_dialog and not is_sensitive_case and LANGUAGE == "EN":
                 new_hyp_with_attrs = get_hyp_np_questions(dialog)

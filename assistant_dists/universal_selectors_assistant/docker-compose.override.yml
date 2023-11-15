@@ -8,7 +8,8 @@ services:
         dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       LANGUAGE: EN
-      FALLBACK_FILE: fallbacks_dream_en.json
+      FALLBACK_FILE: fallbacks_sentius_en.json
+      FALLBACK_TO_DOCS_FILE: fallbacks_sentius_en_docs.json
 
   combined-classification:
     env_file: [ .env ]
