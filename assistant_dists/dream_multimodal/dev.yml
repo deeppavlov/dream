@@ -59,16 +59,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  voice-service:
-    volumes:
-      - "~/.deeppavlov/file_server:/tmp"
-    ports:
-      - 8333:8333
-  dff-voice-skill:
-    volumes:
-      - "~/.deeppavlov/file_server:/tmp"
-    ports:
-      - 8444:8444
   fromage:
     volumes:
       - "./services/fromage:/src"
