@@ -144,7 +144,8 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "age_group": age_group,
         "disliked_skills": disliked_skills,
     }
-    hype_attr = {"can_continue": can_continue, "is_final_answer": is_final_answer}
+    hype_attr = {"can_continue": can_continue}
+    hype_attr["sound_attr"] = sound_attr
     if response_parts:
         hype_attr["response_parts"] = response_parts
     response = ctx.last_response
