@@ -7,7 +7,6 @@ import os
 from typing import List, Tuple
 from common.text_processing_for_prompts import (
     check_token_number,
-    decide_where_to_break,
     split_transcript_into_chunks,
 )
 from common.containers import get_max_tokens_for_llm
@@ -222,10 +221,9 @@ def get_and_upload_response_for_one_doc(
     # if we have multiple docs, we would like not to split one doc into two
     # so in this case we split by special separator
     if prompt_type == "weekly_report" or prompt_type == "combine_responses":
-        break_points = decide_where_to_break(orig_text, limit=token_limit, sep=SEP_FOR_DOC_RESPONSES)
+        transcript_chunks = split_transcript_into_chunks(orig_text, limit=token_limit, sep=SEP_FOR_DOC_RESPONSES)
     else:
-        break_points = decide_where_to_break(orig_text, limit=token_limit)
-    transcript_chunks = split_transcript_into_chunks(orig_text, break_points)
+        transcript_chunks = split_transcript_into_chunks(orig_text, limit=token_limit)
 
     # if asked for full report, we get parts of it separately and then just concatenate them
     if prompt_type == "full_report":

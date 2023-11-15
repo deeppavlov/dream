@@ -8,29 +8,25 @@ def check_token_number(text, model_name="gpt-3.5-turbo", enc=None):
     return len_text
 
 
-def decide_where_to_break(transcript, model_name="gpt-3.5-turbo", limit=3000, sep="\n"):
-    # the list of models with available encoders, see to define what model_name you need:
-    # https://github.com/openai/tiktoken/blob/39f29cecdb6fc38d9a3434e5dd15e4de58cf3c80/tiktoken/model.py#L19
+def split_transcript_into_chunks(transcript, model_name="gpt-3.5-turbo", limit=3000, sep="\n"):
     transcript_list = transcript.split(sep)
     enc = tiktoken.encoding_for_model(model_name)
-    len_tokens = 0
-    break_points = []
-    for n, utt in enumerate(transcript_list):
-        len_tokens += check_token_number(utt, enc=enc)
-        if len_tokens > limit:
-            len_tokens = check_token_number(utt, enc=enc)
-            break_points.append(n - 1)
-    return break_points
-
-
-def split_transcript_into_chunks(transcript, break_points):
-    transcript_list = transcript.split("\n")
+    n_tokens_sep = check_token_number(sep, enc=enc)
     transcript_chunks = []
-    start_point = 0
-    for break_point in break_points:
-        chunk = "\n".join(transcript_list[start_point:break_point])
-        transcript_chunks.append(chunk)
-        start_point = break_point
-    last_chunk = "\n".join(transcript_list[start_point:])
-    transcript_chunks.append(last_chunk)
+    transcript_chunk = ""
+    len_chunk = 0
+    for curr_part in transcript_list:
+        if not transcript_chunk:
+            transcript_chunk = curr_part
+            len_chunk = check_token_number(curr_part, enc=enc)
+        else:
+            n_tokens_curr_part = check_token_number(curr_part, enc=enc)
+            if len_chunk + n_tokens_sep + n_tokens_curr_part <= limit:
+                len_chunk += n_tokens_sep + n_tokens_curr_part
+                transcript_chunk += f"{sep}{curr_part}"
+            else:
+                transcript_chunks.append(transcript_chunk)
+                transcript_chunk = curr_part
+                len_chunk = n_tokens_curr_part
+    transcript_chunks.append(transcript_chunk)
     return transcript_chunks
