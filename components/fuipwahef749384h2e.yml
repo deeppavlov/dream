@@ -1,0 +1,23 @@
+name: emotional_bot_response
+display_name: Emotional Bot Response
+component_type: Generative
+model_type: NN-based
+is_customizable: true
+author: publisher@deeppavlov.ai
+description: Change hypotheses texts according to specified emotions.
+ram_usage: 500M
+gpu_usage: null
+group: candidate_annotators
+connector:
+  protocol: http
+  timeout: 30.0
+  url: http://emotional-bot-response:8050/respond_batch
+dialog_formatter: state_formatters.dp_formatters:bot_mood_emotion_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: skills
+required_previous_services: null
+state_manager_method: add_hypothesis_annotation_batch
+tags: null
+endpoint: respond_batch
+service: annotators/emotional_bot_response/service_configs/emotional-bot-response
+date_created: '2023-08-27T12:12:12'
