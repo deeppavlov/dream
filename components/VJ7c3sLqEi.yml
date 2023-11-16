@@ -4,9 +4,10 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: This skill utilizes LangChain's GoogleSearchAPIWrapper
-    to use Google search and OpenAI llm for question answering.
-ram_usage: 100M
+description: This skill utilizes global search by Google to answer questions or requests
+  that need recent or up-to-date knowledge to accomplish. The skill also should be utilized when 
+  one needs to get any type of data about famous people, countries, companies.
+ram_usage: 128M
 gpu_usage: null
 group: skills
 connector:

@@ -176,6 +176,27 @@
                     "service": "skills/dff_template_prompted_skill/service_configs/dff-general-pm-prompted-skill"
                 }
             },
+            "dff_google_api_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-google-api-skill:8162/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_google_api_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/VJ7c3sLqEi.yml",
+                    "service": "skills/dff_google_api_skill/service_configs/dff-google-api-skill"
+                }
+            },
             "dummy_skill": {
                 "connector": {
                     "protocol": "python",

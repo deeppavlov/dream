@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "llm-based-response-selector-gpt4:8003, combined-classification:8087, sentence-ranker:8128, 
         prompt-selector:8135, openai-api-chatgpt:8145, dff-general-pm-prompted-skill:8189, dff-meeting-analysis-skill:8186, 
         doc-processor-from-atts:8188, dff-roles-prompted-skill:8185, llm-based-skill-selector:8182,
-        openai-api-gpt4-turbo:8190"
+        openai-api-gpt4-turbo:8190, dff-google-api-skill:8162"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -244,5 +244,20 @@ services:
           memory: 500M
         reservations:
           memory: 100M
-          
+
+  dff-google-api-skill:
+    env_file: [ .env,.env_secret ]
+    build:
+      args:
+        SERVICE_PORT: 8162
+        SERVICE_NAME: dff_google_api_skill
+      context: .
+      dockerfile: ./skills/dff_google_api_skill/Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
 version: '3.7'

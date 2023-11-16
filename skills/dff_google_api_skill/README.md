@@ -2,7 +2,7 @@
 
 ## Description
 
-Google API Skill utilizes Google API to the given dialog context. 
+This skill utilizes LangChain's GoogleSearchAPIWrapper to use Google search and OpenAI llm for question answering.
 Sometimes, when user did not imply any requests to the system, responses from Google API may be not suitable.
 
 ### How To Get GOOGLE_CSE_ID and GOOGLE_API_KEY

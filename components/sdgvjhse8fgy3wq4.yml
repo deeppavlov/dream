@@ -6,7 +6,8 @@ is_customizable: true
 author: publisher@deeppavlov.ai
 description: This agent provides responses on all kind of questions (except of about meeting transcripts), 
   greets user, gives fallbacks, explains abilities of the assistant, accepts feature requests.
-ram_usage: 100M
+  This skill does not have an access to recent or up-to-date data.
+ram_usage: 128M
 gpu_usage: null
 group: skills
 connector:
