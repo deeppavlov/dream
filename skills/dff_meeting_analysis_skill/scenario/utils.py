@@ -4,7 +4,7 @@ import logging
 import sentry_sdk
 import requests
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Any
 from common.text_processing_for_prompts import (
     check_token_number,
     split_transcript_into_chunks,
@@ -75,10 +75,12 @@ def get_older_gen_response(item_type_and_id, bot_attrs_files):
     return old_response
 
 
-def set_correct_type_and_id(request, prompt_type_local, document_in_use_id):
+def set_correct_type_and_id(request, prompt_type_local, document_in_use_id=""):
     # if we need a weekly report, on this step we gather separate daily reports for each doc
+    prompt_type_and_id = ""
     if prompt_type_local == "weekly_report":
-        prompt_type_and_id = f"full_report__{document_in_use_id}"
+        if document_in_use_id:
+            prompt_type_and_id = f"full_report__{document_in_use_id}"
     else:
         if prompt_type_local == "summary":
             is_long_request = LONG_SUMMARY_REQUEST.search(request)
@@ -87,7 +89,8 @@ def set_correct_type_and_id(request, prompt_type_local, document_in_use_id):
                 prompt_type_local += "_long"
             elif is_short_request:
                 prompt_type_local += "_short"
-        prompt_type_and_id = f"{prompt_type_local}__{document_in_use_id}"
+        if document_in_use_id:
+            prompt_type_and_id = f"{prompt_type_local}__{document_in_use_id}"
     return prompt_type_local, prompt_type_and_id
 
 
@@ -176,8 +179,14 @@ The summary must be two or three paragraphs."
 
 
 def upload_generated_item_return_link(hypothesis: str, prompt_type_and_id: str):
-    filename = f"{prompt_type_and_id}.txt"
-    uploaded_doc_link = upload_document(hypothesis, filename, FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text")
+    # we do not upload question_answering as questions may vary
+    # we do not upload combine_responses because combine_responses type is only used for internal processing
+    # the response generated in combine_responses will be uploaded later at its original name
+    uploaded_doc_link = ""
+    if "combine_responses" not in prompt_type_and_id and "question_answering" not in prompt_type_and_id:
+        logger.info(f"Saving {prompt_type_and_id} to related_files.")
+        filename = f"{prompt_type_and_id}.txt"
+        uploaded_doc_link = upload_document(hypothesis, filename, FILE_SERVER_URL, FILE_SERVER_TIMEOUT, type_ref="text")
     return uploaded_doc_link
 
 
@@ -199,10 +208,13 @@ def compose_and_upload_final_response(
         info_to_provide_to_llm = [hyps[1] for hyps in hyps_and_names_all_docs]
     hyps_from_all_docs = SEP_FOR_DOC_RESPONSES.join(info_to_provide_to_llm)
     if "weekly_report" not in prompt_type_and_id:
-        prompt_type_and_id = f"combine_responses__{prompt_type_and_id.split('__')[1]}"
+        prompt_type_and_id_for_processing = f"combine_responses__{prompt_type_and_id.split('__')[1]}"
     hyp_combined, bot_attrs_files, n_requests = get_and_upload_response_for_one_doc(
-        hyps_from_all_docs, prompt_type_and_id, dialog_context, sending_variables, bot_attrs_files
+        hyps_from_all_docs, prompt_type_and_id_for_processing, dialog_context, sending_variables, bot_attrs_files
     )
+    uploaded_doc_link = upload_generated_item_return_link(hyp_combined, prompt_type_and_id)
+    if uploaded_doc_link:
+        bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
     return [hyp_combined], bot_attrs_files, n_requests
 
 
@@ -242,7 +254,8 @@ def get_and_upload_response_for_one_doc(
                 )
                 n_requests += _n_requests
                 uploaded_doc_link = upload_generated_item_return_link(part_of_report, item_type_and_id)
-                bot_attrs_files[item_type_and_id] = uploaded_doc_link
+                if uploaded_doc_link:
+                    bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
                 hypothesis += f"{part_of_report}\n\n"
     else:
         hypothesis, n_requests = get_response_for_prompt_type(
@@ -250,16 +263,21 @@ def get_and_upload_response_for_one_doc(
         )
 
     # we save each hyp to server under the name of the request and doc_in_use id
-    # except for question_answering and combine_responses which we don't save as questions may vary
-    if prompt_type != "question_answering" and prompt_type != "combine_responses":
-        logger.info(f"Saving {prompt_type_and_id} to related_files.")
-        uploaded_doc_link = upload_generated_item_return_link(hypothesis, prompt_type_and_id)
+    uploaded_doc_link = upload_generated_item_return_link(hypothesis, prompt_type_and_id)
+    if uploaded_doc_link:
         bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
     return hypothesis, bot_attrs_files, n_requests
 
 
-def get_name_and_text_from_file(transcript_link):
+def get_name_and_text_from_file(transcript_link: str) -> Tuple[str, str]:
     orig_file = requests.get(transcript_link, timeout=FILE_SERVER_TIMEOUT)
     orig_text = orig_file.text
     filename = FILENAME.search(orig_text).group(1)
     return filename, orig_text
+
+
+def get_key_by_value(dictionary: dict, value_to_find: Any) -> str:
+    for key, value in dictionary.items():
+        if value == value_to_find:
+            return key
+    return ""

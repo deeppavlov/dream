@@ -244,7 +244,7 @@ def get_docs_to_process(all_docs_to_check: List[str], all_docs_info: dict, docs_
 
 def upload_documents_save_info(
     docs_in_atts: List[str], doc_paths_or_links: List[str], all_docs_info: dict, docs_in_use_info: dict, dialog_id: str
-) -> Tuple[dict, dict]:
+) -> Tuple[list, dict, dict]:
     """Processes the given documents to get plain text if they were not processed before,
         uploads them to file server and returns information about each.
         NB: If there are multiple documents, their text is concatenated and uploaded to server as one .txt file.
@@ -259,6 +259,12 @@ def upload_documents_save_info(
         A list containing ids of all files currently in use:
         documents_in_use = ['nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc',
         'kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc']
+
+        A dictionary mapping combination id with ids of files currently in use:
+        docs_combination_ids = {
+            'LKNpck0nke_7ed546db9846ba7661ceda123837f7fc':
+            ['nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc-kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc']
+            }
 
         Another one mapping ids of all files that were ever used and information about them, such as
         file source and link to the file with processed text:
@@ -284,7 +290,7 @@ def upload_documents_save_info(
     # (either fully unprocessed or processed sometime earlier but not yet present in current docs_in_use)
     all_docs_to_check = list(set(docs_in_atts + doc_paths_or_links))
     docs_and_types = get_docs_to_process(all_docs_to_check, all_docs_info, docs_in_use_info)
-    all_docs_info_new = {}
+    all_docs_info_new, docs_combination_ids_new = {}, {}
     docs_in_use_info_new = []
     # check if we need to process anything
     if docs_and_types:
@@ -327,4 +333,7 @@ def upload_documents_save_info(
                 all_docs_info_new[file_id]["processed_text_link"] = doc_text_link
                 all_docs_info_new[file_id]["filename"] = filename
             docs_in_use_info_new.append(file_id)
-    return docs_in_use_info_new, all_docs_info_new
+        if len(docs_in_use_info_new) > 1:
+            doc_combination_id = generate_unique_file_id(10, dialog_id)
+            docs_combination_ids_new[doc_combination_id] = docs_in_use_info_new
+    return docs_in_use_info_new, all_docs_info_new, docs_combination_ids_new

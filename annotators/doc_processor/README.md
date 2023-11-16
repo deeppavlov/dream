@@ -11,7 +11,19 @@ Here is an example of what Document Processor may add to the dialog state:
 {
     "human": {
         "attributes": {
-            "documents_in_use" = ["nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc", "kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc"]
+            "documents_in_use" = ["nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc", "kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc"],
+            "documents_combination_ids" = {
+                "LKNpck0nke_7ed546db9846ba7661ceda123837f7f":
+                [
+                    "nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc", 
+                    "kKmcdwiow9_7ed546db9846ba7661ceda123837f7fc"
+                    ],
+                "kfmIOJkm9e_7ed546db9846ba7661ceda123837f7f":
+                [
+                    "nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc", 
+                    "lrfmovor99_jdcn096db9846ba681ceda398kewn93"
+                    ]
+                }
             "processed_documents" = {
             "nlkr09lnvJ_7ed546db9846ba7661ceda123837f7fc":
             {
@@ -38,6 +50,8 @@ Here is an example of what Document Processor may add to the dialog state:
 ```
 
 `documents_in_use` are the documents that are being discussed on this step of the dialog. These are typically the documents specified in the attributes of the last human utterance or the arguments of doc-processor docker container.
+
+`documents_combination_ids` is a dictionary mapping combination id with ids of documents that this combination includes. Each docs (2 and more) that were ever used together in `documents_in_use` have their own combination id and are stored in `documents_combination_ids`.
 
 `processed_documents` are all documents that were given by the user during the dialog and processed by system with all the information available about these documents. `processed_documents` always include `documents_in_use` and may include previously discussed documents if there are any.
 
