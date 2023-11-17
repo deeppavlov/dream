@@ -1,0 +1,10 @@
+server {
+  listen 443 ssl;
+  server_name www.${DNS};
+  ssl_certificate      /etc/letsencrypt/live/${DNS}/fullchain.pem;
+  ssl_certificate_key  /etc/letsencrypt/live/${DNS}/privkey.pem;
+  client_max_body_size 10M;
+  location / {
+    proxy_pass ${AGENT_URL};
+  }
+}

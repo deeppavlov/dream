@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  https:
+    image: https_proxy
+    build:
+      context: dp/https/
+    env_file: .env_secret
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - 443:443
