@@ -31,7 +31,7 @@ jobs:
         if: steps.staging_update.outputs.exit_code == 0
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Staging updated`, text: ''}"
+          overwrite: "{title: `Dream: Staging updated`, text: ''}"
           job: '{"status": "success"}'
 
       - name: Staging update failure notification
@@ -39,7 +39,7 @@ jobs:
         if: failure()
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Failed to update staging`, text: ''}"
+          overwrite: "{title: `Dream: Failed to update staging`, text: ''}"
           job: '{"status": "failure"}'
 
     env:

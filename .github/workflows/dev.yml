@@ -31,7 +31,7 @@ jobs:
         if: steps.dev_update.outputs.exit_code == 0
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Dev updated`, text: ''}"
+          overwrite: "{title: `Dream: Dev updated`, text: ''}"
           job: '{"status": "success"}'
 
       - name: Dev update failure notification
@@ -39,7 +39,7 @@ jobs:
         if: failure()
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Failed to update dev`, text: ''}"
+          overwrite: "{title: `Dream: Failed to update dev`, text: ''}"
           job: '{"status": "failure"}'
 
     env:

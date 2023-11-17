@@ -32,6 +32,12 @@ and verify your ssh connection
 ssh -T git@github.com
 ```
 
+If you get errors like `invalid empty ssh agent socket: make sure SSH_AUTH_SOCK is set` when you launch dream later,
+add to ~/.bashrc line
+```commandline
+eval `ssh-agent -s`
+```
+
 # DeepPavlov Dream
 
 **DeepPavlov Dream** is a platform for creating multi-skill chatbots.

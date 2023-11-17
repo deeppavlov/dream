@@ -28,7 +28,7 @@ jobs:
         if: steps.alpha_update.outputs.exit_code == 0
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Alpha updated`, text: ''}"
+          overwrite: "{title: `Dream: Alpha updated`, text: ''}"
           job: '{"status": "success"}'
 
       - name: Alpha update failure notification
@@ -36,7 +36,7 @@ jobs:
         if: failure()
         with:
           webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-          overwrite: "{title: `Failed to update alpha`, text: ''}"
+          overwrite: "{title: `Dream: Failed to update alpha`, text: ''}"
           job: '{"status": "failure"}'
 
     env:
