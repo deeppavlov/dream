@@ -12,6 +12,11 @@ Add your SSH private key to the ssh-agent.
 ssh-add ~/.ssh/id_ed25519
 ```
 
+If you get error `Could not open a connection to your authentication agent.`, run 
+```
+eval `ssh-agent -s`
+```
+
 Add the SSH public key to your account on GitHub. For more information, see
 "[Adding a new SSH key to your GitHub account.](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)"
 

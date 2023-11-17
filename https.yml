@@ -1,6 +1,12 @@
 version: '3.7'
 services:
+  agent:
+    env_file:
+      - .env
+      - .env_secret
   https:
+    depends_on:
+      - agent
     image: https_proxy
     build:
       context: dp/https/

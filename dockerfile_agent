@@ -32,7 +32,7 @@ RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pya
 
 RUN apt install -y openssh-client
 RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-ARG AGENT_COMMIT=f17ca4e4222b4a600928e8dab918e83bd4a6c54c
+ARG AGENT_COMMIT=f4f57c5f35971da1ebe990d3f00e5acb13e43c1a
 RUN --mount=type=ssh git clone git@github.com:Generative-Assistants/dp-agent.git /tmp/dp-agent && \
     cd /tmp/dp-agent && \
     git checkout $AGENT_COMMIT && \
