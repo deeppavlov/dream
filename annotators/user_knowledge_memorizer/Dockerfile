@@ -38,8 +38,10 @@ ENV USE_KG_DATA=$USE_KG_DATA
 RUN pip install -U pip wheel setuptools
 
 COPY ./annotators/user_knowledge_memorizer/requirements.txt .
+COPY common/dff/requirements.txt common-reqs.txt
 RUN pip install --upgrade pip && \
     pip install --no-cache -r /src/requirements.txt && \
+    pip install --no-cache -r /src/common-reqs.txt && \
     python -m nltk.downloader wordnet && \
     pip install git+https://github.com/deeppavlov/custom_kg_svc.git@724513b4
     

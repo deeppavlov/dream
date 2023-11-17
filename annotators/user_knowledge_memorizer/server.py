@@ -8,6 +8,11 @@ from pathlib import Path
 import requests
 from uuid import uuid4
 import time
+
+import common.dff.integration.context as int_ctx
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+from df_engine.core import Context, Actor
+
 import sentry_sdk
 from flask import Flask, jsonify, request
 from deeppavlov_kg import TerminusdbKnowledgeGraph
@@ -35,9 +40,7 @@ if GENERATIVE_SERVICE_CONFIG:
 
 ENVVARS_TO_SEND = os.getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-envvars_to_send = [os.getenv(var, None) for var in ENVVARS_TO_SEND]
-# logger.info(f"envars - {envvars_to_send}")
-assert envvars_to_send, logger.error("Error: OpenAI API key is not specified in env")
+assert ENVVARS_TO_SEND, logger.error("Error: OpenAI API key is not specified in env")
 
 SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
 SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
@@ -494,18 +497,26 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
         "Translate each semantic triple into a sentence. Triplets"
         f" : {triplets}"
     ]
+    # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
+    # from user_utterance attributes or from environment
+    human_uttr_attributes = int_ctx.get_last_human_utterance(Context, Actor).get("attributes", {})
+    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
+        **human_uttr_attributes,
+    )
     try:
-        response = requests.post(
-            GENERATIVE_SERVICE_URL,
-            json={
-                "dialog_contexts": contexts,
-                "prompts": prompts,
-                "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
-                "openai_api_keys": envvars_to_send * len(contexts),
-            },
-            timeout=GENERATIVE_SERVICE_TIMEOUT,
-        )
-        hypotheses = response.json()[0]
+        hypotheses = send_request_to_prompted_generative_service(
+                contexts,
+                prompts,
+                GENERATIVE_SERVICE_URL,
+                GENERATIVE_SERVICE_CONFIG,
+                GENERATIVE_SERVICE_TIMEOUT,
+                sending_variables,
+            )
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
