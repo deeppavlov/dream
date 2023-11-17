@@ -53,7 +53,7 @@
 8047	eliza
 8048
 8049	emotion-skill
-8050    dff-knowledge-prompted-skill
+8050    
 8051
 8052	dummy-skill-dialog
 8053	comet-atomic
@@ -87,7 +87,7 @@
 8081    ranking-and-intent-based-response-selector
 8082    ranking-and-intent-based-response-selector-ru
 8083	knowledge-grounding
-8084
+8084    dff-knowledge-prompted-skill
 8085	knowledge-grounding-skill
 8086	dff-friendship-ru-skill,dff-friendship-skill
 8087	combined-classification
