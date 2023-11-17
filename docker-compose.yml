@@ -4,6 +4,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run'
     build:
       context: ./
+      ssh:
+        - default
       dockerfile: dockerfile_agent
     deploy:
       resources:

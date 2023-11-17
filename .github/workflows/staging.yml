@@ -12,6 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: webfactory/ssh-agent@v0.8.0
+        with:
+            ssh-private-key: ${{ secrets.PRIVATE_DEPLOY_KEY }}
+
       - name: update base bots
         id: staging_update
         run: /home/ubuntu/venv/bin/python3 utils/deploy/deploy.py

@@ -10,6 +10,10 @@ jobs:
 
     - uses: actions/checkout@v3
 
+    - uses: webfactory/ssh-agent@v0.8.0
+      with:
+          ssh-private-key: ${{ secrets.PRIVATE_DEPLOY_KEY }}
+
     - name: Add .env_secret file
       run: touch .env_secret .env_secret_azure
 

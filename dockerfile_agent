@@ -30,8 +30,13 @@ RUN mkdir /pavlov && \
 
 RUN pip install sentry-sdk==0.16.0 requests==2.24.0 pandas GitPython==3.1.14 pyaml openpyxl==3.0.0 xlrd==1.2.0 ruamel-yaml==0.17.21
 
-ARG AGENT_COMMIT=3733533092401b42a1fcf2bf2b0f69564edb0fe7
-RUN pip install https://codeload.github.com/deeppavlov/dp-agent/tar.gz/${AGENT_COMMIT}
+RUN apt install -y openssh-client
+RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+ARG AGENT_COMMIT=f17ca4e4222b4a600928e8dab918e83bd4a6c54c
+RUN --mount=type=ssh git clone git@github.com:Generative-Assistants/dp-agent.git /tmp/dp-agent && \
+    cd /tmp/dp-agent && \
+    git checkout $AGENT_COMMIT && \
+    pip install .
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
