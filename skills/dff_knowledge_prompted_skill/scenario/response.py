@@ -87,8 +87,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         **human_uttr_attributes,
     )
 
-    shared_memory = int_ctx.get_shared_memory(ctx, actor)
-    prompt = shared_memory.get("prompt", "")
     prompt = PROMPT
 
     custom_el = (
@@ -152,22 +150,3 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         bot_attr=curr_bot_attrs,
         hype_attr=curr_attrs,
     )(ctx, actor, *args, **kwargs)
-
-
-def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    human_uttr = int_ctx.get_last_human_utterance(ctx, actor).get("text", "")
-    prompt = PROMPT_REPLACEMENT_COMMAND.sub("", human_uttr).strip()
-    int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
-
-    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
-    return (
-        "Saved the new prompt for you. "
-        "To update the prompt, type in `/prompt prompttext` again. "
-        "To reset the prompt to the default one, use `/resetprompt` command."
-    )
-
-
-def reseting_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    int_ctx.save_to_shared_memory(ctx, actor, prompt=PROMPT)
-    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
-    return f"Reset the prompt to the default one for you:\n{PROMPT}"
