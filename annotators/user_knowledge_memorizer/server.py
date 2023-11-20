@@ -38,7 +38,10 @@ if GENERATIVE_SERVICE_CONFIG:
 
 ENVVARS_TO_SEND = os.getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
-assert ENVVARS_TO_SEND, logger.error("Error: OpenAI API key is not specified in env")
+envvars_to_send = [os.getenv(var, None) for var in ENVVARS_TO_SEND]
+assert envvars_to_send, logger.error("Error: OpenAI API key is not specified in env")
+
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", None)
 
 SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
 SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
@@ -506,19 +509,27 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
         envvars_to_send,
         **human_uttr_attributes,
     )
+    logger.info(f"sending_variables -- {sending_variables}")
     try:
-        hypotheses = send_request_to_prompted_generative_service(
-            contexts,
-            prompts,
-            GENERATIVE_SERVICE_URL,
-            GENERATIVE_SERVICE_CONFIG,
-            GENERATIVE_SERVICE_TIMEOUT,
-            sending_variables,
-        )
+        response = requests.post(
+             GENERATIVE_SERVICE_URL,
+             json={
+                 "dialog_contexts": contexts,
+                 "prompts": prompts,
+                 "configs": [GENERATIVE_SERVICE_CONFIG] * len(contexts),
+                 "openai_api_keys": envvars_to_send * len(contexts),
+                 "base_url": OPENAI_BASE_URL,
+             },
+             timeout=GENERATIVE_SERVICE_TIMEOUT,
+         )
+        hypotheses = response.json()[0]
+        logger.info(f"hypotheses -- {hypotheses}")
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
         hypotheses = []
+
+    logger.info(f"hypotheses -- {hypotheses}")
 
     return hypotheses
 
