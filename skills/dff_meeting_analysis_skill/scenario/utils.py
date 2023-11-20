@@ -209,6 +209,8 @@ def compose_and_upload_final_response(
     hyps_from_all_docs = SEP_FOR_DOC_RESPONSES.join(info_to_provide_to_llm)
     if "weekly_report" not in prompt_type_and_id:
         prompt_type_and_id_for_processing = f"combine_responses__{prompt_type_and_id.split('__')[1]}"
+    else:
+        prompt_type_and_id_for_processing = prompt_type_and_id
     hyp_combined, bot_attrs_files, n_requests = get_and_upload_response_for_one_doc(
         hyps_from_all_docs, prompt_type_and_id_for_processing, dialog_context, sending_variables, bot_attrs_files
     )

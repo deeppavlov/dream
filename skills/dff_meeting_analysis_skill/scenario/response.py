@@ -171,6 +171,7 @@ Sending request to generative model."
                     else:
                         # earlier we set prompt_type_and_id for weekly_analysis to full report for each doc,
                         # now we need it to set it back
+                        curr_combination_id = get_key_by_value(docs_combination_ids, documents_in_use)
                         prompt_type_and_id = f"{prompt_type_local}__{curr_combination_id}"
                         try:
                             # now by default we are passing filenames to LLM together with hypothesis for each file
