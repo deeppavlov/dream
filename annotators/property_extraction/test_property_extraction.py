@@ -5,7 +5,7 @@ def main():
     url = "http://0.0.0.0:8136/respond"
 
     request_data = [{"utterances": [["i live in moscow"]]}]
-    gold_results = [[{"triplets": [{"object": "moscow", "relation": "live in citystatecountry", "subject": "user"}]}]]
+    gold_results = [[{"triplets": [{"object": "moscow", "relation": "live in general", "subject": "user"}]}]]
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):

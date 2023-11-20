@@ -6,6 +6,9 @@ from typing import Dict, List
 from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
+# import json  # comment out if saving dialog content is planned
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -1291,3 +1294,62 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
     batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
+
+
+def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
+    # comment out the next two lines to save dialog data to see its contents
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    sentences = [dialog["human_utterances"][-1]["text"]]
+    annotated_utterances = [dialog["human_utterances"][-1]]
+
+    # [0.75, 0.25, 0.44] - default mood of the bot in PAD coordinates
+    # for detailed calculation please refer to bot_emotion_classifier
+    if len(dialog["bot_utterances"]) > 1:
+        bot_mood = (
+            dialog["bot_utterances"][-2]["annotations"]
+            .get("bot_emotion_classifier", {})
+            .get("bot_mood", [0.75, 0.25, 0.44])
+        )
+    else:
+        bot_mood = [0.75, 0.25, 0.44]
+    bot_mood_list = len(sentences) * [bot_mood]
+
+    return [
+        {
+            "sentences": sentences,
+            "annotated_utterances": annotated_utterances,
+            "bot_mood": bot_mood_list,
+        }
+    ]
+
+
+def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
+    # comment out the next two lines to save dialog data to see its contents
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+
+    if dialog["bot_utterances"]:
+        bot_mood_label = (
+            dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_mood_label", "happy")
+        )
+
+        bot_emotion = (
+            dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_emotion", "neutral")
+        )
+    else:
+        bot_mood_label = "happy"
+        bot_emotion = "neutral"
+
+    bot_mood_labels = len(hypots) * [bot_mood_label]
+    bot_emotions = len(hypots) * [bot_emotion]
+
+    return [
+        {
+            "sentences": hypots,
+            "bot_mood_labels": bot_mood_labels,
+            "bot_emotions": bot_emotions,
+        }
+    ]
