@@ -1,0 +1,3 @@
+[submodule "dp-agent"]
+	path = dp-agent
+	url = https://github.com/Generative-Assistants/dp-agent.git

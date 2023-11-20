@@ -1,42 +1,8 @@
 # Setting up ssh key
 
-Create new SSH key if needed
+To clone repository with submodules, run `git clone --recurse-submodules https://github.com/Generative-Assistants/dream.git`.
 
-```commandline
-ssh-keygen -t ed25519 -C "your_github@email.com"
-```
-
-Add your SSH private key to the ssh-agent.
-
-```commandline
-ssh-add ~/.ssh/id_ed25519
-```
-
-If you get error `Could not open a connection to your authentication agent.`, run 
-```
-eval `ssh-agent -s`
-```
-
-Add the SSH public key to your account on GitHub. For more information, see
-"[Adding a new SSH key to your GitHub account.](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)"
-
-Add key to known hosts:
-
-```commandline
-ssh-keyscan github.com >> ~/.ssh/known_hosts
-```
-
-and verify your ssh connection
-
-```commandline
-ssh -T git@github.com
-```
-
-If you get errors like `invalid empty ssh agent socket: make sure SSH_AUTH_SOCK is set` when you launch dream later,
-add to ~/.bashrc line
-```commandline
-eval `ssh-agent -s`
-```
+To pull dp-agent to already existing repo as submodule, use `git pull --recurse-submodules` and `git submodule update`.
 
 # DeepPavlov Dream
 
