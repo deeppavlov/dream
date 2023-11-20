@@ -201,7 +201,8 @@
                 "dialog_formatter": "state_formatters.dp_formatters:dff_voice_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
-                    "skill_selectors"
+                    "skill_selectors",
+                    "voice_service"
                 ],
                 "state_manager_method": "add_hypothesis"
             }

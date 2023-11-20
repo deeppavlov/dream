@@ -52,20 +52,20 @@ def respond():
         process = subprocess.run(['ffmpeg', '-i', os.path.join(AUDIO_DIR, filename), os.path.join(AUDIO_DIR, filename[:-len(filename.split('.')[-1])] + "wav")])
         if process.returncode != 0:
             raise Exception("Something went wrong")
-    # try:
-    logger.info(f"Scanning AUDIO_DIR ({AUDIO_DIR}) for wav files...")
-    for i in os.listdir(AUDIO_DIR):
-        if i.split(".")[-1] == 'wav':
-            break
-    else:
-        CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
-        raise Exception(CAP_ERR_MSG)
-    logger.info("Scanning finished successfully, files found, starting inference...")
-    captions = infer(AUDIO_DIR, MODEL_PATH)
-    logger.info("Inference finished successfully")
-    responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
-    # except:
-    #     responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
+    try:
+        logger.info(f"Scanning AUDIO_DIR ({AUDIO_DIR}) for wav files...")
+        for i in os.listdir(AUDIO_DIR):
+            if i.split(".")[-1] == 'wav':
+                break
+        else:
+            CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
+            raise Exception(CAP_ERR_MSG)
+        logger.info("Scanning finished successfully, files found, starting inference...")
+        captions = infer(AUDIO_DIR, MODEL_PATH)
+        logger.info("Inference finished successfully")
+        responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
+    except:
+        responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
 
     logger.info(f"VOICE_SERVICE RESPONSE: {responses}")
 
