@@ -487,14 +487,11 @@ def get_knowledge(user_id):
 
 
 def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
-    contexts = [
-        [],
+    context = [
+        "",
     ]
-    prompts = [
-        # "Generate natural language sentences based on the following triplets. One sentence for each triplets"
-        "Translate each semantic triple into a sentence. Triplets"
-        f" : {triplets}"
-    ]
+    prompt = f"Translate each semantic triple into a sentence. Triplets: {triplets}"
+
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
     human_uttr_attributes = request.json.get("last_human_annotated_utterance", [])[0].get("attributes", {})
@@ -508,8 +505,8 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
     )
     try:
         hypotheses = send_request_to_prompted_generative_service(
-            contexts,
-            prompts,
+            context,
+            prompt,
             GENERATIVE_SERVICE_URL,
             GENERATIVE_SERVICE_CONFIG,
             GENERATIVE_SERVICE_TIMEOUT,
