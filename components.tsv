@@ -4,6 +4,7 @@
 3882	harvesters-maintenance-gobot-skill
 4242	agent
 6000    ros-flask-server
+6363    terminusdb-server
 8002	ranking-based-response-selector,ranking-based-response-selector-ru
 8003	llm-based-response-selector
 8004	convers-evaluator-annotator
@@ -86,7 +87,7 @@
 8081    ranking-and-intent-based-response-selector
 8082    ranking-and-intent-based-response-selector-ru
 8083	knowledge-grounding
-8084
+8084    dff-knowledge-prompted-skill
 8085	knowledge-grounding-skill
 8086	dff-friendship-ru-skill,dff-friendship-skill
 8087	combined-classification
