@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
+
 @app.route("/respond", methods=["POST"])
 def respond():
     global CAP_ERR_MSG
@@ -49,7 +50,8 @@ def respond():
         file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
 
         import subprocess
-        process = subprocess.run(['ffmpeg', '-i', os.path.join(AUDIO_DIR, filename), os.path.join(AUDIO_DIR, filename[:-len(filename.split('.')[-1])] + "wav")])
+        process = subprocess.run(['ffmpeg', '-i', os.path.join(AUDIO_DIR, filename),
+                                  os.path.join(AUDIO_DIR, filename[:-len(filename.split('.')[-1])] + "wav")])
         if process.returncode != 0:
             raise Exception("Something went wrong")
     try:
