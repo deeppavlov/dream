@@ -40,12 +40,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8014:8014
-  badlisted-words:
-    volumes:
-      - "./annotators/BadlistedWordsDetector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8018:8018
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"

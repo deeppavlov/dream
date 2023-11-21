@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_voice/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, convers-evaluation-selector:8009, 
-          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
+          dff-intent-responder-skill:8012, intent-catcher:8014,
           dialogpt:8125, sentence-ranker:8128,
           voice-service:8333, dff-voice-skill:8444"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
@@ -120,23 +120,6 @@ services:
           memory: 3.5G
         reservations:
           memory: 3.5G
-
-  badlisted-words:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8018
-        SERVICE_NAME: badlisted_words
-      context: annotators/BadlistedWordsDetector/
-    command: flask run -h 0.0.0.0 -p 8018
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   dialogpt:
     env_file: [ .env ]
