@@ -56,7 +56,7 @@ function dockercompose_cmd() {
     # if [[ "$DEVICE" == "cpu" ]]; then
     #     DOCKER_COMPOSE_CMD="docker-compose -f docker-compose.yml -f dev.yml -f cpu.yml -f proxy.yml -f s3.yml -p test"
     # else
-        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p dream -f docker-compose.yml -f assistant_dists/dream_russian/docker-compose.override.yml -f assistant_dists/dream_russian/test.yml"
+        DOCKER_COMPOSE_CMD="docker-compose --no-ansi -p test -f docker-compose.yml -f assistant_dists/dream_russian/docker-compose.override.yml -f assistant_dists/dream_russian/test.yml"
     # fi
     eval '$DOCKER_COMPOSE_CMD "$@"'
     if [[ $? != 0 ]]; then
@@ -131,7 +131,7 @@ if [[ "$MODE" == "test_dialog" || "$MODE" == "all" ]]; then
 fi
 
 if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
-    # docker-compose -f docker-compose.yml -f dev.yml ps --services | grep -wv -e agent -e mongo
+    # docker-compose -p test -f docker-compose.yml -f dev.yml ps --services | grep -wv -e agent -e mongo
 
     dockercompose_cmd logs --no-color -f --tail="all" --timestamps &
     echo "Passing test data to each skill selected for testing"
@@ -140,7 +140,7 @@ if [[ "$MODE" == "test_skills" || "$MODE" == "all" ]]; then
     for container in dff-program-y-ru-skill intent-catcher-ru convers-evaluation-selector-ru personal-info-ru-skill \
                      entity-linking-ru wiki-parser-ru badlisted-words-ru spelling-preprocessing-ru sentseg-ru \
                      dff-friendship-ru-skill dff-intent-responder-ru-skill entity-detection-ru dialogpt-ru \
-                     dff-generative-ru-skill dialogrpt-ru spacy-annotator-ru toxic-classification-ru \
+                     dff-generative-ru-skill dialogrpt-ru spacy-annotator-ru combined-classification-ru \
                      text-qa-ru fact-retrieval-ru; do
 
         echo "Run tests for $container"

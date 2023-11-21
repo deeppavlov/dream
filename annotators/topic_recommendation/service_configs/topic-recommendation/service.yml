@@ -1,0 +1,25 @@
+name: topic-recommendation
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8113
+      SERVICE_NAME: topic_recommendation
+      FLASK_APP: server
+    context: ./annotators/topic_recommendation/
+  command: flask run -h 0.0.0.0 -p 8113
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./annotators/topic_recommendation:/src
+  ports:
+  - 8113:8113

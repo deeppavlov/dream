@@ -1,0 +1,9 @@
+WAIT_HOSTS: sentseg:8011, entity-storer:8089, entity-detection:8103, entity-linking:8075,
+  wiki-parser:8077, midas-classification:8090, midas-predictor:8121, factoid-qa:8071,
+  dff-program-y-skill:8008, ranking-and-intent-based-response-selector-ru:8082
+WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+HIGH_PRIORITY_INTENTS: 1
+RESTRICTION_FOR_SENSITIVE_CASE: 1
+ALWAYS_TURN_ON_ALL_SKILLS: 0
+LANGUAGE: EN
+FALLBACK_FILE: fallbacks_dream_en.json

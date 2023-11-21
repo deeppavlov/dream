@@ -1,0 +1,11 @@
+{
+    "generative_lm": {
+        "display_name": "Generative LM",
+        "description": "This service uses language models to generate responses.",
+        "keys": ["OPENAI_API_KEY"],
+        "needs_approval": false,
+        "approve_once": false,
+        "timeout": 30,
+        "input_template": "Just the request in a string format"
+    }
+}

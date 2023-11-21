@@ -1,0 +1,22 @@
+name: convert-reddit
+endpoints:
+- convert_reddit
+compose:
+  env_file:
+  - .env
+  build:
+    context: ./skills/convert_reddit/
+  command: flask run -h 0.0.0.0 -p 8029
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 1536M
+      reservations:
+        memory: 1536M
+  volumes:
+  - ./skills/convert_reddit:/app
+  - ./common:/src/common
+  ports:
+  - 8029:8029

@@ -38,11 +38,13 @@
             },
             "used_links": {},
             "age_group": "unknown",
-            "disliked_skills": []
-        },
+                "disliked_skills": [],
+                "prompts_goals": {}
+            },
         {},
         {
-            "can_continue": "no"
+            "can_continue": "no",
+            "is_final_answer": "true"
         }
     ]
 ]

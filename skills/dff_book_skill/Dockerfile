@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.9.16
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -7,17 +7,17 @@ COPY common/dff/requirements.txt .
 RUN pip install -r requirements.txt
 
 # ###################### CUSTOM SECTION ######################################
-# Here you can make changes 
-RUN mkdir /global_data
+# Here you can make changes
 ARG QUERY_DICT
-RUN wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
+RUN mkdir /global_data && \
+    wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -m nltk.downloader wordnet
+RUN pip install -r requirements.txt && \
+    python -m nltk.downloader wordnet
 
 COPY skills/${SERVICE_NAME}/ ./
 COPY ./common/ ./common/

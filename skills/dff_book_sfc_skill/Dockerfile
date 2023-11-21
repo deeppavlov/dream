@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.9.16-slim
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
 WORKDIR /src
@@ -14,12 +14,12 @@ ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
 COPY skills/${SERVICE_NAME}/requirements.txt .
-RUN pip install -r requirements.txt
-RUN python -m nltk.downloader wordnet
+RUN pip install -r requirements.txt && \
+    python -m nltk.downloader wordnet
 
-RUN mkdir /global_data
 ARG QUERY_DICT
-RUN wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
+RUN mkdir /global_data && \
+    wget -q $QUERY_DICT -O /global_data/book_query_dict.pkl
 
 
 COPY skills/${SERVICE_NAME}/ ./

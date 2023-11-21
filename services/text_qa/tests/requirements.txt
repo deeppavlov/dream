@@ -1,0 +1,8 @@
+sentry-sdk[flask]==0.14.1
+gunicorn==19.9.0
+pyOpenSSL==22.0.0
+transformers==4.10.1
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.3.0/en_core_web_sm-3.3.0-py3-none-any.whl
+overrides==3.1.0
+pytest==7.4.2
+allure-pytest==2.13.2

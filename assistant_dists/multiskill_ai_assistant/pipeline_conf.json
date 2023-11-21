@@ -1,0 +1,365 @@
+{
+    "connectors": {
+        "sentseg": {
+            "protocol": "http",
+            "timeout": 1.5,
+            "url": "http://sentseg:8011/sentseg"
+        }
+    },
+    "services": {
+        "last_chance_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, something went wrong inside. Please tell me, what did you say.",
+                        "segments": [
+                            "Sorry, something went wrong inside.",
+                            "Please tell me, what did you say."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ],
+            "source": {
+                "component": "components/jHBkaLTk5Skn.yml",
+                "service": "services/agent_services/service_configs/multiskill_ai_assistant"
+            }
+        },
+        "timeout_service": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "Sorry, I need to think more on that. Let's talk about something else.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "Sorry, I need to think more on that. Let's talk about something else.",
+                        "segments": [
+                            "Sorry, I need to think more on that.",
+                            "Let's talk about something else."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ],
+            "source": {
+                "component": "components/mgQsWnZUXVg3.yml",
+                "service": "services/agent_services/service_configs/multiskill_ai_assistant"
+            }
+        },
+        "response_annotator_selectors": {
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
+            }
+        },
+        "response_annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:last_bot_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "response_annotator_selectors"
+                ],
+                "state_manager_method": "add_annotation_prev_bot_utt",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/1Q9QXih1U2zhCpVm9zxdsA.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
+                }
+            }
+        },
+        "annotators": {
+            "sentseg": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.5,
+                    "url": "http://sentseg:8011/sentseg"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/gM4fEjvVqLlSRRRkQfds2g.yml",
+                    "service": "annotators/SentSeg/service_configs/sentseg"
+                }
+            },
+            "prompt_goals_collector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/collect_goals"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "update_attributes",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/HqbKuGPENqUm.yml",
+                    "service": "annotators/prompt_selector/service_configs/multiskill_ai_assistant"
+                }
+            },
+            "prompt_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.prompt_goals_collector"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/HqbKuGPENqUm.yml",
+                    "service": "annotators/prompt_selector/service_configs/multiskill_ai_assistant"
+                }
+            }
+        },
+        "skill_selectors": {
+            "description_based_skill_selector": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ],
+                "is_enabled": true,
+                "source": {
+                    "component": "components/dfsw4bji8bgjq2.yml",
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
+                }
+            }
+        },
+        "skills": {
+            "dff_dream_persona_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-dream-persona-chatgpt-prompted-skill:8137/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_dream_persona_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/W6hdAGshQyMwdQukRXXuKA.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-dream-persona-chatgpt-prompted-skill"
+                }
+            },
+            "dff_casual_email_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-casual-email-prompted-skill:8154/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_casual_email_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/mJFsrLmq1C2Q7bw7W6QnbT.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-casual-email-prompted-skill"
+                }
+            },
+            "dff_meeting_notes_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-meeting-notes-prompted-skill:8155/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_meeting_notes_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/2bbCQcfY2YYjHtMCRFHImG.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-meeting-notes-prompted-skill"
+                }
+            },
+            "dff_official_email_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-official-email-prompted-skill:8156/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_official_email_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/8qwxH2SZE4EhXS5JqqZPkm.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-official-email-prompted-skill"
+                }
+            },
+            "dff_plan_for_article_prompted_skill": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://dff-plan-for-article-prompted-skill:8157/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_plan_for_article_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/6vJmuO1GbwgIDIBc3hrwm0.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff-plan-for-article-prompted-skill"
+                }
+            },
+            "dummy_skill": {
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
+            }
+        },
+        "candidate_annotators": {
+            "combined_classification": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://combined-classification:8087/batch_model"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypothesis_histories_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/PbLNvh4hrvs47rPaf2bfYQ.yml",
+                    "service": "annotators/combined_classification/service_configs/combined-classification"
+                }
+            },
+            "sentence_ranker": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://sentence-ranker:8128/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:sentence_ranker_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/XGwmAHtAOu0NDqqG3QCJw.yml",
+                    "service": "services/sentence_ranker/service_configs/sentence-ranker"
+                }
+            }
+        },
+        "response_selectors": {
+            "response_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 120.0,
+                    "url": "http://llm-based-response-selector:8003/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "candidate_annotators"
+                ],
+                "tags": [
+                    "selector"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "service": "response_selectors/llm_based_response_selector/service_configs/llm-based-response-selector"
+                }
+            }
+        }
+    },
+    "metadata": {
+        "display_name": "Multi-skill AI Assistant",
+        "author": "DeepPavlov",
+        "description": "Multi-skill AI Assistant is an AI-based dialog system containing multiple skills with prompt-based architecture. Multi-skill AI Assistant utilizes two the most relevant prompts among the given to it to generate a response via the given LLM service.",
+        "version": "0.0.1",
+        "date_created": "2023-01-10T02:00:00",
+        "ram_usage": "4 GB",
+        "gpu_usage": "3 GB",
+        "disk_usage": "10 GB"
+    }
+}

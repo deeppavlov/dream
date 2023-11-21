@@ -1,0 +1,27 @@
+name: dff_fairytale_ru_prompted_skill
+display_name: Рассказчик Сказок
+component_type: Generative
+model_type: NN-based
+is_customizable: true
+author: publisher@deeppavlov.ai
+description: Этот навык рассказывает сказки для детей, основываясь на запросе пользователя. 
+  Ответы генерируются с помощью модели Russian XGLM 4.5B с использованием промпта-инструкции и предыдущего контекста диалога.
+ram_usage: 128M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 20.0
+  url: http://dff-fairytale-ru-prompted-skill:8174/respond
+dialog_formatter:
+  name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+  skill_name: dff_fairytale_ru_prompted_skill
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_template_prompted_skill/service_configs/dff-fairytale-ru-prompted-skill
+date_created: '2023-03-16T09:45:32'

@@ -1,36 +1,29 @@
+import os
 import requests
 
 
-DEFAULT_CONFIG = {
-    "max_length": 60,
-    "min_length": 8,
-    "top_p": 0.9,
-    "temperature": 0.9,
-    "do_sample": True,
-    "num_return_sequences": 2,
-}
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
 
 def test_respond():
-    url = "http://0.0.0.0:8130/respond"
+    url = f"http://0.0.0.0:{SERVICE_PORT}/respond"
     contexts = [
         [
             "Hi! I am Marcus. How are you today?",
             "Hi Marcus! I am fine. How are you?",
             "I am great. What are your plans for today?",
         ],
-        ["Hi Marcus! I am fine. How are you?", "I am great. What are your plans for today?"],
+        ["Привет, Маркус! Я в порядке. Как дела?", "Я отлично. Какие у тебя планы на сегодня?"],
     ]
     prompts = [
-        "Respond like a friendly chatbot.",
-        "Respond like a friendly chatbot.",
+        "Respond like a friendly chatbot. \n Dialog:\n",
+        "Отвечай как дружелюбный бот.",
     ]
     result = requests.post(
         url,
         json={
             "dialog_contexts": contexts,
             "prompts": prompts,
-            "configs": [DEFAULT_CONFIG] * len(contexts),
         },
     ).json()
     print(result)

@@ -4,16 +4,14 @@ import logging
 import time
 import os
 import random
+from common.dff_api_v1.integration.serializer import load_ctxs, run_dff
 
 from flask import Flask, request, jsonify
 from healthcheck import HealthCheck
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-
-from common.dff.integration.actor import load_ctxs, get_response
-
-from scenario.main import actor
+from scenario.main import pipeline
 
 # import test_server
 
@@ -45,8 +43,7 @@ def handler(requested_data, random_seed=None):
             # for tests
             if random_seed:
                 random.seed(int(random_seed))
-            ctx = actor(ctx)
-            responses.append(get_response(ctx, actor))
+            responses.append(run_dff(ctx, pipeline))
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)

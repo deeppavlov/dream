@@ -10,23 +10,23 @@ services:
       - 3000:3000
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  ranking-based-response-selector:
+    volumes:
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8002:8002
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
       - "./common:/src/common"
     ports:
       - 8008:8008
-  sentseg:
-    volumes:
-      - "./annotators/SentSeg:/src"
-    ports:
-      - 8011:8011
-  convers-evaluation-selector:
-    volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8009:8009
   dff-intent-responder-skill:
     volumes:
       - "./skills/dff_intent_responder_skill:/src"

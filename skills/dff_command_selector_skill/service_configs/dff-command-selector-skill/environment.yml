@@ -1,0 +1,5 @@
+SERVICE_PORT: 8148
+SERVICE_NAME: dff_command_selector_skill
+LANGUAGE: EN
+ROS_FLASK_SERVER: http://ros-flask-server:6000
+FAKE: false

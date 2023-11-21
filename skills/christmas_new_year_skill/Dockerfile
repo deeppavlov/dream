@@ -1,6 +1,6 @@
-FROM python:3.7.4
+FROM python:3.9.16-slim
 
-RUN mkdir /src
+WORKDIR /src
 
 COPY ./requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt

@@ -1,0 +1,35 @@
+name: dialogpt
+endpoints:
+- respond
+- continue
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8125
+      SERVICE_NAME: dialogpt
+      PRETRAINED_MODEL_NAME_OR_PATH: microsoft/DialoGPT-medium
+      N_HYPOTHESES_TO_GENERATE: 5
+      CONFIG_NAME: dialogpt_en.json
+      MAX_HISTORY_DEPTH: 2
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/dialogpt/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8125
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 2G
+      reservations:
+        memory: 2G
+  volumes:
+  - ./services/dialogpt:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8125:8125

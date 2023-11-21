@@ -1,0 +1,65 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  
+  spelling-preprocessing:
+    volumes:
+      - "./annotators/spelling_preprocessing:/src"
+    ports:
+      - 8074:8074
+    
+  dff-program-y-skill:
+    volumes:
+      - "./skills/dff_program_y_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8008:8008
+      
+  badlisted-words:
+    volumes:
+      - "./annotators/BadlistedWordsDetector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8018:8018
+
+  dff-friendship-skill:
+    volumes:
+      - "./skills/dff_friendship_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8086:8086
+  
+  dff-template-skill:
+    volumes:
+      - "./skills/dff_template_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8120:8120
+
+  confidence-based-response-selector:
+    volumes:
+      - "./response_selectors/confidence_based_response_selector:/src"
+    ports:
+      - 8005:8005
+
+  mongo:
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+
+  combined-classification-lightweight:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification_lightweight:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8150:8150
+
+version: "3.7"

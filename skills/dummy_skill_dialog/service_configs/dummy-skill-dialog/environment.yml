@@ -1,0 +1,4 @@
+SERVICE_NAME: dummy_skill_dialog
+SERVICE_PORT: 8052
+DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
+FLASK_APP: server

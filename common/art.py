@@ -1,5 +1,6 @@
 import re
-from common.utils import get_topics, TOPIC_GROUPS
+from common.combined_classes import TOPIC_GROUPS
+from common import utils
 
 
 SUPER_CONFIDENCE = 1.0
@@ -12,7 +13,7 @@ ART_PATTERN = re.compile(r"\b(art|artist|drawing|painting|painter|gallery)(\.|\?
 
 
 def check_about_art(user_uttr):
-    found_topics = get_topics(user_uttr, probs=False, which="all")
+    found_topics = utils.get_topics(user_uttr, probs=False, which="all")
     if any([art_topic in found_topics for art_topic in TOPIC_GROUPS["art"]]):
         return True
     elif re.findall(ART_PATTERN, user_uttr["text"]):

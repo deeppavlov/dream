@@ -1,0 +1,6 @@
+SERVICE_PORT: 8075
+SERVICE_NAME: entity_linking
+CONFIG: entity_linking_rus.json
+SRC_DIR: annotators/entity_linking_rus
+LANGUAGE: RU
+CUDA_VISIBLE_DEVICES: '0'

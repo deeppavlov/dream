@@ -1,0 +1,26 @@
+name: response_selector
+display_name: Ranking-based Response Selector
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Algorithm that selects the final response among the given list of candidate
+    responses via the given ranking service
+ram_usage: 100M
+gpu_usage: null
+group: response_selectors
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://ranking-based-response-selector:8002/respond
+dialog_formatter: state_formatters.dp_formatters:cropped_dialog
+response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
+previous_services:
+- candidate_annotators
+required_previous_services: null
+state_manager_method: add_bot_utterance
+tags:
+- selector
+endpoint: respond
+service: response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector
+date_created: '2023-03-16T09:45:32'

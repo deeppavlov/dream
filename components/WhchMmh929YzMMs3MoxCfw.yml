@@ -1,0 +1,24 @@
+name: rake_keywords
+display_name: Rake Keywords
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: extracts keywords from utterances with the help of RAKE algorithm
+ram_usage: 100M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://rake-keywords:8007/respond
+dialog_formatter: state_formatters.dp_formatters:preproc_last_human_utt_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.spelling_preprocessing
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: respond
+service: annotators/rake_keywords/service_configs/rake-keywords
+date_created: '2023-03-16T09:45:32'

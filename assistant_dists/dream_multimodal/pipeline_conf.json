@@ -99,7 +99,6 @@
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
-                    "annotators.spelling_preprocessing",
                     "annotators.sentseg"
                 ],
                 "state_manager_method": "add_annotation",
@@ -300,7 +299,7 @@
                     "timeout": 2.0,
                     "url": "http://dff-fromage-image-skill:8070/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_image_skill_formatter",
+                "dialog_formatter": "state_formatters.dp_formatters:dff_fromage_image_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
                     "skill_selectors"
@@ -320,7 +319,7 @@
                     "timeout": 1.0,
                     "url": "http://ranking-based-response-selector:8002/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:full_history_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
                 "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
                 "previous_services": [
                     "candidate_annotators"

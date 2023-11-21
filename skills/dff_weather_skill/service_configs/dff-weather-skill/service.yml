@@ -1,0 +1,24 @@
+name: dff-weather-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8037
+      SERVICE_NAME: dff_weather_skill
+    context: .
+    dockerfile: ./skills/dff_weather_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8037 --reload --timeout 500
+  deploy:
+    resources:
+      limits:
+        memory: 1G
+      reservations:
+        memory: 1G
+  volumes:
+  - ./skills/dff_weather_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8037:8037

@@ -1,0 +1,23 @@
+name: small-talk-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    context: .
+    dockerfile: ./skills/small_talk_skill/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8062
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./skills/small_talk_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8062:8062

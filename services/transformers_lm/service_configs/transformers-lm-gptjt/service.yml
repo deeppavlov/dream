@@ -1,0 +1,43 @@
+name: transformers-lm-gptjt
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8161
+      SERVICE_NAME: transformers_lm_gptjt
+      PRETRAINED_MODEL_NAME_OR_PATH: togethercomputer/GPT-JT-6B-v1
+      HALF_PRECISION: 1
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8161
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 50G
+      reservations:
+        memory: 50G
+  volumes:
+  - ./services/transformers_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8161:8161
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8161
+  - PORT=8161

@@ -1,0 +1,44 @@
+name: transformers-lm-bloomz7b
+endpoints:
+- respond
+- generate_goals
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8146
+      SERVICE_NAME: transformers_lm_bloomz7b
+      PRETRAINED_MODEL_NAME_OR_PATH: bigscience/bloomz-7b1
+      HALF_PRECISION: 0
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8146
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 50G
+      reservations:
+        memory: 50G
+  volumes:
+  - ./services/transformers_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8146:8146
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8146
+  - PORT=8146

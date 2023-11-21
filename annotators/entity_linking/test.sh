@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python test_el.py
+python -m pytest tests/test_el.py

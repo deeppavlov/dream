@@ -1,0 +1,28 @@
+name: entity-storer
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8089
+      SERVICE_NAME: entity_storer
+      WORK_DIR: annotators/entity_storer
+      FLASK_APP: server
+    context: .
+    dockerfile: annotators/entity_storer/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8089
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 384M
+      reservations:
+        memory: 384M
+  volumes:
+  - ./common:/src/common
+  - ./annotators/entity_storer:/src
+  ports:
+  - 8089:8089

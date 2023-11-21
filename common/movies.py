@@ -2,7 +2,8 @@ import re
 from random import choice
 
 from common.fact_retrieval import topic_types
-from common.utils import get_entities, get_topics, TOPIC_GROUPS
+from common.combined_classes import TOPIC_GROUPS
+from common import utils
 
 
 MOVIE_SKILL_CHECK_PHRASE = "the recent movie"
@@ -181,7 +182,6 @@ ACKNOWLEDGEMENT_LIKES_MOVIE = [
 
 
 def get_movie_template(category, subcategory=None, movie_type="movie"):
-
     if subcategory is not None:
         return (
             choice(DIFFERENT_SCRIPT_TEMPLATES[category].get(subcategory, ""))
@@ -223,7 +223,7 @@ def extract_movies_names_from_annotations(annotated_uttr, check_full_utterance=F
     movies_titles = None
     if "entity_detection" in annotated_uttr["annotations"]:
         movies_titles = []
-        entities = get_entities(annotated_uttr, only_named=False, with_labels=True)
+        entities = utils.get_entities(annotated_uttr, only_named=False, with_labels=True)
         for ent in entities:
             if ent.get("label", "") == "videoname":
                 movies_titles += [ent["text"]]
@@ -249,7 +249,7 @@ def extract_movies_names_from_annotations(annotated_uttr, check_full_utterance=F
 
 
 def about_movies(annotated_utterance):
-    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    found_topics = utils.get_topics(annotated_utterance, probs=False, which="all")
     if any([topic in found_topics for topic in TOPIC_GROUPS["movies"]]):
         return True
     elif re.findall(MOVIE_COMPILED_PATTERN, annotated_utterance["text"]):

@@ -1,0 +1,25 @@
+name: combined_classification_ru
+display_name: Combined ClassificationRu
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Russian BERT-based model including topic classification,MIDAS intent classification,
+  sentiment, toxicity, emotion, factoid classification
+ram_usage: 1.5G
+gpu_usage: 3.5G
+group: annotators
+connector:
+  protocol: http
+  timeout: 1.0
+  url: http://combined-classification-ru:8198/model
+dialog_formatter: state_formatters.dp_formatters:preproc_last_human_utt_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.spelling_preprocessing
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: model
+service: annotators/combined_classification_ru/service_configs/combined-classification-ru
+date_created: '2023-03-16T09:45:32'

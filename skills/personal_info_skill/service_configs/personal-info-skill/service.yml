@@ -1,0 +1,23 @@
+name: personal-info-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    context: .
+    dockerfile: ./skills/personal_info_skill/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8030
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 128M
+      reservations:
+        memory: 128M
+  volumes:
+  - ./skills/personal_info_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8030:8030

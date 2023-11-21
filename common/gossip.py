@@ -1,7 +1,7 @@
 import re
 import logging
-from common.universal_templates import if_chat_about_particular_topic
-from common.utils import get_topics, TOPIC_GROUPS
+from common.combined_classes import TOPIC_GROUPS
+from common import utils, universal_templates
 
 logger = logging.getLogger(__name__)
 
@@ -274,7 +274,7 @@ def skill_trigger_phrases():
 
 
 def talk_about_gossip(human_utterance, bot_utterance):
-    user_lets_chat_about = if_chat_about_particular_topic(
+    user_lets_chat_about = universal_templates.if_chat_about_particular_topic(
         human_utterance, bot_utterance, compiled_pattern=GOSSIP_COMPILED_PATTERN
     )
     flag = bool(user_lets_chat_about)
@@ -334,7 +334,7 @@ def check_is_celebrity_mentioned(human_utterance):
 
 
 def about_celebrities(annotated_utterance):
-    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    found_topics = utils.get_topics(annotated_utterance, probs=False, which="all")
     if any([topic in found_topics for topic in TOPIC_GROUPS["celebrities"]]):
         return True
     elif re.findall(GOSSIP_COMPILED_PATTERN, annotated_utterance["text"]):

@@ -1,0 +1,41 @@
+name: property-extraction
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      CONFIG_T5: t5_generative_ie_lite_infer.json
+      CONFIG_REL_RANKER: rel_ranking_roberta.json
+      SERVICE_PORT: 8136
+      SRC_DIR: annotators/property_extraction/
+      SERVICE_NAME: property_extraction
+      FLASK_APP: server
+    context: ./
+    dockerfile: annotators/property_extraction/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8136
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 7G
+      reservations:
+        memory: 7G
+  volumes:
+  - ./annotators/property_extraction:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8136:8136
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8136
+  - PORT=8136

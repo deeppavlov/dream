@@ -1,0 +1,14 @@
+- name: prompt_selector_template
+  display_name: Prompt Selector Template
+  author: publisher@deeppavlov.ai
+#  is_customizable: true
+  description: Template for creating Prompt Selector
+  endpoints:
+  - group: annotators
+    endpoint: respond
+  config_keys:
+#    SERVICE_PORT: int
+    SERVICE_NAME: str
+    SENTENCE_RANKER_SERVICE_URL: str
+    N_SENTENCES_TO_RETURN: int
+    PROMPTS_TO_CONSIDER: list

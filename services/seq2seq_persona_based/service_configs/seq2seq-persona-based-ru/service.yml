@@ -1,0 +1,35 @@
+name: seq2seq-persona-based-ru
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8140
+      SERVICE_NAME: seq2seq_persona_based
+      PRETRAINED_MODEL_NAME_OR_PATH: DeepPavlov/bart-base-en-persona-chat
+      PAIR_DIALOG_HISTORY_LENGTH: 2
+      CHAT_EVERY_SENT_MAX_LENGTH: 25
+      PERSONA_EVERY_SENT_MAX_LENGTH: 19
+      GENERATION_PARAMS_CONFIG: bart-base-en-persona-chat_v1.json
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/seq2seq_persona_based/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8140
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 2G
+      reservations:
+        memory: 2G
+  volumes:
+  - ./services/seq2seq_persona_based:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8140:8140

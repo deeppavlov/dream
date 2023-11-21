@@ -1,4 +1,4 @@
-FROM python:3.7.4
+FROM python:3.10
 
 RUN mkdir /src
 COPY ./requirements.txt /src/requirements.txt
@@ -7,7 +7,6 @@ RUN pip install -r /src/requirements.txt
 ARG MODELS_URL
 ENV MODELS_URL ${MODELS_URL:-http://lnsigo.mipt.ru/export/models/new_vectorizer_2.zip}
 
-RUN mkdir /global_data
 WORKDIR /global_data
 
 RUN wget ${MODELS_URL} -O ./new_vectorizer_2.zip

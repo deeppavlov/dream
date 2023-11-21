@@ -1,0 +1,11 @@
+{
+    "news_api": {
+        "display_name": "News API",
+        "description": "The News API can provide the list of latest trending news.",
+        "keys": ["NEWS_API_KEY"],
+        "needs_approval": false,
+        "approve_once": false,
+        "timeout": 30,
+        "input_template": "Just the request in a string format"
+    }
+}

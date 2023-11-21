@@ -7,13 +7,12 @@ import sentry_sdk
 
 from sentry_sdk.integrations.flask import FlaskIntegration
 from deeppavlov import build_model
-from common.utils import combined_classes
+from common.combined_classes import combined_classes
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-app = Flask(__name__)
 logger = logging.getLogger(__name__)
 
 
@@ -56,6 +55,8 @@ except Exception as e:
     logger.exception(e)
     raise e
 
+app = Flask(__name__)
+
 
 @app.route("/model", methods=["POST"])
 def respond():
@@ -79,7 +80,3 @@ def batch_respond():
     logger.debug(f"combined_classification batch result: {answer}")
     logger.info(f"combined_classification exec time: {time.time() - t}")
     return jsonify([{"batch": answer}])
-
-
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=3000)

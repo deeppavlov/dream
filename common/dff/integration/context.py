@@ -129,6 +129,10 @@ def get_age_group(ctx: Context, actor: Actor) -> dict:
     return {} if ctx.validation else ctx.misc["agent"]["age_group"]
 
 
+def get_prompts_goals(ctx: Context, actor: Actor) -> dict:
+    return {} if ctx.validation else ctx.misc["agent"]["prompts_goals"]
+
+
 def set_age_group(ctx: Context, actor: Actor, set_age_group):
     if not ctx.validation:
         ctx.misc["agent"]["age_group"] = set_age_group
@@ -328,3 +332,7 @@ def get_last_state(ctx: Context, actor: Actor) -> str:
         history_sorted = sorted(history, key=lambda x: x[0])
         last_state = history_sorted[-1][1]
     return last_state
+
+
+def get_dialog_id(ctx: Context, actor: Actor) -> dict:
+    return "unknown" if ctx.validation else ctx.misc["agent"]["dialog_id"]

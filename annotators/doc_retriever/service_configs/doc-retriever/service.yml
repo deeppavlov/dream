@@ -1,0 +1,34 @@
+name: doc-retriever
+endpoints:
+  - train_and_upload_model
+  - return_candidates
+compose:
+  env_file:
+    - .env
+  build:
+    args:
+      SERVICE_PORT: 8165
+      SERVICE_NAME: doc_retriever
+      CONFIG_PATH: ./doc_retriever_config.json
+      DOC_PATH_OR_LINK: http://files.deeppavlov.ai/dream_data/documents_for_qa/test_file_dream_repo.html,http://files.deeppavlov.ai/dream_data/documents_for_qa/alphabet_financial_report.txt,http://files.deeppavlov.ai/dream_data/documents_for_qa/test_file_jurafsky_chatbots.pdf
+      PARAGRAPHS_NUM: 5
+      FILE_SERVER_TIMEOUT: 30
+    context: .
+    dockerfile: annotators/doc_retriever/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8165
+  environment:
+    - CUDA_VISIBLE_DEVICES=0
+    - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 5G
+      reservations:
+        memory: 5G
+  volumes:
+    - "./annotators/doc_retriever:/src"
+    - "./common:/src/common"
+    - "./documents:/src/documents"
+  ports:
+    - 8165:8165
+proxy: null

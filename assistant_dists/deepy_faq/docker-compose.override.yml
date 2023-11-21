@@ -4,7 +4,7 @@ services:
     volumes:
       - ".:/dp-agent"
     environment:
-      WAIT_HOSTS: "spelling-preprocessing:8074, faq-skill:3772, rule-based-response-selector:8005,
+      WAIT_HOSTS: "spelling-preprocessing:8074, faq-skill:3772, confidence-based-response-selector:8005,
         emotion-classification-deepy:8015, dff-program-y-skill:8008"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
 
@@ -21,9 +21,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
     ports:
       - 8074:8074
 
@@ -34,9 +34,9 @@ services:
     ports:
       - 3710:3710
 
-  rule-based-response-selector:
+  confidence-based-response-selector:
     build:
-      context: response_selectors/rule_based_response_selector
+      context: response_selectors/confidence_based_response_selector
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8005
     volumes: []
     ports:

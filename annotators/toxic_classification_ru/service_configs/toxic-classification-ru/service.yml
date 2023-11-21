@@ -1,0 +1,31 @@
+name: toxic-classification-ru
+endpoints:
+- respond
+- respond_batch
+compose:
+  env_file:
+  - .env_ru
+  build:
+    context: ./annotators/toxic_classification_ru/
+    args:
+      SERVICE_PORT: 8118
+      PRETRAINED_MODEL_NAME_OR_PATH: s-nlp/russian_toxicity_classifier
+      LANGUAGE: RU
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+  command: flask run -h 0.0.0.0 -p 8118
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 3G
+      reservations:
+        memory: 3G
+  volumes:
+  - ./annotators/toxic_classification_ru:/src
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8118:8118
+proxy: null

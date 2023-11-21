@@ -1,0 +1,26 @@
+name: dff-gaming-skill
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8115
+      SERVICE_NAME: dff_gaming_skill
+      GAMES_IGDB_SEARCH_RESULTS_URL: http://files.deeppavlov.ai/alexaprize_data/games_igdb_search_results_v2.json
+      GAMES_IGDB_IDS_URL: http://files.deeppavlov.ai/alexaprize_data/game_igdb_ids_v2.json
+    context: .
+    dockerfile: ./skills/dff_gaming_skill/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8115
+  deploy:
+    resources:
+      limits:
+        memory: 512M
+      reservations:
+        memory: 512M
+  volumes:
+  - ./skills/dff_gaming_skill:/src
+  - ./common:/src/common
+  ports:
+  - 8115:8115

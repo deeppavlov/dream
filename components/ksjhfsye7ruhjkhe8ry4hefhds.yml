@@ -1,0 +1,27 @@
+name: transformers_lm_gptj
+display_name: GPT-J 6B
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: An open-source English-only large language model which is 
+  NOT fine-tuned for instruction following and NOT capable of code generation.
+  For more details, refer to 
+  [HuggingFace Model Page](https://huggingface.co/EleutherAI/gpt-j-6b). 
+  Free of charge. This model is up and running on our servers and can be used for free.
+ram_usage: 50G
+gpu_usage: 25G
+group: services
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://transformers-lm-gptj:8130/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/transformers_lm/service_configs/transformers-lm-gptj
+date_created: '2023-04-16T09:45:32'

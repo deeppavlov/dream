@@ -1,0 +1,26 @@
+name: seq2seq_persona_based
+display_name: Seq2seq Persona-based
+component_type: Script-based with NNs
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: generative service based on Transformers seq2seq model, the model was
+  pre-trained on the PersonaChat dataset to generate a response conditioned on a several
+  sentences of the socialbot's persona
+ram_usage: 1.5G
+gpu_usage: 1.5G
+group: skills
+connector:
+  protocol: http
+  timeout: 3.0
+  url: http://seq2seq-persona-based:8140/respond
+dialog_formatter: state_formatters.dp_formatters:persona_bot_formatter
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: services/seq2seq_persona_based/service_configs/seq2seq-persona-based
+date_created: '2023-03-16T09:45:32'

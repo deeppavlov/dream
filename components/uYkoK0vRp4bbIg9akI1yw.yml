@@ -1,0 +1,23 @@
+name: dummy_skill
+display_name: Dummy Skill
+component_type: Fallback
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: a fallback skill with multiple non-toxic candidate responses
+ram_usage: 100M
+gpu_usage: null
+group: skills
+connector:
+  protocol: python
+  class_name: skills.dummy_skill.connector:DummySkillConnector
+dialog_formatter: state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: null
+service: skills/dummy_skill/service_configs/agent
+date_created: '2023-03-16T09:45:32'

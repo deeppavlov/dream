@@ -1,0 +1,27 @@
+name: user-persona-extractor
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8114
+      SERVICE_NAME: user_persona_extractor
+      FLASK_APP: server
+    context: .
+    dockerfile: ./annotators/user_persona_extractor/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8114
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./annotators/user_persona_extractor:/src
+  - ./common:/src/common
+  ports:
+  - 8114:8114

@@ -1,0 +1,11 @@
+favorite animal
+like animal
+favorite book
+like read
+favorite movie
+favorite food
+like food
+favorite drink
+like drink
+favorite sport
+like sports

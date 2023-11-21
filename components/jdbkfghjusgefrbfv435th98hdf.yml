@@ -1,0 +1,26 @@
+name: prompt_goals_collector
+display_name: Prompt Goals Collector
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Annotator that collects prompts_goals from the previous step's 
+  hypotheses and saves them to human attributes for future use by the Prompt Selector; 
+  prompts_goals, in turn, are extracted by different prompted skills using 
+  generative services.
+ram_usage: 100M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://prompt-selector:8135/collect_goals
+dialog_formatter: state_formatters.dp_formatters:prompts_goals_collector_formatter
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: update_attributes
+tags: null
+endpoint: collect_goals
+service: annotators/prompt_selector/service_configs/ai_faq_assistant
+date_created: '2023-03-16T09:45:32'

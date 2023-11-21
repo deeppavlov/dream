@@ -24,14 +24,19 @@ services:
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
+      ENABLE_NP_QUESTIONS: 1
+      ENABLE_SWITCH_TOPIC: 1
+      ENABLE_LINK_QUESTIONS: 1
+      ENABLE_NP_FACTS: 1
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   convers-evaluator-annotator:
     env_file: [.env]
     build:
       args:
         CONFIG: conveval.json
-        PORT: 8004
+        SERVICE_PORT: 8004
         DATA_URL: https://files.deeppavlov.ai/alexaprize_data/cobot_conveval2.tar.gz
       context: .
       dockerfile: ./annotators/ConversationEvaluator/Dockerfile
@@ -89,9 +94,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   sentseg:
     env_file: [.env]
@@ -129,6 +134,8 @@ services:
         CONV_EVAL_STRENGTH: 0.4
         PRIORITIZE_HUMAN_INITIATIVE: 0
         QUESTION_TO_QUESTION_DOWNSCORE_COEF: 0.8
+        LANGUAGE: EN
+        FALLBACK_FILE: fallbacks_dream_en.json
       context: .
       dockerfile: ./response_selectors/convers_evaluation_based_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8009
@@ -251,7 +258,7 @@ services:
     build:
       args:
         CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
-        PORT: 8021
+        SERVICE_PORT: 8021
         SRC_DIR: annotators/NER_deeppavlov
         COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
       context: ./
@@ -278,9 +285,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   convert-reddit:
     env_file: [.env]
@@ -322,9 +329,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   misheard-asr:
     env_file: [.env]
@@ -352,14 +359,16 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   dummy-skill-dialog:
     env_file: [.env]
     build:
       args:
+        SERVICE_NAME: dummy_skill_dialog
+        SERVICE_PORT: 8052
         DATA_URL: http://files.deeppavlov.ai/alexaprize_data/dummy_skill_dialog.tar.gz
       context: ./skills/dummy_skill_dialog/
     command: flask run -h 0.0.0.0 -p 8052 --without-threads
@@ -442,9 +451,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   game-cooperative-skill:
     env_file: [.env]
@@ -542,7 +551,6 @@ services:
         SERVICE_PORT: 8075
         SERVICE_NAME: entity_linking
         CONFIG: entity_linking_eng.json
-        PORT: 8075
         SRC_DIR: annotators/entity_linking
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
@@ -565,7 +573,6 @@ services:
         WIKI_LITE_INDEX_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata2022.hdt.index.v1-1
         WIKI_CACHE_DB: http://files.deeppavlov.ai/kbqa/wikidata/wikidata_cache.json
         CONFIG: wiki_parser.json
-        PORT: 8077
         SRC_DIR: annotators/wiki_parser
         COMMIT: ff5b156d16a949c3ec99da7fb60ae907dec37a41
         FAST: 1
@@ -589,7 +596,6 @@ services:
         SERVICE_PORT: 8078
         SERVICE_NAME: text_qa
         CONFIG: qa_eng.json
-        PORT: 8078
       context: services/text_qa
       dockerfile: Dockerfile
     command: flask run -h 0.0.0.0 -p 8078
@@ -611,7 +617,6 @@ services:
         SERVICE_PORT: 8072
         SERVICE_NAME: kbqa
         CONFIG: kbqa_cq_mt_bert_lite.json
-        PORT: 8072
         SRC_DIR: annotators/kbqa/
         COMMIT: 47adffa799cc8b04fa9af7b8842e9f5d76bfe2dc
       context: ./
@@ -640,9 +645,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 50M
+          memory: 100M
         reservations:
-          memory: 50M
+          memory: 100M
 
   dff-grounding-skill:
     env_file: [.env]
@@ -767,9 +772,9 @@ services:
         SERVICE_PORT: 8087
         SERVICE_NAME: combined_classification
         CONFIG: combined_classifier.json
-        PORT: 8087
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8087 --timeout 600
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
@@ -957,7 +962,6 @@ services:
         CONFIG: configs/fact_retrieval_page.json
         CONFIG_WIKI: configs/page_extractor.json
         CONFIG_WHOW: configs/whow_page_extractor.json
-        PORT: 8100
         SRC_DIR: annotators/fact_retrieval/
         COMMIT: 4b3e60c407644b750c9dc292ac6bf206081fb9d0
         N_FACTS: 3
@@ -1060,9 +1064,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 100M
         reservations:
-          memory: 80M
+          memory: 100M
 
   wiki-facts:
     env_file: [.env]
@@ -1109,7 +1113,7 @@ services:
         SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
         CONFIG: entity_detection_eng.json
         LOWERCASE: 1
-        PORT: 8103
+        SERVICE_PORT: 8103
         SRC_DIR: annotators/entity_detection/
         FINEGRAINED: 0
       context: ./

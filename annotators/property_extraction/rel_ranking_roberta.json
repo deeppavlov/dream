@@ -1,0 +1,44 @@
+{
+    "chainer": {
+      "in": ["uttr", "rel_list"],
+      "pipe": [
+        {
+          "class_name": "torch_transformers_preprocessor",
+          "vocab_file": "{TRANSFORMER}",
+          "do_lower_case": true,
+          "max_seq_length": 128,
+          "in": ["uttr", "rel_list"],
+          "out": ["bert_features"]
+        },
+        {
+          "class_name": "torch_transformers_classifier",
+          "n_classes": 2,
+          "return_probas": true,
+          "pretrained_bert": "{TRANSFORMER}",
+          "save_path": "{MODEL_PATH}/model_uncased",
+          "load_path": "{MODEL_PATH}/model_uncased",
+          "optimizer": "AdamW",
+          "optimizer_parameters": {"lr": 1e-05},
+          "learning_rate_drop_patience": 5,
+          "learning_rate_drop_div": 2.0,
+          "in": ["bert_features"],
+          "out": ["y_pred_probas"]
+        }
+      ],
+      "out": ["y_pred_probas"]
+    },
+    "metadata": {
+      "variables": {
+        "ROOT_PATH": "~/.deeppavlov",
+        "DOWNLOADS_PATH": "{ROOT_PATH}/downloads",
+        "TRANSFORMER": "google/bert_uncased_L-4_H-512_A-8",
+        "MODEL_PATH": "{ROOT_PATH}/models/classifiers/rel_ranking_prex"
+      },
+      "download": [
+        {
+          "url": "http://files.deeppavlov.ai/deeppavlov_data/generative_ie/rel_classifier_uncased.tar.gz",
+          "subdir": "{MODEL_PATH}"
+        }
+      ]
+    }
+}

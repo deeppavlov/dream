@@ -3,17 +3,8 @@ import re
 from os import getenv
 from random import choice
 
-from common.utils import (
-    join_words_in_or_pattern,
-    join_sentences_in_or_pattern,
-    get_topics,
-    get_intents,
-    get_sentiment,
-    is_yes,
-    is_no,
-    get_entities,
-    join_word_beginnings_in_or_pattern,
-)
+from common import utils
+from common.join_pattern import *
 from common.greeting import GREETING_QUESTIONS_TEXTS
 import sentry_sdk
 
@@ -23,22 +14,10 @@ sentry_sdk.init(getenv("SENTRY_DSN"))
 
 
 GENERATIVE_ROBOT_TEMPLATE = re.compile(
-    r"(AI:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:)\s?"
+    r"(?:AI:|Assistant:|Robot:|ROBOT:|Computer:|COMPUTER:|User:|USER:|Speaker:|SPEAKER:|Human:|HUMAN:"
+    r"|Ассистент:|Человек:|Чат-?бот:)\s?"
 )
-DUMMY_DONTKNOW_RESPONSES = {
-    "EN": [
-        "What do you want to talk about?",
-        "I am a bit confused. What would you like to chat about?",
-        "Sorry, probably, I didn't get what you meant. What do you want to talk about?",
-        "Sorry, I didn't catch that. What would you like to chat about?",
-    ],
-    "RU": [
-        "О чем ты хочешь поговорить?",
-        "Кажется, я немного потерялась. О чем ты хочешь поговорить?",
-        "Извини, возможно я не совсем поняла, что ты имеешь в виду. О чем ты хочешь поговорить?",
-        "Извини, я не уловила информацию. О чем ты хочешь поболтать?",
-    ],
-}
+
 # https://www.englishclub.com/vocabulary/fl-asking-for-opinions.htm
 UNIVERSAL_OPINION_REQUESTS = [
     "This is interesting, isn't it?",
@@ -177,7 +156,16 @@ SOMETHING_LIKE = [
     "всякое",
     "другое",
 ]
-NOTHING_LIKE = ["nothing", "none", "neither", "ничего", "нечего", "ни о чем", "не о чем", r"ни то,? ни то"]
+NOTHING_LIKE = [
+    "nothing",
+    "none",
+    "neither",
+    "ничего",
+    "нечего",
+    "ни о чем",
+    "не о чем",
+    r"ни то,? ни то",
+]
 DONOTKNOW_LIKE = [
     r"(i )?(do not|don't) know",
     "you (choose|decide|pick up)",
@@ -198,7 +186,8 @@ SOMETHING_WITH_SPACES = r"\s?" + join_words_in_or_pattern(SOMETHING_LIKE) + r"?\
 ABOUT_TOPIC = join_words_in_or_pattern(ABOUT_LIKE) + r"\s" + ANY_WORDS
 KNOW = join_words_in_or_pattern(KNOW_LIKE)
 SOMETHING_ELSE = re.compile(
-    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))", re.IGNORECASE
+    r"((something|anything|everything|что-нибудь|что-то|что угодно|что-либо) (else|other|другом|другое))",
+    re.IGNORECASE,
 )
 
 # --------------- Let's talk. / Can we talk? / Talk to me. ------------
@@ -315,7 +304,8 @@ LIKE_WORDS = r"\b(prefer|adore|enjoy|love|like|stand|into\b|fond of|passionate o
 LIKE_PATTERN = re.compile(LIKE_WORDS, re.IGNORECASE)
 
 NOT_LIKE_PATTERN = re.compile(
-    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)", re.IGNORECASE
+    rf"(hate|loathe|((not|n't) |dis|un)({LIKE_WORDS}|for (me|you)\b)|[a-z ]+\bfan\b)",
+    re.IGNORECASE,
 )
 
 STOP_PATTERN = re.compile(r"(stop|shut|something else|change|don't want)", re.IGNORECASE)
@@ -355,7 +345,7 @@ def if_switch_topic(uttr):
 
 
 def book_movie_music_found(annotated_uttr):
-    topics = set(get_topics(annotated_uttr, which="all"))
+    topics = set(utils.get_topics(annotated_uttr, which="all"))
     target_topics = {
         "Entertainment_Books",
         "Books&Literature",
@@ -369,7 +359,7 @@ def book_movie_music_found(annotated_uttr):
 
 
 def is_switch_topic(annotated_uttr):
-    topic_switch_detected = False  # "Topic_SwitchIntent" in get_intents(annotated_uttr, which="all")
+    topic_switch_detected = False  # "Topic_SwitchIntent" in utils.get_intents(annotated_uttr, which="all")
 
     if topic_switch_detected or if_switch_topic(annotated_uttr["text"].lower()):
         return True
@@ -387,14 +377,16 @@ def if_choose_topic(annotated_uttr, prev_annotated_uttr=None):
     prev_annotated_uttr = {} if prev_annotated_uttr is None else prev_annotated_uttr
     uttr_ = annotated_uttr.get("text", "").lower()
     prev_uttr_ = prev_annotated_uttr.get("text", "--").lower()
-    chat_about_intent = "lets_chat_about" in get_intents(annotated_uttr, probs=False, which="intent_catcher")
+    chat_about_intent = "lets_chat_about" in utils.get_intents(annotated_uttr, probs=False, which="intent_catcher")
     user_asks_what_to_talk_about = re.search(COMPILE_WHAT_TO_TALK_ABOUT, uttr_)
     # user ask to "talk about something"
     smth1 = re.search(COMPILE_LETS_TALK_ABOUT_SOMETHING, uttr_) or (
         chat_about_intent and re.search(COMPILE_SOMETHING, uttr_)
     )
     # bot asks "what user wants to talk about", and user answers "something"
-    prev_chat_about_intent = "lets_chat_about" in get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
+    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(
+        prev_annotated_uttr, probs=False, which="intent_catcher"
+    )
     prev_uttr_asks_what_topic = prev_chat_about_intent or re.search(COMPILE_WHAT_TO_TALK_ABOUT, prev_uttr_)
     smth2 = prev_uttr_asks_what_topic and re.search(COMPILE_SOMETHING, uttr_)
 
@@ -410,9 +402,11 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
         return True
 
     # prev uttr is what do you want to talk about?
-    prev_chat_about_intent = "lets_chat_about" in get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
+    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(
+        prev_annotated_uttr, probs=False, which="intent_catcher"
+    )
     prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
-    if prev_what_to_chat_about and is_no(annotated_uttr):
+    if prev_what_to_chat_about and utils.is_no(annotated_uttr):
         # previously offered to chat about topic, user declines
         return True
     elif prev_what_to_chat_about and is_switch_topic(annotated_uttr):
@@ -423,7 +417,7 @@ def if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_ut
         return True
 
     # current uttr is lets talk about something else / other than
-    chat_about_intent = "lets_chat_about" in get_intents(annotated_uttr, probs=False, which="intent_catcher")
+    chat_about_intent = "lets_chat_about" in utils.get_intents(annotated_uttr, probs=False, which="intent_catcher")
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
     if chat_about and SOMETHING_ELSE.search(uttr_):
         return True
@@ -457,11 +451,13 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     prev_uttr_ = prev_annotated_uttr.get("text", "").lower()
 
     # current uttr is lets talk about blabla
-    chat_about_intent = "lets_chat_about" in get_intents(annotated_uttr, probs=False, which="intent_catcher")
+    chat_about_intent = "lets_chat_about" in utils.get_intents(annotated_uttr, probs=False, which="intent_catcher")
     chat_about = chat_about_intent or if_lets_chat_about_topic(uttr_)
 
     # prev uttr is what do you want to talk about?
-    prev_chat_about_intent = "lets_chat_about" in get_intents(prev_annotated_uttr, probs=False, which="intent_catcher")
+    prev_chat_about_intent = "lets_chat_about" in utils.get_intents(
+        prev_annotated_uttr, probs=False, which="intent_catcher"
+    )
     prev_what_to_chat_about = prev_chat_about_intent or if_utterance_requests_topic(prev_annotated_uttr)
 
     not_want = if_not_want_to_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr)
@@ -470,22 +466,29 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
     elif prev_what_to_chat_about or chat_about:
         if key_words:
             trigger_pattern = re.compile(
-                rf"{join_word_beginnings_in_or_pattern(key_words)}[a-zA-Z0-9,\-\' ]+\?", re.IGNORECASE
+                rf"{join_word_beginnings_in_or_pattern(key_words)}[a-zA-Z0-9,\-\' ]+\?",
+                re.IGNORECASE,
             )
             offered_this_topic = trigger_pattern.search(prev_uttr_)
-            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
+            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or utils.is_yes(annotated_uttr)
             if any([word in uttr_ for word in key_words]) or (offered_this_topic and user_agrees_or_any):
                 return True
             else:
                 return False
         elif compiled_pattern:
             if isinstance(compiled_pattern, str):
-                offered_this_topic = re.search(rf"{compiled_pattern}[a-zA-Z0-9,\-\' ]+\?", prev_uttr_, re.IGNORECASE)
+                offered_this_topic = re.search(
+                    rf"{compiled_pattern}[a-zA-Z0-9,\-\' ]+\?",
+                    prev_uttr_,
+                    re.IGNORECASE,
+                )
             else:
                 offered_this_topic = re.search(
-                    rf"{compiled_pattern.pattern}[a-zA-Z0-9,\-\' ]+\?", prev_uttr_, re.IGNORECASE
+                    rf"{compiled_pattern.pattern}[a-zA-Z0-9,\-\' ]+\?",
+                    prev_uttr_,
+                    re.IGNORECASE,
                 )
-            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or is_yes(annotated_uttr)
+            user_agrees_or_any = ANY_TOPIC_AMONG_OFFERED.search(uttr_) or utils.is_yes(annotated_uttr)
             if re.search(compiled_pattern, uttr_) or (offered_this_topic and user_agrees_or_any):
                 return True
             else:
@@ -496,17 +499,17 @@ def if_chat_about_particular_topic(annotated_uttr, prev_annotated_uttr=None, key
 
 
 def is_negative(annotated_uttr):
-    sentiment = get_sentiment(annotated_uttr, probs=False)[0]
+    sentiment = utils.get_sentiment(annotated_uttr, probs=False)[0]
     return sentiment in ["negative", "very_negative"]
 
 
 def is_positive(annotated_uttr):
-    sentiment = get_sentiment(annotated_uttr, probs=False)[0]
+    sentiment = utils.get_sentiment(annotated_uttr, probs=False)[0]
     return sentiment in ["positive", "very_positive"]
 
 
 def is_neutral(annotated_uttr):
-    sentiment = get_sentiment(annotated_uttr, probs=False)[0]
+    sentiment = utils.get_sentiment(annotated_uttr, probs=False)[0]
     return sentiment in ["neutral"]
 
 
@@ -514,7 +517,7 @@ more_details_pattern = re.compile(r"(\bmore\b|detail)", re.IGNORECASE)
 
 
 def tell_me_more(annotated_uttr):
-    intents = get_intents(annotated_uttr, which="intent_catcher", probs=False)
+    intents = utils.get_intents(annotated_uttr, which="intent_catcher", probs=False)
     cond1 = "tell_me_more" in intents
     cond2 = re.search(more_details_pattern, annotated_uttr["text"])
     return cond1 or cond2
@@ -570,10 +573,12 @@ MY_FAVORITE_PATTERN = re.compile(
 I_LOVE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_LOVE, re.IGNORECASE)
 I_HATE_PATTERN = re.compile(r"(^|\b)(i|i'm|i am|we|we're|we are) " + WORD_HATE, re.IGNORECASE)
 WHAT_FAVORITE_PATTERN = re.compile(
-    r"(what|which)[a-z0-9A-Z \-]* your (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)", re.IGNORECASE
+    r"(what|which)[a-z0-9A-Z \-]* your (favou?rite|(the )?best|beloved|(a )?loved|well-loved|truelove)",
+    re.IGNORECASE,
 )
 WHAT_LESS_FAVORITE_PATTERN = re.compile(
-    r"(what|which)[a-z0-9A-Z \-]* your ((less|least)[- ]favou?rite|(the )?worst|unloved|unlovable)", re.IGNORECASE
+    r"(what|which)[a-z0-9A-Z \-]* your ((less|least)[- ]favou?rite|(the )?worst|unloved|unlovable)",
+    re.IGNORECASE,
 )
 WHAT_DO_YOU_THINK_PATTERN = re.compile(
     r"(what (do|did|are|were) you (think|believe|recognize|sure|understand|feel|appeal|suppose|imagine|guess|"
@@ -586,14 +591,14 @@ WHAT_DO_YOU_THINK_PATTERN = re.compile(
 
 def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict):
     entities_with_attitudes = {"like": [], "dislike": []}
-    all_entities = get_entities(annotated_uttr, only_named=False, with_labels=False)
-    all_prev_entities = get_entities(prev_annotated_uttr, only_named=False, with_labels=False)
+    all_entities = utils.get_entities(annotated_uttr, only_named=False, with_labels=False)
+    all_prev_entities = utils.get_entities(prev_annotated_uttr, only_named=False, with_labels=False)
     logger.info(f"Consider all curr entities: {all_entities}, and all previous entities: {all_prev_entities}")
     curr_entity = all_entities[0] if all_entities else ""
     prev_entity = all_prev_entities[-1] if all_prev_entities else ""
     curr_uttr_text = annotated_uttr.get("text", "")
     prev_uttr_text = prev_annotated_uttr.get("text", "")
-    curr_sentiment = get_sentiment(annotated_uttr, probs=False, default_labels=["neutral"])[0]
+    curr_sentiment = utils.get_sentiment(annotated_uttr, probs=False, default_labels=["neutral"])[0]
     current_first_sentence = (
         annotated_uttr.get("annotations", {}).get("sentseg", {}).get("segments", [curr_uttr_text])[0]
     )
@@ -607,17 +612,17 @@ def get_entities_with_attitudes(annotated_uttr: dict, prev_annotated_uttr: dict)
         # what is your less favorite ..? - animals -> `dislike animals`
         entities_with_attitudes["dislike"] += [curr_entity]
     elif DO_YOU_LOVE_PATTERN.search(prev_uttr_text):
-        if is_no(annotated_uttr):
+        if utils.is_no(annotated_uttr):
             # do you love .. animals? - no -> `dislike animals`
             entities_with_attitudes["dislike"] += [prev_entity]
-        elif is_yes(annotated_uttr):
+        elif utils.is_yes(annotated_uttr):
             # do you love .. animals? - yes -> `like animals`
             entities_with_attitudes["like"] += [prev_entity]
     elif DO_YOU_HATE_PATTERN.search(prev_uttr_text):
-        if is_no(annotated_uttr):
+        if utils.is_no(annotated_uttr):
             # do you hate .. animals? - no -> `like animals`
             entities_with_attitudes["like"] += [prev_entity]
-        elif is_yes(annotated_uttr):
+        elif utils.is_yes(annotated_uttr):
             # do you hate .. animals? - yes -> `dislike animals`
             entities_with_attitudes["dislike"] += [prev_entity]
     elif I_HATE_PATTERN.search(curr_uttr_text):
