@@ -8,7 +8,7 @@
         ],
         [
             {
-                "dff_dream_persona_prompted_skill_state": {
+                "dff_knowledge_prompted_skill_state": {
                     "shared_memory": {},
                     "previous_human_utter_index": 1,
                     "history": {

@@ -13,20 +13,6 @@ services:
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
 
-  sentseg:
-    env_file: [.env]
-    build:
-      context: ./annotators/SentSeg/
-    command: flask run -h 0.0.0.0 -p 8011
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 1.5G
-        reservations:
-          memory: 1.5G
-
   ranking-based-response-selector:
     env_file: [ .env ]
     build:
@@ -39,6 +25,7 @@ services:
         SENTENCE_RANKER_TIMEOUT: 3
         N_UTTERANCES_CONTEXT: 5
         FILTER_TOXIC_OR_BADLISTED: 1
+        FALLBACK_FILE: fallbacks_dream_en.json
       context: .
       dockerfile: ./response_selectors/ranking_based_response_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8002
@@ -50,6 +37,57 @@ services:
           memory: 100M
         reservations:
           memory: 100M
+
+  sentseg:
+    env_file: [ .env ]
+    build:
+      context: ./annotators/SentSeg/
+    command: flask run -h 0.0.0.0 -p 8011
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+        reservations:
+          memory: 1.5G
+
+  dff-intent-responder-skill:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8012
+        SERVICE_NAME: dff_intent_responder_skill
+        INTENT_RESPONSE_PHRASES_FNAME: intent_response_phrases.json
+      context: .
+      dockerfile: ./skills/dff_intent_responder_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8012 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+
+  intent-catcher:
+    env_file: [ .env ]
+    build:
+      context: .
+      dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
+      args:
+        SERVICE_PORT: 8014
+        CONFIG_NAME: intents_model_dp_config.json
+        INTENT_PHRASES_PATH: intent_phrases.json
+    command: python -m flask run -h 0.0.0.0 -p 8014
+    environment:
+      - FLASK_APP=server
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 3.5G
+        reservations:
+          memory: 3.5G
 
   ner:
     env_file: [ .env ]
@@ -64,7 +102,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8021
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=0
     tty: true
     deploy:
       resources:
@@ -77,19 +115,20 @@ services:
     env_file: [.env]
     build:
       args:
-        CONFIG: entity_linking_eng.json
         SERVICE_PORT: 8075
+        SERVICE_NAME: entity_linking
+        CONFIG: entity_linking_eng.json
         SRC_DIR: annotators/entity_linking
       context: ./
       dockerfile: annotators/entity_linking/Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
-          memory: 1.5G
+          memory: 2.5G
         reservations:
-          memory: 1.5G
+          memory: 2.5G
 
   combined-classification:
     env_file: [.env]
@@ -100,7 +139,7 @@ services:
       context: .
       dockerfile: ./annotators/combined_classification/Dockerfile
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -123,7 +162,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8103
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -163,7 +202,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8131
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=4
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -209,6 +248,7 @@ services:
       args:
         SERVICE_PORT: 8135
         SERVICE_NAME: prompt_selector
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
         N_SENTENCES_TO_RETURN: 3
         PROMPTS_TO_CONSIDER: knowledge
       context: .
@@ -228,11 +268,12 @@ services:
     build:
       args:
         SERVICE_PORT: 8128
-        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/bert-base-nli-mean-tokens
+        SERVICE_NAME: sentence_ranker
+        PRETRAINED_MODEL_NAME_OR_PATH: sentence-transformers/all-MiniLM-L6-v2
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:
