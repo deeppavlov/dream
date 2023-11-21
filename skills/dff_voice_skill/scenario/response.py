@@ -17,6 +17,4 @@ def caption(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -
             .get("captions", "No cap")
         )
 
-    int_ctx.set_confidence(ctx, actor, 1)
-
     return f"Is there {cap} in that audio?"

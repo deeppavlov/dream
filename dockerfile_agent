@@ -33,7 +33,6 @@ RUN pip install jinja2==3.0.3 Werkzeug==2.0.3
 
 ARG AGENT_COMMIT=cea048eb2c421649a534321dd570dc52e90da0b7
 RUN pip install https://codeload.github.com/deeppavlov/dp-agent/tar.gz/${AGENT_COMMIT}
-RUN cat /usr/local/lib/python3.7/site-packages/deeppavlov_agent/channels/telegram/bot.py
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8

@@ -164,8 +164,6 @@ services:
           memory: 3G
 
   voice-service:
-    ports:
-        - "8333:8333"
     env_file: [ .env ]
     build:
       args:
@@ -184,8 +182,6 @@ services:
           memory: 5G
 
   dff-voice-skill:
-    ports:
-        - "8444:8444"
     env_file: [ .env ]
     build:
       args:
@@ -195,7 +191,6 @@ services:
       dockerfile: ./skills/dff_voice_skill/Dockerfile
     command: gunicorn --workers=1 server:app -b 0.0.0.0:8444 --reload
     environment:
-      - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
     deploy:
       resources:

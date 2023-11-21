@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 import time
+from itertools import zip_longest
 
 import sentry_sdk
 from aux_files.inference import infer
@@ -29,45 +30,55 @@ def respond():
     global CAP_ERR_MSG
     st_time = time.time()
 
-    path = request.json.get("sound_path")
-    duration = request.json.get("sound_duration")
-    type = request.json.get("sound_type")
+    paths = request.json.get("sound_path")
+    durations = request.json.get("sound_duration")
+    types = request.json.get("sound_type")
 
-    logger.info(f"path: {path}")
+    responses = []
 
-    filename_extract = path[0]
-    filename_els = filename_extract.split("=")
-    filename = filename_els[-1]
+    for path, duration, atype in zip_longest(paths, durations, types):
+        filename_extract = path[0]
+        filename_els = filename_extract.split("=")
+        filename = filename_els[-1]
 
-    if not os.path.exists(AUDIO_DIR):
-        os.makedirs(AUDIO_DIR)
+        if not os.path.exists(AUDIO_DIR):
+            os.makedirs(AUDIO_DIR)
 
-    for i in os.listdir(AUDIO_DIR):
-        os.remove(os.path.join(AUDIO_DIR, i))
-
-    if filename.split('.')[-1] in ['oga', 'mp3', 'MP3', 'ogg', 'flac', 'mp4']:
-        file = URLopener()
-        file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
-
-        import subprocess
-        process = subprocess.run(['ffmpeg', '-i', os.path.join(AUDIO_DIR, filename),
-                                  os.path.join(AUDIO_DIR, filename[:-len(filename.split('.')[-1])] + "wav")])
-        if process.returncode != 0:
-            raise Exception("Something went wrong")
-    try:
-        logger.info(f"Scanning AUDIO_DIR ({AUDIO_DIR}) for wav files...")
         for i in os.listdir(AUDIO_DIR):
-            if i.split(".")[-1] == 'wav':
-                break
-        else:
-            CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
-            raise Exception(CAP_ERR_MSG)
-        logger.info("Scanning finished successfully, files found, starting inference...")
-        captions = infer(AUDIO_DIR, MODEL_PATH)
-        logger.info("Inference finished successfully")
-        responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
-    except:
-        responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
+            os.remove(os.path.join(AUDIO_DIR, i))
+
+        if filename.split(".")[-1] in ["oga", "mp3", "MP3", "ogg", "flac", "mp4"]:
+            file = URLopener()
+            file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
+
+            import subprocess
+
+            process = subprocess.run(
+                [
+                    "ffmpeg",
+                    "-i",
+                    os.path.join(AUDIO_DIR, filename),
+                    os.path.join(AUDIO_DIR, filename[: -len(filename.split(".")[-1])] + "wav"),
+                ]
+            )
+            if process.returncode != 0:
+                raise Exception("Something went wrong")
+        try:
+            logger.info(f"Scanning AUDIO_DIR ({AUDIO_DIR}) for wav files...")
+            for i in os.listdir(AUDIO_DIR):
+                if i.split(".")[-1] == "wav":
+                    break
+            else:
+                CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
+                raise Exception(CAP_ERR_MSG)
+            logger.info("Scanning finished successfully, files found, starting inference...")
+            captions = infer(AUDIO_DIR, MODEL_PATH)
+            logger.info("Inference finished successfully")
+            responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
+        except Exception as e:
+            responses.append(
+                [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG + str(e)}]
+            )
 
     logger.info(f"VOICE_SERVICE RESPONSE: {responses}")
 

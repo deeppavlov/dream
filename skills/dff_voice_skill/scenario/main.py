@@ -12,9 +12,9 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {
-        TRANSITIONS: {("greeting", "caption"): loc_cnd.voice_message_detected},
+        TRANSITIONS: {("response", "caption"): loc_cnd.voice_message_detected},
     },
-    "greeting": {
+    "response": {
         LOCAL: {
             PROCESSING: {
                 "set_confidence": int_prs.set_confidence(1.0),
@@ -29,11 +29,9 @@ flows = {
     },
     "global_flow": {
         "start": {
-            RESPONSE: "The voice skill is now active and running.",
             TRANSITIONS: {},
         },
         "fallback": {
-            RESPONSE: "An exception occured while accessing voice skill.",
             TRANSITIONS: {},
         },
     },

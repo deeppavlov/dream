@@ -1070,7 +1070,7 @@ def voice_formatter_service(dialog: Dict) -> List[Dict]:
             "captions": [dialog["human_utterances"][-1]["attributes"].get("captions")]}]
 
 
-def dff_voice_skill_formatter(dialog, skill_name = None):
+def dff_voice_skill_formatter(dialog, skill_name="dff_voice_skill"):
     return utils.dff_formatter(
         dialog, 
         skill_name,
