@@ -103,7 +103,7 @@ def vectorize_upload_return_attributes(
         processed_docs: A dictionary with information about processed documents.
 
     Returns:
-        A tuple of dicts: one with information about the model files uploaded to server:
+        A dict with information about the model files uploaded to server:
         model_info = {
             'db_link': '{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.db',
             'matrix_link': '{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.npz',

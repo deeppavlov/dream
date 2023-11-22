@@ -17,25 +17,6 @@ Here is an example of what Document Retriever may add to the dialog state for bo
 {
     "human": {
         "attributes": {
-            "documents_in_use": {
-                "3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc": {
-                    "full_processed_text_link": "{FILE_SERVER_URL}/file?file=3bFzQ3tc3I_7ed546db9846ba7661ceda123837f7fc.txt",
-                    "source_file_ids": ["MehiMaayiX_7ed546db9846ba7661ceda123837f7fc", "kmk02fOIf_7ed546db9846ba7661ceda123837f7fc"],
-                    "vectors_processed": True
-                },
-            }
-        }
-    }
-}
-```
-NB: `documents_in_use` were added earlier by Document Processor. Document Retriever only adds a new key `vectors_processed` item to each document in `documents_in_use`.
-
-`vectors_processed` shows whether the file was already vectorized by Document Retriever.
-
-```
-{
-    "human": {
-        "attributes": {
             "model_info": {
                 "db_link": "{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.db",
                 "matrix_link": "{FILE_SERVER_URL}/file?file=lmskdUBH9m_7ed546db9846ba7661ceda123837f7fc.npz",
