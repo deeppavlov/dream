@@ -1,59 +1,20 @@
 {
     "human_utter_index_batch": [
-        0
+        14
     ],
     "dialog_batch": [
         {
             "human_utterances": [
                 {
-                    "text": "hi.",
+                    "text": "",
                     "annotations": {
-                        "asr": {
-                            "asr_confidence": "undefined"
-                        },
-                        "spelling_preprocessing": "hi",
-                        "badlisted_words": {
-                            "inappropriate": false,
-                            "profanity": false,
-                            "restricted_topics": false
-                        },
-                        "spacy_nounphrases": [],
-                        "factoid_classification": {
-                            "factoid": 0.009537393227219582,
-                            "conversational": 0.990462601184845
-                        },
-                        "conceptnet": {},
-                        "combined_classification": {
-                            "cobot_dialogact_intents": {
-                                "General_ChatIntent": 0.9982210397720337
-                            },
-                            "cobot_dialogact_topics": {
-                                "Other": 0.9222673773765564
-                            },
-                            "cobot_topics": {
-                                "Phatic": 0.9989814758300781
-                            },
-                            "emotion_classification": {
-                                "neutral": 0.9996328353881836
-                            },
-                            "sentiment_classification": {
-                                "positive": 0.737922191619873
-                            },
-                            "toxic_classification": {
-                                "toxic": 0.0014452040195465088
-                            }
-                        },
+                        "spelling_preprocessing": "",
                         "sentseg": {
-                            "punct_sent": "hi.",
+                            "punct_sent": "",
                             "segments": [
-                                "hi."
+                                ""
                             ]
                         },
-                        "topic_recommendation": [
-                            "dff_movie_skill",
-                            "dff_travel_skill",
-                            "dff_music_skill"
-                        ],
                         "intent_catcher": {
                             "cant_do": {
                                 "confidence": 0.0,
@@ -144,82 +105,124 @@
                                 "detected": 0
                             }
                         },
-                        "midas_classification": [
-                            {
-                                "appreciation": 0.0037371967919170856,
-                                "command": 0.014534023590385914,
-                                "comment": 0.007815568707883358,
-                                "complaint": 0.013871942646801472,
-                                "dev_command": 0.011961258016526699,
-                                "neg_answer": 0.0012791282497346401,
-                                "open_question_factual": 0.00706735672429204,
-                                "open_question_opinion": 0.0020942040719091892,
-                                "opinion": 0.028205107897520065,
-                                "other_answers": 0.0029170422349125147,
-                                "pos_answer": 0.003618006594479084,
-                                "statement": 0.8965855836868286,
-                                "yes_no_question": 0.006313641089946032
-                            }
-                        ],
-                        "ner": [
-                            []
-                        ],
-                        "entity_linking": [],
-                        "sentrewrite": {
-                            "clusters": [],
-                            "modified_sents": [
-                                "hi."
-                            ]
+                        "voice_service": {
+                            "captions": "a man talking"
+                        }
+                    },
+                    "user": {
+                        "id": "639876f976b2962019b5ad48",
+                        "user_external_id": "201223105",
+                        "persona": {},
+                        "profile": {
+                            "name": null,
+                            "gender": null,
+                            "birthdate": null,
+                            "location": null,
+                            "home_coordinates": null,
+                            "work_coordinates": null,
+                            "occupation": null,
+                            "income_per_year": null
                         },
-                        "fact_retrieval": {
-                            "facts": [],
-                            "topic_facts": []
-                        },
-                        "kbqa": {
-                            "answer": "",
-                            "confidence": 0.0,
-                            "qa_system": "kbqa"
-                        },
-                        "entity_detection": {},
-                        "wiki_parser": {
-                            "animals_skill_entities_info": {},
-                            "entities_info": {},
-                            "topic_skill_entities_info": {},
-                            "utt_num": 1,
-                            "wiki_skill_entities_info": {}
-                        },
-                        "fact_random": [],
-                        "news_api_annotator": [
-                            {
-                                "entity": "all",
-                                "news": {
-                                    "content": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours. The companies also will not be allowed to provide services to users who haven't logged in with real-n... [3065 chars]",
-                                    "description": "The rules will apply to companies providing online game services to minors, limiting their ability to serve those users outside of designated hours.",
-                                    "image": "https://image.cnbcfm.com/api/v1/image/106924433-GettyImages-1234392254.jpg?v=1630329277",
-                                    "publishedAt": "2021-08-30T13:52:58Z",
-                                    "source": {
-                                        "name": "CNBC",
-                                        "url": "https://www.cnbc.com"
+                        "attributes": {
+                            "disliked_skills": [],
+                            "age_group": "",
+                            "dff_voice_skill_state": {
+                                "context": {
+                                    "actor_state": {},
+                                    "id": "80f98394-6b2c-4f45-be54-56160ae12dd7",
+                                    "labels": {
+                                        "0": [
+                                            "response",
+                                            "caption"
+                                        ]
                                     },
-                                    "title": "China to ban kids from playing online games for more than three hours per week",
-                                    "url": "https://www.cnbc.com/2021/08/30/china-to-ban-kids-from-playing-online-games-for-more-than-three-hours-per-week.html"
+                                    "misc": {},
+                                    "requests": {
+                                        "0": ""
+                                    },
+                                    "responses": {
+                                        "0": "Is there a man talking in that audio?"
+                                    },
+                                    "validation": false
                                 },
-                                "which": "all"
-                            }
-                        ]
+                                "current_turn_dff_suspended": false,
+                                "history": {
+                                    "4": [
+                                        "response",
+                                        "caption"
+                                    ]
+                                },
+                                "previous_human_utter_index": 4,
+                                "shared_memory": {}
+                            },
+                            "dff_shared_state": {
+                                "cross_links": {},
+                                "cross_states": {}
+                            },
+                            "used_links": {}
+                        },
+                        "user_type": "human"
                     }
                 }
             ],
-            "bot_utterances": []
+            "bot_utterances": [
+                {
+                    "text": ",.,?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": ",.,?",
+                            "segments": [
+                                ",.",
+                                ",?"
+                            ]
+                        }
+                    },
+                    "active_skill": "dialogpt",
+                    "user": {
+                        "id": "63c923636572d14b2f602840",
+                        "persona": {},
+                        "attributes": {},
+                        "user_type": "bot"
+                    }
+                }
+            ]
         }
     ],
-    "dff_template_skill_state_batch": [
-        {}
+    "dff_voice_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "80f98394-6b2c-4f45-be54-56160ae12dd7",
+                "labels": {
+                    "0": [
+                        "response",
+                        "caption"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "0": ""
+                },
+                "responses": {
+                    "0": ""
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "4": [
+                    "response",
+                    "caption"
+                ]
+            },
+            "previous_human_utter_index": 4,
+            "shared_memory": {}
+        }
     ],
     "dff_shared_state_batch": [
         {
-            "cross_states": {},
-            "cross_links": {}
+            "cross_links": {},
+            "cross_states": {}
         }
     ],
     "entities_batch": [
@@ -229,13 +232,15 @@
         {}
     ],
     "age_group_batch": [
-        "unknown"
+        ""
     ],
     "disliked_skills_batch": [
         []
     ],
+    "prompts_goals_batch": [
+        {}
+    ],
     "clarification_request_flag_batch": [
         false
-    ],
-    "random_seed": 2718
+    ]
 }
