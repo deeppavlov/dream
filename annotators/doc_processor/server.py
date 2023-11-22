@@ -45,7 +45,7 @@ def process_and_upload_doc():
             # even if we reset the dialog, we may still get some old files in docs_in_use
             # thus, for a new dialog, we manually reset docs_in_use
             if len(human_utts) == 1 and len(bot_utts) == 0:
-                docs_in_use_info = {}
+                docs_in_use_info = []
             # check if we got sth from attributes (docs_in_atts) or arguments (DOC_PATHS_OR_LINKS)
             # if these docs were not processed yet, process them and upload to file server
             # if these docs were already processed, just reset n_steps_discussed
