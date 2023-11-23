@@ -1361,6 +1361,7 @@ def bot_knowledge_memorizer_formatter_last_bot_dialog(dialog: Dict) -> List[Dict
             "human_utterances": [dialog["human_utterances"][-1]],
         }
     ]
+
 def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
     last_sentences = [dialog["human_utterances"][-1]["text"]]
     dialog_ids = [dialog.get("dialog_id", "unknown")]
