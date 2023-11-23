@@ -64,7 +64,7 @@ services:
       - "./common:/src/common"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8028:8028
+      - 8044:8044
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
@@ -93,6 +93,6 @@ services:
       - "./skills/dff_knowledge_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8051:8051
+      - 8088:8088
 
 version: "3.7"

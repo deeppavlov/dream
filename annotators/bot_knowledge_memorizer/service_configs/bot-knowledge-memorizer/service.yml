@@ -7,7 +7,7 @@ compose:
   - .env_secret
   build:
     args:
-      SERVICE_PORT: 8028
+      SERVICE_PORT: 8044
       SRC_DIR: annotators/bot_knowledge_memorizer/
       SERVICE_NAME: bot_knowledge_memorizer
       TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
@@ -24,7 +24,7 @@ compose:
       USE_BOT_KG_DATA: 1
     context: ./
     dockerfile: annotators/bot_knowledge_memorizer/Dockerfile
-  command: flask run -h 0.0.0.0 -p 8028
+  command: flask run -h 0.0.0.0 -p 8044
   environment:
   - FLASK_APP=server
   deploy:
@@ -37,5 +37,5 @@ compose:
   - ./annotators/bot_knowledge_memorizer:/src
   - ~/.deeppavlov:/root/.deeppavlov
   ports:
-  - 8028:8028
+  - 8044:8044
 proxy: null

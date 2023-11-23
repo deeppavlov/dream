@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, 
           ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103, terminusdb-server:6363, 
-          bot-knowledge-memorizer:8028, property-extraction:8131, custom-entity-linking:8153, dff-bot-knowledge-prompted-skill:8051, 
+          bot-knowledge-memorizer:8044, property-extraction:8131, custom-entity-linking:8153, dff-bot-knowledge-prompted-skill:8088, 
           sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
@@ -174,7 +174,7 @@ services:
     env_file: [ .env, .env_secret]
     build:
       args:
-        SERVICE_PORT: 8028
+        SERVICE_PORT: 8044
         SRC_DIR: annotators/bot_knowledge_memorizer/
         SERVICE_NAME: bot_knowledge_memorizer
         TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
@@ -192,7 +192,7 @@ services:
         USE_BOT_KG_DATA: 1
       context: ./
       dockerfile: annotators/bot_knowledge_memorizer/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8028
+    command: flask run -h 0.0.0.0 -p 8044
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=8
@@ -264,7 +264,7 @@ services:
     env_file: [ .env, .env_secret ]
     build:
       args:
-        SERVICE_PORT: 8051
+        SERVICE_PORT: 8088
         SERVICE_NAME: dff_bot_knowledge_prompted_skill
         PROMPT_FILE: common/prompts/bot_knowledge.json
         GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond

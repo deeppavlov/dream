@@ -1,4 +1,4 @@
-SERVICE_PORT: 8051
+SERVICE_PORT: 8088
 SERVICE_NAME: dff_bot_knowledge_prompted_skill
 PROMPT_FILE: common/prompts/bot_knowledge.json
 GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond

@@ -29,7 +29,7 @@
 8025
 8026
 8027    user-knowledge-memorizer
-8028    bot-knowledge-memorizer
+8028    
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
 8031	asr
@@ -45,14 +45,14 @@
 8041
 8042
 8043
-8044
+8044    bot-knowledge-memorizer
 8045
 8046
 8047	eliza
 8048
 8049	emotion-skill
 8050
-8051    dff-bot-knowledge-prompted-skill
+8051    
 8052	dummy-skill-dialog
 8053	comet-atomic
 8054	meta-script-skill
@@ -89,7 +89,7 @@
 8085	knowledge-grounding-skill
 8086	dff-friendship-ru-skill,dff-friendship-skill
 8087	combined-classification
-8088
+8088    dff-bot-knowledge-prompted-skill
 8089	entity-storer
 8090	midas-classification
 8091
