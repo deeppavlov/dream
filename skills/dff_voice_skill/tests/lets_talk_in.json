@@ -1,6 +1,6 @@
 {
     "human_utter_index_batch": [
-        14
+        6
     ],
     "dialog_batch": [
         {
@@ -8,7 +8,6 @@
                 {
                     "text": "",
                     "annotations": {
-                        "spelling_preprocessing": "",
                         "sentseg": {
                             "punct_sent": "",
                             "segments": [
@@ -106,83 +105,131 @@
                             }
                         },
                         "voice_service": {
-                            "captions": "a man talking"
+                            "captions": "a siren blaring siren blaring siren blaring and a siren blaring",
+                            "sound_duration": 4,
+                            "sound_path": "http://files:3000/file?file=file_178.oga",
+                            "sound_type": "voice_message"
                         }
-                    },
-                    "user": {
-                        "id": "639876f976b2962019b5ad48",
-                        "user_external_id": "201223105",
-                        "persona": {},
-                        "profile": {
-                            "name": null,
-                            "gender": null,
-                            "birthdate": null,
-                            "location": null,
-                            "home_coordinates": null,
-                            "work_coordinates": null,
-                            "occupation": null,
-                            "income_per_year": null
+                    }
+                },
+                {
+                    "text": "",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "",
+                            "segments": [
+                                ""
+                            ]
                         },
-                        "attributes": {
-                            "disliked_skills": [],
-                            "age_group": "",
-                            "dff_voice_skill_state": {
-                                "context": {
-                                    "actor_state": {},
-                                    "id": "80f98394-6b2c-4f45-be54-56160ae12dd7",
-                                    "labels": {
-                                        "0": [
-                                            "response",
-                                            "caption"
-                                        ]
-                                    },
-                                    "misc": {},
-                                    "requests": {
-                                        "0": ""
-                                    },
-                                    "responses": {
-                                        "0": "Is there a man talking in that audio?"
-                                    },
-                                    "validation": false
-                                },
-                                "current_turn_dff_suspended": false,
-                                "history": {
-                                    "4": [
-                                        "response",
-                                        "caption"
-                                    ]
-                                },
-                                "previous_human_utter_index": 4,
-                                "shared_memory": {}
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
                             },
-                            "dff_shared_state": {
-                                "cross_links": {},
-                                "cross_states": {}
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
                             },
-                            "used_links": {}
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
                         },
-                        "user_type": "human"
+                        "voice_service": {
+                            "captions": "someone is playing a musical instrument while music plays in the background",
+                            "sound_duration": 2,
+                            "sound_path": "http://files:3000/file?file=file_179.oga",
+                            "sound_type": "voice_message"
+                        }
                     }
                 }
             ],
             "bot_utterances": [
                 {
-                    "text": ",.,?",
+                    "text": "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?",
                     "annotations": {
                         "sentseg": {
-                            "punct_sent": ",.,?",
+                            "punct_sent": "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?",
                             "segments": [
-                                ",.",
-                                ",?"
+                                "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?"
                             ]
                         }
-                    },
-                    "active_skill": "dialogpt",
-                    "user": {
-                        "id": "63c923636572d14b2f602840",
-                        "persona": {},
-                        "attributes": {},
-                        "user_type": "bot"
                     }
                 }
             ]
@@ -192,30 +239,52 @@
         {
             "context": {
                 "actor_state": {},
-                "id": "80f98394-6b2c-4f45-be54-56160ae12dd7",
+                "id": "41d0492d-f65b-44f3-8792-de756549645b",
                 "labels": {
-                    "0": [
+                    "3": [
+                        "response",
+                        "caption"
+                    ],
+                    "4": [
                         "response",
                         "caption"
                     ]
                 },
                 "misc": {},
                 "requests": {
-                    "0": ""
+                    "3": "",
+                    "4": ""
                 },
                 "responses": {
-                    "0": ""
+                    "3": "Is there the wind is blowing in the background while the wind blows in that audio?",
+                    "4": "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?"
                 },
                 "validation": false
             },
             "current_turn_dff_suspended": false,
             "history": {
+                "0": [
+                    "response",
+                    "caption"
+                ],
+                "2": [
+                    "response",
+                    "caption"
+                ],
+                "3": [
+                    "response",
+                    "caption"
+                ],
                 "4": [
+                    "response",
+                    "caption"
+                ],
+                "5": [
                     "response",
                     "caption"
                 ]
             },
-            "previous_human_utter_index": 4,
+            "previous_human_utter_index": 5,
             "shared_memory": {}
         }
     ],
@@ -242,5 +311,8 @@
     ],
     "clarification_request_flag_batch": [
         false
+    ],
+    "dialog_id_batch": [
+        "6666f3459534d05c11e8191bf89fd4f0"
     ]
 }

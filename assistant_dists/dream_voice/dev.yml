@@ -56,12 +56,12 @@ services:
   voice-service:
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
-      - "./services/voice_service:/src"
+      - "./services/voice_service:/srcf"
     ports:
       - 8333:8333
   dff-voice-skill:
     volumes:
-      - "./skills/dff_voice_skill:/src"
+      - "./skills/dff_voice_skill:/srcf"
       - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8444:8444

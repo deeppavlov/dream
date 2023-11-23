@@ -37,8 +37,8 @@ def respond():
     responses = []
 
     for path, duration, atype in zip_longest(paths, durations, types):
-        filename_extract = path[0]
-        filename_els = filename_extract.split("=")
+        logger.info(f"Processing batch at voice_service: {path}, {duration}, {atype}")
+        filename_els = path.split("=")
         filename = filename_els[-1]
 
         if not os.path.exists(AUDIO_DIR):
@@ -49,7 +49,7 @@ def respond():
 
         if filename.split(".")[-1] in ["oga", "mp3", "MP3", "ogg", "flac", "mp4"]:
             file = URLopener()
-            file.retrieve(path[0], os.path.join(AUDIO_DIR, filename))
+            file.retrieve(path, os.path.join(AUDIO_DIR, filename))
 
             import subprocess
 
@@ -74,10 +74,10 @@ def respond():
             logger.info("Scanning finished successfully, files found, starting inference...")
             captions = infer(AUDIO_DIR, MODEL_PATH)
             logger.info("Inference finished successfully")
-            responses = [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": captions}]
-        except Exception as e:
+            responses = [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": captions}]
+        except Exception:
             responses.append(
-                [{"sound_type": type, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG + str(e)}]
+                [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
             )
 
     logger.info(f"VOICE_SERVICE RESPONSE: {responses}")
