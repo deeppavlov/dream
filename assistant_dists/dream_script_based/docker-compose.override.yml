@@ -25,7 +25,12 @@ services:
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
+      ENABLE_NP_QUESTIONS: 1
+      ENABLE_SWITCH_TOPIC: 1
+      ENABLE_LINK_QUESTIONS: 1
+      ENABLE_NP_FACTS: 1
       LANGUAGE: EN
+      FALLBACK_FILE: fallbacks_dream_en.json
 
   convers-evaluator-annotator:
     env_file: [ .env ]
@@ -1258,6 +1263,7 @@ services:
       args:
         SERVICE_PORT: 8133
         SERVICE_NAME: relative_persona_extractor
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
         N_SENTENCES_TO_RETURN: 3
       context: .
       dockerfile: ./annotators/relative_persona_extractor/Dockerfile

@@ -10,23 +10,23 @@ services:
       - 3000:3000
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  ranking-based-response-selector:
+    volumes:
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8002:8002
   dff-program-y-skill:
     volumes:
       - "./skills/dff_program_y_skill:/src"
       - "./common:/src/common"
     ports:
       - 8008:8008
-  sentseg:
-    volumes:
-      - "./annotators/SentSeg:/src"
-    ports:
-      - 8011:8011
-  convers-evaluation-selector:
-    volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
-      - "./common:/src/common"
-    ports:
-      - 8009:8009
   dff-intent-responder-skill:
     volumes:
       - "./skills/dff_intent_responder_skill:/src"
@@ -46,11 +46,6 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  spelling-preprocessing:
-    volumes:
-      - "./annotators/spelling_preprocessing:/src"
-    ports:
-      - 8074:8074
   dialogpt:
     volumes:
       - "./services/dialogpt:/src"
@@ -64,16 +59,17 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
-  image-captioning:
+  fromage:
     volumes:
-      - "./services/image_captioning:/src"
-      - "~/.deeppavlov/file_server:/tmp"
+      - "./services/fromage:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8123:8123
-  dff-image-skill:
+      - 8069:8069
+  dff-fromage-image-skill:
     volumes:
-      - "./skills/dff_image_skill:/src"
+      - "./skills/dff_fromage_image_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8124:8124
+      - 8070:8070
 version: "3.7"

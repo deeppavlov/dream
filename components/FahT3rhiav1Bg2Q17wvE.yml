@@ -11,7 +11,7 @@ group: skills
 connector:
   protocol: http
   timeout: 2.0
-  url: http://dff-travel-italy-skill:8139/respond
+  url: http://dff-travel-italy-skill:8025/respond
 dialog_formatter: state_formatters.dp_formatters:dff_travel_italy_skill_formatter
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:

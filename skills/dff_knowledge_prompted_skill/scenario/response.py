@@ -3,39 +3,40 @@ import logging
 import re
 import sentry_sdk
 from os import getenv
-from pathlib import Path
 from typing import Any
 
 import common.dff.integration.context as int_ctx
 import common.dff.integration.response as int_rsp
 from common.constants import CAN_NOT_CONTINUE
-from common.prompts import send_request_to_prompted_generative_service, get_goals_from_prompt, compose_sending_variables
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from df_engine.core import Context, Actor
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
-USE_KG_DATA = getenv("USE_KG_DATA", False)  # set variable not in .env but in Dockerfile and docker-compose
+USE_KG_DATA = int(getenv("USE_KG_DATA", 0))
+USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
 USE_BOT_KG_DATA = int(getenv("USE_BOT_KG_DATA", 0))
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
 
-PROMPT_FILE = getenv("PROMPT_FILE")  # set prompt in docker-compose?
+PROMPT_FILE = getenv("PROMPT_FILE")
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
+assert USER_KG_SERVICE_URL
+
 with open(PROMPT_FILE, "r") as f:
     PROMPT_DICT = json.load(f)
 PROMPT = PROMPT_DICT["prompt"]
-GOALS_FROM_PROMPT = PROMPT_DICT.get("goals", "")
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 PROMPT_REPLACEMENT_COMMAND = re.compile(r"^/prompt")
@@ -87,31 +88,17 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         **human_uttr_attributes,
     )
 
-    shared_memory = int_ctx.get_shared_memory(ctx, actor)
-    prompt = shared_memory.get("prompt", "")
     prompt = PROMPT
 
     # To use knowledge about user
-    custom_el = (
-        ctx.misc.get("agent", {})
-        .get("dialog", {})
-        .get("human_utterances", [{}])[-1]
-        .get("annotations", {})
-        .get("custom_entity_linking")
-    )
-    user_kg = (
-        ctx.misc.get("agent", {})
-        .get("dialog", {})
-        .get("human_utterances", [{}])[-1]
-        .get("annotations", {})
-        .get("user_knowledge_graph")
-    )
+    custom_el = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("custom_entity_linking")
+    user_kg = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("user_knowledge_memorizer")
     logger.info(f"custom_el: {custom_el}")
     logger.info(f"user_kg: {user_kg}")
 
     if USE_KG_DATA and user_kg and (kg_prompt := user_kg["kg_prompt"]):
-        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0][0].lower()).split(".")
-        kg_prompt = ",".join(kg_prompt[:-1])
+        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0].lower()).split(".")
+        kg_prompt = ",".join(kg_prompt)
         prompt = prompt + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
 
     # To use knowledge about bot
@@ -155,33 +142,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         hypotheses = []
     logger.info(f"generated hypotheses: {hypotheses}")
 
-    # if we do not have a goals from prompt, extract them using generative model (at most once in a dialog)
-    goals_from_prompt = ""
-    prompt_name = Path(PROMPT_FILE).stem
-    if not GOALS_FROM_PROMPT:
-        # get already collected goals from prompts from human attributes
-        prev_prompts_goals = int_ctx.get_prompts_goals(ctx, actor)
-        goals_from_prompt = prev_prompts_goals.get(prompt_name, "")
-        if not goals_from_prompt:
-            # if current prompt's goals are empty in human attributes, generate them!
-            goals_from_prompt = get_goals_from_prompt(
-                prompt=PROMPT,
-                url=GENERATIVE_SERVICE_URL,
-                generative_timeout=GENERATIVE_TIMEOUT,
-                sending_variables=sending_variables,
-            )
-            logger.info(f"Generated goals for prompt using generative service:\n{goals_from_prompt}")
-        else:
-            logger.info("Found goals for prompt from the human attributes")
-
     for hyp in hypotheses:
         confidence = DEFAULT_CONFIDENCE
         if len(hyp) and hyp[-1] not in [".", "?", "!"]:
             hyp += "."
             confidence = LOW_CONFIDENCE
         _curr_attrs = {"can_continue": CAN_NOT_CONTINUE}
-        if goals_from_prompt:
-            _curr_attrs["prompts_goals"] = {prompt_name: goals_from_prompt}
         gathering_responses(hyp, confidence, {}, {}, _curr_attrs)
 
     if len(curr_responses) == 0:
@@ -194,22 +160,3 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         bot_attr=curr_bot_attrs,
         hype_attr=curr_attrs,
     )(ctx, actor, *args, **kwargs)
-
-
-def updating_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    human_uttr = int_ctx.get_last_human_utterance(ctx, actor).get("text", "")
-    prompt = PROMPT_REPLACEMENT_COMMAND.sub("", human_uttr).strip()
-    int_ctx.save_to_shared_memory(ctx, actor, prompt=prompt)
-
-    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
-    return (
-        "Saved the new prompt for you. "
-        "To update the prompt, type in `/prompt prompttext` again. "
-        "To reset the prompt to the default one, use `/resetprompt` command."
-    )
-
-
-def reseting_prompt_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
-    int_ctx.save_to_shared_memory(ctx, actor, prompt=PROMPT)
-    int_ctx.set_confidence(ctx, actor, SUPER_CONFIDENCE)
-    return f"Reset the prompt to the default one for you:\n{PROMPT}"

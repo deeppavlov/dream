@@ -21,12 +21,12 @@ ARG LANGUAGE=EN
 ENV LANGUAGE ${LANGUAGE}
 
 ARG CONFIG
-ARG PORT
+ARG SERVICE_PORT
 ARG SRC_DIR
 ARG SED_ARG=" | "
 
 ENV CONFIG=$CONFIG
-ENV PORT=$PORT
+ENV SERVICE_PORT=$SERVICE_PORT
 
 COPY ./annotators/custom_entity_linking/requirements.txt ./requirements.txt
 RUN pip install -r ./requirements.txt
@@ -39,4 +39,4 @@ RUN python -m deeppavlov install $CONFIG && \
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
-CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:${PORT}
+CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:${SERVICE_PORT}

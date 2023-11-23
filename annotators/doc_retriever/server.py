@@ -23,9 +23,9 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 app = Flask(__name__)
 
 PARAGRAPHS_NUM = int(os.environ.get("PARAGRAPHS_NUM", 5))
-FILE_SERVER_TIMEOUT = int(os.environ.get("FILE_SERVER_TIMEOUT", 30))
+FILE_SERVER_TIMEOUT = float(os.environ.get("FILE_SERVER_TIMEOUT", 30))
 DOC_PATH_OR_LINK = os.environ.get("DOC_PATH_OR_LINK", "")
-if DOC_PATH_OR_LINK and type(DOC_PATH_OR_LINK) != list:
+if DOC_PATH_OR_LINK and not isinstance(DOC_PATH_OR_LINK, list):
     DOC_PATH_OR_LINK = DOC_PATH_OR_LINK.split(",")  # we may have multiple files
 CONFIG_PATH = os.environ.get("CONFIG_PATH", None)
 SERVICE_PORT = os.environ.get("SERVICE_PORT", None)

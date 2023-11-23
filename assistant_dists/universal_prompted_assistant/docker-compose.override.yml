@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentseg:8011, ranking-based-response-selector:8002, combined-classification:8087, 
         sentence-ranker:8128, 
-        transformers-lm-gptjt:8161, transformers-lm-oasst12b:8158, openai-api-chatgpt:8145, openai-api-davinci3:8131,
+        transformers-lm-gptjt:8161, openai-api-chatgpt:8145, openai-api-davinci3:8131,
         openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167,
         dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
@@ -104,27 +104,6 @@ services:
           memory: 50G
         reservations:
           memory: 50G
-
-  transformers-lm-oasst12b:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8158
-        SERVICE_NAME: transformers_lm_oasst12b
-        PRETRAINED_MODEL_NAME_OR_PATH: OpenAssistant/pythia-12b-sft-v8-7k-steps
-        HALF_PRECISION: 1
-      context: .
-      dockerfile: ./services/transformers_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8158
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 60G
-        reservations:
-          memory: 60G
 
   openai-api-chatgpt:
     env_file: [ .env ]
@@ -267,7 +246,7 @@ services:
         SERVICE_NAME: dff_universal_prompted_skill
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
-        DEFAULT_LM_SERVICE_URL: http://transformers-lm-oasst12b:8158/respond
+        DEFAULT_LM_SERVICE_URL: http://transformers-lm-gptjt:8161/respond
         DEFAULT_LM_SERVICE_CONFIG: default_generative_config.json
       context: .
       dockerfile: ./skills/dff_universal_prompted_skill/Dockerfile

@@ -295,4 +295,5 @@ def has_entities(*args):
             if extracted_entity:
                 return True
         return False
+
     return has_entities_func

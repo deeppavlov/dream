@@ -3,6 +3,8 @@
 3772	faq-skill
 3882	harvesters-maintenance-gobot-skill
 4242	agent
+6000    ros-flask-server
+6363    terminusdb-server
 8002	ranking-based-response-selector,ranking-based-response-selector-ru
 8003	llm-based-response-selector
 8004	convers-evaluator-annotator
@@ -26,10 +28,10 @@
 8022	dff-program-y-dangerous-skill
 8023	dff-movie-skill
 8024	sentiment-classification-multilingual
-8025
-8026
+8025    dff-travel-italy-skill
+8026    personality-detection
 8027    user-knowledge-memorizer
-8028    
+8028    dff-user-kg-skill
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
 8031	asr
@@ -42,26 +44,26 @@
 8038    robot-fake-server
 8039
 8040
-8041
-8042
+8041    dff-embodied-skill
+8042    embodied-sender
 8043
 8044    bot-knowledge-memorizer
 8045
 8046
 8047	eliza
-8048
+8048    emotion-ranking-based-response-selector
 8049	emotion-skill
-8050
-8051    
+8050    emotional-bot-response
+8051    bot-emotion-classifier
 8052	dummy-skill-dialog
 8053	comet-atomic
 8054	meta-script-skill
 8055
 8056
 8057	dff-short-story-skill
-8058
-8059
-8060
+8058	summarization-annotator
+8059	dialog-summarizer
+8060	rut5-summarizer
 8061	dff-coronavirus-skill
 8062	small-talk-skill
 8063
@@ -70,8 +72,8 @@
 8066	news-api-skill
 8067
 8068	game-cooperative-skill
-8069
-8070
+8069    fromage
+8070    dff-fromage-image-skill
 8071	factoid-qa
 8072	kbqa
 8073
@@ -82,10 +84,10 @@
 8078	text-qa-ru,text-qa
 8079
 8080	dff-grounding-skill
-8081
-8082
+8081    ranking-and-intent-based-response-selector
+8082    ranking-and-intent-based-response-selector-ru
 8083	knowledge-grounding
-8084
+8084    dff-knowledge-prompted-skill
 8085	knowledge-grounding-skill
 8086	dff-friendship-ru-skill,dff-friendship-skill
 8087	combined-classification
@@ -134,14 +136,14 @@
 8130	transformers-lm-gptj
 8131	openai-api-davinci3
 8132	gpt2-multilingual
-8133	relative-persona-extractor
+8133	relative-persona-extractor,relative-persona-extractor-ru
 8134	dff-dream-persona-gpt-j-prompted-skill
 8135	prompt-selector,prompt-selector-ru
 8136	property-extraction
 8137	dff-dream-persona-chatgpt-prompted-skill
 8138	dff-marketing-prompted-skill
 8139	dff-fairytale-prompted-skill
-8140	seq2seq-persona-based
+8140	seq2seq-persona-based,seq2seq-persona-based-ru
 8141	dff-nutrition-prompted-skill
 8142	dff-life-coaching-prompted-skill
 8143	dff-ai-faq-prompted-skill
@@ -162,7 +164,7 @@
 8158	transformers-lm-oasst12b
 8159	openai-api-gpt4
 8160	openai-api-gpt4-32k
-8161
+8161    dff-universal-ru-prompted-skill
 8162	dff-google-api-skill
 8163	anthropic-api-claude-instant-v1
 8164	anthropic-api-claude-v1
@@ -172,3 +174,23 @@
 8168	transformers-lm-vicuna13b
 8169    dff-reasoning-skill
 8170    dff-dream-faq-prompted-skill
+8171    transformers-lm-ruxglm
+8172    dff-dream-persona-ruxglm-prompted-skill
+8173	dff-storyteller-ru-prompted-skill
+8174	dff-fairytale-ru-prompted-skill
+8175	dff-official-letter-ru-prompted-skill
+8176	dff-informal-letter-ru-prompted-skill
+8177	dff-journalist-helper-ru-prompted-skill
+8178    transformers-lm-rugpt35
+8179	dff-robot-prompted-skill
+8180
+8181
+8182
+8183	external-integration-skill
+8184	external-fake-server
+8185	transformers-mistral-7b-128k
+8186	dff-document-qa-transformers-llm-skill
+8187
+8188
+8189
+8190

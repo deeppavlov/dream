@@ -1,6 +1,7 @@
 import re
 from common.utils import join_sentences_in_or_pattern
-from common.utils import get_topics, TOPIC_GROUPS
+from common.combined_classes import TOPIC_GROUPS
+from common import utils
 
 OPINION_REQUESTS_ABOUT_FOOD = [
     "Do you like cooking?",
@@ -104,6 +105,7 @@ FAVORITE_FOOD_WORDS = (
     r" food|meal|breakfast|lunch|dinner|branch|snack)"
 )
 
+
 def skill_trigger_phrases():
     return TRIGGER_PHRASES
 
@@ -113,7 +115,7 @@ def food_skill_was_proposed(prev_bot_utt):
 
 
 def about_food(annotated_utterance):
-    found_topics = get_topics(annotated_utterance, probs=False, which="all")
+    found_topics = utils.get_topics(annotated_utterance, probs=False, which="all")
     if any([food_topic in found_topics for food_topic in TOPIC_GROUPS["food"]]):
         return True
     elif re.findall(FOOD_COMPILED_PATTERN, annotated_utterance["text"]):

@@ -6,11 +6,11 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8132
+      SERVICE_PORT: 8028
       SERVICE_NAME: dff_user_kg_skill
     context: .
     dockerfile: ./skills/dff_user_kg_skill/Dockerfile
-  command: gunicorn --workers=1 server:app -b 0.0.0.0:8132
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8028
   deploy:
     resources:
       limits:
@@ -21,5 +21,5 @@ compose:
   - ./skills/dff_user_kg_skill:/src
   - ./common:/src/common
   ports:
-  - 8132:8132
+  - 8028:8028
 proxy: null

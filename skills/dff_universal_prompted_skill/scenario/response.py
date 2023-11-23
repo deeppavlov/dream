@@ -15,14 +15,14 @@ from df_engine.core import Context, Actor
 sentry_sdk.init(getenv("SENTRY_DSN"))
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 5))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 3))
 
 FIX_PUNCTUATION = re.compile(r"\s(?=[\.,:;])")
 DEFAULT_CONFIDENCE = 0.9
 LOW_CONFIDENCE = 0.7
 DEFAULT_PROMPT = "Respond like a friendly chatbot."
-DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-oasst12b:8158/respond")
+DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-gptjt:8161/respond")
 DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
 ENVVARS_TO_SEND = {
@@ -38,6 +38,8 @@ ENVVARS_TO_SEND = {
     "http://anthropic-api-claude-v1:8164/respond": ["ANTHROPIC_API_KEY"],
     "http://anthropic-api-claude-instant-v1:8163/respond": ["ANTHROPIC_API_KEY"],
     "http://transformers-lm-vicuna13b:8168/respond": [],
+    "http://transformers-lm-ruxglm:8171/respond": [],
+    "http://transformers-lm-rugpt35:8178/respond": [],
 }
 
 
@@ -101,6 +103,9 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         envvars_to_send,
         **human_uttr_attributes,
     )
+    lm_service_timeout = (
+        lm_service_config.pop("timeout", GENERATIVE_TIMEOUT) if lm_service_config else GENERATIVE_TIMEOUT
+    )
 
     if len(dialog_context) > 0:
         try:
@@ -109,7 +114,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
                 prompt,
                 lm_service_url,
                 lm_service_config,
-                GENERATIVE_TIMEOUT,
+                lm_service_timeout,
                 sending_variables,
             )
         except Exception as e:

@@ -13,7 +13,7 @@ services:
   sentseg-ru:
     environment:
       CUDA_VISIBLE_DEVICES: ""
-  toxic-classification-ru:
+  combined-classification-ru:
     environment:
       CUDA_VISIBLE_DEVICES: ""
   intent-catcher-ru:

@@ -2,6 +2,7 @@ import logging
 import os
 import re
 import time
+import string
 import pickle
 import itertools
 import json
@@ -116,6 +117,8 @@ def postprocess_triplets(triplets_init, scores_init, uttr):
             if triplet[0] in ["i", "my"]:
                 triplet[0] = "user"
             obj = triplet[2]
+            for punc in string.punctuation:
+                obj = obj.replace(punc, "")
             if obj in existing_obj:
                 prev_triplet, prev_score = scores_dict[obj]
                 if score > prev_score:
@@ -160,54 +163,41 @@ def get_result(request):
     logger.info(
         f"init_uttrs {init_uttrs} entities_with_labels: {entities_with_labels_batch} entity_info: {entity_info_batch}"
     )
+    uttrs = []
+    for uttr_list in init_uttrs:
+        if len(uttr_list) == 1:
+            uttrs.append(uttr_list[0].lower())
+        else:
+            utt_prev = uttr_list[-2]
+            utt_prev_sentences = nltk.sent_tokenize(utt_prev)
+            utt_prev = utt_prev_sentences[-1]
+            utt_cur = uttr_list[-1]
+            utt_prev_l = utt_prev.lower()
+            utt_cur_l = utt_cur.lower()
+            is_q = (
+                any([utt_prev_l.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
+                or "?" in utt_prev_l
+            )
 
-    if not init_uttrs:
-        triplets_batch = [[""]]
-        uttrs = [""]
-    elif isinstance(init_uttrs[0], str):
-        uttrs = []
-        for uttr_list in init_uttrs:
-            if len(uttr_list) == 1:
-                uttrs.append(uttr_list[0].lower())
+            is_sentence = False
+            parsed_sentence = nlp(utt_cur_l)
+            if parsed_sentence:
+                tokens = [elem.text for elem in parsed_sentence]
+                tags = [elem.tag_ for elem in parsed_sentence]
+                found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP", "VBD"]])
+                if found_verbs and len(tokens) > 2:
+                    is_sentence = True
+
+            logger.info(f"is_q: {is_q} --- is_s: {is_sentence} --- utt_prev: {utt_prev_l} --- utt_cur: {utt_cur_l}")
+            if is_q and not is_sentence:
+                uttrs.append(sentrewrite(utt_prev_l, utt_cur_l))
             else:
-                utt_prev = uttr_list[-2]
-                utt_prev_sentences = nltk.sent_tokenize(utt_prev)
-                utt_prev = utt_prev_sentences[-1]
-                utt_cur = uttr_list[-1]
-                utt_prev_l = utt_prev.lower()
-                utt_cur_l = utt_cur.lower()
-                is_q = (
-                    any([utt_prev_l.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
-                    or "?" in utt_prev_l
-                )
+                uttrs.append(utt_cur_l)
 
-                is_sentence = False
-                parsed_sentence = nlp(utt_cur_l)
-                if parsed_sentence:
-                    tokens = [elem.text for elem in parsed_sentence]
-                    tags = [elem.tag_ for elem in parsed_sentence]
-                    found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP", "VBD"]])
-                    if found_verbs and len(tokens) > 2:
-                        is_sentence = True
-
-                logger.info(f"is_q: {is_q} --- is_s: {is_sentence} --- utt_prev: {utt_prev_l} --- utt_cur: {utt_cur_l}")
-                if is_q and not is_sentence:
-                    uttrs.append(sentrewrite(utt_prev_l, utt_cur_l))
-                else:
-                    uttrs.append(utt_cur_l)
-        logger.info(f"input utterances: {uttrs}")
-        relations_pred = get_relations(uttrs)
-        triplets_batch = generate_triplets(uttrs, relations_pred)
-        #relations_pred = get_relations(init_uttrs)
-        #triplets_batch = generate_triplets(init_uttrs, relations_pred)
-    else:
-        uttrs = [" ".join(utt_list) for utt_list in init_uttrs]
-        triplets_batch = []
-        for uttrs_list in init_uttrs:
-            relations_pred = get_relations(uttrs_list)
-            curr_triplets_batch = generate_triplets(uttrs_list, relations_pred)
-            flattened_triplets = list(itertools.chain(*curr_triplets_batch))
-            triplets_batch.append(flattened_triplets)
+    logger.info(f"input utterances: {uttrs}")
+    relations_pred = get_relations(uttrs)
+    triplets_batch = generate_triplets(uttrs, relations_pred)
+    logger.info(f"triplets_batch {triplets_batch}")
 
     logger.info(f"triplets_batch {triplets_batch}")
     triplets_info_batch = []

@@ -1,0 +1,82 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  emotion-ranking-based-response-selector:
+    volumes:
+      - "./response_selectors/emotion_ranking_based_response_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8048:8048
+  mongo:
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8087:8087
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
+  prompt-selector:
+    volumes:
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8135:8135
+  openai-api-chatgpt:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8145:8145
+  dff-dream-persona-chatgpt-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8137:8137
+  dff-dream-faq-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8170:8170
+  openai-api-chatgpt-16k:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8167:8167
+  bot-emotion-classifier:
+    volumes:
+      - "./annotators/bot_emotion_classifier:/src"
+      - "./common:/src/common"
+    ports:
+      - 8051:8051
+  emotional-bot-response:
+    volumes:
+      - "./annotators/emotional_bot_response:/src"
+      - "./common:/src/common"
+    ports:
+      - 8050:8050
+version: "3.7"

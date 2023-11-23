@@ -7,6 +7,7 @@ import pathlib
 from copy import deepcopy
 from random import choice, choices
 
+from common import utils  # Importing before skills to avoid circular import
 import common.animals as dff_animals_skill
 import common.books as books
 import common.emotion as emotion
@@ -21,7 +22,6 @@ import common.science as dff_science_skill
 import common.sport as dff_sport_skill
 import common.travel as dff_travel_skill
 from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, CAN_CONTINUE_PROMPT, MUST_CONTINUE
-from common.utils import get_not_used_template
 from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, CHANGE_TOPIC_SUBJECT, BY_THE_WAY
 
 # Each common skill module should define +skill_trigger_phrases()+ function
@@ -286,13 +286,13 @@ def get_prelinkto_connection(from_skill, to_skill, used_templates):
     skill_pair = sorted([from_skill, to_skill])
     for el in PRELINKTO_CONNECTION_PHRASES:
         if el.get("skill_pair") == skill_pair and el.get("phrases"):
-            return get_not_used_template(used_templates, el["phrases"])
+            return utils.get_not_used_template(used_templates, el["phrases"])
     return ""
 
 
 def get_prelinkto_topic_connection(to_skill, used_templates):
     if to_skill in PRELINKTO_TOPIC_PHRASES:
-        return get_not_used_template(used_templates, PRELINKTO_TOPIC_PHRASES[to_skill])
+        return utils.get_not_used_template(used_templates, PRELINKTO_TOPIC_PHRASES[to_skill])
     return ""
 
 
@@ -309,7 +309,7 @@ def compose_linkto_with_connection_phrase(skills, human_attributes, recent_activ
 
     if not connection:
         # not found prelinkto connection phrase AND not found prelinkto topic phrase
-        connection = get_not_used_template(
+        connection = utils.get_not_used_template(
             human_attributes.get("prelinkto_connections", []), COMPLETELY_CHANGING_THE_SUBJECT_PHRASES
         )
 

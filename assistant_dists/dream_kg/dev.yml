@@ -5,23 +5,23 @@ services:
       - ".:/dp-agent"
     ports:
       - 4242:4242
-  spacy-nounphrases:
+  sentence-ranker:
     volumes:
-      - "./annotators/spacy_nounphrases:/src"
-      - "./common:/src/common"
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
     ports:
-      - 8006:8006
+      - 8128:8128
   sentseg:
     volumes:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  convers-evaluation-selector:
+  ranking-based-response-selector:
     volumes:
-      - "./response_selectors/convers_evaluation_based_selector:/src"
+      - "./response_selectors/ranking_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8009:8009
+      - 8002:8002
   ner:
     volumes:
       - './annotators/NER_deeppavlov:/src'
@@ -85,11 +85,11 @@ services:
       - "./skills/dff_user_kg_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8132:8132
+      - 8028:8028
   dff-travel-italy-skill:
     volumes:
       - "./skills/dff_travel_italy_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8139:8139
+      - 8025:8025
 version: "3.7"

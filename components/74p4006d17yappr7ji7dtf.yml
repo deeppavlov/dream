@@ -11,7 +11,7 @@ group: annotators
 connector:
   protocol: http
   url: http://user-knowledge-memorizer:8027/respond
-dialog_formatter: state_formatters.dp_formatters:user_knowledge_memorizer_formatter_dialog
+dialog_formatter: state_formatters.dp_formatters:last_human_annotated_utterance
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services:
 - annotators.property_extraction

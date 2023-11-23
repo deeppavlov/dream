@@ -6,8 +6,6 @@ from common.prompts import send_request_to_prompted_generative_service, compose_
 from scenario.utils import compose_input_for_API, compose_data_for_model
 from df_engine.core import Context, Actor
 import common.dff.integration.context as int_ctx
-import common.dff.integration.response as int_rsp
-from common.constants import CAN_NOT_CONTINUE
 from typing import Any
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -19,7 +17,7 @@ GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG", "openai-chatgpt.
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
-GENERATIVE_TIMEOUT = int(getenv("GENERATIVE_TIMEOUT", 30))
+GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 30))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT", 1))
 ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
@@ -69,24 +67,12 @@ def generative_lm_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         except Exception as e:
             sentry_sdk.capture_exception(e)
             logger.exception(e)
-            hypotheses = []
+            hypotheses = list()
     else:
-        hypotheses = []
-    for hyp in hypotheses:
-        confidence = DEFAULT_CONFIDENCE
-        hyp_text = " ".join(hyp.split())
-        if len(hyp_text) and hyp_text[-1] not in [".", "?", "!"]:
-            hyp_text += "."
-            confidence = LOW_CONFIDENCE
-        gathering_responses(hyp_text, confidence, {}, {}, {"can_continue": CAN_NOT_CONTINUE})
+        hypotheses = list()
 
-    if len(curr_responses) == 0:
+    if len(hypotheses) == 0:
         return ""
 
-    return int_rsp.multi_response(
-        replies=curr_responses,
-        confidences=curr_confidences,
-        human_attr=curr_human_attrs,
-        bot_attr=curr_bot_attrs,
-        hype_attr=curr_attrs,
-    )(ctx, actor, *args, **kwargs)
+    logger.info(f"hypotheses: {hypotheses[0]}")
+    return hypotheses[0]

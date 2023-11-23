@@ -17,7 +17,7 @@ services:
     environment:
       - CUDA_VISIBLE_DEVICES=8
   badlisted-words-ru:
-  toxic-classification-ru:
+  combined-classification-ru:
     volumes:
       - "~/.deeppavlov/cache:/root/.cache"
     environment:

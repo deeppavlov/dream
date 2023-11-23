@@ -1,5 +1,3 @@
-from pathlib import Path
-import os
 import requests
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
@@ -78,7 +76,6 @@ def main():
     TERMINUSDB_SERVER_TEAM = "admin"
     TERMINUSDB_SERVER_DB = "user_knowledge_db"
     TERMINUSDB_SERVER_PASSWORD = "root"
-    INDEX_LOAD_PATH = Path(os.path.expanduser("annotators/user_knowledge_memorizer"))
     USER_KNOWLEDGE_MEMORIZER_PORT = 8027
 
     USER_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{USER_KNOWLEDGE_MEMORIZER_PORT}/respond"
@@ -88,7 +85,6 @@ def main():
         team=TERMINUSDB_SERVER_TEAM,
         server=TERMINUSDB_SERVER_URL,
         password=TERMINUSDB_SERVER_PASSWORD,
-        index_load_path=INDEX_LOAD_PATH,
     )
 
     USER_ID = "User/b75d2700259bdc44sdsdf85e7f530ed"

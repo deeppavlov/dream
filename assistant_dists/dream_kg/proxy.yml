@@ -45,5 +45,12 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8103
       - PORT=8103
 
-
+  property-extraction:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=proxy.deeppavlov.ai:8136
+      - PORT=8136
 version: '3.7'

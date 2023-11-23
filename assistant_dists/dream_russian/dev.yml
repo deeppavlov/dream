@@ -42,12 +42,13 @@ services:
       - "./common:/src/common"
     ports:
       - 8018:8018
-  toxic-classification-ru:
+  combined-classification-ru:
     volumes:
-      - "./annotators/toxic_classification_ru:/src"
+      - "./annotators/combined_classification_ru:/src"
       - "~/.deeppavlov/cache:/root/.cache"
+      - "./common:/src/common"
     ports:
-      - 8118:8118
+      - 8198:8198
   ner-ru:
     volumes:
       - './annotators/NER_deeppavlov:/src'
@@ -137,4 +138,14 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8078:8078
+  summarization-annotator:
+    volumes:
+      - "./annotators/summarization_annotator:/src"
+    ports:
+      - 8058:8058
+  rut5-summarizer:
+    volumes:
+      - "./services/ruT5_summarizer:/src"
+    ports:
+      - 8060:8060
 version: "3.7"

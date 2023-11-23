@@ -15,6 +15,8 @@ from common.dff.integration.actor import load_ctxs, get_response
 
 from scenario.main import actor
 
+import test_server
+
 
 ignore_logger("root")
 
@@ -57,6 +59,14 @@ def handler(requested_data, random_seed=None):
     logger.info(f"{SERVICE_NAME} exec time = {total_time:.3f}s")
     return responses
 
+
+try:
+    test_server.run_test(handler)
+    logger.info("test query processed")
+except Exception as exc:
+    sentry_sdk.capture_exception(exc)
+    logger.exception(exc)
+    raise exc
 
 logger.info(f"{SERVICE_NAME} is loaded and ready")
 

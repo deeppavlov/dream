@@ -1,0 +1,25 @@
+FROM deeppavlov/base-gpu:0.12.1
+RUN pip install --upgrade pip && pip install git+https://github.com/deeppavlov/DeepPavlov.git@0.12.1
+
+ARG CONFIG
+ARG SERVICE_PORT
+ARG SRC_DIR
+ARG SED_ARG=" | "
+
+ARG LANGUAGE=EN
+ENV LANGUAGE ${LANGUAGE}
+
+ENV CONFIG=$CONFIG
+ENV SERVICE_PORT=$SERVICE_PORT
+
+COPY ./annotators/entity_detection_rus/tests/requirements.txt /src/requirements.txt
+RUN pip install -r /src/requirements.txt
+
+COPY $SRC_DIR /src
+
+WORKDIR /src
+RUN python -m deeppavlov install $CONFIG
+
+RUN sed -i "s|$SED_ARG|g" "$CONFIG"
+
+CMD gunicorn  --workers=1 --timeout 500 server:app -b 0.0.0.0:8103
