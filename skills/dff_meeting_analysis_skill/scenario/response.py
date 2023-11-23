@@ -12,7 +12,6 @@ from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import compose_sending_variables
 from df_engine.core import Context, Actor
 from .utils import (
-    postprocess_formatting,
     get_and_upload_response_for_one_doc,
     set_correct_type_and_id,
     compose_and_upload_final_response,
@@ -189,9 +188,6 @@ Sending request to generative model."
                             sentry_sdk.capture_exception(e)
                             logger.exception(e)
                             hypotheses = []
-                        # for full report and weekly report, add formatting
-                        if prompt_type_local == "weekly_report" or prompt_type_local == "full_report":
-                            hypotheses = postprocess_formatting(hypotheses, prompt_type=prompt_type_local)
 
             # if there are docs in human utt attributes, but no processed docs in use were found
             elif docs_in_attributes:

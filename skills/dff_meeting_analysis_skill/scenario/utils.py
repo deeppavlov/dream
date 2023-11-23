@@ -18,16 +18,6 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 INCLUDE_INTO_REPORT = ["progress_by_areas", "problems", "summary_short"]
-TYPES_AND_TITLES = {
-    "progress_by_areas": "Progress made by each team",
-    "problems": "Problems encountered by the team",
-    "summary": "Summary of the meeting",
-    "summary_short": "Summary of the meeting",
-    "summary_long": "Summary of the meeting",
-    "completed_tasks": "Completed tasks for each speaker",
-    "decisions": "Key decisions made during the call",
-    "future_tasks": "To-do tasks for each speaker",
-}
 SEP_FOR_DOC_RESPONSES = "\n****************\n"
 LONG_SUMMARY_REQUEST = re.compile(r"(detailed)|(long)", flags=re.IGNORECASE)
 SHORT_SUMMARY_REQUEST = re.compile(r"(short)|(concise)", flags=re.IGNORECASE)
@@ -57,6 +47,11 @@ management_prompts_dict = {
     "problems": {},
     "combine_responses": {},
 }
+
+with open("common/prompts/management_assistant/formatting.json", "r") as f:
+    formatting_dict = json.load(f)
+    BASIC_FORMATTING_GUIDELINES = formatting_dict["instruction_to_format"]
+    NON_FORMATTING_GUIDELINES = formatting_dict["instruction_not_to_format"]
 
 with open("common/prompts/management_assistant/default_system_prompt_assistant.json", "r") as f:
     DEFAULT_SYSTEM_PROMPT = json.load(f)["prompt"]
@@ -94,37 +89,8 @@ def set_correct_type_and_id(request, prompt_type_local, document_in_use_id=""):
     return prompt_type_local, prompt_type_and_id
 
 
-def postprocess_formatting(hypotheses: List[str], prompt_type: str = "full_report"):
-    hypotheses_formatted = []
-    for hypothesis in hypotheses:
-        # find titles and format them as title (level 1) by adding prefix '#'
-        for title in INCLUDE_INTO_REPORT:
-            title_text = TYPES_AND_TITLES[title]
-            title_text_regex = rf"(?:.*)({title_text})\**:?\**\.?\**\n"
-            hypothesis = re.sub(title_text_regex, "# " + r"\1" + "\n", hypothesis, flags=re.IGNORECASE)
-        # find title of the weekly report and format it as title (level 1) by adding prefix '#'
-        # to-do: find a nicer way to format this title
-        if prompt_type == "weekly_report":
-            hypothesis_lines = hypothesis.split("\n")
-            weekly_title = hypothesis_lines[0]
-            weekly_title_text_regex = r"(?:(?:#* ?)|(?:\**))*(.+)$"
-            weekly_title_bold = re.sub(weekly_title_text_regex, "# " + r"\1", weekly_title, flags=re.IGNORECASE)
-            hypothesis_lines[0] = weekly_title_bold
-            hypothesis = ("\n").join(hypothesis_lines)
-            # weekly reports may also include conslusion section, format it as title (level 1)
-            title_text_regex = r"(?:.*)(conclusion)\**:?\**\.?\**\n"
-            hypothesis = re.sub(title_text_regex, "# " + r"\1" + "\n", hypothesis, flags=re.IGNORECASE)
-        # find short strings that don't end with . and : (e.g., in Areas)
-        # and are not yet formatted (do not start with #)
-        # format them as title (level 2) by adding prefix '##'
-        bold_regex = r"\n(?!#)(.+)(?<!\.)(?<!(?:\. ))\n"
-        hypothesis = re.sub(bold_regex, "\n## " + r"\1" + "\n", hypothesis, flags=re.IGNORECASE)
-        hypotheses_formatted.append(hypothesis)
-    return hypotheses_formatted
-
-
 def get_response_for_prompt_type(
-    transcript_chunks: list, prompt_type: str, dialog_context: list, sending_variables: dict
+    transcript_chunks: list, prompt_type: str, dialog_context: list, sending_variables: dict, format_the_response=False
 ) -> Tuple[str, int]:
     if "summary" in prompt_type:
         if "summary_short" in prompt_type:
@@ -145,6 +111,15 @@ The summary must be two or three paragraphs."
     # this is prompt for processing the results for all chunks to get the final response
     # only used if the document is longer than the model's context window - 1000
     prompt_final = management_prompts_dict[prompt_type]["prompt_concatenate"]
+    if format_the_response:
+        if len(transcript_chunks) == 1:
+            prompt += f" {BASIC_FORMATTING_GUIDELINES}"
+        else:
+            prompt += f" {NON_FORMATTING_GUIDELINES}"
+            prompt_final += f" {BASIC_FORMATTING_GUIDELINES}"
+    else:
+        prompt += f" {NON_FORMATTING_GUIDELINES}"
+        prompt_final += f" {NON_FORMATTING_GUIDELINES}"
     request = dialog_context[-1]
     for n, chunk in enumerate(transcript_chunks):
         prompt_to_send = prompt.replace("{transcript_chunk}", chunk)
@@ -229,6 +204,7 @@ def get_and_upload_response_for_one_doc(
 ) -> Tuple[str, dict, int]:
     prompt_type = prompt_type_and_id.split("__")[0]
     document_in_use_id = prompt_type_and_id.split("__")[1]
+    _format_the_response = False
     # hard-coded limit: we preserve 1000 tokens for LLM answer
     token_limit = get_max_tokens_for_llm(GENERATIVE_SERVICE_URL) - 1000
 
@@ -236,6 +212,7 @@ def get_and_upload_response_for_one_doc(
     # so in this case we split by special separator
     if prompt_type == "weekly_report" or prompt_type == "combine_responses":
         transcript_chunks = split_transcript_into_chunks(orig_text, limit=token_limit, sep=SEP_FOR_DOC_RESPONSES)
+        _format_the_response = True
     else:
         transcript_chunks = split_transcript_into_chunks(orig_text, limit=token_limit)
 
@@ -252,7 +229,7 @@ def get_and_upload_response_for_one_doc(
             else:
                 logger.info(f"No earlier {item_type_and_id} for full_report found.")
                 part_of_report, _n_requests = get_response_for_prompt_type(
-                    transcript_chunks, item, dialog_context, sending_variables
+                    transcript_chunks, item, dialog_context, sending_variables, format_the_response=True
                 )
                 n_requests += _n_requests
                 uploaded_doc_link = upload_generated_item_return_link(part_of_report, item_type_and_id)
@@ -261,7 +238,7 @@ def get_and_upload_response_for_one_doc(
                 hypothesis += f"{part_of_report}\n\n"
     else:
         hypothesis, n_requests = get_response_for_prompt_type(
-            transcript_chunks, prompt_type, dialog_context, sending_variables
+            transcript_chunks, prompt_type, dialog_context, sending_variables, format_the_response=_format_the_response
         )
 
     # we save each hyp to server under the name of the request and doc_in_use id

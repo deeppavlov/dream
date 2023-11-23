@@ -1,0 +1,4 @@
+{
+    "instruction_to_format": "Format the response.\nThe result should be easy for a human to read. You do not have to apply formatting in all cases. Only apply formatting where it is necessary.\nYou must observe these rules:\n- Level-1 headings are formatted like # **this**.\n- Level-2 headings are formatted like ## **this**\n- Level-3 headlines are formatted like ## this.\n- Level-4 headings are not allowed.\n- Subsections in items are formatted like **this**.\nReturn only the formatted text and nothing else.",
+    "instruction_not_to_format": "You must not format the response."
+}
