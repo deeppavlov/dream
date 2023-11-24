@@ -94,6 +94,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     user_kg = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("user_knowledge_memorizer")
     logger.info(f"custom_el: {custom_el}")
     logger.info(f"user_kg: {user_kg}")
+    # logger.info(f"USE_KG_DATA: {USE_KG_DATA}")
 
     if USE_KG_DATA and user_kg and (kg_prompt := user_kg["kg_prompt"]):
         kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0].lower()).split(".")
@@ -101,17 +102,12 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
         prompt = prompt + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
 
     # To use knowledge about bot
-    # bot_utterances = ctx.misc.get("agent", {}).get("dialog", {}).get("bot_utterances", [{}])
     bot_custom_el = int_ctx.get_last_bot_utterance(ctx, actor).get("annotations", {}).get("custom_entity_linking")
     bot_kg = int_ctx.get_last_bot_utterance(ctx, actor).get("annotations", {}).get("bot_knowledge_memorizer")
-    # if bot_utterances:
-    #     custom_el = bot_utterances[-1].get("annotations", {}).get("custom_entity_linking")
-    #     bot_kg = bot_utterances[-1].get("annotations", {}).get("bot_knowledge_memorizer")
-    # else:
-    #     custom_el = {}
-    #     bot_kg = {}
+
     logger.info(f"bot_custom_el: {bot_custom_el}")
     logger.info(f"bot_kg: {bot_kg}")
+    # logger.info(f"USE_BOT_KG_DATA: {USE_BOT_KG_DATA}")
 
     if USE_BOT_KG_DATA and bot_kg and (kg_prompt := bot_kg["kg_prompt"]):
         logger.info(f"kg_prompt - {kg_prompt}")
