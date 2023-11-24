@@ -1064,10 +1064,11 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
 
 
 def voice_formatter_service(dialog: Dict) -> List[Dict]:
-   return [{"sound_path": [dialog["human_utterances"][-1]["attributes"].get("sound_path")],
-            "sound_duration": [dialog["human_utterances"][-1]["attributes"].get("sound_duration")],
-            "sound_type": [dialog["human_utterances"][-1]["attributes"].get("sound_type")],
-            "captions": [dialog["human_utterances"][-1]["attributes"].get("captions")]}]
+    return [{
+        "sound_path": [dialog["human_utterances"][-1]["attributes"].get("sound_paths")],
+        "sound_duration": [dialog["human_utterances"][-1]["attributes"].get("sound_durations")],
+        "sound_type": [dialog["human_utterances"][-1]["attributes"].get("sound_types")]
+    }]
 
 
 def dff_voice_skill_formatter(dialog, skill_name="dff_voice_skill"):

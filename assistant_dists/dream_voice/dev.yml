@@ -61,7 +61,7 @@ services:
       - 8333:8333
   dff-voice-skill:
     volumes:
-      - "./skills/dff_voice_skill:/src"
+      - "./skills/dff_voice_skill:/srcf"
       - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8444:8444

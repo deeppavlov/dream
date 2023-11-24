@@ -30,9 +30,9 @@ def respond():
     global CAP_ERR_MSG
     st_time = time.time()
 
-    paths = request.json.get("sound_path")
-    durations = request.json.get("sound_duration")
-    types = request.json.get("sound_type")
+    paths = request.json.get("sound_paths")
+    durations = request.json.get("sound_durations")
+    types = request.json.get("sound_types")
 
     responses = []
 
@@ -74,10 +74,11 @@ def respond():
             logger.info("Scanning finished successfully, files found, starting inference...")
             captions = infer(AUDIO_DIR, MODEL_PATH)
             logger.info("Inference finished successfully")
-            responses = [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": captions}]
+            responses += [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": captions}]
         except Exception:
+            logger.info(f"An error occurred in voice-service: {CAP_ERR_MSG}")
             responses.append(
-                [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": CAP_ERR_MSG}]
+                [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": "Error"}]
             )
 
     logger.info(f"VOICE_SERVICE RESPONSE: {responses}")

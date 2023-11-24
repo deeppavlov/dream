@@ -8,13 +8,14 @@ logger = logging.getLogger(__name__)
 
 
 def caption(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
-    cap = "ERROR"
-    if not ctx.validation:
-        cap = (
-            int_ctx.get_last_human_utterance(ctx, actor)
-            .get("annotations", {})
-            .get("voice_service", {})
-            .get("captions", "No cap")
-        )
+    cap = (
+        int_ctx.get_last_human_utterance(ctx, actor)
+        .get("annotations", {})
+        .get("voice_service", {})
+        .get("captions", "Error")
+    )
 
-    return f"Is there {cap} in that audio?"
+    rsp = "I couldn't caption the audio in your message, please try again with another file" \
+        if cap == "Error" else f"Is there {cap} in that audio?"
+
+    return rsp
