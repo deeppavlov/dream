@@ -155,14 +155,8 @@ def respond():
         for context, openai_api_key, openai_org, prompt, config in zip(
             contexts, openai_api_keys, openai_orgs, prompts, configs
         ):
-            curr_responses = []
             outputs = generate_responses(context, openai_api_key, openai_org, prompt, config)
-            for response in outputs:
-                if len(response) >= 2:
-                    curr_responses += [response]
-                else:
-                    curr_responses += [""]
-            responses += [curr_responses]
+            responses += [outputs]
 
     except Exception as exc:
         logger.exception(exc)
