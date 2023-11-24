@@ -1,6 +1,6 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_prompted_assistant/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/universal_prompted_assistant/pipeline_conf.json agent.channel=$AGENT_CHANNEL'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector:8002, combined-classification:8087, 
         sentence-ranker:8128, openai-api-chatgpt:8145, openai-api-davinci3:8131,

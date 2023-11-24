@@ -4,6 +4,8 @@ services:
     env_file:
       - .env
       - .env_secret
+    environment:
+      - AGENT_CHANNEL=ms
   https:
     depends_on:
       - agent
