@@ -1,5 +1,3 @@
-from pathlib import Path
-import os
 import requests
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 

@@ -494,7 +494,7 @@ def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
     prompt = f"Translate each semantic triple into a sentence. Triplets: {triplets}"
     # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
     # from user_utterance attributes or from environment
-    human_uttr_attributes = request.json.get("last_human_annotated_utterance", [])[0].get("attributes", {})
+    human_uttr_attributes = request.json.get("human_utterances", [])[0].get("attributes", {})
     lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
     lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
     envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
@@ -546,12 +546,12 @@ def relativity_filter(bot_knowledge: List[str], last_utt: List[str]) -> List[str
 
 def create_kg_prompt(bot_id: str, last_human_utt: str) -> List[str]:
     bot_triplets = get_knowledge(bot_id)
-    # logger.info(f"bot triplets -- {bot_triplets}")
+    logger.info(f"bot triplets -- {bot_triplets}")
     if bot_triplets and USE_BOT_KG_DATA:
         bot_knowledge = convert_triplets_to_natural_language(bot_triplets)
     else:
         bot_knowledge = []
-    # logger.info(f"bot knowledge -- {bot_knowledge}")
+    logger.info(f"bot knowledge -- {bot_knowledge}")
     # Generate prompt with related knowledge about bot
     if bot_knowledge:
         bot_knowledge = bot_knowledge[0].split(".")[:-1]
