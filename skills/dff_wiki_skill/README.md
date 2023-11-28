@@ -5,7 +5,7 @@ Template has dialog flows based on programy (`repeating`) and based on valila py
 
 
 
-# Importan changes in files of the agent
+# Important changes in files of the agent
 docker-compose.yml
 ```yml
   dff-template:
