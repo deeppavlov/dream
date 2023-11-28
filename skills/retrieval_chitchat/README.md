@@ -1,4 +1,4 @@
-# Title
+# Retrieval ChitChat Skill
 ## Description
 
 ## Input/Output
