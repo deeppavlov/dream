@@ -1,4 +1,6 @@
 # DialogFlow Framework Template
+
+## Description
 Changes can only be made in the `dialogflows` directory.
 
 Template has dialog flows based on programy (`repeating`) and based on valila python (`greeting`).
@@ -74,8 +76,8 @@ def DFF_TEMPLATE_formatter(dialog: Dict) -> List[Dict]:
 ```
 
 
-# Tests
-## Test creating
+## Tests
+### Test creating
 
 The file `server.py` contains this code
 
@@ -128,7 +130,7 @@ except Exception as exc:
 - service testing by `test.sh` execution
 
 
-## Test extending
+### Test extending
 If you use service based on random behavior you can send `random_seed` in your service. You can find corespond lines in `server.py`
 ```python
     ... # some code
@@ -300,3 +302,5 @@ Then in skill\_selectors/rule\_based_selector/connector.py:
         simplified_dialog_flow.set_error_successor(State.SYS_INSERT_FACT, State.SYS_ERR)
         simplified_dialog_flow.set_error_successor(State.USR_INSERT_FACT, State.SYS_ERR)
 ```
+
+## Dependencies

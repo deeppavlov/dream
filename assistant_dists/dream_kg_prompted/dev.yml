@@ -1,0 +1,98 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  ranking-based-response-selector:
+    volumes:
+      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8002:8002
+  ner:
+    volumes:
+      - './annotators/NER_deeppavlov:/src'
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8021:8021
+  entity-linking:
+    volumes:
+      - "./annotators/entity_linking:/src"
+      - "/archive/evseev/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8075:8075
+  mongo:
+    ports:
+      - 27017:27017
+    # # you can use persistent local volume if you need
+    # volumes:
+    #   - ./venv/data/db_data:/root/data/db
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    ports:
+      - 8087:8087
+  entity-detection:
+    volumes:
+      - "./annotators/entity_detection:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8103:8103
+  custom-entity-linking:
+    volumes:
+      - "./annotators/custom_entity_linking:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8153:8153
+  property-extraction:
+    volumes:
+      - "./annotators/property_extraction:/src"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8131:8131
+  user-knowledge-memorizer:
+    volumes:
+      - "./annotators/user_knowledge_memorizer:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 8027:8027
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
+  prompt-selector:
+    volumes:
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8135:8135
+  terminusdb-server:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    ports:
+      - 6363:6363
+  openai-api-chatgpt:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8145:8145
+  dff-knowledge-prompted-skill:
+    volumes:
+      - "./skills/dff_knowledge_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8084:8084
+
+version: "3.7"
