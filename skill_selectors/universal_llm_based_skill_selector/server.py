@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+import re
 from os import getenv
 from typing import List
 
@@ -10,6 +11,10 @@ from common.doc_based_skills_for_skills_selector import turn_on_doc_based_skills
 from common.containers import get_envvars_for_llm
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.selectors import collect_descriptions_from_components
+from common.skill_selector_utils_and_constants import (
+    DEFAULT_SKILLS,
+    get_available_commands,
+)
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -25,8 +30,7 @@ DEFAULT_PROMPT = json.load(open("common/prompts/skill_selector.json", "r"))["pro
 DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-lm-gptjt:8161/respond")
 DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
-
-DEFAULT_SKILLS = ["dummy_skill"]
+AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS = None, None
 
 
 def get_all_skill_names(dialog: dict) -> List[str]:
@@ -36,17 +40,46 @@ def get_all_skill_names(dialog: dict) -> List[str]:
 
 
 def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: List[str]) -> List[str]:
-    global DEFAULT_PROMPT, N_UTTERANCES_CONTEXT
+    global DEFAULT_PROMPT, N_UTTERANCES_CONTEXT, AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS
     selected_skills = []
     selected_skills += DEFAULT_SKILLS
 
     dialog_context = [uttr["text"] for uttr in dialog["utterances"]]
+    last_human_uttr = dialog_context[-1]
     dialog_context[-1] = f"{dialog_context[-1]}\nSelected skills/agents for this dialog context:"
     human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
 
     all_skill_names = get_all_skill_names(dialog)
     _skill_selector = human_uttr_attributes.get("skill_selector", {})
     _is_prompt_based_selection = "prompt" in _skill_selector
+
+    # on first iteration, get ALL commands from commands/ folder
+    if not AVAILABLE_COMMANDS:
+        COMMANDS_TO_SKILLS = get_available_commands("all")
+        if COMMANDS_TO_SKILLS:
+            available_commands = [f".?({command}).?$" for command in list(COMMANDS_TO_SKILLS.keys())]
+            AVAILABLE_COMMANDS = re.compile("|".join(available_commands), flags=re.IGNORECASE)
+
+    # automatically turn on corresponding skill if user uttr contains a known command
+    # however note that for universal skill selector all commands are known commands
+    # thus we have to check later if skill associated with command is available
+    if AVAILABLE_COMMANDS:
+        commands_in_utt = AVAILABLE_COMMANDS.match(last_human_uttr)
+        if commands_in_utt:
+            discovered_command_groups = commands_in_utt.groups()
+            discovered_command = next(command for command in discovered_command_groups if command)
+            skills_to_select = COMMANDS_TO_SKILLS[discovered_command]
+            # check if the skill is available
+            for skill_to_select in skills_to_select:
+                if skill_to_select in all_skill_names:
+                    selected_skills.append(skill_to_select)
+            if selected_skills:
+                logger.info(
+                    f"Command {discovered_command} detected in human utterance. \
+Selected corresponding skill(s):`{selected_skills}`"
+                )
+            return selected_skills
+
     # if debugging response selector (selected_skills=all and skill_selector_prompt is not given):
     #   return all skills from pipeline conf
     # if debugging skill selector (skill_selector_prompt is given):

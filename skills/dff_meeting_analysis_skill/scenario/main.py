@@ -16,12 +16,20 @@ SUMMARY = re.compile(
     r"(summary)|(summari(z|s)e)",
     re.IGNORECASE,
 )
+SHORT_SUMMARY = re.compile(
+    r"^.?/short_summary.?$",
+    re.IGNORECASE,
+)
+LONG_SUMMARY = re.compile(
+    r"^.?/long_summary.?$",
+    re.IGNORECASE,
+)
 FUTURE_TASKS = re.compile(
-    r"(((future)|(to-?do)|(current)) tasks)|(tasks in progress)",
+    r"((((future)|(to-?do)|(current)) tasks)|(tasks in progress))|(^.?/current_tasks.?$)",
     re.IGNORECASE,
 )
 COMPLETED_TASKS = re.compile(
-    r"((completed)|(finished)) tasks",
+    r"(((completed)|(finished)) tasks)|(^.?/completed_tasks.?$)",
     re.IGNORECASE,
 )
 DECISIONS = re.compile(
@@ -29,7 +37,7 @@ DECISIONS = re.compile(
     re.IGNORECASE,
 )
 PROGRESS_BY_AREAS = re.compile(
-    r"progress ((made )?(by))?((did)|(have))? (((.* )?teams?)|(areas))",
+    r"(progress ((made )?(by))?((did)|(have))? (((.* )?teams?)|(areas)))|(^.?/progress_by_areas.?$)",
     re.IGNORECASE,
 )
 WEEKLY_REPORT = re.compile(
@@ -37,7 +45,11 @@ WEEKLY_REPORT = re.compile(
     re.IGNORECASE,
 )
 FULL_REPORT = re.compile(
-    r"((full)|(complete)|(entire)) ((report)|(overview))",
+    r"(((full)|(complete)|(entire)) ((report)|(overview)))|(^.?/full_report.?$)",
+    re.IGNORECASE,
+)
+PROBLEMS = re.compile(
+    r"^.?/problems.?$",
     re.IGNORECASE,
 )
 # тут можно еще спрашивать ллмку. но пока оставляем в таком виде, только побольше вариантов.
@@ -50,10 +62,13 @@ flows = {
             ("generation", "decisions", 1.5): cnd.regexp(DECISIONS),
             ("generation", "future_tasks", 1.5): cnd.regexp(FUTURE_TASKS),
             ("generation", "completed_tasks", 1.5): cnd.regexp(COMPLETED_TASKS),
+            ("generation", "summary_short", 1.5): cnd.regexp(SHORT_SUMMARY),
+            ("generation", "summary_long", 1.5): cnd.regexp(LONG_SUMMARY),
             ("generation", "summary", 1.5): cnd.regexp(SUMMARY),
             ("generation", "progress_by_areas", 1.5): cnd.regexp(PROGRESS_BY_AREAS),
             ("generation", "full_report", 1.5): cnd.regexp(FULL_REPORT),
             ("generation", "weekly_report", 1.5): cnd.regexp(WEEKLY_REPORT),
+            ("generation", "problems", 1.5): cnd.regexp(PROBLEMS),
             ("generation", "question_answering", 1.1): loc_cnd.go_to_question_answering(),
         }
     },
@@ -80,6 +95,14 @@ flows = {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="summary"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
         },
+        "summary_short": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="summary_short"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+        "summary_long": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="summary_long"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
         "future_tasks": {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="future_tasks"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
@@ -102,6 +125,10 @@ flows = {
         },
         "weekly_report": {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="weekly_report"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+        "problems": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="problems"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
         },
         "question_answering": {

@@ -57,8 +57,8 @@ LOW_CONFIDENCE = 0.7
 
 def analyze_transcript(prompt_type: str):
     """
-    prompt_type:  "summary", "future_tasks", "completed_tasks",
-        "decisions", "question_answering", "progress_by_areas",
+    prompt_type:  "summary", "summary_short", "summary_long", "future_tasks", "completed_tasks",
+        "decisions", "question_answering", "progress_by_areas", "problems",
         "full_report", "weekly_report"
     """
 

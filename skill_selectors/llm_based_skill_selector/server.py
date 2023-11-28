@@ -3,6 +3,7 @@ import logging
 import time
 from os import getenv
 from typing import List
+import re
 
 import sentry_sdk
 from flask import Flask, request, jsonify
@@ -10,6 +11,10 @@ from common.containers import get_envvars_for_llm, is_container_running
 from common.doc_based_skills_for_skills_selector import turn_on_doc_based_skills
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.selectors import collect_descriptions_from_components
+from common.skill_selector_utils_and_constants import (
+    DEFAULT_SKILLS,
+    get_available_commands,
+)
 
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
@@ -50,7 +55,7 @@ with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
-DEFAULT_SKILLS = ["dummy_skill"]
+AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS = None, None
 
 assert GENERATIVE_SERVICE_URL
 
@@ -65,11 +70,12 @@ def get_all_skill_names(dialog: dict) -> List[str]:
 
 
 def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: List[str]) -> List[str]:
-    global PROMPT, N_UTTERANCES_CONTEXT
+    global PROMPT, N_UTTERANCES_CONTEXT, AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS
     selected_skills = []
     selected_skills += DEFAULT_SKILLS
 
     dialog_context = [uttr["text"] for uttr in dialog["utterances"]]
+    last_human_uttr = dialog_context[-1]
     dialog_context[-1] = f"{dialog_context[-1]}\nSelected skills/agents for this dialog context:"
     human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
 
@@ -77,6 +83,28 @@ def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: L
     if human_uttr_attributes.get("selected_skills", None) in ["all", []]:
         logger.info(f"llm_based_skill_selector selected ALL skills:\n`{all_skill_names}`")
         return all_skill_names
+
+    # on first iteration, get available commands and command-skill mapping
+    # based on available skills
+    if not AVAILABLE_COMMANDS:
+        COMMANDS_TO_SKILLS = get_available_commands(all_skill_names)
+        if COMMANDS_TO_SKILLS:
+            available_commands = [f".?({command}).?$" for command in list(COMMANDS_TO_SKILLS.keys())]
+            AVAILABLE_COMMANDS = re.compile("|".join(available_commands), flags=re.IGNORECASE)
+
+    # automatically turn on corresponding skill if user uttr contains a known command
+    if AVAILABLE_COMMANDS:
+        commands_in_utt = AVAILABLE_COMMANDS.match(last_human_uttr)
+        if commands_in_utt:
+            discovered_command_groups = commands_in_utt.groups()
+            discovered_command = next(command for command in discovered_command_groups if command)
+            skills_to_select = COMMANDS_TO_SKILLS[discovered_command]
+            selected_skills += skills_to_select
+            logger.info(
+                f"Command {discovered_command} detected in human utterance. \
+Selected corresponding skill(s):`{skills_to_select}`"
+            )
+            return list(set(selected_skills))
 
     # no matter if we have doc in use now, remove dff_document_qa_llm_skill from skills to be sent to LLM
     # in any case, this skill will be added later

@@ -6,3 +6,5 @@ ALWAYS_TURN_ON_ALL_SKILLS: 0
 LANGUAGE: EN
 FALLBACK_FILE: fallbacks_sentius_en.json
 FALLBACK_TO_DOCS_FILE: fallbacks_sentius_en_docs.json
+HELP_FILE: help_en.json
+START_DIALOG_FILE: start_dialog_en.json

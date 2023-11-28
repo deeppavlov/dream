@@ -13,6 +13,8 @@ services:
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_sentius_en.json
       FALLBACK_TO_DOCS_FILE: fallbacks_sentius_en_docs.json
+      HELP_FILE: help_en.json
+      START_DIALOG_FILE: start_dialog_en.json
 
   files:
     image: julienmeerschart/simple-file-upload-download-server

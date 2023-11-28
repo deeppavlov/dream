@@ -234,7 +234,7 @@ def get_and_upload_response_for_one_doc(
                 n_requests += _n_requests
                 uploaded_doc_link = upload_generated_item_return_link(part_of_report, item_type_and_id)
                 if uploaded_doc_link:
-                    bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
+                    bot_attrs_files[item_type_and_id] = uploaded_doc_link
                 hypothesis += f"{part_of_report}\n\n"
     else:
         hypothesis, n_requests = get_response_for_prompt_type(
