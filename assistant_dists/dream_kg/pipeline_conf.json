@@ -312,7 +312,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://user-knowledge-memorizer:8027/respond"
+                    "url": "http://user-knowledge-memorizer:8020/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -323,7 +323,7 @@
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/74p4006d17yappr7ji7dtf.yml",
+                    "component": "components/GevC8fAKjHFtY48HoDyXf8.yml",
                     "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer"
                 }
             }
