@@ -1,14 +1,23 @@
 # BadlistedWordsDetector for Russian
 
 ## Description
-component_type: annotator
-is_customizable: true
 
-Spacy-based user utterance annotator that detects words and phrases from the badlist. This version of the annotator works for the Russian Language.
+Spacy-based user utterance annotator that detects words and phrases from the badlist.
+
+This version of the annotator works for the Russian Language.
 
 ## I/O
-**Input:** a list of user's uttetances 
-**Output:** words and their tags (`{"bad_words": False}` or `{"bad_words": True}`)
+**Input:**
+Takes a list of user's utterances
+```
+["не пизди.", "застрахуйте уже его", "пошел нахер!"]
+```
+
+**Output:**
+Returns words and their tags
+```
+[{"bad_words": True}, {"bad_words": False}, {"bad_words": True}]
+```
 
 ## Dependencies
 none

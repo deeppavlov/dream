@@ -19,15 +19,25 @@ Relation examples:
 
 ## I/O
 
-**Inpunt**
-user_id, entity substring, entity_tags
+**Input**
+Takes a list of user_id, entity substring, entity_tags
 
-**Output:** 
+An input example:
+```
+```
+
+**Output:**
 processed information about:
 - entities
 - entity_id (ids for multiple entities)
 - entity_confidence score
 - entity_id_tags
-  
+
+An output example:
+```
+```
+
 ## Dependencies
- annotators: `NER`, `entity_detection` and `spacy_nounphrases`
+- annotators.ner
+- annotators.entity_detection
+- annotators.spacy_nounphrases

@@ -14,16 +14,23 @@ Entity generator - a se2seq model which generates the subject and object for eac
 
 ## I/O
 
-**Input example**
+**Input**
+Takes user utterances as a list of lists
 
+An input example:
 ```python
 import requests
 
-utterances = [["I love going for a walk with my two dogs every day."], ["I like travelling in Italy with my husband. And you?"]]
+utterances = [["I love going for a walk with my two dogs every day."],
+              ["I like travelling in Italy with my husband. And you?"]]
+
 requests.post("http://0.0.0.0:8136/respond", json = {"utterances": utterances}).json()
 ```
 
-**Output example**
+**Output**
+Returns annotated triplets *subject-relation-object* with information about entities and their relations
+
+An output example:
 ```
 [
     {"triplets": [{"subject": "user", "relation": "like activity", "object": "walking"}, {"subject": "user", "relation": "have pet", "object": "two dogs"}]}, 
@@ -32,8 +39,5 @@ requests.post("http://0.0.0.0:8136/respond", json = {"utterances": utterances}).
 ```
 
 ## Dependencies
-none
-
-**Output**
-
-## Dependencies
+- annotators.ner
+- annotators.entity_linking
