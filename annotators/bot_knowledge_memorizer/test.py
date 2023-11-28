@@ -108,7 +108,7 @@ def main():
 
     request_data = [
         {
-            "last_human_annotated_utterance": [
+            "utterances": [
                 {
                     "text": "i have a dog and a cat",
                     "user": {"id": BOT_ID.split("/")[1]},
@@ -122,7 +122,15 @@ def main():
                         "custom_entity_linking": [],
                     },
                 },
-            ]
+            ],
+            "human_utterances": [
+                {
+                    "text": "What's your dog's name?",
+                },
+                {
+                    "text": "",
+                },
+            ],
         }
     ]
 
