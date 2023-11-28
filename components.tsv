@@ -23,14 +23,14 @@
 8017	sentrewrite
 8018	badlisted-words,badlisted-words-ru
 8019
-8020
+8020    user-knowledge-memorizer
 8021	ner-ru,ner
 8022	dff-program-y-dangerous-skill
 8023	dff-movie-skill
 8024	sentiment-classification-multilingual
 8025    dff-travel-italy-skill
 8026    personality-detection
-8027    user-knowledge-memorizer
+8027    user-knowledge-memorizer-prompted
 8028    dff-user-kg-skill
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
