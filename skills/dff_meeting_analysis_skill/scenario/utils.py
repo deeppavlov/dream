@@ -236,6 +236,7 @@ def get_and_upload_response_for_one_doc(
                 if uploaded_doc_link:
                     bot_attrs_files[item_type_and_id] = uploaded_doc_link
                 hypothesis += f"{part_of_report}\n\n"
+        hypothesis = hypothesis.strip()
     else:
         hypothesis, n_requests = get_response_for_prompt_type(
             transcript_chunks, prompt_type, dialog_context, sending_variables, format_the_response=_format_the_response

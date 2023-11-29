@@ -1,0 +1,4 @@
+{
+    "prompt": "Select the most informative, relevant and non-toxic response among the hypotheses to the given dialog context. Return only the number of selected hypothesis. Each hypothesis is presented inside quotation marks. If there is a hypothesis with an answer to the user request, you must return the number of this hypothesis. You must always return a number. Try to avoid hypotheses that start with 'I'm sorry' or 'I apologize'. The list of hypotheses:\nLIST_OF_HYPOTHESES\nThe number of the selected hypothesis (with no additional comments):",
+    "goals": "Selects the most informative, relevant and non-toxic response among hypotheses and returns only its number."
+}

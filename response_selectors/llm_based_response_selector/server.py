@@ -55,6 +55,7 @@ assert PROMPT_FILE, logger.error("No prompt provided")
 with open(PROMPT_FILE, "r") as f:
     PROMPT = json.load(f)["prompt"]
 KEEP_ORIGINAL_HYPOTHESIS = int(getenv("KEEP_ORIGINAL_HYPOTHESIS"))
+CHOOSE_HYP_BY_NUM = int(getenv("CHOOSE_HYP_BY_NUM"))
 
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
@@ -78,27 +79,26 @@ def select_response_by_scores(hypotheses, scores):
     return result, best_id
 
 
-def select_response(dialog, hypotheses, human_uttr_attributes):
+def select_response_full_text(dialog, hypotheses, human_uttr_attributes):
     dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
 
     if len(hypotheses) == 1:
         logger.info("Found only one hypothesis. Return it.")
         return hypotheses[0]["text"]
 
+    hyps_without_dummy = [hyp for hyp in hypotheses if hyp["skill_name"] != "dummy_skill"]
+    if len(hyps_without_dummy) == 1:
+        logger.info("Found only one hypothesis apart from dummy_skill hypothesis. Return it.")
+        return hyps_without_dummy[0]["text"]
+
     try:
         ie_types = [
-            "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service" for hyp in hypotheses
+            "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service"
+            for hyp in hyps_without_dummy
         ]
         curr_prompt = PROMPT.replace(
             "LIST_OF_HYPOTHESES",
-            "Hypotheses:\n"
-            + "\n".join(
-                [
-                    f'"{hyp["text"]}" [{ie}]'
-                    for hyp, ie in zip(hypotheses, ie_types)
-                    if hyp["skill_name"] != "dummy_skill"
-                ]
-            ),
+            "Hypotheses:\n" + "\n".join([f'"{hyp["text"]}" [{ie}]' for hyp, ie in zip(hyps_without_dummy, ie_types)]),
         )
         logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
         logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
@@ -121,6 +121,61 @@ def select_response(dialog, hypotheses, human_uttr_attributes):
         result = response[0]
         logger.info(f"llm_based_response_selector received from llm:\n`{result}`")
         result = result.replace("[internal service]", "").replace("[external service]", "").strip()
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        result = select_response_by_scores(hypotheses, [hyp["confidence"] for hyp in hypotheses])[0]["text"]
+        logger.info("Exception in LLM's invocation. Selected a response with the highest confidence.")
+    logger.info(f"llm_based_response_selector selected:\n`{result}`")
+
+    return result
+
+
+def select_response_by_number(dialog, hypotheses, human_uttr_attributes):
+    dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+
+    if len(hypotheses) == 1:
+        logger.info("Found only one hypothesis. Return it.")
+        return hypotheses[0]["text"]
+
+    hyps_without_dummy = [hyp for hyp in hypotheses if hyp["skill_name"] != "dummy_skill"]
+    if len(hyps_without_dummy) == 1:
+        logger.info("Found only one hypothesis apart from dummy_skill hypothesis. Return it.")
+        return hyps_without_dummy[0]["text"]
+
+    try:
+        ie_types = [
+            "external service" if hyp["skill_name"] in EXTERNAL_SKILLS else "internal service"
+            for hyp in hyps_without_dummy
+        ]
+        curr_prompt = PROMPT.replace(
+            "LIST_OF_HYPOTHESES",
+            "Hypotheses:\n"
+            + "\n".join(
+                [f'{i + 1}: "{hyp["text"]}" [{ie}]' for i, (hyp, ie) in enumerate(zip(hyps_without_dummy, ie_types))]
+            ),
+        )
+        logger.info(f"llm_based_response_selector sends dialog context to llm:\n`{dialog_context}`")
+        logger.info(f"llm_based_response_selector sends prompt to llm:\n`{curr_prompt}`")
+
+        lm_service_kwargs = human_uttr_attributes.get("response_selector", {}).get("lm_service", {}).get("kwargs", None)
+        lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+        sending_variables = compose_sending_variables(
+            lm_service_kwargs,
+            ENVVARS_TO_SEND,
+            human_uttr_attributes,
+        )
+        response = send_request_to_prompted_generative_service(
+            dialog_context,
+            curr_prompt,
+            GENERATIVE_SERVICE_URL,
+            GENERATIVE_SERVICE_CONFIG,
+            GENERATIVE_TIMEOUT,
+            sending_variables,
+        )
+        num_hyp = int(response[0].strip())
+        logger.info(f"llm_based_response_selector received from llm:\n`{num_hyp}`")
+        result = hyps_without_dummy[num_hyp - 1]["text"]
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
@@ -164,8 +219,11 @@ def respond():
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
+        if CHOOSE_HYP_BY_NUM:
+            selected_resp = select_response_by_number(dialog, hypotheses, human_uttr_attributes)
+        else:
+            selected_resp = select_response_full_text(dialog, hypotheses, human_uttr_attributes)
 
-        selected_resp = select_response(dialog, hypotheses, human_uttr_attributes)
         if selected_resp:
             best_id = find_most_similar_hypothesis(selected_resp, hypotheses)
 

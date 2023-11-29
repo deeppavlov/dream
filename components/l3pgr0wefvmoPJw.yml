@@ -5,14 +5,15 @@ model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
 description: Algorithm that selects the final response among the given list of candidate
-    responses via the given LLM service (in this case, using gpt-4)
+    responses via the given LLM service (in this case, using gpt-4). Works faster by returning
+    the hypothesis number instead of full text. 
 ram_usage: 100M
 gpu_usage: null
 group: response_selectors
 connector:
   protocol: http
   timeout: 120.0
-  url: http://llm-based-response-selector-gpt4-full:8003/respond
+  url: http://llm-based-response-selector-gpt4:8003/respond
 dialog_formatter: state_formatters.dp_formatters:cropped_dialog
 response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
 previous_services:
@@ -23,5 +24,5 @@ state_manager_method: add_bot_utterance
 tags:
 - selector
 endpoint: respond
-service: response_selectors/llm_based_response_selector/service_configs/llm-based-response-selector-gpt4-full
+service: response_selectors/llm_based_response_selector/service_configs/llm-based-response-selector-gpt4
 date_created: '2023-03-16T09:45:32'

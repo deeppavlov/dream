@@ -11,9 +11,10 @@ compose:
       LANGUAGE: EN
       FILTER_TOXIC_OR_BADLISTED: 0
       DEFAULT_LM_SERVICE_URL: http://openai-api-chatgpt:8145/respond
-      DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt-long.json
+      DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt-short.json
       DEFAULT_LM_SERVICE_TIMEOUT: 120
       N_UTTERANCES_CONTEXT: 1
+      CHOOSE_HYP_BY_NUM: 1
       FLASK_APP: server
     context: .
     dockerfile: ./response_selectors/universal_llm_based_response_selector/Dockerfile

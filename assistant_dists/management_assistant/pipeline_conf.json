@@ -230,7 +230,7 @@
                 ],
                 "is_enabled": true,
                 "source": {
-                    "component": "components/lkmklmmPONklev0.yml",
+                    "component": "components/l3pgr0wefvmoPJw.yml",
                     "service": "response_selectors/llm_based_response_selector/service_configs/llm-based-response-selector-gpt4"
                 }
             }
