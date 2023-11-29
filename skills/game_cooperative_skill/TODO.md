@@ -1,2 +1,0 @@
-- add diff backets of skill cand
-- add recovery scenario

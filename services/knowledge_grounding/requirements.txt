@@ -1,3 +1,0 @@
-git+https://github.com/Saraharas/ParlAI@v0.9.4-kg-batch-2models#egg=ParlAI
-gunicorn==19.9.0
-sentry-sdk[flask]==0.14.1

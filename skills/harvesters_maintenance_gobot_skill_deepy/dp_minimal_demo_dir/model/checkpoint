@@ -1,2 +1,0 @@
-model_checkpoint_path: "/content/dp_minimal_demo_dir/model/policy"
-all_model_checkpoint_paths: "/content/dp_minimal_demo_dir/model/policy"

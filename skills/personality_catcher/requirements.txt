@@ -1,8 +1,0 @@
-dataclasses==0.6
-fastapi==0.38.1
-# pkg-resources==0.0.0
-pydantic==0.32.2
-starlette==0.12.8
-sentry-sdk==0.12.3
-jinja2<=3.0.3
-Werkzeug<=2.0.3

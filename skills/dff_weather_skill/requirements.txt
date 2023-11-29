@@ -1,3 +1,0 @@
-click==7.1.2
-nltk==3.5
-ahocorapy==1.5.2

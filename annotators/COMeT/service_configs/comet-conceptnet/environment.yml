@@ -1,8 +1,0 @@
-GRAPH: conceptnet
-SERVICE_HOME: ./annotators/COMeT/
-SERVICE_NAME: comet_conceptnet
-SERVICE_PORT: 8065
-PRETRAINED_MODEL: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/conceptnet_pretrained_model.pickle
-PREPROCESS_DATA: http://lnsigo.mipt.ru/export/alexaprize_data/conceptnet/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
-DECODING_ALGO: beam-3
-CUDA_VISIBLE_DEVICES: '0'
