@@ -72,5 +72,11 @@ services:
       - "./components:/src/components"
     ports:
       - 8182:8182
+  dff-google-api-skill:
+    volumes:
+      - "./skills/dff_google_api_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8162:8162
 
 version: "3.7"

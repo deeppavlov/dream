@@ -11,6 +11,7 @@ compose:
       GENERATIVE_SERVICE_CONFIG: openai-chatgpt-short.json
       GENERATIVE_TIMEOUT: 10
       N_UTTERANCES_CONTEXT: 3
+      N_TURNS_TO_KEEP_DOC: 5
       PROMPT_FILE: common/prompts/skill_selector.json
       FLASK_APP: server
     context: .

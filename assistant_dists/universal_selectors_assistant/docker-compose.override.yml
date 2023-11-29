@@ -40,6 +40,7 @@ services:
         DEFAULT_LM_SERVICE_CONFIG: openai-chatgpt-short.json
         DEFAULT_LM_SERVICE_TIMEOUT: 10
         N_UTTERANCES_CONTEXT: 1
+        N_TURNS_TO_KEEP_DOC: 5
       context: .
       dockerfile: ./skill_selectors/universal_llm_based_skill_selector/Dockerfile
     command: flask run -h 0.0.0.0 -p 8187

@@ -46,12 +46,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8159:8159
-  dff-roles-prompted-skill:
+  dff-general-pm-prompted-skill:
     volumes:
       - "./skills/dff_template_prompted_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8185:8185
+      - 8189:8189
   dff-meeting-analysis-skill:
     volumes:
       - "./skills/dff_meeting_analysis_skill:/src"
@@ -86,5 +86,11 @@ services:
       - "./components:/src/components"
     ports:
       - 8182:8182
+  dff-google-api-skill:
+    volumes:
+      - "./skills/dff_google_api_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8162:8162
 
 version: "3.7"
