@@ -183,7 +183,7 @@
 8177	dff-journalist-helper-ru-prompted-skill
 8178    transformers-lm-rugpt35
 8179	dff-robot-prompted-skill
-8180
+8180    openai-api-gpt4-turbo
 8181
 8182
 8183	external-integration-skill
