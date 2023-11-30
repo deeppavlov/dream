@@ -238,11 +238,11 @@
                     "service": "annotators/custom_entity_linking/service_configs/custom-entity-linking"
                 }
             },
-            "user_knowledge_memorizer_prompted": {
+            "user_knowledge_memorizer": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 10.0,
-                    "url": "http://user-knowledge-memorizer-prompted:8027/respond"
+                    "url": "http://user-knowledge-memorizer:8027/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",

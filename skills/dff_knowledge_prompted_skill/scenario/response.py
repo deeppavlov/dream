@@ -91,7 +91,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     custom_el = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("custom_entity_linking")
     user_kg = (
-        int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("user_knowledge_memorizer_prompted")
+        int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("user_knowledge_memorizer")
     )
     logger.info(f"custom_el: {custom_el}")
     logger.info(f"user_kg: {user_kg}")

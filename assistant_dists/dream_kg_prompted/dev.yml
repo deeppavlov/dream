@@ -58,7 +58,7 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8131:8131
-  user-knowledge-memorizer-prompted:
+  user-knowledge-memorizer:
     volumes:
       - "./annotators/user_knowledge_memorizer:/src"
       - "./common:/src/common"

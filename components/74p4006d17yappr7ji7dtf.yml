@@ -1,4 +1,4 @@
-name: user_knowledge_memorizer_prompted
+name: user_knowledge_memorizer
 display_name: User Knowledge Graph
 component_type: null
 model_type: null
@@ -10,7 +10,7 @@ gpu_usage: null
 group: annotators
 connector:
   protocol: http
-  url: http://user-knowledge-memorizer-prompted:8027/respond
+  url: http://user-knowledge-memorizer:8027/respond
 dialog_formatter: state_formatters.dp_formatters:last_human_annotated_utterance
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services:
