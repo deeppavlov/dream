@@ -212,7 +212,7 @@
                             }
                         },
                         "voice_service": {
-                            "captions": "someone is playing a musical instrument while music plays in the background",
+                            "caption": "someone is playing a musical instrument while music plays in the background",
                             "sound_duration": 2,
                             "sound_path": "http://files:3000/file?file=file_179.oga",
                             "sound_type": "voice_message"
