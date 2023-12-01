@@ -2,7 +2,7 @@
 
 FROM python:3.7
 
-WORKDIR /data
+WORKDIR /src
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
@@ -19,33 +19,33 @@ RUN apt install ffmpeg -y
 RUN python -m pip install -U pip
 RUN pip install gdown
 
-RUN git clone https://github.com/moon-strider/audio-captioning-dcase /data/aux_files
-WORKDIR /data/aux_files
+RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
+WORKDIR /src/aux_files
 RUN git pull
-WORKDIR /data
+WORKDIR /src
 
-RUN pip install -e /data/aux_files/AudioCaption
+RUN pip install -e /src/aux_files/AudioCaption
 
-RUN gdown https://drive.google.com/uc?id=11Gnme5XM-WcQ8C2vcbZ0m2ngmkvgGWwx -O /data/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
-RUN unzip /data/aux_files/AudioCaption/experiments.zip -d /data/aux_files/AudioCaption
-RUN ls /data/aux_files/AudioCaption/experiments/clotho_v2
-RUN ls /data/aux_files/AudioCaption/experiments/clotho_v2/train_val
-RUN ls /data/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel
-RUN ls /data/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm
-RUN ls /data/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1
-RUN rm /data/aux_files/AudioCaption/experiments.zip
-RUN sed -i "s|sed/audioset_tagging_cnn/pretrained_weights/Cnn14_mAP=0.431.pth|/data/aux_files/pretrained_weights/model.pth|" /data/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
-RUN sed -i "s|/home/ilia/projects/audio-captioning/pretrained_weights/Cnn14_mAP=0.431.pth|/data/aux_files/pretrained_weights/model.pth|" /data/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
-RUN cat /data/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
+RUN gdown https://drive.google.com/uc?id=11Gnme5XM-WcQ8C2vcbZ0m2ngmkvgGWwx -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
+RUN unzip /src/aux_files/AudioCaption/experiments.zip -d /src/aux_files/AudioCaption
+RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2
+RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val
+RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel
+RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm
+RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1
+RUN rm /src/aux_files/AudioCaption/experiments.zip
+RUN sed -i "s|sed/audioset_tagging_cnn/pretrained_weights/Cnn14_mAP=0.431.pth|/src/aux_files/pretrained_weights/model.pth|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
+RUN sed -i "s|/home/ilia/projects/audio-captioning/pretrained_weights/Cnn14_mAP=0.431.pth|/src/aux_files/pretrained_weights/model.pth|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
+RUN cat /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
 # PATH
-RUN mkdir /data/aux_files/pretrained_weights
-RUN gdown https://drive.google.com/uc?id=1CVD_JFEx9iFg8DH1cZd81gcPvxrb8uZq -O /data/aux_files/pretrained_weights/model.pth -c --no-check-certificate
+RUN mkdir /src/aux_files/pretrained_weights
+RUN gdown https://drive.google.com/uc?id=1CVD_JFEx9iFg8DH1cZd81gcPvxrb8uZq -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
 
 # SWA
-# RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /data/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
+# RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
 
-COPY ./requirements.txt /data/requirements.txt
-COPY ./ /data/
+COPY ./requirements.txt /src/requirements.txt
+COPY ./ /src/
 
-RUN pip install -r /data/requirements.txt
-RUN pip install -r /data/aux_files/reqs.txt
+RUN pip install -r /src/requirements.txt
+RUN pip install -r /src/aux_files/reqs.txt
