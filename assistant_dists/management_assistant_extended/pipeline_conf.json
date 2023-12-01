@@ -34,6 +34,22 @@
             }
         },
         "annotators": {
+            "teams_postprocessor": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://teams-postprocessor:8019/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "replace_last_human_utterance",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/dfklgjop3q4tnbiufgfd.yml",
+                    "service": "annotators/teams_postprocessor/service_configs/teams-postprocessor"
+                }
+            },
             "prompt_goals_collector": {
                 "connector": {
                     "protocol": "http",
@@ -42,7 +58,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
+                "previous_services": [
+                    "annotators.teams_postprocessor"
+                ],
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {
@@ -59,6 +77,7 @@
                 "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [
+                    "annotators.teams_postprocessor",
                     "annotators.prompt_goals_collector"
                 ],
                 "state_manager_method": "add_annotation",
@@ -76,7 +95,9 @@
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog_skills_and_docs",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
+                "previous_services": [
+                    "annotators.teams_postprocessor"
+                ],
                 "state_manager_method": "update_attributes",
                 "is_enabled": true,
                 "source": {

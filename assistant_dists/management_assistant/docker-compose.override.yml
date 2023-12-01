@@ -5,7 +5,7 @@ services:
       WAIT_HOSTS: "llm-based-response-selector-gpt4:8003, combined-classification:8087, sentence-ranker:8128, 
         prompt-selector:8135, openai-api-chatgpt:8145, dff-general-pm-prompted-skill:8189, dff-meeting-analysis-skill:8186, 
         doc-processor-from-atts:8188, llm-based-skill-selector:8182,
-        openai-api-gpt4:8159"
+        openai-api-gpt4:8159, teams-postprocessor:8019"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -18,6 +18,24 @@ services:
 
   files:
     image: julienmeerschart/simple-file-upload-download-server
+
+  teams-postprocessor:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8019
+        SERVICE_NAME: teams_postprocessor
+      context: .
+      dockerfile: ./annotators/teams_postprocessor/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8019
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   llm-based-skill-selector:
     env_file: [ .env, .env_secret_azure ]

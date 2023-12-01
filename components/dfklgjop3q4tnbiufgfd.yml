@@ -1,0 +1,25 @@
+name: teams_postprocessor
+display_name: Teams Post-processor
+component_type: null
+model_type: Dictionary/Pattern-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Annotator post-processing teams html content attachments when needed.
+  If lists are presented in the message, formats the list correctly.
+  If suggested commands selected, converts command to internal view with backslashes.
+ram_usage: 100M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  timeout: 2.0
+  url: http://teams-postprocessor:8019/respond
+dialog_formatter: state_formatters.dp_formatters:context_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: replace_last_human_utterance
+tags: null
+endpoint: respond
+service: annotators/teams_postprocessor/service_configs/teams-postprocessor
+date_created: '2023-03-16T09:45:32'

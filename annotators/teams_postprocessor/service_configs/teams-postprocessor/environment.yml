@@ -1,0 +1,3 @@
+SERVICE_PORT: 8019
+SERVICE_NAME: teams_postprocessor
+FLASK_APP: server

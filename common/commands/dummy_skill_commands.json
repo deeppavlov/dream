@@ -1,5 +1,4 @@
 [
-    "/help",
-    "help",
-    "/start_dialog"
+    {"command": "/help", "title": "Help"},
+    {"command": "/start_dialog", "title": "/start"}
 ]

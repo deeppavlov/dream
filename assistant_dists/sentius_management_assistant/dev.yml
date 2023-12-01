@@ -10,6 +10,12 @@ services:
       - 3000:3000
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
+  teams-postprocessor:
+    volumes:
+      - "./annotators/teams_postprocessor:/src"
+      - "./common:/src/common"
+    ports:
+      - 8019:8019
   llm-based-response-selector-gpt4:
     volumes:
       - "./response_selectors/llm_based_response_selector:/src"

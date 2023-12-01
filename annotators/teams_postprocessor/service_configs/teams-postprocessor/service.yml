@@ -1,0 +1,27 @@
+name: teams-postprocessor
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8019
+      SERVICE_NAME: teams_postprocessor
+      FLASK_APP: server
+    context: .
+    dockerfile: ./annotators/teams_postprocessor/Dockerfile
+  environment:
+  - FLASK_APP=server
+  command: flask run -h 0.0.0.0 -p 8019
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./annotators/teams_postprocessor:/src
+  - ./common:/src/common
+  ports:
+  - 8019:8019

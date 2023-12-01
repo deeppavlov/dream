@@ -16,7 +16,8 @@ connector:
   url: http://doc-processor-from-atts:8188/process_and_upload_doc
 dialog_formatter: state_formatters.dp_formatters:cropped_dialog_skills_and_docs
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
-previous_services: null
+previous_services:
+- annotators.teams_postprocessor
 required_previous_services: null
 state_manager_method: update_attributes
 tags: null

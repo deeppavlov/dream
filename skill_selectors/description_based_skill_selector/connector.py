@@ -12,7 +12,8 @@ from common.link import get_previously_active_skill
 from common.robot import command_intents
 from common.skill_selector_utils_and_constants import (
     DEFAULT_SKILLS,
-    get_available_commands,
+    get_available_commands_mapped_to_skills,
+    get_all_skill_names,
 )
 from common.universal_templates import is_any_question_sentence_in_utterance
 from common.utils import get_factoid, get_intents, high_priority_intents
@@ -42,8 +43,7 @@ class DescriptionBasedSkillSelectorConnector:
             user_uttr_text = user_uttr["text"]
             user_uttr_annotations = user_uttr["annotations"]
 
-            all_skill_names = dialog.get("attributes", {}).get("pipeline", [])
-            all_skill_names = [el.split(".")[1] for el in all_skill_names if "skills" in el]
+            all_skill_names = get_all_skill_names(dialog)
 
             intent_catcher_intents = get_intents(user_uttr, probs=False, which="intent_catcher")
             high_priority_intent_detected = any(
@@ -54,7 +54,7 @@ class DescriptionBasedSkillSelectorConnector:
             # on first iteration, get available commands and command-skill mapping
             # based on available skills
             if not AVAILABLE_COMMANDS:
-                COMMANDS_TO_SKILLS = get_available_commands(all_skill_names)
+                COMMANDS_TO_SKILLS = get_available_commands_mapped_to_skills(all_skill_names)
                 if COMMANDS_TO_SKILLS:
                     available_commands = [f".?({command}).?$" for command in list(COMMANDS_TO_SKILLS.keys())]
                     AVAILABLE_COMMANDS = re.compile("|".join(available_commands), flags=re.IGNORECASE)

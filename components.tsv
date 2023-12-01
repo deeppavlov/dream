@@ -20,7 +20,7 @@
 8016    dff-command-selector-skill,dff-command-selector-ru-skill
 8017	sentrewrite
 8018	badlisted-words,badlisted-words-ru
-8019
+8019	teams-postprocessor
 8020
 8021	ner-ru,ner
 8022	dff-program-y-dangerous-skill

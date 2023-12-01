@@ -17,7 +17,8 @@ connector:
   url: http://prompt-selector:8135/collect_goals
 dialog_formatter: state_formatters.dp_formatters:prompts_goals_collector_formatter
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
-previous_services: null
+previous_services:
+- annotators.teams_postprocessor
 required_previous_services: null
 state_manager_method: update_attributes
 tags: null

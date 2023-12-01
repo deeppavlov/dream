@@ -14,7 +14,8 @@ from common.prompts import send_request_to_prompted_generative_service, compose_
 from common.selectors import collect_descriptions_from_components
 from common.skill_selector_utils_and_constants import (
     DEFAULT_SKILLS,
-    get_available_commands,
+    get_available_commands_mapped_to_skills,
+    get_all_skill_names,
 )
 
 
@@ -34,12 +35,6 @@ DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_
 AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS = None, None
 
 
-def get_all_skill_names(dialog: dict) -> List[str]:
-    human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})
-    all_skill_names = [skill["name"] for skill in human_uttr_attributes["skills"]]
-    return all_skill_names
-
-
 def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: List[str]) -> List[str]:
     global DEFAULT_PROMPT, N_UTTERANCES_CONTEXT, AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS
     selected_skills = []
@@ -56,7 +51,7 @@ def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: L
 
     # on first iteration, get ALL commands from commands/ folder
     if not AVAILABLE_COMMANDS:
-        COMMANDS_TO_SKILLS = get_available_commands("all")
+        COMMANDS_TO_SKILLS = get_available_commands_mapped_to_skills("all")
         if COMMANDS_TO_SKILLS:
             available_commands = [f".?({command}).?$" for command in list(COMMANDS_TO_SKILLS.keys())]
             AVAILABLE_COMMANDS = re.compile("|".join(available_commands), flags=re.IGNORECASE)

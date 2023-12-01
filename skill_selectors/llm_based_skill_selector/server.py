@@ -14,7 +14,8 @@ from common.prompts import send_request_to_prompted_generative_service, compose_
 from common.selectors import collect_descriptions_from_components
 from common.skill_selector_utils_and_constants import (
     DEFAULT_SKILLS,
-    get_available_commands,
+    get_available_commands_mapped_to_skills,
+    get_all_skill_names,
 )
 
 
@@ -61,15 +62,6 @@ AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS = None, None
 assert GENERATIVE_SERVICE_URL
 
 
-def get_all_skill_names(dialog: dict) -> List[str]:
-    pipeline = dialog.get("attributes", {}).get("pipeline", [])
-    # pipeline is smth like this: ['annotators.sentseg', 'skills.dummy_skill',
-    # 'candidate_annotators.sentence_ranker', 'response_selectors.response_selector', ...]
-    all_skill_names = [el.split(".")[1] for el in pipeline if "skills" in el]
-    # never changing all_skill_names, only changing all_available_skill_names
-    return all_skill_names
-
-
 def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: List[str]) -> List[str]:
     global PROMPT, N_UTTERANCES_CONTEXT, AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS
     selected_skills = []
@@ -88,7 +80,7 @@ def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: L
     # on first iteration, get available commands and command-skill mapping
     # based on available skills
     if not AVAILABLE_COMMANDS:
-        COMMANDS_TO_SKILLS = get_available_commands(all_skill_names)
+        COMMANDS_TO_SKILLS = get_available_commands_mapped_to_skills(all_skill_names)
         if COMMANDS_TO_SKILLS:
             available_commands = [f".?({command}).?$" for command in list(COMMANDS_TO_SKILLS.keys())]
             AVAILABLE_COMMANDS = re.compile("|".join(available_commands), flags=re.IGNORECASE)
