@@ -10,7 +10,6 @@ compose:
       SERVICE_PORT: 8180
       SERVICE_NAME: openai_api_gpt4_turbo
       PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-1106-preview
-      CUDA_VISIBLE_DEVICES: '0'
       FLASK_APP: server
     context: .
     dockerfile: ./services/openai_api_lm/Dockerfile
