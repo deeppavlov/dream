@@ -72,13 +72,13 @@ def respond():
                 CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
                 raise Exception(CAP_ERR_MSG)
             logger.info("Scanning finished successfully, files found, starting inference...")
-            captions = infer(AUDIO_DIR, MODEL_PATH)
+            caption = infer(AUDIO_DIR, MODEL_PATH)
             logger.info("Inference finished successfully")
-            responses += [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": captions}]
+            responses += [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "caption": caption}]
         except Exception:
             logger.info(f"An error occurred in voice-service: {CAP_ERR_MSG}")
             responses.append(
-                [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "captions": "Error"}]
+                [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "caption": "Error"}]
             )
 
     logger.info(f"VOICE_SERVICE RESPONSE: {responses}")

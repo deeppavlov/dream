@@ -15,7 +15,9 @@ def caption(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -
         .get("captions", "Error")
     )
 
-    rsp = "I couldn't caption the audio in your message, please try again with another file" \
-        if cap == "Error" else f"Is there {cap} in that audio?"
+    error_response = "I couldn't caption the audio in your message, please try again with another file"
+    success_response = f"Is there {cap} in that audio?"
+
+    rsp = error_response if cap == "Error" else success_response
 
     return rsp

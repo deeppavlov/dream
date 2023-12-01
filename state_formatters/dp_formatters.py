@@ -1075,7 +1075,7 @@ def dff_voice_skill_formatter(dialog, skill_name="dff_voice_skill"):
     return utils.dff_formatter(
         dialog, 
         skill_name,
-        wanted_keys = ["text", "annotations", "sound_path", "sound_duration", "sound_type", "captions"],
+        wanted_keys = ["text", "annotations", "sound_path", "sound_duration", "sound_type", "caption"],
     )
 
 
