@@ -12,7 +12,7 @@ def caption(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -
         int_ctx.get_last_human_utterance(ctx, actor)
         .get("annotations", {})
         .get("voice_service", {})
-        .get("captions", "Error")
+        .get("caption", "Error")
     )
 
     error_response = "I couldn't caption the audio in your message, please try again with another file"
