@@ -105,7 +105,7 @@
                             }
                         },
                         "voice_service": {
-                            "captions": "a siren blaring siren blaring siren blaring and a siren blaring",
+                            "caption": "a siren blaring siren blaring siren blaring and a siren blaring",
                             "sound_duration": 4,
                             "sound_path": "http://files:3000/file?file=file_178.oga",
                             "sound_type": "voice_message"
