@@ -211,7 +211,7 @@ services:
     command: flask run -h 0.0.0.0 -p 8027
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=3
+      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
