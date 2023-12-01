@@ -1,7 +1,7 @@
 FROM python:3.9.1
 # ###################### IMMUTABLE SECTION ######################################
 # Do not change anything in this section 
-WORKDIR /data
+WORKDIR /src
 
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
