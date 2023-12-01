@@ -1,4 +1,4 @@
-name: user-knowledge-memorizer
+name: user-knowledge-memorizer-prompted
 endpoints:
 - respond
 compose:
