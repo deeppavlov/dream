@@ -1,13 +1,12 @@
 import logging
 import os
-import sys
 import time
 from itertools import zip_longest
 
 import sentry_sdk
 from aux_files.inference import infer
 from flask import Flask, request, jsonify
-from urllib.request import urlopen, URLopener
+from urllib.request import URLopener
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 CAP_ERR_MSG = "The audiofile format is not supported"
