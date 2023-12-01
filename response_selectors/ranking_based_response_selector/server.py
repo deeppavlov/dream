@@ -9,6 +9,7 @@ from os import getenv
 
 import sentry_sdk
 from flask import Flask, request, jsonify
+from common.response_selection import prioritize_scripted_hypotheses
 from common.utils import is_toxic_or_badlisted_utterance
 
 
@@ -24,6 +25,7 @@ SENTENCE_RANKER_SERVICE_URL = getenv("SENTENCE_RANKER_SERVICE_URL")
 SENTENCE_RANKER_TIMEOUT = float(getenv("SENTENCE_RANKER_TIMEOUT"))
 FILTER_TOXIC_OR_BADLISTED = int(getenv("FILTER_TOXIC_OR_BADLISTED"))
 N_UTTERANCES_CONTEXT = int(getenv("N_UTTERANCES_CONTEXT"))
+PRIORITIZE_SCRIPTS = int(getenv("PRIORITIZE_SCRIPTS"))
 assert SENTENCE_RANKER_ANNOTATION_NAME or SENTENCE_RANKER_SERVICE_URL, logger.error(
     "Ranker service URL or annotator name should be given"
 )
@@ -99,6 +101,10 @@ def respond():
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
+
+        if PRIORITIZE_SCRIPTS:
+            hypotheses = prioritize_scripted_hypotheses(hypotheses)
+
         selected_resp = select_response(dialog_context, hypotheses)
         try:
             best_id = hypotheses.index(selected_resp)

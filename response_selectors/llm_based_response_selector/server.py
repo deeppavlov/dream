@@ -13,6 +13,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from common.containers import get_envvars_for_llm, is_container_running
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+from common.response_selection import prioritize_scripted_hypotheses
 from common.utils import is_toxic_or_badlisted_utterance
 
 
@@ -60,6 +61,8 @@ CHOOSE_HYP_BY_NUM = int(getenv("CHOOSE_HYP_BY_NUM"))
 ENVVARS_TO_SEND = get_envvars_for_llm(GENERATIVE_SERVICE_URL)
 EXTERNAL_SKILLS = ["factoid_qa", "dff_google_api_skill"]
 assert GENERATIVE_SERVICE_URL
+
+PRIORITIZE_SCRIPTS = int(getenv("PRIORITIZE_SCRIPTS"))
 
 
 def filter_out_badlisted_or_toxic(hypotheses):
@@ -216,6 +219,10 @@ def respond():
         hypotheses = [hyp for hyp in dialog["human_utterances"][-1]["hypotheses"]]
         if FILTER_TOXIC_OR_BADLISTED:
             hypotheses = filter_out_badlisted_or_toxic(hypotheses)
+
+        if PRIORITIZE_SCRIPTS:
+            hypotheses = prioritize_scripted_hypotheses(hypotheses)
+
         hypotheses_texts = "\n".join([f'{h["skill_name"]} (conf={h["confidence"]}): {h["text"]}' for h in hypotheses])
         logger.info(f"Hypotheses: {hypotheses_texts}")
         human_uttr_attributes = dialog["human_utterances"][-1].get("attributes", {})

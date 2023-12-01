@@ -7,7 +7,7 @@ import json
 import sentry_sdk
 from sentry_sdk.integrations.logging import ignore_logger
 
-from common.constants import CAN_NOT_CONTINUE, CAN_CONTINUE_SCENARIO
+from common.constants import CAN_NOT_CONTINUE
 
 from df_engine.core import Context, Actor
 
@@ -138,7 +138,7 @@ def get_response(ctx: Context, actor: Actor, *args, **kwargs):
         "current_turn_dff_suspended": current_turn_dff_suspended,
     }
     confidence = ctx.misc["agent"]["response"].get("confidence", 0.85)
-    can_continue = CAN_CONTINUE_SCENARIO if confidence else CAN_NOT_CONTINUE
+    can_continue = CAN_NOT_CONTINUE
     can_continue = ctx.misc["agent"]["response"].get("can_continue", can_continue)
     is_final_answer = ctx.misc["agent"]["response"].get("is_final_answer", "true")
     ctx.clear(2, ["requests", "responses", "labels"])

@@ -9,6 +9,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from common.doc_based_skills_for_skills_selector import turn_on_doc_based_skills
 from common.containers import get_envvars_for_llm
+from common.link import get_previously_active_skill
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.selectors import collect_descriptions_from_components
 from common.skill_selector_utils_and_constants import (
@@ -171,6 +172,9 @@ Selected corresponding skill(s):`{selected_skills}`"
     # so, now we have selected_skills containing skills from human utterance attributes skill names (not deployed)
     # we need to add dff_universal_skill to generate prompt-based hypotheses
     selected_skills += ["dff_universal_prompted_skill"]
+    # turn on skills active on the previous step and which have not CAN_NOT_CONTINUE tag
+    selected_skills.extend(get_previously_active_skill(dialog))
+
     selected_skills = list(set(selected_skills))
     logger.info(f"universal_llm_based_skill_selector selected:\n`{selected_skills}`")
     return selected_skills

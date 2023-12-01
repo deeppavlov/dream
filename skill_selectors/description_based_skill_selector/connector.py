@@ -117,9 +117,6 @@ Selected corresponding skill(s):`{skills_to_select}`"
             if user_uttr_text == "/get_dialog_id":
                 skills_for_uttr = ["dummy_skill"]
             else:
-                # adding linked-to skills
-                skills_for_uttr.extend(get_previously_active_skill(dialog))
-
                 if "dff_universal_prompted_skill" in prompted_skills:
                     skills_for_uttr.append("dff_universal_prompted_skill")
 
@@ -145,10 +142,14 @@ Selected corresponding skill(s):`{skills_to_select}`"
             # turn on skills that use documents (dff_document_qa_llm_skill, dff_meeting_analysis_skill)
             # if we have active documents in use
             skills_for_uttr = turn_on_doc_based_skills(dialog, all_skill_names, skills_for_uttr)
+            # turn on skills active on the previous step and which have not CAN_NOT_CONTINUE tag
+            skills_for_uttr.extend(get_previously_active_skill(dialog))
+
+            skills_for_uttr = list(set(skills_for_uttr))
             logger.info(f"Selected skills: {skills_for_uttr}")
             total_time = time.time() - st_time
             logger.info(f"description_based_skill_selector exec time = {total_time:.3f}s")
-            asyncio.create_task(callback(task_id=payload["task_id"], response=list(set(skills_for_uttr))))
+            asyncio.create_task(callback(task_id=payload["task_id"], response=skills_for_uttr))
         except Exception as e:
             total_time = time.time() - st_time
             logger.info(f"description_based_skill_selector exec time = {total_time:.3f}s")

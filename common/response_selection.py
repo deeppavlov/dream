@@ -1,3 +1,12 @@
+import logging
+from copy import deepcopy
+
+from common.constants import CAN_NOT_CONTINUE
+from common.skill_selector_utils_and_constants import DEFAULT_SKILLS
+
+
+logger = logging.getLogger(__name__)
+
 # this is a list of skills which are not one-lines
 ACTIVE_SKILLS = [
     "dff_book_skill",
@@ -68,3 +77,26 @@ BY_THE_WAY = [
     "Oh, before I forget,",
     "I wanted to mention that,",
 ]
+
+
+def prioritize_scripted_hypotheses(hypotheses):
+    # identify if we have any scripted hypotheses
+    if_scripts_available = False
+    for hyp in hypotheses:
+        if hyp.get("can_continue", CAN_NOT_CONTINUE) != CAN_NOT_CONTINUE:
+            if_scripts_available = True
+            logger.info("Scripted hypotheses found. Prioritize scripted hypotheses.")
+            break
+
+    if if_scripts_available:
+        # if we have scripted hypotheses, leave only scripted hypotheses and from default skills
+        new_hypotheses = []
+        for hyp in hypotheses:
+            if hyp["skill_name"] in DEFAULT_SKILLS or hyp.get("can_continue", CAN_NOT_CONTINUE) != CAN_NOT_CONTINUE:
+                new_hypotheses.append(deepcopy(hyp))
+                continue
+            else:
+                logger.info(f"Unscripted hypothesis by {hyp['skill_name']} was dropped")
+        return new_hypotheses
+    else:
+        return hypotheses

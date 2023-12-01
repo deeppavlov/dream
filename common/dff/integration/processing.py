@@ -93,7 +93,7 @@ def set_confidence(confidence: float = 1.0):
     return set_confidence_processing
 
 
-def set_can_continue(continue_flag: str = common_constants.CAN_CONTINUE_SCENARIO):
+def set_can_continue(continue_flag: str = common_constants.CAN_NOT_CONTINUE):
     def set_can_continue_processing(
         ctx: Context,
         actor: Actor,

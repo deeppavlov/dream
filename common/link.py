@@ -3,6 +3,7 @@ This module consolidates possible phrases that links to specific skill.
 Also it contains +link_to+ function that returns phrase to link to specific skill
 """
 import json
+import logging
 import pathlib
 from copy import deepcopy
 from random import choice, choices
@@ -20,9 +21,12 @@ import common.personal_info as personal_info
 import common.science as dff_science_skill
 import common.sport as dff_sport_skill
 import common.travel as dff_travel_skill
-from common.constants import CAN_CONTINUE_SCENARIO, CAN_NOT_CONTINUE, CAN_CONTINUE_PROMPT, MUST_CONTINUE
+from common.constants import CAN_NOT_CONTINUE
 from common.utils import get_not_used_template
 from common.response_selection import COMPLETELY_CHANGING_THE_SUBJECT_PHRASES, CHANGE_TOPIC_SUBJECT, BY_THE_WAY
+
+
+logger = logging.getLogger(__name__)
 
 # Each common skill module should define +skill_trigger_phrases()+ function
 # that contains all phrases to trigger specific skill
@@ -363,19 +367,10 @@ def get_linked_to_skills(dialog):
 
 
 def get_previously_active_skill(dialog):
-    # return prev active skill if it returned not `CAN_NOT_CONTINUE`
-
-    prev_user_uttr_hyp = dialog["human_utterances"][-2]["hypotheses"] if len(dialog["human_utterances"]) > 1 else []
     bot_uttr = dialog["bot_utterances"][-1] if len(dialog["bot_utterances"]) else {}
     prev_active_skill = bot_uttr.get("active_skill", "")
 
-    result = []
-    for hyp in prev_user_uttr_hyp:
-        if hyp.get("can_continue", CAN_NOT_CONTINUE) in {
-            CAN_CONTINUE_SCENARIO,
-            MUST_CONTINUE,
-            CAN_CONTINUE_PROMPT,
-        }:
-            if hyp["skill_name"] == prev_active_skill:
-                result.append(hyp["skill_name"])
-    return result
+    if bot_uttr.get("attributes", {}).get("can_continue", CAN_NOT_CONTINUE) != CAN_NOT_CONTINUE:
+        logger.info(f"Turn on `{prev_active_skill}` because it was active on the previous step as scripted one.")
+        return [prev_active_skill]
+    return []

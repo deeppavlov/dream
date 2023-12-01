@@ -9,6 +9,7 @@ import sentry_sdk
 from flask import Flask, request, jsonify
 from common.containers import get_envvars_for_llm, is_container_running
 from common.doc_based_skills_for_skills_selector import turn_on_doc_based_skills
+from common.link import get_previously_active_skill
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 from common.selectors import collect_descriptions_from_components
 from common.skill_selector_utils_and_constants import (
@@ -163,6 +164,9 @@ Selected corresponding skill(s):`{skills_to_select}`"
         prev_active_skills,
         auto_turn_on_meeting_analysis_when_doc_in_use=False,
     )
+    # turn on skills active on the previous step and which have not CAN_NOT_CONTINUE tag
+    selected_skills.extend(get_previously_active_skill(dialog))
+
     selected_skills = list(set(selected_skills))
     logger.info(f"llm_based_skill_selector selected:\n`{selected_skills}`")
     return selected_skills
