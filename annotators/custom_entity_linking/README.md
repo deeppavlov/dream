@@ -24,18 +24,23 @@ Takes a list of user_id, entity substring, entity_tags
 
 An input example:
 ```
+"user_id": [user_id],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "context": [context],
+            "property_extraction": [property_extraction],
+        }
 ```
 
 **Output:**
-processed information about:
-- entities
-- entity_id (ids for multiple entities)
-- entity_confidence score
-- entity_id_tags
+- List of entity substrings (entity names).
+- List of entity IDs.
+- List of confidences.
+- List of entity ID tags (entity kinds).
+- List of property extraction information.
+- List of preprocessed conversation
 
-An output example:
-```
-```
+
 
 ## Dependencies
 - annotators.ner

@@ -4,7 +4,7 @@ A skill that is able to parse user's input and retrieve person's name.
 ## Input/Output
 
 **Input**
-A user utterance
+Accepts annotated utterances, including NER
 ```
 ["my name is john."]
 ```
