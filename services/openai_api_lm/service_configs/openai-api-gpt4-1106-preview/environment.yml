@@ -1,0 +1,4 @@
+SERVICE_PORT: 8180
+SERVICE_NAME: openai-api-gpt4-turbo
+PRETRAINED_MODEL_NAME_OR_PATH: gpt-4-1106-preview
+FLASK_APP: server
