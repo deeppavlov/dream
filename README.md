@@ -72,6 +72,13 @@ and the provided information will be used in LLM-powered reply generation as a p
 
 # Quick Start
 
+### System Requirements
+
+- Operating System: Ubuntu 18.04+, Windows 10+ (через WSL \& WSL2), MacOS Big Sur;
+- Version of `docker` from 20 and above;
+- Version of `docker-compose` v1.29.2;
+- Operative Memory from 2 Gb (using proxy), from 4 Gb (LLM-based prompted distributions) and from  20 Gb (old scripted distributions).
+
 ### Clone the repo
 
 ```
