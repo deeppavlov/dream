@@ -11,7 +11,7 @@ from common.doc_based_skills_for_skills_selector import turn_on_doc_based_skills
 from common.containers import get_envvars_for_llm
 from common.link import get_previously_active_skill
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
-from common.selectors import collect_descriptions_from_components
+from common.selectors import update_descriptions_from_given_dict, collect_descriptions_from_components_folder
 from common.skill_selector_utils_and_constants import (
     DEFAULT_SKILLS,
     get_available_commands_mapped_to_skills,
@@ -33,6 +33,7 @@ DEFAULT_LM_SERVICE_URL = getenv("DEFAULT_LM_SERVICE_URL", "http://transformers-l
 DEFAULT_LM_SERVICE_CONFIG = getenv("DEFAULT_LM_SERVICE_CONFIG", "default_generative_config.json")
 DEFAULT_LM_SERVICE_CONFIG = json.load(open(f"common/generative_configs/{DEFAULT_LM_SERVICE_CONFIG}", "r"))
 AVAILABLE_COMMANDS, COMMANDS_TO_SKILLS = None, None
+ALL_SKILLS_DESCRIPTIONS_MAPPING = collect_descriptions_from_components_folder()
 
 
 def select_skills(dialog: dict, prev_active_skills: List[str], prev_used_docs: List[str]) -> List[str]:
@@ -99,12 +100,17 @@ Selected corresponding skill(s):`{selected_skills}`"
     # TURN ON: all skills & turn on skills selected by LLM via prompt
     try:
         skills = [skill for skill in human_uttr_attributes["skills"] if skill["name"] in all_available_skill_names]
-        skill_descriptions_list, display_names_mapping = collect_descriptions_from_components(skills)
+        current_skills_descs_mapping = update_descriptions_from_given_dict(ALL_SKILLS_DESCRIPTIONS_MAPPING, skills)
         prompt = _skill_selector.get("prompt", DEFAULT_PROMPT)
         if "LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS" in prompt:
             # need to add skill descriptions in prompt in replacement of `LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS`
             skill_descriptions = "Skills:\n"
-            skill_descriptions += "\n".join([f'"{name}": "{descr}"' for name, descr in skill_descriptions_list])
+            skill_descriptions += "\n".join(
+                [
+                    '"' + name_desc_dict["display_name"] + ": " + name_desc_dict["description"] + '"'
+                    for name_desc_dict in current_skills_descs_mapping.values()
+                ]
+            )
             prompt = prompt.replace("LIST_OF_AVAILABLE_AGENTS_WITH_DESCRIPTIONS", skill_descriptions)
 
         lm_service_url = _skill_selector.get("lm_service", {}).get("url", DEFAULT_LM_SERVICE_URL)
@@ -142,8 +148,8 @@ Selected corresponding skill(s):`{selected_skills}`"
             sending_variables,
         )[0]
         logger.info(f"universal_llm_based_skill_selector received from llm:\n`{response}`")
-        for skill_name, display_name in display_names_mapping.items():
-            if display_name in response:
+        for skill_name, name_desc_dict in current_skills_descs_mapping.items():
+            if name_desc_dict["display_name"] in response:
                 selected_skills += [skill_name]
     except Exception as e:
         sentry_sdk.capture_exception(e)

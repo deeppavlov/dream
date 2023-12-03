@@ -1,38 +1,43 @@
 import yaml
-
 from os import listdir
 from typing import List
 
 
-def collect_descriptions_from_components(skills: List[dict]):
-    # skills contain list of working names (aka `dff_blabla_skill`)
-    result = []
+def collect_descriptions_from_components_folder() -> dict:
+    # collect display names and descriptions of skills which descriptions are not given in request
+    # from the components folder
+    mapping = {}
+    for fname in listdir("components/"):
+        if "yml" in fname:
+            component = yaml.load(open(f"components/{fname}", "r"), Loader=yaml.FullLoader)
+            if component["state_manager_method"] == "add_hypothesis" and component["name"] not in mapping.keys():
+                mapping[component["name"]] = {
+                    "display_name": component["display_name"],
+                    "description": component["description"],
+                }
+    return mapping
+
+
+def update_descriptions_from_given_dict(
+    mapping: dict,
+    skills: List[dict],
+):
     all_skills = [skill["name"] for skill in skills]
-    collected_skills = []
-    display_names_mapping = {}
+    updated_mapping = {skill_name: v for skill_name, v in mapping.items() if skill_name in all_skills}
 
     # collect display names and descriptions from the request
     for skill in skills:
         if skill.get("display_name", "") and skill.get("description", ""):
-            result += [(skill["display_name"], skill["description"])]
-            collected_skills += [skill["name"]]
-            display_names_mapping[skill["name"]] = skill["display_name"]
-
-    # collect display names and descriptions of skills which descriptions are not given in request
-    # from the components folder
-    for fname in listdir("components/"):
-        if "yml" in fname:
-            component = yaml.load(open(f"components/{fname}", "r"), Loader=yaml.FullLoader)
-            if component["name"] in all_skills and component["name"] not in collected_skills:
-                result += [(component["display_name"], component["description"])]
-                collected_skills += [component["name"]]
-                display_names_mapping[component["name"]] = component["display_name"]
-
+            updated_mapping[skill["name"]] = {
+                "display_name": skill["display_name"],
+                "description": skill["description"],
+            }
     # for the rest of unfound skills, compose description by hands
     for skill in skills:
-        if skill["name"] not in collected_skills:
+        if skill["name"] not in updated_mapping.keys():
             prompt = skill["prompt"]
-            result += [(skill["name"], f"Agent with the following task:\n`{prompt}`")]
-            display_names_mapping[skill["name"]] = skill["name"]
-
-    return result, display_names_mapping
+            updated_mapping[skill["name"]] = {
+                "display_name": skill["name"],
+                "description": f"Agent with the following task:\n`{prompt}`",
+            }
+    return updated_mapping
