@@ -1,12 +1,12 @@
 import logging
 import re
 
+import common.dff.integration.condition as int_cnd
 from df_engine.core.keywords import TRANSITIONS, RESPONSE, GLOBAL
 from df_engine.core import Actor
 import df_engine.conditions as cnd
 import df_engine.labels as lbl
 from . import condition as loc_cnd
-
 from . import response as loc_rsp
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -14,6 +14,17 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 SUMMARY = re.compile(
     r"(summary)|(summari(z|s)e)",
+    re.IGNORECASE,
+)
+SET_PERSONAL_FUTURE_TASKS = re.compile(
+    r"(set)|(put) (my (((future)|(today'?s?)|(to-?do)|(current)) tasks)|(tasks in progress)|(tasks for today))"
+    r"|((((future)|(today'?s?)|(to-?do)|(current)) tasks)|(tasks in progress)|(tasks for today) for me)"
+    r"((into)|(to)) (the)? task-? ?tracker",
+    re.IGNORECASE,
+)
+PERSONAL_FUTURE_TASKS = re.compile(
+    r"(my (((future)|(today'?s?)|(to-?do)|(current)) tasks)|(tasks in progress)|(tasks for today))"
+    r"|((((future)|(today'?s?)|(to-?do)|(current)) tasks)|(tasks in progress)|(tasks for today) for me)",
     re.IGNORECASE,
 )
 SHORT_SUMMARY = re.compile(
@@ -26,6 +37,10 @@ LONG_SUMMARY = re.compile(
 )
 FUTURE_TASKS = re.compile(
     r"((((future)|(to-?do)|(current)) tasks)|(tasks in progress))|(^.?/current_tasks.?$)",
+    re.IGNORECASE,
+)
+PERSONAL_COMPLETED_TASKS = re.compile(
+    r"(my ((completed)|(finished)) tasks)|(((completed)|(finished)) tasks for me)",
     re.IGNORECASE,
 )
 COMPLETED_TASKS = re.compile(
@@ -60,7 +75,10 @@ flows = {
         TRANSITIONS: {
             ("service", "no_document", 1.7): loc_cnd.no_document_in_use(),
             ("generation", "decisions", 1.5): cnd.regexp(DECISIONS),
+            ("generation", "extract_tasks_ask_for_approval", 1.5): cnd.regexp(SET_PERSONAL_FUTURE_TASKS),
+            ("generation", "personal_future_tasks", 1.5): cnd.regexp(PERSONAL_FUTURE_TASKS),
             ("generation", "future_tasks", 1.5): cnd.regexp(FUTURE_TASKS),
+            ("generation", "personal_completed_tasks", 1.5): cnd.regexp(PERSONAL_COMPLETED_TASKS),
             ("generation", "completed_tasks", 1.5): cnd.regexp(COMPLETED_TASKS),
             ("generation", "summary_short", 1.5): cnd.regexp(SHORT_SUMMARY),
             ("generation", "summary_long", 1.5): cnd.regexp(LONG_SUMMARY),
@@ -95,6 +113,18 @@ flows = {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="summary"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
         },
+        "extract_tasks_ask_for_approval": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="set_personal_tasks_into_tracker"),
+            TRANSITIONS: {
+                ("template_responses", "user_approval_received", 1.2): int_cnd.is_yes_vars,
+                ("template_responses", "ask_for_approval_to_set_updated_tasks", 1.2): loc_cnd.is_a_list(),
+                ("generation", "question_answering"): cnd.true(),
+            },
+        },
+        "personal_future_tasks": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="personal_future_tasks"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
         "summary_short": {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="summary_short"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
@@ -105,6 +135,10 @@ flows = {
         },
         "future_tasks": {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="future_tasks"),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+        "personal_completed_tasks": {
+            RESPONSE: loc_rsp.analyze_transcript(prompt_type="personal_completed_tasks"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
         },
         "completed_tasks": {
@@ -134,6 +168,20 @@ flows = {
         "question_answering": {
             RESPONSE: loc_rsp.analyze_transcript(prompt_type="question_answering"),
             TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+    },
+    "template_responses": {
+        "user_approval_received": {
+            RESPONSE: loc_rsp.respond_to_user_approval(),
+            TRANSITIONS: {("generation", "question_answering"): cnd.true()},
+        },
+        "ask_for_approval_to_set_updated_tasks": {
+            RESPONSE: loc_rsp.ask_for_approval_to_set_updated_tasks(),
+            TRANSITIONS: {
+                ("template_responses", "user_approval_received", 1.2): int_cnd.is_yes_vars,
+                ("template_responses", "ask_for_approval_to_set_updated_tasks", 1.2): loc_cnd.is_a_list(),
+                ("generation", "question_answering"): cnd.true(),
+            },
         },
     },
 }

@@ -1,0 +1,4 @@
+{
+    "check_the_task_list_by_bot": "Please, check your current tasks that I extracted from the meeting. Should I set these tasks to the task tracker?\n\nIf you are satisfied with the list of tasks, answer \"yes\".\n\nIf you would like to edit it, respond to this message with an updated list of tasks.",
+    "check_the_task_list_by_user": "Please, check the updated list of your current tasks. Should I set these tasks to the task tracker?\n\nIf you are satisfied with the list of tasks, answer \"yes\".\n\nIf you would like to edit it, respond to this message with an updated list of tasks."
+}

@@ -54,6 +54,17 @@ FILE_SERVER_TIMEOUT = float(os.getenv("FILE_SERVER_TIMEOUT"))
 SHORT_ENVVARS_TO_SEND = get_envvars_for_llm(SHORT_GENERATIVE_SERVICE_URL)
 
 
+def is_a_list():
+    def is_a_list_handler(ctx: Context, actor: Actor) -> bool:
+        _is_a_list = False
+        last_human_uttr = int_ctx.get_last_human_utterance(ctx, actor)["text"]
+        if re.match(r"- ", last_human_uttr) or len(re.split(r"\n ?- ?", last_human_uttr)) > 1:
+            _is_a_list = True
+        return _is_a_list
+
+    return is_a_list_handler
+
+
 def no_document_in_use():
     def no_document_in_use_handler(ctx: Context, actor: Actor) -> bool:
         if ctx.validation:

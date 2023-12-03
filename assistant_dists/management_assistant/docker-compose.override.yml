@@ -237,6 +237,7 @@ services:
         SHORT_GENERATIVE_TIMEOUT: 30
         N_UTTERANCES_CONTEXT: 7
         FILE_SERVER_TIMEOUT: 30.0
+        TRANSCRIPTOR_SERVICE_URL: 'http://3.86.192.202:8171'
       context: .
       dockerfile: ./skills/dff_meeting_analysis_skill/Dockerfile
     deploy:

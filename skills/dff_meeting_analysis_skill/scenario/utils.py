@@ -38,7 +38,9 @@ GENERATIVE_SERVICE_URL = os.getenv("GENERATIVE_SERVICE_URL")
 
 management_prompts_dict = {
     "summary": {},
+    "personal_future_tasks": {},
     "future_tasks": {},
+    "personal_completed_tasks": {},
     "completed_tasks": {},
     "decisions": {},
     "question_answering": {},
@@ -50,6 +52,9 @@ management_prompts_dict = {
 
 with open("common/prompts/management_assistant/formatting.json", "r") as f:
     formatting_dict = json.load(f)
+    SHORT_RESPONSE_GUIDELINES = formatting_dict["instruction_short_response"]
+    MEDIUM_RESPONSE_GUIDELINES = formatting_dict["instruction_medium_response"]
+    LONG_RESPONSE_GUIDELINES = formatting_dict["instruction_long_response"]
     BASIC_FORMATTING_GUIDELINES = formatting_dict["instruction_to_format"]
     NON_FORMATTING_GUIDELINES = formatting_dict["instruction_not_to_format"]
 
@@ -90,18 +95,20 @@ def set_correct_type_and_id(request, prompt_type_local, document_in_use_id=""):
 
 
 def get_response_for_prompt_type(
-    transcript_chunks: list, prompt_type: str, dialog_context: list, sending_variables: dict, format_the_response=False
+    transcript_chunks: list,
+    prompt_type: str,
+    dialog_context: list,
+    sending_variables: dict,
+    username: str = None,
+    format_the_response: bool = False,
 ) -> Tuple[str, int]:
     if "summary" in prompt_type:
         if "summary_short" in prompt_type:
-            length_request = " Your summary must be very concise. Make it as short as possible. \
-The summary must be one short paragraph at most."
+            length_request = SHORT_RESPONSE_GUIDELINES
         elif "summary_long" in prompt_type:
-            length_request = " Your summary must be as detailed as possible. Cover all aspects of the discussions. \
-The summary must include at least one paragraph for each speaker."
+            length_request = LONG_RESPONSE_GUIDELINES
         else:
-            length_request = " Be concise but mention all important details. Leave out minor detailes when possible. \
-The summary must be two or three paragraphs."
+            length_request = MEDIUM_RESPONSE_GUIDELINES
         prompt_type = "summary"
     else:
         length_request = ""
@@ -120,6 +127,10 @@ The summary must be two or three paragraphs."
     else:
         prompt += f" {NON_FORMATTING_GUIDELINES}"
         prompt_final += f" {NON_FORMATTING_GUIDELINES}"
+    if username:
+        prompt = prompt.replace("{username}", username)
+    else:
+        prompt = prompt.replace("{username}", "User request")
     request = dialog_context[-1]
     for n, chunk in enumerate(transcript_chunks):
         prompt_to_send = prompt.replace("{transcript_chunk}", chunk)
@@ -172,6 +183,7 @@ def compose_and_upload_final_response(
     sending_variables: dict,
     bot_attrs_files: dict,
     use_filenames: True = bool,
+    username: str = None,
 ) -> Tuple[List[str], dict, int]:
     # note that we are joining responses for all docs by a special character SEP_FOR_DOC_RESPONSES
     # when we are sending them to LLM, if we need to split the info into chunks, we
@@ -187,7 +199,12 @@ def compose_and_upload_final_response(
     else:
         prompt_type_and_id_for_processing = prompt_type_and_id
     hyp_combined, bot_attrs_files, n_requests = get_and_upload_response_for_one_doc(
-        hyps_from_all_docs, prompt_type_and_id_for_processing, dialog_context, sending_variables, bot_attrs_files
+        hyps_from_all_docs,
+        prompt_type_and_id_for_processing,
+        dialog_context,
+        sending_variables,
+        bot_attrs_files,
+        username,
     )
     uploaded_doc_link = upload_generated_item_return_link(hyp_combined, prompt_type_and_id)
     if uploaded_doc_link:
@@ -201,6 +218,7 @@ def get_and_upload_response_for_one_doc(
     dialog_context: List[str],
     sending_variables: dict,
     bot_attrs_files: dict,
+    username: str = None,
 ) -> Tuple[str, dict, int]:
     prompt_type = prompt_type_and_id.split("__")[0]
     document_in_use_id = prompt_type_and_id.split("__")[1]
@@ -229,7 +247,7 @@ def get_and_upload_response_for_one_doc(
             else:
                 logger.info(f"No earlier {item_type_and_id} for full_report found.")
                 part_of_report, _n_requests = get_response_for_prompt_type(
-                    transcript_chunks, item, dialog_context, sending_variables, format_the_response=True
+                    transcript_chunks, item, dialog_context, sending_variables, username, format_the_response=True
                 )
                 n_requests += _n_requests
                 uploaded_doc_link = upload_generated_item_return_link(part_of_report, item_type_and_id)
@@ -239,7 +257,12 @@ def get_and_upload_response_for_one_doc(
         hypothesis = hypothesis.strip()
     else:
         hypothesis, n_requests = get_response_for_prompt_type(
-            transcript_chunks, prompt_type, dialog_context, sending_variables, format_the_response=_format_the_response
+            transcript_chunks,
+            prompt_type,
+            dialog_context,
+            sending_variables,
+            username,
+            format_the_response=_format_the_response,
         )
 
     # we save each hyp to server under the name of the request and doc_in_use id

@@ -17,6 +17,8 @@ compose:
       SHORT_GENERATIVE_TIMEOUT: 30
       N_UTTERANCES_CONTEXT: 7
       FILE_SERVER_TIMEOUT: 30.0
+      TRANSCRIPTOR_SERVICE_URL: 'http://3.86.192.202:8171'
+      BEARER_TOKEN_MICROSOFT_API: 'Bearer 6ad07e35-bb74-4683-a6f5-8c3bd31c0159'
     context: .
     dockerfile: ./skills/dff_meeting_analysis_skill/Dockerfile
   command: gunicorn --workers=1 server:app -b 0.0.0.0:8186 --reload --timeout 600

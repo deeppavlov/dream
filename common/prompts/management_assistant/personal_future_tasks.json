@@ -1,0 +1,5 @@
+{
+    "prompt": "Meeting transcript:\n{transcript_chunk}\nWrite the lists of future to-do tasks according to the user request.\nOnly mention tasks in progress or new tasks that were set during this call and will be started later.\nGive one list of future tasks without extra information. The user making the request is {username}. Use 'you' to adress the user, do not mention their name. Make the list structured with bullet points for each separate task. If the user requests 'my tasks', only present the tasks for this user. If user asks to put their tasks into task tracker, ignore that and only present the tasks for this user based on the given meeting transcript.\nUser request (by {username}): {request}",
+    "prompt_concatenate": "Here is a list of future to-do tasks for a person or people:\n{gpt_responses}\nFormat the list to use correct numbering and get rid of duplicate items and make it structured.",
+    "goals": "Extracts future tasks to be done by a specific person or people from meeting transcripts."
+}
