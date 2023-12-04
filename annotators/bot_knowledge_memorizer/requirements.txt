@@ -9,5 +9,4 @@ pyopenssl==22.0.0
 itsdangerous==2.0.1
 click==7.1.2
 nltk==3.5
-numpy
-uuid
+uuid==1.30
