@@ -10,9 +10,6 @@ ENV SERVICE_PORT ${SERVICE_PORT}
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
-ARG FLASK_APP
-ENV FLASK_APP ${FLASK_APP}
-
 RUN apt update
 RUN apt install libsndfile1 -y
 RUN apt install ffmpeg -y
