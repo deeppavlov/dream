@@ -44,7 +44,6 @@ SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
 SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
 RELEVANT_KNOWLEDGE_THRESHOLD = float(os.getenv("RELEVANT_KNOWLEDGE_THRESHOLD", 0.2))
 
-BOT_ID = "/".join(["Bot", "514b2c3d-bb73-4294-9486-04f9e099835e"])
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is not specified")
@@ -567,7 +566,7 @@ def create_kg_prompt(bot_id: str, last_human_utt: str) -> List[str]:
 
 
 def memorize(graph, utt, last_human_utt):
-    bot_id = BOT_ID
+    bot_id = "/".join(["Bot", str(utt.get("user", {}).get("id", ""))])
     bot_external_id = ""
     triplets_added_to_kg_batch = []
     triplets_already_in_kg_batch = []
@@ -689,8 +688,7 @@ def get_result(request, graph):
     utt = uttrs[0]
     last_human_utt = human_uttrs[0]["text"]
     if not utt:
-        related_knowledge = create_kg_prompt(BOT_ID, last_human_utt)
-        return [{"added_to_graph": [], "triplets_already_in_graph": [], "kg_prompt": related_knowledge}]
+        return [{"added_to_graph": [], "triplets_already_in_graph": [], "kg_prompt": []}]
     try:
         result = memorize(graph, utt, last_human_utt)
     except Exception as e:

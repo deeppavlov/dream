@@ -8,8 +8,6 @@ from typing import Dict, List
 from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
-# import json  # comment out if saving dialog content is planned
-
 
 logger = logging.getLogger(__name__)
 
@@ -819,13 +817,14 @@ def custom_el_formatter_dialog(dialog: Dict):
 
 def custom_el_formatter_last_bot_dialog(dialog: Dict):
     # Used by: bot-km annotator
-    bot_id = "514b2c3d-bb73-4294-9486-04f9e099835e"
     if len(dialog["bot_utterances"]):
         entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog)  # changed prepare_el_input
         property_extraction = dialog["bot_utterances"][-1]["annotations"].get("property_extraction", {})
+        bot_id = str(dialog["bot_utterances"][-1].get("user", {}).get("id", ""))
     else:
         property_extraction = {}
         entity_substr_list, entity_tags_list, context = [""], [""], [""]
+        bot_id = ""
     return [
         {
             "user_id": [bot_id],
