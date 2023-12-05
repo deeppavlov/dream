@@ -2,11 +2,14 @@ import json
 import logging
 import os
 import time
+from datetime import datetime, timedelta
+from pathlib import Path
 
 import openai
 import sentry_sdk
 import tiktoken
 from common.prompts import META_GOALS_PROMPT
+from common.text_processing_for_prompts import check_token_number
 from common.universal_templates import GENERATIVE_ROBOT_TEMPLATE
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -14,12 +17,31 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
-
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+def dump_stats(requests_stats, statistics_fpath, create_file=False):
+    mode = "w" if create_file else "a"
+    with open(statistics_fpath, mode) as f:
+        for line in requests_stats:
+            f.write(json.dumps(line) + "\n")
+    return datetime.now()
+
+
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
 logger.info(f"PRETRAINED_MODEL_NAME_OR_PATH = {PRETRAINED_MODEL_NAME_OR_PATH}")
+
+STATISTICS_FILES_PATH = os.environ.get("STATISTICS_FILES_PATH", "stats/")
+
+now = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+model_name = PRETRAINED_MODEL_NAME_OR_PATH.replace(".", "")
+folder = Path("/data/").joinpath(STATISTICS_FILES_PATH)
+folder.mkdir(parents=True, exist_ok=True)
+statistics_fpath = folder.joinpath(f"stats_{model_name}_{now}.txt")
+prev_dump_datetime = dump_stats([{}], statistics_fpath, create_file=True)
+requests_stats = []
+
 NAMING = ["AI", "Human"]
 CHATGPT_ROLES = ["assistant", "user"]
 
@@ -55,6 +77,37 @@ except Exception as exc:
     sentry_sdk.capture_exception(exc)
     ENCODER = tiktoken.encoding_for_model("gpt-3.5-turbo")
     logger.info("Utilize tiktoken model: `gpt-3.5-turbo`")
+
+
+def count_tokens(context, prompt, hypotheses):
+    global PRETRAINED_MODEL_NAME_OR_PATH, prev_dump_datetime, requests_stats
+    result = []
+    texts = context + [prompt] + hypotheses
+    try:
+        for text in texts:
+            result += [check_token_number(text, model_name=PRETRAINED_MODEL_NAME_OR_PATH)]
+    except Exception as e:
+        logger.exception(e)
+        sentry_sdk.capture_exception(e)
+        logger.info(f"Tiktoken does not contain a model: {PRETRAINED_MODEL_NAME_OR_PATH}. Use ChatGPT's one.")
+        for text in texts:
+            result += [check_token_number(text)]
+
+    context_prompt_n_uttr = len(context) + 1
+    # update statistics
+    requests_stats += [
+        {
+            "input_tokens": sum(result[:context_prompt_n_uttr]),
+            "output_tokens": sum(result[context_prompt_n_uttr:]),
+            "api_type": os.environ.get("OPENAI_API_TYPE", "openai"),
+        }
+    ]
+
+    if datetime.now() - prev_dump_datetime >= timedelta(minutes=5):
+        # every 5 minutes, dump statistics
+        prev_dump_datetime = dump_stats(requests_stats, statistics_fpath)
+        requests_stats = []
+    return
 
 
 def generate_responses(context, openai_api_key, openai_org, prompt, generation_params, continue_last_uttr=False):
@@ -117,6 +170,8 @@ def generate_responses(context, openai_api_key, openai_org, prompt, generation_p
     if PRETRAINED_MODEL_NAME_OR_PATH not in CHAT_COMPLETION_MODELS:
         # post-processing of the responses by all models except of ChatGPT
         outputs = [GENERATIVE_ROBOT_TEMPLATE.sub("\n", resp).strip() for resp in outputs]
+
+    count_tokens(context, prompt, outputs)
     return outputs
 
 

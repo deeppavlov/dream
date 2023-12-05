@@ -139,7 +139,8 @@ Selected corresponding skill(s):`{skills_to_select}`"
             GENERATIVE_SERVICE_CONFIG,
             GENERATIVE_TIMEOUT,
             sending_variables,
-        )[0]
+        )
+        response = response[0]
         logger.info(f"llm_based_skill_selector received from llm:\n`{response}`")
         for skill_name, name_desc_dict in current_skills_descs_mapping.items():
             if name_desc_dict["display_name"] in response:

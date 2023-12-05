@@ -101,7 +101,7 @@ def get_response_for_prompt_type(
     sending_variables: dict,
     username: str = None,
     format_the_response: bool = False,
-) -> Tuple[str, int]:
+) -> str:
     if "summary" in prompt_type:
         if "summary_short" in prompt_type:
             length_request = SHORT_RESPONSE_GUIDELINES
@@ -161,7 +161,7 @@ def get_response_for_prompt_type(
             sending_variables,
         )
         all_gpt_responses += final_response
-    return all_gpt_responses[-1], len(all_gpt_responses)
+    return all_gpt_responses[-1]
 
 
 def upload_generated_item_return_link(hypothesis: str, prompt_type_and_id: str):
@@ -184,7 +184,7 @@ def compose_and_upload_final_response(
     bot_attrs_files: dict,
     use_filenames: True = bool,
     username: str = None,
-) -> Tuple[List[str], dict, int]:
+) -> Tuple[List[str], dict]:
     # note that we are joining responses for all docs by a special character SEP_FOR_DOC_RESPONSES
     # when we are sending them to LLM, if we need to split the info into chunks, we
     # will do that by SEP_FOR_DOC_RESPONSES, not by newline
@@ -198,7 +198,7 @@ def compose_and_upload_final_response(
         prompt_type_and_id_for_processing = f"combine_responses__{prompt_type_and_id.split('__')[1]}"
     else:
         prompt_type_and_id_for_processing = prompt_type_and_id
-    hyp_combined, bot_attrs_files, n_requests = get_and_upload_response_for_one_doc(
+    hyp_combined, bot_attrs_files = get_and_upload_response_for_one_doc(
         hyps_from_all_docs,
         prompt_type_and_id_for_processing,
         dialog_context,
@@ -209,7 +209,7 @@ def compose_and_upload_final_response(
     uploaded_doc_link = upload_generated_item_return_link(hyp_combined, prompt_type_and_id)
     if uploaded_doc_link:
         bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
-    return [hyp_combined], bot_attrs_files, n_requests
+    return [hyp_combined], bot_attrs_files
 
 
 def get_and_upload_response_for_one_doc(
@@ -219,7 +219,7 @@ def get_and_upload_response_for_one_doc(
     sending_variables: dict,
     bot_attrs_files: dict,
     username: str = None,
-) -> Tuple[str, dict, int]:
+) -> Tuple[str, dict]:
     prompt_type = prompt_type_and_id.split("__")[0]
     document_in_use_id = prompt_type_and_id.split("__")[1]
     _format_the_response = False
@@ -237,26 +237,24 @@ def get_and_upload_response_for_one_doc(
     # if asked for full report, we get parts of it separately and then just concatenate them
     if prompt_type == "full_report":
         hypothesis = ""
-        n_requests = 0
+
         for item in INCLUDE_INTO_REPORT:
             item_type_and_id = f"{item}__{document_in_use_id}"
             if item_type_and_id in bot_attrs_files.keys():
                 part_of_report = get_older_gen_response(item_type_and_id, bot_attrs_files)
                 hypothesis += f"{part_of_report}\n\n"
-                n_requests += 0
             else:
                 logger.info(f"No earlier {item_type_and_id} for full_report found.")
-                part_of_report, _n_requests = get_response_for_prompt_type(
+                part_of_report = get_response_for_prompt_type(
                     transcript_chunks, item, dialog_context, sending_variables, username, format_the_response=True
                 )
-                n_requests += _n_requests
                 uploaded_doc_link = upload_generated_item_return_link(part_of_report, item_type_and_id)
                 if uploaded_doc_link:
                     bot_attrs_files[item_type_and_id] = uploaded_doc_link
                 hypothesis += f"{part_of_report}\n\n"
         hypothesis = hypothesis.strip()
     else:
-        hypothesis, n_requests = get_response_for_prompt_type(
+        hypothesis = get_response_for_prompt_type(
             transcript_chunks,
             prompt_type,
             dialog_context,
@@ -269,7 +267,7 @@ def get_and_upload_response_for_one_doc(
     uploaded_doc_link = upload_generated_item_return_link(hypothesis, prompt_type_and_id)
     if uploaded_doc_link:
         bot_attrs_files[prompt_type_and_id] = uploaded_doc_link
-    return hypothesis, bot_attrs_files, n_requests
+    return hypothesis, bot_attrs_files
 
 
 def get_name_and_text_from_file(transcript_link: str) -> Tuple[str, str]:

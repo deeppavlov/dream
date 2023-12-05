@@ -93,7 +93,8 @@ def analyze_transcript(prompt_type: str):
         context = dialog.get("utterances", [])[-N_UTTERANCES_CONTEXT:]
         related_files = {}
         username = None
-        n_requests = 0
+        hypotheses_init = []
+
         if context:
             dialog_context = [uttr["text"] for uttr in dialog["utterances"][-N_UTTERANCES_CONTEXT:]]
             request = dialog_context[-1]
@@ -117,7 +118,6 @@ def analyze_transcript(prompt_type: str):
             sending_variables = compose_sending_variables({}, ENVVARS_TO_SEND, human_uttr_attributes)
             hyps_and_names_all_docs = []
             if documents_in_use:
-                _all_docs_have_summary = True
                 _need_to_get_response_from_llm = True
                 # check if have final hypothesis for this request in case of multiple docs in use
                 if len(documents_in_use) > 1:
@@ -138,8 +138,6 @@ def analyze_transcript(prompt_type: str):
 
                 if _need_to_get_response_from_llm:
                     for document_in_use_id in documents_in_use:
-                        if related_files.get(f"summary__{document_in_use_id}", None) is None:
-                            _all_docs_have_summary = False
                         # if we need a weekly report, on this step we gather separate daily reports for each doc
                         # also here we change the type of summary prompt based on summary length request
                         prompt_type_local, prompt_type_and_id = set_correct_type_and_id(
@@ -163,7 +161,7 @@ Sending request to generative model."
                                 )
                                 try:
                                     filename, orig_text = get_name_and_text_from_file(transcript_link)
-                                    hyp_one_doc, related_files, _n_requests = get_and_upload_response_for_one_doc(
+                                    hyp_one_doc, related_files = get_and_upload_response_for_one_doc(
                                         orig_text,
                                         prompt_type_and_id,
                                         dialog_context,
@@ -172,7 +170,6 @@ Sending request to generative model."
                                         username,
                                     )
                                     hyp_and_name_one_doc = [(filename, hyp_one_doc)]
-                                    n_requests += _n_requests
                                 except Exception as e:
                                     sentry_sdk.capture_exception(e)
                                     logger.exception(e)
@@ -181,10 +178,6 @@ Sending request to generative model."
                             hyp_and_name_one_doc = []
                         hyps_and_names_all_docs += hyp_and_name_one_doc
 
-                    if prompt_type == "question_answering" and _all_docs_have_summary:
-                        # if we are in `question_answering` node then
-                        # the condition `go_to_question_answering` was requested once
-                        n_requests += 1
                     # having got responses for all docs, let's make one response from it
                     # just return the response if we have one document and one response
                     if len(hyps_and_names_all_docs) == 1 and prompt_type_local != "weekly_report":
@@ -198,7 +191,7 @@ Sending request to generative model."
                             # now by default we are passing filenames to LLM together with hypothesis for each file
                             # you can choose to pass only hypotheses (no filenames) by setting use_filenames=False
                             # when calling compose_and_upload_final_response()
-                            hypotheses_init, related_files, _n_requests = compose_and_upload_final_response(
+                            hypotheses_init, related_files = compose_and_upload_final_response(
                                 hyps_and_names_all_docs,
                                 prompt_type_and_id,
                                 dialog_context,
@@ -206,7 +199,6 @@ Sending request to generative model."
                                 related_files,
                                 username,
                             )
-                            n_requests += _n_requests
                         except Exception as e:
                             sentry_sdk.capture_exception(e)
                             logger.exception(e)
@@ -244,8 +236,6 @@ Please, make sure that you provide a valid .docx file with Teams meeting transcr
             if len(hyp) and hyp[-1] not in [".", "?", "!"]:
                 hyp += "."
                 confidence = LOW_CONFIDENCE
-            _curr_attrs["llm_requests"] = {"llm_url": GENERATIVE_SERVICE_URL, "n_requests": n_requests}
-
             gathering_responses(hyp, confidence, {}, bot_attrs, _curr_attrs)
 
         if len(curr_responses) == 0:

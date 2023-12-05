@@ -170,12 +170,6 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
             confidence = LOW_CONFIDENCE
         _curr_attrs = {
             "can_continue": CAN_NOT_CONTINUE,
-            "llm_requests": {
-                "llm_url": GENERATIVE_SERVICE_URL,
-                "n_requests": GENERATIVE_SERVICE_CONFIG.get("num_return_sequences", 1)
-                if GENERATIVE_SERVICE_CONFIG
-                else 1,
-            },
         }
         _curr_attrs.update(hyp_attrs)
         gathering_responses(hyp, confidence, {}, {}, _curr_attrs)

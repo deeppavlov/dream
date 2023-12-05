@@ -131,7 +131,8 @@ def go_to_question_answering():  # if no summary then True
                     SHORT_GENERATIVE_SERVICE_CONFIG,
                     SHORT_GENERATIVE_TIMEOUT,
                     sending_variables,
-                )[0]
+                )
+                response = response[0]
                 if re.search(no_templates, response.lower()):
                     go_to_qa_node = False
                     logger.info("User request is NOT relevant to the current document.")

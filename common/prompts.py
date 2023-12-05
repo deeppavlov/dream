@@ -2,8 +2,10 @@ import json
 import logging
 from copy import deepcopy
 from os import getenv
+from typing import List
 
 import requests
+
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +13,9 @@ with open("common/prompts/goals_for_prompts.json", "r") as f:
     META_GOALS_PROMPT = json.load(f)["prompt"]
 
 
-def send_request_to_prompted_generative_service(dialog_context, prompt, url, config, timeout, sending_variables):
+def send_request_to_prompted_generative_service(
+    dialog_context, prompt, url, config, timeout, sending_variables
+) -> List[str]:
     response = requests.post(
         url,
         json={
@@ -23,10 +27,11 @@ def send_request_to_prompted_generative_service(dialog_context, prompt, url, con
         timeout=timeout,
     )
     hypotheses = response.json()[0]
+
     return hypotheses
 
 
-def get_goals_from_prompt(prompt, url, generative_timeout, sending_variables):
+def get_goals_from_prompt(prompt, url, generative_timeout, sending_variables) -> str:
     new_url = "/".join(url.split("/")[:-1])
     try:
         goals_description = requests.post(
@@ -43,7 +48,7 @@ def get_goals_from_prompt(prompt, url, generative_timeout, sending_variables):
     return goals_description
 
 
-def if_none_var_values(sending_variables):
+def if_none_var_values(sending_variables) -> bool:
     if len(sending_variables) > 0 and all(
         [var_value[0] is None or var_value[0] == "" for var_value in sending_variables.values()]
     ):
@@ -51,7 +56,7 @@ def if_none_var_values(sending_variables):
     return False
 
 
-def compose_sending_variables(lm_service_kwargs, envvars_to_send, human_uttr_attrs):
+def compose_sending_variables(lm_service_kwargs, envvars_to_send, human_uttr_attrs) -> dict:
     if len(envvars_to_send):
         # get variables which names are in `envvars_to_send` (splitted by comma if many)
         # from env variables
