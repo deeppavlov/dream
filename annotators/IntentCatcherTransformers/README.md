@@ -1,5 +1,7 @@
-## IntentCatcher based on Transformers
+## Intent Catcher based on Transformers
 
+Intent Catcher Annotator allows to adapt the dialog system to particular tasks. 
+The annotator detects intents of the user that are addressed by the DFF Intent Responder Skill.
 
 English version was trained on `intent_phrases.json` dataset using `DeepPavlov` library via command:
 ```

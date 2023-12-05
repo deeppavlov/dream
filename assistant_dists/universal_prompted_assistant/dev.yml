@@ -65,6 +65,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8167:8167
+  openai-api-gpt4-turbo:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8180:8180
   anthropic-api-claude-v1:
     volumes:
       - "./services/anthropic_api_lm:/src"
