@@ -4,7 +4,7 @@ services:
     environment:
       WAIT_HOSTS: "sentence-ranker:8128, sentseg:8011, ranking-based-response-selector:8002,
           ner:8021, entity-linking:8075, combined-classification:8087, entity-detection:8103,
-          property-extraction:8136, custom-entity-linking:8153, terminusdb-server:6363, user-knowledge-memorizer:8027,
+          property-extraction:8136, custom-entity-linking:8153, terminusdb-server:6363, user-knowledge-memorizer:8020,
           dff-user-kg-skill:8028, dff-travel-italy-skill:8025"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
@@ -198,7 +198,7 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8027
+        SERVICE_PORT: 8020
         SRC_DIR: annotators/user_knowledge_memorizer/
         SERVICE_NAME: user_knowledge_memorizer
         TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
@@ -216,7 +216,7 @@ services:
         USE_KG_DATA: 0
       context: ./
       dockerfile: annotators/user_knowledge_memorizer/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8027
+    command: flask run -h 0.0.0.0 -p 8020
     environment:
       - FLASK_APP=server
     deploy:

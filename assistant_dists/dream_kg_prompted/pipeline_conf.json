@@ -242,7 +242,7 @@
                 "connector": {
                     "protocol": "http",
                     "timeout": 10.0,
-                    "url": "http://user-knowledge-memorizer:8027/respond"
+                    "url": "http://user-knowledge-memorizer-prompted:8027/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_human_annotated_utterance",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -254,7 +254,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/74p4006d17yappr7ji7dtf.yml",
-                    "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer"
+                    "service": "annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer-prompted"
                 }
             },
             "combined_classification": {
