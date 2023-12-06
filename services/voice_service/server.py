@@ -30,11 +30,11 @@ def respond():
     st_time = time.time()
 
     paths = request.json.get("sound_paths")
-    paths = request.json.get("video_paths") if paths == [None] else paths
+    paths = request.json.get("video_paths") if all([el is None for el in paths]) else paths
     durations = request.json.get("sound_durations")
-    durations = request.json.get("video_durations") if durations == [None] else durations
+    durations = request.json.get("video_durations") if all([el is None for el in durations]) else durations
     types = request.json.get("sound_types", None)
-    types = request.json.get("video_types", None) if types == [None] else types
+    types = request.json.get("video_types") if all([el is None for el in types]) else types
 
     responses = []
 

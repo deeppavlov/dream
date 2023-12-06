@@ -16,9 +16,9 @@ RUN apt install ffmpeg -y
 RUN python -m pip install -U pip
 RUN pip install gdown
 
-RUN git clone https://github.com/moon-strider/audio-captioning-dcase /src/aux_files
+RUN git clone https://github.com/deeppavlov/audio-captioning-dcase /src/aux_files
 WORKDIR /src/aux_files
-RUN git pull
+RUN git reset --hard 8b1d39dddff295570d21092b82b1d9894732d99f
 WORKDIR /src
 
 RUN pip install -e /src/aux_files/AudioCaption
