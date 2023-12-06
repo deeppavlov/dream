@@ -5,8 +5,12 @@ import json
 import logging
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
+import requests
 from uuid import uuid4
 import time
+
+from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
+
 import sentry_sdk
 from flask import Flask, jsonify, request
 from deeppavlov_kg import TerminusdbKnowledgeGraph
@@ -24,12 +28,28 @@ with open("rel_list.json") as file:
 with open("abstract_rels.txt", "r") as file:
     abstract_rels = [line.strip() for line in file.readlines()]
 
+USE_KG_DATA = int(os.getenv("USE_KG_DATA", 0))
+GENERATIVE_SERVICE_URL = os.getenv("GENERATIVE_SERVICE_URL")
+GENERATIVE_SERVICE_CONFIG = os.getenv("GENERATIVE_SERVICE_CONFIG")
+GENERATIVE_SERVICE_TIMEOUT = float(os.getenv("GENERATIVE_SERVICE_TIMEOUT", 5))
+if GENERATIVE_SERVICE_CONFIG:
+    with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
+        GENERATIVE_SERVICE_CONFIG = json.load(f)
+
+ENVVARS_TO_SEND = os.getenv("ENVVARS_TO_SEND", None)
+ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
+assert ENVVARS_TO_SEND, logger.error("Error: OpenAI API key is not specified in env")
+
+SENTENCE_RANKER_URL = os.getenv("SENTENCE_RANKER_URL")
+SENTENCE_RANKER_TIMEOUT = float(os.getenv("SENTENCE_RANKER_TIMEOUT", 5))
+RELEVANT_KNOWLEDGE_THRESHOLD = float(os.getenv("RELEVANT_KNOWLEDGE_THRESHOLD", 0.5))
+
 TERMINUSDB_SERVER_URL = os.getenv("TERMINUSDB_SERVER_URL")
 TERMINUSDB_SERVER_PASSWORD = os.getenv("TERMINUSDB_SERVER_PASSWORD")
 assert TERMINUSDB_SERVER_PASSWORD, logger.error("TerminusDB server password is not specified")
 TERMINUSDB_SERVER_DB = os.getenv("TERMINUSDB_SERVER_DB")
 TERMINUSDB_SERVER_TEAM = os.getenv("TERMINUSDB_SERVER_TEAM")
-config_path = os.getenv("CONFIG")
+config_path = os.getenv("USER_KM_SERVICE_CONFIG")
 with open(config_path, "r") as config_file:
     config = json.load(config_file)
 index_load_path = Path(os.path.expanduser(config["metadata"]["variables"]["CUSTOM_EL"]))
@@ -451,12 +471,86 @@ def check_and_add_properties(graph, prop_triplets: List[dict], user_id: str) -> 
     return properties_to_add_to_kg, properties_already_in_kg
 
 
+def get_knowledge(user_id):
+    user_data = kg_graph.search_for_relationships(id_a=user_id)
+    rels = [triplet["rel"] for triplet in user_data]
+    entity_ids = [triplet["id_b"] for triplet in user_data]
+    relationship_entity_id_pair = list(zip(rels, entity_ids))
+    entity_values = kg_graph.get_properties_of_entities(entity_ids)
+    user_triplets = []
+    for entity in entity_values:
+        for rel, id in relationship_entity_id_pair:
+            if entity["@id"] == id:
+                user_triplets.extend([("User", rel, entity.get("substr", entity.get("Name")))])
+
+    return user_triplets
+
+
+def convert_triplets_to_natural_language(triplets: List[tuple]) -> List[str]:
+    context = [
+        "",
+    ]
+    prompt = f"Translate each semantic triple into a sentence. Triplets: {triplets}"
+
+    # get variables which names are in `ENVVARS_TO_SEND` (splitted by comma if many)
+    # from user_utterance attributes or from environment
+    human_uttr_attributes = request.json.get("last_human_annotated_utterance", [])[0].get("attributes", {})
+    lm_service_kwargs = human_uttr_attributes.pop("lm_service_kwargs", None)
+    lm_service_kwargs = {} if lm_service_kwargs is None else lm_service_kwargs
+    envvars_to_send = ENVVARS_TO_SEND if len(ENVVARS_TO_SEND) else human_uttr_attributes.get("envvars_to_send", [])
+    sending_variables = compose_sending_variables(
+        lm_service_kwargs,
+        envvars_to_send,
+        **human_uttr_attributes,
+    )
+    try:
+        hypotheses = send_request_to_prompted_generative_service(
+            context,
+            prompt,
+            GENERATIVE_SERVICE_URL,
+            GENERATIVE_SERVICE_CONFIG,
+            GENERATIVE_SERVICE_TIMEOUT,
+            sending_variables,
+        )
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        hypotheses = []
+
+    return hypotheses
+
+
+def relativity_filter(user_knowledge: List[str], last_utt: List[str]) -> List[str]:
+    requested_data = {"sentence_pairs": list(zip(user_knowledge, last_utt))}
+    try:
+        res = requests.post(SENTENCE_RANKER_URL, json=requested_data, timeout=SENTENCE_RANKER_TIMEOUT).json()[0][
+            "batch"
+        ]
+        res = list(zip(user_knowledge, res))
+        user_related_knowledge = []
+        for knowledge, score in res:
+            # logger.info(f"knowledge -- {knowledge}")
+            # logger.info(f"score -- {score}")
+            if score >= RELEVANT_KNOWLEDGE_THRESHOLD:
+                user_related_knowledge.append(knowledge)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        logger.exception(e)
+        user_related_knowledge = []
+
+    if user_related_knowledge:
+        user_related_knowledge = [".".join(user_related_knowledge)]
+
+    return user_related_knowledge
+
+
 def memorize(graph, uttrs):
     user_id = "/".join(["User", str(uttrs[0].get("user", {}).get("id", ""))])
     user_external_id = str(uttrs[0].get("user", {}).get("user_external_id", ""))
 
     triplets_added_to_kg_batch = []
     triplets_already_in_kg_batch = []
+    related_knowledge = []
     for utt in uttrs:
         last_utt = utt["text"]
         logger.info(f"last_utt --  {last_utt}")
@@ -475,6 +569,26 @@ def memorize(graph, uttrs):
                         logging.error(
                             f"ValueError: the triplet '{triplet}' in property extraction output has '<blank>' object"
                         )
+
+        user_triplets = get_knowledge(user_id)
+        logger.info(f"user triplets -- {user_triplets}")
+
+        # Convert triplets into natural language
+        if user_triplets and USE_KG_DATA:
+            user_knowledge = convert_triplets_to_natural_language(user_triplets)
+        else:
+            user_knowledge = []
+
+        logger.info(f"user knowledge -- {user_knowledge}")
+        # Generate prompt with related knowledge about user
+        if user_knowledge:
+            user_knowledge = user_knowledge[0].split(".")[:-1]
+            # logger.info(f"user_knowledge -- {user_knowledge}")
+            last_utt_to_compare = [last_utt] * len(user_knowledge)
+            related_knowledge = relativity_filter(user_knowledge, last_utt_to_compare)
+        else:
+            related_knowledge = []
+        logger.info(f"related knowledge -- {related_knowledge}")
 
         create_entities(graph, [(user_external_id, "User")], has_name_property=True, entity_ids=[user_id])
 
@@ -544,9 +658,16 @@ def memorize(graph, uttrs):
         triplets_already_in_kg_batch.append(triplets_already_in_kg + properties_already_in_kg)
 
     logger.info(
-        f"added_to_graph -- {triplets_added_to_kg_batch}, triplets_already_in_graph -- {triplets_already_in_kg_batch}"
+        f"added_to_graph -- {triplets_added_to_kg_batch}, "
+        f"triplets_already_in_graph -- {triplets_already_in_kg_batch}, kg_prompt -- {related_knowledge}"
     )
-    return [{"added_to_graph": triplets_added_to_kg_batch, "triplets_already_in_graph": triplets_already_in_kg_batch}]
+    return [
+        {
+            "added_to_graph": triplets_added_to_kg_batch,
+            "triplets_already_in_graph": triplets_already_in_kg_batch,
+            "kg_prompt": related_knowledge,
+        }
+    ]
 
 
 def get_result(request, graph):
@@ -556,7 +677,13 @@ def get_result(request, graph):
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
-        result = [{"added_to_graph": [[]] * len(uttrs), "triplets_already_in_graph": [[]] * len(uttrs)}]
+        result = [
+            {
+                "added_to_graph": [[]] * len(uttrs),
+                "triplets_already_in_graph": [[]] * len(uttrs),
+                "kg_prompt": [[]] * len(uttrs),
+            }
+        ]
     return result
 
 

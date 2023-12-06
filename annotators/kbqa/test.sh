@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python test_kbqa.py
+python -m pytest tests/test_kbqa.py

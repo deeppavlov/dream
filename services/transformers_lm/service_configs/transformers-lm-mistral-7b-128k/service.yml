@@ -1,0 +1,44 @@
+name: transformers-lm-mistral-7b-128k
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8185
+      SERVICE_NAME: transformers_lm_mistral_7b_128k
+      PRETRAINED_MODEL_NAME_OR_PATH: NousResearch/Yarn-Mistral-7b-128k
+      HALF_PRECISION: 1
+      USE_FLASH_ATTENTION_2: 1
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/transformers_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8185
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 50G
+      reservations:
+        memory: 50G
+  volumes:
+  - ./services/transformers_lm:/src
+  - ./common:/src/common
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8185:8185
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8185
+  - PORT=8185

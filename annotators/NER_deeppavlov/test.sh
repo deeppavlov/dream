@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-python test_server.py
+python -m pytest tests/test_server.py

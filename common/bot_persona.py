@@ -1,5 +1,5 @@
 import re
-from common.utils import join_sentences_in_or_pattern
+from common.join_pattern import join_sentences_in_or_pattern
 
 
 YOUR_FAVORITE_COMPILED_PATTERN = re.compile(
