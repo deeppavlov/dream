@@ -262,6 +262,9 @@ class RuleBasedSkillSelectorConnector:
                 skills_for_uttr.extend(get_linked_to_skills(dialog))
                 skills_for_uttr.extend(get_previously_active_skill(dialog))
 
+                if user_uttr["attributes"].get("sound_path") is not None:
+                    skills_for_uttr.append("dff_voice_skill")
+
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 
             if "dff_coronavirus_skill" in skills_for_uttr:
