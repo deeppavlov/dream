@@ -1069,6 +1069,9 @@ def voice_formatter_service(dialog: Dict) -> List[Dict]:
             "sound_paths": [dialog["human_utterances"][-1]["attributes"].get("sound_path")],
             "sound_durations": [dialog["human_utterances"][-1]["attributes"].get("sound_duration")],
             "sound_types": [dialog["human_utterances"][-1]["attributes"].get("sound_type")],
+            "video_paths": [dialog["human_utterances"][-1]["attributes"].get("video_path")],
+            "video_durations": [dialog["human_utterances"][-1]["attributes"].get("video_duration")],
+            "video_types": [dialog["human_utterances"][-1]["attributes"].get("video_type")],
         }
     ]
 

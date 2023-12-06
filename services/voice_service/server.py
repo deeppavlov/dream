@@ -29,9 +29,9 @@ def respond():
     global CAP_ERR_MSG
     st_time = time.time()
 
-    paths = request.json.get("sound_paths")
-    durations = request.json.get("sound_durations")
-    types = request.json.get("sound_types")
+    paths = request.json.get("sound_paths") + request.json.get("video_paths")
+    durations = request.json.get("sound_durations") + request.json.get("video_paths")
+    types = request.json.get("sound_types") + request.json.get("video_types")
 
     responses = []
 
