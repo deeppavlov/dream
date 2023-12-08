@@ -169,7 +169,7 @@ def get_result(request):
     logger.info(
         f"init_uttrs {init_uttrs} entities_with_labels: {entities_with_labels_batch} entity_info: {entity_info_batch}"
     )
-    if not init_uttrs:
+    if not init_uttrs[0][0]:
         triplets_batch = [[""]]
         uttrs = [""]
     else:
@@ -177,13 +177,15 @@ def get_result(request):
         for uttr_list in init_uttrs:
             if len(uttr_list) == 1:
                 sents = nltk.sent_tokenize(uttr_list[0])
-                sents_declarative = [sent for sent in sents if not is_question(sent)]
+                sents_declarative = [sent.lower() for sent in sents if not is_question(sent)]
+                if not sents_declarative:
+                    sents_declarative = [""]
                 uttrs.extend(sents_declarative)
             else:
                 utt_prev = uttr_list[-2]
                 utt_prev_sentences = nltk.sent_tokenize(utt_prev)
-                utt_prev = utt_prev_sentences[-1]
-                utt_cur = uttr_list[-1]
+                utt_prev = utt_prev_sentences[-1].lower()
+                utt_cur = uttr_list[-1].lower()
                 is_q = is_question(utt_prev)
 
                 is_sentence = False

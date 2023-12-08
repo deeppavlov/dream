@@ -275,8 +275,8 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
 def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
-    if len(dialog["utterances"]) >= 2:
-        dialog_history = [dialog["utterances"][-2]["text"]]
+    if len(dialog["bot_utterances"]):
+        dialog_history = [dialog["bot_utterances"][-1]["text"]]
         entities_with_labels = get_entities(dialog["bot_utterances"][-1], only_named=False, with_labels=True)
         entity_info_list = dialog["bot_utterances"][-1]["annotations"].get("entity_linking", [{}])
         named_entities = dialog["bot_utterances"][-1]["annotations"].get("ner", [{}])
