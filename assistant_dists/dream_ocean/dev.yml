@@ -154,4 +154,11 @@ services:
       - 3000:3000
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
+
+  dff-emo-skill:
+    volumes:
+      - "./skills/dff_emo_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8999:8999      
 version: "3.7"
