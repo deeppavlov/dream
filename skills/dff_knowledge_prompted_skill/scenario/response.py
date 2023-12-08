@@ -18,9 +18,9 @@ logger = logging.getLogger(__name__)
 GENERATIVE_TIMEOUT = float(getenv("GENERATIVE_TIMEOUT", 5))
 GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
-USE_KG_DATA = bool(getenv("USE_KG_DATA", 0))
+USE_KG_DATA = int(getenv("USE_KG_DATA", 0))
 USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
-USE_BOT_KG_DATA = bool(getenv("USE_BOT_KG_DATA", 0))
+USE_BOT_KG_DATA = int(getenv("USE_BOT_KG_DATA", 0))
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
@@ -94,7 +94,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
     user_kg = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("user_knowledge_memorizer")
     logger.info(f"custom_el: {custom_el}")
     logger.info(f"user_kg: {user_kg}")
-    # logger.info(f"USE_KG_DATA: {USE_KG_DATA}")
+    logger.info(f"USE_KG_DATA: {USE_KG_DATA}")
 
     if USE_KG_DATA and user_kg and (kg_prompt := user_kg["kg_prompt"]):
         kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0].lower()).split(".")
@@ -107,7 +107,7 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     logger.info(f"bot_custom_el: {bot_custom_el}")
     logger.info(f"bot_kg: {bot_kg}")
-    # logger.info(f"USE_BOT_KG_DATA: {USE_BOT_KG_DATA}")
+    logger.info(f"USE_BOT_KG_DATA: {USE_BOT_KG_DATA}")
 
     if USE_BOT_KG_DATA and bot_kg and (kg_prompt := bot_kg["kg_prompt"]):
         logger.info(f"kg_prompt - {kg_prompt}")
