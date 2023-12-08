@@ -57,7 +57,7 @@ services:
       - "./annotators/property_extraction:/src"
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
-      - 8131:8131
+      - 8136:8136
   bot-knowledge-memorizer:
     volumes:
       - "./annotators/bot_knowledge_memorizer:/src"
