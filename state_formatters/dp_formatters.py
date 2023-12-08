@@ -249,7 +249,7 @@ def entity_detection_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
     if len(dialog["bot_utterances"]):
-        context = [dialog["bot_utterances"][-1]["text"]]
+        context = [[dialog["bot_utterances"][-1]["text"]]]
     else:
         context = [[""]]
     return [{"sentences": context}]
