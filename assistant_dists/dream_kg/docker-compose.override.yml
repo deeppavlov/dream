@@ -219,7 +219,6 @@ services:
     command: flask run -h 0.0.0.0 -p 8020
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
     deploy:
       resources:
         limits:
@@ -239,9 +238,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 128M
         reservations:
-          memory: 512M
+          memory: 128M
 
   dff-travel-italy-skill:
     env_file: [ .env ]
