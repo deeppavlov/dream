@@ -427,8 +427,8 @@ def check_abstract_triplets(
         except ValueError:
             logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
         except Exception:  # TODO: replace with Terminusdb DatabaseError
-            graph.ontology.create_entity_kinds(parents)
             try:
+                graph.ontology.create_entity_kinds(parents)
                 graph.ontology.create_entity_kinds(kinds_to_add, parents)
             except ValueError:
                 logger.info(f"All entity kinds '{kinds_to_add}' are already in KG")
