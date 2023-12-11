@@ -4,8 +4,8 @@ import re
 import time
 import string
 import pickle
-import itertools
 import json
+from itertools import chain, product, zip_longest
 
 import nltk
 import sentry_sdk
@@ -81,7 +81,7 @@ def sentrewrite(sentence, init_answer):
 
 def get_relations(uttr_batch, thres=0.5):
     relations_pred_batch = []
-    input_batch = list(zip(*itertools.product(uttr_batch, relations_all)))
+    input_batch = list(zip(*product(uttr_batch, relations_all)))
     rels_scores = rel_ranker(*input_batch)
     rels_scores = np.array(rels_scores).reshape((len(uttr_batch), len(relations_all), 2))
     for curr_scores in rels_scores:
@@ -139,7 +139,7 @@ def generate_triplets(uttr_batch, relations_pred_batch):
     for uttr, preds in zip(uttr_batch, relations_pred_batch):
         uttrs_mult = [uttr for _ in preds]
         t5_input_uttrs.extend(uttrs_mult)
-    relations_pred_flat = list(itertools.chain(*relations_pred_batch))
+    relations_pred_flat = list(chain(*relations_pred_batch))
     t5_pred_triplets, t5_pred_scores = generative_ie(t5_input_uttrs, relations_pred_flat)
     logger.debug(f"t5 raw output: {t5_pred_triplets} scores: {t5_pred_scores}")
 
@@ -154,12 +154,6 @@ def generate_triplets(uttr_batch, relations_pred_batch):
     return triplets_corr_batch
 
 
-def is_question(uttr: str):
-    uttr = uttr.lower()
-    is_q = any([uttr.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]]) or "?" in uttr
-    return is_q
-
-
 def get_result(request):
     st_time = time.time()
     init_uttrs = request.json.get("utterances", [])
@@ -169,46 +163,45 @@ def get_result(request):
     logger.info(
         f"init_uttrs {init_uttrs} entities_with_labels: {entities_with_labels_batch} entity_info: {entity_info_batch}"
     )
-    if not init_uttrs[0][0]:
-        triplets_batch = [[""]]
-        uttrs = [""]
-    else:
-        uttrs = []
-        for uttr_list in init_uttrs:
-            if len(uttr_list) == 1:
-                sents = nltk.sent_tokenize(uttr_list[0])
-                sents_declarative = [sent.lower() for sent in sents if not is_question(sent)]
-                if not sents_declarative:
-                    sents_declarative = [""]
-                uttrs.extend(sents_declarative)
+    uttrs, indices = [], [0]
+    for uttr_list in init_uttrs:
+        if len(uttr_list) == 1:
+            sents = nltk.sent_tokenize(uttr_list[0]) or [""]
+            uttrs.extend(sents)
+        else:
+            utt_prev = uttr_list[-2]
+            utt_prev_sentences = nltk.sent_tokenize(utt_prev)
+            utt_prev = utt_prev_sentences[-1].lower()
+            utt_cur = uttr_list[-1].lower()
+            is_q = (
+                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
+                or "?" in utt_prev
+            )
+
+            is_sentence = False
+            parsed_sentence = nlp(utt_cur)
+            if parsed_sentence:
+                tokens = [elem.text for elem in parsed_sentence]
+                tags = [elem.tag_ for elem in parsed_sentence]
+                found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP", "VBD"]])
+                if found_verbs and len(tokens) > 2:
+                    is_sentence = True
+
+            logger.info(f"is_q: {is_q} --- is_s: {is_sentence} --- utt_prev: {utt_prev} --- utt_cur: {utt_cur}")
+            if is_q and not is_sentence:
+                uttrs.append(sentrewrite(utt_prev, utt_cur))
             else:
-                utt_prev = uttr_list[-2]
-                utt_prev_sentences = nltk.sent_tokenize(utt_prev)
-                utt_prev = utt_prev_sentences[-1].lower()
-                utt_cur = uttr_list[-1].lower()
-                is_q = is_question(utt_prev)
+                uttrs.append(utt_cur)
+        indices.append(len(uttrs))
 
-                is_sentence = False
-                parsed_sentence = nlp(utt_cur)
-                if parsed_sentence:
-                    tokens = [elem.text for elem in parsed_sentence]
-                    tags = [elem.tag_ for elem in parsed_sentence]
-                    found_verbs = any([tag in tags for tag in ["VB", "VBZ", "VBP", "VBD"]])
-                    if found_verbs and len(tokens) > 2:
-                        is_sentence = True
-
-                logger.info(f"is_q: {is_q} --- is_s: {is_sentence} --- utt_prev: {utt_prev} --- utt_cur: {utt_cur}")
-                if is_q and not is_sentence:
-                    uttrs.append(sentrewrite(utt_prev, utt_cur))
-                else:
-                    uttrs.append(utt_cur)
-
-        logger.info(f"input utterances: {uttrs}")
-        relations_pred = get_relations(uttrs)
-        triplets_batch = generate_triplets(uttrs, relations_pred)
+    logger.info(f"input utterances: {uttrs}")
+    relations_pred = get_relations(uttrs)
+    triplets_batch = generate_triplets(uttrs, relations_pred)
 
     logger.info(f"triplets_batch {triplets_batch}")
     triplets_info_batch = []
+    triplets_batch = [list(chain(*triplets_batch[start:end])) for start, end in zip_longest(indices, indices[1:])]
+    uttrs = [" ".join(uttrs[start:end]) for start, end in zip_longest(indices, indices[1:])]
     for triplets, uttr, named_entities, entities_with_labels, entity_info_list in zip(
         triplets_batch, uttrs, named_entities_batch, entities_with_labels_batch, entity_info_batch
     ):
