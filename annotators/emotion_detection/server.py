@@ -123,7 +123,16 @@ def process_audio(file_path: str):
         verbose=True,
     )
 
-    audio_features = smile.process_files([file_path])
+    redundant_features = os.getenv("REDUNDANT_FEATURES")
+    print(redundant_features)
+    redundant_features_list = []
+    with open(os.getenv("REDUNDANT_FEATURES"), "r") as features_file:
+        for line in features_file:
+            redundant_features_list.append(line.split(','))
+    print(redundant_features_list)
+
+    audio_features = smile.process_files([file_path], redundant_features_list)
+    audio_features = audio_features.drop(columns=redundant_features_list, inplace=False)
     return audio_features.values.reshape(audio_features.shape[0], 1, audio_features.shape[1])
 
 

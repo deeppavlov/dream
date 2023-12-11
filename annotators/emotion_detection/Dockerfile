@@ -8,11 +8,13 @@ ARG VIDEO_PRETRAINED
 ARG TEXT_PRETRAINED
 ARG MODEL_PATH
 ARG MULTIMODAL_MODEL
+ARG REDUNDANT_FEATURES
 
 ENV VIDEO_PRETRAINED=$VIDEO_PRETRAINED
 ENV TEXT_PRETRAINED=$TEXT_PRETRAINED
 ENV MULTIMODAL_MODEL=$MULTIMODAL_MODEL
 ENV MODEL_PATH=$MODEL_PATH
+ENV REDUNDANT_FEATURES=$REDUNDANT_FEATURES
 
 WORKDIR /src
 
@@ -30,7 +32,11 @@ RUN mv -f /data/repo/* /data/ && rm -rf /data/repo
 
 RUN touch /data/multimodal_concat/__init__.py
 
-RUN gdown 'https://drive.google.com/uc?id=12C36rGUe7tuWGAh_FByw80c3wAtdUHx8' -O '/data/1d_cnn_with_opensmile.pt'
+RUN gdown 'https://drive.google.com/uc?id=1G2SbaE6Ef7mCFcvI60KqINYQlX-kYUhp' -O '/data/1d_cnn_with_opensmile.pt'
 RUN gdown 'https://drive.google.com/uc?id=1ZHw2MEbjLwU5A7EaNysgVHZlaWq4FJZG' -O '/data/bert-large-uncased_none_seed-42.pt'
-RUN gdown 'https://drive.google.com/uc?id=1tDf-jWihZ6M0oX-niOfVmLUimJqYrG_M' -O '/data/final_model.pt'
+RUN gdown 'https://drive.google.com/uc?id=1XZVPI2ZvE0PbvhFMinsAp2z9SPPEsSjn' -O '/data/final_model.pt'
 RUN gdown 'https://drive.google.com/uc?id=1DMUHqbwqn-j9XIhoqnfSwqyqrlPMkVJe' -O '/data/XCLIP_Augmented.pt'
+RUN gdown 'https://drive.google.com/uc?id=1VxEQcso_Bsrzix1TykriJ2BLfUm9Gtx5' -O '/data/redundant_features.txt'
+
+RUN ls '/data'
+RUN echo MODEL_PATH
