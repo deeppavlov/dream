@@ -1,0 +1,24 @@
+name: property_extraction
+display_name: Property Extraction
+component_type: null
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: extracts user attributes from utterances into a structured RDF triplets
+ram_usage: 9G
+gpu_usage: 2G
+group: annotators
+connector:
+  protocol: http
+  url: http://property-extraction:8136/respond
+dialog_formatter: state_formatters.dp_formatters:property_extraction_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.ner
+- annotators.entity_linking
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: respond
+service: annotators/property_extraction/service_configs/property-extraction
+date_created: '2023-12-11T13:45:33'
