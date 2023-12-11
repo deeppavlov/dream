@@ -30,7 +30,7 @@ def respond():
     entity_tags_batch = inp.get(
         "entity_tags", [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
     )
-    context_batch = inp.get("context", [[""]])
+    context_batch = inp.get("contexts", [[""]])
     opt_context_batch = []
     for hist_utt in context_batch:
         hist_utt = [utt for utt in hist_utt if len(utt) > 1]

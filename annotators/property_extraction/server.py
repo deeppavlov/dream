@@ -174,8 +174,7 @@ def get_result(request):
             utt_prev = utt_prev_sentences[-1].lower()
             utt_cur = uttr_list[-1].lower()
             is_q = (
-                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]])
-                or "?" in utt_prev
+                any([utt_prev.startswith(q_word) for q_word in ["what ", "who ", "when ", "where "]]) or "?" in utt_prev
             )
 
             is_sentence = False
@@ -264,6 +263,7 @@ def get_result(request):
                 triplets_info_list.append({"per_triplet": per_triplets})
         triplets_info_batch.append(triplets_info_list)
     total_time = time.time() - st_time
+    logger.info(triplets_info_batch)
     logger.info(f"property extraction exec time: {total_time: .3f}s")
     return triplets_info_batch
 

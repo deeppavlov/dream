@@ -785,7 +785,7 @@ def el_formatter_dialog(dialog: Dict):
         {
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
-            "context": [context],
+            "contexts": [context],
         }
     ]
 
@@ -796,7 +796,7 @@ def el_formatter_last_bot_dialog(dialog: Dict):
         entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog)
     else:
         entity_substr_list, entity_tags_list, context = [""], [""], [""]
-    return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "context": [context]}]
+    return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "contexts": [context]}]
 
 
 def custom_el_formatter_dialog(dialog: Dict):
@@ -809,7 +809,7 @@ def custom_el_formatter_dialog(dialog: Dict):
             "user_id": [user_id],
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
-            "context": [context],
+            "contexts": [context],
             "property_extraction": [property_extraction],
         }
     ]
@@ -830,7 +830,7 @@ def custom_el_formatter_last_bot_dialog(dialog: Dict):
             "user_id": [bot_id],
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
-            "context": [context],
+            "contexts": [context],
             "property_extraction": [property_extraction],
         }
     ]
