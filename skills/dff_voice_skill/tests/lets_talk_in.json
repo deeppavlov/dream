@@ -1,0 +1,318 @@
+{
+    "human_utter_index_batch": [
+        6
+    ],
+    "dialog_batch": [
+        {
+            "human_utterances": [
+                {
+                    "text": "",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "",
+                            "segments": [
+                                ""
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "voice_service": {
+                            "caption": "a siren blaring siren blaring siren blaring and a siren blaring",
+                            "sound_duration": 4,
+                            "sound_path": "http://files:3000/file?file=file_178.oga",
+                            "sound_type": "voice_message"
+                        }
+                    }
+                },
+                {
+                    "text": "",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "",
+                            "segments": [
+                                ""
+                            ]
+                        },
+                        "intent_catcher": {
+                            "cant_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "choose_topic": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "doing_well": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "dont_understand": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "exit": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "lets_chat_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "no": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "opinion_request": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "repeat": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "stupid": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_a_story": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "tell_me_more": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "topic_switching": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "weather_forecast_intent": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_are_you_talking_about": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_can_you_do": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_job": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_is_your_name": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "what_time": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "where_are_you_from": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "who_made_you": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            },
+                            "yes": {
+                                "confidence": 0.0,
+                                "detected": 0
+                            }
+                        },
+                        "voice_service": {
+                            "caption": "someone is playing a musical instrument while music plays in the background",
+                            "sound_duration": 2,
+                            "sound_path": "http://files:3000/file?file=file_179.oga",
+                            "sound_type": "voice_message"
+                        }
+                    }
+                }
+            ],
+            "bot_utterances": [
+                {
+                    "text": "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?",
+                    "annotations": {
+                        "sentseg": {
+                            "punct_sent": "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?",
+                            "segments": [
+                                "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "dff_voice_skill_state_batch": [
+        {
+            "context": {
+                "actor_state": {},
+                "id": "41d0492d-f65b-44f3-8792-de756549645b",
+                "labels": {
+                    "3": [
+                        "response",
+                        "caption"
+                    ],
+                    "4": [
+                        "response",
+                        "caption"
+                    ]
+                },
+                "misc": {},
+                "requests": {
+                    "3": "",
+                    "4": ""
+                },
+                "responses": {
+                    "3": "Is there the wind is blowing in the background while the wind blows in that audio?",
+                    "4": "Is there a siren blaring siren blaring siren blaring and a siren blaring in that audio?"
+                },
+                "validation": false
+            },
+            "current_turn_dff_suspended": false,
+            "history": {
+                "0": [
+                    "response",
+                    "caption"
+                ],
+                "2": [
+                    "response",
+                    "caption"
+                ],
+                "3": [
+                    "response",
+                    "caption"
+                ],
+                "4": [
+                    "response",
+                    "caption"
+                ],
+                "5": [
+                    "response",
+                    "caption"
+                ]
+            },
+            "previous_human_utter_index": 5,
+            "shared_memory": {}
+        }
+    ],
+    "dff_shared_state_batch": [
+        {
+            "cross_links": {},
+            "cross_states": {}
+        }
+    ],
+    "entities_batch": [
+        {}
+    ],
+    "used_links_batch": [
+        {}
+    ],
+    "age_group_batch": [
+        ""
+    ],
+    "disliked_skills_batch": [
+        []
+    ],
+    "prompts_goals_batch": [
+        {}
+    ],
+    "clarification_request_flag_batch": [
+        false
+    ],
+    "dialog_id_batch": [
+        "6666f3459534d05c11e8191bf89fd4f0"
+    ]
+}

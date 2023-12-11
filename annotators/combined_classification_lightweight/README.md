@@ -21,13 +21,15 @@ The models were trained on the following datasets:
 
 The model also contains 3 replacement models for Amazon services.
 
-The models (multitask and comparative single task) were trained with initial learning rate 2e-5(with validation patience 2 it could be dropped 2 times), batch size 32,optimizer adamW(betas (0.9,0.99) and early stop on 3 epochs. The criteria on early stopping was average accuracy for all tasks for multitask models, or the single-task accuracy for singletask models.
+The models (multitask and comparative single task) were trained with initial learning rate 2e-5(with validation patience 2 it could be dropped 2 times), batch size 32,optimizer adamW(betas (0.9,0.99)) and early stop on 3 epochs. The criteria on early stopping was average accuracy for all tasks for multitask models, or the single-task accuracy for singletask models.
 
 This model(with a huawei-noah/TinyBERT_General_4L_312D backbone) on a CPU-only inference takes 42% less time than combined_classification, while using only ~1.5 Gb of the CPU instead of the 2909 Mb for combined_classification. The average accuracy and average F1 at the same time are for this model only ~1.5% lower than for the combined_classification, and this dropdown is consistent for all tasks.
 
 
 ## I/O
-
+**Input:** immediate user utterances  (+ optional history of previous utterances)
+**Output:** tags for each utterance  (based on toxic/topic/emotion/sentiment/factoid/midas classification)
 
 ## Dependencies
+none
 
