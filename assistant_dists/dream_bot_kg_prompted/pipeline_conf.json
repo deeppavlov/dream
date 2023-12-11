@@ -121,7 +121,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/3RDNPBdybjBlSQZqcc7nGQ.yml",
+                    "component": "components/U5vEOIpvZ4iaIolONGpj0y.yml",
                     "service": "annotators/NER_deeppavlov/service_configs/ner"
                 }
             },
@@ -141,7 +141,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/05PqJXVd7gV7DqslN5z3A.yml",
+                    "component": "components/DppqKeE1BYrso10vmAj1Id.yml",
                     "service": "annotators/entity_detection/service_configs/entity-detection"
                 }
             },
@@ -162,7 +162,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/M1sE6hOm20EGBWBdr0vIOw.yml",
+                    "component": "components/RD2alKTQg4YqHgDalsmv0r.yml",
                     "service": "annotators/entity_linking/service_configs/entity-linking"
                 }
             },
@@ -184,7 +184,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/7v330b9odypuiugqeiuqij.yml",
+                    "component": "components/CscuX9SPYF34MFG4sd7f0a.yml",
                     "service": "annotators/property_extraction/service_configs/property-extraction"
                 }
             },
@@ -207,7 +207,7 @@
                 "state_manager_method": "add_annotation_prev_bot_utt",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/7v330b9odypuiugqeiuqij.yml",
+                    "component": "components/gYAcDA3dGQS4rJauyD9E44.yml",
                     "service": "annotators/custom_entity_linking/service_configs/custom-entity-linking"
                 }
             },
@@ -459,7 +459,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7Xs.yml",
                     "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
