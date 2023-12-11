@@ -689,7 +689,7 @@ def get_result(request, graph):
     utt = uttrs[0]
     last_human_utt = human_uttrs[0]["text"]
     if not utt:
-        return [{"added_to_graph": [], "triplets_already_in_graph": [], "kg_prompt": []}]
+        return [{"added_to_graph": [[]], "triplets_already_in_graph": [[]], "kg_prompt": []}]
     try:
         result = memorize(graph, utt, last_human_utt)
     except Exception as e:
@@ -697,9 +697,9 @@ def get_result(request, graph):
         logger.exception(e)
         result = [
             {
-                "added_to_graph": [[]] * len(utt),
-                "triplets_already_in_graph": [[]] * len(utt),
-                "kg_prompt": [[]] * len(utt),
+                "added_to_graph": [[]],
+                "triplets_already_in_graph": [[]],
+                "kg_prompt": [],
             }
         ]
     return result
