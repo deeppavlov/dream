@@ -411,10 +411,11 @@ def check_abstract_triplets(
         ][0]
         if is_abstract_relationship(relationship_kind, entity_substr, text):
             substr2kind = entity_substr.capitalize()
-            kinds_to_add.append(substr2kind)
-            parents.append(entity_kind)
-            abstract_entity_id = "/".join(["Abstract", substr2kind])
-            abstract_triplets.append((bot_id, relationship_kind, abstract_entity_id))
+            if substr2kind not in kinds_to_add:
+                kinds_to_add.append(substr2kind)
+                parents.append(entity_kind)
+                abstract_entity_id = "/".join(["Abstract", substr2kind])
+                abstract_triplets.append((bot_id, relationship_kind, abstract_entity_id))
         else:
             non_abstract_triplets.append(entity)
 
