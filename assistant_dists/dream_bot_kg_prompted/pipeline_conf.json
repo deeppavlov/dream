@@ -357,8 +357,7 @@
                     "skill_name": "dff_bot_knowledge_prompted_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "required_previous_services": [
-                    "response_annotators.custom_entity_linking",
+                "previous_services": [
                     "response_annotators.bot_knowledge_memorizer",
                     "skill_selectors"
                 ],
@@ -445,7 +444,6 @@
         },
         "response_selectors": {
             "response_selector": {
-		"required_previous_services": ["response_annotators"],
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
@@ -459,7 +457,7 @@
                 "state_manager_method": "add_bot_utterance",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/YJzc7NwGrLmKp6gfZJh7Xs.yml",
+                    "component": "components/YJzc7NwGrLmKp6gfZJh7X1.yml",
                     "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector"
                 }
             }
