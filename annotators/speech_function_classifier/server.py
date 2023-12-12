@@ -36,10 +36,13 @@ def handler(payload: List[Dict]):
             phrases = [p["prev_phrase"]] + p["phrase"]
             authors = ["John"] + ["Doe"] * phrase_len
             response = [p["prev_speech_function"]]
+            logger.info(f'PREV_SF:{response}')
             for phr, prev_phr, auth, prev_auth in zip(phrases[1:], phrases[:-1], authors[1:], authors[:-1]):
-                speech_f = get_speech_function(phr, prev_phr, auth, prev_auth)
+                speech_f = get_speech_function(phr, prev_phr,response[-1], auth, prev_auth)
                 response.append(speech_f)
             responses[i] = response[1:]
+            logger.info(f'RESPONSE:{response}')
+            
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.exception(e)
