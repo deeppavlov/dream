@@ -1,0 +1,15 @@
+SERVICE_PORT: 8044
+SRC_DIR: annotators/bot_knowledge_memorizer/
+SERVICE_NAME: bot_knowledge_memorizer
+TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
+TERMINUSDB_SERVER_PASSWORD: root
+TERMINUSDB_SERVER_TEAM: admin
+TERMINUSDB_SERVER_DB: bot_knowledge_db
+BOT_KM_SERVICE_CONFIG: config.json
+GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+SENTENCE_RANKER_URL: http://sentence-ranker:8128/respond
+SENTENCE_RANKER_TIMEOUT: 5
+RELEVANT_KNOWLEDGE_THRESHOLD: 0.2
+ENVVARS_TO_SEND: OPENAI_API_KEY
+USE_BOT_KG_DATA: 1
