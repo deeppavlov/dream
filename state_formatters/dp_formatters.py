@@ -6,6 +6,9 @@ from typing import Dict, List
 from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
 
+# import json  # comment out if saving dialog content is planned
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -1004,6 +1007,14 @@ def dff_template_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_template_skill")
 
 
+def dff_user_kg_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_user_kg_skill")
+
+
+def dff_travel_italy_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_travel_italy_skill")
+
+
 def dff_intent_responder_skill_formatter(dialog: Dict) -> List[Dict]:
     intents = list(dialog["human_utterances"][-1]["annotations"].get("intent_catcher", {}).keys())
     called_intents = {intent: False for intent in intents}
@@ -1068,6 +1079,29 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
 
 def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
+
+
+def dff_fromage_image_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_fromage_image_skill")
+
+
+def fromage_formatter(dialog: Dict) -> List:
+    # Used by: fromage
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+
+    image_paths = [utt["attributes"].get("image") for utt in dialog["human_utterances"]]
+    utterances_history = 5
+    image_paths = image_paths[-utterances_history:]
+    human_text_uttr = dialog["human_utterances"][-1]["text"]
+    input_dict = {"sentences": [human_text_uttr if human_text_uttr else ""]}
+    for url in reversed(image_paths):
+        if url is not None and url.startswith("http"):
+            input_dict.update({"image_paths": [url]})
+            break
+        else:
+            input_dict.update({"image_paths": [None]})
+    return [input_dict]
 
 
 def dff_prompted_skill_formatter(dialog, skill_name=None):
@@ -1240,6 +1274,14 @@ def image_captioning_formatter(dialog: Dict) -> List[Dict]:
     return [{"image_paths": [dialog["human_utterances"][-1].get("attributes", {}).get("image")]}]
 
 
+def last_human_annotated_utterance(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
+        }
+    ]
+
+
 def external_integration_skill_formatter(dialog: Dict) -> List[Dict]:
     last_sentences = [dialog["human_utterances"][-1]["text"]]
     dialog_ids = [dialog.get("dialog_id", "unknown")]
@@ -1266,3 +1308,62 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
     batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
+
+
+def user_emotion_bot_mood_formatter(dialog: Dict) -> List[Dict]:
+    # comment out the next two lines to save dialog data to see its contents
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    sentences = [dialog["human_utterances"][-1]["text"]]
+    annotated_utterances = [dialog["human_utterances"][-1]]
+
+    # [0.75, 0.25, 0.44] - default mood of the bot in PAD coordinates
+    # for detailed calculation please refer to bot_emotion_classifier
+    if len(dialog["bot_utterances"]) > 1:
+        bot_mood = (
+            dialog["bot_utterances"][-2]["annotations"]
+            .get("bot_emotion_classifier", {})
+            .get("bot_mood", [0.75, 0.25, 0.44])
+        )
+    else:
+        bot_mood = [0.75, 0.25, 0.44]
+    bot_mood_list = len(sentences) * [bot_mood]
+
+    return [
+        {
+            "sentences": sentences,
+            "annotated_utterances": annotated_utterances,
+            "bot_mood": bot_mood_list,
+        }
+    ]
+
+
+def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
+    # comment out the next two lines to save dialog data to see its contents
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    hypotheses = dialog["human_utterances"][-1]["hypotheses"]
+    hypots = [h["text"] for h in hypotheses]
+
+    if dialog["bot_utterances"]:
+        bot_mood_label = (
+            dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_mood_label", "happy")
+        )
+
+        bot_emotion = (
+            dialog["bot_utterances"][-1]["annotations"].get("bot_emotion_classifier", {}).get("bot_emotion", "neutral")
+        )
+    else:
+        bot_mood_label = "happy"
+        bot_emotion = "neutral"
+
+    bot_mood_labels = len(hypots) * [bot_mood_label]
+    bot_emotions = len(hypots) * [bot_emotion]
+
+    return [
+        {
+            "sentences": hypots,
+            "bot_mood_labels": bot_mood_labels,
+            "bot_emotions": bot_emotions,
+        }
+    ]

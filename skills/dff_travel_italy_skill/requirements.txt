@@ -1,0 +1,3 @@
+git+https://github.com/deeppavlov/custom_kg_svc.git@724513b4
+click==8.1.6
+nltk==3.5

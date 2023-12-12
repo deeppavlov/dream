@@ -2,10 +2,8 @@ import itertools
 import logging
 import random
 import re
-from common.universal_templates import COMPILE_WHAT_TO_TALK_ABOUT
+from common import utils, universal_templates
 from common.animals import ANIMALS_FIND_TEMPLATE
-from common.universal_templates import if_chat_about_particular_topic
-from common.utils import is_no, is_yes
 from common.wiki_skill_scenarios import topic_config
 
 logger = logging.getLogger(__name__)
@@ -679,7 +677,7 @@ def extract_entity(ctx, entity_type):
         if entities:
             return entities[0]
     else:
-        res = re.findall(entity_type, user_uttr["text"])
+        res = re.findall(entity_type, user_uttr.get("text", ""))
         if res:
             return res[0]
     return ""
@@ -687,7 +685,7 @@ def extract_entity(ctx, entity_type):
 
 def if_user_dont_know_topic(user_uttr, bot_uttr):
     flag = False
-    what_to_talk_about = re.findall(COMPILE_WHAT_TO_TALK_ABOUT, bot_uttr.get("text", ""))
+    what_to_talk_about = re.findall(universal_templates.COMPILE_WHAT_TO_TALK_ABOUT, bot_uttr.get("text", ""))
     user_dont_know = re.findall("(do not|dont|don't) know", user_uttr["text"]) or re.findall(
         "(anything|everything)", user_uttr["text"]
     )
@@ -699,8 +697,8 @@ def if_user_dont_know_topic(user_uttr, bot_uttr):
 def check_condition_element(elem, user_uttr, bot_uttr, shared_memory={}):
     flag = False
     annotations = user_uttr["annotations"]
-    isyes = is_yes(user_uttr)
-    isno = is_no(user_uttr)
+    isyes = utils.is_yes(user_uttr)
+    isno = utils.is_no(user_uttr)
     user_info = shared_memory.get("user_info", {})
     entity_triplets = shared_memory.get("entity_triplets", {})
     if elem[0] == "is_yes" and isyes:
@@ -790,7 +788,7 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
         if (
             (isinstance(pattern, str) and re.findall(pattern, user_uttr["text"], re.IGNORECASE))
             or (isinstance(pattern, re.Pattern) and re.findall(pattern, user_uttr["text"]))
-            or if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern)
+            or universal_templates.if_chat_about_particular_topic(user_uttr, bot_uttr, compiled_pattern=pattern)
         ):
             flag = True
         switch_on = topic_info.get("switch_on", [])
@@ -812,7 +810,7 @@ def if_switch_wiki_skill(user_uttr, bot_uttr):
 def if_must_switch(user_uttr, bot_uttr):
     flag = False
     user_uttr_annotations = user_uttr["annotations"]
-    lets_chat = if_chat_about_particular_topic(user_uttr, bot_uttr)
+    lets_chat = universal_templates.if_chat_about_particular_topic(user_uttr, bot_uttr)
     found_entity_substr_wp, *_, conf_type_wp = find_entity_wp(user_uttr_annotations, bot_uttr)
     found_entity_substr_nphr, conf_type_nphr = find_entity_nounphr(user_uttr_annotations)
     if (
@@ -827,7 +825,7 @@ def if_must_switch(user_uttr, bot_uttr):
 def switch_wiki_skill_on_news(user_uttr, bot_uttr):
     user_uttr_annotations = user_uttr["annotations"]
     news = user_uttr_annotations.get("news_api_annotator", [])
-    if if_chat_about_particular_topic(user_uttr, bot_uttr) and news:
+    if universal_templates.if_chat_about_particular_topic(user_uttr, bot_uttr) and news:
         nounphrases = user_uttr_annotations.get("cobot_entities", {}).get("labelled_entities", [])
         if nounphrases and news:
             for nounphr in nounphrases:

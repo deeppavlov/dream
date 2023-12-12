@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python test_wiki_parser.py
+python -m pytest tests/test_wiki_parser.py

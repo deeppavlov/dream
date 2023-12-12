@@ -1,5 +1,5 @@
 #!/bin/bash
 
 
-python test_entity_detection.py
+python -m pytest tests/test_entity_detection.py
 

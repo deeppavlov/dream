@@ -4,6 +4,7 @@
 3882	harvesters-maintenance-gobot-skill
 4242	agent
 6000    ros-flask-server
+6363    terminusdb-server
 8002	ranking-based-response-selector,ranking-based-response-selector-ru
 8003	llm-based-response-selector
 8004	convers-evaluator-annotator
@@ -27,10 +28,10 @@
 8022	dff-program-y-dangerous-skill
 8023	dff-movie-skill
 8024	sentiment-classification-multilingual
-8025
+8025    dff-travel-italy-skill
 8026    personality-detection
-8027
-8028
+8027    user-knowledge-memorizer
+8028    dff-user-kg-skill
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
 8031	asr
@@ -50,10 +51,10 @@
 8045    emotion-detection
 8046
 8047	eliza
-8048
+8048    emotion-ranking-based-response-selector
 8049	emotion-skill
-8050
-8051
+8050    emotional-bot-response
+8051    bot-emotion-classifier
 8052	dummy-skill-dialog
 8053	comet-atomic
 8054	meta-script-skill
@@ -71,8 +72,8 @@
 8066	news-api-skill
 8067
 8068	game-cooperative-skill
-8069
-8070
+8069    fromage
+8070    dff-fromage-image-skill
 8071	factoid-qa
 8072	kbqa
 8073
@@ -86,7 +87,7 @@
 8081    ranking-and-intent-based-response-selector
 8082    ranking-and-intent-based-response-selector-ru
 8083	knowledge-grounding
-8084
+8084    dff-knowledge-prompted-skill
 8085	knowledge-grounding-skill
 8086	dff-friendship-ru-skill,dff-friendship-skill
 8087	combined-classification
@@ -135,14 +136,14 @@
 8130	transformers-lm-gptj
 8131	openai-api-davinci3
 8132	gpt2-multilingual
-8133	relative-persona-extractor
+8133	relative-persona-extractor,relative-persona-extractor-ru
 8134	dff-dream-persona-gpt-j-prompted-skill
 8135	prompt-selector,prompt-selector-ru
 8136	property-extraction
 8137	dff-dream-persona-chatgpt-prompted-skill
 8138	dff-marketing-prompted-skill
 8139	dff-fairytale-prompted-skill
-8140	seq2seq-persona-based
+8140	seq2seq-persona-based,seq2seq-persona-based-ru
 8141	dff-nutrition-prompted-skill
 8142	dff-life-coaching-prompted-skill
 8143	dff-ai-faq-prompted-skill
@@ -187,3 +188,9 @@
 8182
 8183	external-integration-skill
 8184	external-fake-server
+8185	transformers-mistral-7b-128k
+8186	dff-document-qa-transformers-llm-skill
+8187
+8188
+8189
+8190

@@ -3,7 +3,7 @@ import re
 from itertools import chain
 from typing import List
 
-from common.universal_templates import join_sentences_in_or_pattern
+from common.join_pattern import join_sentences_in_or_pattern
 
 
 def get_regexp(intent_phrases_path):

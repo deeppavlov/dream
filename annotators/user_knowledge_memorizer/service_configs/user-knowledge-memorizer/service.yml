@@ -1,0 +1,42 @@
+name: user-knowledge-memorizer
+endpoints:
+- respond
+compose:
+  env_file:
+  - .env
+  - .env_secret
+  build:
+    args:
+      SERVICE_PORT: 8027
+      SRC_DIR: annotators/user_knowledge_memorizer/
+      SERVICE_NAME: user_knowledge_memorizer
+      TERMINUSDB_SERVER_URL: http://terminusdb-server:6363
+      TERMINUSDB_SERVER_PASSWORD: root
+      TERMINUSDB_SERVER_TEAM: admin
+      TERMINUSDB_SERVER_DB: user_knowledge_db
+      USER_KM_SERVICE_CONFIG: index_load_path.json
+      GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
+      GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
+      GENERATIVE_SERVICE_TIMEOUT: 120
+      SENTENCE_RANKER_URL: http://sentence-ranker:8128/respond
+      SENTENCE_RANKER_TIMEOUT: 5
+      RELEVANT_KNOWLEDGE_THRESHOLD: 0.5
+      ENVVARS_TO_SEND: OPENAI_API_KEY
+      USE_KG_DATA: 1
+    context: ./
+    dockerfile: annotators/user_knowledge_memorizer/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8027
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 256M
+      reservations:
+        memory: 256M
+  volumes:
+  - ./annotators/user_knowledge_memorizer:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  ports:
+  - 8027:8027
+proxy: null

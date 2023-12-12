@@ -1,0 +1,41 @@
+name: combined-classification-ru
+endpoints:
+- model
+- batch_model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8198
+      SERVICE_NAME: combined_classification_ru
+      CONFIG: combined_classifier_ru.json
+    context: .
+    dockerfile: ./annotators/combined_classification_ru/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8198 --timeout 600
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    resources:
+      limits:
+        memory: 2G
+      reservations:
+        memory: 2G
+  volumes:
+  - ./common:/src/common
+  - ./annotators/combined_classification_ru:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8198:8198
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8198
+  - PORT=8198

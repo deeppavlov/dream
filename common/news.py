@@ -5,7 +5,7 @@ import requests
 from os import getenv
 
 import sentry_sdk
-from common.utils import is_yes, get_entities
+from common import utils
 
 sentry_sdk.init(getenv("SENTRY_DSN"))
 
@@ -41,7 +41,7 @@ def skill_trigger_phrases():
 
 def is_breaking_news_requested(prev_bot_utt, user_utt):
     if OFFER_BREAKING_NEWS.lower() in prev_bot_utt.get("text", "").lower():
-        if is_yes(user_utt):
+        if utils.is_yes(user_utt):
             return True
     return False
 
@@ -144,7 +144,7 @@ def extract_topics(curr_uttr):
     Returns:
         list of mentioned entities/nounphrases
     """
-    entities = get_entities(curr_uttr, only_named=True, with_labels=False)
+    entities = utils.get_entities(curr_uttr, only_named=True, with_labels=False)
     entities = [ent.lower() for ent in entities]
     entities = [
         ent
@@ -152,7 +152,7 @@ def extract_topics(curr_uttr):
         if not (ent == "alexa" and curr_uttr["text"].lower()[:5] == "alexa") and "news" not in ent
     ]
     if len(entities) == 0:
-        for ent in get_entities(curr_uttr, only_named=False, with_labels=False):
+        for ent in utils.get_entities(curr_uttr, only_named=False, with_labels=False):
             if ent.lower() not in BANNED_UNIGRAMS and "news" not in ent.lower():
                 if ent in entities:
                     pass

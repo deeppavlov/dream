@@ -1,0 +1,5 @@
+{
+	"max_new_tokens": 256,
+	"penalty_alpha": 0.15,
+	"top_k": 10
+}

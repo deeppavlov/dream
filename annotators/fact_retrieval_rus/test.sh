@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python test_fact_retrieval.py
+python -m pytest tests/test_fact_retrieval.py
