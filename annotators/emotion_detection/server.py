@@ -7,7 +7,7 @@ import sentry_sdk
 import cv2
 import aux  # noqa: F401
 
-from multimodal_concat.models import MultimodalClassificaionModel, MainModel
+from multimodal_concat.models import MultimodalClassificationModel, MainModel
 from multimodal_concat.utils import prepare_models
 
 from fastapi import FastAPI
@@ -76,12 +76,12 @@ def get_frames(
 
 
 def create_final_model():
-    multi_model = MultimodalClassificaionModel(
+    multi_model = MultimodalClassificationModel(
         text_model,
         video_model,
         audio_model,
         num_labels,
-        input_size=1920,
+        input_size=4885,
         hidden_size=512,
     )
     checkpoint = torch.load(os.getenv("MULTIMODAL_MODEL"))
@@ -93,6 +93,7 @@ def create_final_model():
 
 def process_text(input_tokens: str):
     text_model_name = os.getenv("TEXT_PRETRAINED")
+    logger.info(f"{text_model_name}")
     tokenizer = AutoTokenizer.from_pretrained(text_model_name)
 
     return tokenizer(
@@ -124,22 +125,23 @@ def process_audio(file_path: str):
     )
 
     redundant_features = os.getenv("REDUNDANT_FEATURES")
-    print(redundant_features)
-    redundant_features_list = []
-    with open(os.getenv("REDUNDANT_FEATURES"), "r") as features_file:
-        for line in features_file:
-            redundant_features_list.append(line.split(','))
-    print(redundant_features_list)
+    logger.info(f"{redundant_features}")
+    with open(redundant_features, 'r') as features_file:
+        redundant_features_list = features_file.read().split(',')
+    logger.info(f"{redundant_features_list}")
 
-    audio_features = smile.process_files([file_path], redundant_features_list)
+    audio_features = smile.process_files([file_path])
     audio_features = audio_features.drop(columns=redundant_features_list, inplace=False)
     return audio_features.values.reshape(audio_features.shape[0], 1, audio_features.shape[1])
 
 
 def inference(text: str, video_path: str):
     text_encoding = process_text(text)
+    logger.info(f"{text_encoding}")
     video_encoding = process_video(video_path)
+    logger.info(f"{video_encoding}")
     audio_features = process_audio(video_path)
+    logger.info(f"{audio_features}")
     batch = {
         "text": text_encoding,
         "video": video_encoding,
@@ -153,6 +155,7 @@ def inference(text: str, video_path: str):
 
 def predict_emotion(text: str, video_path: str):
     try:
+        logger.info(f"{inference(text, video_path)}")
         return inference(text, video_path)
     except Exception as e:
         sentry_sdk.capture_exception(e)
@@ -170,10 +173,13 @@ class EmotionsPayload(BaseModel):
 def subinfer(msg_text: str, video_path: str):
     emotion = "Emotion detection unsuccessfull. An error occured during inference."
     filepath = "undefined"
+    logger.info(f"{video_path}")
     try:
         filename = video_path.split("=")[-1]
         filepath = f"/data/{filename}"
+        logger.info(f"filepath -- {filepath}, filename -- {filename}")
         urlretrieve(video_path, filepath)
+        logger.info(f"{urlretrieve(video_path, filepath)}")
         if not os.path.exists(filepath):
             raise ValueError(f"Failed to retrieve videofile from {filepath}")
         emotion = predict_emotion(msg_text, filepath)
