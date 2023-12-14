@@ -102,7 +102,7 @@ def respond():
 
     if max_tokens:
         configs = list(
-            map(lambda d: {key: max_tokens[-1] if key == 'max_tokens' else value for key, value in d.items()}, configs)
+            map(lambda d: {key: max_tokens[-1] if key == "max_tokens" else value for key, value in d.items()}, configs)
         )
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
