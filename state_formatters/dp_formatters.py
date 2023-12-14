@@ -92,11 +92,17 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: personality_catcher_formatter
+
+    logger.warning("Personality catcher")
+    # logger.warning(dialog["human_utterances"][-1]["annotations"].get(
+    #                 dialog["human_utterances"][-1]["text"]
+    #             ))
+    logger.warning(dialog["human_utterances"][-1]["annotations"])
     return [
         {
             "personality": [
                 dialog["human_utterances"][-1]["annotations"].get(
-                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+                    dialog["human_utterances"][-1]["text"]
                 )
             ]
         }
@@ -105,11 +111,13 @@ def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def emotion_detection_formatter(dialog: Dict) -> List[Dict]:
     # Used by: emotion_detection annotator
+    logger.warning("Emotion Personality")    
+    logger.warning(dialog["human_utterances"][-1]["annotations"])
     return [
         {
             "personality": [
                 dialog["human_utterances"][-1]["annotations"].get(
-                    "spelling_preprocessing", dialog["human_utterances"][-1]["text"]
+                    dialog["human_utterances"][-1]["text"]
                 )
             ],
             "video_path": [dialog["human_utterances"][-1]["attributes"].get("video_path")],
@@ -502,6 +510,7 @@ def simple_formatter_service(payload: List):
     sent_rewrite_formatter, sent_segm_formatter, base_skill_selector_formatter
     """
     logging.info(f"answer {payload}")
+    logging.warning(f"answer {payload}")
     return payload
 
 

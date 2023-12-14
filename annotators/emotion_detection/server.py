@@ -137,11 +137,11 @@ def process_audio(file_path: str):
 
 def inference(text: str, video_path: str):
     text_encoding = process_text(text)
-    logger.info(f"{text_encoding}")
+    logger.warning(f"{text_encoding}")
     video_encoding = process_video(video_path)
-    logger.info(f"{video_encoding}")
+    logger.warning(f"{video_encoding}")
     audio_features = process_audio(video_path)
-    logger.info(f"{audio_features}")
+    logger.warning(f"{audio_features}")
     batch = {
         "text": text_encoding,
         "video": video_encoding,
@@ -155,7 +155,7 @@ def inference(text: str, video_path: str):
 
 def predict_emotion(text: str, video_path: str):
     try:
-        logger.info(f"{inference(text, video_path)}")
+        logger.warning(f"{inference(text, video_path)}")
         return inference(text, video_path)
     except Exception as e:
         sentry_sdk.capture_exception(e)
@@ -173,17 +173,15 @@ class EmotionsPayload(BaseModel):
 def subinfer(msg_text: str, video_path: str):
     emotion = "Emotion detection unsuccessfull. An error occured during inference."
     filepath = "undefined"
-    logger.info(f"{video_path}")
     try:
         filename = video_path.split("=")[-1]
         filepath = f"/data/{filename}"
-        logger.info(f"filepath -- {filepath}, filename -- {filename}")
         urlretrieve(video_path, filepath)
-        logger.info(f"{urlretrieve(video_path, filepath)}")
         if not os.path.exists(filepath):
             raise ValueError(f"Failed to retrieve videofile from {filepath}")
+        logger.warning(f"Text for model -- {msg_text}")
         emotion = predict_emotion(msg_text, filepath)
-        logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
+        logger.warning(f"Detected emotion: {jsonable_encoder(emotion)}")
     except Exception as e:
         raise ValueError(f"The message format is correct, but: {e}")
     return emotion
@@ -201,6 +199,7 @@ app.add_middleware(
 
 @app.post("/model")
 def infer(payload: EmotionsPayload):
-    logger.info(f"Emotion Detection: {payload}")
+    logger.warning(f"Emotion Detection: {payload}")
     emotion = [subinfer(p[0], p[1]) for p in zip(payload.personality, payload.video_path)]
+    logger.warning(emotion)
     return jsonable_encoder(emotion)
