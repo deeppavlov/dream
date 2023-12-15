@@ -95,15 +95,10 @@ def respond():
     st_time = time.time()
     contexts = request.json.get("dialog_contexts", [])
     prompts = request.json.get("prompts", [])
-    max_tokens = request.json.get("max_tokens", None)
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
     configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
 
-    if max_tokens:
-        configs = list(
-            map(lambda d: {key: max_tokens[-1] if key == "max_tokens" else value for key, value in d.items()}, configs)
-        )
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
     openai_api_keys = request.json.get("openai_api_keys", [])
