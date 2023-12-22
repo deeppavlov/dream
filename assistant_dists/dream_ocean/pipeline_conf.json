@@ -114,7 +114,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/OQWoiqfnqwfnoqwib.yml",
-                    "service": "annotators/emotion_detection/service_configs/emotion_detection"
+                    "service": "annotators/emotion_detection/service_configs/emotion-detection"
                 }
             },
             "prompt_goals_collector": {

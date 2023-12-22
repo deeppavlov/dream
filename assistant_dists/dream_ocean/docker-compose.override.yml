@@ -429,6 +429,7 @@ services:
           memory: 4G
 
   personality-detection:
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8026
@@ -445,6 +446,7 @@ services:
           memory: 312M
 
   emotion-detection:
+    env_file: [ .env ]
     build:
       args:
         SERVICE_PORT: 8045
