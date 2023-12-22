@@ -177,7 +177,7 @@ def subinfer(msg_text: str, video_path: str):
     filename = video_path.split("=")[-1]
     filepath = f"/data/{filename}"
     urlretrieve(video_path, filepath)
-    logger.warning(f"Text for model -- {msg_text}, filepath -- {filepath}")
+    logger.warning(f"Text for model -- {msg_text+ ' '}, filepath -- {filepath}")
     emotion = predict_emotion(msg_text+' ', filepath)
     logger.warning(f"Emotion -- {predict_emotion(msg_text+' ', filepath)}")
     logger.warning(f"Detected emotion: {jsonable_encoder(emotion)}")

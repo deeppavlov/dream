@@ -116,7 +116,7 @@ def emotion_detection_formatter(dialog: Dict) -> List[Dict]:
     return [
         {
             "personality": [
-                dialog["human_utterances"][-2].get("text")
+                dialog["human_utterances"][-1].get("text")
             ],
             "video_path": [dialog["human_utterances"][-1]["attributes"].get("video_path")],
         }
