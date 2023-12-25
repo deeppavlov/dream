@@ -13,7 +13,9 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_NAME_OR_PATH = os.environ.get("PRETRAINED_MODEL_NAME_OR_PATH")
@@ -23,13 +25,23 @@ GIGACHAT_ROLES = ["assistant", "user"]
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "GigaChat:1.3.23.1": json.load(open("common/generative_configs/gigachat.json", "r")),
+    "GigaChat:1.3.23.1": json.load(
+        open("common/generative_configs/gigachat.json", "r")
+    ),
 }
 
 
-def generate_responses(context, gigachat_api_key, gigachat_org, prompt, generation_params, continue_last_uttr=False):
-
-    assert gigachat_api_key, logger.error("Error: GigaChat API key is not specified in env")
+def generate_responses(
+    context,
+    gigachat_api_key,
+    gigachat_org,
+    prompt,
+    generation_params,
+    continue_last_uttr=False,
+):
+    assert gigachat_api_key, logger.error(
+        "Error: GigaChat API key is not specified in env"
+    )
     giga = GigaChat(credentials=gigachat_api_key, verify_ssl_certs=False)
 
     s = len(context) % 2
@@ -65,7 +77,10 @@ def respond():
     prompts = request.json.get("prompts", [])
     configs = request.json.get("configs", None)
     configs = [None] * len(prompts) if configs is None else configs
-    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+    configs = [
+        DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el
+        for el in configs
+    ]
 
     if len(contexts) > 0 and len(prompts) == 0:
         prompts = [""] * len(contexts)
@@ -80,7 +95,9 @@ def respond():
             contexts, gigachat_api_keys, gigachat_orgs, prompts, configs
         ):
             curr_responses = []
-            outputs = generate_responses(context, gigachat_api_key, gigachat_org, prompt, config)
+            outputs = generate_responses(
+                context, gigachat_api_key, gigachat_org, prompt, config
+            )
             for response in outputs:
                 if len(response) >= 2:
                     curr_responses += [response]
