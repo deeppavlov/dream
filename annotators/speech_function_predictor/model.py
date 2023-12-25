@@ -1,14 +1,12 @@
 import json
 
 
-
 def init_model():
-    with open('sf_pairs.json', 'r') as json_file:
+    with open("sf_pairs.json", "r") as json_file:
         lines = json_file.readlines()
 
-    prev_sfs = [json.loads(line)['prev_sf'] for line in lines]
-    current_sfs = [json.loads(line)['current_sf'] for line in lines]
-
+    prev_sfs = [json.loads(line)["prev_sf"] for line in lines]
+    current_sfs = [json.loads(line)["current_sf"] for line in lines]
 
     class_dict = {}
     label_to_name = []
