@@ -102,7 +102,7 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
     human_entities = get_entities(last_human_ann_uttr, only_named=False, with_labels=False)
 
     _human_is_switch_topic_request = is_switch_topic(last_human_ann_uttr)
-    _human_is_any_question = is_any_question_sentence_in_utterance(last_human_ann_uttr)
+    # _human_is_any_question = is_any_question_sentence_in_utterance(last_human_ann_uttr)
     # if user utterance contains any question AND requires some intent by socialbot
     _human_wants_to_chat_about_topic = (
         if_chat_about_particular_topic(last_human_ann_uttr) and "about it" not in last_human_ann_uttr["text"].lower()
@@ -123,7 +123,7 @@ def select_response(dialog_context: List[str], hypotheses: List[dict], last_huma
             speech_predictor_hyps = [v["prediction"] for v in speech_predictor]
             speech_predictor_scores = [v["confidence"] for v in speech_predictor]
         except TypeError:
-            logger.error(f"Warning! The speech_predictor_classifier data is either empty or corrupt.")
+            logger.error("Warning! The speech_predictor_classifier data is either empty or corrupt.")
             return
         try:
             speech_index = speech_predictor_hyps.index(speech_annotation)
