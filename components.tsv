@@ -43,12 +43,12 @@
 8037	dff-weather-skill
 8038    robot-fake-server
 8039
-8040
+8040    emotion-detection
 8041    dff-embodied-skill
 8042    embodied-sender
 8043
 8044
-8045    emotion-detection
+8045    
 8046
 8047	eliza
 8048    emotion-ranking-based-response-selector
