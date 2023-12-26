@@ -1,12 +1,12 @@
 import logging
+
+# import json # comment out if saving dialog content is planned
 from copy import deepcopy
 from typing import Dict, List
 
 
 from common.utils import get_entities, get_intents
 import state_formatters.utils as utils
-
-# import json  # comment out if saving dialog content is planned
 
 
 logger = logging.getLogger(__name__)
@@ -251,6 +251,16 @@ def entity_detection_formatter_dialog(dialog: Dict) -> List[Dict]:
     return [{"sentences": context}]
 
 
+def entity_detection_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    if len(dialog["bot_utterances"]):
+        context = [[dialog["bot_utterances"][-1]["text"]]]
+    else:
+        context = [[""]]
+    return [{"sentences": context}]
+
+
 def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
     dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
     dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
@@ -269,13 +279,24 @@ def property_extraction_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 
 def property_extraction_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
-    if dialog["bot_utterances"]:
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    if len(dialog["bot_utterances"]):
         dialog_history = [dialog["bot_utterances"][-1]["text"]]
+        entities_with_labels = get_entities(dialog["bot_utterances"][-1], only_named=False, with_labels=True)
+        entity_info_list = dialog["bot_utterances"][-1]["annotations"].get("entity_linking", [{}])
+        named_entities = dialog["bot_utterances"][-1]["annotations"].get("ner", [{}])
     else:
         dialog_history = [""]
+        entities_with_labels = []
+        entity_info_list = [{}]
+        named_entities = [{}]
     return [
         {
             "utterances": [dialog_history],
+            "entities_with_labels": [entities_with_labels],
+            "named_entities": [named_entities],
+            "entity_info": [entity_info_list],
         }
     ]
 
@@ -744,6 +765,26 @@ def prepare_el_input(dialog: Dict):
     return entity_substr_list, entity_tags_list, context
 
 
+def prepare_el_input_last_bot(dialog: Dict):
+    entities_with_labels = get_entities(dialog["bot_utterances"][-1], only_named=False, with_labels=True)
+    entity_substr_list, entity_tags_list = [], []
+    for entity in entities_with_labels:
+        if entity and isinstance(entity, dict) and "text" in entity and entity["text"].lower() != "alexa":
+            entity_substr_list.append(entity["text"])
+            if "finegrained_label" in entity:
+                finegrained_labels = [[label.lower(), conf] for label, conf in entity["finegrained_label"]]
+                entity_tags_list.append(finegrained_labels)
+            elif "label" in entity:
+                entity_tags_list.append([[entity["label"].lower(), 1.0]])
+            else:
+                entity_tags_list.append([["misc", 1.0]])
+    dialog = utils.get_last_n_turns(dialog, bot_last_turns=1)
+    dialog = utils.replace_with_annotated_utterances(dialog, mode="punct_sent")
+    context = [dialog["bot_utterances"][-1]["text"]]
+
+    return entity_substr_list, entity_tags_list, context
+
+
 def el_formatter_dialog(dialog: Dict):
     # Used by: entity_linking annotator
     entity_substr_list, entity_tags_list, context = prepare_el_input(dialog)
@@ -751,9 +792,18 @@ def el_formatter_dialog(dialog: Dict):
         {
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
-            "context": [context],
+            "contexts": [context],
         }
     ]
+
+
+def el_formatter_last_bot_dialog(dialog: Dict):
+    # Used by: entity_linking annotator
+    if len(dialog["bot_utterances"]):
+        entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog)
+    else:
+        entity_substr_list, entity_tags_list, context = [""], [""], [""]
+    return [{"entity_substr": [entity_substr_list], "entity_tags": [entity_tags_list], "contexts": [context]}]
 
 
 def custom_el_formatter_dialog(dialog: Dict):
@@ -766,7 +816,28 @@ def custom_el_formatter_dialog(dialog: Dict):
             "user_id": [user_id],
             "entity_substr": [entity_substr_list],
             "entity_tags": [entity_tags_list],
-            "context": [context],
+            "contexts": [context],
+            "property_extraction": [property_extraction],
+        }
+    ]
+
+
+def custom_el_formatter_last_bot_dialog(dialog: Dict):
+    # Used by: bot-km annotator
+    if len(dialog["bot_utterances"]):
+        entity_substr_list, entity_tags_list, context = prepare_el_input_last_bot(dialog)  # changed prepare_el_input
+        property_extraction = dialog["bot_utterances"][-1]["annotations"].get("property_extraction", {})
+        bot_id = str(dialog["bot_utterances"][-1].get("user", {}).get("id", ""))
+    else:
+        property_extraction = {}
+        entity_substr_list, entity_tags_list, context = [""], [""], [""]
+        bot_id = ""
+    return [
+        {
+            "user_id": [bot_id],
+            "entity_substr": [entity_substr_list],
+            "entity_tags": [entity_tags_list],
+            "contexts": [context],
             "property_extraction": [property_extraction],
         }
     ]
@@ -1070,6 +1141,27 @@ def dff_program_y_dangerous_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_program_y_dangerous_skill")
 
 
+def voice_formatter_service(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "sound_paths": [dialog["human_utterances"][-1]["attributes"].get("sound_path")],
+            "sound_durations": [dialog["human_utterances"][-1]["attributes"].get("sound_duration")],
+            "sound_types": [dialog["human_utterances"][-1]["attributes"].get("sound_type")],
+            "video_paths": [dialog["human_utterances"][-1]["attributes"].get("video_path")],
+            "video_durations": [dialog["human_utterances"][-1]["attributes"].get("video_duration")],
+            "video_types": [dialog["human_utterances"][-1]["attributes"].get("video_type")],
+        }
+    ]
+
+
+def dff_voice_skill_formatter(dialog, skill_name="dff_voice_skill"):
+    return utils.dff_formatter(
+        dialog,
+        skill_name,
+        wanted_keys=["text", "annotations", "sound_path", "sound_duration", "sound_type", "caption"],
+    )
+
+
 def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")
 
@@ -1271,6 +1363,22 @@ def last_human_annotated_utterance(dialog: Dict) -> List[Dict]:
     return [
         {
             "last_human_annotated_utterance": [dialog["human_utterances"][-1]],
+        }
+    ]
+
+
+def bot_knowledge_memorizer_formatter_last_bot_dialog(dialog: Dict) -> List[Dict]:
+    # comment out the next two lines to save dialog data to see its contents
+    # with open('test_formatters.json', 'w', encoding='utf-8') as f:
+    #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    if len(dialog["bot_utterances"]):
+        dialog_history = dialog["bot_utterances"][-1]
+    else:
+        dialog_history = []
+    return [
+        {
+            "utterances": [dialog_history],
+            "human_utterances": [dialog["human_utterances"][-1]],
         }
     ]
 

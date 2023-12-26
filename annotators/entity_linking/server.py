@@ -30,20 +30,23 @@ def respond():
     entity_tags_batch = inp.get(
         "entity_tags", [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch]
     )
-    context_batch = inp.get("context", [[""]])
+    context_batch = inp.get("contexts", [[""]])
     opt_context_batch = []
     for hist_utt in context_batch:
         hist_utt = [utt for utt in hist_utt if len(utt) > 1]
-        last_utt = hist_utt[-1]
-        if last_utt[-1] not in {".", "!", "?"}:
-            last_utt = f"{last_utt}."
-        if len(hist_utt) > 1:
-            prev_utt = hist_utt[-2]
-            if prev_utt[-1] not in {".", "!", "?"}:
-                prev_utt = f"{prev_utt}."
-            opt_context_batch.append([prev_utt, last_utt])
+        if hist_utt:
+            last_utt = hist_utt[-1]
+            if last_utt[-1] not in {".", "!", "?"}:
+                last_utt = f"{last_utt}."
+            if len(hist_utt) > 1:
+                prev_utt = hist_utt[-2]
+                if prev_utt[-1] not in {".", "!", "?"}:
+                    prev_utt = f"{prev_utt}."
+                opt_context_batch.append([prev_utt, last_utt])
+            else:
+                opt_context_batch.append([last_utt])
         else:
-            opt_context_batch.append([last_utt])
+            opt_context_batch.append([""])
 
     entity_info_batch = [[{}] for _ in entity_substr_batch]
     try:

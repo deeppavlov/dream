@@ -1,15 +1,18 @@
+# Personality Catcher Skill
 ## Description
 
-Этот скил сделан для смены персоны бота. 
-В решении много костылей, поэтому решение временное.
-По функционалу должно использоваться для только разработчиками.
+This skill is created in order to be able to change the bot personality.
 
+Note: this is a paragon of a crutch-driven development, so the solution temporal (and only for devs)
 
 
 ## Getting started
 
-Для смены персоны необходимо отправить через телеграмм сообщение `/start` - для создания нового диалога. После вместе с командой `/new_persona` отравить персону через знак новой строки `\n`. Знаком новой строки `\n` разделяются предложения из персоны.
+To change the bot persona:
+1. in Telegram, when talking to your bot, send `/start` command
+2. Then using a command `/new_persona` send the new persona description (use `\n` at the end of the sentences)
+3.`\n` works as a separator for sentences.
 
 ## Crutches
 
-Все костыли этого решения помечены записью `# TODO: rm crutch of personality_catcher`
+All the dev crutches are marked as `# TODO: rm crutch of personality_catcher`

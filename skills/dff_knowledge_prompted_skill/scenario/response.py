@@ -20,6 +20,7 @@ GENERATIVE_SERVICE_URL = getenv("GENERATIVE_SERVICE_URL")
 GENERATIVE_SERVICE_CONFIG = getenv("GENERATIVE_SERVICE_CONFIG")
 USE_KG_DATA = int(getenv("USE_KG_DATA", 0))
 USER_KG_SERVICE_URL = getenv("USER_KG_SERVICE_URL")
+USE_BOT_KG_DATA = int(getenv("USE_BOT_KG_DATA", 0))
 if GENERATIVE_SERVICE_CONFIG:
     with open(f"common/generative_configs/{GENERATIVE_SERVICE_CONFIG}", "r") as f:
         GENERATIVE_SERVICE_CONFIG = json.load(f)
@@ -31,7 +32,6 @@ ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
 assert GENERATIVE_SERVICE_URL
 assert PROMPT_FILE
-assert USER_KG_SERVICE_URL
 
 with open(PROMPT_FILE, "r") as f:
     PROMPT_DICT = json.load(f)
@@ -89,15 +89,34 @@ def generative_response(ctx: Context, actor: Actor, *args, **kwargs) -> Any:
 
     prompt = PROMPT
 
+    # To use knowledge about user
     custom_el = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("custom_entity_linking")
     user_kg = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("user_knowledge_memorizer")
     logger.info(f"custom_el: {custom_el}")
     logger.info(f"user_kg: {user_kg}")
+    logger.info(f"USE_KG_DATA: {USE_KG_DATA}")
 
     if USE_KG_DATA and user_kg and (kg_prompt := user_kg["kg_prompt"]):
         kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0].lower()).split(".")
         kg_prompt = ",".join(kg_prompt)
         prompt = prompt + f"\n\nADDITIONAL INSTRUCTION: You know that {kg_prompt}. Use these facts in your answer."
+
+    # To use knowledge about bot
+    bot_custom_el = int_ctx.get_last_bot_utterance(ctx, actor).get("annotations", {}).get("custom_entity_linking")
+    bot_kg = int_ctx.get_last_bot_utterance(ctx, actor).get("annotations", {}).get("bot_knowledge_memorizer")
+
+    logger.info(f"bot_custom_el: {bot_custom_el}")
+    logger.info(f"bot_kg: {bot_kg}")
+    logger.info(f"USE_BOT_KG_DATA: {USE_BOT_KG_DATA}")
+
+    if USE_BOT_KG_DATA and bot_kg and (kg_prompt := bot_kg["kg_prompt"]):
+        logger.info(f"kg_prompt - {kg_prompt}")
+        kg_prompt = re.sub(r"[-\n]", "", kg_prompt[0]).split(".")
+        kg_prompt = ".".join(kg_prompt)
+        prompt = (
+            prompt
+            + f"{kg_prompt}. INSTRUCTION: Now respond to user. Be concise, but engaging. Answer in 1, 2 or 3 sentences."
+        )
 
     logger.info(f"prompt: {prompt}")
     logger.info(f"dialog_context: {dialog_context}")
