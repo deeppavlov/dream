@@ -1,0 +1,9 @@
+{
+    "chainer": {
+    },
+    "metadata": {
+      "variables": {
+        "CUSTOM_EL": "/root/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream"
+      }
+    }
+  }

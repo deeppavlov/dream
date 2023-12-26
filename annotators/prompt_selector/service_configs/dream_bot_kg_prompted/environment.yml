@@ -1,0 +1,6 @@
+SERVICE_PORT: 8135
+SERVICE_NAME: prompt_selector
+SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+N_SENTENCES_TO_RETURN: 3
+PROMPTS_TO_CONSIDER: bot_knowledge
+FLASK_APP: server

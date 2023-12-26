@@ -1,0 +1,29 @@
+name: bot_knowledge_memorizer
+display_name: Bot Knowledge Graph
+component_type: null
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: stores new triplets information detected through Property Extraction, preserving unique data within the KG.
+ram_usage: 256M
+gpu_usage: null
+group: response_annotators
+connector:
+  protocol: http
+  url: http://bot-knowledge-memorizer:8028/respond
+dialog_formatter: state_formatters.dp_formatters:bot_knowledge_memorizer_formatter_last_bot_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- response_annotator_selectors
+- response_annotators.sentseg
+- response_annotators.ner
+- response_annotators.entity_detection
+- response_annotators.entity_linking
+- response_annotators.property_extraction
+- response_annotators.custom_entity_linking
+required_previous_services: null
+state_manager_method: add_annotation_prev_bot_utt
+tags: null
+endpoint: respond
+service: annotators/bot_knowledge_memorizer/service_configs/bot-knowledge-memorizer
+date_created: '2023-08-21T12:42:33'

@@ -23,14 +23,14 @@
 8017	sentrewrite
 8018	badlisted-words,badlisted-words-ru
 8019
-8020
+8020    user-knowledge-memorizer
 8021	ner-ru,ner
 8022	dff-program-y-dangerous-skill
 8023	dff-movie-skill
 8024	sentiment-classification-multilingual
 8025    dff-travel-italy-skill
 8026    personality-detection
-8027    user-knowledge-memorizer
+8027    user-knowledge-memorizer-prompted
 8028    dff-user-kg-skill
 8029	convert-reddit
 8030	personal-info-ru-skill,personal-info-skill
@@ -48,7 +48,7 @@
 8042    embodied-sender
 8043
 8044    bot-knowledge-memorizer
-8045    
+8045
 8046
 8047	eliza
 8048    emotion-ranking-based-response-selector
@@ -91,7 +91,7 @@
 8085	knowledge-grounding-skill
 8086	dff-friendship-ru-skill,dff-friendship-skill
 8087	combined-classification
-8088
+8088    dff-bot-knowledge-prompted-skill
 8089	entity-storer
 8090	midas-classification
 8091
@@ -183,7 +183,7 @@
 8177	dff-journalist-helper-ru-prompted-skill
 8178    transformers-lm-rugpt35
 8179	dff-robot-prompted-skill
-8180
+8180    openai-api-gpt4-turbo
 8181
 8182
 8183	external-integration-skill

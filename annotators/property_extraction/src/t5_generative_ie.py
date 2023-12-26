@@ -170,8 +170,8 @@ class T5GenerativeIE(TorchModel):
         else:
             raise ConfigError("No pre-trained BERT model is given.")
 
-        if self.device.type == "cuda" and torch.cuda.device_count() > 1:
-            self.model = torch.nn.DataParallel(self.model)
+        # if self.device.type == "cuda" and torch.cuda.device_count() > 1:
+        #    self.model = torch.nn.DataParallel(self.model)
 
         self.model.to(self.device)
 

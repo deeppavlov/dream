@@ -1,0 +1,24 @@
+name: user_knowledge_memorizer
+display_name: User Knowledge Graph
+component_type: null
+model_type: null
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: stores new triplets information detected through Property Extraction, preserving unique data within the KG.
+ram_usage: 256M
+gpu_usage: null
+group: annotators
+connector:
+  protocol: http
+  url: http://user-knowledge-memorizer:8020/respond
+dialog_formatter: state_formatters.dp_formatters:last_human_annotated_utterance
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services:
+- annotators.property_extraction
+- annotators.custom_entity_linking
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: respond
+service: annotators/user_knowledge_memorizer/service_configs/user-knowledge-memorizer
+date_created: '2023-11-28T12:42:33'
