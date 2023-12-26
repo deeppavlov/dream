@@ -11,7 +11,6 @@ from typing import List
 import sentry_sdk
 from flask import Flask, request, jsonify
 from common.universal_templates import (
-    is_any_question_sentence_in_utterance,
     if_chat_about_particular_topic,
     if_not_want_to_chat_about_particular_topic,
     if_choose_topic,
