@@ -125,10 +125,8 @@ def process_audio(file_path: str):
     )
 
     redundant_features = os.getenv("REDUNDANT_FEATURES")
-    logger.warning(f"{redundant_features}")
     with open(redundant_features, 'r') as features_file:
         redundant_features_list = features_file.read().split(',')
-    logger.warning(f"{redundant_features_list}")
 
     audio_features = smile.process_files([file_path])
     audio_features = audio_features.drop(columns=redundant_features_list, inplace=False)
@@ -137,11 +135,8 @@ def process_audio(file_path: str):
 
 def inference(text: str, video_path: str):
     text_encoding = process_text(text)
-    logger.warning(f"{text_encoding}")
     video_encoding = process_video(video_path)
-    logger.warning(f"{video_encoding}")
     audio_features = process_audio(video_path)
-    logger.warning(f"{audio_features}")
     batch = {
         "text": text_encoding,
         "video": video_encoding,
@@ -172,27 +167,17 @@ class EmotionsPayload(BaseModel):
 
 def subinfer(msg_text: str, video_path: str):
     emotion = "Emotion detection unsuccessfull. An error occured during inference."
-    filepath = "undefined"
-    # with no try-catch
-    filename = video_path.split("=")[-1]
-    filepath = f"/data/{filename}"
-    urlretrieve(video_path, filepath)
-    logger.warning(f"Text for model -- {msg_text+ ' '}, filepath -- {filepath}")
-    emotion = predict_emotion(msg_text+' ', filepath)
-    logger.warning(f"Emotion -- {predict_emotion(msg_text+' ', filepath)}")
-    logger.warning(f"Detected emotion: {jsonable_encoder(emotion)}")
-    
-    # try:
-    #     filename = video_path.split("=")[-1]
-    #     filepath = f"/data/{filename}"
-    #     urlretrieve(video_path, filepath)
-    #     if not os.path.exists(filepath):
-    #         raise ValueError(f"Failed to retrieve videofile from {filepath}")
-    #     logger.warning(f"Text for model -- {msg_text}")
-    #     emotion = predict_emotion(msg_text+' ', filepath)
-    #     logger.warning(f"Detected emotion: {jsonable_encoder(emotion)}")
-    # except Exception as e:
-    #     raise ValueError(f"The message format is correct, but: {e}")
+    filepath = "undefined" 
+    try:
+        filename = video_path.split("=")[-1]
+        filepath = f"/data/{filename}"
+        urlretrieve(video_path, filepath)
+        if not os.path.exists(filepath):
+            raise ValueError(f"Failed to retrieve videofile from {filepath}")
+        emotion = predict_emotion(msg_text + ' ', filepath)
+        logger.info(f"Detected emotion: {jsonable_encoder(emotion)}")
+    except Exception as e:
+        raise ValueError(f"The message format is correct, but: {e}")
     
     return emotion
 
@@ -209,7 +194,6 @@ app.add_middleware(
 
 @app.post("/model")
 def infer(payload: EmotionsPayload):
-    logger.warning(f"Emotion Detection: {payload}")
+    logger.info(f"Emotion Detection: {payload}")
     emotion = [subinfer(p[0], p[1]) for p in zip(payload.personality, payload.video_path)]
-    logger.warning(emotion)
     return jsonable_encoder(emotion)

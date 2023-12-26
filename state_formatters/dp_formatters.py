@@ -92,32 +92,18 @@ def convert_formatter_dialog(dialog: Dict) -> List[Dict]:
 
 def personality_catcher_formatter_dialog(dialog: Dict) -> List[Dict]:
     # Used by: personality_catcher_formatter
-
-    logger.warning("Personality catcher with text")
-    # logger.warning(dialog["human_utterances"][-1]["annotations"].get(
-    #                 dialog["human_utterances"][-1]["text"]
-    #             ))
-    logger.warning(dialog["human_utterances"][-1]["text"])
     return [
         {
-            "personality": [
-                dialog["human_utterances"][-1].get("text")
-            ]
+            "personality": [dialog["human_utterances"][-1].get("text")]
         }
     ]
 
 
 def emotion_detection_formatter(dialog: Dict) -> List[Dict]:
     # Used by: emotion_detection annotator
-    logger.warning("Emotion Personality with annotation")    
-    logger.warning(dialog["human_utterances"][-1]["annotations"])
-    logger.warning("Total dialog.human_utterance.-1")
-    logger.warning(dialog["human_utterances"])
     return [
         {
-            "personality": [
-                dialog["human_utterances"][-1].get("text")
-            ],
+            "personality": [dialog["human_utterances"][-1].get("text")],
             "video_path": [dialog["human_utterances"][-1]["attributes"].get("video_path")],
         }
     ]
