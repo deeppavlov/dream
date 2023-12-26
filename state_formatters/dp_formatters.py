@@ -1186,7 +1186,7 @@ def speech_function_predictor_formatter(dialog: Dict):
         logger.info(f"formatter log sfp/sfc: {res}")
     except Exception as e:
         logger.error(f"Failed to format sfc output: {e}")
-    return [{"funcs": res}]
+    return [{"funcs": [res]}]
 
 
 def speech_function_hypotheses_predictor_formatter(dialog: Dict):
