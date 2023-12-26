@@ -7,7 +7,7 @@ services:
           factoid-qa:8071, kbqa:8072, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
           sentence-ranker:8128, property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
-          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059, personality-detection:8026, emotion-detection:8045"
+          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059, personality-detection:8026, emotion-detection:8040"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -449,14 +449,15 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8045
+        SERVICE_PORT: 8040
         SERVICE_NAME: emotion_detection
         VIDEO_PRETRAINED: "microsoft/xclip-base-patch32"
         TEXT_PRETRAINED: "bert-large-uncased"
         MODEL_PATH: "/data/"
         MULTIMODAL_MODEL: "/data/final_model.pt"
+        REDUNDANT_FEATURES: "/data/redundant_features.txt"
       context: annotators/emotion_detection
-    command: uvicorn server:app --host 0.0.0.0 --port 8045
+    command: uvicorn server:app --host 0.0.0.0 --port 8040
     deploy:
       resources:
         limits:

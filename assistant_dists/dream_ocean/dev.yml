@@ -148,7 +148,7 @@ services:
     volumes:
       - "./annotators/emotion_detection:/src"
     ports:
-      - 8045:8045
+      - 8040:8040
   files:
     ports:
       - 3000:3000

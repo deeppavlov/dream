@@ -37,3 +37,5 @@ RUN gdown 'https://drive.google.com/uc?id=1ZHw2MEbjLwU5A7EaNysgVHZlaWq4FJZG' -O 
 RUN gdown 'https://drive.google.com/uc?id=1XZVPI2ZvE0PbvhFMinsAp2z9SPPEsSjn' -O '/data/final_model.pt'
 RUN gdown 'https://drive.google.com/uc?id=1DMUHqbwqn-j9XIhoqnfSwqyqrlPMkVJe' -O '/data/XCLIP_Augmented.pt'
 RUN gdown 'https://drive.google.com/uc?id=1VxEQcso_Bsrzix1TykriJ2BLfUm9Gtx5' -O '/data/redundant_features.txt'
+
+RUN echo $REDUNDANT_FEATURES

@@ -126,7 +126,7 @@ def process_audio(file_path: str):
 
     redundant_features = os.getenv("REDUNDANT_FEATURES")
     logger.warning(f"{redundant_features}")
-    with open('/data/redundant_features.txt', 'r') as features_file:
+    with open(redundant_features, 'r') as features_file:
         redundant_features_list = features_file.read().split(',')
     logger.warning(f"{redundant_features_list}")
 
