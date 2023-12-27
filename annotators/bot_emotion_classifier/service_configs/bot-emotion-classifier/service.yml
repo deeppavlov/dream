@@ -1,0 +1,27 @@
+name: bot-emotion-classifier
+endpoints:
+- model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8051
+      SERVICE_NAME: bot_emotion_classifier
+      WORK_DIR: annotators/bot_emotion_classifier
+    context: .
+    dockerfile: annotators/bot_emotion_classifier/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8051
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 500M
+      reservations:
+        memory: 500M
+  volumes:
+  - ./annotators/bot_emotion_classifier:/src
+  - ./common:/src/common
+  ports:
+  - 8051:8051

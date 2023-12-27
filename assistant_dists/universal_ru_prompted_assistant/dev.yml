@@ -61,6 +61,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8167:8167
+  openai-api-gpt4-turbo:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8180:8180
   dff-universal-ru-prompted-skill:
     volumes:
       - "./skills/dff_universal_prompted_skill:/src"

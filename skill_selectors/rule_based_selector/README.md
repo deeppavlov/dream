@@ -3,12 +3,16 @@
 ## Description
 
 Skill Selector is a component selecting a subset of skills to generate hypotheses.
-The Rule-based Skill Selector utilizes hand-written rules based on user's utterance annotations
-(e.g., entities, dialog acts, intents, topics, toxicity, etc.).
-Best fit for Dream Scripted, Dream Alexa distributions and other ones containing a lot of scripted skills.
-Not suitable for prompt-based distributions.
+The Rule-based Skill Selector utilizes hand-written rules based on user's utterance annotations _(entities, dialog acts, intents, topics, toxicity, etc.)_.
+Best fitted for `Dream Scripted`, `Dream Alexa` distributions and other ones containing a lot of scripted skills.
+**Not suitable** for prompt-based distributions.
 
-### Parameters
+## Input/Output
+
+**Input:** annotated user input and dialogue context
+**Output:** a list of selected skills
+
+## Parameters
 
 ```
 HIGH_PRIORITY_INTENTS: whether to turn on only Intent Responder for high-priority intents
@@ -17,3 +21,4 @@ ALWAYS_TURN_ON_ALL_SKILLS: whether to always turn on all skills. Avoid using thi
 ```
 
 ## Dependencies
+none

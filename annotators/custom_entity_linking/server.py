@@ -162,7 +162,7 @@ def respond():
         "entity_tags",
         [["" for _ in entity_substr_list] for entity_substr_list in entity_substr_batch],
     )
-    context_batch = request.json.get("context", [[""]])
+    context_batch = request.json.get("contexts", [[""]])
     prex_info_batch = request.json.get("property_extraction", [{} for _ in entity_substr_batch])
 
     # Preprocess the conversation context

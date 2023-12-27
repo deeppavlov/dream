@@ -1,0 +1,69 @@
+admiration	admiration
+joy	joy
+liking	liking
+love	admiration
+hope	hope
+gratitude	admiration
+pride	admiration
+relief	relief
+surprise	joy
+
+admiration	admiration
+joy	joy
+liking	liking
+love	love
+hope	hope
+gratitude	gratitude
+pride	pride
+relief	relief
+surprise	joy
+
+admiration	gratitude
+joy	joy
+liking	gratitude
+love	love
+hope	gratitude
+gratitude	joy
+pride	gratitude
+relief	joy
+surprise	joy
+
+admiration	admiration
+joy	joy
+liking	admiration
+love	admiration
+hope	hope
+gratitude	joy
+pride	admiration
+relief	joy
+surprise	joy
+
+admiration	admiration
+joy	joy
+liking	liking
+love	love
+hope	hope
+gratitude	gratitude
+pride	pride
+relief	relief
+surprise	joy
+
+admiration	admiration
+joy	joy
+liking	liking
+love	love
+hope	hope
+gratitude	gratitude
+pride	pride
+relief	relief
+surprise	joy
+
+admiration	admiration
+joy	joy
+liking	admiration
+love	admiration
+hope	hope
+gratitude	gratitude
+pride	pride
+relief	relief
+surprise	joy

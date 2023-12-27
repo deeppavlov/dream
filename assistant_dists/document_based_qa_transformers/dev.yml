@@ -1,0 +1,52 @@
+# С такими volumes удобно дебажить, не нужно пересобирать контейнер каждый раз при изменении кода
+services:
+  agent:
+    volumes:
+      - ".:/dp-agent"
+    ports:
+      - 4242:4242
+  files:
+    ports:
+      - 3000:3000
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
+  sentseg:
+    volumes:
+      - "./annotators/SentSeg:/src"
+    ports:
+      - 8011:8011
+  combined-classification:
+    volumes:
+      - "./common:/src/common"
+      - "./annotators/combined_classification:/src"
+    ports:
+      - 8087:8087
+  sentence-ranker:
+    volumes:
+      - "./services/sentence_ranker:/src"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8128:8128
+  transformers-lm-mistral-7b-128k:
+    volumes:
+      - "./services/transformers_lm:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8185:8185
+  doc-retriever:
+    volumes:
+      - "./annotators/doc_retriever:/src"
+      - "./common:/src/common"
+      - "./documents:/src/documents"
+    ports:
+      - 8165:8165
+  dff-document-qa-transformers-llm-skill:
+    volumes:
+      - "./skills/dff_document_qa_llm_skill:/src"
+      - "./common:/src/common"
+      - "./documents:/src/documents"
+    ports:
+      - 8186:8186
+
+version: "3.7"
