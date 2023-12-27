@@ -12,13 +12,13 @@ from starlette.middleware.cors import CORSMiddleware
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-cEXT = pickle.load(open("/personality-detection-text/data/models/cEXT.p", "rb"))
-cNEU = pickle.load(open("/personality-detection-text/data/models/cNEU.p", "rb"))
-cAGR = pickle.load(open("/personality-detection-text/data/models/cAGR.p", "rb"))
-cCON = pickle.load(open("/personality-detection-text/data/models/cCON.p", "rb"))
-cOPN = pickle.load(open("/personality-detection-text/data/models/cOPN.p", "rb"))
-vectorizer_31 = pickle.load(open("/personality-detection-text/data/models/vectorizer_31.p", "rb"))
-vectorizer_30 = pickle.load(open("/personality-detection-text/data/models/vectorizer_30.p", "rb"))
+cEXT = pickle.load(open("./models/cEXT.p", "rb"))
+cNEU = pickle.load(open("./models/cNEU.p", "rb"))
+cAGR = pickle.load(open("./models/cAGR.p", "rb"))
+cCON = pickle.load(open("./models/cCON.p", "rb"))
+cOPN = pickle.load(open("./models/cOPN.p", "rb"))
+vectorizer_31 = pickle.load(open("./models/vectorizer_31.p", "rb"))
+vectorizer_30 = pickle.load(open("./models/vectorizer_30.p", "rb"))
 
 
 logger = logging.getLogger(__name__)
