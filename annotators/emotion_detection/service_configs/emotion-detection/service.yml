@@ -6,7 +6,7 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8045
+      SERVICE_PORT: 8040
       SERVICE_NAME: emotion_detection
       VIDEO_PRETRAINED: "microsoft/xclip-base-patch32"
       TEXT_PRETRAINED: "bert-large-uncased"
@@ -16,7 +16,7 @@ compose:
       PREFIX: "Detect emotions:"
     context: .
     dockerfile: ./annotators/emotion_detection/Dockerfile
-  command: uvicorn server:app --host 0.0.0.0 --port 8045
+  command: uvicorn server:app --host 0.0.0.0 --port 8040
   deploy:
     resources:
       limits:
@@ -26,4 +26,4 @@ compose:
   environment:
       - CUDA_VISIBLE_DEVICES=0
   ports:
-  - 8045:8045
+  - 8040:8040
