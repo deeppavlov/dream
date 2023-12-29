@@ -28,3 +28,6 @@ services:
   speech-function-classifier:
     environment:
       CUDA_VISIBLE_DEVICES: ""
+  speech-function-predictor:
+    environment:
+      CUDA_VISIBLE_DEVICES: ""
