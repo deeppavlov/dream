@@ -511,7 +511,6 @@ def simple_formatter_service(payload: List):
     sent_rewrite_formatter, sent_segm_formatter, base_skill_selector_formatter
     """
     logging.info(f"answer {payload}")
-    logging.warning(f"answer {payload}")
     return payload
 
 
