@@ -3,7 +3,8 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_sfc/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "convers-evaluator-annotator:8004,
-          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, scripts-priority-selector:8009, personality-catcher:8010, intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
+          spacy-nounphrases:8006, dff-program-y:8008, sentseg:8011, scripts-priority-selector:8009, personality-catcher:8010,
+          intent-responder:8012, intent-catcher:8014, badlisted-words:8018,
           sentrewrite:8017, ner:8021, dff-program-y-dangerous:8022, dff-movie-skill:8023,
           convert-reddit:8029, personal-info-skill:8030, asr:8031, misheard-asr:8033, dff-weather-skill:8037,
           eliza:8047, emotion-skill:8049, dummy-skill-dialog:8052, comet-atomic:8053, meta-script-skill:8054,
