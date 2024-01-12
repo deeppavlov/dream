@@ -5,10 +5,8 @@ from typing import List, Dict
 
 import sentry_sdk
 from flask import Flask, request, jsonify
-from nltk import sent_tokenize
-from itertools import zip_longest
-
 from models import get_speech_function
+from nltk import sent_tokenize
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
