@@ -56,7 +56,7 @@ def answer():
     prev_phrases = request.json.get("prev_phrase", [])
     prev_speech_funcs = request.json.get("prev_speech_function", [])
     payloads = []
-    for phr, prev_phr, prev_speech_func in zip_longest(phrases, prev_phrases, prev_speech_funcs):
+    for phr, prev_phr, prev_speech_func in zip(phrases, prev_phrases, prev_speech_funcs):
         payloads.append(
             {"phrase": sent_tokenize(phr), "prev_phrase": prev_phr, "prev_speech_function": prev_speech_func}
         )
@@ -73,7 +73,7 @@ def annotation():
     prev_phrases = request.json.get("prev_phrase", [])
     prev_speech_funcs = request.json.get("prev_speech_function", [])
     payloads = []
-    for phr, prev_phr, prev_speech_func in zip_longest(phrases, prev_phrases, prev_speech_funcs):
+    for phr, prev_phr, prev_speech_func in zip(phrases, prev_phrases, prev_speech_funcs):
         payloads.append(
             {"phrase": sent_tokenize(phr), "prev_phrase": prev_phr, "prev_speech_function": prev_speech_func}
         )
