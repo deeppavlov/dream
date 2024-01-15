@@ -1134,33 +1134,36 @@ def game_cooperative_skill_formatter(dialog: Dict):
 
 
 def speech_function_formatter(dialog: Dict):
-    human_sentseg = dialog["human_utterances"][-1].get("annotations", {}).get("sentseg", {})
-    resp = {"phrase": human_sentseg.get("segments", [dialog["human_utterances"][-1]["text"]])}
-    try:
-        bot_sentseg = dialog["bot_utterances"][-1].get("annotations", {}).get("sentseg", {})
-        resp["prev_phrase"] = bot_sentseg.get("segments", [dialog["bot_utterances"][-1]["text"]])[-1]
+    if len(dialog["bot_utterances"]):
+        bot_uttr = dialog["bot_utterances"][-1]["text"]
         bot_function = dialog["bot_utterances"][-1].get("annotations", {}).get("speech_function_classifier", [""])[-1]
-        resp["prev_speech_function"] = bot_function
-    except IndexError:
-        resp["prev_phrase"] = None
-        resp["prev_speech_function"] = None
-    return [resp]
+    else:
+        bot_uttr = ""
+        bot_function = ""
+    return [{
+        "phrases": [dialog["human_utterances"][-1]["text"]],
+        "prev_phrases": [bot_uttr],
+        "prev_speech_functions": [bot_function],
+    }]
 
 
 def speech_function_bot_formatter(dialog: Dict):
-    bot_sentseg = dialog["bot_utterances"][-1].get("annotations", {}).get("sentseg", {})
-    resp = {"phrase": bot_sentseg.get("segments", [dialog["bot_utterances"][-1]["text"]])}
-    if len(dialog["human_utterances"]) > 1:
-        human_sentseg = dialog["human_utterances"][-2].get("annotations", {}).get("sentseg", {})
-        resp["prev_phrase"] = human_sentseg.get("segments", [dialog["human_utterances"][-2]["text"]])[-1]
-        human_function = (
-            dialog["human_utterances"][-2].get("annotations", {}).get("speech_function_classifier", [""])[-1]
-        )
-        resp["prev_speech_function"] = human_function
-    else:
-        resp["prev_phrase"] = None
-        resp["prev_speech_function"] = None
-    return [resp]
+    human_function = dialog["human_utterances"][-2].get("annotations", {}).get("speech_function_classifier", "")
+    return [{
+        "phrases": [dialog["bot_utterances"][-1]["text"]],
+        "prev_phrases": [dialog["human_utterances"][-2]["text"]],
+        "prev_speech_functions": [human_function],
+    }]
+
+
+def speech_function_hypotheses_formatter(dialog: Dict):
+    human_function = dialog["human_utterances"][-1].get("annotations", {}).get("speech_function_classifier", "")
+    hypotheses = dialog["human_utterances"][-1].get("hypotheses", [])
+    return [{
+        "phrases": [hyp["text"] for hyp in hypotheses],
+        "prev_phrases": [dialog["human_utterances"][-1]["text"]] * len(hypotheses),
+        "prev_speech_functions": [human_function] * len(hypotheses),
+    }]
 
 
 def speech_function_annotation(dialog: Dict):

@@ -12,8 +12,8 @@ group: candidate_annotators
 connector:
   protocol: http
   timeout: 5.0
-  url: http://speech-function-classifier:8108/annotation
-dialog_formatter: state_formatters.dp_formatters:speech_function_annotation
+  url: http://speech-function-classifier:8108/respond_batch
+dialog_formatter: state_formatters.dp_formatters:speech_function_hypotheses_formatter
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
 previous_services:
 - skills
