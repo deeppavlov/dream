@@ -15,19 +15,14 @@ def run_test():
     model_hypothesis = requests.post(f"{URL}/respond", json=model_test_data).json()
 
     print("test name: sfc model_hypothesis")
-    assert model_hypothesis == [
-        [
-            "React.Rejoinder.Support.Response.Resolve",
-        ]
-    ], print(model_hypothesis)
+    assert model_hypothesis == ["React.Rejoinder.Support.Response.Resolve"], print(model_hypothesis)
 
-    annotation_test_data = [
-        {
-            "phrases": ["fine, thank you.", "and you?"],
-            "prev_phrases": ["How are you doing today?", "How are you doing today?"],
-            "prev_speech_functions": ["Open.Demand.Fact", "Open.Demand.Fact"],
-        }
-    ]
+    annotation_test_data = {
+        "phrases": ["fine, thank you.", "and you?"],
+        "prev_phrases": ["How are you doing today?", "How are you doing today?"],
+        "prev_speech_functions": ["Open.Demand.Fact", "Open.Demand.Fact"],
+    }
+
     annotation_hypothesis = requests.post(f"{URL}/respond_batch", json=annotation_test_data).json()
 
     print("test name: sfc annotation_hypothesis")
