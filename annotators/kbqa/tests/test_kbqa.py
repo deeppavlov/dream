@@ -13,7 +13,7 @@ import requests
         ),
         (
             {"x_init": ["How old is Donald Trump?"], "entities": [["Donald Trump"]], "entity_tags": [[["per", 1.0]]]},
-            "Donald Trump is 77 years old.",
+            "Donald Trump is 78 years old.",
         ),
     ],
 )
