@@ -1183,7 +1183,7 @@ def speech_function_predictor_formatter(dialog: Dict):
     res = None
     res = dialog["human_utterances"][-1]["annotations"].get("speech_function_classifier", [""])
     logger.info(f"formatter log sfp/sfc: {res}")
-    return [{"funcs": [res]}]
+    return [{"funcs": res}]
 
 
 def speech_function_hypotheses_predictor_formatter(dialog: Dict):

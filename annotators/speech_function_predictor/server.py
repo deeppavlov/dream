@@ -64,6 +64,7 @@ def answer():
 def annotation():
     st_time = time.time()
     payload = request.json.get("funcs", [])
+    logger.info(f"PAYLOAD IN BATCH RESPOND SFP --------------------------------: {payload}")
     responses = handler(payload)
     total_time = time.time() - st_time
     logger.info(f"speech_function_predictor batch exec time: {total_time:.3f}s")
