@@ -1,12 +1,10 @@
 import logging
 import os
 import time
-from typing import List, Dict
 
 import sentry_sdk
 from flask import Flask, request, jsonify
 from models import get_speech_functions
-from nltk import sent_tokenize
 
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
