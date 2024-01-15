@@ -38,9 +38,6 @@ def answer():
     prev_phrases = ["" for _ in phrases] if prev_phrases is None else prev_phrases
     prev_speech_funcs = request.json.get("prev_speech_functions", None)
     prev_speech_funcs = ["" for _ in phrases] if prev_speech_funcs is None else prev_speech_funcs
-    logger.info(
-        f"speech_function_classifier input:\nphrases={phrases}\nprev_phrases={prev_phrases}\nprev_speech_funcs={prev_speech_funcs}"
-    )
 
     responses = get_speech_functions(phrases, prev_phrases, prev_speech_funcs)
     logger.info(f"speech_function_classifier responses: {responses}")
@@ -59,9 +56,6 @@ def annotation():
     prev_speech_funcs = request.json.get("prev_speech_functions", None)
     prev_speech_funcs = ["" for _ in phrases] if prev_speech_funcs is None else prev_speech_funcs
 
-    logger.info(
-        f"speech_function_classifier input:\nphrases={phrases}\nprev_phrases={prev_phrases}\nprev_speech_funcs={prev_speech_funcs}"
-    )
     responses = get_speech_functions(phrases, prev_phrases, prev_speech_funcs)
     logger.info(f"speech_function_classifier responses: {responses}")
 
