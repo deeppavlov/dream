@@ -32,8 +32,4 @@ RUN mv -f /data/repo/* /data/ && rm -rf /data/repo
 
 RUN touch /data/multimodal_concat/__init__.py
 
-RUN gdown 'https://drive.google.com/uc?id=15rB8cn3MSJpFNIKHY3f9qvCMbgH2ZLmR' -O '/data/1d_cnn_with_opensmile.pt'
-RUN gdown 'https://drive.google.com/uc?id=1ZHw2MEbjLwU5A7EaNysgVHZlaWq4FJZG' -O '/data/bert-large-uncased_none_seed-42.pt'
-RUN gdown 'https://drive.google.com/uc?id=1XZVPI2ZvE0PbvhFMinsAp2z9SPPEsSjn' -O '/data/final_model.pt'
-RUN gdown 'https://drive.google.com/uc?id=1DMUHqbwqn-j9XIhoqnfSwqyqrlPMkVJe' -O '/data/XCLIP_Augmented.pt'
-RUN gdown 'https://drive.google.com/uc?id=1VxEQcso_Bsrzix1TykriJ2BLfUm9Gtx5' -O '/data/redundant_features.txt'
+RUN wget -O models.tar.gz http://files.deeppavlov.ai/dream_data/emotion_detection.tar.gz && tar -xvf models.tar.gz -C /data/
