@@ -1148,10 +1148,17 @@ def speech_function_formatter(dialog: Dict):
 
 
 def speech_function_bot_formatter(dialog: Dict):
-    human_function = dialog["human_utterances"][-2].get("annotations", {}).get("speech_function_classifier", "")
+    if len(dialog["human_utterances"]) > 1 and len(dialog["bot_utterances"]):
+        last_bot_uttr = dialog["bot_utterances"][-1]["text"]
+        prev_human_uttr = dialog["human_utterances"][-2]["text"]
+        human_function = dialog["human_utterances"][-2].get("annotations", {}).get("speech_function_classifier", "")
+    else:
+        last_bot_uttr = ""
+        prev_human_uttr = ""
+        human_function = ""
     return [{
-        "phrases": [dialog["bot_utterances"][-1]["text"]],
-        "prev_phrases": [dialog["human_utterances"][-2]["text"]],
+        "phrases": [last_bot_uttr],
+        "prev_phrases": [prev_human_uttr],
         "prev_speech_functions": [human_function],
     }]
 
