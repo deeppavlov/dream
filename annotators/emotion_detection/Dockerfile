@@ -32,4 +32,10 @@ RUN mv -f /data/repo/* /data/ && rm -rf /data/repo
 
 RUN touch /data/multimodal_concat/__init__.py
 
-RUN wget -O models.tar.gz http://files.deeppavlov.ai/dream_data/emotion_detection.tar.gz && tar -xvf models.tar.gz -C /data/
+RUN apt-get install -y wget
+
+RUN wget -O models http://files.deeppavlov.ai/dream_data/emotion_detection_v1.tar.gz && tar -xvf models -C /data/
+RUN ls /data/ 
+RUN ls /data/emotion_detection_models
+
+RUN echo $MODEL_PATH
