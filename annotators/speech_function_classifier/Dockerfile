@@ -4,20 +4,15 @@ WORKDIR /src
 
 RUN apt-get update && apt-get install -y --allow-unauthenticated git curl && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /models && \
-    curl https://files.deeppavlov.ai/alexaprize_data/speech_function_classifier.tar.gz --output arch.tgz && \
-    tar zxfv arch.tgz && \
-    rm -rf arch.tgz && \
-    curl https://files.deeppavlov.ai/dream/speech_function_classifier/res_cor.json --output data/res_cor.json && \
-    mv data/* /models && \
-    rm -rf data
+# RUN git clone -b feat/speech-fn https://github.com/deeppavlov/DeepPavlov.git && \
+# 	cd DeepPavlov && pip install -e . && cd .. && rm -rf DeepPavlov && python -m deeppavlov download speech_fn
 
-COPY annotators/speech_function_classifier/requirements.txt requirements.txt
-
-RUN pip install -r requirements.txt && \
-    python -c "import nltk; nltk.download('punkt')"
+RUN pip install git+https://github.com/deeppavlov/DeepPavlov.git@e2ae2d91edad414736d15520eb1820cb6c06565d && \
+        python -m deeppavlov download speech_fn
 
 COPY . ./
+
+RUN pip install -r requirements.txt
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}

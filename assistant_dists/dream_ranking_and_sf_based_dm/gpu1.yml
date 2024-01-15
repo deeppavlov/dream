@@ -31,7 +31,7 @@ services:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
     restart: unless-stopped
-  ranking-and-intent-based-response-selector:
+  ranking-based-response-selector:
     restart: unless-stopped
   dff-intent-responder-skill:
     restart: unless-stopped
@@ -71,6 +71,18 @@ services:
     restart: unless-stopped
     environment:
       - CUDA_VISIBLE_DEVICES=9
+  speech-function-classifier:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+  speech-function-predictor:
+    restart: unless-stopped
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
   property-extraction:
     restart: unless-stopped
     volumes:

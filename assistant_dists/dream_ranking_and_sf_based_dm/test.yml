@@ -1,78 +1,74 @@
 services:
   agent:
-    restart: unless-stopped
     volumes:
       - "/cephfs/home/ignatov/artifacts:/output"
-      - ".:/dp-agent"
     ports:
       - ${AGENT_PORT}:4242
   kbqa:
-    restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=5
   text-qa:
-    restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=5
   combined-classification:
-    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
-      - CUDA_VISIBLE_DEVICES=7
+      - CUDA_VISIBLE_DEVICES=8
   mongo:
-    restart: unless-stopped
     command: mongod
     image: mongo:4.0.0
     # # you can use persistent local volume if you need
     # volumes:
     #   - ./venv/data/db_data:/root/data/db
   sentseg:
-    restart: unless-stopped
-  ranking-and-intent-based-response-selector:
-    restart: unless-stopped
   dff-intent-responder-skill:
-    restart: unless-stopped
   intent-catcher:
-    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
-      - CUDA_VISIBLE_DEVICES=9
+      - CUDA_VISIBLE_DEVICES=6
   ner:
-    restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
     environment:
       - CUDA_VISIBLE_DEVICES=7
   factoid-qa:
-    restart: unless-stopped
   entity-linking:
-    restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=9
   wiki-parser:
-    restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
   fact-retrieval:
-    restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=7
+  entity-detection:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=8
-  entity-detection:
-    restart: unless-stopped
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-    environment:
-      - CUDA_VISIBLE_DEVICES=9
   sentence-ranker:
-    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov/cache:/root/.cache"
     environment:
       - CUDA_VISIBLE_DEVICES=9
   property-extraction:
-    restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
 version: '3.7'

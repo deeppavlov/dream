@@ -1,8 +1,9 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_ranking_and_midas_based_dm/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_ranking_and_sf_based_dm/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "sentseg:8011, ranking-and-intent-based-response-selector:8081,
+      WAIT_HOSTS: "sentseg:8011, ranking-and-sf-based-response-selector:8082,
+          speech-function-predictor:8107, speech-function-classifier:8108,
           dff-intent-responder-skill:8012, intent-catcher:8014, ner:8021,
           factoid-qa:8071, kbqa:8072, entity-linking:8075, wiki-parser:8077, text-qa:8078,
           combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
@@ -16,11 +17,11 @@ services:
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
 
-  ranking-and-intent-based-response-selector:
+  ranking-and-sf-based-response-selector:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8081
+        SERVICE_PORT: 8082
         SERVICE_NAME: response_selector
         LANGUAGE: EN
         SENTENCE_RANKER_ANNOTATION_NAME: sentence_ranker
@@ -30,8 +31,8 @@ services:
         FILTER_TOXIC_OR_BADLISTED: 1
         FALLBACK_FILE: fallbacks_dream_en.json
       context: .
-      dockerfile: ./response_selectors/ranking_and_intent_based_response_selector/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8081
+      dockerfile: ./response_selectors/ranking_and_sf_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8082
     environment:
       - FLASK_APP=server
     deploy:
@@ -481,5 +482,39 @@ services:
           memory: 4G
         reservations:
           memory: 4G
+
+  speech-function-classifier:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8108
+        SERVICE_NAME: speech_function_classifier
+      context: ./annotators/speech_function_classifier/
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8108
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+
+  speech-function-predictor:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8107
+        SERVICE_NAME: speech_function_predictor
+      context: ./annotators/speech_function_predictor
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8107
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
 
 version: '3.7'
