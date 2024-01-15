@@ -27,9 +27,7 @@ def run_test():
 
     print("test name: sfc annotation_hypothesis")
     assert annotation_hypothesis == [
-        {
-            'batch': ['React.Rejoinder.Support.Response.Resolve', 'React.Rejoinder.Support.Track']
-        }
+        {"batch": ["React.Rejoinder.Support.Response.Resolve", "React.Rejoinder.Support.Track"]}
     ], print(annotation_hypothesis)
 
     print("Success")

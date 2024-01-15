@@ -1140,11 +1140,13 @@ def speech_function_formatter(dialog: Dict):
     else:
         bot_uttr = ""
         bot_function = ""
-    return [{
-        "phrases": [dialog["human_utterances"][-1]["text"]],
-        "prev_phrases": [bot_uttr],
-        "prev_speech_functions": [bot_function],
-    }]
+    return [
+        {
+            "phrases": [dialog["human_utterances"][-1]["text"]],
+            "prev_phrases": [bot_uttr],
+            "prev_speech_functions": [bot_function],
+        }
+    ]
 
 
 def speech_function_bot_formatter(dialog: Dict):
@@ -1156,21 +1158,25 @@ def speech_function_bot_formatter(dialog: Dict):
         last_bot_uttr = ""
         prev_human_uttr = ""
         human_function = ""
-    return [{
-        "phrases": [last_bot_uttr],
-        "prev_phrases": [prev_human_uttr],
-        "prev_speech_functions": [human_function],
-    }]
+    return [
+        {
+            "phrases": [last_bot_uttr],
+            "prev_phrases": [prev_human_uttr],
+            "prev_speech_functions": [human_function],
+        }
+    ]
 
 
 def speech_function_hypotheses_formatter(dialog: Dict):
     human_function = dialog["human_utterances"][-1].get("annotations", {}).get("speech_function_classifier", "")
     hypotheses = dialog["human_utterances"][-1].get("hypotheses", [])
-    return [{
-        "phrases": [hyp["text"] for hyp in hypotheses],
-        "prev_phrases": [dialog["human_utterances"][-1]["text"]] * len(hypotheses),
-        "prev_speech_functions": [human_function] * len(hypotheses),
-    }]
+    return [
+        {
+            "phrases": [hyp["text"] for hyp in hypotheses],
+            "prev_phrases": [dialog["human_utterances"][-1]["text"]] * len(hypotheses),
+            "prev_speech_functions": [human_function] * len(hypotheses),
+        }
+    ]
 
 
 def speech_function_annotation(dialog: Dict):
