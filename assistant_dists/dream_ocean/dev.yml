@@ -117,6 +117,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
+  dff-dream-persona-chatgpt-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8137:8137
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"
@@ -144,4 +150,14 @@ services:
       - "./annotators/personality_detection:/src"
     ports:
       - 8026:8026
+  emotion-detection:
+    volumes:
+      - "./annotators/emotion_detection:/src"
+    ports:
+      - 8040:8040
+  files:
+    ports:
+      - 3000:3000
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
 version: "3.7"

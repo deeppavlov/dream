@@ -1,0 +1,9 @@
+SERVICE_PORT: 8040
+SERVICE_NAME: emotion_detection
+CUDA_VISIBLE_DEVICES: 0
+VIDEO_PRETRAINED: "microsoft/xclip-base-patch32"
+EXT_PRETRAINED: "bert-large-uncased"
+MULTIMODAL_MODEL: "final_model.pt"
+REDUNDANT_FEATURES: "redundant_features.txt"
+MODEL_PATH: "/data/"
+PREFIX: "Detect emotions:"
