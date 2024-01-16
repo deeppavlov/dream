@@ -455,7 +455,7 @@ services:
         TEXT_PRETRAINED: "bert-large-uncased"
         MODEL_PATH: "/data/emotion_detection_models/"
         MULTIMODAL_MODEL: "/data/emotion_detection_models/multimodal_model_with_early_fusion.pt"
-        REDUNDANT_FEATURES: "/data/redundant_features.txt"
+        REDUNDANT_FEATURES: "/data/redundant_feat"
       context: annotators/emotion_detection
     command: uvicorn server:app --host 0.0.0.0 --port 8040
     deploy:
