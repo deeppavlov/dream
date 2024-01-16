@@ -117,6 +117,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8145:8145
+  dff-dream-persona-chatgpt-prompted-skill:
+    volumes:
+      - "./skills/dff_template_prompted_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8137:8137
   property-extraction:
     volumes:
       - "./annotators/property_extraction:/src"
