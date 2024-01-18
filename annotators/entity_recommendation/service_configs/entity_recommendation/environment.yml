@@ -1,0 +1,4 @@
+prev_count: 5
+top_k_count: 5
+light_model_url: https://storage.yandexcloud.net/dream/model/model_best_light.pt
+light_model_path: /tmp/entity_recommendation/model_light.pt
