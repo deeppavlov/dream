@@ -8,6 +8,7 @@ from gigachat import GigaChat
 from gigachat.models import Chat
 from flask import Flask, request, jsonify
 from sentry_sdk.integrations.flask import FlaskIntegration
+from common.prompts import META_GOALS_PROMPT_RU
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
@@ -102,4 +103,36 @@ def respond():
     logger.info(f"gigachat-api result: {responses}")
     total_time = time.time() - st_time
     logger.info(f"gigachat-api exec time: {total_time:.3f}s")
+    return jsonify(responses)
+
+
+@app.route("/generate_goals", methods=["POST"])
+def generate_goals():
+    st_time = time.time()
+
+    prompts = request.json.get("prompts", None)
+    prompts = [] if prompts is None else prompts
+    configs = request.json.get("configs", None)
+    configs = [None] * len(prompts) if configs is None else configs
+    configs = [DEFAULT_CONFIGS[PRETRAINED_MODEL_NAME_OR_PATH] if el is None else el for el in configs]
+
+    gigachat_api_keys = request.json.get("gigachat_credentials", [])
+    gigachat_orgs = request.json.get("gigachat_scopes", None)
+    gigachat_orgs = [None] * len(prompts) if gigachat_orgs is None else gigachat_orgs
+
+    try:
+        responses = []
+        for gigachat_api_key, gigachat_org, prompt, config in zip(gigachat_api_keys, gigachat_orgs, prompts, configs):
+            context = ["Привет", META_GOALS_PROMPT_RU + f"\nПромпт: '''{prompt}'''\nРезультат:"]
+            goals_for_prompt = generate_responses(context, gigachat_api_key, gigachat_org, "", config)[0]
+            logger.info(f"Generated goals: `{goals_for_prompt}` for prompt: `{prompt}`")
+            responses += [goals_for_prompt]
+
+    except Exception as exc:
+        logger.info(exc)
+        sentry_sdk.capture_exception(exc)
+        responses = [""] * len(prompts)
+
+    total_time = time.time() - st_time
+    logger.info(f"gigachat-api generate_goals exec time: {total_time:.3f}s")
     return jsonify(responses)
