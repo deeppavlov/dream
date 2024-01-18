@@ -1,0 +1,25 @@
+name: gigachat
+display_name: GigaChat
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: GigaChat is a service that can interact with the user in a dialogue format, write code, 
+  create texts and pictures at the user’s request. At the same time, 
+  GigaChat considers controversial issues or provocations.
+ram_usage: 100M
+gpu_usage: null
+group: services
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://gigachat-api:8187/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/gigachat_api_lm/service_configs/gigachat-api
+date_created: '2023-12-25T09:45:32'
