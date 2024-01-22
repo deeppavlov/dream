@@ -71,4 +71,10 @@ services:
   property-extraction:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+  dnnc-intents:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
 version: '3.7'

@@ -1,0 +1,40 @@
+name: dnnc-intents
+endpoints:
+- model
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8218
+      SERVICE_NAME: dnnc_intents
+      CONFIG: classifier.json
+    context: .
+    dockerfile: ./annotators/dnnc_intents/Dockerfile
+  command: gunicorn --workers=1 server:app -b 0.0.0.0:8218 --timeout 600
+  environment:
+  - CUDA_VISIBLE_DEVICES=0
+  deploy:
+    resources:
+      limits:
+        memory: 8G
+      reservations:
+        memory: 8G
+  volumes:
+  - ./common:/src/common
+  - ./annotators/dnnc_intents:/src
+  - ~/.deeppavlov:/root/.deeppavlov
+  - ~/.deeppavlov/cache:/root/.cache
+  ports:
+  - 8218:8218
+proxy:
+  command:
+  - nginx
+  - -g
+  - daemon off;
+  build:
+    context: dp/proxy/
+    dockerfile: Dockerfile
+  environment:
+  - PROXY_PASS=dream.deeppavlov.ai:8218
+  - PORT=8218

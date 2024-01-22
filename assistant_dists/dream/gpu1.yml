@@ -75,4 +75,10 @@ services:
     restart: unless-stopped
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
+  dnnc-intents:
+    restart: unless-stopped
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+    environment:
+      - CUDA_VISIBLE_DEVICES=6
 version: '3.7'

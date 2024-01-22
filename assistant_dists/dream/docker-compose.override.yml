@@ -8,7 +8,7 @@ services:
           combined-classification:8087, fact-retrieval:8100, entity-detection:8103,
           sentence-ranker:8128, property-extraction:8136, prompt-selector:8135, openai-api-chatgpt:8145,
           dff-dream-persona-chatgpt-prompted-skill:8137, dff-dream-faq-prompted-skill:8170,
-          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059"
+          openai-api-chatgpt-16k:8167, summarization-annotator:8058, dialog-summarizer:8059,dnnc-intents:8218"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -483,5 +483,27 @@ services:
           memory: 4G
         reservations:
           memory: 4G
+
+  dnnc-intents:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8218
+        SERVICE_NAME: dnnc_intents
+        CONFIG: classifier.json
+        CLASSES: tell_joke,are_you_a_bot,meaning_of_life,oos
+      context: .
+      dockerfile: ./annotators/dnnc_intents/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8218 --timeout 600
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 8G
+
 
 version: '3.7'
