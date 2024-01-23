@@ -16,7 +16,7 @@ services:
       LANGUAGE: EN
       FALLBACK_FILE: fallbacks_dream_en.json
 
-  ranking-based-response-selector:
+  ranking-and-intent-based-response-selector:
     env_file: [ .env ]
     build:
       args:

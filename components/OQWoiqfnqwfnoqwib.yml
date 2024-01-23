@@ -1,0 +1,23 @@
+name: emotion_detection
+display_name: Emotion Detection
+component_type: null
+model_type: ML-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: Emotion detection annotator.
+ram_usage: 1G
+gpu_usage: 1G
+group: annotators
+connector:
+  protocol: http
+  timeout: 15.0
+  url: http://emotion-detection:8045/model
+dialog_formatter: state_formatters.dp_formatters:personality_catcher_formatter_dialog
+response_formatter: state_formatters.dp_formatters:simple_formatter_service
+previous_services: null
+required_previous_services: null
+state_manager_method: add_annotation
+tags: null
+endpoint: model
+service: annotators/emotion_detection/service_configs/emotion_detection
+date_created: '2023-08-28T12:12:12'

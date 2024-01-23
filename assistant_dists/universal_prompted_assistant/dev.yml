@@ -71,6 +71,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8180:8180
+  gigachat-api:
+    volumes:
+      - "./services/gigachat_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8187:8187
   anthropic-api-claude-v1:
     volumes:
       - "./services/anthropic_api_lm:/src"

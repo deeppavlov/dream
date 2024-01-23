@@ -43,7 +43,7 @@
 8037	dff-weather-skill
 8038    robot-fake-server
 8039
-8040
+8040    emotion-detection
 8041    dff-embodied-skill
 8042    embodied-sender
 8043
@@ -190,7 +190,7 @@
 8184	external-fake-server
 8185	transformers-mistral-7b-128k
 8186	dff-document-qa-transformers-llm-skill
-8187
+8187    gigachat-api
 8188
 8189
 8190

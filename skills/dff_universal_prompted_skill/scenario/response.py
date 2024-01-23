@@ -41,6 +41,7 @@ ENVVARS_TO_SEND = {
     "http://transformers-lm-vicuna13b:8168/respond": [],
     "http://transformers-lm-ruxglm:8171/respond": [],
     "http://transformers-lm-rugpt35:8178/respond": [],
+    "http://gigachat-api:8187/respond": ["GIGACHAT_CREDENTIAL", "GIGACHAT_SCOPE"],
 }
 
 

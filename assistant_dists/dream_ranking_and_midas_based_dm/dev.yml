@@ -11,12 +11,12 @@ services:
       - "./annotators/SentSeg:/src"
     ports:
       - 8011:8011
-  ranking-based-response-selector:
+  ranking-and-intent-based-response-selector:
     volumes:
-      - "./response_selectors/ranking_based_response_selector:/src"
+      - "./response_selectors/ranking_and_intent_based_response_selector:/src"
       - "./common:/src/common"
     ports:
-      - 8002:8002
+      - 8081:8081
   dff-intent-responder-skill:
     volumes:
       - "./skills/dff_intent_responder_skill:/src"
