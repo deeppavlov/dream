@@ -24,7 +24,7 @@ sentry_sdk.init(os.getenv("SENTRY_DSN"))
 SERVICE_NAME = os.getenv("SERVICE_NAME")
 SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 RANDOM_SEED = int(os.getenv("RANDOM_SEED", 2718))
-ROS_FLASK_SERVER = os.getenv("ROS_FLASK_SERVER")
+ROS_FLASK_SERVER = os.getenv("ROS_FLASK_SERVER") + '/ping'
 
 logging.basicConfig(format="%(asctime)s - %(pathname)s - %(lineno)d - %(levelname)s - %(message)s", level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -40,14 +40,19 @@ def handler(requested_data, random_seed=None):
     ctxs = load_ctxs(requested_data)
     random_seed = requested_data.get("random_seed", random_seed)  # for tests
 
+    logger.warning(f"INSIDE THE HANDLER...")
+
     responses = []
     for ctx in ctxs:
+        logger.warning("trying for ctx in ctxes...")
         try:
             # for tests
             if random_seed:
                 random.seed(int(random_seed))
             ctx = actor(ctx)
+            logger.warning("tried to get response")
             responses.append(get_response(ctx, actor))
+            logger.warning(f"got response successfully, new: {responses}")
         except Exception as exc:
             sentry_sdk.capture_exception(exc)
             logger.exception(exc)
@@ -69,7 +74,7 @@ while True:
 
 
 try:
-    test_server.run_test(handler)
+    #test_server.run_test(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
@@ -96,7 +101,9 @@ def respond():
     # import common.test_utils as t_utils; t_utils.save_to_test(request.json,"tests/lets_talk_in.json",indent=4)  # TEST
     # responses = handler(request.json, RANDOM_SEED)  # TEST
     # import common.test_utils as t_utils; t_utils.save_to_test(responses,"tests/lets_talk_out.json",indent=4)  # TEST
+    logger.info("Starting command selector")
     responses = handler(request.json)
+    logger.info("Exiting command selector")
     return jsonify(responses)
 
 

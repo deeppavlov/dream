@@ -10,6 +10,9 @@ services:
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
 
+  files:
+    image: julienmeerschart/simple-file-upload-download-server
+
   ranking-based-response-selector:
     env_file: [ .env ]
     build:
@@ -274,6 +277,8 @@ services:
           memory: 2G
 
   ros-flask-server:
+    ports:
+      - "6000:6000"
     env_file: [ .env ]
     build:
       args:

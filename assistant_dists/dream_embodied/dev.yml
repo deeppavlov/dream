@@ -108,5 +108,10 @@ services:
       - "./common:/src/common"
     ports:
       - 8036:8036
+  files:
+    ports:
+      - 3000:3000
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
 
 version: "3.7"

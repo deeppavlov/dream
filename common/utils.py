@@ -795,7 +795,9 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     default_labels = [] if default_labels is None else default_labels
     annotations = annotated_utterance.get("annotations", {})
     intents = annotations.get("intent_catcher", {})
+    logger.info(f"EXTRACTING INTENTS FROM ANNOTATIONS/DIALOG STATE: {intents}")
     detected_intents = [k for k, v in intents.items() if v.get("detected", 0) == 1]
+    logger.info(f"CONFIDENT IN: {detected_intents}")
     detected_intent_probs = {key: 1 for key in detected_intents}
     midas_intent_probs = annotations.get("midas_classification", {})
     if "combined_classification" in annotations and not midas_intent_probs:

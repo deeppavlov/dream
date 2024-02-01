@@ -18,5 +18,10 @@ def command_selector_exists_condition(ctx: Context, actor: Actor, *args, **kwarg
         which="intent_catcher",
     )
 
+    logger.info(f"COMMAND SELECTOR SKILL INTENTS BY CATCHER: {intents_by_catcher}")
+
     response_funcs = get_respond_funcs()
+
+    logger.info(f"COMMAND SELECTOR SKILL response_funcs = {response_funcs}")
+
     return bool(any([intent in response_funcs for intent in intents_by_catcher]))

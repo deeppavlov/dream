@@ -1,4 +1,6 @@
 import logging
+import requests
+import os
 from copy import deepcopy
 
 import common.dff.integration.context as int_ctx
@@ -9,6 +11,8 @@ from df_engine.core import Actor, Context
 
 
 logger = logging.getLogger(__name__)
+
+ROS_FLASK_SERVER = os.getenv("ROS_FLASK_SERVER")
 
 
 def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> str:
@@ -35,6 +39,8 @@ def command_selector_response(ctx: Context, actor: Actor, *args, **kwargs) -> st
         logger.info(f"Response: {response}; intent_name: {intention}")
         try:
             response += " #+#{}".format(intention)
+            logger.debug(f"senging {intention} to {ROS_FLASK_SERVER}/perform_command...")
+            requests.post(ROS_FLASK_SERVER + '/perform_command', json={'command': intention})
         except TypeError:
             logger.error(f"TypeError intent_name: {intention} response: {response};")
             response = "Hmmm... #+#{}".format(intention)
@@ -79,3 +85,4 @@ def get_detected_intents(annotated_utterance):
                 intent, confidence = intent_name, float(confidence_current)
 
     return intent, confidence
+

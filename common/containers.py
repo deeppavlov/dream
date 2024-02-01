@@ -1,8 +1,10 @@
 import requests
+import logging
 
 
 def is_container_running(model_url, timeout=4):
     new_url = "/".join(model_url.split("/")[:-1]) + "/ping"
+    logging.info(f"pinging {new_url}, {model_url.split('/')[:-1]}")
     try:
         response = requests.post(new_url, timeout=timeout)
         if response.status_code == 200:
