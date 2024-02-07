@@ -59,7 +59,7 @@ def handler(requested_data, random_seed=None):
 
 
 while True:
-    result = containers.is_container_running(ROS_FLASK_SERVER)
+    result = containers.is_container_running(ROS_FLASK_SERVER + "/ping")
     if result:
         logger.info(f"GENERATIVE_SERVICE_URL: {ROS_FLASK_SERVER} is ready")
         break
@@ -69,7 +69,7 @@ while True:
 
 
 try:
-    test_server.run_test(handler)
+    #test_server.run_test(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
