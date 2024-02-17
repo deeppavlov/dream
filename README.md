@@ -1,6 +1,6 @@
 # DeepPavlov Dream
 
-**DeepPavlov Dream** is a platform for creating generative AI multi-skill chatbots.
+**DeepPavlov Dream** is a platform for creating multi-skill generative AI assistants.
 
 To learn more about the platform and how to build AI assistants with it, please visit [Dream](https://dream.deeppavlov.ai/). If you want to learn more about DeepPavlov Agent that powers Dream visit [DeepPavlov Agent documentation](https://deeppavlov-agent.readthedocs.io).
 
