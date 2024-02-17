@@ -2,7 +2,7 @@
 
 **DeepPavlov Dream** is a platform for creating generative AI multi-skill chatbots.
 
-To get architecture documentation, please refer to DeepPavlov Agent [readthedocs documentation](https://deeppavlov-agent.readthedocs.io).
+To learn more about the platform and how to build AI assistants with it, please visit [Dream](https://dream.deeppavlov.ai/). If you want to learn more about DeepPavlov Agent that powers Dream visit [DeepPavlov Agent documentation](https://deeppavlov-agent.readthedocs.io).
 
 # Star History
 [![Star History Chart](https://api.star-history.com/svg?repos=deeppavlov/dream&type=Date)](https://star-history.com/#deeppavlov/dream&Date)
