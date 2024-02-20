@@ -1,0 +1,8 @@
+WAIT_HOSTS: prompt-selector-ru:8135, dialogrpt-ru:8122, dff-jtjcrpd68is1-prompted-skill:8199,
+  ranking-based-response-selector-ru:8002
+WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+HIGH_PRIORITY_INTENTS: 1
+RESTRICTION_FOR_SENSITIVE_CASE: 1
+ALWAYS_TURN_ON_ALL_SKILLS: 0
+LANGUAGE: RU
+FALLBACK_FILE: fallbacks_dream_ru.json
