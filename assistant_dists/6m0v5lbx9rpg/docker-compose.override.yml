@@ -1,0 +1,139 @@
+services:
+  agent:
+    build:
+      args:
+        WAIT_HOSTS: prompt-selector-ru:8135, dialogrpt-ru:8122, dff-xxl6lh5ldvjr-prompted-skill:8199,
+          ranking-based-response-selector-ru:8002
+        WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+        HIGH_PRIORITY_INTENTS: 1
+        RESTRICTION_FOR_SENSITIVE_CASE: 1
+        ALWAYS_TURN_ON_ALL_SKILLS: 0
+        LANGUAGE: RU
+        FALLBACK_FILE: fallbacks_dream_ru.json
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/6m0v5lbx9rpg/pipeline_conf.json'
+    environment:
+      WAIT_HOSTS: prompt-selector-ru:8135, dialogrpt-ru:8122, dff-xxl6lh5ldvjr-prompted-skill:8199,
+        ranking-based-response-selector-ru:8002
+      WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
+      HIGH_PRIORITY_INTENTS: 1
+      RESTRICTION_FOR_SENSITIVE_CASE: 1
+      ALWAYS_TURN_ON_ALL_SKILLS: 0
+      LANGUAGE: RU
+      FALLBACK_FILE: fallbacks_dream_ru.json
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+        reservations:
+          memory: 200M
+  prompt-selector-ru:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8135
+        SERVICE_NAME: prompt_selector
+        N_SENTENCES_TO_RETURN: 3
+        PROMPTS_TO_CONSIDER: xxl6lh5ldvjr
+        FLASK_APP: server
+      context: .
+      dockerfile: annotators/prompt_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8135
+    environment:
+      SERVICE_PORT: 8135
+      SERVICE_NAME: prompt_selector
+      N_SENTENCES_TO_RETURN: 3
+      PROMPTS_TO_CONSIDER: xxl6lh5ldvjr
+      FLASK_APP: server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+  dialogrpt-ru:
+    env_file:
+    - .env_ru
+    build:
+      args:
+        SERVICE_PORT: 8122
+        PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+        TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
+        CUDA_VISIBLE_DEVICES: '0'
+        FLASK_APP: server
+      context: services/dialogrpt_ru
+    command: flask run -h 0.0.0.0 -p 8122
+    environment:
+      SERVICE_PORT: 8122
+      PRETRAINED_MODEL_FNAME: dialogrpt_ru_ckpt_v0.pth
+      TOKENIZER_NAME_OR_PATH: DeepPavlov/rudialogpt3_medium_based_on_gpt2_v2
+      CUDA_VISIBLE_DEVICES: '0'
+      FLASK_APP: server
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 4G
+  dff-xxl6lh5ldvjr-prompted-skill:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8199
+        SERVICE_NAME: dff_xxl6lh5ldvjr_prompted_skill
+        PROMPT_FILE: common/prompts/xxl6lh5ldvjr.json
+        GENERATIVE_SERVICE_URL: http://gigachat-api:8187/respond
+        GENERATIVE_SERVICE_CONFIG: xxl6lh5ldvjr.json
+        GENERATIVE_TIMEOUT: 120
+        N_UTTERANCES_CONTEXT: 7
+        ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION,GIGACHAT_CREDENTIAL,GIGACHAT_SCOPE
+      context: .
+      dockerfile: skills/dff_template_prompted_skill/Dockerfile
+    environment:
+      SERVICE_PORT: 8199
+      SERVICE_NAME: dff_xxl6lh5ldvjr_prompted_skill
+      PROMPT_FILE: common/prompts/xxl6lh5ldvjr.json
+      GENERATIVE_SERVICE_URL: http://gigachat-api:8187/respond
+      GENERATIVE_SERVICE_CONFIG: xxl6lh5ldvjr.json
+      GENERATIVE_TIMEOUT: 120
+      N_UTTERANCES_CONTEXT: 7
+      ENVVARS_TO_SEND: OPENAI_API_KEY,OPENAI_ORGANIZATION,GIGACHAT_CREDENTIAL,GIGACHAT_SCOPE
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 128M
+  ranking-based-response-selector-ru:
+    env_file:
+    - .env
+    build:
+      args:
+        SERVICE_PORT: 8002
+        SERVICE_NAME: response_selector
+        SENTENCE_RANKER_ANNOTATION_NAME: dialogrpt
+        SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+        SENTENCE_RANKER_TIMEOUT: 3
+        N_UTTERANCES_CONTEXT: 5
+        FILTER_TOXIC_OR_BADLISTED: 1
+        FLASK_APP: server
+      context: .
+      dockerfile: response_selectors/ranking_based_response_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8002
+    environment:
+      SERVICE_PORT: 8002
+      SERVICE_NAME: response_selector
+      SENTENCE_RANKER_ANNOTATION_NAME: dialogrpt
+      SENTENCE_RANKER_SERVICE_URL: http://dialogrpt-ru:8122/rank_sentences
+      SENTENCE_RANKER_TIMEOUT: 3
+      N_UTTERANCES_CONTEXT: 5
+      FILTER_TOXIC_OR_BADLISTED: 1
+      FLASK_APP: server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
+version: '3.7'
