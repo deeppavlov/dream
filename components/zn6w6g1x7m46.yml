@@ -1,0 +1,36 @@
+name: dff_o780f9k8cdh0_prompted_skill
+display_name: "\u0412\u0432\u043E\u0434\u043D\u0430\u044F \u0438\u043D\u0444\u043E\
+  \u0440\u043C\u0430\u0446\u0438\u044F \u043E \u043C\u0435\u0441\u0442\u0435 \u0440\
+  \u0430\u0431\u043E\u0442\u044B"
+component_type: Generative
+model_type: NN-based
+is_customizable: true
+author: rafil.galimzyanov.00@bk.ru
+description: "\u0420\u0430\u0441\u0441\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u0442\
+  \ \u043E \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438 \u0432 \u0446\u0435\u043B\
+  \u043E\u043C \u0438 \u0434\u043E\u043B\u0436\u043D\u043E\u0441\u0442\u0438 \u043D\
+  \u043E\u0432\u043E\u0433\u043E \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A\
+  \u0430 \u0432 \u0447\u0430\u0441\u0442\u043D\u043E\u0441\u0442\u0438."
+ram_usage: 150M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 20.0
+  url: http://dff-o780f9k8cdh0-prompted-skill:8199/respond
+  class_name: null
+  response_text: null
+  annotations: null
+  annotator_names: null
+dialog_formatter:
+  name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+  skill_name: dff_o780f9k8cdh0_prompted_skill
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_template_prompted_skill/service_configs/dff_o780f9k8cdh0_prompted_skill
+date_created: '2024-02-19T20:28:16'
