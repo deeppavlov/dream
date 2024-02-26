@@ -18,7 +18,7 @@ connector:
   annotator_names: null
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
-  skill_name: dff_intercultural_understanding_prompted_skill
+  skill_name: dff_time_manager_prompted_skill
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors
