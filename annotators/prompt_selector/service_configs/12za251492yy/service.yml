@@ -1,0 +1,28 @@
+name: 12za251492yy
+endpoints:
+- respond
+compose:
+  image: null
+  volumes:
+  - ./annotators/prompt_selector:/src
+  - ./common:/src/common
+  env_file:
+  - .env
+  build:
+    args: null
+    context: .
+    dockerfile: annotators/prompt_selector/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8135
+  environment: null
+  deploy:
+    mode: null
+    replicas: null
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  tty: null
+  ports:
+  - 8135:8135
+proxy: null

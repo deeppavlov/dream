@@ -1,0 +1,22 @@
+name: bg2b2gl28he9
+endpoints:
+- respond
+compose:
+  image: null
+  volumes:
+  - .:/dp-agent
+  env_file: null
+  build: null
+  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/5cjv9h4831a8/pipeline_conf.json'
+  environment: null
+  deploy:
+    mode: null
+    replicas: null
+    resources:
+      limits:
+        memory: 200M
+      reservations:
+        memory: 200M
+  tty: null
+  ports: null
+proxy: null

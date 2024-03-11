@@ -1,0 +1,234 @@
+{
+    "services": {
+        "last_chance_service": {
+            "group": "last_chance_service",
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                        "segments": [
+                            "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443.",
+                            "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "last_chance"
+            ],
+            "endpoint": "respond",
+            "is_enabled": true,
+            "source": {
+                "component": "components/d49098pusmbe.yml",
+                "service": "services/agent_services/service_configs/iqbyc19q91gw"
+            }
+        },
+        "timeout_service": {
+            "group": "timeout_service",
+            "connector": {
+                "protocol": "python",
+                "class_name": "PredefinedTextConnector",
+                "response_text": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                "annotations": {
+                    "sentseg": {
+                        "punct_sent": "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443.",
+                        "segments": [
+                            "\u0418\u0437\u0432\u0438\u043d\u0438, \u0447\u0442\u043e-\u0442\u043e \u043f\u043e\u0448\u043b\u043e \u043d\u0435 \u0442\u0430\u043a \u0432 \u043c\u043e\u0435\u043c \u043c\u043e\u0437\u0433\u0443.",
+                            "\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043f\u043e\u0432\u0442\u043e\u0440\u0438 \u043f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0443\u044e \u0440\u0435\u043f\u043b\u0438\u043a\u0443."
+                        ]
+                    }
+                }
+            },
+            "state_manager_method": "add_bot_utterance_last_chance",
+            "tags": [
+                "timeout"
+            ],
+            "endpoint": "respond",
+            "is_enabled": true,
+            "source": {
+                "component": "components/xyn93nxm2c01.yml",
+                "service": "services/agent_services/service_configs/iqbyc19q91gw"
+            }
+        },
+        "annotators": {
+            "prompt_goals_collector": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector-ru:8135/collect_goals"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:prompts_goals_collector_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "update_attributes",
+                "endpoint": "collect_goals",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/k3j2h498hvflekdfdfbfgh34r.yml",
+                    "service": "annotators/prompt_selector/service_configs/prompt-selector-ru"
+                }
+            },
+            "prompt_selector": {
+                "group": "annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector-ru:8135/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "state_manager_method": "add_annotation",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/cydxihwddiwr.yml",
+                    "service": "annotators/prompt_selector/service_configs/i9hs2fke2h0b"
+                }
+            }
+        },
+        "response_annotators": {},
+        "response_annotator_selectors": {
+            "group": "response_annotator_selectors",
+            "connector": {
+                "protocol": "python",
+                "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
+                "annotator_names": [
+                    "sentseg"
+                ]
+            },
+            "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+            "tags": [
+                "selector"
+            ],
+            "is_enabled": true,
+            "source": {
+                "component": "components/LXrJDIf43gwNmPMNXG5Eg.yml",
+                "service": "services/response_annotator_selectors/service_configs/agent"
+            }
+        },
+        "candidate_annotators": {
+            "dialogrpt": {
+                "group": "candidate_annotators",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://dialogrpt-ru:8122/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_with_context_list",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "skills"
+                ],
+                "state_manager_method": "add_hypothesis_annotation_batch",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/DUW2u7FwPMyhBOWrK1HTg.yml",
+                    "service": "services/dialogrpt_ru/service_configs/dialogrpt-ru"
+                }
+            }
+        },
+        "skill_selectors": {
+            "description_based_skill_selector": {
+                "group": "skill_selectors",
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skill_selectors.description_based_skill_selector.connector:DescriptionBasedSkillSelectorConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:base_skill_selector_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators"
+                ],
+                "tags": [
+                    "selector"
+                ],
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/dfsw4bji8bgjq2.yml",
+                    "service": "skill_selectors/description_based_skill_selector/service_configs/agent"
+                }
+            }
+        },
+        "skills": {
+            "dummy_skill": {
+                "group": "skills",
+                "connector": {
+                    "protocol": "python",
+                    "class_name": "skills.dummy_skill.connector:DummySkillConnector"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:utt_sentrewrite_modified_last_dialog",
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/uYkoK0vRp4bbIg9akI1yw.yml",
+                    "service": "skills/dummy_skill/service_configs/agent"
+                }
+            },
+            "dff_p3diuwwf0xdb_prompted_skill": {
+                "group": "skills",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 20.0,
+                    "url": "http://dff-p3diuwwf0xdb-prompted-skill:8199/respond"
+                },
+                "dialog_formatter": {
+                    "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
+                    "skill_name": "dff_p3diuwwf0xdb_prompted_skill"
+                },
+                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
+                "previous_services": [
+                    "skill_selectors"
+                ],
+                "state_manager_method": "add_hypothesis",
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/qyaj9xru71ec.yml",
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff_p3diuwwf0xdb_prompted_skill"
+                }
+            }
+        },
+        "response_selectors": {
+            "response_selector": {
+                "group": "response_selectors",
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://ranking-based-response-selector-ru:8002/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:cropped_dialog",
+                "response_formatter": "state_formatters.dp_formatters:base_response_selector_formatter_service",
+                "previous_services": [
+                    "candidate_annotators"
+                ],
+                "state_manager_method": "add_bot_utterance",
+                "tags": [
+                    "selector"
+                ],
+                "endpoint": "respond",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/hE12LfxAkX3K9gU0nU4yE2.yml",
+                    "service": "response_selectors/ranking_based_response_selector/service_configs/ranking-based-response-selector-ru"
+                }
+            }
+        },
+        "actors": {}
+    },
+    "metadata": {
+        "display_name": "\u0410\u0441\u0441\u0438\u0441\u0442\u0435\u043d\u0442 \u0434\u043b\u044f \u0434\u0435\u043b\u043e\u0432\u043e\u0439 \u043f\u0435\u0440\u0435\u043f\u0438\u0441\u043a\u0438",
+        "author": "DeepPavlov",
+        "description": "\u0414\u0430\u043d\u043d\u044b\u0439 \u0430\u0441\u0441\u0438\u0441\u0442\u0435\u043d\u0442 \u043f\u0440\u0438\u0437\u0432\u0430\u043d \u0443\u043f\u0440\u043e\u0449\u0430\u0442\u044c \u0434\u0435\u043b\u043e\u0432\u043e\u0435 \u043e\u0431\u0449\u0435\u043d\u0438\u0435 - \u043e\u043d \u043c\u043e\u0436\u0435\u0442 \u0440\u0435\u0444\u0435\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0434\u043b\u0438\u043d\u043d\u044b\u0435 \u043f\u0438\u0441\u044c\u043c\u0430, \u0438\u0437\u0432\u043b\u0435\u043a\u0430\u0442\u044c \u043d\u0443\u0436\u043d\u0443\u044e \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044e \u0438\u0437 \u043f\u0438\u0441\u044c\u043c\u0430, \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0442\u044c \u0438 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043e\u0440\u0444\u043e\u0433\u0440\u0430\u0444\u0438\u044e \u0438 \u043f\u0443\u043d\u043a\u0442\u0443\u0430\u0446\u0438\u044e, \u043f\u0438\u0441\u0430\u0442\u044c \u043f\u0438\u0441\u044c\u043c\u0430 \u043f\u043e \u0442\u0435\u0437\u0438\u0441\u0430\u043c \u0438\u043b\u0438 \u0448\u0430\u0431\u043b\u043e\u043d\u0443.",
+        "date_created": "2024-02-27T09:12:01"
+    }
+}
