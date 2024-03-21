@@ -4,7 +4,7 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: Prompt-based skill that utilizes Russian XGLM 4.5B to generate
+description: Prompt-based skill that utilizes GigaChat to generate
   responses based on the given Russian Dream persona description.
 ram_usage: 150M
 gpu_usage: null
