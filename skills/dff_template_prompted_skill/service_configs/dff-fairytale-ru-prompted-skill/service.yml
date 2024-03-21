@@ -14,6 +14,7 @@ compose:
       GENERATIVE_SERVICE_CONFIG: gigachat.json
       GENERATIVE_TIMEOUT: 20
       N_UTTERANCES_CONTEXT: 3
+      ENVVARS_TO_SEND: GIGACHAT_CREDENTIAL,GIGACHAT_SCOPE
     context: .
     dockerfile: ./skills/dff_template_prompted_skill/Dockerfile
   deploy:
