@@ -1156,6 +1156,15 @@ def dff_voice_skill_formatter(dialog, skill_name="dff_voice_skill"):
         wanted_keys=["text", "annotations", "sound_path", "sound_duration", "sound_type", "caption"],
     )
 
+def vidchapters_service_formatter(dialog: Dict) -> List[Dict]:
+    return [
+        {
+            "video_paths": [dialog["human_utterances"][-1]["attributes"].get("video_path")]
+        }
+    ]
+
+def dff_vidchapters_skill_formatter(dialog: Dict) -> List[Dict]:
+    return utils.dff_formatter(dialog, "dff_vidchapters_skill", wanted_keys=["text", "annotations", "chapters"])
 
 def dff_image_skill_formatter(dialog: Dict) -> List[Dict]:
     return utils.dff_formatter(dialog, "dff_image_skill")

@@ -72,4 +72,17 @@ services:
       - "./common:/src/common"
     ports:
       - 8070:8070
+  vidchapters-service:
+    volumes:
+      - "./services/dialogpt:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 2121:2121
+  dff-vidchapters-skill:
+    volumes:
+      - "./skills/dff_vidchapters_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 2122:2122
 version: "3.7"

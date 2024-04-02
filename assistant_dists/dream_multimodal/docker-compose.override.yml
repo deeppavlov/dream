@@ -5,7 +5,8 @@ services:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, ranking-based-response-selector:8002,
           dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
           dialogpt:8125, sentence-ranker:8128,
-          fromage:8069, dff-fromage-image-skill:8070"
+          fromage:8069, dff-fromage-image-skill:8070,
+          vidchapters-service: 2121, dff-vidchapters-skill: 2122"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -203,4 +204,40 @@ services:
           memory: 100M
         reservations:
           memory: 100M
+  
+  vidchapters-service:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 2121
+        SERVICE_NAME: vidchapters_service
+        RET_SCALE_FACTOR: 0
+      context: .
+      dockerfile: ./services/vidchapters_service/Dockerfile
+    command: flask run -h 0.0.0.0 -p 2121
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 45G
+        reservations:
+          memory: 45G
+
+  dff-vidchapters-skill:
+    env_file: [.env]
+    build:
+      args:
+        SERVICE_PORT: 2122
+        SERVICE_NAME: dff_vidchapters_skill
+      context: .
+      dockerfile: ./skills/dff_vidchapters_skill/Dockerfile
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:2122 --reload
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M  
 version: '3.7'
