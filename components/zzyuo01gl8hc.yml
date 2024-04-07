@@ -1,4 +1,4 @@
-name: dff_s9qkdg4i9g01_prompted_skill
+name: dff_marketing_strategy_prompted_skill
 display_name: "\u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430 \u043C\
   \u0430\u0440\u043A\u0435\u0442\u0438\u043D\u0433\u043E\u0432\u043E\u0439 \u0441\u0442\
   \u0440\u0430\u0442\u0435\u0433\u0438\u0438"
@@ -17,14 +17,14 @@ group: skills
 connector:
   protocol: http
   timeout: 20.0
-  url: http://dff-s9qkdg4i9g01-prompted-skill:8199/respond
+  url: http://dff-marketing-strategy-prompted-skill:8199/respond
   class_name: null
   response_text: null
   annotations: null
   annotator_names: null
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
-  skill_name: dff_s9qkdg4i9g01_prompted_skill
+  skill_name: dff_marketing_strategy_prompted_skill
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors
@@ -32,5 +32,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_template_prompted_skill/service_configs/dff_s9qkdg4i9g01_prompted_skill
+service: skills/dff_template_prompted_skill/service_configs/dff_marketing_strategy_prompted_skill
 date_created: '2024-02-19T20:31:40'
