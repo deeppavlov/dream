@@ -1,4 +1,4 @@
-name: dff_adzau1psfzgf_prompted_skill
+name: dff_plans_prompted_skill
 display_name: "\u0421\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u0438\u0435\
   \ \u043F\u0443\u043D\u043A\u0442\u043E\u0432 \u043F\u043B\u0430\u043D\u0430"
 component_type: Generative
@@ -16,14 +16,14 @@ group: skills
 connector:
   protocol: http
   timeout: 20.0
-  url: http://dff-adzau1psfzgf-prompted-skill:8199/respond
+  url: http://dff-plans-prompted-skill:8199/respond
   class_name: null
   response_text: null
   annotations: null
   annotator_names: null
 dialog_formatter:
   name: state_formatters.dp_formatters:dff_prompted_skill_formatter
-  skill_name: dff_adzau1psfzgf_prompted_skill
+  skill_name: dff_plans_prompted_skill
 response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
 previous_services:
 - skill_selectors
@@ -31,5 +31,5 @@ required_previous_services: null
 state_manager_method: add_hypothesis
 tags: null
 endpoint: respond
-service: skills/dff_template_prompted_skill/service_configs/dff_adzau1psfzgf_prompted_skill
+service: skills/dff_template_prompted_skill/service_configs/dff_plans_prompted_skill
 date_created: '2024-02-19T20:24:15'

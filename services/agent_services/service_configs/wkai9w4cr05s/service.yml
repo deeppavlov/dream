@@ -7,7 +7,7 @@ compose:
   - .:/dp-agent
   env_file: null
   build: null
-  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/slv7hbc5d921/pipeline_conf.json'
+  command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/project_manager/pipeline_conf.json'
   environment: null
   deploy:
     mode: null
