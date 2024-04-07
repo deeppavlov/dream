@@ -1,4 +1,4 @@
-name: dff_vs8v91cf94yl_prompted_skill
+name: dff_text_writer_prompted_skill
 endpoints:
 - respond
 compose:
