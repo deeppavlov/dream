@@ -2,7 +2,7 @@ services:
   agent:
     build:
       args:
-        WAIT_HOSTS: prompt-selector-ru:8135, dialogrpt-ru:8122, dff-jtjcrpd68is1-prompted-skill:8199,
+        WAIT_HOSTS: prompt-selector-ru:8135, dialogrpt-ru:8122, dff-ideas-generator-prompted-skill:8199,
           ranking-based-response-selector-ru:8002
         WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
         HIGH_PRIORITY_INTENTS: 1
@@ -10,9 +10,9 @@ services:
         ALWAYS_TURN_ON_ALL_SKILLS: 0
         LANGUAGE: RU
         FALLBACK_FILE: fallbacks_dream_ru.json
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/5cjv9h4831a8/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/marketing_ru_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: prompt-selector-ru:8135, dialogrpt-ru:8122, dff-jtjcrpd68is1-prompted-skill:8199,
+      WAIT_HOSTS: prompt-selector-ru:8135, dialogrpt-ru:8122, dff-ideas-generator-prompted-skill:8199,
         ranking-based-response-selector-ru:8002
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
@@ -75,13 +75,13 @@ services:
           memory: 4G
         reservations:
           memory: 4G
-  dff-jtjcrpd68is1-prompted-skill:
+  dff-ideas-generator-prompted-skill:
     env_file:
     - .env
     build:
       args:
         SERVICE_PORT: 8199
-        SERVICE_NAME: dff_jtjcrpd68is1_prompted_skill
+        SERVICE_NAME: dff_ideas_generator_prompted_skill
         PROMPT_FILE: common/prompts/jtjcrpd68is1.json
         GENERATIVE_SERVICE_URL: http://gigachat-api:8187/respond
         GENERATIVE_SERVICE_CONFIG: jtjcrpd68is1.json
@@ -92,7 +92,7 @@ services:
       dockerfile: skills/dff_template_prompted_skill/Dockerfile
     environment:
       SERVICE_PORT: 8199
-      SERVICE_NAME: dff_jtjcrpd68is1_prompted_skill
+      SERVICE_NAME: dff_ideas_generator_prompted_skill
       PROMPT_FILE: common/prompts/jtjcrpd68is1.json
       GENERATIVE_SERVICE_URL: http://gigachat-api:8187/respond
       GENERATIVE_SERVICE_CONFIG: jtjcrpd68is1.json

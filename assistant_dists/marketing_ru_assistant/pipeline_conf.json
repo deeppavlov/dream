@@ -174,16 +174,16 @@
                     "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
-            "dff_jtjcrpd68is1_prompted_skill": {
+            "dff_ideas_generator_prompted_skill": {
                 "group": "skills",
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
-                    "url": "http://dff-jtjcrpd68is1-prompted-skill:8199/respond"
+                    "url": "http://dff-ideas-generator-prompted-skill:8199/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_jtjcrpd68is1_prompted_skill"
+                    "skill_name": "dff_ideas_generator_prompted_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
@@ -194,7 +194,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/ffp1wgespv66.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff_jtjcrpd68is1_prompted_skill"
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff_ideas_generator_prompted_skill"
                 }
             }
         },
