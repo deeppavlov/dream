@@ -174,16 +174,16 @@
                     "service": "skills/dummy_skill/service_configs/agent"
                 }
             },
-            "dff_o780f9k8cdh0_prompted_skill": {
+            "dff_guide_prompted_skill": {
                 "group": "skills",
                 "connector": {
                     "protocol": "http",
                     "timeout": 20.0,
-                    "url": "http://dff-o780f9k8cdh0-prompted-skill:8199/respond"
+                    "url": "http://dff-guide-prompted-skill:8199/respond"
                 },
                 "dialog_formatter": {
                     "name": "state_formatters.dp_formatters:dff_prompted_skill_formatter",
-                    "skill_name": "dff_o780f9k8cdh0_prompted_skill"
+                    "skill_name": "dff_guide_prompted_skill"
                 },
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
@@ -194,7 +194,7 @@
                 "is_enabled": true,
                 "source": {
                     "component": "components/zn6w6g1x7m46.yml",
-                    "service": "skills/dff_template_prompted_skill/service_configs/dff_o780f9k8cdh0_prompted_skill"
+                    "service": "skills/dff_template_prompted_skill/service_configs/dff_guide_prompted_skill"
                 }
             }
         },
