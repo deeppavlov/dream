@@ -1,0 +1,30 @@
+name: dff_text_editing_prompted_skill
+display_name: "Редактирование текста (иностранный язык)"
+component_type: Generative
+model_type: NN-based
+is_customizable: true
+author: publisher@deeppavlov.ai
+description: "Данный навык анализирует текст на иностранном языке, выявляя и исправляя грамматические ошибки, а также предлагая альтернативные формулировки для улучшения четкости, стиля и выразительности текста. Способствует повышению качества коммуникации и эффективности передачи информации, обеспечивая точность формулировок и профессиональный языковой стиль."
+ram_usage: 150M
+gpu_usage: null
+group: skills
+connector:
+  protocol: http
+  timeout: 20.0
+  url: http://dff-text-editing-prompted-skill:8199/respond
+  class_name: null
+  response_text: null
+  annotations: null
+  annotator_names: null
+dialog_formatter:
+  name: state_formatters.dp_formatters:dff_prompted_skill_formatter
+  skill_name: dff_text_editing_prompted_skill
+response_formatter: state_formatters.dp_formatters:skill_with_attributes_formatter_service
+previous_services:
+- skill_selectors
+required_previous_services: null
+state_manager_method: add_hypothesis
+tags: null
+endpoint: respond
+service: skills/dff_template_prompted_skill/service_configs/dff_text_editing_prompted_skill
+date_created: '2024-02-19T20:32:28'
