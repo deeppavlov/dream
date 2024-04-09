@@ -264,6 +264,9 @@ class RuleBasedSkillSelectorConnector:
 
                 if user_uttr["attributes"].get("sound_path") is not None:
                     skills_for_uttr.append("dff_voice_skill")
+                
+                if user_uttr["attributes"].get("video_paths") is not None:
+                    skills_for_uttr.append("dff_vidchapters_skill")
 
             # NOW IT IS NOT ONLY FOR USUAL CONVERSATION BUT ALSO FOR SENSITIVE/HIGH PRIORITY INTENTS/ETC
 

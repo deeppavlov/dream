@@ -1,14 +1,23 @@
 import logging
+import common.dff.integration.context as int_ctx
 
-from dff.script import Context
+from df_engine.core import Context, Actor
 
 
 logger = logging.getLogger(__name__)
-# ....
 
 
-def example_response(reply: str):
-    def example_response_handler(ctx: Context, _) -> str:
-        return reply
+def chapters(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) -> str:
+    chapters = (
+        int_ctx.get_last_human_utterance(ctx, actor)
+        .get("annotations", {})
+        .get("vidchapter_service", {})
+        .get("video_captioning", "Error") # normally video_captioning is a dict 
+    )
 
-    return example_response_handler
+    error_response = "I couldn't caption the video in your message, please try again with another file"
+    success_response = f"There are {chapters} in that video"
+
+    rsp = error_response if chapters == "Error" else success_response
+
+    return rsp

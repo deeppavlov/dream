@@ -1,16 +1,14 @@
 import logging
 
-from dff.script import Context
-from dff.pipeline import Pipeline
-
-from common.dff_api_v1.integration import condition as int_cnd
+from df_engine.core import Context, Actor
+import common.dff.integration.context as int_ctx
 
 logger = logging.getLogger(__name__)
-# ....
 
 
-def example_lets_talk_about():
-    def example_lets_talk_about_handler(ctx: Context, pipeline: Pipeline) -> str:
-        return int_cnd.is_lets_chat_about_topic_human_initiative(ctx, pipeline)
-
-    return example_lets_talk_about_handler
+def video_detected(ctx: Context, actor: Actor, *args, **kwargs) -> bool:
+    video_captioning = int_ctx.get_last_human_utterance(ctx, actor).get("annotations", {}).get("vidchapters_service", {})
+    logger.info(f"CONDITION.PY VOICE: {video_captioning}")
+    if video_captioning.get("chapters", "Error") != "Error":
+        return True
+    return False
