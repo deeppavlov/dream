@@ -1,5 +1,5 @@
 name: gigachat
-display_name: GigaChat
+display_name: GigaChat Lite
 component_type: Generative
 model_type: NN-based
 is_customizable: false

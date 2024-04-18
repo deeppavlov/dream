@@ -191,6 +191,6 @@
 8185	transformers-mistral-7b-128k
 8186	dff-document-qa-transformers-llm-skill
 8187    gigachat-api
-8188
-8189
+8188    gigachat-pro-api
+8189    gigachat-plus-api
 8190

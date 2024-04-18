@@ -24,7 +24,9 @@ GIGACHAT_ROLES = ["assistant", "user"]
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 DEFAULT_CONFIGS = {
-    "GigaChat:1.3.23.1": json.load(open("common/generative_configs/gigachat.json", "r")),
+    "GigaChat": json.load(open("common/generative_configs/gigachat.json", "r")),
+    "GigaChat-Pro": json.load(open("common/generative_configs/gigachat.json", "r")),
+    "GigaChat-Plus": json.load(open("common/generative_configs/gigachat_plus.json", "r")),
 }
 
 

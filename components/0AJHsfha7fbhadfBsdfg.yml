@@ -1,0 +1,24 @@
+name: gigachat-plus
+display_name: GigaChat-Plus
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: The model is suitable for tasks that require processing a large amount of data. 
+  For example, summarizing articles or call transcriptions, extracting information from documents
+ram_usage: 100M
+gpu_usage: null
+group: services
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://gigachat-plus-api:8189/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/gigachat_api_lm/service_configs/gigachat-plus-api
+date_created: '2023-12-25T09:45:32'
