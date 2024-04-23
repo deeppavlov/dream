@@ -73,6 +73,18 @@ services:
       - "./common:/src/common"
     ports:
       - 8187:8187
+  gigachat-pro-api:
+    volumes:
+      - "./services/gigachat_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8188:8188
+  gigachat-plus-api:
+    volumes:
+      - "./services/gigachat_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8189:8189
   dff-universal-ru-prompted-skill:
     volumes:
       - "./skills/dff_universal_prompted_skill:/src"

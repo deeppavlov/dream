@@ -1,0 +1,24 @@
+name: gigachat-pro
+display_name: GigaChat-Pro
+component_type: Generative
+model_type: NN-based
+is_customizable: false
+author: publisher@deeppavlov.ai
+description: GigaChat Pro is suitable for complex, highly specialized tasks, 
+  as it follows instructions better and can perform more complex tasks.
+ram_usage: 100M
+gpu_usage: null
+group: services
+connector:
+  protocol: http
+  timeout: 120.0
+  url: http://gigachat-pro-api:8188/respond
+dialog_formatter: null
+response_formatter: null
+previous_services: null
+required_previous_services: null
+state_manager_method: null
+tags: null
+endpoint: respond
+service: services/gigachat_api_lm/service_configs/gigachat-pro-api
+date_created: '2023-12-25T09:45:32'
