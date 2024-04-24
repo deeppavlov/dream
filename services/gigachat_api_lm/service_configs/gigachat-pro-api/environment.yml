@@ -1,0 +1,4 @@
+SERVICE_PORT: 8188
+SERVICE_NAME: gigachat_pro_api
+PRETRAINED_MODEL_NAME_OR_PATH: GigaChat-Pro
+FLASK_APP: server

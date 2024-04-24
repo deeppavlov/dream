@@ -1,4 +1,4 @@
-name: gigachat-api
+name: gigachat-pro-api
 endpoints:
 - respond
 - generate_goals
@@ -7,12 +7,12 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8187
-      SERVICE_NAME: gigachat_api
-      PRETRAINED_MODEL_NAME_OR_PATH: GigaChat
+      SERVICE_PORT: 8188
+      SERVICE_NAME: gigachat_pro_api
+      PRETRAINED_MODEL_NAME_OR_PATH: GigaChat-Pro
     context: .
     dockerfile: ./services/gigachat_api_lm/Dockerfile
-  command: flask run -h 0.0.0.0 -p 8187
+  command: flask run -h 0.0.0.0 -p 8188
   environment:
   - FLASK_APP=server
   deploy:
@@ -25,5 +25,5 @@ compose:
   - ./services/gigachat_api_lm:/src
   - ./common:/src/common
   ports:
-  - 8187:8187
+  - 8188:8188
 proxy: null
