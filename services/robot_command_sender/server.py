@@ -3,7 +3,7 @@ import time
 from os import getenv
 
 import sentry_sdk
-from common.robot import send_robot_command_to_perform
+from common.robo_integration import send_robot_command_to_perform
 from flask import Flask, request, jsonify
 
 

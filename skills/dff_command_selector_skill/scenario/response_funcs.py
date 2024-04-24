@@ -113,10 +113,10 @@ def move_forward_respond(ctx: Context, actor: Actor):
         else:
             response = "Moving forward."
 
-    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        return response, 1.0, {}, {}, {"command_to_perform": command}
-    else:
-        return ""
+    #if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+    #else:
+    #    return ""
 
 
 def move_backward_respond(ctx: Context, actor: Actor):
@@ -135,10 +135,10 @@ def move_backward_respond(ctx: Context, actor: Actor):
         else:
             response = "Moving backward."
 
-    if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
-        return response, 1.0, {}, {}, {"command_to_perform": command}
-    else:
-        return ""
+    # if check_if_valid_robot_command(command, ROS_FLASK_SERVER, dialog_id=int_ctx.get_dialog_id(ctx, actor)):
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+    # else:
+    #     return ""
 
 
 def open_door_respond(ctx: Context, actor: Actor):
