@@ -3,7 +3,7 @@ display_name: Russian Dream Persona Skill
 component_type: Generative
 model_type: NN-based
 is_customizable: true
-author: rafil.galimzyanov.00@bk.ru
+author: publisher@deeppavlov.ai
 description: Prompt-based skill that utilizes Russian XGLM 4.5B to generate responses
   based on the given Russian Dream persona description.
 ram_usage: 150M

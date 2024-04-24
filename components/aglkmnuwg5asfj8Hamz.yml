@@ -1,10 +1,11 @@
 name: dff_text_summarization_prompted_skill
-display_name: "Суммаризация текста"
+display_name: Суммаризация текста
 component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: "Обобщает и кратко излагает ключевые идеи, информацию или текст, сокращая объем, но сохраняя основное содержание."
+description: Обобщает и кратко излагает ключевые идеи, информацию или текст, сокращая
+  объем, но сохраняя основное содержание.
 ram_usage: 150M
 gpu_usage: null
 group: skills

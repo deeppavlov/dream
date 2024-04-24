@@ -4,9 +4,10 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: This skill is part of the KG Prompted pipeline. It generates responses using a language model 
-  based on the dialog context and the given prompt. The info about the bot is added to the prompt 
-  in case relevant knowledge to the user's utterance is found in bot's Knowledge Graph.
+description: This skill is part of the KG Prompted pipeline. It generates responses
+  using a language model based on the dialog context and the given prompt. The info
+  about the bot is added to the prompt in case relevant knowledge to the user's utterance
+  is found in bot's Knowledge Graph.
 ram_usage: 100M
 gpu_usage: null
 group: skills

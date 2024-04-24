@@ -4,10 +4,10 @@ component_type: null
 model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: The Ranking- and Speech Function-based Response Selector utilizes floating point
-  annotations by ranking hypotheses with a candidate annotator (e.g., Sentence Ranker),
-  scaling ranking scores with heuristics depending on entities and annotations from Speech Function Predictor,
-  and finally selecting the best ranked one.
+description: The Ranking- and Speech Function-based Response Selector utilizes floating
+  point annotations by ranking hypotheses with a candidate annotator (e.g., Sentence
+  Ranker), scaling ranking scores with heuristics depending on entities and annotations
+  from Speech Function Predictor, and finally selecting the best ranked one.
 ram_usage: 100M
 gpu_usage: null
 group: response_selectors
@@ -18,7 +18,7 @@ connector:
 dialog_formatter: state_formatters.dp_formatters:cropped_dialog
 response_formatter: state_formatters.dp_formatters:base_response_selector_formatter_service
 previous_services:
-  - candidate_annotators
+- candidate_annotators
 required_previous_services: null
 state_manager_method: add_bot_utterance
 tags: null

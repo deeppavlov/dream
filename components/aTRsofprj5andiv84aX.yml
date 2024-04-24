@@ -1,10 +1,11 @@
 name: dff_create_definitions_prompted_skill
-display_name: "Создание определений"
+display_name: Создание определений
 component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: "Формулирует ясные и точные определения для терминов, понятий или явлений, обеспечивая понимание их смысла."
+description: Формулирует ясные и точные определения для терминов, понятий или явлений,
+  обеспечивая понимание их смысла.
 ram_usage: 150M
 gpu_usage: null
 group: skills

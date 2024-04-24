@@ -15,7 +15,7 @@ connector:
   url: http://prompt-selector-ru:8135/respond
 dialog_formatter: state_formatters.dp_formatters:context_formatter_dialog
 response_formatter: state_formatters.dp_formatters:simple_formatter_service
-previous_services:
+previous_services: null
 required_previous_services: null
 state_manager_method: add_annotation
 tags: null

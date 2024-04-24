@@ -1,17 +1,11 @@
 name: dff_text_writer_prompted_skill
-display_name: "\u041D\u0430\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u0442\u0435\
-  \u043A\u0441\u0442\u043E\u0432"
+display_name: Написание текстов
 component_type: Generative
 model_type: NN-based
 is_customizable: true
-author: rafil.galimzyanov.00@bk.ru
-description: "\u041F\u0438\u0448\u0435\u0442 \u0442\u0435\u043A\u0441\u0442 \u043F\
-  \u043E \u0437\u0430\u0434\u0430\u043D\u043D\u043E\u0439 \u043F\u043E\u043B\u044C\
-  \u0437\u043E\u0432\u0430\u0442\u0435\u043B\u0435\u043C \u0442\u0435\u043C\u0435\
-  . \u0412\u043D\u043E\u0441\u0438\u0442 \u043A\u043E\u0440\u0440\u0435\u043A\u0442\
-  \u0438\u0440\u043E\u0432\u043A\u0438 \u0432 \u0442\u0435\u043A\u0441\u0442 \u043F\
-  \u043E \u0437\u0430\u043F\u0440\u043E\u0441\u0443 \u043F\u043E\u043B\u044C\u0437\
-  \u043E\u0432\u0430\u0442\u0435\u043B\u044F."
+author: publisher@deeppavlov.ai
+description: Пишет текст по заданной пользователем теме. Вносит корректировки в текст
+  по запросу пользователя.
 ram_usage: 150M
 gpu_usage: null
 group: skills

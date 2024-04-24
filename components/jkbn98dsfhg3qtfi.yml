@@ -4,8 +4,8 @@ component_type: null
 model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: Russian annotator utilizing Sentence Ranker to rank persona sentences and selecting
-  `N_SENTENCES_TO_RETURN` the most relevant sentences
+description: Russian annotator utilizing Sentence Ranker to rank persona sentences
+  and selecting `N_SENTENCES_TO_RETURN` the most relevant sentences
 ram_usage: 100M
 gpu_usage: null
 group: annotators

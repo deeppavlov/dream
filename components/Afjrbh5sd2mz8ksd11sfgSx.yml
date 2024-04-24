@@ -1,10 +1,12 @@
 name: dff_letter_writing_prompted_skill
-display_name: "Написание письма по тезисам"
+display_name: Написание письма по тезисам
 component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: "Пишет письмо по заданным пользователем тезисам, стилю и предполагаемой целевой аудитории письма. Итеративно вносит корректировки в текст письма в диалоговом режиме."
+description: Пишет письмо по заданным пользователем тезисам, стилю и предполагаемой
+  целевой аудитории письма. Итеративно вносит корректировки в текст письма в диалоговом
+  режиме.
 ram_usage: 150M
 gpu_usage: null
 group: skills
