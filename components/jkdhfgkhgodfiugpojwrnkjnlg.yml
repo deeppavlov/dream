@@ -4,12 +4,11 @@ component_type: Generative
 model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: A multilingual instruction-based large language model 
-  which is capable of code generation and other complex tasks. 
-  More capable than any GPT-3.5 model, able to do more complex tasks, 
-  and optimized for chat. Paid. 
-  You must provide your OpenAI API key to use the model. 
-  Your OpenAI account will be charged according to your usage.
+description: A multilingual instruction-based large language model which is capable
+  of code generation and other complex tasks. More capable than any GPT-3.5 model,
+  able to do more complex tasks, and optimized for chat. Paid. You must provide your
+  OpenAI API key to use the model. Your OpenAI account will be charged according to
+  your usage.
 ram_usage: 100M
 gpu_usage: null
 group: services

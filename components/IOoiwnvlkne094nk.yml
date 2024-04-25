@@ -4,7 +4,8 @@ component_type: Generative
 model_type: NN-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: Prompt-based skill that utilizes ChatGPT to generate plans of action for an embodied agent.
+description: Prompt-based skill that utilizes ChatGPT to generate plans of action
+  for an embodied agent.
 ram_usage: 150M
 gpu_usage: null
 group: skills

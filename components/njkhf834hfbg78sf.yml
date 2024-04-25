@@ -4,13 +4,11 @@ component_type: Generative
 model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: The Anthropic's largest language model which is 
-  more robust against red-team inputs, better at precise instruction-following, 
-  better at code, and better and non-English dialogue and writing.
-  For more details, refer to 
-  [Anthropic website](https://console.anthropic.com/docs/api/reference). 
-  Paid. You must provide your Anthropic API key to use the model. 
-  Your Anthropic account will be charged according to your usage.
+description: The Anthropic's largest language model which is more robust against red-team
+  inputs, better at precise instruction-following, better at code, and better and
+  non-English dialogue and writing. For more details, refer to [Anthropic website](https://console.anthropic.com/docs/api/reference).
+  Paid. You must provide your Anthropic API key to use the model. Your Anthropic account
+  will be charged according to your usage.
 ram_usage: 100M
 gpu_usage: null
 group: services

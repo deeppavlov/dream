@@ -4,10 +4,10 @@ component_type: null
 model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: The Ranking- and Intent-based Response Selector utilizes floating point 
-  annotations by ranking hypotheses with a candidate annotator (e.g., Sentence Ranker), 
-  scaling ranking scores with heuristics depending on entities and intents,
-  and finally selecting the best ranked one.
+description: The Ranking- and Intent-based Response Selector utilizes floating point
+  annotations by ranking hypotheses with a candidate annotator (e.g., Sentence Ranker),
+  scaling ranking scores with heuristics depending on entities and intents, and finally
+  selecting the best ranked one.
 ram_usage: 100M
 gpu_usage: null
 group: response_selectors

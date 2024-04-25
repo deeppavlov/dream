@@ -4,11 +4,10 @@ component_type: Generative
 model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: An open-source English-only large language model which is 
-  NOT fine-tuned for instruction following and NOT capable of code generation.
-  For more details, refer to 
-  [HuggingFace Model Page](https://huggingface.co/EleutherAI/gpt-j-6b). 
-  Free of charge. This model is up and running on our servers and can be used for free.
+description: An open-source English-only large language model which is NOT fine-tuned
+  for instruction following and NOT capable of code generation. For more details,
+  refer to [HuggingFace Model Page](https://huggingface.co/EleutherAI/gpt-j-6b). Free
+  of charge. This model is up and running on our servers and can be used for free.
 ram_usage: 50G
 gpu_usage: 25G
 group: services

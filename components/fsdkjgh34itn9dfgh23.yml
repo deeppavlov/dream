@@ -4,8 +4,8 @@ component_type: Script-based w/o NNs
 model_type: Dictionary/Pattern-based
 is_customizable: true
 author: publisher@deeppavlov.ai
-description: provides template-based replies for commands detected by Intent
-  Catcher annotator
+description: provides template-based replies for commands detected by Intent Catcher
+  annotator
 ram_usage: 100M
 gpu_usage: null
 group: skills

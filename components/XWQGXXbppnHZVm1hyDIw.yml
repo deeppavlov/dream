@@ -4,8 +4,8 @@ component_type: null
 model_type: NN-based
 is_customizable: false
 author: publisher@deeppavlov.ai
-description: BERT-based model (bert-base-cased-conversational) trained to distinguish between 17 possible classes of speech functions for an input utterance.
-# for more info please refer to the model config file: https://github.com/deeppavlov/DeepPavlov/blob/feat/speech-fn/deeppavlov/configs/classifiers/speech_fn.json
+description: BERT-based model (bert-base-cased-conversational) trained to distinguish
+  between 17 possible classes of speech functions for an input utterance.
 ram_usage: 6G
 gpu_usage: 4.5G
 group: candidate_annotators

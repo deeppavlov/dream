@@ -5,7 +5,7 @@ model_type: Dictionary/Pattern-based
 is_customizable: false
 author: publisher@deeppavlov.ai
 description: Algorithm that selects the final response among the given list of candidate
-    responses via the given ranking service
+  responses via the given ranking service
 ram_usage: 100M
 gpu_usage: null
 group: response_selectors
