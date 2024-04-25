@@ -61,18 +61,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
-  entity-detection:
-    volumes:
-      - "./annotators/entity_detection:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8103:8103
-  ner:
-    volumes:
-      - './annotators/NER_deeppavlov:/src'
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8021:8021
   ros-flask-server:
     volumes:
       - "./services/ros_flask_server:/home/dkr/"

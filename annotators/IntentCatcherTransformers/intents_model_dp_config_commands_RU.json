@@ -2,7 +2,7 @@
     "dataset_reader": {
       "class_name": "intents_dataset_reader:IntentsJsonReader",
       "data_path": "./",
-      "train": "robot_intent_phrases_RU.json",
+      "train": "intent_phrases_commands_RU.json",
       "generated_data_path": "./generated_data"
     },
     "dataset_iterator": {
@@ -181,10 +181,6 @@
         "MODEL_PATH": "{MODELS_PATH}/classifiers/robot_intents_model_RU_v0"
       },
       "download": [
-        {
-          "url": "http://files.deeppavlov.ai/dream_data/robot_intents_model_RU_v0.tar.gz",
-          "subdir": "{MODELS_PATH}/classifiers"
-        }
       ]
     }
   }

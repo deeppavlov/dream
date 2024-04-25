@@ -1,8 +1,22 @@
 import requests
 
 
-command_intents = {"track_object", "turn_around", "move_forward", "move_backward", "open_door", "move_to_point"}
-embodied_intents = {"test_command", "move_forward", "move_backward"}
+command_intents = {"track_object", "turn_around", "move_forward", "move_backward", "open_door", "move_to_point",
+    "approach",
+    "pick_up",
+    "place",
+    "say",
+    "sit_down",
+    "stand_up",
+    "stop"}
+embodied_intents = {"test_command", "move_forward", "move_backward",
+    "approach",
+    "pick_up",
+    "place",
+    "say",
+    "sit_down",
+    "stand_up",
+    "stop"}
 
 
 def check_if_valid_robot_command(command, service_url, dialog_id, timeout=1.0):

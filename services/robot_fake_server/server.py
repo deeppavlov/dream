@@ -22,6 +22,13 @@ VALID_COMMANDS = [
     "move_backward",
     "open_door",
     "move_to_point",
+    "approach",
+    "pick_up",
+    "place",
+    "say",
+    "sit_down",
+    "stand_up",
+    "stop"
 ]
 
 

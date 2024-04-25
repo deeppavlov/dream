@@ -3,7 +3,7 @@ services:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_embodied/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, dff-program-y-skill:8008, sentseg:8011, 
-          intent-catcher-commands:8014, badlisted-words:8018, dff-command-selector-skill:8148, dff-intent-responder-skill:8012, dialogpt:8125, entity-detection:8103, ner:8021, spacy-nounphrases:8006, ros-flask-server:6000, robot-notifications:8036, robot-fake-server:8038"
+          intent-catcher-commands:8014, badlisted-words:8018, dff-command-selector-skill:8148, dff-intent-responder-skill:8012, dialogpt:8125, spacy-nounphrases:8006, ros-flask-server:6000, robot-notifications:8036, robot-fake-server:8038"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-480}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -47,7 +47,7 @@ services:
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=2
       - FLASK_APP=server
     deploy:
       resources:
@@ -181,12 +181,12 @@ services:
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
       args:
         SERVICE_PORT: 8014
-        CONFIG_NAME: intents_model_dp_config_commands.json
-        INTENT_PHRASES_PATH: intent_phrases_commands.json
+        CONFIG_NAME: intents_model_dp_config_commands_RU.json
+        INTENT_PHRASES_PATH: intent_phrases_commands_RU.json
     command:  python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=2
     deploy:
       resources:
         limits:
@@ -222,53 +222,8 @@ services:
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=2
       - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-        reservations:
-          memory: 2G
-
-  entity-detection:
-    env_file: [ .env ]
-    build:
-      args:
-        SEQ_TAG_CONFIG: wikipedia_entity_detection_distilbert.json
-        CONFIG: entity_detection_eng.json
-        LOWERCASE: 1
-        PORT: 8103
-        SRC_DIR: annotators/entity_detection/
-        FINEGRAINED: 0
-      context: ./
-      dockerfile: annotators/entity_detection/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8103
-    environment:
-      - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
-    deploy:
-      resources:
-        limits:
-          memory: 2.5G
-        reservations:
-          memory: 2.5G
-
-  ner:
-    env_file: [ .env ]
-    build:
-      args:
-        CONFIG: ner_case_agnostic_multilingual_bert_base_extended.json
-        PORT: 8021
-        SRC_DIR: annotators/NER_deeppavlov
-        COMMIT: f5117cd9ad1e64f6c2d970ecaa42fc09ccb23144
-      context: ./
-      dockerfile: annotators/NER_deeppavlov/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8021
-    environment:
-      - FLASK_APP=server
-      - CUDA_VISIBLE_DEVICES=0
-    tty: true
     deploy:
       resources:
         limits:

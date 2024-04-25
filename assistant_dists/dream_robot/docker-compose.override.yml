@@ -96,8 +96,8 @@ services:
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
       args:
         SERVICE_PORT: 8014
-        CONFIG_NAME: intents_model_dp_config_commands.json
-        INTENT_PHRASES_PATH: intent_phrases_commands.json
+        CONFIG_NAME: intents_model_dp_config_commands_RU.json
+        INTENT_PHRASES_PATH: intent_phrases_commands_RU.json
     command: python -m flask run -h 0.0.0.0 -p 8014
     environment:
       - FLASK_APP=server

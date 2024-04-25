@@ -25,6 +25,13 @@ def get_respond_funcs():
         "move_backward": move_backward_respond,
         "open_door": open_door_respond,
         "move_to_point": move_to_point_respond,
+        "approach": new_command_respond,
+        "pick_up": new_command_respond,
+        "place": new_command_respond,
+        "say": new_command_respond,
+        "sit_down": new_command_respond,
+        "stand_up": new_command_respond,
+        "stop": new_command_respond
     }
 
 
@@ -179,3 +186,6 @@ def move_to_point_respond(ctx: Context, actor: Actor):
         return response, 1.0, {}, {}, {"command_to_perform": command}
     else:
         return ""
+
+def new_command_respond(ctx: Context, actor: Actor):
+    return response, 1.0, {}, {}, {"command_to_perform": "new_command"}
