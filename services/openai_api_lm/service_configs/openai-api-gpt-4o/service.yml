@@ -1,0 +1,30 @@
+name: openai-api-gpt4o
+endpoints:
+- respond
+- generate_goals
+compose:
+  env_file:
+  - .env
+  build:
+    args:
+      SERVICE_PORT: 8181
+      SERVICE_NAME: openai_api_gpt4_o
+      PRETRAINED_MODEL_NAME_OR_PATH: gpt-4o
+      FLASK_APP: server
+    context: .
+    dockerfile: ./services/openai_api_lm/Dockerfile
+  command: flask run -h 0.0.0.0 -p 8181
+  environment:
+  - FLASK_APP=server
+  deploy:
+    resources:
+      limits:
+        memory: 100M
+      reservations:
+        memory: 100M
+  volumes:
+  - ./services/openai_api_lm:/src
+  - ./common:/src/common
+  ports:
+  - 8181:8181
+proxy: null

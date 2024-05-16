@@ -67,6 +67,12 @@ services:
       - "./common:/src/common"
     ports:
       - 8180:8180
+  openai-api-gpt4o:
+    volumes:
+      - "./services/openai_api_lm:/src"
+      - "./common:/src/common"
+    ports:
+      - 8181:8181
   gigachat-api:
     volumes:
       - "./services/gigachat_api_lm:/src"

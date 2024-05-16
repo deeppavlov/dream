@@ -6,8 +6,8 @@ services:
         sentence-ranker:8128, 
         transformers-lm-gptjt:8161, openai-api-chatgpt:8145, openai-api-davinci3:8131,
         openai-api-gpt4:8159, openai-api-gpt4-32k:8160, openai-api-chatgpt-16k:8167,
-        openai-api-gpt4-turbo:8180, gigachat-api:8187, gigachat-pro-api:8188, gigachat-plus-api:8189, 
-        dff-universal-prompted-skill:8147"
+        openai-api-gpt4-turbo:8180, openai-api-gpt4o:8181, gigachat-api:8187, gigachat-pro-api:8188, 
+        gigachat-plus-api:8189, dff-universal-prompted-skill:8147"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
 
   sentseg:
@@ -211,6 +211,25 @@ services:
       context: .
       dockerfile: ./services/openai_api_lm/Dockerfile
     command: flask run -h 0.0.0.0 -p 8180
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 100M
+
+  openai-api-gpt4o:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8181
+        SERVICE_NAME: openai_api_gpt4o
+        PRETRAINED_MODEL_NAME_OR_PATH: gpt-4o
+      context: .
+      dockerfile: ./services/openai_api_lm/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8181
     environment:
       - FLASK_APP=server
     deploy:
