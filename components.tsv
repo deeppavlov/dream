@@ -184,7 +184,7 @@
 8178    transformers-lm-rugpt35
 8179	dff-robot-prompted-skill
 8180    openai-api-gpt4-turbo
-8181
+8181    openai-api-gpt-4o
 8182
 8183	external-integration-skill
 8184	external-fake-server
