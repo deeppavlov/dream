@@ -4,11 +4,6 @@
             "protocol": "http",
             "timeout": 1.5,
             "url": "http://sentseg:8011/sentseg"
-        },
-        "ner": {
-            "protocol": "http",
-            "timeout": 1.5,
-            "url": "http://ner:8021/ner"
         }
     },
     "services": {
@@ -63,20 +58,20 @@
             }
         },
         "annotators": {
-            "robot_notifications": {
+            "llava_service": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://robot-notifications:8036/check"
+                    "url": "http://10.55.228.225:8000/respond"
                 },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
+                "dialog_formatter": "state_formatters.dp_formatters:llava_service_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "previous_services": [],
-                "state_manager_method": "update_attributes",
+                "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/dfmgnoie4wrn34r98.yml",
-                    "service": "services/robot_notifications/service_configs/robot-notifications"
+                    "component": "components/NONE.yml",
+                    "service": "services/NONE"
                 }
             },
             "sentseg": {
@@ -129,24 +124,6 @@
                     "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher"
                 }
             },
-            "ner": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://ner:8021/ner"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "annotators.sentseg"
-                ],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/3RDNPBdybjBlSQZqcc7nGQ.yml",
-                    "service": "annotators/NER_deeppavlov/service_configs/ner"
-                }
-            },
             "entity_detection": {
                 "connector": {
                     "protocol": "http",
@@ -167,33 +144,13 @@
             }
         },
         "response_annotators": {
-            "ner": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.5,
-                    "url": "http://ner:8021/ner"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:ner_formatter_last_bot_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_annotator_selectors",
-                    "response_annotators.sentseg"
-                ],
-                "state_manager_method": "add_annotation_prev_bot_utt",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/3RDNPBdybjBlSQZqcc7nGQ.yml",
-                    "service": "annotators/NER_deeppavlov/service_configs/ner"
-                }
-            }
         },
         "response_annotator_selectors": {
             "connector": {
                 "protocol": "python",
                 "class_name": "skill_selectors.post_annotator_selector.connector:PostAnnotatorSelectorConnector",
                 "annotator_names": [
-                    "sentseg",
-                    "ner"
+                    "sentseg"
                 ]
             },
             "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -302,24 +259,6 @@
                     "service": "skills/dff_intent_responder_skill/service_configs/dff-intent-responder-skill"
                 }
             },
-            "dff_command_selector_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://dff-command-selector-skill:8148/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_command_selector_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/jskfdgh384gtnfdsrkfg78.yml",
-                    "service": "skills/dff_command_selector_skill/service_configs/dff-command-selector-skill"
-                }
-            },
             "dummy_skill": {
                 "connector": {
                     "protocol": "python",
@@ -377,23 +316,6 @@
             }
         },
         "actors": {
-            "robot_command_sender": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://robot-command-sender:8035/send"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_human_bot_annotated_utterance",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "response_selectors"
-                ],
-                "state_manager_method": "update_attributes",
-                "source": {
-                    "component": "components/iigrietu2934i2nh34e0.yml",
-                    "service": "services/robot_command_sender/service_configs/robot-command-sender"
-                }
-            }
         }
     },
     "metadata": {

@@ -1252,3 +1252,18 @@ def dff_command_selector_skill_formatter(dialog: Dict) -> List[Dict]:
     batches[-1]["dialog_batch"][-1]["called_intents"] = called_intents
     batches[-1]["dialog_batch"][-1]["dialog_id"] = dialog.get("dialog_id", "unknown")
     return batches
+
+def llava_service_formatter(dialog: Dict) -> List[Dict]:
+    # Used by: llava_service
+    dialog = utils.get_last_n_turns(dialog)
+    dialog = utils.remove_clarification_turns_from_dialog(dialog)
+
+    img_path = dialog["human_utterances"][-1]["attributes"].get("llava_image_path")
+    prompt = dialog["human_utterances"][-1]["attributes"].get("llava_prompt")
+
+    return [
+        {
+            "llava_prompt": prompt,
+            "llava_image_path": img_path
+        }
+    ]
