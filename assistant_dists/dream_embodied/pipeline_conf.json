@@ -63,22 +63,6 @@
             }
         },
         "annotators": {
-            "robot_notifications": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://robot-notifications:8036/check"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:utt_non_punct_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "update_attributes",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/dfmgnoie4wrn34r98.yml",
-                    "service": "services/robot_notifications/service_configs/robot-notifications"
-                }
-            },
             "sentseg": {
                 "connector": {
                     "protocol": "http",

@@ -8,6 +8,8 @@ ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 ARG INTENT_PHRASES_PATH
 ENV INTENT_PHRASES_PATH ${INTENT_PHRASES_PATH}
+ARG CUDA_VISIBLE_DEVICES
+ENV CUDA_VISIBLE_DEVICES ${CUDA_VISIBLE_DEVICES}
 
 COPY annotators/IntentCatcherTransformers/requirements.txt /src/requirements.txt
 RUN pip install --upgrade pip && pip install -r /src/requirements.txt

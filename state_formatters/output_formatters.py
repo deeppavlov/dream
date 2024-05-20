@@ -21,6 +21,7 @@ def http_api_output_formatter(payload: Dict):
         "response": response,
         "ssml_tagged_response": ssml_tagged_response,
         "active_skill": active_skill,
+        "intent_catcher": payload['utterances'][-2]["annotations"].get('intent_catcher'),
     }
     logger.info(f"http api output {ret_val}")
     return ret_val
@@ -40,6 +41,7 @@ def http_debug_output_formatter(payload: Dict):
         "response": response,
         "active_skill": active_skill,
         "ssml_tagged_response": ssml_tagged_response,
+        "intent_catcher": payload['utterances'][-2]["annotations"].get('intent_catcher'),
         "debug_output": payload["utterances"][-2]["hypotheses"],
         "attributes": payload["utterances"][-1].get("attributes", {}),
     }

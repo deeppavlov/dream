@@ -18,24 +18,6 @@ services:
       - PROXY_PASS=proxy.deeppavlov.ai:8012
       - PORT=8012
 
-  ner:
-    command: ["nginx", "-g", "daemon off;"]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8021
-      - PORT=8021
-
-  entity-detection:
-    command: [ "nginx", "-g", "daemon off;" ]
-    build:
-      context: dp/proxy/
-      dockerfile: Dockerfile
-    environment:
-      - PROXY_PASS=proxy.deeppavlov.ai:8103
-      - PORT=8103
-
   sentence-ranker:
     command: [ "nginx", "-g", "daemon off;" ]
     build:

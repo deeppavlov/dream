@@ -61,24 +61,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8125:8125
-  entity-detection:
-    volumes:
-      - "./annotators/entity_detection:/src"
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8103:8103
-  ner:
-    volumes:
-      - './annotators/NER_deeppavlov:/src'
-      - "~/.deeppavlov:/root/.deeppavlov"
-    ports:
-      - 8021:8021
-  ros-flask-server:
-    volumes:
-      - "./services/ros_flask_server:/home/dkr/"
-      - "./common:/home/dkr/common"
-    ports:
-      - 6000:6000
   dff-command-selector-skill:
     volumes:
       - "./skills/dff_command_selector_skill:/src"
@@ -91,17 +73,5 @@ services:
       - "./common:/src/common"
     ports:
       - 8035:8035
-  robot-fake-server:
-    volumes:
-      - "./services/robot_fake_server:/src"
-      - "./common:/src/common"
-    ports:
-      - 8038:8038
-  robot-notifications:
-    volumes:
-      - "./services/robot_notifications:/src"
-      - "./common:/src/common"
-    ports:
-      - 8036:8036
 
 version: "3.7"
