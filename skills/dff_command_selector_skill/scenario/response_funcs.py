@@ -31,7 +31,12 @@ def get_respond_funcs():
         "say": say_respond,
         "sit_down": sit_down_respond,
         "stand_up": stand_up_respond,
-        "stop": stop_respond
+        "stop": stop_respond,
+        "turn_right": turn_right_respond,
+        "turn_left": turn_left_respond,
+        "status": status_respond,
+        "enable_autopilot": enable_autopilot_respond,
+        "disable_autopilot": disable_autopilot_respond,
     }
 
 
@@ -245,6 +250,31 @@ def open_door_respond(ctx: Context, actor: Actor):
 
     return response, 1.0, {}, {}, {"command_to_perform": command}
     
+def turn_right_respond():
+    command = "turn_right"
+    response = "command"
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def turn_left_respond():
+    command = "turn_left"
+    response = "command"
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def status_respond():
+    command = "status"
+    response = "command"
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def enable_autopilot_respond():
+    command = "enable_autopilot"
+    response = "command"
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def disable_autopilot_respond():
+    command = "disable_autopilot"
+    response = "command"
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
 
 # covers coords like "5,35", "5, 35", "5 35"
 COMPILED_COORDS_PATTERN = re.compile(r"[-][0-9]+[ ,]+[-][0-9]+", re.IGNORECASE)
