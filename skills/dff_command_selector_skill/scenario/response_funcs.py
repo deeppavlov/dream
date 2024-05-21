@@ -250,27 +250,27 @@ def open_door_respond(ctx: Context, actor: Actor):
 
     return response, 1.0, {}, {}, {"command_to_perform": command}
     
-def turn_right_respond():
+def turn_right_respond(ctx: Context, actor: Actor):
     command = "turn_right"
     response = "command"
     return response, 1.0, {}, {}, {"command_to_perform": command}
 
-def turn_left_respond():
+def turn_left_respond(ctx: Context, actor: Actor):
     command = "turn_left"
     response = "command"
     return response, 1.0, {}, {}, {"command_to_perform": command}
 
-def status_respond():
+def status_respond(ctx: Context, actor: Actor):
     command = "status"
     response = "command"
     return response, 1.0, {}, {}, {"command_to_perform": command}
 
-def enable_autopilot_respond():
+def enable_autopilot_respond(ctx: Context, actor: Actor):
     command = "enable_autopilot"
     response = "command"
     return response, 1.0, {}, {}, {"command_to_perform": command}
 
-def disable_autopilot_respond():
+def disable_autopilot_respond(ctx: Context, actor: Actor):
     command = "disable_autopilot"
     response = "command"
     return response, 1.0, {}, {}, {"command_to_perform": command}
