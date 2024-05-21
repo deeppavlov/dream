@@ -26,5 +26,13 @@ services:
     environment:
       - PROXY_PASS=proxy.deeppavlov.ai:8128
       - PORT=8128
-
+  
+  llava-service:
+    command: [ "nginx", "-g", "daemon off;" ]
+    build:
+      context: dp/proxy/
+      dockerfile: Dockerfile
+    environment:
+      - PROXY_PASS=10.55.228.225:8000
+      - PORT=8000
 version: '3.7'

@@ -63,6 +63,22 @@
             }
         },
         "annotators": {
+            "llava_service": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 1.0,
+                    "url": "http://10.55.228.225:8000/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:llava_service_formatter",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/NONE.yml",
+                    "service": "services/NONE"
+                }
+            },
             "sentseg": {
                 "connector": {
                     "protocol": "http",

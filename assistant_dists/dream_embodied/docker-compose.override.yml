@@ -10,7 +10,8 @@ services:
       RESTRICTION_FOR_SENSITIVE_CASE: 1
       ALWAYS_TURN_ON_ALL_SKILLS: 0
       LANGUAGE: EN
-
+    extra_hosts:
+      - "llava-service:10.55.228.225"
   files:
     ports:
     - "3000:3000"
