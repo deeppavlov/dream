@@ -213,7 +213,7 @@ services:
         SERVICE_NAME: vidchapters_service
         RET_SCALE_FACTOR: 0
       context: .
-      dockerfile: ./services/vidchapters_service/Dockerfile
+      dockerfile: ./annotators/vidchapters_service/Dockerfile
     command: flask run -h 0.0.0.0 -p 2121
     environment:
       - CUDA_VISIBLE_DEVICES=0

@@ -1,89 +1,89 @@
 import logging
 import os
-import pickle
-import re
-from typing import Any, List
+import time
+from itertools import zip_longest
 
-import numpy as np
 import sentry_sdk
-from fastapi import FastAPI, Body
-from pydantic import BaseModel
-from starlette.middleware.cors import CORSMiddleware
+from aux_files.inference import infer
+from flask import Flask, request, jsonify
+from urllib.request import URLopener
+from sentry_sdk.integrations.flask import FlaskIntegration
 
-sentry_sdk.init(os.getenv("SENTRY_DSN"))
+CAP_ERR_MSG = "The file format is not supported"
+CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
+MODEL_PATH = "/src/aux_files/captioning_model.pth"
 
-cEXT = pickle.load(open("/data/models/cEXT.p", "rb"))
-cNEU = pickle.load(open("/data/models/cNEU.p", "rb"))
-cAGR = pickle.load(open("/data/models/cAGR.p", "rb"))
-cCON = pickle.load(open("/data/models/cCON.p", "rb"))
-cOPN = pickle.load(open("/data/models/cOPN.p", "rb"))
-vectorizer_31 = pickle.load(open("/data/models/vectorizer_31.p", "rb"))
-vectorizer_30 = pickle.load(open("/data/models/vectorizer_30.p", "rb"))
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
+SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
+logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+app = Flask(__name__)
+logging.getLogger("werkzeug").setLevel("WARNING")
 
-def jsonify_data(data: Any) -> Any:
-    """Replaces JSON-non-serializable objects with JSON-serializable.
+@app.route("/respond", methods=["POST"])
+def respond():
+    global CAP_ERR_MSG
+    st_time = time.time()
 
-    Function replaces numpy arrays and numbers with python lists and numbers, tuples is replaces with lists. All other
-    object types remain the same.
+    paths = request.json.get("sound_paths")
+    paths = request.json.get("video_paths") if all([el is None for el in paths]) else paths
+    durations = request.json.get("sound_durations")
+    durations = request.json.get("video_durations") if all([el is None for el in durations]) else durations
+    types = request.json.get("sound_types", None)
+    types = request.json.get("video_types") if all([el is None for el in types]) else types
 
-    Args:
-        data: Object to make JSON-serializable.
+    responses = []
 
-    Returns:
-        Modified input data.
+    for path, duration, atype in zip_longest(paths, durations, types):
+        logger.info(f"Processing batch at voice_service: {path}, {duration}, {atype}")
+        filename_els = path.split("=")
+        filename = filename_els[-1]
 
-    """
-    if isinstance(data, (list, tuple)):
-        result = [jsonify_data(item) for item in data]
-    elif isinstance(data, dict):
-        result = {}
-        for key in data.keys():
-            result[key] = jsonify_data(data[key])
-    elif isinstance(data, np.ndarray):
-        result = data.tolist()
-    elif isinstance(data, np.integer):
-        result = int(data)
-    elif isinstance(data, np.floating):
-        result = float(data)
-    elif callable(getattr(data, "to_serializable_dict", None)):
-        result = data.to_serializable_dict()
-    else:
-        result = data
-    return result
+        if not os.path.exists(AUDIO_DIR):
+            os.makedirs(AUDIO_DIR)
 
+        for i in os.listdir(AUDIO_DIR):
+            os.remove(os.path.join(AUDIO_DIR, i))
 
-def predict_personality(text):
-    try:
-        scentences = re.split("(?<=[.!?]) +", text)
-        text_vector_31 = vectorizer_31.transform(scentences)
-        text_vector_30 = vectorizer_30.transform(scentences)
-        EXT = cEXT.predict(text_vector_31)
-        NEU = cNEU.predict(text_vector_30)
-        AGR = cAGR.predict(text_vector_31)
-        CON = cCON.predict(text_vector_31)
-        OPN = cOPN.predict(text_vector_31)
-        return {"EXT": EXT[0], "NEU": NEU[0], "AGR": AGR[0], "CON": CON[0], "OPN": OPN[0]}
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        raise e
+        if filename.split(".")[-1] in ["oga", "mp3", "MP3", "ogg", "flac", "mp4"]:
+            file = URLopener()
+            file.retrieve(path, os.path.join(AUDIO_DIR, filename))
 
+            import subprocess
 
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
-)
+            process = subprocess.run(
+                [
+                    "ffmpeg",
+                    "-i",
+                    os.path.join(AUDIO_DIR, filename),
+                    os.path.join(AUDIO_DIR, filename[: -len(filename.split(".")[-1])] + "wav"),
+                ]
+            )
+            if process.returncode != 0:
+                raise Exception("Something went wrong")
+        try:
+            logger.info(f"Scanning AUDIO_DIR ({AUDIO_DIR}) for wav files...")
+            for i in os.listdir(AUDIO_DIR):
+                if i.split(".")[-1] == "wav":
+                    break
+            else:
+                CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
+                raise Exception(CAP_ERR_MSG)
+            logger.info("Scanning finished successfully, files found, starting inference...")
+            caption = infer(AUDIO_DIR, MODEL_PATH)
+            logger.info("Inference finished successfully")
+            responses += [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "caption": caption}]
+        except Exception:
+            logger.info(f"An error occurred in voice-service: {CAP_ERR_MSG}")
+            responses.append(
+                [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "caption": "Error"}]
+            )
 
+    logger.info(f"VIDCHAPTERS_SERVICE RESPONSE: {responses}")
 
-class PersonalityPayload(BaseModel):
-    personality: List[str] = Body(...)
-
-
-@app.post("/model")
-def infer(payload: PersonalityPayload):
-    logger.info(f"Personality Detection: {payload}")
-    personality = [predict_personality(p) for p in payload.personality]
-    return jsonify_data(personality)
+    total_time = time.time() - st_time
+    logger.info(f"service exec time: {total_time:.3f}s")
+    return 0
