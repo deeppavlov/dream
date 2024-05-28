@@ -21,6 +21,6 @@ RUN gdown --fuzzy https://drive.google.com/file/d/1qmQcEkDDlnkAkRd6BIrVoArBv6Sg1
 
 RUN pip install git+https://github.com/m-bain/whisperx.git 
 
-COPY . .
+# COPY . .
 
 

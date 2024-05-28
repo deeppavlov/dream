@@ -24,4 +24,8 @@ scikit_learn==0.23.2
 tensorboardX==2.1
 langdetect==1.0.9
 genbit==2.2.0.0
+
 flask==2.2.2
+Werkzeug==2.2.2
+sentry-sdk[flask]==0.14.1
+click==8.0

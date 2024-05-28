@@ -4,7 +4,7 @@ import time
 from itertools import zip_longest
 
 import sentry_sdk
-from aux_files.inference import infer
+# from aux_files.inference import infer
 from flask import Flask, request, jsonify
 from urllib.request import URLopener
 from sentry_sdk.integrations.flask import FlaskIntegration
@@ -14,8 +14,6 @@ CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
 MODEL_PATH = "/src/aux_files/captioning_model.pth"
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-
-SERVICE_PORT = int(os.getenv("SERVICE_PORT"))
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -82,8 +80,9 @@ def respond():
                 [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "caption": "Error"}]
             )
 
-    logger.info(f"VIDCHAPTERS_SERVICE RESPONSE: {responses}")
+    # logger.info(f"VIDCHAPTERS_SERVICE RESPONSE: {responses}")
+    logger.info(f"VIDCHAPTERS_SERVICE RESPONSE: {CAP_ERR_MSG}")
 
     total_time = time.time() - st_time
     logger.info(f"service exec time: {total_time:.3f}s")
-    return 0
+    return "CAP_ERR_MSG"

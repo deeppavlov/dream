@@ -74,7 +74,7 @@ services:
       - 8070:8070
   vidchapters-service:
     volumes:
-      - "./services/dialogpt:/src"
+      - "./annotators/vidchapters_service:/src"
       - "./common:/src/common"
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
