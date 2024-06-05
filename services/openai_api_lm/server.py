@@ -31,6 +31,7 @@ DEFAULT_CONFIGS = {
     "gpt-4": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-4-32k": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
     "gpt-4-1106-preview": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
+    "gpt-4o": json.load(open("common/generative_configs/openai-chatgpt.json", "r")),
 }
 CHAT_COMPLETION_MODELS = ["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k", "gpt-4-1106-preview", "gpt-4o"]
 
