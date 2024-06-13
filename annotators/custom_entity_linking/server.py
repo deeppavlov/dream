@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+from typing import List
 from flask import Flask, request, jsonify
 import sentry_sdk
 from deeppavlov import build_model
@@ -25,7 +26,7 @@ except Exception as e:
     raise e
 
 
-def preprocess_context(context_batch):
+def preprocess_context(context_batch: List[List[str]]):
     """Preprocesses the context batch by combining previous and current utterances.
 
     Args:
@@ -34,6 +35,8 @@ def preprocess_context(context_batch):
     Returns:
       list: Preprocessed context batch.
     """
+    if context_batch == [[""]]:
+        logger.error("There are no contexts!")
     optimized_context_batch = []
     for hist_uttr in context_batch:
         if len(hist_uttr) == 1:
