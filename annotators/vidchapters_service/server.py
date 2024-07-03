@@ -13,7 +13,6 @@ import whisperx
 import pickle 
 
 import argparse
-from args import get_args_parser
 
 import torch
 import numpy as np
@@ -24,10 +23,15 @@ import clip
 import subprocess
 import re
 
-# from aux_files.demo_vid2seq import
-from aux_files.VidChapters.model.vid2seq import _get_tokenizer, Vid2Seq
-from aux_files.VidChapters.model.texttitling import TextTilingTokenizer
+import sys
 
+# Добавление пути к sys.path
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'src/aux_files/VidChapters'))
+sys.path.append('src/aux_files/VidChapters')
+from args import get_args_parser
+
+# from aux_files.demo_vid2seq import
+from model.vid2seq import _get_tokenizer, Vid2Seq
 
 CAP_ERR_MSG = "The file format is not supported"
 CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
