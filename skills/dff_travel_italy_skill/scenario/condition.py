@@ -138,7 +138,7 @@ def example_lets_talk_about():
 
 def get_current_user_id(ctx: Context, actor: Actor) -> bool:
     if "agent" in ctx.misc:
-        user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1]["user"]["id"]
+        user_id = ctx.misc["agent"]["dialog"]["human_utterances"][-1].get("user", {}).get("id", None)
 
         return user_id
 

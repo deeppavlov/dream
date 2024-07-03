@@ -9,18 +9,7 @@ import nltk
 
 load_dotenv("./.env")
 
-config_name = "annotators/custom_entity_linking/custom_entity_linking.json"
-nltk.download("stopwords")
-
-try:
-    el = build_model(config_name, download=True)
-    print("model loaded")
-except Exception as e:
-    sentry_sdk.capture_exception(e)
-    print(e)
-    raise e
-
-INDEX_LOAD_PATH = Path(os.path.expanduser(el.pipe[-1][-1].load_path))
+INDEX_LOAD_PATH = Path(os.path.expanduser("~/.deeppavlov/downloads/entity_linking_eng/custom_el_eng_dream"))   
 TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
 TERMINUSDB_SERVER_TEAM = "admin"
 TERMINUSDB_SERVER_DB = "user_knowledge_db"
@@ -37,7 +26,7 @@ graph = TerminusdbKnowledgeGraph(
 
 
 def main():
-    url = "http://0.0.0.0:8153"
+    url = "http://0.0.0.0:9153"
     inserted_data = {
         "user_id": "User/Jack",
         "entity_info": {
@@ -58,7 +47,7 @@ def main():
             "user_id": ["User/Jack"],
             "entity_substr": [["forrest gump"]],
             "entity_tags": [[[("film", 1.0)]]],
-            "context": [["who directed forrest gump?"]],
+            "contexts": [["who directed forrest gump?"]],
         }
     ]
     gold_results = [["film/123"]]
