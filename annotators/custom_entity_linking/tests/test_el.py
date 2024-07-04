@@ -26,7 +26,7 @@ graph = TerminusdbKnowledgeGraph(
 
 
 def main():
-    url = "http://0.0.0.0:9153"
+    url = "http://0.0.0.0:8153"
     inserted_data = {
         "user_id": "User/Jack",
         "entity_info": {
