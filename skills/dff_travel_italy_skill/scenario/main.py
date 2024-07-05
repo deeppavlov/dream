@@ -34,7 +34,7 @@ flows = {
         TRANSITIONS: {
             ("travel_italy_general", "italy_start"): loc_cnd.start_condition,
             ("travel_italy_general", "like_italy"): loc_cnd.is_proposed_skill,
-            ("italian_food_flow_restart", "tell_more"): cnd.all(
+            ("italian_food_flow_restart", "tell_more"): cnd.any(
                 [
                     loc_cnd.has_entity_in_graph("LIKE FOOD/Food"),
                     loc_cnd.uttr_about_favorite_food,
@@ -68,6 +68,7 @@ flows = {
                         int_cnd.has_entities("wiki:Q747074"),  # Q38 - Italy, Q747074 - commune of Italy
                         int_cnd.has_entities("wiki:Q515"),  # Q515 - city
                         int_cnd.has_entities("wiki:Q1549591"),  # Q1549591 - big city
+                        int_cnd.has_entities("prop:favorite_place"),
                     ]
                 ),
                 ("travel_italy_general", "like_italy", 1): cnd.true(),
