@@ -1,4 +1,5 @@
 import requests
+import time
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 
@@ -72,6 +73,7 @@ def compare_results(results, golden_results) -> bool:
 
 
 def main():
+    st_time = time.time()
     TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
     TERMINUSDB_SERVER_TEAM = "admin"
     TERMINUSDB_SERVER_DB = "user_knowledge_db"
@@ -140,7 +142,9 @@ def main():
         if compare_results(result, golden_result):
             count += 1
     assert count == len(request_data)
+    total_time = time.time() - st_time
     print("Success")
+    print(f"user knowledge memorizer exec time = {total_time:.3f}s")
 
 
 if __name__ == "__main__":

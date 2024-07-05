@@ -1,7 +1,9 @@
 import requests
+import time
 
 
 def main():
+    st_time = time.time()
     url = "http://0.0.0.0:8136/respond"
 
     request_data = [{"utterances": [["i live in moscow"]]}]
@@ -17,7 +19,9 @@ def main():
         print(result)
 
     assert count == len(request_data)
+    total_time = time.time() - st_time
     print("Success")
+    print(f"property extraction exec time = {total_time:.3f}s")
 
 
 if __name__ == "__main__":

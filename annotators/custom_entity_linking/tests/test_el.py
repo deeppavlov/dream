@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 import requests
 from dotenv import load_dotenv
@@ -26,6 +27,7 @@ graph = TerminusdbKnowledgeGraph(
 
 
 def main():
+    st_time = time.time()
     url = "http://0.0.0.0:8153"
     inserted_data = {
         "user_id": "User/Jack",
@@ -66,7 +68,9 @@ def main():
             print(f"Got {result}, but expected: {gold_result}")
 
     assert count == len(request_data)
+    total_time = time.time() - st_time
     print("Success")
+    print(f"custom entity linking exec time = {total_time:.3f}s")
 
 
 if __name__ == "__main__":
