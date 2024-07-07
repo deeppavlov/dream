@@ -29,13 +29,11 @@ import sys
 # sys.path.append(os.path.join(os.path.dirname(__file__), 'src/aux_files/VidChapters'))
 # sys.path.append('/src/aux_files/VidChapters')
 
-sys.path.append('/src/aux_files/VidChapters')
-print(os.listdir('.'))
-print(os.getcwd())
+# sys.path.append('/src/aux_files/VidChapters')
 from args import get_args_parser
 
 # # from aux_files.demo_vid2seq import
-# from model.vid2seq imprt _get_tokenizer, Vid2Seq
+from model.vid2seq import _get_tokenizer, Vid2Seq
 
 CAP_ERR_MSG = "The file format is not supported"
 CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
@@ -336,12 +334,12 @@ def respond():
             asr_caption = generate_asr(video_path, asr_output_path)
             video_caption = generate_video_caption(video_path, asr_caption)
             logger.info("Inference finished successfully")
-            responses += [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  asr_caption, "chapters": video_caption}]
+            responses += [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  asr_caption, "video_captioning_chapters": video_caption}]
         except Exception:
             logger.info(f"An error occurred in voice-service: {CAP_ERR_MSG}")
             #TODO: Error on which step asr or vid2seq
             responses.append(
-                [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  "Error", "chapters": "Error"}]
+                [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  "Error", "video_captioning_chapters": "Error"}]
             )
 
     logger.info(f"VIDCHAPTERS_SERVICE RESPONSE: {responses}")

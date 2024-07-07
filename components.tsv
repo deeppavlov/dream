@@ -48,8 +48,8 @@
 8042    embodied-sender
 8043
 8044    bot-knowledge-memorizer
-8045
-8046
+8045    vidchapters-service
+8046    dff-vidchapters-skill
 8047	eliza
 8048    emotion-ranking-based-response-selector
 8049	emotion-skill

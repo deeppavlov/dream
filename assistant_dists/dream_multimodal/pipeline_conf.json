@@ -74,27 +74,11 @@
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:preproc_last_human_utt_dialog",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [],
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
-                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
-                }
-            },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 1.0,
-                    "url": "http://intent-catcher:8014/detect"
+                    "url": "http://intent-catcher:8019/detect"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:last_utt_sentseg_segments_dialog",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
@@ -108,33 +92,17 @@
                     "service": "annotators/IntentCatcherTransformers/service_configs/intent-catcher"
                 }
             },
-            "fromage": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 90.0,
-                    "url": "http://fromage:8069/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:fromage_formatter",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "state_manager_method": "add_annotation",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/8iHHdjsnfhewkl.yml",
-                    "service": "services/fromage/service_configs/fromage"
-                }
-            },
             "vidchapters-service": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 90.0,
-                    "url": "http://vidchapters-service:2121/respond"
+                    "url": "http://vidchapters-service:8045/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:vidchapters_service_formatter",
                 "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
                 "state_manager_method": "add_annotation",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/TODO.yml",
                     "service": "annotators/vidchapters_service/service_configs/vidchapters"
                 }
             }
@@ -178,24 +146,6 @@
             }
         },
         "candidate_annotators": {
-            "badlisted_words": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 1.0,
-                    "url": "http://badlisted-words:8018/badlisted_words_batch"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:hypotheses_list",
-                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
-                "previous_services": [
-                    "skills"
-                ],
-                "state_manager_method": "add_hypothesis_annotation_batch",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/gySZ51dyqYi9TOFr6zY5kA.yml",
-                    "service": "annotators/BadlistedWordsDetector/service_configs/badlisted-words"
-                }
-            },
             "sentence_ranker": {
                 "connector": {
                     "protocol": "http",
@@ -308,29 +258,11 @@
                     "service": "services/dialogpt/service_configs/dialogpt"
                 }
             },
-            "dff_fromage_image_skill": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 2.0,
-                    "url": "http://dff-fromage-image-skill:8070/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:dff_fromage_image_skill_formatter",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis",
-                "is_enabled": true,
-                "source": {
-                    "component": "components/8jfFjmYnbdeH.yml",
-                    "service": "services/dff_fromage_image_skill/service_configs/dff-fromage-image-skill"
-                }
-            },
             "dff_vidchapters_skill": {
                 "connector": {
                     "protocol": "http",
                     "timeout": 2.0,
-                    "url": "http://dff-vidchapters-skill:2122/respond"
+                    "url": "http://dff-vidchapters-skill:8046/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_vidchapters_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
@@ -340,7 +272,6 @@
                 "state_manager_method": "add_hypothesis",
                 "is_enabled": true,
                 "source": {
-                    "component": "components/TODO.yml",
                     "service": "skills/dff_vidchapters_skill/service_configs/dff-template-skill"
                 }
             }

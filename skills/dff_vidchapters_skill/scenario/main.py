@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 flows = {
     GLOBAL: {
-        TRANSITIONS: {("response", "caption"): loc_cnd._video_detected},
+        TRANSITIONS: {("response", "chapters"): loc_cnd.video_detected},
     },
     "response": {
         LOCAL: {
@@ -21,7 +21,7 @@ flows = {
                 "set_can_continue": int_prs.set_can_continue(),
             },
         },
-        "caption": {
+        "chapters": {
             RESPONSE: loc_rsp.chapters,
             PROCESSING: {},
             TRANSITIONS: {},

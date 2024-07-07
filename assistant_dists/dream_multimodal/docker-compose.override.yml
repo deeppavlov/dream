@@ -1,12 +1,11 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/dream_multimodal/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, ranking-based-response-selector:8002,
-          dff-intent-responder-skill:8012, intent-catcher:8014, badlisted-words:8018,
+          dff-intent-responder-skill:8012, intent-catcher:8019,
           dialogpt:8125, sentence-ranker:8128,
-          fromage:8069, dff-fromage-image-skill:8070,
-          vidchapters-service: 2121, dff-vidchapters-skill: 2122"
+          vidchapters-service: 8045, dff-vidchapters-skill: 8046"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -96,10 +95,10 @@ services:
       context: .
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
       args:
-        SERVICE_PORT: 8014
+        SERVICE_PORT: 8019
         CONFIG_NAME: intents_model_dp_config.json
         INTENT_PHRASES_PATH: intent_phrases.json
-    command:  python -m flask run -h 0.0.0.0 -p 8014
+    command:  python -m flask run -h 0.0.0.0 -p 8019
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=0
@@ -109,23 +108,6 @@ services:
           memory: 3.5G
         reservations:
           memory: 3.5G
-
-  badlisted-words:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8018
-        SERVICE_NAME: badlisted_words
-      context: annotators/BadlistedWordsDetector/
-    command: flask run -h 0.0.0.0 -p 8018
-    environment:
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 256M
 
   dialogpt:
     env_file: [ .env ]
@@ -168,53 +150,17 @@ services:
           memory: 3G
         reservations:
           memory: 3G
-
-  fromage:
-    env_file: [ .env ]
-    build:
-      args:
-        SERVICE_PORT: 8069
-        SERVICE_NAME: fromage
-        RET_SCALE_FACTOR: 0
-      context: .
-      dockerfile: ./services/fromage/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8069
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
-      - FLASK_APP=server
-    deploy:
-      resources:
-        limits:
-          memory: 45G
-        reservations:
-          memory: 45G
-
-  dff-fromage-image-skill:
-    env_file: [.env]
-    build:
-      args:
-        SERVICE_PORT: 8070
-        SERVICE_NAME: dff_fromage_image_skill
-      context: .
-      dockerfile: ./skills/dff_fromage_image_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:8070 --reload
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-        reservations:
-          memory: 100M
   
   vidchapters-service:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 2121
+        SERVICE_PORT: 8045
         SERVICE_NAME: vidchapters_service
         RET_SCALE_FACTOR: 0
       context: .
       dockerfile: ./annotators/vidchapters_service/Dockerfile
-    command: flask run -h 0.0.0.0 -p 2121
+    command: flask run -h 0.0.0.0 -p 8045
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -229,11 +175,11 @@ services:
     env_file: [.env]
     build:
       args:
-        SERVICE_PORT: 2122
+        SERVICE_PORT: 8046
         SERVICE_NAME: dff_vidchapters_skill
       context: .
       dockerfile: ./skills/dff_vidchapters_skill/Dockerfile
-    command: gunicorn --workers=1 server:app -b 0.0.0.0:2122 --reload
+    command: gunicorn --workers=1 server:app -b 0.0.0.0:8046 --reload
     deploy:
       resources:
         limits:

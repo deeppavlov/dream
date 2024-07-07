@@ -27,16 +27,6 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
-  badlisted-words:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-  fromage:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
-    environment:
-      - CUDA_VISIBLE_DEVICES=0
   sentence-ranker:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

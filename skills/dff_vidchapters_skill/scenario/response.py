@@ -12,7 +12,7 @@ def chapters(ctx: Context, actor: Actor, excluded_skills=None, *args, **kwargs) 
         int_ctx.get_last_human_utterance(ctx, actor)
         .get("annotations", {})
         .get("vidchapter_service", {})
-        .get("video_captioning", "Error") # normally video_captioning is a dict 
+        .get("video_captioning_chapters", "Error") # normally video_captioning is a string 
     )
 
     error_response = "I couldn't caption the video in your message, please try again with another file"
