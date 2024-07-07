@@ -37,6 +37,11 @@ def get_respond_funcs():
         "status": status_respond,
         "enable_autopilot": enable_autopilot_respond,
         "disable_autopilot": disable_autopilot_respond,
+        "GO": go_respond,
+        "world_state": world_state_respond,
+        "go_to": go_to_respond,
+        "drop": drop_respond,
+        "set_point": set_point_respond
     }
 
 
@@ -65,7 +70,6 @@ def track_object_respond(ctx: Context, actor: Actor):
             response = "I did not get tracked object. Please repeat the command."
 
     return response, 1.0, {}, {}, {"command_to_perform": command}
-    
 
 def turn_around_respond(ctx: Context, actor: Actor):
     utt = int_ctx.get_last_human_utterance(ctx, actor)
@@ -298,4 +302,57 @@ def move_to_point_respond(ctx: Context, actor: Actor):
             response = "I did not get a target point. Please repeat the command."
 
     return response, 1.0, {}, {}, {"command_to_perform": command}
-    
+
+def go_respond(ctx: Context, actor: Actor):
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    distance = re.findall(r"\b\d+(\.\d+)?\b", utt["text"])
+    if distance:
+        command = f"go_{distance[0]}"
+        response = f"Иду на расстояние {distance[0]} метров." if LANGUAGE == "RU" else f"Going a distance of {distance[0]} meters."
+    else:
+        command = "go_unknown"
+        response = "Не могу определить расстояние. Повторите команду." if LANGUAGE == "RU" else "I did not get the distance. Please repeat the command."
+
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def world_state_respond(ctx: Context, actor: Actor):
+    command = "world_state"
+    response = "Определяю состояние мира." if LANGUAGE == "RU" else "Determining world state."
+
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def go_to_respond(ctx: Context, actor: Actor):
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    waypoint_id = re.findall(r"\b\d+\b", utt["text"])
+    if waypoint_id:
+        command = f"go_to_{waypoint_id[0]}"
+        response = f"Иду к точке {waypoint_id[0]}." if LANGUAGE == "RU" else f"Going to waypoint {waypoint_id[0]}."
+    else:
+        command = "go_to_unknown"
+        response = "Не могу определить точку назначения. Повторите команду." if LANGUAGE == "RU" else "I did not get the waypoint. Please repeat the command."
+
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def drop_respond(ctx: Context, actor: Actor):
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    box_id = re.findall(r"\b\d+\b", utt["text"])
+    if box_id:
+        command = f"drop_{box_id[0]}"
+        response = f"Оставляю коробку {box_id[0]}." if LANGUAGE == "RU" else f"Dropping box {box_id[0]}."
+    else:
+        command = "drop_unknown"
+        response = "Не могу определить коробку. Повторите команду." if LANGUAGE == "RU" else "I did not get which box to drop. Please repeat the command."
+
+    return response, 1.0, {}, {}, {"command_to_perform": command}
+
+def set_point_respond(ctx: Context, actor: Actor):
+    utt = int_ctx.get_last_human_utterance(ctx, actor)
+    point_name = re.findall(r"\b\w+\b", utt["text"])
+    if point_name:
+        command = f"set_point_{point_name[0]}"
+        response = f"Устанавливаю точку {point_name[0]}." if LANGUAGE == "RU" else f"Setting point {point_name[0]}."
+    else:
+        command = "set_point_unknown"
+        response = "Не могу определить имя точки. Повторите команду." if LANGUAGE == "RU" else "I did not get the name of the point. Please repeat the command."
+
+    return response, 1.0, {}, {}, {"command_to_perform": command}

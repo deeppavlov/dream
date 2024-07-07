@@ -2,8 +2,7 @@ import requests
 
 
 command_intents = {"track_object", "turn_around", "move_forward", "move_backward", "open_door", "move_to_point"}
-embodied_intents = {'place', 'approach', 'pick_up', 'track_object', 'enable_autopilot', 'move_forward', 'open_door', 'disable_autopilot', 'say', 'stand_up', 'move_to_point', 'stop', 'turn_left', 'move_backward', 'turn_around', 'turn_right', 'test_command', 'sit_down', 'status'}
-
+embodied_intents = embodied_intents = {'place', 'approach', 'pick_up', 'track_object', 'enable_autopilot', 'move_forward', 'open_door', 'disable_autopilot', 'say', 'stand_up', 'move_to_point', 'stop', 'turn_left', 'move_backward', 'GO','turn_around', 'turn_right','test_command','sit_down','status','world_state','go_to','drop','set_point'}
 
 def check_if_valid_robot_command(command, service_url, dialog_id, timeout=1.0):
     result = requests.post(
