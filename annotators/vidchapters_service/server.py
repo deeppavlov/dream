@@ -287,6 +287,7 @@ def respond():
     paths = request.json.get("video_paths")
     durations = request.json.get("video_durations")
     types = request.json.get("video_types")
+    logger.info(paths)
 
     responses = []
 
@@ -318,8 +319,7 @@ def respond():
         try:
             logger.info(f"Scanning DATA_DIR ({DATA_DIR}) for files...")
             for i in os.listdir(DATA_DIR):
-                logger.info(i, i.split(".")[0], i.split(".")[-1])
-                logger.info(os.path.join(DATA_DIR, i.split(".")[0]+'_asr'))
+                logger.info('something i', i,'Filename',filename)
                 logger.info("Scanning finished successfully, files found, starting inference...")
                 break
                 # if i.split(".")[-1] == "wav":
@@ -336,7 +336,7 @@ def respond():
             logger.info("Inference finished successfully")
             responses += [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  asr_caption, "video_captioning_chapters": video_caption}]
         except Exception:
-            logger.info(f"An error occurred in voice-service: {CAP_ERR_MSG}")
+            logger.info(f"An error occurred in vidchapters-service: {CAP_ERR_MSG}")
             #TODO: Error on which step asr or vid2seq
             responses.append(
                 [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  "Error", "video_captioning_chapters": "Error"}]

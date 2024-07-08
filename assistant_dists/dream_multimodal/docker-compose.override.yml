@@ -1,11 +1,12 @@
 services:
   agent:
-    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream/pipeline_conf.json'
+    command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.channel=telegram agent.telegram_token=$TG_TOKEN agent.pipeline_config=assistant_dists/dream_multimodal/pipeline_conf.json agent.db_config=assistant_dists/dream_multimodal/db_conf.json'
     environment:
       WAIT_HOSTS: "dff-program-y-skill:8008, sentseg:8011, ranking-based-response-selector:8002,
-          dff-intent-responder-skill:8012, intent-catcher:8019,
+          prompt-selector:8135, intent-catcher:8019,
+          dff-intent-responder-skill:8012,
           dialogpt:8125, sentence-ranker:8128,
-          vidchapters-service: 8045, dff-vidchapters-skill: 8046"
+          vidchapters-service:8045, dff-vidchapters-skill:8046"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1200}
       HIGH_PRIORITY_INTENTS: 1
       RESTRICTION_FOR_SENSITIVE_CASE: 1
@@ -88,9 +89,9 @@ services:
           memory: 128M
         reservations:
           memory: 128M
-
+  
   intent-catcher:
-    env_file: [.env]
+    env_file: [ .env ]
     build:
       context: .
       dockerfile: ./annotators/IntentCatcherTransformers/Dockerfile
@@ -98,7 +99,7 @@ services:
         SERVICE_PORT: 8019
         CONFIG_NAME: intents_model_dp_config.json
         INTENT_PHRASES_PATH: intent_phrases.json
-    command:  python -m flask run -h 0.0.0.0 -p 8019
+    command: python -m flask run -h 0.0.0.0 -p 8019
     environment:
       - FLASK_APP=server
       - CUDA_VISIBLE_DEVICES=0
@@ -131,6 +132,27 @@ services:
           memory: 2G
         reservations:
           memory: 2G
+
+  prompt-selector:
+    env_file: [ .env ]
+    build:
+      args:
+        SERVICE_PORT: 8135
+        SERVICE_NAME: prompt_selector
+        SENTENCE_RANKER_SERVICE_URL: http://sentence-ranker:8128/respond
+        N_SENTENCES_TO_RETURN: 3
+        PROMPTS_TO_CONSIDER: dream_persona,dream_faq
+      context: .
+      dockerfile: ./annotators/prompt_selector/Dockerfile
+    command: flask run -h 0.0.0.0 -p 8135
+    environment:
+      - FLASK_APP=server
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+        reservations:
+          memory: 100M
 
   sentence-ranker:
     env_file: [ .env ]

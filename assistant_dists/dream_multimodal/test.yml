@@ -19,10 +19,6 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
-  dff-fromage-image-skill:
-    volumes:
-      - "~/.deeppavlov:/root/.deeppavlov"
-      - "~/.deeppavlov/cache:/root/.cache"
   intent-catcher:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"

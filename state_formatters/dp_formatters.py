@@ -1159,7 +1159,9 @@ def dff_voice_skill_formatter(dialog, skill_name="dff_voice_skill"):
 def vidchapters_service_formatter(dialog: Dict) -> List[Dict]:
     return [
         {
-            "video_paths": [dialog["human_utterances"][-1]["attributes"].get("video_path")]
+            "video_paths": [dialog["human_utterances"][-1]["attributes"].get("video_path")],
+            "video_durations": [dialog["human_utterances"][-1]["attributes"].get("video_duration")],
+            "video_types": [dialog["human_utterances"][-1]["attributes"].get("video_type")],
         }
     ]
 

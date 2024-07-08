@@ -74,6 +74,24 @@
                     "service": "annotators/SentSeg/service_configs/sentseg"
                 }
             },
+            "prompt_selector": {
+                "connector": {
+                    "protocol": "http",
+                    "timeout": 2.0,
+                    "url": "http://prompt-selector:8135/respond"
+                },
+                "dialog_formatter": "state_formatters.dp_formatters:context_formatter_dialog",
+                "response_formatter": "state_formatters.dp_formatters:simple_formatter_service",
+                "previous_services": [
+                    "annotators.prompt_goals_collector"
+                ],
+                "state_manager_method": "add_annotation",
+                "is_enabled": true,
+                "source": {
+                    "component": "components/tK0hTk4TyMj7.yml",
+                    "service": "annotators/prompt_selector/service_configs/dream_persona_openai_prompted"
+                }
+            },
             "intent_catcher": {
                 "connector": {
                     "protocol": "http",

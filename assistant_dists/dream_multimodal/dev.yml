@@ -54,6 +54,12 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8128:8128
+  prompt-selector:
+    volumes:
+      - "./annotators/prompt_selector:/src"
+      - "./common:/src/common"
+    ports:
+      - 8135:8135
   vidchapters-service:
     volumes:
       - "./common:/src/common"
