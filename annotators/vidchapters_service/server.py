@@ -119,7 +119,7 @@ def generate_asr(video_path, asr_output_path):
     logger.info("load Whisper model")
     # assert whisper.load_model('large-v2', download_root='/src/aux_files/TOFILL')
     try:
-        asr_model = whisper.load_model('large-v2', download_root='/src')
+        asr_model = whisper.load_model('large-v2', download_root='/src/aux_files/TOFILL')
     except Exception as e:
         logger.warn(f"str{e}")
     logger.info("extract ASR")
@@ -132,6 +132,7 @@ def generate_asr(video_path, asr_output_path):
         # vidchapters-service_1              | Requirement already satisfied: future in /usr/local/lib/python3.8/site-packages (from ffmpeg-python) (1.0.0)
         
         # subprocess.check_call([sys.executable, "-m", "pip", "install", "ffmpeg"])
+        
         asr = asr_model.transcribe(video_path)
     except Exception as e:
         logger.warn(f"str{e}")
