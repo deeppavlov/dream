@@ -19,15 +19,17 @@ RUN touch /src/__init__.py && \
 RUN wget -O /src/aux_files/checkpoint_vidchapters https://drive.google.com/file/d/1jbmfuB44p3twrlqnfIv6cCM3Oyqk-zeh
 RUN gdown --fuzzy https://drive.google.com/file/d/1qmQcEkDDlnkAkRd6BIrVoArBv6Sg1Lv7/view -O /src/aux_files/captioning_model.pth -c --no-check-certificate
 
-RUN pip install git+https://github.com/openai/whisper.git 
-RUN pip install git+https://github.com/m-bain/whisperx.git 
+# RUN pip install git+https://github.com/openai/whisper.git 
+# RUN pip install git+https://github.com/m-bain/whisperx.git 
 
 COPY ./annotators/vidchapters_service /src/
 
 RUN pip list
-RUN pwd
+RUN ls /src/aux_files
 
 # RUN sudo apt update && sudo apt install ffmpeg
 # RUN sudo apt install ffmpeg
 
 # ENV PYTHONPATH "${PYTHONPATH}:/src/aux_files/VidChapters"
+RUN apt-get update && apt-get install -y ffmpeg
+ENV PYTHONPATH="${PYTHONPATH}:/src"

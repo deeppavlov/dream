@@ -24,7 +24,7 @@ import subprocess
 import re
 
 import sys
-sys.path.append('/src')
+# sys.path.append('/src')
 from aux_files.VidChapters.args import get_args_parser, MODEL_DIR
 
 # # from aux_files.demo_vid2seq import
@@ -119,26 +119,29 @@ def generate_asr(video_path, asr_output_path):
     logger.info("load Whisper model")
     # assert whisper.load_model('large-v2', download_root='/src/aux_files/TOFILL')
     try:
-        asr_model = whisper.load_model('large-v2', download_root='/src/aux_files/TOFILL')
+        #TODO download while building, not on inference -- takes way to long
+        asr_model = whisper.load_model('large-v2', device = DEVICE, download_root='/src/aux_files/TOFILL')
     except Exception as e:
         logger.warn(f"str{e}")
     logger.info("extract ASR")
     try:
-        import pkg_resources
-        print(pkg_resources.get_distribution("ffmpeg-python"))
-        print(pkg_resources.get_distribution("ffmpeg"))
-
-        # vidchapters-service_1              | Requirement already satisfied: ffmpeg-python in /usr/local/lib/python3.8/site-packages (0.2.0)
-        # vidchapters-service_1              | Requirement already satisfied: future in /usr/local/lib/python3.8/site-packages (from ffmpeg-python) (1.0.0)
-        
+        # logger.info("Checking for ffmpeg")
+        # logger.info(os.getcwd())
+        # import pkg_resources, shutil
+        # logger.info(pkg_resources.get_distribution("ffmpeg-python"))
+        # logger.info(pkg_resources.get_distribution("ffmpeg"))
+        # logger.info(shutil.which("ffmpeg"))
+        # sys.path.append('/src/aux_files/TOFILL')
         # subprocess.check_call([sys.executable, "-m", "pip", "install", "ffmpeg"])
-        
         asr = asr_model.transcribe(video_path)
     except Exception as e:
-        logger.warn(f"str{e}")
-    logger.info(asr)
+        logger.warn(f"str{e}, {type(e)=}")
+    # logger.info(asr)
     logger.info("load align model")
-    align_model, metadata = whisperx.load_align_model(language_code=asr['language'], device=DEVICE, model_dir=MODEL_DIR)
+    try: 
+        align_model, metadata = whisperx.load_align_model(language_code=asr['language'], device = DEVICE, model_dir=os.path.join('/src/aux_files', MODEL_DIR))
+    except Exception as e:
+        logger.warn(f"str{e}, {type(e)=}")
     logger.info("extract audio")
     audio = whisperx.load_audio(video_path)
     logger.info("align ASR")
@@ -339,30 +342,16 @@ def respond():
         if filename.split(".")[-1] in ["oga", "ogg", "mp4", "webm"]:
             file = URLopener()
             file.retrieve(path, os.path.join(DATA_DIR, filename))
-
-            # process = subprocess.run(
-            #     [
-            #         "ffmpeg",
-            #         "-i",
-            #         os.path.join(DATA_DIR, filename),
-            #         os.path.join(DATA_DIR, filename[: -len(filename.split(".")[-1])] + "wav"),
-            #     ]
-            # )
-            # if process.returncode != 0:
-            #     raise Exception("Something went wrong")
         try:
             logger.info(f"Scanning DATA_DIR ({DATA_DIR}) for files...")
             for i in os.listdir(DATA_DIR):
                 # i is a filename without path
                 logger.info("Scanning finished successfully, files found, starting inference...")
                 break
-                # if i.split(".")[-1] == "wav":
-                #     break
             else:
                 CAP_ERR_MSG = "No files for inference found in DATA_DIR"
                 raise Exception(CAP_ERR_MSG)
             
-            # caption = infer(AUDIO_DIR, MODEL_PATH)
             asr_output_path = os.path.join(DATA_DIR, i.split(".")[0]+'_asr')
             video_path = os.path.join(DATA_DIR, i)
             asr_caption = generate_asr(video_path, asr_output_path)
@@ -371,7 +360,6 @@ def respond():
             responses += [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  asr_caption, "video_captioning_chapters": video_caption}]
         except Exception:
             logger.info(f"An error occurred in vidchapters-service: {CAP_ERR_MSG}")
-            #TODO: Error on which step asr or vid2seq
             responses.append(
                 [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  "Error", "video_captioning_chapters": "Error"}]
             )
