@@ -18,22 +18,17 @@ import torch
 import numpy as np
 import random
 
-import ffmpeg
+import future
 import clip
 import subprocess
 import re
 
 import sys
-
-# Добавление пути к sys.path
-# sys.path.append(os.path.join(os.path.dirname(__file__), 'src/aux_files/VidChapters'))
-# sys.path.append('/src/aux_files/VidChapters')
-
-# sys.path.append('/src/aux_files/VidChapters')
-from args import get_args_parser, MODEL_DIR
+sys.path.append('/src')
+from aux_files.VidChapters.args import get_args_parser, MODEL_DIR
 
 # # from aux_files.demo_vid2seq import
-from model.vid2seq import _get_tokenizer, Vid2Seq
+from aux_files.VidChapters.model.vid2seq import _get_tokenizer, Vid2Seq
 
 CAP_ERR_MSG = "The file format is not supported"
 CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
@@ -107,10 +102,40 @@ def generate_asr(video_path, asr_output_path):
     # dict_of_args['video_example'] = video_path
     # dict_of_args['asr_example'] = asr_output_path
 
+    # try:
+    #     import pkg_resources
+    #     print(pkg_resources.get_distribution("ffmpeg-python"))
+    #     print(pkg_resources.get_distribution("ffmpeg"))
+    #     subprocess.run(["pwd"], check=True)
+    # except pkg_resources.DistributionNotFound:
+    #     print(subprocess.check_call([sys.executable, "-m", "pip", "install", "ffmpeg-python"]))
+    #     import ffmpeg
+    #     print(subprocess.run(["ffmpeg", "-version"], check=True))
+    #     logger.warn(f"str{e}")
+    # except Exception as e:
+    #     logger.warn(f"str{e}")
+
+
     logger.info("load Whisper model")
-    asr_model = whisper.load_model('large-v2', DEVICE, download_root=os.path.join('/src/aux_files', MODEL_DIR))
+    # assert whisper.load_model('large-v2', download_root='/src/aux_files/TOFILL')
+    try:
+        asr_model = whisper.load_model('large-v2', download_root='/src')
+    except Exception as e:
+        logger.warn(f"str{e}")
     logger.info("extract ASR")
-    asr = asr_model.transcribe(video_path)
+    try:
+        import pkg_resources
+        print(pkg_resources.get_distribution("ffmpeg-python"))
+        print(pkg_resources.get_distribution("ffmpeg"))
+
+        # vidchapters-service_1              | Requirement already satisfied: ffmpeg-python in /usr/local/lib/python3.8/site-packages (0.2.0)
+        # vidchapters-service_1              | Requirement already satisfied: future in /usr/local/lib/python3.8/site-packages (from ffmpeg-python) (1.0.0)
+        
+        # subprocess.check_call([sys.executable, "-m", "pip", "install", "ffmpeg"])
+        asr = asr_model.transcribe(video_path)
+    except Exception as e:
+        logger.warn(f"str{e}")
+    logger.info(asr)
     logger.info("load align model")
     align_model, metadata = whisperx.load_align_model(language_code=asr['language'], device=DEVICE, model_dir=MODEL_DIR)
     logger.info("extract audio")

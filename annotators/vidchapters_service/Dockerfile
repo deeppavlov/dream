@@ -6,6 +6,8 @@ RUN pip install --upgrade pip
 RUN pip install gdown
 COPY ./annotators/vidchapters_service/requirements.txt /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+# RUN ls /src
+# RUN which clip
 
 RUN git clone https://github.com/antoyang/VidChapters.git /src/aux_files/VidChapters
 
@@ -22,4 +24,10 @@ RUN pip install git+https://github.com/m-bain/whisperx.git
 
 COPY ./annotators/vidchapters_service /src/
 
-ENV PYTHONPATH "${PYTHONPATH}:/src/aux_files/VidChapters"
+RUN pip list
+RUN pwd
+
+# RUN sudo apt update && sudo apt install ffmpeg
+# RUN sudo apt install ffmpeg
+
+# ENV PYTHONPATH "${PYTHONPATH}:/src/aux_files/VidChapters"
