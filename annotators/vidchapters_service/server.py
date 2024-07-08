@@ -30,7 +30,7 @@ import sys
 # sys.path.append('/src/aux_files/VidChapters')
 
 # sys.path.append('/src/aux_files/VidChapters')
-from args import get_args_parser
+from args import get_args_parser, MODEL_DIR
 
 # # from aux_files.demo_vid2seq import
 from model.vid2seq import _get_tokenizer, Vid2Seq
@@ -38,7 +38,6 @@ from model.vid2seq import _get_tokenizer, Vid2Seq
 CAP_ERR_MSG = "The file format is not supported"
 CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
 MODEL_PATH = "/src/aux_files/captioning_model.pth"
-MODEL_DIR = "/src/aux_files/TOFILL"
 DATA_DIR = "/src/aux_files/data/video_captioning"
 DEVICE='cuda'
 
@@ -95,12 +94,21 @@ def build_vid2seq_model(dict_of_args, tokenizer):
 
 def generate_asr(video_path, asr_output_path):
 
-    video_path = '/cephfs/home/dolidze/notebooks/test.webm'
-    asr_output_path = '/cephfs/home/dolidze/notebooks/test_asr'
+    # video_path = '/cephfs/home/dolidze/notebooks/test.webm'
+    # asr_output_path = '/cephfs/home/dolidze/notebooks/test_asr'
     # device='cuda'
 
+    # parser = argparse.ArgumentParser(parents=[get_args_parser()])
+    # args = parser.parse_args()
+    # cli_string = '--video_example=<VIDEO_PATH> --asr_example <OUTPUT_ASR_PATH> --combine_datasets chapter'
+    # cli_arguments = cli_string.split()
+    # args = parser.parse_args(cli_arguments)
+    # dict_of_args = vars(args)
+    # dict_of_args['video_example'] = video_path
+    # dict_of_args['asr_example'] = asr_output_path
+
     logger.info("load Whisper model")
-    asr_model = whisper.load_model('large-v2', DEVICE, download_root=MODEL_DIR)
+    asr_model = whisper.load_model('large-v2', DEVICE, download_root=os.path.join('/src/aux_files', MODEL_DIR))
     logger.info("extract ASR")
     asr = asr_model.transcribe(video_path)
     logger.info("load align model")
@@ -116,8 +124,8 @@ def generate_asr(video_path, asr_output_path):
 
 def generate_video_caption(video_path, asr_path):
 
-    video_path = '/cephfs/home/dolidze/notebooks/test.webm'
-    asr_path = '/cephfs/home/dolidze/notebooks/test_asr'
+    # video_path = '/cephfs/home/dolidze/notebooks/test.webm'
+    # asr_path = '/cephfs/home/dolidze/notebooks/test_asr'
 
     # reparse parser
     parser = argparse.ArgumentParser(parents=[get_args_parser()])
@@ -319,7 +327,7 @@ def respond():
         try:
             logger.info(f"Scanning DATA_DIR ({DATA_DIR}) for files...")
             for i in os.listdir(DATA_DIR):
-                logger.info('something i', i,'Filename',filename)
+                # i is a filename without path
                 logger.info("Scanning finished successfully, files found, starting inference...")
                 break
                 # if i.split(".")[-1] == "wav":

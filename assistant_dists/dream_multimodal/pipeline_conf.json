@@ -113,7 +113,7 @@
             "vidchapters-service": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 90.0,
+                    "timeout": 900.0,
                     "url": "http://vidchapters-service:8045/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:vidchapters_service_formatter",
