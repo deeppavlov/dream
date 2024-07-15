@@ -14,7 +14,7 @@ for d in data["test"]:
 
 
 def generate_triplets(uttr_batch):
-    triplets_pred = requests.post("http://0.0.0.0:9136/respond", json={"utterances": uttr_batch}).json()
+    triplets_pred = requests.post("http://0.0.0.0:8136/respond", json={"utterances": uttr_batch}).json()
     final_preds = []
     for i in triplets_pred:
         triplets = i[0].get("triplets")
