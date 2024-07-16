@@ -2,7 +2,7 @@ services:
   agent:
     command: sh -c 'bin/wait && python -m deeppavlov_agent.run agent.pipeline_config=assistant_dists/deepy_assistant/pipeline_conf.json'
     environment:
-      WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8131,
+      WAIT_HOSTS: "ranking-based-response-selector:8002, sentence-ranker:8128, prompt-selector:8135, openai-api-chatgpt:8145,
         dff-deepy-prompted-skill:8152"
       WAIT_HOSTS_TIMEOUT: ${WAIT_TIMEOUT:-1000}
       HIGH_PRIORITY_INTENTS: 1
@@ -79,12 +79,12 @@ services:
     env_file: [ .env ]
     build:
       args:
-        SERVICE_PORT: 8131
+        SERVICE_PORT: 8145
         SERVICE_NAME: openai_api_chatgpt
         PRETRAINED_MODEL_NAME_OR_PATH: gpt-3.5-turbo
       context: .
       dockerfile: ./services/openai_api_lm/Dockerfile
-    command: flask run -h 0.0.0.0 -p 8131
+    command: flask run -h 0.0.0.0 -p 8145
     environment:
       - CUDA_VISIBLE_DEVICES=0
       - FLASK_APP=server
@@ -102,7 +102,7 @@ services:
         SERVICE_PORT: 8152
         SERVICE_NAME: dff_deepy_prompted_skill
         PROMPT_FILE: common/prompts/deepy.json
-        GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8131/respond
+        GENERATIVE_SERVICE_URL: http://openai-api-chatgpt:8145/respond
         GENERATIVE_SERVICE_CONFIG: openai-chatgpt.json
         GENERATIVE_TIMEOUT: 120
         N_UTTERANCES_CONTEXT: 7
