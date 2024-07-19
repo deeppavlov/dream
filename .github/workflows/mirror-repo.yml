@@ -23,7 +23,7 @@ jobs:
         uses: yesolutions/mirror-action@master
         continue-on-error: true
         with:
-          REMOTE: ${{ inputs.GITLAB_URL }}
+          REMOTE: ${{ secrets.GITLAB_URL }}
           GIT_USERNAME: ${{ secrets.GITLAB_USER }}
           GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
 
@@ -41,7 +41,7 @@ jobs:
         uses: yesolutions/mirror-action@master
         continue-on-error: true
         with:
-          REMOTE: ${{ inputs.GITLAB_URL }}
+          REMOTE: ${{ secrets.GITLAB_URL }}
           GIT_USERNAME: ${{ secrets.GITLAB_USER }}
           GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
         if: ${{ steps.mirror-1.outcome == 'failure' }}
@@ -60,7 +60,7 @@ jobs:
         uses: yesolutions/mirror-action@master
         continue-on-error: true
         with:
-          REMOTE: ${{ inputs.GITLAB_URL }}
+          REMOTE: ${{ secrets.GITLAB_URL }}
           GIT_USERNAME: ${{ secrets.GITLAB_USER }}
           GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
         if: ${{ steps.mirror-2.outcome == 'failure' }}
@@ -78,7 +78,7 @@ jobs:
       - id: mirror-4
         uses: yesolutions/mirror-action@master
         with:
-          REMOTE: ${{ inputs.GITLAB_URL }}
+          REMOTE: ${{ secrets.GITLAB_URL }}
           GIT_USERNAME: ${{ secrets.GITLAB_USER }}
           GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
         if: ${{ steps.mirror-3.outcome == 'failure' }}
