@@ -2,11 +2,9 @@ name: Mirror repo
 
 on:
   workflow_call:
-    inputs:
+    secrets:
       GITLAB_URL:
         required: true
-        type: string
-    secrets:
       GITLAB_USER:
         required: true
       GITLAB_PASSWORD:
