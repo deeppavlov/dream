@@ -1,0 +1,84 @@
+name: Mirror repo
+
+on:
+  workflow_call:
+    inputs:
+      GITLAB_URL:
+        required: true
+        type: string
+    secrets:
+      GITLAB_USER:
+        required: true
+      GITLAB_PASSWORD:
+        required: true
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: mirror-1
+        uses: yesolutions/mirror-action@master
+        continue-on-error: true
+        with:
+          REMOTE: ${{ inputs.GITLAB_URL }}
+          GIT_USERNAME: ${{ secrets.GITLAB_USER }}
+          GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
+
+      - run: sleep 60s
+        shell: bash  
+        if: ${{ steps.mirror-1.outcome == 'failure' }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        if: ${{ steps.mirror-1.outcome == 'failure' }}
+      - run: sudo git remote remove mirror || true
+        if: ${{ steps.mirror-1.outcome == 'failure' }}
+      - id: mirror-2
+        uses: yesolutions/mirror-action@master
+        continue-on-error: true
+        with:
+          REMOTE: ${{ inputs.GITLAB_URL }}
+          GIT_USERNAME: ${{ secrets.GITLAB_USER }}
+          GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
+        if: ${{ steps.mirror-1.outcome == 'failure' }}
+          
+      - run: sleep 60s
+        shell: bash    
+        if: ${{ steps.mirror-2.outcome == 'failure' }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        if: ${{ steps.mirror-2.outcome == 'failure' }}
+      - run: sudo git remote remove mirror || true
+        if: ${{ steps.mirror-2.outcome == 'failure' }}
+      - id: mirror-3
+        uses: yesolutions/mirror-action@master
+        continue-on-error: true
+        with:
+          REMOTE: ${{ inputs.GITLAB_URL }}
+          GIT_USERNAME: ${{ secrets.GITLAB_USER }}
+          GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
+        if: ${{ steps.mirror-2.outcome == 'failure' }}
+        
+      - run: sleep 60s
+        shell: bash    
+        if: ${{ steps.mirror-3.outcome == 'failure' }}
+
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+        if: ${{ steps.mirror-3.outcome == 'failure' }}
+      - run: sudo git remote remove mirror || true
+        if: ${{ steps.mirror-3.outcome == 'failure' }}
+      - id: mirror-4
+        uses: yesolutions/mirror-action@master
+        with:
+          REMOTE: ${{ inputs.GITLAB_URL }}
+          GIT_USERNAME: ${{ secrets.GITLAB_USER }}
+          GIT_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
+        if: ${{ steps.mirror-3.outcome == 'failure' }}
