@@ -4,7 +4,7 @@ on: [push, delete]
 
 jobs:
   call-dream-ops-mirror-workflow:
-    uses: dream/.github/workflows/mirror-repo.yml@main
+    uses: .github/workflows/mirror-repo.yml@main
     secrets:
       GITLAB_URL: ${{ secrets.GITLAB_URL }}
       GITLAB_USER: ${{ secrets.GITLAB_USER }}
