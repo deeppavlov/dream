@@ -1,0 +1,75 @@
+{
+  "chainer": {
+    "in": ["x"],
+    "pipe": [
+       {
+        "class_name": "stream_spacy_tokenizer",
+                "in": [
+                    "x"
+                ],
+                "id": "my_tokenizer",
+                "lemmas": false,
+                "out": "token_lemmas",
+                "spacy_model": "en_core_web_sm",
+                "support_load_path": "{DOWNLOADS_PATH}/logreg_files/support_dataset.json"
+            },
+            {
+                "ref": "my_tokenizer",
+                "in": [
+                    "token_lemmas"
+                ],
+                "out": [
+                    "text_lem"
+                ]
+            },
+            {
+                "class_name": "fasttext",
+                "in": [
+                    "token_lemmas"
+                ],
+                "load_path": "{DOWNLOADS_PATH}/embeddings/fasttext/{LANGUAGE}.bin",
+                "mean": true,
+                "out": [
+                    "text_vector"
+                ]
+            },
+            {
+                "in": [
+                    "text_vector"
+                ],
+                "out": [
+                    "y_pred_probas"
+                ],
+                "class_name": "sklearn_component",
+                "main": true,
+                "save_path": "{DOWNLOADS_PATH}/logreg_files/model.pkl",
+                "load_path": "{DOWNLOADS_PATH}/logreg_files/model.pkl",
+                "model_class": "sklearn.linear_model:LogisticRegression",
+                "infer_method": "predict_proba",
+                "C": 10,
+                "penalty": "l2"
+            }
+    ],
+    "out": ["y_pred_probas"]
+  },
+  "metadata": {
+    "variables": {
+      "ROOT_PATH": "~/.deeppavlov",
+      "DOWNLOADS_PATH":"{ROOT_PATH}/downloads",
+      "LOGREG_PATH": "{DOWNLOADS_PATH}/logreg_files",
+      "LANGUAGE":"en"
+    },
+    "imports":["utils"],
+    "download": [
+            {
+                "url": "http://files.deeppavlov.ai/embeddings/fasttext/{LANGUAGE}.bin",
+                "subdir": "{DOWNLOADS_PATH}/embeddings/fasttext"
+            },
+            {
+                "url": "https://files.deeppavlov.ai/dream_data/dnnc_intents/logreg_files.tar.gz",
+                "subdir": "{LOGREG_PATH}"
+            }
+            
+    ]
+  }
+}

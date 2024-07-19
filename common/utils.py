@@ -838,7 +838,6 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     else:
         midas_intent_labels = []
     cobot_da_intent_probs, cobot_da_intent_labels = {}, []
-
     if "cobot_dialogact" in annotations and "intents" in annotations["cobot_dialogact"]:
         cobot_da_intent_labels = annotated_utterance["annotations"]["cobot_dialogact"]["intents"]
     elif "cobot_dialogact_intents" in annotations:
@@ -852,10 +851,13 @@ def get_intents(annotated_utterance, probs=False, default_probs=None, default_la
     cobot_da_intent_labels = _process_text(cobot_da_intent_labels)
     if not cobot_da_intent_probs:
         cobot_da_intent_probs = _labels_to_probs(cobot_da_intent_labels, combined_classes["cobot_dialogact_intents"])
-
+    dnnc_intent_probs = annotated_utterance.get("annotations", {}).get("dnnc_intents", {"oos": 1})
+    dnnc_intent_labels = [intent for intent in dnnc_intent_probs if dnnc_intent_probs.get(intent, 0) == 1]
     if which == "all":
-        answer_probs = {**detected_intent_probs, **cobot_da_intent_probs, **midas_intent_probs}
-        answer_labels = detected_intents + cobot_da_intent_labels + midas_intent_labels
+        answer_probs = {**detected_intent_probs, **cobot_da_intent_probs, **midas_intent_probs, **dnnc_intent_probs}
+        answer_labels = detected_intents + cobot_da_intent_labels + midas_intent_labels + dnnc_intent_labels
+    elif which == "dnnc":
+        answer_probs, answer_labels = dnnc_intent_probs, dnnc_intents
     elif which == "intent_catcher":
         answer_probs, answer_labels = detected_intent_probs, detected_intents
     elif which == "cobot_dialogact_intents":
