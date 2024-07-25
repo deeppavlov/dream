@@ -44,6 +44,9 @@ sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# create asr whisper model here
+asr_model = whisper.load_model(ASR_MODEL, device = DEVICE, in_memory=True)
+
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
 
@@ -94,7 +97,7 @@ def generate_asr(video_path, asr_output_path):
     logger.info("load Whisper model")
     try:
         # TODO: speed up via hugging face (current upload 23s)
-        asr_model = whisper.load_model(ASR_MODEL, device = DEVICE, in_memory=True)
+        # asr_model = whisper.load_model(ASR_MODEL, device = DEVICE, in_memory=True)
         asr = asr_model.transcribe(video_path)
         # TODO: download while building, not on inference -- takes way to long
         align_model, metadata = whisperx.load_align_model(language_code=asr['language'], device = DEVICE, model_dir=os.path.join('/src/aux_files', MODEL_DIR))
@@ -298,8 +301,8 @@ def generate_video_caption(video_path, asr_path):
 
 
 def gen_video_caption(video_path, asr_caption):
-    import os
-    os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/hub'
+    # import os
+    # os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/hub'
     path_2_demo = '/src/aux_files/VidChapters/demo_vid2seq.py'
     command = [
         "python", 

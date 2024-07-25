@@ -34,5 +34,5 @@ RUN apt-get update && apt-get install -y ffmpeg
 
 RUN python -c "import whisper; whisper.load_model('large-v2', device='cpu', download_root='/src/aux_files/TOFILL')"
 
-ENV HF_HOME="~/.cache/huggingface/hub"
+# ENV HF_HOME="~/.cache/huggingface/hub"
 # RUN export TRANSFORMERS_CACHE=~/.cache/huggingface/hub
