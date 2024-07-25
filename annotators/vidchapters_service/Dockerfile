@@ -15,6 +15,11 @@ RUN touch /src/__init__.py && \
     touch /src/aux_files/__init__.py && \
     touch /src/aux_files/VidChapters/__init__.py
 
+RUN sed -in '/args.model_name = os.path.join(os.environ\[\"TRANSFORMERS_CACHE\"\], args.model_name)/d' /src/aux_files/VidChapters/demo_vid2seq.py
+RUN sed -i "s/t5-base/google-t5\/t5-base/" /src/aux_files/VidChapters/args.py
+RUN cat /src/aux_files/VidChapters/args.py
+RUN sed -i "s/local_files_only=True/local_files_only=False/" /src/aux_files/VidChapters/model/vid2seq.py
+# RUN cat /src/aux_files/VidChapters/model/vid2seq.py
 
 RUN wget -O /src/aux_files/checkpoint_vidchapters https://drive.google.com/file/d/1jbmfuB44p3twrlqnfIv6cCM3Oyqk-zeh
 RUN gdown --fuzzy https://drive.google.com/file/d/1qmQcEkDDlnkAkRd6BIrVoArBv6Sg1Lv7/view -O /src/aux_files/captioning_model.pth -c --no-check-certificate
@@ -24,12 +29,10 @@ RUN gdown --fuzzy https://drive.google.com/file/d/1qmQcEkDDlnkAkRd6BIrVoArBv6Sg1
 
 COPY ./annotators/vidchapters_service /src/
 
-RUN pip list
-RUN ls /src/aux_files
-
-# RUN sudo apt update && sudo apt install ffmpeg
-# RUN sudo apt install ffmpeg
-
-# ENV PYTHONPATH "${PYTHONPATH}:/src/aux_files/VidChapters"
 RUN apt-get update && apt-get install -y ffmpeg
-ENV PYTHONPATH="${PYTHONPATH}:/src"
+# ENV PYTHONPATH="${PYTHONPATH}:/src"
+
+RUN python -c "import whisper; whisper.load_model('large-v2', device='cpu', download_root='/src/aux_files/TOFILL')"
+
+ENV HF_HOME="~/.cache/huggingface/hub"
+# RUN export TRANSFORMERS_CACHE=~/.cache/huggingface/hub

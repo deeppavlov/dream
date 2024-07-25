@@ -18,23 +18,26 @@ import torch
 import numpy as np
 import random
 
-import future
+import ffmpeg
 import clip
 import subprocess
 import re
 
-import sys
-# sys.path.append('/src')
-from aux_files.VidChapters.args import get_args_parser, MODEL_DIR
+from transformers import T5Tokenizer
 
-# # from aux_files.demo_vid2seq import
-from aux_files.VidChapters.model.vid2seq import _get_tokenizer, Vid2Seq
+import sys
+sys.path.append('/src/aux_files/VidChapters')
+from args import get_args_parser, MODEL_DIR
+
+#from aux_files.demo_vid2seq import
+from model import _get_tokenizer, Vid2Seq
 
 CAP_ERR_MSG = "The file format is not supported"
 CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
 MODEL_PATH = "/src/aux_files/captioning_model.pth"
 DATA_DIR = "/src/aux_files/data/video_captioning"
-DEVICE='cuda'
+ASR_MODEL = "/src/aux_files/TOFILL/large-v2.pt"
+DEVICE='cpu'
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -88,67 +91,19 @@ def build_vid2seq_model(dict_of_args, tokenizer):
     return model
 
 def generate_asr(video_path, asr_output_path):
-
-    # video_path = '/cephfs/home/dolidze/notebooks/test.webm'
-    # asr_output_path = '/cephfs/home/dolidze/notebooks/test_asr'
-    # device='cuda'
-
-    # parser = argparse.ArgumentParser(parents=[get_args_parser()])
-    # args = parser.parse_args()
-    # cli_string = '--video_example=<VIDEO_PATH> --asr_example <OUTPUT_ASR_PATH> --combine_datasets chapter'
-    # cli_arguments = cli_string.split()
-    # args = parser.parse_args(cli_arguments)
-    # dict_of_args = vars(args)
-    # dict_of_args['video_example'] = video_path
-    # dict_of_args['asr_example'] = asr_output_path
-
-    # try:
-    #     import pkg_resources
-    #     print(pkg_resources.get_distribution("ffmpeg-python"))
-    #     print(pkg_resources.get_distribution("ffmpeg"))
-    #     subprocess.run(["pwd"], check=True)
-    # except pkg_resources.DistributionNotFound:
-    #     print(subprocess.check_call([sys.executable, "-m", "pip", "install", "ffmpeg-python"]))
-    #     import ffmpeg
-    #     print(subprocess.run(["ffmpeg", "-version"], check=True))
-    #     logger.warn(f"str{e}")
-    # except Exception as e:
-    #     logger.warn(f"str{e}")
-
-
     logger.info("load Whisper model")
-    # assert whisper.load_model('large-v2', download_root='/src/aux_files/TOFILL')
     try:
-        #TODO download while building, not on inference -- takes way to long
-        asr_model = whisper.load_model('large-v2', device = DEVICE, download_root='/src/aux_files/TOFILL')
-    except Exception as e:
-        logger.warn(f"str{e}")
-    logger.info("extract ASR")
-    try:
-        # logger.info("Checking for ffmpeg")
-        # logger.info(os.getcwd())
-        # import pkg_resources, shutil
-        # logger.info(pkg_resources.get_distribution("ffmpeg-python"))
-        # logger.info(pkg_resources.get_distribution("ffmpeg"))
-        # logger.info(shutil.which("ffmpeg"))
-        # sys.path.append('/src/aux_files/TOFILL')
-        # subprocess.check_call([sys.executable, "-m", "pip", "install", "ffmpeg"])
+        # TODO: speed up via hugging face (current upload 23s)
+        asr_model = whisper.load_model(ASR_MODEL, device = DEVICE, in_memory=True)
         asr = asr_model.transcribe(video_path)
-    except Exception as e:
-        logger.warn(f"str{e}, {type(e)=}")
-    # logger.info(asr)
-    logger.info("load align model")
-    try: 
+        # TODO: download while building, not on inference -- takes way to long
         align_model, metadata = whisperx.load_align_model(language_code=asr['language'], device = DEVICE, model_dir=os.path.join('/src/aux_files', MODEL_DIR))
+        audio = whisperx.load_audio(video_path)
+        aligned_asr = whisperx.align(asr["segments"], align_model, metadata, audio, DEVICE, return_char_alignments=False)
+        pickle.dump(aligned_asr, open(asr_output_path, 'wb'))
     except Exception as e:
         logger.warn(f"str{e}, {type(e)=}")
-    logger.info("extract audio")
-    audio = whisperx.load_audio(video_path)
-    logger.info("align ASR")
-    aligned_asr = whisperx.align(asr["segments"], align_model, metadata, audio, DEVICE, return_char_alignments=False)
-    logger.info("saving")
-    pickle.dump(aligned_asr, open(asr_output_path, 'wb'))
-
+    
     return asr_output_path
 
 def generate_video_caption(video_path, asr_path):
@@ -157,31 +112,58 @@ def generate_video_caption(video_path, asr_path):
     # asr_path = '/cephfs/home/dolidze/notebooks/test_asr'
 
     # reparse parser
-    parser = argparse.ArgumentParser(parents=[get_args_parser()])
-    args = parser.parse_args()
-    cli_string = '--load=<CHECKPOINT> --video_example=<VIDEO_PATH> --asr_example <OUTPUT_ASR_PATH> --combine_datasets chapters --model_name t5-base'
-    cli_arguments = cli_string.split()
-    args = parser.parse_args(cli_arguments)
-    dict_of_args = vars(args)
-    dict_of_args['combine_datasets'] = 'chapters'
-    dict_of_args['model_name'] = 't5-base'
+    logger.info("Welcome back to hell!!!")
+    try: 
+        parser = argparse.ArgumentParser(parents=[get_args_parser()])
+        logger.info(parser)
+        cli_string = '--combine_datasets chapters --model_name t5-base'
+        cli_arguments = cli_string.split()
+        args = parser.parse_args(cli_arguments)
 
-    device = torch.device(dict_of_args.get('device'))
+        dict_of_args = vars(args)
+        dict_of_args['asr_example'] = asr_path
+        dict_of_args['video_example'] = video_path
+        dict_of_args['load']=CHECKPOINTS
+        logger.info(dict_of_args)
+        logger.info(dict_of_args.get('model_name'))
 
-    # fix seeds
-    seed = dict_of_args.get('seed')
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-    random.seed(seed)
+        # device = torch.device(dict_of_args.get('device'))
+        device = DEVICE
 
-    logger.info("load Vid2Seq model")
-    tokenizer = _get_tokenizer(dict_of_args.get('model_name'), dict_of_args.get('num_bins'))
-    model = build_vid2seq_model(args, tokenizer)
-    model.eval()
-    model.to(device)
-    # assert args.load
-    dict_of_args['load']=CHECKPOINTS
+        # fix seeds
+        seed = dict_of_args.get('seed')
+        torch.manual_seed(seed)
+        np.random.seed(seed)
+        random.seed(seed)
+
+        logger.info("loading Vid2Seq model")
+
+        # tokenizer_path = 't5-base'
+        dict_of_args['model_name'] = 't5-base'
+        # tokenizer_path = dict_of_args.get('model_name')
+
+        # if 't5' in tokenizer_path:
+        #     tokenizer = T5Tokenizer.from_pretrained(tokenizer_path, local_files_only=False)
+        #     if dict_of_args.get('num_bins'):
+        #         new_tokens = ["<time=" + str(i) + ">" for i in range(dict_of_args.get('num_bins'))]
+        #         tokenizer.add_tokens(list(new_tokens))
+        # else:
+        #     raise NotImplementedError(tokenizer_path)
+        
+        tokenizer = _get_tokenizer(dict_of_args.get('model_name'), dict_of_args.get('num_bins'))
+
+        logger.info("building Vid2Seq model")
+        model = build_vid2seq_model(dict_of_args, tokenizer)
+        model.eval()
+        model.to(device)
+    except Exception as e:
+        logger.warn(f"{e}, {type(e)=}")
+
+    
+    logger.info("loading checkpoints")
     checkpoint = torch.load(dict_of_args.get('load'), map_location="cpu")
+
+    logger.info("load_state_dict")
     model.load_state_dict(checkpoint["model"], strict=False)
 
     logger.info("loading visual backbone")
@@ -192,7 +174,6 @@ def generate_video_caption(video_path, asr_path):
 
     logger.info("extracting visual features")
     # TODO: rewrite into sep. function 
-    dict_of_args['video_example'] = video_path
     probe = ffmpeg.probe(dict_of_args.get('video_example'))
     video_stream = next((stream for stream in probe["streams"] if stream["codec_type"] == "video"), None)
     
@@ -235,7 +216,6 @@ def generate_video_caption(video_path, asr_path):
     logger.info("visual features extracted")
 
     logger.info("load ASR")
-    dict_of_args['asr_example'] = asr_path
     segments = pickle.load(open(dict_of_args.get('asr_example'), 'rb'))["segments"]
     texts, starts, ends = [], [], []
     for i in range(len(segments)):
@@ -316,6 +296,27 @@ def generate_video_caption(video_path, asr_path):
 
     return res
 
+
+def gen_video_caption(video_path, asr_caption):
+    import os
+    os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/hub'
+    path_2_demo = '/src/aux_files/VidChapters/demo_vid2seq.py'
+    command = [
+        "python", 
+        path_2_demo,
+        f'--load={CHECKPOINTS}',
+        f'--video_example={video_path}',
+        f'--asr_example={asr_caption}',
+        "--combine_datasets", "chapters"
+    ]
+    logger.info(command)
+    try:
+        result = subprocess.run(command, capture_output=True, text=True)
+        logger.info(result)
+    except Exception as e:
+        logger.warn(f"str{e}, {type(e)=}")
+    return "this is fine"
+
 @app.route("/respond", methods=["POST"])
 def respond():
     global CAP_ERR_MSG
@@ -355,7 +356,9 @@ def respond():
             asr_output_path = os.path.join(DATA_DIR, i.split(".")[0]+'_asr')
             video_path = os.path.join(DATA_DIR, i)
             asr_caption = generate_asr(video_path, asr_output_path)
-            video_caption = generate_video_caption(video_path, asr_caption)
+            logger.info(asr_caption)
+            # video_caption = generate_video_caption(video_path, asr_caption)
+            video_caption = gen_video_caption(video_path, asr_caption)
             logger.info("Inference finished successfully")
             responses += [{"video_type": atype, "video_duration": duration, "video_path": path, "asr_path":  asr_caption, "video_captioning_chapters": video_caption}]
         except Exception:

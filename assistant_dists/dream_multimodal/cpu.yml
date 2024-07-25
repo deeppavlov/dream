@@ -16,3 +16,7 @@ services:
     environment:
       DEVICE: cpu
       CUDA_VISIBLE_DEVICES: ""
+  vidchapters-service:
+    environment:
+      DEVICE: cpu
+      CUDA_VISIBLE_DEVICES: ""
