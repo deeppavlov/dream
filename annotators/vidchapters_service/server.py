@@ -37,7 +37,7 @@ CHECKPOINTS = "/src/aux_files/checkpoint_vidchapters"
 MODEL_PATH = "/src/aux_files/captioning_model.pth"
 DATA_DIR = "/src/aux_files/data/video_captioning"
 ASR_MODEL = "/src/aux_files/TOFILL/large-v2.pt"
-DEVICE='cuda'
+DEVICE='cpu'
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -307,14 +307,15 @@ def gen_video_caption(video_path, asr_caption):
     command = [
         "python", 
         path_2_demo,
-        f'--load={CHECKPOINTS}',
+        f'--load={MODEL_PATH}',
         f'--video_example={video_path}',
         f'--asr_example={asr_caption}',
-        "--combine_datasets", "chapters"
+        "--combine_datasets", "chapters",
+        "--device", "cpu"
     ]
-    logger.info(command)
     try:
         result = subprocess.run(command, capture_output=True, text=True)
+        logger.info(result.stdout)
         logger.info(result.stderr)
     except Exception as e:
         logger.warn(f"str{e}, {type(e)=}")

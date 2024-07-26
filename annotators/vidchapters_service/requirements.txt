@@ -24,7 +24,7 @@ scikit_learn==0.23.2
 tensorboardX
 langdetect==1.0.9
 genbit==2.2.0.0
-clip
+git+https://github.com/openai/CLIP.git
 
 flask==2.2.2
 Werkzeug==2.2.2
