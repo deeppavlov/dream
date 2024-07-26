@@ -32,7 +32,7 @@ COPY ./annotators/vidchapters_service /src/
 RUN apt-get update && apt-get install -y ffmpeg
 # ENV PYTHONPATH="${PYTHONPATH}:/src"
 
-RUN python -c "import whisper; whisper.load_model('large-v2', device='cpu', download_root='/src/aux_files/TOFILL')"
+RUN python -c "import whisper; whisper.load_model('large-v2', device='cuda', download_root='/src/aux_files/TOFILL')"
 
 # ENV HF_HOME="~/.cache/huggingface/hub"
 # RUN export TRANSFORMERS_CACHE=~/.cache/huggingface/hub

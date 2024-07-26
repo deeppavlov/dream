@@ -1,4 +1,4 @@
-name: personality-detection
+name: vidchapters-service
 endpoints:
 - model
 compose:
@@ -6,11 +6,14 @@ compose:
   - .env
   build:
     args:
-      SERVICE_PORT: 8026
-      SERVICE_NAME: personality_detection
+      SERVICE_PORT: 8045
+      SERVICE_NAME: vidchapters_service
+      CUDA_VISIBLE_DEVICES: '0,1,2'
     context: .
-    dockerfile: ./annotators/personality_detection/Dockerfile
-  command: uvicorn server:app --host 0.0.0.0 --port 8026
+    dockerfile: ./annotators/vidchapters_service/Dockerfile
+  environment:
+    - CUDA_VISIBLE_DEVICES=0
+  command: uvicorn server:app --host 0.0.0.0 --port 8045
   deploy:
     resources:
       limits:
@@ -18,6 +21,6 @@ compose:
       reservations:
         memory: 312M
   volumes:
-  - ./annotators/personality_detection:/src
+  - ./annotators/vidchapters_service:/src
   ports:
-  - 8026:8026
+  - 8045:8045
