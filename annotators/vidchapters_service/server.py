@@ -315,11 +315,10 @@ def gen_video_caption(video_path, asr_caption):
     ]
     try:
         result = subprocess.run(command, capture_output=True, text=True)
-        logger.info(result.stdout)
-        logger.info(result.stderr)
+        # logger.info(result.stdout)
     except Exception as e:
         logger.warn(f"str{e}, {type(e)=}")
-    return "this is fine"
+    return result.stdout
 
 @app.route("/respond", methods=["POST"])
 def respond():
@@ -360,7 +359,7 @@ def respond():
             asr_output_path = os.path.join(DATA_DIR, i.split(".")[0]+'_asr')
             video_path = os.path.join(DATA_DIR, i)
             asr_caption = generate_asr(video_path, asr_output_path)
-            logger.info(asr_caption)
+            logger.info("ASR caption is ready. Video chapters in processing.")
             # video_caption = generate_video_caption(video_path, asr_caption)
             video_caption = gen_video_caption(video_path, asr_caption)
             logger.info("Inference finished successfully")
