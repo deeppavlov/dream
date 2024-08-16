@@ -15,7 +15,9 @@ from seq2seq_utils.bot_utils import DialogBotV1, H2PersonaChatHyperparametersV1
 
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 logging.getLogger("werkzeug").setLevel("INFO")
@@ -28,7 +30,9 @@ PAIR_DIALOG_HISTORY_LENGTH = int(os.environ.get("PAIR_DIALOG_HISTORY_LENGTH", 2)
 CHAT_EVERY_SENT_MAX_LENGTH = int(os.environ.get("CHAT_EVERY_SENT_MAX_LENGTH", 25))
 # PERSONA_MAX_LENGTH for single sentence
 PERSONA_EVERY_SENT_MAX_LENGTH = int(os.environ.get("PERSONA_EVERY_SENT_MAX_LENGTH", 19))
-GENERATION_PARAMS_CONFIG = os.environ.get("GENERATION_PARAMS_CONFIG", "bart-base-en-persona-chat_v1.json")
+GENERATION_PARAMS_CONFIG = os.environ.get(
+    "GENERATION_PARAMS_CONFIG", "bart-base-en-persona-chat_v1.json"
+)
 SUPER_CONFIDENCE = 1.0
 DEFAULT_CONFIDENCE = 0.9
 
@@ -93,7 +97,7 @@ def generate_response(
     response = persona_bot.next_response(
         **GENERATION_PARAMS,
     )
-    logger.info(f"response: {response}")
+    logger.info(f"persona: {persona['persona']} response: {response}")
 
     return response
 
@@ -116,8 +120,12 @@ def respond():
     last_annotated_utterances_batch = request.json["last_annotated_utterances"]
     utterances_histories = request.json["utterances_histories"]
     try:
-        for utterance, utterence_hist in zip(last_annotated_utterances_batch, utterances_histories):
-            persona = utterance.get("annotations", {}).get("relative_persona_extractor", [])
+        for utterance, utterence_hist in zip(
+            last_annotated_utterances_batch, utterances_histories
+        ):
+            persona = utterance.get("annotations", {}).get(
+                "relative_persona_extractor", []
+            )
 
             response = generate_response(
                 model=model,

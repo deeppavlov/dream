@@ -23,7 +23,7 @@ services:
       context: ./annotators/midas_classification
     command: flask run -h 0.0.0.0 -p 8090
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=''
       - FLASK_APP=server
     deploy:
       resources:

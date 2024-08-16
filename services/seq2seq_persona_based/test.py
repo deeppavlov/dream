@@ -1,4 +1,5 @@
 import requests
+import time
 
 
 def test_respond():
@@ -26,11 +27,14 @@ def test_respond():
             ]
         ],
     }
-    gold = []
-
+    gold = ['i am not sure. i am a vegetarian.']
+    start_time = time.time()
     result = requests.post(url, json=test_data).json()
-
+    total_time = time.time() - start_time
+    print(f"Execution Time: {total_time} s")
     assert len(result[0][0]) > 0, print(f"Expected: {gold} but got: {result}")
+    print(result[0][0], len(result[0][0]))
+    assert total_time < 0.4, print(f"Expected: <={0.4}s but got: {result}s")
     print("Success")
 
 

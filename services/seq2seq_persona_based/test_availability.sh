@@ -1,0 +1,3 @@
+cd ../../ && docker-compose -f docker-compose.yml -f assistant_dists/dream_mini_persona_based/docker-compose.override.yml -f assistant_dists/dream_mini_persona_based/dev.yml -f assistant_dists/dream_mini_persona_based/proxy.yml up --build -d
+python services/seq2seq_persona_based/test_availability.py
+docker-compose -f docker-compose.yml -f assistant_dists/dream_mini_persona_based/docker-compose.override.yml -f assistant_dists/dream_mini_persona_based/dev.yml -f assistant_dists/dream_mini_persona_based/proxy.yml down
