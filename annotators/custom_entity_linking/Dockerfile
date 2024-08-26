@@ -36,7 +36,7 @@ COPY $SRC_DIR .
 
 RUN python -m deeppavlov install $CONFIG && \
     python -c "import nltk; nltk.download('stopwords')" \
-    pip install git+https://github.com/deeppavlov/custom_kg_svc.git@724513b4
+    pip install git+https://github.com/deeppavlov/custom_kg_svc.git@4c7dea8858c01fa11d10dbe3d528d91bf19555e2
 
 RUN sed -i "s|$SED_ARG|g" "$CONFIG"
 
