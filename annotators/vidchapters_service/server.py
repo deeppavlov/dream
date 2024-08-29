@@ -45,7 +45,8 @@ logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 # create asr whisper model here
-asr_model = whisper.load_model(ASR_MODEL, device = DEVICE, in_memory=True)
+asr_model = whisper.load_model('large-v2', device='cpu', download_root='/src/aux_files/TOFILL')
+
 
 app = Flask(__name__)
 logging.getLogger("werkzeug").setLevel("WARNING")
@@ -94,15 +95,16 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 #     return model
 
 def generate_asr(video_path, asr_output_path):
-    logger.info("load Whisper model")
+    logger.info("ASR captioning")
     try:
-        # TODO: speed up via hugging face (current upload 23s)
-        # asr_model = whisper.load_model(ASR_MODEL, device = DEVICE, in_memory=True)
+        # takes 16 sec
         asr = asr_model.transcribe(video_path)
-        # TODO: download while building, not on inference -- takes way to long
-        align_model, metadata = whisperx.load_align_model(language_code=asr['language'], device = DEVICE, model_dir=os.path.join('/src/aux_files', MODEL_DIR))
+        # logger.info("ASR.model")
+        align_model, metadata = whisperx.load_align_model(language_code='en', device = DEVICE, model_dir=os.path.join('/src/aux_files', MODEL_DIR))
         audio = whisperx.load_audio(video_path)
+        # logger.info("Whisperx.load_audio", audio)
         aligned_asr = whisperx.align(asr["segments"], align_model, metadata, audio, DEVICE, return_char_alignments=False)
+        # logger.info("Aligned", aligned_asr)
         pickle.dump(aligned_asr, open(asr_output_path, 'wb'))
     except Exception as e:
         logger.warn(f"str{e}, {type(e)=}")
@@ -301,8 +303,7 @@ def generate_asr(video_path, asr_output_path):
 
 
 def gen_video_caption(video_path, asr_caption):
-    # import os
-    # os.environ['TRANSFORMERS_CACHE'] = '~/.cache/huggingface/hub'
+    # takes 1 min
     path_2_demo = '/src/aux_files/VidChapters/demo_vid2seq.py'
     command = [
         "python", 
