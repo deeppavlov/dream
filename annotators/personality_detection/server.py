@@ -1,25 +1,34 @@
 import logging
 import os
-import pickle
-import re
-from typing import Any, List
-
 import numpy as np
+import torch
 import sentry_sdk
+import random
+
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from typing import Any, List
 from fastapi import FastAPI, Body
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 
+
 sentry_sdk.init(os.getenv("SENTRY_DSN"))
 
-cEXT = pickle.load(open("/data/models/cEXT.p", "rb"))
-cNEU = pickle.load(open("/data/models/cNEU.p", "rb"))
-cAGR = pickle.load(open("/data/models/cAGR.p", "rb"))
-cCON = pickle.load(open("/data/models/cCON.p", "rb"))
-cOPN = pickle.load(open("/data/models/cOPN.p", "rb"))
-vectorizer_31 = pickle.load(open("/data/models/vectorizer_31.p", "rb"))
-vectorizer_30 = pickle.load(open("/data/models/vectorizer_30.p", "rb"))
 
+torch.manual_seed(42)
+random.seed(42)
+np.random.seed(42)
+
+tokenizer = AutoTokenizer.from_pretrained('tae898/emoberta-base')
+max_len = 128
+traits = ['extraversion', 'neuroticism', 'agreeableness', 'conscientiousness', 'openness']
+models = {}
+
+for trait in traits:
+    path = f'/data/{trait}_tae898_emoberta-base_seed-42.pt'
+    model = AutoModelForSequenceClassification.from_pretrained('tae898/emoberta-base', num_labels=2, ignore_mismatched_sizes=True)
+    model.load_state_dict(torch.load(path, map_location=torch.device('cpu')), strict=False)
+    models[trait] = model
 
 logger = logging.getLogger(__name__)
 
@@ -58,15 +67,16 @@ def jsonify_data(data: Any) -> Any:
 
 def predict_personality(text):
     try:
-        scentences = re.split("(?<=[.!?]) +", text)
-        text_vector_31 = vectorizer_31.transform(scentences)
-        text_vector_30 = vectorizer_30.transform(scentences)
-        EXT = cEXT.predict(text_vector_31)
-        NEU = cNEU.predict(text_vector_30)
-        AGR = cAGR.predict(text_vector_31)
-        CON = cCON.predict(text_vector_31)
-        OPN = cOPN.predict(text_vector_31)
-        return {"EXT": EXT[0], "NEU": NEU[0], "AGR": AGR[0], "CON": CON[0], "OPN": OPN[0]}
+        results = {}
+        for trait in traits:
+            trait_model = models[trait]
+            inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=max_len)
+            with torch.no_grad():
+                outputs = trait_model(**inputs)
+                predictions = torch.argmax(torch.softmax(outputs.logits, dim=1), dim=1)
+                prediction = predictions.item()
+                results[trait.upper()] = prediction
+        return results
     except Exception as e:
         sentry_sdk.capture_exception(e)
         raise e

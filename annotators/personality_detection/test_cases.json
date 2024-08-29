@@ -1,0 +1,2242 @@
+[
+    {
+        "sentences": [
+            " Yeah that would be cool ! Maybe I can also have a try at other weapons like a machine gun or a shotgun ! Maybe even a rocket launcher or an anti tank missile ! Or what about a flame thrower ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.94,
+                        "neutral": 0.05,
+                        "sadness": 0.0,
+                        "surprise": 0.01
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.88,
+                        "positive": 0.1
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I think it will be very useful in many ways . Beside , shanghai is an important trade center , not only in China , but also in the world , English is useful in almost all walks of life . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.92,
+                        "neutral": 0.06,
+                        "sadness": 0.0,
+                        "surprise": 0.01
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.06,
+                        "neutral": 0.3,
+                        "positive": 0.64
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.2,
+                0.1,
+                0.04999999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Oh , he wanted to know what time I got up this morning and if I bad a bath or a shower you know , things like that . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.05,
+                        "neutral": 0.69,
+                        "sadness": 0.01,
+                        "surprise": 0.26
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.09,
+                        "neutral": 0.86,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I'm afraid it wasn't . And when the police get here , you will also see that it wasn't . But enough of this bickering . I'm going to go find a phone.Don ' t move that arm while I'm gone . Alright ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.01,
+                        "fear": 0.58,
+                        "joy": 0.06,
+                        "neutral": 0.06,
+                        "sadness": 0.24,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.65,
+                        "neutral": 0.24,
+                        "positive": 0.12
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.25499,
+                0.29501,
+                0.12501
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Oh , no , Nathan , I ... I really think we've bought this flat at the right time , you know.Market prices are going to go up , and I think you'll find in a year or two it will be worth a lot more . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.05,
+                        "neutral": 0.26,
+                        "sadness": 0.01,
+                        "surprise": 0.67
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.08,
+                        "neutral": 0.89,
+                        "positive": 0.03
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I don't buy your story . Try not to have any more sick relatives this week , all right ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.21,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.34,
+                        "neutral": 0.29,
+                        "sadness": 0.11,
+                        "surprise": 0.05
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.53,
+                        "neutral": 0.43,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I can ’ t , Tim . I hope someday you can find some way to understand I ’ m only doing this for you . I don ’ t really wanna go but , deep in my heart I know this is the kindest thing to do . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.17,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.54,
+                        "neutral": 0.13,
+                        "sadness": 0.1,
+                        "surprise": 0.05
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.56,
+                        "neutral": 0.41,
+                        "positive": 0.02
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.14999,
+                0.050010000000000006,
+                -0.2999899999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I'm Bill . I'm in Room 908 . Can you change the room for me ? It's too noisy . My wife was woken up several times by the noise the baggage elevator made . She said it was too much for her . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.05,
+                        "disgust": 0.04,
+                        "fear": 0.34,
+                        "joy": 0.0,
+                        "neutral": 0.18,
+                        "sadness": 0.06,
+                        "surprise": 0.31
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.81,
+                        "neutral": 0.18,
+                        "positive": 0.0
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I think my English is fairly good . As you can see from my CV , I graduated from university with a B . A . degree in English . I studied the English language and English literature systematically . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.93,
+                        "neutral": 0.06,
+                        "sadness": 0.0,
+                        "surprise": 0.01
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.81,
+                        "positive": 0.18
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I just hate being alone at home with nothing to do about listen to the clock ticking.It ' s so lonely and boring . My sickness makes it worse . When will I recover ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.22,
+                        "disgust": 0.01,
+                        "fear": 0.01,
+                        "joy": 0.01,
+                        "neutral": 0.04,
+                        "sadness": 0.71,
+                        "surprise": 0.0
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.95,
+                        "neutral": 0.04,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " You did ? I thought you must feel right at home here as we get as many fast food restaurants as you do in America . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.05,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.14,
+                        "neutral": 0.47,
+                        "sadness": 0.01,
+                        "surprise": 0.33
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.09,
+                        "neutral": 0.8,
+                        "positive": 0.11
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.2,
+                0.1,
+                0.04999999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " What about you ? You spend as much or more money on your razors , after shave , cologne and gel ! Not to mention how much you spend on clothes and ... "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.1,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.03,
+                        "neutral": 0.56,
+                        "sadness": 0.01,
+                        "surprise": 0.3
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.3,
+                        "neutral": 0.68,
+                        "positive": 0.03
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.25499,
+                0.29501,
+                0.12501
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            "I am so worried about this English contest . I have butterflies in my stomach now ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.02,
+                        "fear": 0.68,
+                        "joy": 0.22,
+                        "neutral": 0.02,
+                        "sadness": 0.05,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.62,
+                        "neutral": 0.33,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " No , you don ’ t understand , I need this tomorrow morning ! I accidentally spilled beer all over my wife ’ s dress and we have a wedding to attend tomorrow ! She ’ s gonna kill me ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.18,
+                        "disgust": 0.01,
+                        "fear": 0.01,
+                        "joy": 0.22,
+                        "neutral": 0.48,
+                        "sadness": 0.07,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.24,
+                        "neutral": 0.75,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " No , you should always be upfront and honest about your weaknesses . However by focusing on your strong points and maintaining a positive attitude about your abilities , you can take the attention "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.2,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.42,
+                        "neutral": 0.22,
+                        "sadness": 0.13,
+                        "surprise": 0.01
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.49,
+                        "neutral": 0.46,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " You're from Tangshan ? I can't believe my ears . I was also born in Tangshan , but I was brought up in Beijing . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.0,
+                        "neutral": 0.0,
+                        "sadness": 0.01,
+                        "surprise": 0.95
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.35,
+                        "neutral": 0.62,
+                        "positive": 0.03
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Well , you never know . I'm ready for a commitment and want to settle down , but she says she wants to pursue her career while she's still young . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.33,
+                        "neutral": 0.61,
+                        "sadness": 0.01,
+                        "surprise": 0.04
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.06,
+                        "neutral": 0.87,
+                        "positive": 0.07
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            "Hi , Tina , I ’ Ve got good news . I have successfully passed the first two rounds of interview with ABC Company . They informed me to go to the final round next Monday . It looks very promising . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.88,
+                        "neutral": 0.07,
+                        "sadness": 0.01,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.02,
+                        "neutral": 0.75,
+                        "positive": 0.23
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I've been there ! It really is an amazing work of architecture and art . The entire complex is made of white marble and in the interior of the tomb , the walls are covered with gems and emeralds ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.02,
+                        "fear": 0.1,
+                        "joy": 0.57,
+                        "neutral": 0.07,
+                        "sadness": 0.01,
+                        "surprise": 0.22
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.07,
+                        "positive": 0.91
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            "Doris , I'm glad you're home . I'm terrified . I don't know what to do ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.01,
+                        "fear": 0.96,
+                        "joy": 0.0,
+                        "neutral": 0.0,
+                        "sadness": 0.02,
+                        "surprise": 0.01
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.88,
+                        "neutral": 0.08,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I ’ m sorry . You can ’ t return it because too much time has passed since you purchased it . In order to receive a refund , you must return merchandise to the store within 90 days of purchase . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.01,
+                        "neutral": 0.01,
+                        "sadness": 0.96,
+                        "surprise": 0.01
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.54,
+                        "neutral": 0.41,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " OK , just fill in this application . You can sit over there . This brochure explains our services . We have free checking , and you will be given a debit card and on ATM card . There is no service "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.75,
+                        "neutral": 0.2,
+                        "sadness": 0.0,
+                        "surprise": 0.04
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.0,
+                        "neutral": 0.7,
+                        "positive": 0.3
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " He stays up untill all hours of the night , and he never lifts a finger to help . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.23,
+                        "disgust": 0.02,
+                        "fear": 0.01,
+                        "joy": 0.01,
+                        "neutral": 0.64,
+                        "sadness": 0.06,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.61,
+                        "neutral": 0.37,
+                        "positive": 0.02
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Sorry , I can ’ t ! I have to go to work , pick up Jake and Maddie from school , and make them an afternoon snack , then take Jake to soccer practice and Maddie to dance class . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.02,
+                        "fear": 0.01,
+                        "joy": 0.18,
+                        "neutral": 0.14,
+                        "sadness": 0.6,
+                        "surprise": 0.04
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.02,
+                        "neutral": 0.94,
+                        "positive": 0.03
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I am sorry , sir . I have to give you a ticket . You can appeal to the court within 14 days . You will avoid paying the fine if you can prove that you are not at fault . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.02,
+                        "joy": 0.02,
+                        "neutral": 0.02,
+                        "sadness": 0.93,
+                        "surprise": 0.0
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.83,
+                        "neutral": 0.15,
+                        "positive": 0.02
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I have nothing against them putting the advertisements in magazines and newspapers that are read by adults , but I don't think they should have their ad on billboards where children can see them . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.22,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.02,
+                        "neutral": 0.73,
+                        "sadness": 0.01,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.16,
+                        "neutral": 0.8,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Baby , come on . Don ’ t do this to me ! Whatever it is , we can work it out . Just give me another chance ! I know that we can get through this , but we gotta stick together ! Don ’ t leave me . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.16,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.65,
+                        "neutral": 0.14,
+                        "sadness": 0.02,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.41,
+                        "neutral": 0.55,
+                        "positive": 0.05
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.14999,
+                0.050010000000000006,
+                -0.2999899999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Pleased to meet you too , Ms . Pewless . I travel a lot every year on business , but this is my first visit to your country . I must say I have been much impressed by your friendly people . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.8,
+                        "neutral": 0.05,
+                        "sadness": 0.01,
+                        "surprise": 0.14
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.17,
+                        "positive": 0.81
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            "Francis , you have done an outstanding work in the past six months . In view of your achievement , I trust you ’ re now indispensable part of our company and you deserve an officer director title . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.94,
+                        "neutral": 0.02,
+                        "sadness": 0.01,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.05,
+                        "neutral": 0.05,
+                        "positive": 0.9
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I've no idea . Oh yes , and the most ridiculous thing . He asked me what I had for breakfast this morning . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.09,
+                        "disgust": 0.11,
+                        "fear": 0.03,
+                        "joy": 0.21,
+                        "neutral": 0.07,
+                        "sadness": 0.01,
+                        "surprise": 0.49
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.42,
+                        "neutral": 0.33,
+                        "positive": 0.25
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Grangerfield ! You were in Grangerfield ? That's a completely different town ! How could you drive to a completely different town ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.08,
+                        "neutral": 0.18,
+                        "sadness": 0.01,
+                        "surprise": 0.7
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.03,
+                        "neutral": 0.91,
+                        "positive": 0.06
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " definitely ! Actually , we just moved into a new place . There's a house-warming party this Saturday , if you are free ? I know Jenny would love to see you again and it should be a good party . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.77,
+                        "neutral": 0.08,
+                        "sadness": 0.0,
+                        "surprise": 0.15
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.03,
+                        "neutral": 0.67,
+                        "positive": 0.3
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.2,
+                0.1,
+                0.04999999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " They are . The only reason they didn't disqualify him until after the race is because the results from the text only came back afterwards . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.1,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.04,
+                        "neutral": 0.83,
+                        "sadness": 0.02,
+                        "surprise": 0.01
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.23,
+                        "neutral": 0.58,
+                        "positive": 0.19
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.19998999999999995,
+                -0.09999000000000001,
+                0.05000999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " on top of that , there are a few large chemical factories in the suburbs , which are contributing to the high pollution levels in the water and the air in this city . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.18,
+                        "disgust": 0.01,
+                        "fear": 0.02,
+                        "joy": 0.02,
+                        "neutral": 0.64,
+                        "sadness": 0.09,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.62,
+                        "neutral": 0.36,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Whoa whoa whoa ! Are you nuts ? How much is all this going to cost ? I ’ m looking at the price at each one of these little things and it ’ s outrageous ! This is basically a crayon ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.03,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.35,
+                        "neutral": 0.02,
+                        "sadness": 0.0,
+                        "surprise": 0.59
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.59,
+                        "neutral": 0.2,
+                        "positive": 0.21
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.10000999999999997,
+                0.10001,
+                -0.049989999999999986
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I guess I am going to arrive at 9:00 in the morning and I would like to leave at 200 in the afternoon on Sunday . Please give me a room away from the elevator . I hate noises while I am sleeping . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.01,
+                        "fear": 0.01,
+                        "joy": 0.79,
+                        "neutral": 0.12,
+                        "sadness": 0.01,
+                        "surprise": 0.06
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.03,
+                        "neutral": 0.69,
+                        "positive": 0.27
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " You just cut into line , in front of me and everyone else , that's what ! Go take your place back at the end of the line , like every - one else ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.15,
+                        "disgust": 0.01,
+                        "fear": 0.01,
+                        "joy": 0.16,
+                        "neutral": 0.63,
+                        "sadness": 0.02,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.41,
+                        "neutral": 0.18,
+                        "positive": 0.4
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Oh no you didn ’ t . You didn ’ t just insult the Sals-bury Seals , did you ? Why don ’ t you just . just go and return all of those stupid clothes and not come back until the sales are over ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.35,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.02,
+                        "neutral": 0.37,
+                        "sadness": 0.02,
+                        "surprise": 0.23
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.84,
+                        "neutral": 0.13,
+                        "positive": 0.03
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.25499,
+                0.29501,
+                0.12501
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I ’ m getting this beret ? Doesn ’ t it look cool ? I ’ d like to get some jeans too , but I don ’ t have enough cash on me . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.45,
+                        "neutral": 0.05,
+                        "sadness": 0.0,
+                        "surprise": 0.48
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.18,
+                        "neutral": 0.67,
+                        "positive": 0.15
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.2,
+                0.1,
+                0.04999999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " That's really surprising . I always thought they are well matched . What about the kids ? Who get custody ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.05,
+                        "neutral": 0.05,
+                        "sadness": 0.02,
+                        "surprise": 0.85
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.22,
+                        "neutral": 0.67,
+                        "positive": 0.11
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Fine , then ! If that ’ s the way you feel , so be it . But you ’ re losing out on a great opportunity here . I ’ m going to go hit up Mum for the cash . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.96,
+                        "neutral": 0.01,
+                        "sadness": 0.03,
+                        "surprise": 0.0
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.16,
+                        "neutral": 0.12,
+                        "positive": 0.72
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " It's a long story . In a word , I didn't do a good job of it . I messed up a business deal , a deal that would have made ten million dollars and I messed it up . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.32,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.07,
+                        "neutral": 0.13,
+                        "sadness": 0.41,
+                        "surprise": 0.06
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.29,
+                        "neutral": 0.68,
+                        "positive": 0.03
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.10000999999999997,
+                0.10001,
+                -0.049989999999999986
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I don't know . I saw him the first time Tuesday . He was at the cafe . I noticed he was looking at me a lot . Not just the usual looking , but staring.He just kept staring at me . He didn't stop . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.01,
+                        "neutral": 0.25,
+                        "sadness": 0.0,
+                        "surprise": 0.74
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.0,
+                        "neutral": 0.99,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.10000999999999997,
+                0.10001,
+                -0.049989999999999986
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I hate the bus system in London ! The bus drivers are rude , the buses are never on time , and there are few people around who can help you . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.03,
+                        "disgust": 0.3,
+                        "fear": 0.54,
+                        "joy": 0.03,
+                        "neutral": 0.04,
+                        "sadness": 0.03,
+                        "surprise": 0.04
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.71,
+                        "neutral": 0.02,
+                        "positive": 0.27
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " It's got a built-in video camera so you can see the person you're talking to.It also takes stills and I can use the E-mail mode to send digital pictures straight to my friend's phone ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.68,
+                        "neutral": 0.28,
+                        "sadness": 0.0,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.83,
+                        "positive": 0.16
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " That's so disappointing . I don't know why top athletes would feel the need to take drugs . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.02,
+                        "fear": 0.01,
+                        "joy": 0.0,
+                        "neutral": 0.0,
+                        "sadness": 0.93,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.92,
+                        "neutral": 0.06,
+                        "positive": 0.02
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.19998999999999995,
+                -0.09999000000000001,
+                0.05000999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Oh , they were lovely . Sort of imitation wood , dark brown color , country-style you know , and the lids , if I remember rightly , they had a sort of leaf pattern , or was it flowers ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.01,
+                        "fear": 0.04,
+                        "joy": 0.33,
+                        "neutral": 0.35,
+                        "sadness": 0.03,
+                        "surprise": 0.21
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.05,
+                        "neutral": 0.66,
+                        "positive": 0.29
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " an mp4 player ? why don't you buy a new cell phone ? You can find an mp4 player inside any of the latest cell phones . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.07,
+                        "neutral": 0.39,
+                        "sadness": 0.01,
+                        "surprise": 0.53
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.05,
+                        "neutral": 0.77,
+                        "positive": 0.18
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Not yet , but I have to soon . He's eating me out of house and home . I caught him reading the fridge again last night "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.13,
+                        "neutral": 0.4,
+                        "sadness": 0.0,
+                        "surprise": 0.46
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.92,
+                        "positive": 0.07
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " My co-worker had a whole bunch of bad office habits . She liked to name-drop ... we would be in a meeting and she would say , yesterday I was chatting with Tom . She meant Tom Solomon ... our CEO . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.13,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.04,
+                        "neutral": 0.79,
+                        "sadness": 0.02,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.4,
+                        "neutral": 0.59,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " It's hard for us to believe it . Our instruments have been the best quality for years . Have you any reliable evidence ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.02,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.21,
+                        "neutral": 0.1,
+                        "sadness": 0.01,
+                        "surprise": 0.65
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.08,
+                        "neutral": 0.37,
+                        "positive": 0.55
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            "I wonder what he looks like . Oh , I can't wait to see him ! His email said he'd be wearing a white hat . ( looking around for him ) oh , there is . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.19,
+                        "neutral": 0.05,
+                        "sadness": 0.0,
+                        "surprise": 0.76
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.03,
+                        "neutral": 0.85,
+                        "positive": 0.12
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I'm in such a need of the job that I can't afford any mistakes . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.12,
+                        "disgust": 0.0,
+                        "fear": 0.02,
+                        "joy": 0.15,
+                        "neutral": 0.16,
+                        "sadness": 0.5,
+                        "surprise": 0.05
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.16,
+                        "neutral": 0.64,
+                        "positive": 0.2
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Four times . I'm totally prepared . Oh , no ! I forgot to take off my nail polish ! And I have to be there in 15 minutes ! That's it . I blew it . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.04,
+                        "disgust": 0.15,
+                        "fear": 0.52,
+                        "joy": 0.01,
+                        "neutral": 0.06,
+                        "sadness": 0.09,
+                        "surprise": 0.13
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.41,
+                        "neutral": 0.42,
+                        "positive": 0.17
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Umm . I think my water just broke ! Get me to a hospital ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.01,
+                        "joy": 0.19,
+                        "neutral": 0.25,
+                        "sadness": 0.11,
+                        "surprise": 0.42
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.1,
+                        "neutral": 0.82,
+                        "positive": 0.07
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " The food station was as crowded as usual . I waited for 20 minutes for my sandwich , and when I finally got it the chicken was underdone . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.17,
+                        "disgust": 0.25,
+                        "fear": 0.09,
+                        "joy": 0.01,
+                        "neutral": 0.1,
+                        "sadness": 0.34,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.99,
+                        "neutral": 0.0,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Quick ! Pass me your binoculars . Look at that bird ... I've never seen one of those before . It's indigenous to Guiling , and an endangered species too . This is lucky ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.47,
+                        "neutral": 0.19,
+                        "sadness": 0.0,
+                        "surprise": 0.31
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.1,
+                        "neutral": 0.74,
+                        "positive": 0.16
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.2,
+                0.1,
+                0.04999999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Oh sure , lady , and fat chance I'd get a ticket before they're sold out . I'm staying right here , understand ? So be a nice lady and butt out ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.08,
+                        "neutral": 0.35,
+                        "sadness": 0.0,
+                        "surprise": 0.55
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.06,
+                        "neutral": 0.81,
+                        "positive": 0.13
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.25499,
+                0.29501,
+                0.12501
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I'm happy to recommend the fish , It testes delicious , and it is today's special . Our chef is from the coast , and love seafood . Today special is actually his favorite dish . so I'm sure it is a "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.02,
+                        "fear": 0.01,
+                        "joy": 0.92,
+                        "neutral": 0.03,
+                        "sadness": 0.01,
+                        "surprise": 0.02
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.0,
+                        "positive": 0.99
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I think that's a bad idea . I'd hate anyone here to think of me as a friend . How would they ever respect me as they can do whatever they want ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.21,
+                        "disgust": 0.05,
+                        "fear": 0.06,
+                        "joy": 0.2,
+                        "neutral": 0.02,
+                        "sadness": 0.31,
+                        "surprise": 0.16
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.77,
+                        "neutral": 0.04,
+                        "positive": 0.19
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " You are right . For the past few weeks , I had no appetite and couldn ’ t sleep well . What ’ s worse my back started aching this Monday . It is time for me to take a vacation . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.03,
+                        "disgust": 0.01,
+                        "fear": 0.02,
+                        "joy": 0.19,
+                        "neutral": 0.01,
+                        "sadness": 0.72,
+                        "surprise": 0.03
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.81,
+                        "neutral": 0.16,
+                        "positive": 0.04
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " But there are only two more days until the bidding closes ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.06,
+                        "neutral": 0.79,
+                        "sadness": 0.0,
+                        "surprise": 0.14
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.07,
+                        "neutral": 0.75,
+                        "positive": 0.18
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Okay , thank you . I'll make another reservation as soon as I can . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 1.0,
+                        "neutral": 0.0,
+                        "sadness": 0.0,
+                        "surprise": 0.0
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.01,
+                        "neutral": 0.45,
+                        "positive": 0.54
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Yes . Then I noticed he was on the sidewalk behind me . He was following me . "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.08,
+                        "neutral": 0.49,
+                        "sadness": 0.01,
+                        "surprise": 0.43
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.0,
+                        "neutral": 0.99,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " How come ? Last time I saw you . You told me it was a good job , and you'd like to take it as a career . That was only one month ago . Why this sudden change ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.96,
+                        "neutral": 0.04,
+                        "sadness": 0.0,
+                        "surprise": 0.0
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.12,
+                        "neutral": 0.21,
+                        "positive": 0.67
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.14999,
+                0.050010000000000006,
+                -0.2999899999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " That ’ s great ! I ’ m glad to hear that Pear has finally jumped on the bandwagon . Right now our contract is for the five megapixel cameras . Is Pear still interested in having those ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 1.0,
+                        "neutral": 0.0,
+                        "sadness": 0.0,
+                        "surprise": 0.0
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.04,
+                        "neutral": 0.06,
+                        "positive": 0.9
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Now , let me have a look at you . I'd like to listen to your chest . Now breathe in , a deep breath , that's it Cough , now again . I want to examine your throat , too . Open wide , say ' Ah - - ' "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.0,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.85,
+                        "neutral": 0.14,
+                        "sadness": 0.0,
+                        "surprise": 0.0
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.04,
+                        "neutral": 0.55,
+                        "positive": 0.41
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " What ? Why ? I mean , we ’ Ve had our ups and downs , and we have the occasional disagreement , but we ’ re happy together , aren ’ t we ? "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.12,
+                        "disgust": 0.01,
+                        "fear": 0.0,
+                        "joy": 0.21,
+                        "neutral": 0.06,
+                        "sadness": 0.08,
+                        "surprise": 0.53
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.56,
+                        "neutral": 0.33,
+                        "positive": 0.11
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " I don't think it's right , but I can understand why they might . Imagine how much pressure there would be to win for your country ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.04,
+                        "disgust": 0.0,
+                        "fear": 0.0,
+                        "joy": 0.08,
+                        "neutral": 0.09,
+                        "sadness": 0.02,
+                        "surprise": 0.76
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.39,
+                        "neutral": 0.51,
+                        "positive": 0.1
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                -0.19998999999999995,
+                -0.09999000000000001,
+                0.05000999999999999
+            ]
+        ]
+    },
+    {
+        "sentences": [
+            " Some people are wildly shooting on the next street . We must leave here as soon as possible ! "
+        ],
+        "annotated_utterances": [
+            {
+                "annotations": {
+                    "emotion_classification": {
+                        "anger": 0.01,
+                        "disgust": 0.05,
+                        "fear": 0.75,
+                        "joy": 0.0,
+                        "neutral": 0.06,
+                        "sadness": 0.06,
+                        "surprise": 0.07
+                    },
+                    "sentiment_classification": {
+                        "negative": 0.92,
+                        "neutral": 0.07,
+                        "positive": 0.01
+                    }
+                }
+            }
+        ],
+        "bot_mood": [
+            [
+                0.0,
+                0.0,
+                0.0
+            ]
+        ]
+    }
+]
