@@ -103,13 +103,14 @@ def respond_batch():
     return jsonify([{"batch": results}])
 
 
+
 try:
     logger.info("emotional-bot-response is starting")
 
     sentences = ["I will eat pizza."]
     bot_mood_labels = ["angry"]
     bot_emotions = ["anger"]
-    responses = rewrite_sentences(sentences, bot_mood_labels, bot_emotions)
+    responses = rewrite_sentences(sentences[0], bot_mood_labels[0], bot_emotions[0])
     logger.info(f"TEST. Sentences: {sentences}")
     logger.info(f"TEST. Emotional sentences: {responses}")
 
@@ -121,3 +122,4 @@ except Exception as e:
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=3000)
+
