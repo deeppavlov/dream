@@ -14,7 +14,6 @@ from common.prompts import (
     compose_sending_variables,
 )
 
-
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -101,7 +100,6 @@ def respond_batch():
     logger.info(f"emotional-bot-response exec time: {total_time:.3f}s")
 
     return jsonify([{"batch": results}])
-
 
 
 try:
