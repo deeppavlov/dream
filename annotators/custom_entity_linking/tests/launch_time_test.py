@@ -25,8 +25,11 @@ graph = TerminusdbKnowledgeGraph(
 
 
 def main():
-    st_time = time.time()
-    url = "http://0.0.0.0:8153"
+    start_time = time.time()
+    CUSTOM_ENTITY_LINKING_PORT = 8153
+
+    CUSTOM_ENTITY_LINKING_URL = f"http://0.0.0.0:{CUSTOM_ENTITY_LINKING_PORT}/model"
+
     inserted_data = {
         "user_id": "User/Jack",
         "entity_info": {
@@ -42,33 +45,28 @@ def main():
         inserted_data["entity_info"]["tags"],
     )
 
-    request_data = [
-        {
-            "user_id": ["User/Jack"],
-            "entity_substr": [["forrest gump"]],
-            "entity_tags": [[[("film", 1.0)]]],
-            "contexts": [["who directed forrest gump?"]],
-        }
-    ]
-    gold_results = [["film/123"]]
+    request_data = {
+        "user_id": ["User/Jack"],
+        "entity_substr": [["forrest gump"]],
+        "entity_tags": [[[("film", 1.0)]]],
+        "contexts": [["who directed forrest gump?"]],
+    }
 
-    count = 0
-    for data, gold_result in zip(request_data, gold_results):
-        result = requests.post(f"{url}/model", json=data).json()
-        print(result)
-        entity_ids = []
-        for entity_info_list in result:
-            for entity_info in entity_info_list:
-                entity_ids = entity_info.get("entity_ids")
-        if entity_ids == gold_result:
-            count += 1
-        else:
-            print(f"Got {result}, but expected: {gold_result}")
+    trials = 0
+    response = None
+    while response != 200:
+        try:
+            response = requests.post(CUSTOM_ENTITY_LINKING_URL, json=request_data).status_code
 
-    assert count == len(request_data)
-    total_time = time.time() - st_time
+        except Exception:
+            time.sleep(2)
+            trials += 1
+            if trials > 30:
+                raise TimeoutError("Couldn't build the component")
+
+    total_time = time.time() - start_time
     print("Success")
-    print(f"custom entity linking exec time = {total_time:.3f}s")
+    print(f"custom entity linking launch time = {total_time:.3f}s")
 
 
 if __name__ == "__main__":

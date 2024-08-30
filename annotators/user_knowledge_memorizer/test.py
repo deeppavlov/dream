@@ -77,7 +77,7 @@ def main():
     TERMINUSDB_SERVER_TEAM = "admin"
     TERMINUSDB_SERVER_DB = "user_knowledge_db"
     TERMINUSDB_SERVER_PASSWORD = "root"
-    USER_KNOWLEDGE_MEMORIZER_PORT = 8020
+    USER_KNOWLEDGE_MEMORIZER_PORT = 8027  # tested with dream_kg_prompted distribution
 
     USER_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{USER_KNOWLEDGE_MEMORIZER_PORT}/respond"
 
