@@ -23,9 +23,11 @@ def main():
                 raise TimeoutError("Couldn't build the component")
 
     total_time = time.time() - start_time
+    print('---' * 30)
     if total_time < 1200:
         print("Testing launch time - SUCCESS")
     print(f"Launch time = {total_time:.3f}s")
+    print('---' * 30)
 
 if __name__ == "__main__":
     main()

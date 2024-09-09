@@ -5,9 +5,11 @@ import time
 import json
 from os import getenv
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, g, make_response
 from healthcheck import HealthCheck
 from sentry_sdk.integrations.flask import FlaskIntegration
+from pyinstrument import Profiler
+from pyinstrument.renderers import JSONRenderer
 
 from common.prompts import (
     send_request_to_prompted_generative_service,
@@ -35,7 +37,6 @@ ENVVARS_TO_SEND = getenv("ENVVARS_TO_SEND", None)
 ENVVARS_TO_SEND = [] if ENVVARS_TO_SEND is None else ENVVARS_TO_SEND.split(",")
 
 available_variables = {f"{var}": getenv(var, None) for var in ENVVARS_TO_SEND}
-
 
 def make_prompt(sentence, emotion="neutral", mood="happy", intensity=7):
     with open("emotion_change_prompt.txt", "r", encoding="utf-8") as f:
@@ -81,6 +82,21 @@ def rewrite_sentences(sentence, bot_emotion, bot_mood_label):
         sentry_sdk.capture_exception(exc)
         result = {"hypotheses": ""}
     return result
+
+@app.before_request
+def before_request():
+    if "profile" in request.args:
+        g.profiler = Profiler(interval=0.0001)
+        g.profiler.start()
+
+
+@app.after_request
+def after_request(response):
+    if not hasattr(g, "profiler"):
+        return response
+    g.profiler.stop()
+    output_dict = g.profiler.output(renderer=JSONRenderer())
+    return make_response(output_dict)
 
 
 @app.route("/respond_batch", methods=["POST"])
