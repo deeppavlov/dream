@@ -4,6 +4,8 @@ WORKDIR /src
 COPY annotators/emotional_bot_response/requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
+RUN pip install gdown pyinstrument
+
 ARG SERVICE_PORT
 ENV SERVICE_PORT=$SERVICE_PORT
 ARG GENERATIVE_TIMEOUT

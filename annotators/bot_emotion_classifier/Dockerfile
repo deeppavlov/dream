@@ -4,8 +4,6 @@ WORKDIR /src
 COPY annotators/bot_emotion_classifier/requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
-RUN pip install colorama
-
 ARG SERVICE_PORT
 ENV SERVICE_PORT=$SERVICE_PORT
 

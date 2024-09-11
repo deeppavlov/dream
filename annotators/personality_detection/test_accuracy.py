@@ -2,13 +2,8 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score
-from colorama import init, Fore
 
 import requests
-
-
-init(autoreset=True)
-
 
 def test_accuracy():
     test_data = pd.read_csv('annotators/personality_detection/essays_test.csv')
@@ -23,11 +18,12 @@ def test_accuracy():
 
     accuracy_per_trait = [accuracy_score(test_data[trait], test_data[trait+'_pred']) for trait in traits]
     avg_accuracy = np.mean(accuracy_per_trait)
+
+    print('---' * 30)
     if avg_accuracy * 100 > 56:        
         print('Testing accuracy of classification - SUCCESS')
-        print(f'Average accuracy {avg_accuracy :.2%}')
-    else:
-        print(Fore.RED + f'Average accuracy {avg_accuracy :.2%}')
+    print(f'Average accuracy {avg_accuracy :.2%}')
+    print('---' * 30)
 
 if __name__ == "__main__":
     test_accuracy()  
