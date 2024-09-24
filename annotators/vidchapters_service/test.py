@@ -3,10 +3,11 @@ import requests
 
 import allure
 import pytest
+import subprocess
 
 import time
 
-@allure.description("""Test launch time""")
+@allure.description("""4.2.2 Test launch time""")
 @pytest.mark.parametrize(
     "video_path, gold_result",
     [
@@ -37,7 +38,7 @@ def test_text_qa_launch_time(video_path, gold_result):
     assert response 
 
 
-@allure.description("""Test execution time""")
+@allure.description("""4.1.3 Test execution time""")
 @pytest.mark.parametrize(
     "video_path, gold_result",
     [
@@ -52,7 +53,7 @@ def test_text_qa_exec_time(video_path):
     result = get_answer(video_path)
     assert time.time() - start_time <= 0.4
 
-@allure.description("""Test output data type""")
+@allure.description("""4.1.2 Test output data type""")
 @pytest.mark.parametrize(
     "video_path, gold_result",
     [
@@ -70,6 +71,16 @@ def test_text_qa_json(video_path, gold_result):
         assert True
     except Exception as e:
         assert False
+
+
+@allure.description("""4.3.3 Test roles for docker""")
+def test_roles():
+    command = "groups $(whoami) | grep -o 'docker'"
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    assert result.returncode == 0, f"Executed with error: {result.stderr}"
+    assert 'docker' in result.stdout, "Group 'docker' not found"
+
+
 
 
 @allure.description("""Test execution""")
