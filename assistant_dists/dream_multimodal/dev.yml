@@ -71,5 +71,28 @@ services:
       - "./skills/dff_vidchapters_skill:/src"
       - "./common:/src/common"
     ports:
-      - 8046:8046
+      - 8046:8046 
+  fromage:
+    volumes:
+      - "./services/fromage:/src"
+      - "./common:/src/common"
+      - "~/.deeppavlov/cache:/root/.cache"
+    ports:
+      - 8069:8069
+  dff-fromage-image-skill:
+    volumes:
+      - "./skills/dff_fromage_image_skill:/src"
+      - "./common:/src/common"
+    ports:
+      - 8070:8070
+  voice-service:
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
+    ports:
+      - 8333:8333
+  dff-voice-skill:
+    volumes:
+      - "~/.deeppavlov/file_server:/tmp"
+    ports:
+      - 8444:8444
 version: "3.7"

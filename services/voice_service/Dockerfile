@@ -1,48 +1,41 @@
-# syntax=docker/dockerfile:experimental
-
 FROM python:3.7
 
+# Set the working directory
 WORKDIR /src
 
+# Set environment variables for service
 ARG SERVICE_PORT
 ENV SERVICE_PORT ${SERVICE_PORT}
 
 ARG SERVICE_NAME
 ENV SERVICE_NAME ${SERVICE_NAME}
 
-RUN apt update
-RUN apt install libsndfile1 -y
-RUN apt install ffmpeg -y
-RUN python -m pip install -U pip
-RUN pip install gdown
-
-RUN git clone https://github.com/deeppavlov/audio-captioning-dcase /src/aux_files
-WORKDIR /src/aux_files
-RUN git reset --hard 8b1d39dddff295570d21092b82b1d9894732d99f
-WORKDIR /src
-
-RUN pip install -e /src/aux_files/AudioCaption
-
-RUN gdown https://drive.google.com/uc?id=11Gnme5XM-WcQ8C2vcbZ0m2ngmkvgGWwx -O /src/aux_files/AudioCaption/experiments.zip -c --no-check-certificate
-RUN unzip /src/aux_files/AudioCaption/experiments.zip -d /src/aux_files/AudioCaption
-RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2
-RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val
-RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel
-RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm
-RUN ls /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1
-RUN rm /src/aux_files/AudioCaption/experiments.zip
-RUN sed -i "s|sed/audioset_tagging_cnn/pretrained_weights/Cnn14_mAP=0.431.pth|/src/aux_files/pretrained_weights/model.pth|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
-RUN sed -i "s|/home/ilia/projects/audio-captioning/pretrained_weights/Cnn14_mAP=0.431.pth|/src/aux_files/pretrained_weights/model.pth|" /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
-RUN cat /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/config.yaml
-# PATH
-RUN mkdir /src/aux_files/pretrained_weights
-RUN gdown https://drive.google.com/uc?id=1CVD_JFEx9iFg8DH1cZd81gcPvxrb8uZq -O /src/aux_files/pretrained_weights/model.pth -c --no-check-certificate
-
-# SWA
-# RUN gdown https://drive.google.com/file/d/1V9eHT4s8VbiJwxRyz8Xnu7L6yHzj3aTi/view?usp=share_link -O /src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth
+RUN python -m pip install --upgrade pip
 
 COPY ./requirements.txt /src/requirements.txt
-COPY ./ /src/
+COPY ./server.py /src/server.py
 
-RUN pip install -r /src/requirements.txt
-RUN pip install -r /src/aux_files/reqs.txt
+RUN mkdir -p /src/aux_files/AudioCaption/
+RUN wget --no-check-certificate -O /src/aux_files/AudioCaption/experiments.zip https://files.deeppavlov.ai/dolidze/for_voice_service/AudioCaption.zip
+RUN unzip /src/aux_files/AudioCaption/experiments.zip -d /src
+RUN ls /src
+
+RUN apt update
+RUN apt install -y gcc libsndfile1-dev ffmpeg
+
+RUN python -m pip install -r requirements.txt
+RUN pip install -r /src/AudioCaption/requirements.txt
+
+RUN python -m pip install numba==0.48
+RUN python -m pip install resampy==0.3.1
+RUN python -m pip install torchaudio==0.9.1
+RUN python -m pip install torchlibrosa==0.0.9
+RUN pip install sndfile
+
+# Create directory for pretrained models and download them
+RUN mkdir -p pretrained_feature_extractors
+RUN wget https://github.com/wsntxxn/AudioCaption/releases/download/v0.0.2/contrastive_pretrain_cnn14_bertm.pth -O pretrained_feature_extractors/contrastive_pretrain_cnn14_bertm.pth
+RUN wget https://github.com/wsntxxn/AudioCaption/releases/download/v0.0.2/audiocaps_cntrstv_cnn14rnn_trm.zip -O audiocaps_cntrstv_cnn14rnn_trm.zip
+RUN unzip audiocaps_cntrstv_cnn14rnn_trm.zip -d pretrained_feature_extractors
+
+RUN pip install -e /src/AudioCaption

@@ -27,4 +27,10 @@ services:
     volumes:
       - "~/.deeppavlov:/root/.deeppavlov"
       - "~/.deeppavlov/cache:/root/.cache"
+  fromage:
+    volumes:
+      - "~/.deeppavlov:/root/.deeppavlov"
+      - "~/.deeppavlov/cache:/root/.cache"
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
 version: "3.7"

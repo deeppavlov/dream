@@ -1,17 +1,24 @@
 import logging
 import os
 import time
+import json
+import sys
 from itertools import zip_longest
 
+sys.path.append("/src/")
+sys.path.append("/src/AudioCaption/")
+sys.path.append("/src/AudioCaption/captioning/")
+sys.path.append("/src/AudioCaption/captioning/pytorch_runners/")
+
 import sentry_sdk
-from aux_files.inference import infer
+from AudioCaption.captioning.pytorch_runners.inference_waveform import inference
 from flask import Flask, request, jsonify
 from urllib.request import URLopener
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 CAP_ERR_MSG = "The audiofile format is not supported"
-AUDIO_DIR = "/src/aux_files/data/clotho_audio_files/"
-MODEL_PATH = "/src/aux_files/AudioCaption/experiments/clotho_v2/train_val/TransformerModel/cnn14rnn_trm/seed_1/swa.pth"
+AUDIO_DIR = "/src/audio_input/"
+MODEL_PATH = "/src/AudioCaption/clotho_cntrstv_cnn14rnn_trm/swa.pth"
 
 sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), integrations=[FlaskIntegration()])
 
@@ -39,7 +46,7 @@ def respond():
     responses = []
 
     for path, duration, atype in zip_longest(paths, durations, types):
-        logger.info(f"Processing batch at voice_service: {path}, {duration}, {atype}")
+        logger.info(f"Processing batch at sound_annotator: {path}, {duration}, {atype}")
         filename_els = path.split("=")
         filename = filename_els[-1]
 
@@ -55,6 +62,8 @@ def respond():
 
             import subprocess
 
+            logger.info(f"ffmpegging .{filename.split('.')[-1]} to .wav")
+
             process = subprocess.run(
                 [
                     "ffmpeg",
@@ -63,22 +72,28 @@ def respond():
                     os.path.join(AUDIO_DIR, filename[: -len(filename.split(".")[-1])] + "wav"),
                 ]
             )
+
+            logger.info("ffmpegging finished successfully")
             if process.returncode != 0:
                 raise Exception("Something went wrong")
         try:
             logger.info(f"Scanning AUDIO_DIR ({AUDIO_DIR}) for wav files...")
+            fname = "NOFILE"
             for i in os.listdir(AUDIO_DIR):
                 if i.split(".")[-1] == "wav":
+                    logger.info(f"found file: {os.path.join(AUDIO_DIR, i)}")
+                    inference(os.path.join(AUDIO_DIR, i), "/src/output.json", MODEL_PATH)
+                    fname = i
                     break
             else:
                 CAP_ERR_MSG = "No files for inference found in AUDIO_DIR"
                 raise Exception(CAP_ERR_MSG)
-            logger.info("Scanning finished successfully, files found, starting inference...")
-            caption = infer(AUDIO_DIR, MODEL_PATH)
             logger.info("Inference finished successfully")
+            with open('/src/output.json', 'r') as file:
+                caption = json.load(file)[fname]
             responses += [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "caption": caption}]
-        except Exception:
-            logger.info(f"An error occurred in voice-service: {CAP_ERR_MSG}")
+        except Exception as e:
+            logger.info(f"An error occurred in voice-service: {CAP_ERR_MSG}, {e}")
             responses.append(
                 [{"sound_type": atype, "sound_duration": duration, "sound_path": path, "caption": "Error"}]
             )

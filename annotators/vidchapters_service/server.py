@@ -42,7 +42,6 @@ logging.getLogger("werkzeug").setLevel("WARNING")
 def generate_asr(video_path, asr_output_path):
     logger.info("ASR captioning")
     try:
-        # takes 16 sec
         asr = asr_model.transcribe(video_path)
         # logger.info("ASR.model")
         align_model, metadata = whisperx.load_align_model(language_code='en', device = DEVICE, model_dir=os.path.join('/src/aux_files', MODEL_DIR))
