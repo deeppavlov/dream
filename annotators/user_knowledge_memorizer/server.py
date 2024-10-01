@@ -12,8 +12,10 @@ import time
 from common.prompts import send_request_to_prompted_generative_service, compose_sending_variables
 
 import sentry_sdk
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, g, make_response
 from deeppavlov_kg import TerminusdbKnowledgeGraph
+from pyinstrument import Profiler
+from pyinstrument.renderers import JSONRenderer
 
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
@@ -685,6 +687,22 @@ def get_result(request, graph):
             }
         ]
     return result
+
+
+@app.before_request
+def before_request():
+    if "profile" in request.args:
+        g.profiler = Profiler(interval=0.0001)
+        g.profiler.start()
+
+
+@app.after_request
+def after_request(response):
+    if not hasattr(g, "profiler"):
+        return response
+    g.profiler.stop()
+    output_dict = g.profiler.output(renderer=JSONRenderer())
+    return make_response(output_dict)
 
 
 @app.route("/respond", methods=["POST"])

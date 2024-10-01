@@ -1,5 +1,6 @@
 import requests
-import time
+import json
+import re
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
 
@@ -72,6 +73,13 @@ def compare_results(results, golden_results) -> bool:
     return all(is_successfull)
 
 
+def get_service_time(pattern, time_result):
+    pattern_string = re.search(pattern, time_result.text)[0]
+    pattern_dict = json.loads("{" + pattern_string.split(',"children": [{')[0] + "}")
+
+    return pattern_dict["time"]
+
+
 def main():
     TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
     TERMINUSDB_SERVER_TEAM = "admin"
@@ -89,6 +97,10 @@ def main():
     )
 
     USER_ID = "User/b75d2700259bdc44sdsdf85e7f530ed"
+
+    PATTERN_KNOWLEDGE = r"\"function\": \"get_knowledge\".*\"time\": \d.\d+"
+    PATTERN_LLM = r"\"function\": \"convert_triplets_to_natural_language\".*\"time\": \d.\d+"
+    PATTERN_TERMINUSDB = r"\"function\": \"create_entities\".*\"time\": \d.\d+"
     # get dog_id and park_id from KG
     dog_id, park_id = None, None
     try:
@@ -135,16 +147,27 @@ def main():
 
     count = 0
     for data, golden_result in zip(request_data, golden_results):
-        st_time = time.time()
         result = requests.post(USER_KNOWLEDGE_MEMORIZER_URL, json=data).json()
-        total_time = time.time() - st_time
         print(result)
+        time_result = requests.post(f"{USER_KNOWLEDGE_MEMORIZER_URL}?profile", json=data)
+        output_dict = json.loads(time_result.text)
+        total_time = output_dict["duration"]
+        try:
+            knowledge_time = get_service_time(PATTERN_KNOWLEDGE, time_result)
+            llm_time = get_service_time(PATTERN_LLM, time_result)
+            terminusdb_time = get_service_time(PATTERN_TERMINUSDB, time_result)
+            exec_time = total_time - knowledge_time - llm_time - terminusdb_time
+
+        except Exception as e:
+            raise e
+
         result = prepare_for_comparison(result)
         if compare_results(result, golden_result):
             count += 1
     assert count == len(request_data)
     print("Success")
-    print(f"user knowledge memorizer exec time = {total_time:.3f}s")
+    # print(f"Total time including requests to other services = {total_time:.3f}s")
+    print(f"user knowledge memorizer exec time = {exec_time:.3f}s")
 
 
 if __name__ == "__main__":
