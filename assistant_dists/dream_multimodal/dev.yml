@@ -41,13 +41,6 @@ services:
       - "~/.deeppavlov/cache:/root/.cache"
     ports:
       - 8019:8019
-  dialogpt:
-    volumes:
-      - "./services/dialogpt:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8125:8125
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
