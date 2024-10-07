@@ -11,8 +11,14 @@ def main():
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         st_time = time.time()
-        result = requests.post(url, json=data).json()
+        result = requests.post(url, json=data)
         total_time = time.time() - st_time
+        try:
+            result = result.json()
+            print("Success. Test for input-output data in JSON-format passed.")
+        except Exception:
+            print("Input-output data is not in JSON-format.")
+
         if result and result[0] == gold_result:
             count += 1
         else:

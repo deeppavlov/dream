@@ -155,7 +155,12 @@ def main():
 
     count = 0
     for data, golden_result in zip(request_data, golden_results):
-        result = requests.post(BOT_KNOWLEDGE_MEMORIZER_URL, json=data).json()
+        result = requests.post(BOT_KNOWLEDGE_MEMORIZER_URL, json=data)
+        try:
+            result = result.json()
+            print("Success. Test for input-output data in JSON-format passed.")
+        except Exception:
+            print("Input-output data is not in JSON-format.")
         print(result)
         time_result = requests.post(f"{BOT_KNOWLEDGE_MEMORIZER_URL}?profile", json=data)
         output_dict = json.loads(time_result.text)

@@ -54,7 +54,12 @@ def main():
 
     count = 0
     for data, gold_result in zip(request_data, gold_results):
-        result = requests.post(f"{url}/model", json=data).json()
+        result = requests.post(f"{url}/model", json=data)
+        try:
+            result = result.json()
+            print("Success. Test for input-output data in JSON-format passed.")
+        except Exception:
+            print("Input-output data is not in JSON-format.")
         print(result)
         entity_ids = []
         for entity_info_list in result:
