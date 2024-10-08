@@ -101,6 +101,7 @@ def main():
     PATTERN_KNOWLEDGE = r"\"function\": \"get_knowledge\".*\"time\": \d.\d+"
     PATTERN_LLM = r"\"function\": \"convert_triplets_to_natural_language\".*\"time\": \d.\d+"
     PATTERN_TERMINUSDB = r"\"function\": \"create_entities\".*\"time\": \d.\d+"
+    PATTERN_PROPS = r"\"function\": \"get_properties_of_entities\".*\"time\": \d.\d+"
     # get dog_id and park_id from KG
     dog_id, park_id = None, None
     try:
@@ -172,7 +173,8 @@ def main():
             # print(f"Llm time: {llm_time:.3f}s")
             terminusdb_time = get_service_time(PATTERN_TERMINUSDB, time_result)
             # print(f"Terminusdb time: {terminusdb_time:.3f}s")
-            exec_time = total_time - knowledge_time - llm_time - terminusdb_time
+            props_time = get_service_time(PATTERN_PROPS, time_result)
+            exec_time = total_time - knowledge_time - llm_time - terminusdb_time - props_time
 
         except Exception as e:
             raise e

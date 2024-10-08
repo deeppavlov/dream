@@ -101,6 +101,8 @@ def main():
     PATTERN_KNOWLEDGE = r"\"function\": \"get_knowledge\".*\"time\": \d.\d+"
     PATTERN_LLM = r"\"function\": \"convert_triplets_to_natural_language\".*\"time\": \d.\d+"
     PATTERN_TERMINUSDB = r"\"function\": \"create_entities\".*\"time\": \d.\d+"
+    PATTERN_PROPS = r"\"function\": \"get_properties_of_entities\".*\"time\": \d.\d+"
+    # PATTERN_RELS = r"\"function\": \"search_for_relationships\".*\"time\": \d.\d+"
     # get dog_id and park_id from KG
     dog_id, park_id = None, None
     try:
@@ -156,12 +158,14 @@ def main():
         print(result)
         time_result = requests.post(f"{USER_KNOWLEDGE_MEMORIZER_URL}?profile", json=data)
         output_dict = json.loads(time_result.text)
+        # print(output_dict)
         total_time = output_dict["duration"]
         try:
             knowledge_time = get_service_time(PATTERN_KNOWLEDGE, time_result)
             llm_time = get_service_time(PATTERN_LLM, time_result)
             terminusdb_time = get_service_time(PATTERN_TERMINUSDB, time_result)
-            exec_time = total_time - knowledge_time - llm_time - terminusdb_time
+            props_time = get_service_time(PATTERN_PROPS, time_result)
+            exec_time = total_time - knowledge_time - llm_time - terminusdb_time - props_time
 
         except Exception as e:
             raise e
