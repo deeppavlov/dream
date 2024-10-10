@@ -1454,6 +1454,8 @@ def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
     # comment out the next two lines to save dialog data to see its contents
     # with open('test_formatters.json', 'w', encoding='utf-8') as f:
     #     json.dump(dialog, f, ensure_ascii=False, indent=4)
+    user_sentences = [dialog["human_utterances"][-1]["text"]]
+    annotated_utterances = [dialog["human_utterances"][-1]]
     hypotheses = dialog["human_utterances"][-1]["hypotheses"]
     hypots = [h["text"] for h in hypotheses]
 
@@ -1474,6 +1476,8 @@ def bot_mood_emotion_formatter(dialog: Dict) -> List[Dict]:
 
     return [
         {
+            "user_sentences": user_sentences,
+            "annotated_utterances": annotated_utterances,
             "sentences": hypots,
             "bot_mood_labels": bot_mood_labels,
             "bot_emotions": bot_emotions,
