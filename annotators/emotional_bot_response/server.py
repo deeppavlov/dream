@@ -76,11 +76,11 @@ def rewrite_sentences(sentence, bot_emotion, bot_mood_label):
     try:
         prompt = make_prompt(sentence, bot_emotion, bot_mood_label, 7)  # emotion, mood, intensity
         response = get_llm_emotional_response(prompt)
-        result = {"hypotheses": response}
+        result = {"hypotheses": response, "bot_emotion" : bot_emotion, "bot_mood" : bot_mood_label}
     except Exception as exc:
         logger.exception(exc)
         sentry_sdk.capture_exception(exc)
-        result = {"hypotheses": ""}
+        result = {"hypotheses": "", "bot_emotion" : bot_emotion, "bot_mood" : bot_mood_label}
     return result
 
 @app.before_request
@@ -103,9 +103,16 @@ def after_request(response):
 def respond_batch():
     st_time = time.time()
 
+    user_sentences = request.json.get("user_sentences", [])
+    annotated_utterances = request.json.get("annotated_utterances", [])
     sentences = request.json.get("sentences", [])
     bot_mood_labels = request.json.get("bot_mood_labels", [])
     bot_emotions = request.json.get("bot_emotions", [])
+
+    if bot_mood_labels == []:
+        bot_mood_labels = len(sentences) * ["happy"]
+    if bot_emotions == []:
+        bot_emotions = len(sentences) * ["neutral"]
 
     results = []
     for sentence, emotion, mood in zip(sentences, bot_emotions, bot_mood_labels):
@@ -114,6 +121,8 @@ def respond_batch():
 
     total_time = time.time() - st_time
     logger.info(f"emotional-bot-response exec time: {total_time:.3f}s")
+    logger.info(f"user_sentences: {user_sentences}")
+    logger.info(f"annotated_utterances: {annotated_utterances}")
 
     return jsonify([{"batch": results}])
 

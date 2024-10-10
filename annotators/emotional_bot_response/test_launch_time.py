@@ -5,6 +5,21 @@ def main():
     start_time = time.time()
     url = "http://0.0.0.0:8050/respond_batch"
     request_data = {
+        "user_sentences": ["What do you want to eat?"],
+        "annotated_utterances": [{
+            'annotations': {
+                'emotion_classification': {'anger': 0.0,
+                                            'disgust': 0.0,
+                                            'fear': 0.0,
+                                            'joy': 0.0,
+                                            'neutral': 1.0,
+                                            'sadness': 0.0,
+                                            'surprise': 0.0},
+                'sentiment_classification': {'negative': 0.0,
+                                            'neutral': 1.0,
+                                            'positive': 0.0}
+                            }
+                        }],
         "sentences": ["I will eat pizza"],
         "bot_mood_labels": ["angry"],
         "bot_emotions": ["anger"],
