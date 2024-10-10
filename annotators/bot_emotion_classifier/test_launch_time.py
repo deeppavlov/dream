@@ -20,7 +20,14 @@ def main():
                                             'positive': 0.1}
                             }
                         }],
-        'bot_mood': [[0.0, 0.0, 0.0]]
+        'bot_mood': [[0.0, 0.0, 0.0]],
+        'bot_personality': [{
+            'extraversion': 0.89,
+            'agreeableness': 0.92,
+            'conscientiousness': 0.86,
+            'neuroticism': 0.11,
+            'openness': 0.23
+            }]
         }
     
     trials = 0

@@ -251,18 +251,19 @@ pad_moods = {
 }
 
 
-# default mood
-extraversion = 0.89
-agreeableness = 0.92
-conscientiousness = 0.86
-neuroticism = 0.11
-openness = 0.23
+def get_bot_default_mood(bot_personality):
+    extraversion = bot_personality['extraversion']
+    agreeableness = bot_personality['agreeableness']
+    conscientiousness = bot_personality['conscientiousness']
+    neuroticism = bot_personality['neuroticism']
+    openness = bot_personality['openness']
 
-pleasure = 0.21 * extraversion + 0.59 * agreeableness + 0.19 * neuroticism
-arousal = 0.15 * openness + 0.3 * agreeableness - 0.57 * neuroticism
-dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.32 * agreeableness
+    pleasure = 0.21 * extraversion + 0.59 * agreeableness + 0.19 * neuroticism
+    arousal = 0.15 * openness + 0.3 * agreeableness - 0.57 * neuroticism
+    dominance = 0.25 * openness + 0.17 * conscientiousness + 0.6 * extraversion - 0.32 * agreeableness
 
-default_mood = [pleasure, arousal, dominance]
+    default_mood = [pleasure, arousal, dominance]
+    return default_mood
 
 
 # get bot emotion using user emotion and user utterance
@@ -286,6 +287,30 @@ def get_bot_emotion(sent, emotion, sentiment):
         bot_emotion = pos_reactions[type_num][emotion]
     return bot_emotion
 
+
+def get_bot_emotion_proba(bot_emotion):
+    emotion_proba = {
+        'anger': 0,
+        'resentment': 0,
+        'disappointment': 0,
+        'disgust': 0,
+        'shame': 0,
+        'distress': 0,
+        'fear': 0,
+        'sadness': 0,
+        'admiration': 0,
+        'joy': 0,
+        'liking': 0,
+        'love': 0,
+        'surprise': 0,
+        'gratitude': 0,
+        'pride': 0,
+        'relief': 0,
+        'pity': 0,
+        'neutral': 0
+        }
+    emotion_proba[bot_emotion] = 1
+    return emotion_proba
 
 # the rate of mood decrease
 def get_dim_decay(default_dim, curr_dim):
@@ -351,18 +376,52 @@ def respond():
     sentences = request.json.get("sentences", [])
     annotated_utterances = request.json.get("annotated_utterances", [])
     bot_moods = request.json.get("bot_mood", [])
+    bot_personalities = request.json.get("bot_personality", [])
+
+    if annotated_utterances == []:
+        annotated_utterances = [{
+            'annotations': {
+                'emotion_classification': {'anger': 0.0,
+                                            'disgust': 0.0,
+                                            'fear': 0.0,
+                                            'joy': 0.0,
+                                            'neutral': 1.0,
+                                            'sadness': 0.0,
+                                            'surprise': 0.0},
+                'sentiment_classification': {'negative': 0.0,
+                                            'neutral': 1.0,
+                                            'positive': 0.0}
+                            }
+                        }]
+        
+    if bot_moods == []:
+        bot_moods = [[0.75, 0.25, 0.44]]
+
+    if bot_personalities == []:
+        bot_personalities = [{
+            'extraversion': 0.89,
+            'agreeableness': 0.92,
+            'conscientiousness': 0.86,
+            'neuroticism': 0.11,
+            'openness': 0.23
+            }]
 
     results = []
-    for sentence, annotated_utterance, bot_mood in zip(sentences, annotated_utterances, bot_moods):
+    for sentence, annotated_utterance, bot_mood, bot_personality in zip(
+        sentences, annotated_utterances, bot_moods, bot_personalities
+        ):
         user_emotion = get_emotions(annotated_utterance, probs=False)[0]
         sentiment = get_sentiment(annotated_utterance, probs=False)[0]
+        default_mood = get_bot_default_mood(bot_personality)
 
         logger.info("User's utterance: {}".format(sentence))
         logger.info("User emotion: {}".format(user_emotion))
         logger.info("Sentiment: {}".format(sentiment))
         logger.info("Old bot mood: {}".format(bot_mood))
+        logger.info("Default bot mood: {}".format(default_mood))
 
         bot_emotion = get_bot_emotion(sentence, user_emotion, sentiment)
+        bot_emotion_proba = get_bot_emotion_proba(bot_emotion)
         logger.info("New bot emotion: {}".format(bot_emotion))
         print("NEW BOT EMOTION: ", bot_emotion)
 
@@ -373,8 +432,9 @@ def respond():
         new_bot_mood_label = get_mood_label(new_bot_mood)
         logger.info("New bot mood label: {}".format(new_bot_mood_label))
         print("NEW BOT MOOD LABEL: ", new_bot_mood_label)
-
-        current_result = {"bot_mood": new_bot_mood, "bot_mood_label": new_bot_mood_label, "bot_emotion": bot_emotion}
+                
+        current_result = {"bot_mood": new_bot_mood, "bot_mood_label": new_bot_mood_label, "bot_emotion": bot_emotion,
+                          "bot_emotion_proba": bot_emotion_proba}
 
         results.append(current_result)
 
@@ -387,12 +447,20 @@ try:
     sentence = "I am so sad"
     user_emotion = "distress"
     sentiment = "negative"
+    default_mood = get_bot_default_mood(bot_personality={
+            'extraversion': 0.89,
+            'agreeableness': 0.92,
+            'conscientiousness': 0.86,
+            'neuroticism': 0.11,
+            'openness': 0.23
+            })
     bot_mood = default_mood
 
     logger.info("User's utterance: {}".format(sentence))
     logger.info("User emotion: {}".format(user_emotion))
     logger.info("Sentiment: {}".format(sentiment))
     logger.info("Old bot mood: {}".format(bot_mood))
+    logger.info("Default bot mood: {}".format(default_mood))
 
     bot_emotion = get_bot_emotion(sentence, user_emotion, sentiment)
     logger.info("New bot emotion: {}".format(bot_emotion))

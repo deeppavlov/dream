@@ -1,8 +1,8 @@
 import requests
 
-input_keys = {'sentences', 'annotated_utterances', 'bot_mood'}
+input_keys = {'sentences', 'annotated_utterances', 'bot_mood', 'bot_personality'}
 input_nested_keys = {'emotion_classification', 'sentiment_classification'}
-result_keys = {"bot_emotion", "bot_mood", "bot_mood_label"}
+result_keys = {"bot_emotion", "bot_emotion_proba", "bot_mood", "bot_mood_label"}
 values_emotion = {
             'anger', 
             'resentment', 
@@ -37,6 +37,13 @@ values_mood_label = {
             'relaxed', 
             'fear', 
             'neutral'
+        }
+keys_personality = {
+            'extraversion',
+            'agreeableness',
+            'conscientiousness',
+            'neuroticism',
+            'openness'
         }
 
 def check_input_format(test_case) -> bool:
@@ -92,7 +99,18 @@ def check_input_format(test_case) -> bool:
                     else:
                         for dim in value:
                             if dim < -1 or dim > 1:
-                                errors.append(f"Invalid dimension in bot_mood: {dim}")                   
+                                errors.append(f"Invalid dimension in bot_mood: {dim}")
+
+            if key == 'bot_personality':
+                for value in test_case[key]:
+                    if not isinstance(value, dict):
+                        errors.append(f"Invalid value in bot_personality: {value}")
+                    else:
+                        for trait, trait_value in value.items():
+                            if trait not in keys_personality:
+                                errors.append(f"Invalid trait in bot_personality: {trait}")
+                            if trait_value < 0 or trait_value > 1:
+                                errors.append(f"Invalid trait_value in bot_personality: {dim}")
 
         if errors:
             error_message = "; ".join(errors)
@@ -101,7 +119,7 @@ def check_input_format(test_case) -> bool:
         return True
 
     except Exception as e:
-        print(f"Response format validation failed: {e}")
+        print(f"Input format validation failed: {e}")
         return False
 
 def check_response_format(response: requests.Response) -> bool:
@@ -113,6 +131,13 @@ def check_response_format(response: requests.Response) -> bool:
 
             if key == 'bot_emotion' and value not in values_emotion:
                 errors.append(f"Invalid value: bot_emotion - {value}")
+
+            if key == 'bot_emotion_proba':
+                for emotion, proba in value.items():
+                    if emotion not in values_emotion:
+                        errors.append(f"Invalid emotion in bot_emotion_proba: {emotion}")
+                    if proba < 0 or proba > 1:
+                        errors.append(f"Invalid proba in bot_emotion_proba: {proba}")
                 
             if key == 'bot_mood':
                 for i, dim in enumerate(value):
@@ -149,7 +174,14 @@ def test():
                                             'positive': 0.1}
                             }
                         }],
-        'bot_mood': [[0.0, 0.0, 0.0]]
+        'bot_mood': [[0.0, 0.0, 0.0]],
+        'bot_personality': [{
+            'extraversion': 0.89,
+            'agreeableness': 0.92,
+            'conscientiousness': 0.86,
+            'neuroticism': 0.11,
+            'openness': 0.23
+            }]
         }
 
     if check_input_format(test_config):
