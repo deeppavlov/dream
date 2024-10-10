@@ -19,3 +19,4 @@ if __name__ == "__main__":
         trials += 1
         if trials > 10:
             print("Expected output doesn't match the result", result)
+            break
