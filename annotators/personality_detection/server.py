@@ -27,7 +27,8 @@ models = {}
 for trait in traits:
     path = f'/data/{trait}_tae898_emoberta-base_seed-42.pt'
     model = AutoModelForSequenceClassification.from_pretrained('tae898/emoberta-base', num_labels=2, ignore_mismatched_sizes=True)
-    model.load_state_dict(torch.load(path, map_location=torch.device('cpu')), strict=False)
+    model.to('cuda')
+    model.load_state_dict(torch.load(path, map_location=torch.device('cuda')), strict=False)
     models[trait] = model
 
 logger = logging.getLogger(__name__)
@@ -72,10 +73,11 @@ def predict_personality(text):
             trait_model = models[trait]
             inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=max_len)
             with torch.no_grad():
-                outputs = trait_model(**inputs)
-                predictions = torch.argmax(torch.softmax(outputs.logits, dim=1), dim=1)
-                prediction = predictions.item()
-                results[trait.upper()] = prediction
+                input_ids = inputs['input_ids'].to('cuda')
+                attn_mask = inputs['attention_mask'].to('cuda')
+                output = trait_model(input_ids=input_ids, attention_mask=attn_mask)
+                prediction = torch.argmax(torch.softmax(output['logits'], dim=1), dim=1)
+                results[trait.upper()] = prediction.item()
         return results
     except Exception as e:
         sentry_sdk.capture_exception(e)
