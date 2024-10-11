@@ -1,7 +1,13 @@
-import requests
-import json
-import re
 from deeppavlov_kg import TerminusdbKnowledgeGraph
+
+
+TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
+TERMINUSDB_SERVER_TEAM = "admin"
+TERMINUSDB_SERVER_DB = "bot_knowledge_db"
+TERMINUSDB_SERVER_PASSWORD = "root"
+
+
+BOT_ID = "Bot/514b2c3d-bb73-4294-9486-04f9e099835e"
 
 
 def formulate_utt_annotations(dog_id=None, park_id=None):
@@ -73,22 +79,7 @@ def compare_results(results, golden_results) -> bool:
     return all(is_successfull)
 
 
-def get_service_time(pattern, time_result):
-    pattern_string = re.search(pattern, time_result.text)[0]
-    pattern_dict = json.loads("{" + pattern_string.split(',"children": [{')[0] + "}")
-
-    return pattern_dict["time"]
-
-
-def main():
-    TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
-    TERMINUSDB_SERVER_TEAM = "admin"
-    TERMINUSDB_SERVER_DB = "bot_knowledge_db"
-    TERMINUSDB_SERVER_PASSWORD = "root"
-    BOT_KNOWLEDGE_MEMORIZER_PORT = 8044
-
-    BOT_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{BOT_KNOWLEDGE_MEMORIZER_PORT}/respond"
-
+def prepare_data():
     graph = TerminusdbKnowledgeGraph(
         db_name=TERMINUSDB_SERVER_DB,
         team=TERMINUSDB_SERVER_TEAM,
@@ -96,12 +87,6 @@ def main():
         password=TERMINUSDB_SERVER_PASSWORD,
     )
 
-    BOT_ID = "Bot/514b2c3d-bb73-4294-9486-04f9e099835e"
-
-    PATTERN_KNOWLEDGE = r"\"function\": \"get_knowledge\".*\"time\": \d.\d+"
-    PATTERN_LLM = r"\"function\": \"convert_triplets_to_natural_language\".*\"time\": \d.\d+"
-    PATTERN_TERMINUSDB = r"\"function\": \"create_entities\".*\"time\": \d.\d+"
-    PATTERN_PROPS = r"\"function\": \"get_properties_of_entities\".*\"time\": \d.\d+"
     # get dog_id and park_id from KG
     dog_id, park_id = None, None
     try:
@@ -153,40 +138,4 @@ def main():
         golden_results = [[{"added_to_graph": golden_triplets, "triplets_already_in_graph": [[], []]}]]
     else:
         golden_results = [[{"added_to_graph": [[], []], "triplets_already_in_graph": golden_triplets}]]
-
-    count = 0
-    for data, golden_result in zip(request_data, golden_results):
-        result = requests.post(BOT_KNOWLEDGE_MEMORIZER_URL, json=data)
-        try:
-            result = result.json()
-            print("Success. Test for input-output data in JSON-format passed.")
-        except Exception:
-            print("Input-output data is not in JSON-format.")
-        print(result)
-        time_result = requests.post(f"{BOT_KNOWLEDGE_MEMORIZER_URL}?profile", json=data)
-        output_dict = json.loads(time_result.text)
-        total_time = output_dict["duration"]
-        try:
-            knowledge_time = get_service_time(PATTERN_KNOWLEDGE, time_result)
-            # print(f"Knowledge time: {knowledge_time:.3f}s")
-            llm_time = get_service_time(PATTERN_LLM, time_result)
-            # print(f"Llm time: {llm_time:.3f}s")
-            terminusdb_time = get_service_time(PATTERN_TERMINUSDB, time_result)
-            # print(f"Terminusdb time: {terminusdb_time:.3f}s")
-            props_time = get_service_time(PATTERN_PROPS, time_result)
-            exec_time = total_time - knowledge_time - llm_time - terminusdb_time - props_time
-
-        except Exception as e:
-            raise e
-
-        result = prepare_for_comparison(result)
-        if compare_results(result, golden_result):
-            count += 1
-    assert count == len(request_data)
-    print("Success")
-    # print(f"Total time including requests to other services: {total_time:.3f}s")
-    print(f"bot knowledge memorizer exec time = {exec_time:.3f}s")
-
-
-if __name__ == "__main__":
-    main()
+    return request_data, golden_results
