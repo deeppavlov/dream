@@ -1,0 +1,2 @@
+git+https://github.com/deeppavlov/custom_kg_svc.git@4c7dea8858c01fa11d10dbe3d528d91bf19555e2#egg=deeppavlov_kg
+allure-pytest==2.13.5

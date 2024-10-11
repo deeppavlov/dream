@@ -1,8 +1,19 @@
+import allure
 import requests
 import json
-import re
+
 from deeppavlov_kg import TerminusdbKnowledgeGraph
 
+
+TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
+TERMINUSDB_SERVER_TEAM = "admin"
+TERMINUSDB_SERVER_DB = "user_knowledge_db"
+TERMINUSDB_SERVER_PASSWORD = "root"
+USER_KNOWLEDGE_MEMORIZER_PORT = 8020  # tested with dream_kg_prompted distribution
+
+USER_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{USER_KNOWLEDGE_MEMORIZER_PORT}/respond"
+
+USER_ID = "User/b75d2700259bdc44sdsdf85e7f530ed"
 
 def formulate_utt_annotations(dog_id=None, park_id=None):
     utt_annotations = {
@@ -73,22 +84,7 @@ def compare_results(results, golden_results) -> bool:
     return all(is_successfull)
 
 
-def get_service_time(pattern, time_result):
-    pattern_string = re.search(pattern, time_result.text)[0]
-    pattern_dict = json.loads("{" + pattern_string.split(',"children": [{')[0] + "}")
-
-    return pattern_dict["time"]
-
-
-def main():
-    TERMINUSDB_SERVER_URL = "http://0.0.0.0:6363"
-    TERMINUSDB_SERVER_TEAM = "admin"
-    TERMINUSDB_SERVER_DB = "user_knowledge_db"
-    TERMINUSDB_SERVER_PASSWORD = "root"
-    USER_KNOWLEDGE_MEMORIZER_PORT = 8027  # tested with dream_kg_prompted distribution
-
-    USER_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{USER_KNOWLEDGE_MEMORIZER_PORT}/respond"
-
+def prepare_data():
     graph = TerminusdbKnowledgeGraph(
         db_name=TERMINUSDB_SERVER_DB,
         team=TERMINUSDB_SERVER_TEAM,
@@ -96,13 +92,6 @@ def main():
         password=TERMINUSDB_SERVER_PASSWORD,
     )
 
-    USER_ID = "User/b75d2700259bdc44sdsdf85e7f530ed"
-
-    PATTERN_KNOWLEDGE = r"\"function\": \"get_knowledge\".*\"time\": \d.\d+"
-    PATTERN_LLM = r"\"function\": \"convert_triplets_to_natural_language\".*\"time\": \d.\d+"
-    PATTERN_TERMINUSDB = r"\"function\": \"create_entities\".*\"time\": \d.\d+"
-    PATTERN_PROPS = r"\"function\": \"get_properties_of_entities\".*\"time\": \d.\d+"
-    # PATTERN_RELS = r"\"function\": \"search_for_relationships\".*\"time\": \d.\d+"
     # get dog_id and park_id from KG
     dog_id, park_id = None, None
     try:
@@ -146,38 +135,61 @@ def main():
         golden_results = [[{"added_to_graph": golden_triplets, "triplets_already_in_graph": [[], []]}]]
     else:
         golden_results = [[{"added_to_graph": [[], []], "triplets_already_in_graph": golden_triplets}]]
+    return request_data, golden_results
 
+
+@allure.description("""4.1.2 Test input and output data types""")
+def test_in_out():
+    input_data, _ = prepare_data()
+    
+    result = requests.post(USER_KNOWLEDGE_MEMORIZER_URL, json=next(iter(input_data)))
+    
+    assert isinstance(input_data, (dict, list)), "Invalid input type"
+    assert isinstance(result.json(), (dict, list)), "Invalid output type"
+
+
+@allure.description("""4.1.3 Test execution time""")
+def test_exec_time():
+    def _extract_function_duration(source, func):
+        if source["function"] == func:
+            return source["time"]
+        for child in source["children"]:
+            return _extract_function_duration(child, func)
+        return 0
+    def _get_exec_time():
+        knowledge_time = _extract_function_duration(output_dict["root_frame"], "get_knowledge")
+        llm_time = _extract_function_duration(output_dict["root_frame"], "convert_triplets_to_natural_language")
+        terminusdb_time = _extract_function_duration(output_dict["root_frame"], "create_entities")
+        props_time = _extract_function_duration(output_dict["root_frame"], "get_properties_of_entities")
+
+        return total_time - knowledge_time - llm_time - terminusdb_time - props_time
+
+
+    input_data, _ = prepare_data()
+    time_result = requests.post(f"{USER_KNOWLEDGE_MEMORIZER_URL}?profile", json=next(iter(input_data)))
+    output_dict = json.loads(time_result.text)
+
+    total_time = output_dict["duration"]
+        
+    exec_time = _get_exec_time()
+    assert exec_time <= 0.4, "Unsufficient run time"
+
+
+@allure.description("""Execution test""")
+def test_execution():
+    request_data, golden_results = prepare_data()
     count = 0
     for data, golden_result in zip(request_data, golden_results):
-        result = requests.post(USER_KNOWLEDGE_MEMORIZER_URL, json=data)
-        try:
-            result = result.json()
-            print("Success. Test for input-output data in JSON-format passed.")
-        except Exception:
-            print("Input-output data is not in JSON-format.")
-        print(result)
-        time_result = requests.post(f"{USER_KNOWLEDGE_MEMORIZER_URL}?profile", json=data)
-        output_dict = json.loads(time_result.text)
-        # print(output_dict)
-        total_time = output_dict["duration"]
-        try:
-            knowledge_time = get_service_time(PATTERN_KNOWLEDGE, time_result)
-            llm_time = get_service_time(PATTERN_LLM, time_result)
-            terminusdb_time = get_service_time(PATTERN_TERMINUSDB, time_result)
-            props_time = get_service_time(PATTERN_PROPS, time_result)
-            exec_time = total_time - knowledge_time - llm_time - terminusdb_time - props_time
+        result = requests.post(USER_KNOWLEDGE_MEMORIZER_URL, json=data).json()
 
-        except Exception as e:
-            raise e
-
-        result = prepare_for_comparison(result)
-        if compare_results(result, golden_result):
+        prepared_result = prepare_for_comparison(result)
+        if compare_results(prepared_result, golden_result):
             count += 1
     assert count == len(request_data)
     print("Success")
-    # print(f"Total time including requests to other services = {total_time:.3f}s")
-    print(f"user knowledge memorizer exec time = {exec_time:.3f}s")
 
 
 if __name__ == "__main__":
-    main()
+    test_in_out()
+    test_exec_time()
+    test_execution()
