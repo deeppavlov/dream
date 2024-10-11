@@ -68,7 +68,11 @@ def jsonify_data(data: Any) -> Any:
 
 def predict_personality(text):
     try:
-        results = {}
+        # results = {}
+        results = {
+            'traits': {},
+            'traits_proba': {}
+            }
         for trait in traits:
             trait_model = models[trait]
             inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=True, max_length=max_len)
@@ -76,8 +80,9 @@ def predict_personality(text):
                 input_ids = inputs['input_ids'].to('cuda')
                 attn_mask = inputs['attention_mask'].to('cuda')
                 output = trait_model(input_ids=input_ids, attention_mask=attn_mask)
-                prediction = torch.argmax(torch.softmax(output['logits'], dim=1), dim=1)
-                results[trait.upper()] = prediction.item()
+                predictions = torch.softmax(output['logits'], dim=1)
+                results['traits'][trait.upper()] = torch.argmax(predictions, dim=1).item()
+                results['traits_proba'][trait.upper()] = list(np.array(predictions.cpu()[0]))
         return results
     except Exception as e:
         sentry_sdk.capture_exception(e)

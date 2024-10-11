@@ -13,7 +13,7 @@ def test_accuracy():
         response = requests.post("http://0.0.0.0:8026/model", json={"personality": [row['text']]})
         assert response.status_code == 200
         results = response.json()[0]
-        for trait, prediction in results.items():
+        for trait, prediction in results['traits'].items():
             test_data.loc[i, trait.lower()+'_pred'] = prediction
 
     accuracy_per_trait = [accuracy_score(test_data[trait], test_data[trait+'_pred']) for trait in traits]
@@ -26,4 +26,7 @@ def test_accuracy():
     print('---' * 30)
 
 if __name__ == "__main__":
-    test_accuracy()  
+    test_accuracy()
+
+
+

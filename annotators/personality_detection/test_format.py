@@ -1,7 +1,7 @@
 import requests
 
-result_keys = {"EXTRAVERSION", "NEUROTICISM", "AGREEABLENESS", "CONSCIENTIOUSNESS", "OPENNESS"}
-result_values = {0, 1}
+result_keys = {"traits", "traits_proba"}
+result_trait_keys = {"EXTRAVERSION", "NEUROTICISM", "AGREEABLENESS", "CONSCIENTIOUSNESS", "OPENNESS"}
 
 def check_input_format(test_case) -> bool:
     try:
@@ -35,8 +35,29 @@ def check_response_format(response: requests.Response) -> bool:
             for key, value in response_json.items():
                 if key not in result_keys:
                     errors.append(f"Invalid key: {key}")
-                if value not in result_values:
-                    errors.append(f"Invalid value: {value}")
+                if not isinstance(value, dict):
+                    errors.append(f"Invalid type of value: {value}")
+
+                if key == 'traits':
+                    nested_dict = value
+                    for nested_key, nested_value in nested_dict.items():
+                        if nested_key not in result_trait_keys:
+                            errors.append(f"Invalid nested_key: {nested_key}")
+                        if nested_value not in {0, 1}:
+                            errors.append(f"Invalid nested_value: {nested_value}")
+                
+                if key == 'traits_proba':
+                    nested_dict = value
+                    for nested_key, nested_value in nested_dict.items():
+                        if nested_key not in result_trait_keys:
+                            errors.append(f"Invalid nested_key: {nested_key}")
+                        if not isinstance(nested_value, list):
+                            errors.append(f"Invalid type of nested_value: {nested_value}")
+                        else:
+                            for proba in nested_value:
+                                if proba < 0 or proba > 1:
+                                    errors.append(f"Invalid proba: {proba}")
+
         if errors:
             error_message = "; ".join(errors)
             print(f"Response format validation failed: {error_message}")
