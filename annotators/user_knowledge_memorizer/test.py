@@ -5,7 +5,7 @@ import json
 from prepare_test import prepare_data, prepare_for_comparison, compare_results
 
 
-USER_KNOWLEDGE_MEMORIZER_PORT = 8020  # tested with dream_kg_prompted distribution
+USER_KNOWLEDGE_MEMORIZER_PORT = 8027  # tested with dream_kg_prompted distribution
 USER_KNOWLEDGE_MEMORIZER_URL = f"http://0.0.0.0:{USER_KNOWLEDGE_MEMORIZER_PORT}/respond"
 
 
