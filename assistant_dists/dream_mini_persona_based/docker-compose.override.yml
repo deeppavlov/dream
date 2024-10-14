@@ -167,7 +167,7 @@ services:
       dockerfile: ./services/dialogpt/Dockerfile
     command: flask run -h 0.0.0.0 -p 8125
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=''
       - FLASK_APP=server
     deploy:
       resources:
@@ -186,7 +186,7 @@ services:
       context: ./services/sentence_ranker/
     command: flask run -h 0.0.0.0 -p 8128
     environment:
-      - CUDA_VISIBLE_DEVICES=0
+      - CUDA_VISIBLE_DEVICES=''
       - FLASK_APP=server
     deploy:
       resources:
