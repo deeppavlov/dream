@@ -28,11 +28,11 @@ def test_exec_time():
             return _extract_function_duration(child, func)
         return 0
 
-    def _get_exec_time():
-        knowledge_time = _extract_function_duration(output_dict["root_frame"], "get_knowledge")
-        llm_time = _extract_function_duration(output_dict["root_frame"], "convert_triplets_to_natural_language")
-        terminusdb_time = _extract_function_duration(output_dict["root_frame"], "create_entities")
-        props_time = _extract_function_duration(output_dict["root_frame"], "get_properties_of_entities")
+    def _get_exec_time(profile_result):
+        knowledge_time = _extract_function_duration(profile_result["root_frame"], "get_knowledge")
+        llm_time = _extract_function_duration(profile_result["root_frame"], "convert_triplets_to_natural_language")
+        terminusdb_time = _extract_function_duration(profile_result["root_frame"], "create_entities")
+        props_time = _extract_function_duration(profile_result["root_frame"], "get_properties_of_entities")
 
         return total_time - knowledge_time - llm_time - terminusdb_time - props_time
 
@@ -42,7 +42,7 @@ def test_exec_time():
 
     total_time = output_dict["duration"]
 
-    exec_time = _get_exec_time()
+    exec_time = _get_exec_time(output_dict)
     assert exec_time <= 0.4, "Unsufficient run time"
 
 

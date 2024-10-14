@@ -58,7 +58,7 @@ def handler(requested_data, random_seed=None):
 
 
 try:
-    test_server.run_test(handler)
+    test_server.test_run(handler)
     logger.info("test query processed")
 except Exception as exc:
     sentry_sdk.capture_exception(exc)
