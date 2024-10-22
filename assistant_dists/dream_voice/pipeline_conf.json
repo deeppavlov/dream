@@ -166,30 +166,16 @@
                 ],
                 "state_manager_method": "add_hypothesis"
             },
-            "dialogpt": {
-                "connector": {
-                    "protocol": "http",
-                    "timeout": 3.0,
-                    "url": "http://dialogpt:8125/respond"
-                },
-                "dialog_formatter": "state_formatters.dp_formatters:last_utt_and_history_dialog",
-                "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
-                "previous_services": [
-                    "skill_selectors"
-                ],
-                "state_manager_method": "add_hypothesis"
-            },
             "dff_voice_skill": {
                 "connector": {
                     "protocol": "http",
-                    "timeout": 5, 
+                    "timeout": 2, 
                     "url": "http://dff-voice-skill:8444/respond"
                 },
                 "dialog_formatter": "state_formatters.dp_formatters:dff_voice_skill_formatter",
                 "response_formatter": "state_formatters.dp_formatters:skill_with_attributes_formatter_service",
                 "previous_services": [
-                    "skill_selectors",
-                    "voice_service"
+                    "skill_selectors"
                 ],
                 "state_manager_method": "add_hypothesis"
             }

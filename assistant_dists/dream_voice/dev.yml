@@ -40,13 +40,6 @@ services:
       - "~/.deeppavlov:/root/.deeppavlov"
     ports:
       - 8014:8014
-  dialogpt:
-    volumes:
-      - "./services/dialogpt:/src"
-      - "./common:/src/common"
-      - "~/.deeppavlov/cache:/root/.cache"
-    ports:
-      - 8125:8125
   sentence-ranker:
     volumes:
       - "./services/sentence_ranker:/src"
@@ -56,12 +49,10 @@ services:
   voice-service:
     volumes:
       - "~/.deeppavlov/file_server:/tmp"
-      - "./services/voice_service:/src"
     ports:
       - 8333:8333
   dff-voice-skill:
     volumes:
-      - "./skills/dff_voice_skill:/src"
       - "~/.deeppavlov/file_server:/tmp"
     ports:
       - 8444:8444

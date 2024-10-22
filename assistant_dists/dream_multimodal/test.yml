@@ -3,7 +3,7 @@ services:
     volumes:
       - "/cephfs/home/ignatov/artifacts:/output"
     ports:
-      - ${AGENT_PORT}:8095
+      - ${AGENT_PORT}:4242
   mongo:
     command: mongod
     image: mongo:4.0.0

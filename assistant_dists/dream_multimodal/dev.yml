@@ -4,7 +4,7 @@ services:
     volumes:
       - ".:/dp-agent"
     ports:
-      - 8095:8095
+      - 4242:4242
   files:
     ports:
       - 3000:3000
@@ -78,14 +78,4 @@ services:
       - "./common:/src/common"
     ports:
       - 8070:8070
-  voice-service:
-    volumes:
-      - "~/.deeppavlov/file_server:/tmp"
-    ports:
-      - 8333:8333
-  dff-voice-skill:
-    volumes:
-      - "~/.deeppavlov/file_server:/tmp"
-    ports:
-      - 8444:8444
 version: "3.7"
