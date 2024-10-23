@@ -38,6 +38,7 @@ def count_time(response):
         exec_time = total_time - new_dict['time']
 
         if exec_time < 0.4:
+            print('---' * 30)
             print('Testing execution time - SUCCESS')
         print(f'Total time = {total_time :.3f} s (including request to openai)')
         print(f'Execution time = {exec_time :.3f} s (excluding request to openai)')

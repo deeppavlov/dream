@@ -150,7 +150,19 @@ def check_response_format(response: requests.Response) -> bool:
         print(f"Response format validation failed: {e}")
         return False
     
-def test():
+def test(test_config):
+    if check_input_format(test_config):
+        print(f"Testing input format - SUCCESS")
+
+    response = requests.post("http://0.0.0.0:8050/respond_batch", json=test_config)
+    assert response.status_code == 200
+
+    if check_response_format(response):
+        print(f"Testing response format - SUCCESS") 
+
+    return response
+
+if __name__ == "__main__":
     test_config = {
         "user_sentences": ["What do you want to eat?"],
         "annotated_utterances": [{
@@ -171,18 +183,8 @@ def test():
         "bot_mood_labels": ["angry"],
         "bot_emotions": ["anger"],
         }
-    if check_input_format(test_config):
-        print(f"Testing input format - SUCCESS")
-
-    response = requests.post("http://0.0.0.0:8050/respond_batch", json=test_config)
-    assert response.status_code == 200
-
-    if check_response_format(response):
-        print(f"Testing response format - SUCCESS") 
-        print('---' * 30)
-
-    return response
-
-if __name__ == "__main__":
-    response = test()
+    print('---' * 30)
+    response = test(test_config)
+    print(f'\nInput: {test_config}\n')
     print(f'Response: {response.text}')
+    print('---' * 30)
