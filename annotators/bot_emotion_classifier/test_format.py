@@ -157,7 +157,19 @@ def check_response_format(response: requests.Response) -> bool:
         print(f"Response format validation failed: {e}")
         return False
 
-def test():
+def test(test_config):
+    if check_input_format(test_config):
+        print(f"Testing input format - SUCCESS")
+
+    response = requests.post("http://0.0.0.0:8051/model", json=test_config)
+    assert response.status_code == 200
+
+    if check_response_format(response):
+        print(f"Testing response format - SUCCESS") 
+
+    return response
+
+if __name__ == "__main__":
     test_config = {
         'sentences': [' Yeah that would be cool ! '],
         'annotated_utterances': [{
@@ -183,19 +195,8 @@ def test():
             'openness': 0.23
             }]
         }
-
-    if check_input_format(test_config):
-        print(f"Testing input format - SUCCESS")
-
-    response = requests.post("http://0.0.0.0:8051/model", json=test_config)
-    assert response.status_code == 200
-
-    if check_response_format(response):
-        print(f"Testing response format - SUCCESS") 
-
-    return response
-
-if __name__ == "__main__":
-    response = test()
+    print('---' * 30)
+    response = test(test_config)
+    print(f'\nInput: {test_config}\n')
     print(f'Response: {response.text}')
     print('---' * 30)
