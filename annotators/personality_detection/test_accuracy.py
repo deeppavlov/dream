@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 import requests
 
 def test_accuracy():
-    test_data = pd.read_csv('annotators/personality_detection/essays_test.csv')
+    test_data = pd.read_csv('essays_test.csv')
     traits = ['extraversion', 'neuroticism', 'agreeableness', 'conscientiousness', 'openness']
 
     for i, row in tqdm(test_data.iterrows(), total=len(test_data)):

@@ -68,9 +68,7 @@ def check_response_format(response: requests.Response) -> bool:
         print(f"Response format validation failed: {e}")
         return False
     
-def test():
-    test_config = {"personality": ["Yeah that would be cool!"]}
-
+def test(test_config):
     if check_input_format(test_config):
         print(f"Testing input format - SUCCESS")
 
@@ -83,7 +81,10 @@ def test():
     return response
 
 if __name__ == "__main__":
-    response = test()
+    test_config = {"personality": ["Yeah that would be cool!"]}
+    print('---' * 30)
+    response = test(test_config)
+    print(f'\nInput: {test_config}\n')
     print(f'Response: {response.text}')
     print('---' * 30)
 

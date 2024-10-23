@@ -39,6 +39,7 @@ class TestCases:
             self._run_test(test_case, index)
 
         if self.metrics['time_per_case'] == len(self.test_cases):
+            print('---' * 30)
             print(f'Testing response time per case - SUCCESS')
         average_time = (self.metrics['total_time'] / self.metrics['total_requests']) if self.metrics['total_requests'] > 0 else 0
         print(f"Total requests: {self.metrics['total_requests']}")
@@ -46,7 +47,7 @@ class TestCases:
         print('---' * 30)
 
 if __name__ == "__main__":
-    with open('annotators/personality_detection/test_cases.json', 'r') as f:
+    with open('test_cases.json', 'r') as f:
         test_data = json.load(f)
     test_cases = [data['sentences'] for data in test_data]
 
