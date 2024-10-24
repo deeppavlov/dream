@@ -35,13 +35,13 @@ flows = {
             ("travel_italy_general", "italy_start"): loc_cnd.start_condition,
             ("travel_italy_general", "like_italy"): loc_cnd.is_proposed_skill,
             ("concrete_place_flow", "fav_place"): cnd.any(
-                    [
-                        int_cnd.has_entities("wiki:Q747074"),  # Q38 - Italy, Q747074 - commune of Italy
-                        int_cnd.has_entities("wiki:Q515"),  # Q515 - city
-                        int_cnd.has_entities("wiki:Q1549591"),  # Q1549591 - big city
-                        int_cnd.has_entities("prop:favorite_place"),
-                    ]
-                ),
+                [
+                    int_cnd.has_entities("wiki:Q747074"),  # Q38 - Italy, Q747074 - commune of Italy
+                    int_cnd.has_entities("wiki:Q515"),  # Q515 - city
+                    int_cnd.has_entities("wiki:Q1549591"),  # Q1549591 - big city
+                    int_cnd.has_entities("prop:favorite_place"),
+                ]
+            ),
             ("italian_food_flow_restart", "tell_more"): cnd.any(
                 [
                     loc_cnd.has_entity_in_graph("LIKE FOOD/Food"),

@@ -1,3 +1,4 @@
-git+https://github.com/deeppavlov/custom_kg_svc.git@724513b4
+git+https://github.com/deeppavlov/custom_kg_svc.git@4c7dea8858c01fa11d10dbe3d528d91bf19555e2
 click==8.1.6
 nltk==3.5
+Flask>=2.2.2

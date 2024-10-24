@@ -54,9 +54,9 @@ def fill_responses_by_slots_from_graph():
         except Exception:
             new_entity_type = entity + "/Abstract"
             logger.info(f"{entity_type} does not exist. Trying to extract {new_entity_type}")
-            entity_with_id = user_existing_entities[new_entity_type][-1] 
+            entity_with_id = user_existing_entities[new_entity_type][-1]
             logger.info(f"entity_with_id -- {entity_with_id}")
-            slot_value = graph.get_properties_of_entity(entity_with_id).get('Name', 'that very dish you like')
+            slot_value = graph.get_properties_of_entity(entity_with_id).get("Name", "that very dish you like")
         logger.info(f"slot_value -- {slot_value}")
         processed_node.response = processed_node.response.replace("{" f"{entity}" "}", slot_value.lower())
         ctx.a_s["processed_node"] = processed_node
