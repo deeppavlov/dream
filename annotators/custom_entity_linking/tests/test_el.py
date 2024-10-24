@@ -50,17 +50,18 @@ def main():
             "contexts": [["who directed forrest gump?"]],
         }
     ]
+    print(f"Input data: {request_data}")
     gold_results = [["film/123"]]
-
+    print(f"Expected result: {gold_results}")
     count = 0
     for data, gold_result in zip(request_data, gold_results):
         result = requests.post(f"{url}/model", json=data)
         try:
             result = result.json()
+            print(f"Output data: {result}")
             print("Success. Test for input-output data in JSON-format passed.")
         except Exception:
             print("Input-output data is not in JSON-format.")
-        print(result)
         entity_ids = []
         for entity_info_list in result:
             for entity_info in entity_info_list:
@@ -72,7 +73,7 @@ def main():
 
     assert count == len(request_data)
     total_time = time.time() - st_time
-    print("Success")
+    # print("Success")
     print(f"custom entity linking exec time = {total_time:.3f}s")
 
 

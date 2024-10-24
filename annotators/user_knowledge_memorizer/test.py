@@ -96,7 +96,7 @@ def main():
         password=TERMINUSDB_SERVER_PASSWORD,
     )
 
-    USER_ID = "User/b75d2700259bdc44sdsdf85e7f530ed"
+    USER_ID = "User/b75d2700259bdc44sdsdf85e7f530ec"
 
     PATTERN_KNOWLEDGE = r"\"function\": \"get_knowledge\".*\"time\": \d.\d+"
     PATTERN_LLM = r"\"function\": \"convert_triplets_to_natural_language\".*\"time\": \d.\d+"
@@ -115,31 +115,25 @@ def main():
                 dog_id = entity_info["@id"]
             elif entity_info.get("substr") == "park":
                 park_id = entity_info["@id"]
-        print(f"Found park_id: '{park_id}' and dog_ig: '{dog_id}'")
+        # print(f"Found park_id: '{park_id}' and dog_ig: '{dog_id}'")
         added_new_entities = False
     except Exception:
-        print("Adding new entities and rels")
+        # print("Adding new entities and rels")
         added_new_entities = True
 
     request_data = [
         {
             "last_human_annotated_utterance": [
                 {
-                    "text": "i have a dog and a cat",
+                    "text": "i have a dog and a cat, i like going to a park",
                     "user": {"id": USER_ID.split("/")[1]},
                     "annotations": formulate_utt_annotations(dog_id, park_id),
-                },
-                {
-                    "text": "",
-                    "user": {"id": ""},
-                    "annotations": {
-                        "property_extraction": [{}],
-                        "custom_entity_linking": [],
-                    },
                 },
             ]
         }
     ]
+
+    print(f"Input data: {request_data}")
 
     golden_triplets = [[[USER_ID, "LIKE GOTO", "Place"], [USER_ID, "HAVE PET", "Animal"]], []]
     if added_new_entities:
@@ -152,14 +146,16 @@ def main():
         result = requests.post(USER_KNOWLEDGE_MEMORIZER_URL, json=data)
         try:
             result = result.json()
+            print(f"Output data: {result}")
             print("Success. Test for input-output data in JSON-format passed.")
         except Exception:
+            print(result)
             print("Input-output data is not in JSON-format.")
-        print(result)
         time_result = requests.post(f"{USER_KNOWLEDGE_MEMORIZER_URL}?profile", json=data)
         output_dict = json.loads(time_result.text)
         # print(output_dict)
         total_time = output_dict["duration"]
+        # print(total_time)
         try:
             knowledge_time = get_service_time(PATTERN_KNOWLEDGE, time_result)
             llm_time = get_service_time(PATTERN_LLM, time_result)
@@ -174,9 +170,9 @@ def main():
         if compare_results(result, golden_result):
             count += 1
     assert count == len(request_data)
-    print("Success")
+    # print("Success")
     # print(f"Total time including requests to other services = {total_time:.3f}s")
-    print(f"user knowledge memorizer exec time = {exec_time:.3f}s")
+    print(f"user knowledge memorizer exec time = {exec_time:.1f}s")
 
 
 if __name__ == "__main__":
